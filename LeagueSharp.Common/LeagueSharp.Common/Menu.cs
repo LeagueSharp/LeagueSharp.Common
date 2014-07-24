@@ -9,14 +9,27 @@ using System.IO;
 
 namespace LeagueSharp.Common
 {
-    [Serializable]
+    [ Serializable ]
+    public struct Circle
+    {
+        public bool Active;
+        public Color Color;
+
+        public Circle(bool enabled, Color color)
+        {
+            Active = enabled;
+            Color = color;
+        }
+    }
+
+    [ Serializable ]
     public struct Slider
     {
         public int MaxValue;
         public int MinValue;
         public int Value;
 
-        public Slider(int value, int maxValue = 100, int minValue = 0)
+        public Slider(int value = 0, int maxValue = 100, int minValue = 0)
         {
             MaxValue = maxValue;
             Value = value;
@@ -24,7 +37,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    [Serializable]
+    [ Serializable ]
     public struct StringList
     {
         public string[] SList;
@@ -43,7 +56,7 @@ namespace LeagueSharp.Common
         Press,
     }
 
-    [Serializable]
+    [ Serializable ]
     public struct KeyBind
     {
         public bool Active;
@@ -58,7 +71,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    [Serializable]
+    [ Serializable ]
     internal static class MenuSettings
     {
         public static Menu Config;
@@ -161,7 +174,7 @@ namespace LeagueSharp.Common
         /* Booleans */
     }
 
-    [Serializable]
+    [ Serializable ]
     internal static class MenuHandler
     {
         private static bool _enabled;
@@ -174,6 +187,10 @@ namespace LeagueSharp.Common
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnWndProc += GameOnOnWndProc;
             Game.OnGameUpdate += GameOnOnGameUpdate;
+
+            Game.OnGameEnd += GameOnOnGameEnd;
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
         }
 
         public static bool Visible
@@ -200,6 +217,30 @@ namespace LeagueSharp.Common
                     return MenuSettings.Config.Item("showMenu").GetValue<KeyBind>().Key;
                 return 16;
             }
+        }
+
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            OnExit();
+        }
+
+
+        private static void OnExit()
+        {
+            Game.PrintChat("Saving");
+            SaveItems();
+        }
+
+        private static void GameOnOnGameEnd(GameEndEventArgs args)
+        {
+            if (!_enabled) return;
+            OnExit();
+        }
+
+        private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
+        {
+            if (!_enabled) return;
+            OnExit();
         }
 
         private static void GameOnOnGameUpdate(EventArgs args)
@@ -247,13 +288,6 @@ namespace LeagueSharp.Common
             if (args.Msg == 0x0100 || args.Msg == 0x0101)
             {
                 SendKeys(args.WParam, args.Msg == 0x0101);
-
-                //Temp fix until Assembly.onUnload :3
-                if (args.WParam == 27) // changed to Esacpe key
-                {
-                    Game.PrintChat("Saving");
-                    SaveItems();
-                }
             }
 
             /* WM_LBUTTONDOWN, WM_LBUTTONUP and MouseMove */
@@ -310,6 +344,30 @@ namespace LeagueSharp.Common
             {
                 var menu = menuList[i];
 
+                if (Utility.IsUnderRectangle(cursorPosition, X, Y, MenuSettings.MenuItemWidth,
+                    MenuSettings.MenuItemHeight))
+                {
+                    if (message == 0x201)
+                    {
+                        menu.Open = !menu.Open;
+
+                        LastTick = Environment.TickCount + 10000;
+
+                        if (menu.Open)
+                        {
+                            /*Close the rest of the in the same level*/
+                            foreach (var test in menuList)
+                            {
+                                if (test.DisplayName != menu.DisplayName && test.Name != menu.Name)
+                                {
+                                    if (test.Open)
+                                        test.Open = false;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (menu.Open)
                 {
                     /*Send the click messages to the submenus */
@@ -338,30 +396,6 @@ namespace LeagueSharp.Common
 
                             if (message == 0x200)
                                 item.OnMoveMouse(cursorPosition.X - itemX, cursorPosition.Y - itemY);
-                        }
-                    }
-                }
-
-
-                if (Utility.IsUnderRectangle(cursorPosition, X, Y, MenuSettings.MenuItemWidth,
-                    MenuSettings.MenuItemHeight))
-                {
-                    if (message == 0x201)
-                    {
-                        menu.Open = !menu.Open;
-                        LastTick = Environment.TickCount + 10000;
-
-                        if (menu.Open)
-                        {
-                            /*Close the rest of the in the same level*/
-                            foreach (var test in menuList)
-                            {
-                                if (test.DisplayName != menu.DisplayName && test.Name != menu.Name)
-                                {
-                                    if (test.Open)
-                                        test.Open = false;
-                                }
-                            }
                         }
                     }
                 }
@@ -434,7 +468,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    [Serializable]
+    [ Serializable ]
     public class Menu
     {
         public List<Menu> Children = new List<Menu>();
@@ -466,7 +500,8 @@ namespace LeagueSharp.Common
                 MenuSettings.Config.AddSubMenu(colors);
 
                 var sizes = new Menu("Sizes", "Sizes");
-                sizes.AddItem(new MenuItem("Width", "Width").SetValue(new StringList(new[] { "1", "2", "3", "4", "5" }, 2)));
+                sizes.AddItem(
+                    new MenuItem("Width", "Width").SetValue(new StringList(new[] { "1", "2", "3", "4", "5" }, 2)));
                 sizes.AddItem(new MenuItem("Height", "Height").SetValue(new Slider(25, 100, 10)));
                 sizes.AddItem(new MenuItem("TextSize", "Text Size").SetValue(new Slider(50, 100, 0)));
                 MenuSettings.Config.AddSubMenu(sizes);
@@ -483,23 +518,7 @@ namespace LeagueSharp.Common
             }
         }
 
-
-        internal string OpenId
-        {
-            get { return Name + DisplayName; }
-        }
-
-        internal bool Open
-        {
-            get
-            {
-                var result = Global.Read<bool>(OpenId, true);
-                if (result)
-                    return true;
-                return false;
-            }
-            set { Global.Write(OpenId, value); }
-        }
+        internal bool Open { get; set; }
 
         internal int Id
         {
@@ -589,7 +608,8 @@ namespace LeagueSharp.Common
             return null;
         }
     }
-    [Serializable]
+
+    [ Serializable ]
     public class MenuItem
     {
         private readonly string _assemblyPath;
@@ -599,6 +619,7 @@ namespace LeagueSharp.Common
         public Menu Parent;
 
         internal string ValueType = "null";
+        private bool _appendAssemblyPathToId = true;
 
         private int _colorId;
         private string _configFilePath;
@@ -607,6 +628,9 @@ namespace LeagueSharp.Common
         private byte[] _serialized;
 
         private bool _valueSet;
+
+        private object lastReadValue;
+        private int lastReadValueT;
 
         public MenuItem(string name, string displayName)
         {
@@ -621,9 +645,15 @@ namespace LeagueSharp.Common
             {
                 if (_id != null) return Id;
 
-                return _assemblyPath + DisplayName + Name;
+                return (_appendAssemblyPathToId ? _assemblyPath : "") + DisplayName + Name;
             }
             set { _id = value; }
+        }
+
+        internal MenuItem DontAppendAP()
+        {
+            _appendAssemblyPathToId = false;
+            return this;
         }
 
         internal void OnClick(float X, float Y, bool up)
@@ -655,6 +685,30 @@ namespace LeagueSharp.Common
 
                 OnMoveMouse(X, Y);
             }
+
+            if (ValueType == "Circle")
+            {
+                _interacting = false;
+                if (X < MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight)
+                {
+                    _interacting = !up;
+                }
+                else if (X < MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight && !up)
+                {
+                    var val = GetValue<Circle>();
+                    var newVal = new Circle(!val.Active, val.Color);
+                    SetValue(newVal);
+                }
+                else if (!up)
+                {
+                    var val = GetValue<Circle>();
+                    _colorId = (_colorId != MenuSettings.ColorList.Count - 1) ? _colorId + 1 : 0;
+                    SetValue(new Circle(val.Active, Color.FromArgb(val.Color.A, MenuSettings.ColorList[_colorId])));
+                }
+
+                OnMoveMouse(X, Y);
+            }
+
             if (ValueType == "KeyBind" && !up)
             {
                 if (X > MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight)
@@ -751,6 +805,20 @@ namespace LeagueSharp.Common
                     SetValue(c);
                 }
             }
+
+            if (ValueType == "Circle")
+            {
+                if (_interacting)
+                {
+                    var val = GetValue<Circle>();
+                    var alpha = X * 255 / (MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight * 2);
+
+                    alpha = Math.Max(Math.Min(alpha, 255), 0);
+                    var c = Color.FromArgb((int)alpha, val.Color);
+
+                    SetValue(new Circle(val.Active, c));
+                }
+            }
         }
 
         internal void Draw(int X, int Y)
@@ -825,12 +893,34 @@ namespace LeagueSharp.Common
                     MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight, val);
             }
 
+            if (ValueType == "Circle")
+            {
+                var val = GetValue<Circle>();
+
+                var t = (MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight - 7) * (val.Color.A) / (255);
+                Drawing.DrawLine(X + 5 + t, Y + 2, X + 5 + t, Y + MenuSettings.MenuItemHeight - 1, 3,
+                    MenuSettings.SliderIndicator);
+
+                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight, Y,
+                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight,
+                    val.Active ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor);
+                Drawing.DrawText(
+                    X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight - 7 -
+                    Drawing.GetTextExtent(val.Active ? "On" : "Off").Width,
+                    Y + v, Color.White, val.Active ? "On" : "Off");
+
+                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight, Y,
+                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight, val.Color);
+            }
+
+
             if (ValueType == "StringList")
             {
                 var val = GetValue<StringList>();
                 var s = val.SList[val.SelectedIndex];
                 Drawing.DrawText(
-                    X + MenuSettings.MenuItemWidth - Drawing.GetTextExtent(s).Width - 7 - 2 * MenuSettings.MenuItemHeight,
+                    X + MenuSettings.MenuItemWidth - Drawing.GetTextExtent(s).Width - 7 -
+                    2 * MenuSettings.MenuItemHeight,
                     Y + v, Color.White, s);
 
                 MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight * 2, Y,
@@ -848,8 +938,13 @@ namespace LeagueSharp.Common
 
         public T GetValue<T>()
         {
-            var read = Global.Read<T>(Id, true);
-            return read;
+            if (Environment.TickCount - lastReadValueT < 75) return (T)lastReadValue;
+
+            var val = Global.Read<T>(Id, true);
+            lastReadValue = val;
+            lastReadValueT = Environment.TickCount;
+
+            return val;
         }
 
         public MenuItem SetValue<T>(T newValue)
@@ -884,6 +979,11 @@ namespace LeagueSharp.Common
                 ValueType = "StringList";
             }
 
+            if (newValue.GetType().ToString().Contains("Circle"))
+            {
+                ValueType = "Circle";
+            }
+
             /* Read the value from the saved configuration file.*/
             var dName = Path.GetFileName(_assemblyPath);
 
@@ -902,8 +1002,15 @@ namespace LeagueSharp.Common
                     if (ValueType == "KeyBind")
                     {
                         var cValue = (KeyBind)(object)newValue;
+
                         if (cValue.Type != KeyBindType.Press)
                             newValue = Global.Deserialize<T>(savedObject);
+                        else
+                        {
+                            var savedValue = (KeyBind)(object)Global.Deserialize<T>(savedObject);
+                            cValue.Key = savedValue.Key;
+                            newValue = (T)(object)cValue;
+                        }
                     }
                     else
                     {
@@ -912,10 +1019,11 @@ namespace LeagueSharp.Common
                 }
             }
 
-            if (typeof(T).IsSerializable)
+            if (typeof (T).IsSerializable)
                 _serialized = Global.Serialize(newValue);
 
             _valueSet = true;
+
             Global.Write(Id, newValue);
             return this;
         }

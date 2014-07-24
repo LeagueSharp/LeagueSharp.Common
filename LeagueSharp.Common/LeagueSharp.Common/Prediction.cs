@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -17,12 +16,12 @@ namespace LeagueSharp.Common
     {
         public enum HitChance
         {
-            VP_Dashing = 4,
-            VP_Immobile = 3,
-            VP_HighHitchance = 2,
-            VP_LowHitchance = 1,
-            VP_CantHit = 0,
-            VP_Collision = -1,
+            Dashing = 4,
+            Immobile = 3,
+            HighHitchance = 2,
+            LowHitchance = 1,
+            CantHit = 0,
+            Collision = -1,
         }
 
         public enum SkillshotType
@@ -50,7 +49,6 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Game.OnGameProcessPacket += OnProcessPacket;
             Game.OnGameUpdate += OnTick;
-            Game.OnWndProc += onwndmsg;
             //Drawing.OnDraw += Draw;
 
             Blinks.Add("summonerflash", new BlinkData(400, 0.6f, false));
@@ -120,17 +118,6 @@ namespace LeagueSharp.Common
             DashData.Add("yasuodashwrapper", 0.25f); //yasuo e
         }
 
-        private static void onwndmsg(WndEventArgs args)
-        {
-            if (args.Msg == 0x100)
-            {
-                if (args.WParam == 74)
-                {
-                    // TList.Add(Utils.To2D(Game.CursorPos));
-                }
-            }
-        }
-
         private static void OnTick(EventArgs args)
         {
             foreach (var unit in ObjectManager.Get<Obj_AI_Hero>())
@@ -191,21 +178,17 @@ namespace LeagueSharp.Common
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
             /*Dash*/
-            if (args.PacketData[0] == 99)
+            if (args.PacketData[0] == Packet.S2C.Dash.Header)
             {
-                var stream = new MemoryStream(args.PacketData);
-                var b = new BinaryReader(stream);
-                b.BaseStream.Position = b.BaseStream.Position + 12;
-                var NetworkID = BitConverter.ToInt32(b.ReadBytes(4), 0);
-                var Speed = BitConverter.ToSingle(b.ReadBytes(4), 0);
-                var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(NetworkID);
+                var decodedPacket = Packet.S2C.Dash.Decoded(args.PacketData);
+                var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(decodedPacket.UnitNetworkId);
                 if (unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
                 {
                     if (!Dashes.ContainsKey(unit.NetworkId))
                         Dashes.Add(unit.NetworkId, new Dash(0, 0, false, new Vector2()));
 
                     Dashes[unit.NetworkId].processed = false;
-                    Dashes[unit.NetworkId].Speed = Speed;
+                    Dashes[unit.NetworkId].Speed = decodedPacket.Speed;
                     Dashes[unit.NetworkId].IsBlink = false;
                 }
             }
@@ -273,7 +256,7 @@ namespace LeagueSharp.Common
             float range, bool collision, SkillshotType stype, Vector3 rangeCheckFrom = new Vector3())
         {
             var result = new PredictionOutput(new Vector2(), new Vector2(), 0);
-            if (rangeCheckFrom.X.CompareTo(0) == 0)
+            if (!rangeCheckFrom.To2D().IsValid())
             {
                 rangeCheckFrom = ObjectManager.Player.ServerPosition;
             }
@@ -299,7 +282,7 @@ namespace LeagueSharp.Common
                         /* Mid air */
                         result.CastPosition = iPrediction.CastPosition;
                         result.Position = iPrediction.Position;
-                        result.HitChance = HitChance.VP_Dashing;
+                        result.HitChance = HitChance.Dashing;
                     }
                     else
                     {
@@ -314,17 +297,17 @@ namespace LeagueSharp.Common
                         {
                             result.CastPosition = endPoint.To3D();
                             result.Position = endPoint.To3D();
-                            result.HitChance = HitChance.VP_Dashing;
+                            result.HitChance = HitChance.Dashing;
                         }
                         else
                         {
                             result.CastPosition = endPoint.To3D();
                             result.Position = endPoint.To3D();
-                            result.HitChance = HitChance.VP_CantHit;
+                            result.HitChance = HitChance.CantHit;
                         }
                     }
                 }
-                /*Blinks*/
+                    /*Blinks*/
                 else
                 {
                     var endPoint = Dashes[unit.NetworkId].EndPos;
@@ -335,11 +318,11 @@ namespace LeagueSharp.Common
 
                     if ((Dashes[unit.NetworkId].endT - Game.Time + width / unit.MoveSpeed) >= totaldelay)
                     {
-                        result.HitChance = HitChance.VP_Dashing;
+                        result.HitChance = HitChance.Dashing;
                     }
                     else //TODO:Get the location where he is most likely going after blinking
                     {
-                        result.HitChance = HitChance.VP_CantHit;
+                        result.HitChance = HitChance.CantHit;
                     }
                 }
             }
@@ -353,14 +336,14 @@ namespace LeagueSharp.Common
                     /* Unit will  be immobile */
                     result.CastPosition = unit.ServerPosition;
                     result.Position = unit.ServerPosition;
-                    result.HitChance = HitChance.VP_Immobile;
+                    result.HitChance = HitChance.Immobile;
                 }
                 else
                 {
                     /* Unit will be able to escape if we cast just in the position he is. TODO: Calculate the escape route he will likely take */
                     result.CastPosition = unit.ServerPosition;
                     result.Position = unit.ServerPosition;
-                    result.HitChance = HitChance.VP_CantHit;
+                    result.HitChance = HitChance.CantHit;
                 }
             }
             else
@@ -371,7 +354,7 @@ namespace LeagueSharp.Common
                     /*Unit not moving*/
                     result.CastPosition = unit.ServerPosition;
                     result.Position = unit.ServerPosition;
-                    result.HitChance = HitChance.VP_HighHitchance;
+                    result.HitChance = HitChance.HighHitchance;
                 }
                 else
                 {
@@ -382,31 +365,31 @@ namespace LeagueSharp.Common
                     {
                         result.CastPosition = iPrediction.CastPosition;
                         result.Position = iPrediction.Position;
-                        result.HitChance = HitChance.VP_HighHitchance;
+                        result.HitChance = HitChance.HighHitchance;
                         /* Change the hitchance according to the path change rate */
                     }
                     else
                     {
                         result.CastPosition = iPrediction.CastPosition;
                         result.Position = iPrediction.Position;
-                        result.HitChance = HitChance.VP_CantHit;
+                        result.HitChance = HitChance.CantHit;
                     }
                 }
             }
 
             if (range != float.MaxValue)
             {
-                if (stype == SkillshotType.SkillshotLine)
+                if (stype != SkillshotType.SkillshotCircle)
                 {
                     if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.Position.To2D()) >= range * range)
                     {
-                        result.HitChance = HitChance.VP_CantHit;
+                        result.HitChance = HitChance.CantHit;
                     }
 
                     if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.CastPosition.To2D()) >=
                         range * range)
                     {
-                        result.HitChance = HitChance.VP_CantHit;
+                        result.HitChance = HitChance.CantHit;
                     }
                 }
                 else
@@ -414,17 +397,22 @@ namespace LeagueSharp.Common
                     if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.Position.To2D()) >=
                         Math.Pow(range + width, 2))
                     {
-                        result.HitChance = HitChance.VP_CantHit;
+                        result.HitChance = HitChance.CantHit;
                     }
                     if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.CastPosition.To2D()) >=
                         Math.Pow(range + width, 2))
                     {
-                        result.HitChance = HitChance.VP_CantHit;
+                        result.HitChance = HitChance.CantHit;
                     }
+
+                    if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.CastPosition.To2D()) >= range * range)
+                        result.CastPosition = rangeCheckFrom +
+                                              (range - 10) *
+                                              (result.CastPosition - rangeCheckFrom).To2D().Normalized().To3D();
                 }
             }
 
-            if (collision && result.HitChance > HitChance.VP_CantHit)
+            if (collision && result.HitChance > HitChance.CantHit)
             {
                 var CheckLocations = new List<Vector2>();
                 CheckLocations.Add(result.Position.To2D());
@@ -436,7 +424,7 @@ namespace LeagueSharp.Common
 
                 if (Col1.Count > 0)
                 {
-                    result.HitChance = HitChance.VP_Collision;
+                    result.HitChance = HitChance.Collision;
                     result.CollisionUnitsList.AddRange(Col1);
                 }
             }
@@ -464,9 +452,9 @@ namespace LeagueSharp.Common
                 case SkillshotType.SkillshotCone:
                     objects = GetAoeConePrediction(unit, width, range, delay, speed, collision, from, rangeCheckFrom);
                     break;
-                //case SkillshotAOEType.SkillshotArc:
-                //    objects = GetAoeArcPrediction(unit, width, range, delay, speed, collision, from, rangeCheckFrom, accel);
-                //    break;
+                    //case SkillshotAOEType.SkillshotArc:
+                    //    objects = GetAoeArcPrediction(unit, width, range, delay, speed, collision, from, rangeCheckFrom, accel);
+                    //    break;
             }
 
             return objects;
@@ -612,7 +600,7 @@ namespace LeagueSharp.Common
                     var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
                         SkillshotType.SkillshotCircle, rangeCheckFrom);
 
-                    if (pred.HitChance >= HitChance.VP_CantHit)
+                    if (pred.HitChance >= HitChance.CantHit)
                     {
                         Points.Add(pred.Position.To2D());
                     }
@@ -714,7 +702,7 @@ namespace LeagueSharp.Common
                     var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
                         SkillshotType.SkillshotLine, rangeCheckFrom);
 
-                    if (pred.HitChance >= HitChance.VP_CantHit)
+                    if (pred.HitChance >= HitChance.CantHit)
                     {
                         points.Add(pred.Position.To2D());
                     }
@@ -828,7 +816,7 @@ namespace LeagueSharp.Common
                     var pred = GetBestPosition(enemy, delay, 1, speed, from, range, collision,
                         SkillshotType.SkillshotLine, rangeCheckFrom);
 
-                    if (pred.HitChance >= HitChance.VP_CantHit)
+                    if (pred.HitChance >= HitChance.CantHit)
                     {
                         points.Add(pred.Position.To2D());
                     }
@@ -997,8 +985,8 @@ namespace LeagueSharp.Common
                             tsAngle = Geometry.DegreeToRadian((-47) - (830 - range) / (-20)); //interpolate launch angle
                             tsVo = (float)Math.Sqrt((range * accel) / Math.Sin(2 * tsAngle)); //initial velocity
                             tsTestZ = (float)(Math.Tan(tsAngle) * tsTarget.X -
-                                               (accel / (Math.Pow(2 * tsVo, 2) * Math.Pow(Math.Cos(tsAngle), 2))) *
-                                               Math.Pow(tsTarget.X, 2));
+                                              (accel / (Math.Pow(2 * tsVo, 2) * Math.Pow(Math.Cos(tsAngle), 2))) *
+                                              Math.Pow(tsTarget.X, 2));
                             if (Math.Abs(Math.Ceiling(tsTestZ) - Math.Ceiling(points[0].Y)) <= roundRange)
                             {
                                 tsFlag = true;
@@ -1022,7 +1010,7 @@ namespace LeagueSharp.Common
 
                                     if ((targetAngle <= newTheta) &&
                                         ((tsTargetAngle <= newTheta)))
-                                    //angle of theta must be greater than target
+                                        //angle of theta must be greater than target
                                     {
                                         target = targetOriginal.Rotated(theta); //rotate to neutral axis
                                         angle = Geometry.DegreeToRadian((-47) - (830 - range) / (-20));
@@ -1035,8 +1023,8 @@ namespace LeagueSharp.Common
                                                  Math.Pow(target.X, 2));
 
                                         if (Math.Abs(Math.Ceiling(testZ) - Math.Ceiling(target.Y)) <= roundRange)
-                                        //compensate for rounding
-                                        //collision detected
+                                            //compensate for rounding
+                                            //collision detected
                                         {
                                             collisionCount = collisionCount + 1;
                                         }
@@ -1056,8 +1044,8 @@ namespace LeagueSharp.Common
             }
             return new Object[]
             {
-                (float) (ObjectManager.Player.ServerPosition.X + highestRange*Math.Cos(highestAngle)),
-                (float) (ObjectManager.Player.ServerPosition.Y + highestRange*Math.Sin(highestAngle)),
+                (float)(ObjectManager.Player.ServerPosition.X + highestRange * Math.Cos(highestAngle)),
+                (float)(ObjectManager.Player.ServerPosition.Y + highestRange * Math.Sin(highestAngle)),
                 highestCollision
             };
         }
@@ -1082,7 +1070,7 @@ namespace LeagueSharp.Common
                     var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
                         SkillshotType.SkillshotLine, rangeCheckFrom);
 
-                    if (pred.HitChance >= HitChance.VP_CantHit)
+                    if (pred.HitChance >= HitChance.CantHit)
                     {
                         points.Add(pred.Position.To2D());
                     }

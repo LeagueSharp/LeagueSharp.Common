@@ -1,12 +1,16 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.ComponentModel;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
     internal static class Common
     {
+        private const int localversion = 17;
         internal static bool isInitialized;
-        private const int localversion = 16;
 
         internal static void InitializeCommonLib()
         {
@@ -17,14 +21,17 @@ namespace LeagueSharp.Common
         private static void UpdateCheck()
         {
             Game.PrintChat("<font color='#33FFFF'>>>LeagueSharp.Common loaded <<");
-            BackgroundWorker bgw = new BackgroundWorker();
+            var bgw = new BackgroundWorker();
             bgw.DoWork += bgw_DoWork;
             bgw.RunWorkerAsync();
         }
 
         private static void bgw_DoWork(object sender, DoWorkEventArgs e)
         {
-            Updater myUpdater = new Updater("https://github.com/Andyi19/LeagueSharp/raw/master/Versions/LeagueSharp.Common.txt", "https://github.com/Andyi19/LeagueSharp/raw/master/LibAssemblies/LeagueSharp.Common.dll", localversion);
+            var myUpdater =
+                new Updater("https://github.com/Andyi19/LeagueSharp/raw/master/Versions/LeagueSharp.Common.txt",
+                    "https://github.com/Andyi19/LeagueSharp/raw/master/LibAssemblies/LeagueSharp.Common.dll",
+                    localversion);
             if (myUpdater.NeedUpdate)
             {
                 Game.PrintChat("<font color='#33FFFF'>LeagueSharp.Common: Updating ...");
@@ -35,7 +42,8 @@ namespace LeagueSharp.Common
             }
             else
             {
-                Game.PrintChat("<font color='#33FFFF'>>>LeagueSharp.Common: Most recent version ({0}) loaded!", localversion);
+                Game.PrintChat("<font color='#33FFFF'>>>LeagueSharp.Common: Most recent version ({0}) loaded!",
+                    localversion);
             }
         }
     }
@@ -43,9 +51,10 @@ namespace LeagueSharp.Common
     internal class Updater
     {
         private readonly string _updatelink;
+
+        private readonly System.Net.WebClient _wc = new System.Net.WebClient { Proxy = null };
         public bool NeedUpdate = false;
 
-        readonly System.Net.WebClient _wc = new System.Net.WebClient() { Proxy = null };
         public Updater(string versionlink, string updatelink, int localversion)
         {
             _updatelink = updatelink;
@@ -57,12 +66,17 @@ namespace LeagueSharp.Common
         {
             try
             {
-                if (System.IO.File.Exists(System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak"))
+                if (
+                    System.IO.File.Exists(
+                        System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak"))
                 {
-                    System.IO.File.Delete(System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak");
+                    System.IO.File.Delete(
+                        System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak");
                 }
-                System.IO.File.Move(System.Reflection.Assembly.GetExecutingAssembly().Location, System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak");
-                _wc.DownloadFile(_updatelink, System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                System.IO.File.Move(System.Reflection.Assembly.GetExecutingAssembly().Location,
+                    System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak");
+                _wc.DownloadFile(_updatelink,
+                    System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location));
                 return true;
             }
             catch (Exception ex)

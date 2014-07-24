@@ -5,19 +5,61 @@
  * Version: 2 / 10.05.2014
  */
 
+#region
+
 using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
     public static class DamageLib
     {
+        public enum SpellType
+        {
+            Q,
+            W,
+            E,
+            R,
+            AD,
+            IGNITE,
+            HEXGUN,
+            DFG,
+            BOTRK,
+            BILGEWATER,
+            TIAMAT,
+            HYDRA
+        }
+
+        public enum StageType
+        {
+            FirstDamage,
+            SecondDamage,
+            ThirdDamage,
+            FourthDamage,
+            Default,
+        }
+
+        private static readonly List<Enemy> EnemyList = new List<Enemy>();
+
+        private static readonly ChampDamage Champ;
+
+        // offsensive masteries
+        private static readonly bool doubleedgedsword;
+        private static readonly bool havoc;
+        private static readonly int executioner;
+        private static readonly bool arcaneblade;
+
+        private static readonly bool butcher;
+
         static DamageLib()
         {
             if (Common.isInitialized == false)
             {
                 Common.InitializeCommonLib();
             }
+
             // Get my Hero
             switch (ObjectManager.Player.BaseSkinName)
             {
@@ -383,95 +425,60 @@ namespace LeagueSharp.Common
                                    "'. Please report this in the forums, it's either a wrong typed name or a new hero that needs to be added!");
                     break;
             }
+
             // Get Masteries
-            foreach (Mastery mastery in ObjectManager.Player.Masteries)
+            foreach (var mastery in ObjectManager.Player.Masteries)
             {
                 if (mastery.Page == MasteryPage.Offense)
                 {
-                    if (mastery.Id == 65) // double edged sword
+                    switch (mastery.Id)
                     {
-                        if (mastery.Points == 1)
-                        {
-                            doubleedgedsword = true;
-                        }
-                    }
-                    else if (mastery.Id == 146) // havoc
-                    {
-                        if (mastery.Points == 1)
-                        {
-                            havoc = true;
-                        }
-                    }
-                    else if (mastery.Id == 132) // arcane blade
-                    {
-                        if (mastery.Points == 1)
-                        {
-                            arcaneblade = true;
-                        }
-                    }
-                    else if (mastery.Id == 100) // executioner
-                    {
-                        if (mastery.Points == 1)
-                        {
-                            executioner = 1;
-                        }
-                        else if (mastery.Points == 2)
-                        {
-                            executioner = 2;
-                        }
-                        else if (mastery.Points == 3)
-                        {
-                            executioner = 3;
-                        }
-                    }
-                    else if (mastery.Id == 68) // Butcher
-                    {
-                        if (mastery.Points == 1)
-                        {
-                            butcher = true;
-                        }
+                        case 65:
+                            doubleedgedsword = (mastery.Points == 1);
+                            break;
+                        case 146:
+                            havoc = (mastery.Points == 1);
+                            break;
+                        case 132:
+                            arcaneblade = (mastery.Points == 1);
+                            break;
+                        case 100:
+                            executioner = mastery.Points;
+                            break;
+                        case 68:
+                            butcher = (mastery.Points == 1);
+                            break;
                     }
                 }
             }
 
             // Get enemy masteries
-            foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>())
+            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (hero != null && hero.IsValid == true)
+                if (hero != null && hero.IsValid)
                 {
-                    int unyielding = 0;
-                    int block = 0;
-                    foreach (Mastery mastery in hero.Masteries)
+                    var unyielding = 0;
+                    var block = 0;
+                    foreach (var mastery in hero.Masteries)
                     {
                         if (mastery.Page == MasteryPage.Defense)
                         {
-                            if (mastery.Id == 81) // Unyielding
+                            switch (mastery.Id)
                             {
-                                if (mastery.Points == 1)
-                                {
-                                    if (hero.CombatType == GameObjectCombatType.Melee)
+                                case 65:
+                                    block = mastery.Points;
+                                    break;
+
+                                case 81:
+                                    if (mastery.Points == 1)
                                     {
-                                        unyielding = 2;
+                                        unyielding = (hero.CombatType == GameObjectCombatType.Melee) ? 2 : 1;
                                     }
-                                    else
-                                    {
-                                        unyielding = 1;
-                                    }
-                                }
-                            }
-                            if (mastery.Id == 65) // Block
-                            {
-                                if (mastery.Points == 1)
-                                {
-                                    block = 1;
-                                }
-                                else if (mastery.Points == 2)
-                                {
-                                    block = 2;
-                                }
+                                    break;
                             }
                         }
                     }
+
                     EnemyList.Add(new Enemy
                     {
                         NetworkId = hero.NetworkId,
@@ -481,12 +488,6 @@ namespace LeagueSharp.Common
                 }
             }
         }
-
-        private static readonly List<Enemy> EnemyList = new List<Enemy>();
-
-        private static readonly ChampDamage Champ;
-
-        private delegate double ChampDamage(Obj_AI_Hero enemy, SpellType type, StageType stagetype);
 
         private static bool IsBetween<T>(this T item, T start, T end)
         {
@@ -518,11 +519,11 @@ namespace LeagueSharp.Common
             }
             if (isAA)
             {
-                foreach (InventorySlot slot in ObjectManager.Player.InventoryItems)
+                foreach (var slot in ObjectManager.Player.InventoryItems)
                 {
                     if ((int)slot.Id == 3153) // BOTRK
                     {
-                        double tmpdmg = minion.Health * 0.05;
+                        var tmpdmg = minion.Health * 0.05;
                         if (tmpdmg >= 60)
                         {
                             tmpdmg = 60;
@@ -533,7 +534,7 @@ namespace LeagueSharp.Common
             }
 
             double newarmor = minion.Armor * ObjectManager.Player.PercentArmorPenetrationMod;
-            double dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
+            var dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
             return (((dmg + additionaldmg) * dmgreduction));
         }
 
@@ -561,11 +562,12 @@ namespace LeagueSharp.Common
             }
 
             double newmr = minion.SpellBlock * ObjectManager.Player.PercentMagicPenetrationMod;
-            double dmgreduction = 100 / (100 + newmr - ObjectManager.Player.FlatMagicPenetrationMod);
+            var dmgreduction = 100 / (100 + newmr - ObjectManager.Player.FlatMagicPenetrationMod);
             return (((dmg + additionaldmg) * dmgreduction));
         }
 
-        public static double CalcObjectToObjectDmg(Obj_AI_Base attackminion, Obj_AI_Base shotminion, double extraDamage = 0)
+        public static double CalcObjectToObjectDmg(Obj_AI_Base attackminion, Obj_AI_Base shotminion,
+            double extraDamage = 0)
         {
             double armorPenPercent = attackminion.PercentArmorPenetrationMod;
             double armorPen = attackminion.FlatArmorPenetrationMod;
@@ -585,7 +587,9 @@ namespace LeagueSharp.Common
             var newarmor = shotminion.Armor * armorPenPercent;
             var dmgreduction = 100 / (100 + Math.Max(newarmor - armorPen, 0));
 
-            if ((attackminion is Obj_AI_Turret) && (shotminion.BaseSkinName == "Red_Minion_MechCannon" || shotminion.BaseSkinName == "Blue_Minion_MechCannon"))
+            if ((attackminion is Obj_AI_Turret) &&
+                (shotminion.BaseSkinName == "Red_Minion_MechCannon" ||
+                 shotminion.BaseSkinName == "Blue_Minion_MechCannon"))
             {
                 dmgreduction = 0.8 * dmgreduction;
             }
@@ -603,21 +607,13 @@ namespace LeagueSharp.Common
             return (((attackminion.BaseAttackDamage + attackminion.FlatPhysicalDamageMod + extraDamage) * dmgreduction));
         }
 
-        // offsensive masteries
-        private static readonly bool doubleedgedsword;
-        private static readonly bool havoc;
-        private static readonly int executioner;
-        private static readonly bool arcaneblade;
-
-        private static readonly bool butcher;
-
         /// <summary>
         /// Calculates the damage into the physical damage using Armor, Armorpenetration and Masteries
         /// </summary>
         /// <param name="dmg">The basic damage</param>
-        /// <param name="enemy">The enemy hero object</param>
+        /// <param name="enemy">The enemy object</param>
         /// <returns>Returns the physical damage</returns>
-        public static double CalcPhysicalDmg(double dmg, Obj_AI_Hero enemy)
+        public static double CalcPhysicalDmg(double dmg, Obj_AI_Base enemy)
         {
             double additionaldmg = 0;
             if (doubleedgedsword)
@@ -631,10 +627,12 @@ namespace LeagueSharp.Common
                     additionaldmg += dmg * 0.015;
                 }
             }
+
             if (havoc)
             {
                 additionaldmg += dmg * 0.03;
             }
+
             if (executioner > 0)
             {
                 if (executioner == 1)
@@ -659,10 +657,17 @@ namespace LeagueSharp.Common
                     }
                 }
             }
-            Enemy currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-            int reducedmg = currentenemy.unyielding;
+
+            var reducedmg = 0;
+
+            if (enemy is Obj_AI_Hero)
+            {
+                var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                reducedmg = currentenemy.unyielding;
+            }
+
             double newarmor = enemy.Armor * ObjectManager.Player.PercentArmorPenetrationMod;
-            double dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
+            var dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
             return (((dmg + additionaldmg) * dmgreduction)) - reducedmg;
         }
 
@@ -670,9 +675,9 @@ namespace LeagueSharp.Common
         /// Calculates the damage into the magic damage using MR, Magicpenetration and Masteries
         /// </summary>
         /// <param name="dmg">The basic damage</param>
-        /// <param name="enemy">The enemy hero object</param>
+        /// <param name="enemy">The enemy object</param>
         /// <returns>Returns the magic damage</returns>
-        public static double CalcMagicDmg(double dmg, Obj_AI_Hero enemy)
+        public static double CalcMagicDmg(double dmg, Obj_AI_Base enemy)
         {
             double additionaldmg = 0;
             if (doubleedgedsword)
@@ -714,50 +719,65 @@ namespace LeagueSharp.Common
                     }
                 }
             }
-            Enemy currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-            int reducedmg = currentenemy.unyielding;
+
+            var reducedmg = 0;
+
+            if (enemy is Obj_AI_Hero)
+            {
+                var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                reducedmg = currentenemy.unyielding;
+            }
+
             double newspellblock = enemy.SpellBlock * ObjectManager.Player.PercentMagicPenetrationMod;
-            double dmgreduction = 100 / (100 + newspellblock - ObjectManager.Player.FlatMagicPenetrationMod);
+            var dmgreduction = 100 / (100 + newspellblock - ObjectManager.Player.FlatMagicPenetrationMod);
             return (((dmg + additionaldmg) * dmgreduction)) - reducedmg;
         }
 
         /// <summary>
         /// Calculates the damage of a Spell, Auto Attack or Item for an enemy champion.
         /// </summary>
-        /// <param name="enemy">The enemy hero object</param>
+        /// <param name="enemy">The enemy object</param>
         /// <param name="type">The type of Spell</param>
         /// <param name="stagetype">The stage of the Spell</param>
         /// <returns>Returns the physical/magic damage</returns>
-        public static double getDmg(Obj_AI_Hero enemy, SpellType type, StageType stagetype = StageType.Default)
+        public static double getDmg(Obj_AI_Base enemy, SpellType type, StageType stagetype = StageType.Default)
         {
             switch (type)
             {
                 case SpellType.AD:
                     if (arcaneblade == false)
                     {
-                        Enemy currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-                        int dmgreduce = currentenemy.block;
-                        int reduce2 = 0;
+                        var dmgreduce = 0;
+                        if (enemy is Obj_AI_Hero)
+                        {
+                            var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                            dmgreduce = currentenemy.block;
+                        }
+
+                        var reduce2 = 0;
                         double multiplier = 1;
                         double plusdmg = 0;
-                        foreach (InventorySlot inv in enemy.InventoryItems)
-                        {
-                            if ((int)inv.Id == 1054) // Dorans Shield -> Basic attacks -8 dmg
+                        if (enemy is Obj_AI_Hero)
+                            foreach (var inv in enemy.InventoryItems)
                             {
-                                reduce2 += 8;
+                                if ((int)inv.Id == 1054) // Dorans Shield -> Basic attacks -8 dmg
+                                {
+                                    reduce2 += 8;
+                                }
+                                if ((int)inv.Id == 3047) // Ninja Tabi
+                                {
+                                    multiplier -= 0.095;
+                                }
                             }
-                            if ((int)inv.Id == 3047) // Ninja Tabi
-                            {
-                                multiplier -= 0.095;
-                            }
-                        }
-                        foreach (InventorySlot slot in ObjectManager.Player.InventoryItems)
+
+                        foreach (var slot in ObjectManager.Player.InventoryItems)
                         {
                             if ((int)slot.Id == 3153) // BOTRK
                             {
                                 plusdmg = enemy.Health * 0.05;
                             }
                         }
+
                         return
                             CalcPhysicalDmg(
                                 (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) *
@@ -765,30 +785,36 @@ namespace LeagueSharp.Common
                     }
                     else
                     {
-                        Enemy currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-                        int dmgreduce = currentenemy.block;
-                        int reduce2 = 0;
+                        var dmgreduce = 0;
+                        if (enemy is Obj_AI_Hero)
+                        {
+                            var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                            dmgreduce = currentenemy.block;
+                        }
+                        var reduce2 = 0;
                         double multiplier = 1;
                         double plusdmg = 0;
-                        foreach (InventorySlot inv in enemy.InventoryItems)
-                        {
-                            if ((int)inv.Id == 1054) // Dorans Shield -> Basic attacks -8 dmg
+                        if (enemy is Obj_AI_Hero)
+                            foreach (var inv in enemy.InventoryItems)
                             {
-                                reduce2 += 8;
+                                if ((int)inv.Id == 1054) // Dorans Shield -> Basic attacks -8 dmg
+                                {
+                                    reduce2 += 8;
+                                }
+                                if ((int)inv.Id == 3047) // Ninja Tabi
+                                {
+                                    multiplier -= 0.095;
+                                }
                             }
-                            if ((int)inv.Id == 3047) // Ninja Tabi
-                            {
-                                multiplier -= 0.095;
-                            }
-                        }
-                        foreach (InventorySlot slot in ObjectManager.Player.InventoryItems)
+
+                        foreach (var slot in ObjectManager.Player.InventoryItems)
                         {
                             if ((int)slot.Id == 3153) // BOTRK
                             {
                                 plusdmg = enemy.Health * 0.05;
                             }
                         }
-                        double bonusmagicdmg = CalcMagicDmg(0.05 * ObjectManager.Player.FlatMagicDamageMod, enemy);
+                        var bonusmagicdmg = CalcMagicDmg(0.05 * ObjectManager.Player.FlatMagicDamageMod, enemy);
                         return
                             CalcPhysicalDmg(
                                 (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) *
@@ -841,7 +867,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Aatrox(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Aatrox(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -871,7 +897,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Ahri(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Ahri(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -887,12 +913,12 @@ namespace LeagueSharp.Common
                             return (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                    (0.35 * ObjectManager.Player.FlatMagicDamageMod); // way back true dmg
                         case StageType.Default:
-                            double waytoenemy =
+                            var waytoenemy =
                                 CalcMagicDmg(
                                     (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.35 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                            double wayback = (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
-                                             (0.35 * ObjectManager.Player.FlatMagicDamageMod);
+                            var wayback = (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
+                                          (0.35 * ObjectManager.Player.FlatMagicDamageMod);
                             return waytoenemy + wayback; // both
                         default:
                             throw new InvalidSpellTypeException();
@@ -939,7 +965,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Akali(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Akali(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -956,7 +982,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // q throw + hitted with something
+                            // q throw + hitted with something
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -978,7 +1004,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Alistar(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Alistar(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1001,7 +1027,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Amumu(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Amumu(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1011,9 +1037,9 @@ namespace LeagueSharp.Common
                             (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 50)) +
                             (0.7 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.W:
-                    double basedmg = CalcMagicDmg((4 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 4)),
+                    var basedmg = CalcMagicDmg((4 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 4)),
                         enemy);
-                    double percentofmaxhealth = (1.2 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 0.3));
+                    var percentofmaxhealth = (1.2 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 0.3));
                     double additionalpercentper100ap = 0;
                     if (ObjectManager.Player.FlatMagicDamageMod < 100)
                     {
@@ -1055,7 +1081,7 @@ namespace LeagueSharp.Common
                     {
                         additionalpercentper100ap = 9;
                     }
-                    double healthbase = enemy.MaxHealth / 100 * (percentofmaxhealth + additionalpercentper100ap);
+                    var healthbase = enemy.MaxHealth / 100 * (percentofmaxhealth + additionalpercentper100ap);
                     return basedmg + CalcMagicDmg(healthbase, enemy);
                 case SpellType.E:
                     return
@@ -1072,7 +1098,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Anivia(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Anivia(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1083,7 +1109,8 @@ namespace LeagueSharp.Common
                             return
                                 CalcMagicDmg(
                                     (60 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 60)) +
-                                    (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy); // when stunned (both of dmg)
+                                    (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            // when stunned (both of dmg)
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -1120,7 +1147,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Annie(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Annie(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1147,7 +1174,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (85 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 125)) +
                                     (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // max damage with first tick of tibbers sunfire
+                            // max damage with first tick of tibbers sunfire
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -1155,7 +1182,7 @@ namespace LeagueSharp.Common
                                     (0.8 * ObjectManager.Player.FlatMagicDamageMod), enemy); // basic ult summoner dmg
                         case StageType.SecondDamage:
                             return CalcMagicDmg(35 + (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // per tick of tibbers sunfire
+                            // per tick of tibbers sunfire
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1164,7 +1191,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Ashe(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Ashe(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1190,7 +1217,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (37.5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 87.5)) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // dmg around the explode radius
+                            // dmg around the explode radius
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1199,7 +1226,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Blitzcrank(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Blitzcrank(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1214,7 +1241,7 @@ namespace LeagueSharp.Common
                     return
                         CalcPhysicalDmg(
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                // only the additional dmg
+                    // only the additional dmg
                 case SpellType.R:
                     switch (stagetype)
                     {
@@ -1236,7 +1263,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Brand(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Brand(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1274,7 +1301,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (150 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 300)) +
                                     (1.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // Max possible dmg to one unit
+                            // Max possible dmg to one unit
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -1288,24 +1315,30 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Braum(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Braum(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    return CalcMagicDmg((15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) + (0.25 * ObjectManager.Player.MaxHealth), enemy);
+                    return
+                        CalcMagicDmg(
+                            (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) +
+                            (0.25 * ObjectManager.Player.MaxHealth), enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
                     throw new InvalidSpellTypeException();
                 case SpellType.R:
-                    return CalcMagicDmg((50 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100)) + (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                    return
+                        CalcMagicDmg(
+                            (50 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100)) +
+                            (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 default:
                     throw new InvalidSpellTypeException();
             }
         }
 
-        private static double Caitlyn(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Caitlyn(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1349,7 +1382,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Cassiopeia(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Cassiopeia(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1410,7 +1443,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double ChoGath(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double ChoGath(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1436,7 +1469,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Corki(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Corki(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1503,7 +1536,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Darius(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Darius(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1515,7 +1548,7 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (52.5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 52.5)) +
                                     (1.05 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // max damage (outer half)
+                            // max damage (outer half)
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
@@ -1526,7 +1559,7 @@ namespace LeagueSharp.Common
                     }
                 case SpellType.W:
                     //double basicattack = CalcPhysicalDmg(ObjectManager.Unit.FlatPhysicalDamageMod + ObjectManager.Unit.BaseAttackDamage, enemy);
-                    double bonusdmg = CalcPhysicalDmg(0.2 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level,
+                    var bonusdmg = CalcPhysicalDmg(0.2 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level,
                         enemy); // only the bonus dmg
                     //return basicattack + bonusdmg;
                     return bonusdmg;
@@ -1549,7 +1582,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Diana(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Diana(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1586,25 +1619,23 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double DrMundo(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double DrMundo(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    double tmpdmg =
+                    var tmpdmg =
                         CalcMagicDmg(
-                            (enemy.Health / 100) * (12 + (3 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level)),
+                            (enemy.Health / 100) *
+                            (12 + (3 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level)),
                             enemy);
-                    double mindmg = CalcMagicDmg(30 + (50 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level),
+                    var mindmg = CalcMagicDmg(30 + (50 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level),
                         enemy);
                     if (tmpdmg > mindmg)
                     {
                         return tmpdmg;
                     }
-                    else
-                    {
-                        return mindmg;
-                    }
+                    return mindmg;
                 case SpellType.W:
                     return
                         CalcMagicDmg(
@@ -1619,13 +1650,13 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Draven(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Draven(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
                     //double baseattack = CalcPhysicalDmg(ObjectManager.Unit.BaseAttackDamage + ObjectManager.Unit.FlatPhysicalDamageMod, enemy);
-                    double bonusdmg =
+                    var bonusdmg =
                         CalcPhysicalDmg(
                             (0.35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.1)) *
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod), enemy);
@@ -1665,7 +1696,8 @@ namespace LeagueSharp.Common
                             return
                                 CalcPhysicalDmg(
                                     (60 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 80)) +
-                                    (0.88 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // minimum damage 2 hits
+                                    (0.88 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
+                            // minimum damage 2 hits
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1674,14 +1706,14 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Elise(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Elise(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "EliseHumanQ")
                     {
-                        double basedmg =
+                        var basedmg =
                             CalcMagicDmg((5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 35)), enemy);
                         double percentofcurrenthealth = 8;
                         double additionalpercentper100ap = 0;
@@ -1725,13 +1757,13 @@ namespace LeagueSharp.Common
                         {
                             additionalpercentper100ap = 27;
                         }
-                        double healthbase = enemy.Health / 100 * (percentofcurrenthealth + additionalpercentper100ap);
+                        var healthbase = enemy.Health / 100 * (percentofcurrenthealth + additionalpercentper100ap);
                         return basedmg + CalcMagicDmg(healthbase, enemy);
                     }
                     else
                     {
                         // Spider Q
-                        double basedmg =
+                        var basedmg =
                             CalcMagicDmg((20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40)), enemy);
                         double percentofcurrenthealth = 8;
                         double additionalpercentper100ap = 0;
@@ -1775,8 +1807,8 @@ namespace LeagueSharp.Common
                         {
                             additionalpercentper100ap = 27;
                         }
-                        double healthbase = (enemy.MaxHealth - enemy.Health) / 100 *
-                                            (percentofcurrenthealth + additionalpercentper100ap); // of missing health
+                        var healthbase = (enemy.MaxHealth - enemy.Health) / 100 *
+                                         (percentofcurrenthealth + additionalpercentper100ap); // of missing health
                         return basedmg + CalcMagicDmg(healthbase, enemy);
                     }
                 case SpellType.W:
@@ -1787,10 +1819,7 @@ namespace LeagueSharp.Common
                                 (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 50)) +
                                 (0.8 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                     }
-                    else
-                    {
-                        throw new InvalidSpellTypeException();
-                    }
+                    throw new InvalidSpellTypeException();
                 case SpellType.E:
                     throw new InvalidSpellTypeException();
                 case SpellType.R:
@@ -1800,7 +1829,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Evelynn(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Evelynn(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1861,14 +1890,14 @@ namespace LeagueSharp.Common
                     {
                         additionalpercentper100ap = 9;
                     }
-                    double healthbase = enemy.MaxHealth / 100 * (percentage + additionalpercentper100ap);
+                    var healthbase = enemy.MaxHealth / 100 * (percentage + additionalpercentper100ap);
                     return CalcMagicDmg(healthbase, enemy);
                 default:
                     throw new InvalidSpellTypeException();
             }
         }
 
-        private static double Ezreal(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Ezreal(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1905,7 +1934,7 @@ namespace LeagueSharp.Common
                                     (0.3 *
                                      (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage)) +
                                     (0.27 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // minimum damage after multiple targets were hitted
+                            // minimum damage after multiple targets were hitted
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1914,7 +1943,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Fiddlesticks(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Fiddlesticks(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -1949,7 +1978,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (135 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 60)) +
                                     (1.35 * (ObjectManager.Player.FlatMagicDamageMod)), enemy);
-                        // max damage to the same target_
+                            // max damage to the same target_
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1974,7 +2003,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Fiora(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Fiora(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2009,7 +2038,7 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (-20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 340)) +
                                     (2.4 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // max dmg to 1 target_ // TODO: Check if correct, Wiki giving some shit to me
+                            // max dmg to 1 target_ // TODO: Check if correct, Wiki giving some shit to me
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
@@ -2023,15 +2052,15 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Fizz(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Fizz(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    double addmg =
+                    var addmg =
                         CalcPhysicalDmg(
                             ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod, enemy);
-                    double mdmg =
+                    var mdmg =
                         CalcMagicDmg(
                             (-20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 30)) +
                             (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
@@ -2045,7 +2074,7 @@ namespace LeagueSharp.Common
                                     (5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 5)) +
                                     (0.25 * ObjectManager.Player.FlatMagicDamageMod), enemy); // active dmg
                         case StageType.FirstDamage:
-                            double basedmg =
+                            var basedmg =
                                 CalcMagicDmg(
                                     (20 + (10 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level) +
                                      (0.35 * ObjectManager.Player.FlatMagicDamageMod)), enemy); // passive dmg
@@ -2069,7 +2098,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Galio(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Galio(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2095,7 +2124,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Gangplank(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Gangplank(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2113,13 +2142,14 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 45)) +
-                            (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy); // per canonball, 25 max but randomly
+                            (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                    // per canonball, 25 max but randomly
                 default:
                     throw new InvalidSpellTypeException();
             }
         }
 
-        private static double Garen(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Garen(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2152,7 +2182,7 @@ namespace LeagueSharp.Common
                             throw new InvalidSpellTypeException();
                     }
                 case SpellType.R:
-                    double basedmg = CalcMagicDmg(
+                    var basedmg = CalcMagicDmg(
                         175 + (175 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level), enemy);
                     double hpbonus = 0;
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level == 1)
@@ -2173,7 +2203,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Gragas(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Gragas(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2204,7 +2234,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Graves(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Graves(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2241,7 +2271,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Hecarim(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Hecarim(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2293,7 +2323,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Heimerdinger(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Heimerdinger(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2341,7 +2371,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Irelia(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Irelia(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2381,7 +2411,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Janna(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Janna(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2398,7 +2428,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.35 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // damage when directly casted
+                            // damage when directly casted
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -2416,7 +2446,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double JarvanIV(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double JarvanIV(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2442,7 +2472,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Jax(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Jax(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2472,7 +2502,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Jayce(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Jayce(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2519,19 +2549,17 @@ namespace LeagueSharp.Common
                         }
                     }
                     return 0;
-                // return 0, no exception as when switching the name isn't directly changed and ppl will already try to calculate
+                    // return 0, no exception as when switching the name isn't directly changed and ppl will already try to calculate
                 case SpellType.E:
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "JayceThunderingBlow")
                     {
                         double percentage = 5 + (3 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level);
                         return
                             CalcMagicDmg(
-                                ((enemy.MaxHealth / 100) * percentage) + (ObjectManager.Player.FlatPhysicalDamageMod), enemy);
+                                ((enemy.MaxHealth / 100) * percentage) + (ObjectManager.Player.FlatPhysicalDamageMod),
+                                enemy);
                     }
-                    else
-                    {
-                        return 0;
-                    }
+                    return 0;
                 case SpellType.R:
                     throw new InvalidSpellTypeException();
                 default:
@@ -2539,7 +2567,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Jinx(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Jinx(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2560,7 +2588,7 @@ namespace LeagueSharp.Common
                     switch (stagetype)
                     {
                         case StageType.Default:
-                            double percentage =
+                            var percentage =
                                 CalcPhysicalDmg(
                                     ((enemy.MaxHealth - enemy.Health) / 100) *
                                     (20 + (5 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level)), enemy);
@@ -2569,7 +2597,7 @@ namespace LeagueSharp.Common
                                        (150 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100)) +
                                        (1.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // max dmg
                         case StageType.FirstDamage:
-                            double percentage2 =
+                            var percentage2 =
                                 CalcPhysicalDmg(
                                     ((enemy.MaxHealth - enemy.Health) / 100) *
                                     (20 + (5 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level)), enemy);
@@ -2585,7 +2613,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Karma(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Karma(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2598,12 +2626,12 @@ namespace LeagueSharp.Common
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) +
                                     (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy); // basic q
                         case StageType.FirstDamage:
-                            double baseqdmg =
+                            var baseqdmg =
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) +
                                     (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                             // mantra q (with bonus, not with detonation)
-                            double bonusqdmg =
+                            var bonusqdmg =
                                 CalcMagicDmg(
                                     (-25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level)) +
                                     (0.3 * ObjectManager.Player.FlatMagicDamageMod), enemy);
@@ -2639,7 +2667,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Karthus(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Karthus(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2676,7 +2704,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Kassadin(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Kassadin(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2705,7 +2733,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Katarina(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Katarina(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2717,7 +2745,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40)) +
                                     (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // total dmg (mark + detonation)
+                            // total dmg (mark + detonation)
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -2760,7 +2788,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Kayle(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Kayle(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2784,7 +2812,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Kennen(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Kennen(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2835,7 +2863,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double KhaZix(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double KhaZix(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2851,7 +2879,7 @@ namespace LeagueSharp.Common
                             return
                                 CalcPhysicalDmg(
                                     ((30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
-                                    (1.2 * ObjectManager.Player.FlatPhysicalDamageMod)) * 1.3, enemy); // isolated q
+                                     (1.2 * ObjectManager.Player.FlatPhysicalDamageMod)) * 1.3, enemy); // isolated q
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -2872,7 +2900,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double KogMaw(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double KogMaw(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2882,7 +2910,7 @@ namespace LeagueSharp.Common
                             (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 50)) +
                             (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.W:
-                    double percentofmaxhealth = (1.0 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    var percentofmaxhealth = (1.0 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                     double additionalpercentper100ap = 0;
                     if (ObjectManager.Player.FlatMagicDamageMod < 100)
                     {
@@ -2924,7 +2952,7 @@ namespace LeagueSharp.Common
                     {
                         additionalpercentper100ap = 9;
                     }
-                    double healthbase = enemy.MaxHealth / 100 * (percentofmaxhealth + additionalpercentper100ap);
+                    var healthbase = enemy.MaxHealth / 100 * (percentofmaxhealth + additionalpercentper100ap);
                     return CalcMagicDmg(healthbase, enemy);
                 case SpellType.E:
                     return
@@ -2942,7 +2970,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double LeBlanc(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double LeBlanc(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -2959,7 +2987,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // first q or detonation, same dmg
+                            // first q or detonation, same dmg
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -2981,7 +3009,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 25)) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // first e or detonation, same dmg
+                            // first e or detonation, same dmg
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -3013,7 +3041,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double LeeSin(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double LeeSin(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3051,7 +3079,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Leona(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Leona(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3080,7 +3108,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Lissandra(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Lissandra(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3109,7 +3137,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Lucian(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Lucian(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3138,7 +3166,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Lulu(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Lulu(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3161,7 +3189,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Lux(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Lux(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3187,7 +3215,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Malphite(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Malphite(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3214,7 +3242,7 @@ namespace LeagueSharp.Common
         }
 
 
-        private static double Malzahar(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Malzahar(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3243,7 +3271,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Maokai(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Maokai(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3253,16 +3281,22 @@ namespace LeagueSharp.Common
                             (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) +
                             (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.W:
-                    double percentage = ((7.5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level*1.5)) + (0.04 * ObjectManager.Player.FlatMagicDamageMod));
-                    return CalcMagicDmg((enemy.MaxHealth/100)*percentage, enemy);
+                    var percentage = ((7.5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 1.5)) +
+                                      (0.04 * ObjectManager.Player.FlatMagicDamageMod));
+                    return CalcMagicDmg((enemy.MaxHealth / 100) * percentage, enemy);
                 case SpellType.E:
                     switch (stagetype)
                     {
                         case StageType.Default:
                             return
-                                CalcMagicDmg((60 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 60)) + (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                                CalcMagicDmg(
+                                    (60 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 60)) +
+                                    (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                         case StageType.FirstDamage:
-                            return CalcMagicDmg((20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 20)) + (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            return
+                                CalcMagicDmg(
+                                    (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 20)) +
+                                    (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -3277,7 +3311,7 @@ namespace LeagueSharp.Common
         }
 
 
-        private static double MasterYi(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double MasterYi(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3297,7 +3331,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double MissFortune(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double MissFortune(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3348,7 +3382,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Mordekaiser(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Mordekaiser(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3401,7 +3435,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Morgana(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Morgana(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3449,7 +3483,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Nami(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Nami(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3478,12 +3512,13 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Nasus(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Nasus(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    return CalcPhysicalDmg((10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)), enemy);
+                    return CalcPhysicalDmg((10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)),
+                        enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
@@ -3509,7 +3544,8 @@ namespace LeagueSharp.Common
                             return
                                 CalcMagicDmg(
                                     (((ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level + 2) +
-                                      (0.01 * ObjectManager.Player.FlatMagicDamageMod)) * (enemy.MaxHealth / 100)) * 15, enemy);
+                                      (0.01 * ObjectManager.Player.FlatMagicDamageMod)) * (enemy.MaxHealth / 100)) * 15,
+                                    enemy);
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -3523,7 +3559,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Nautilus(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Nautilus(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3563,7 +3599,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Nidalee(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Nidalee(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3604,21 +3640,24 @@ namespace LeagueSharp.Common
                 case SpellType.W:
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "Bushwhack")
                     {
-                        return CalcMagicDmg((ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 20) + (0.1 + (0.02 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)), enemy);
+                        return
+                            CalcMagicDmg(
+                                (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 20) +
+                                (0.1 + (0.02 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)), enemy);
                     }
-                    return CalcMagicDmg((75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 50)) + (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                    return
+                        CalcMagicDmg(
+                            (75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 50)) +
+                            (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.E:
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Name == "PrimalSurge")
                     {
                         return 0; // no exception as switchting won't change the name directly
                     }
-                    else
-                    {
-                        return
-                            CalcMagicDmg(
-                                (75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 75)) +
-                                (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                    }
+                    return
+                        CalcMagicDmg(
+                            (75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 75)) +
+                            (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.R:
                     throw new InvalidSpellTypeException();
                 default:
@@ -3626,7 +3665,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Nocturne(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Nocturne(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3652,7 +3691,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Nunu(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Nunu(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3686,7 +3725,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Olaf(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Olaf(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3707,7 +3746,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Orianna(Obj_AI_Hero enemy, SpellType type, StageType stageType)
+        private static double Orianna(Obj_AI_Base enemy, SpellType type, StageType stageType)
         {
             switch (type)
             {
@@ -3736,7 +3775,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Pantheon(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Pantheon(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3777,7 +3816,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Poppy(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Poppy(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3812,7 +3851,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Quinn(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Quinn(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3840,7 +3879,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Rammus(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Rammus(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3877,7 +3916,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Renekton(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Renekton(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3954,7 +3993,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Rengar(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Rengar(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -3988,7 +4027,8 @@ namespace LeagueSharp.Common
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
-                                    25 + (ObjectManager.Player.Level * 15) + (0.8 * ObjectManager.Player.FlatMagicDamageMod),
+                                    25 + (ObjectManager.Player.Level * 15) +
+                                    (0.8 * ObjectManager.Player.FlatMagicDamageMod),
                                     enemy); // empowered w
                         default:
                             throw new InvalidCastException();
@@ -4016,7 +4056,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Riven(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Riven(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4064,7 +4104,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Rumble(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Rumble(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4112,7 +4152,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Ryze(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Ryze(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4120,12 +4160,14 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25) +
-                            (0.4 * ObjectManager.Player.FlatMagicDamageMod) + (0.065 * ObjectManager.Player.MaxMana), enemy);
+                            (0.4 * ObjectManager.Player.FlatMagicDamageMod) + (0.065 * ObjectManager.Player.MaxMana),
+                            enemy);
                 case SpellType.W:
                     return
                         CalcMagicDmg(
                             25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 35) +
-                            (0.6 * ObjectManager.Player.FlatMagicDamageMod) + (0.045 * ObjectManager.Player.MaxMana), enemy);
+                            (0.6 * ObjectManager.Player.FlatMagicDamageMod) + (0.045 * ObjectManager.Player.MaxMana),
+                            enemy);
                 case SpellType.E:
                     switch (stagetype)
                     {
@@ -4133,13 +4175,15 @@ namespace LeagueSharp.Common
                             return
                                 CalcMagicDmg(
                                     90 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 60) +
-                                    (1.05 * ObjectManager.Player.FlatMagicDamageMod) + (0.03 * ObjectManager.Player.MaxMana),
+                                    (1.05 * ObjectManager.Player.FlatMagicDamageMod) +
+                                    (0.03 * ObjectManager.Player.MaxMana),
                                     enemy);
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
                                     30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 20) +
-                                    (0.35 * ObjectManager.Player.FlatMagicDamageMod) + (0.01 * ObjectManager.Player.MaxMana),
+                                    (0.35 * ObjectManager.Player.FlatMagicDamageMod) +
+                                    (0.01 * ObjectManager.Player.MaxMana),
                                     enemy);
                         default:
                             throw new InvalidSpellTypeException();
@@ -4151,7 +4195,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Sejuani(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Sejuani(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4159,7 +4203,8 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 30) +
-                            (2 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 2)) * (enemy.MaxHealth / 100),
+                            (2 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 2)) *
+                            (enemy.MaxHealth / 100),
                             enemy);
                 case SpellType.W:
                     switch (stagetype)
@@ -4194,7 +4239,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Shaco(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Shaco(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4236,7 +4281,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Shen(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Shen(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4259,7 +4304,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Shyvana(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Shyvana(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4300,7 +4345,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Singed(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Singed(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4334,7 +4379,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Sion(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Sion(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4357,7 +4402,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Sivir(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Sivir(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4366,14 +4411,15 @@ namespace LeagueSharp.Common
                         CalcPhysicalDmg(
                             (5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)) +
                             ((0.6 + (0.1 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level)) *
-                             ObjectManager.Player.FlatPhysicalDamageMod) + (0.5 * ObjectManager.Player.FlatMagicDamageMod),
+                             ObjectManager.Player.FlatPhysicalDamageMod) +
+                            (0.5 * ObjectManager.Player.FlatMagicDamageMod),
                             enemy); // basic physical dmg
                 case SpellType.W:
                     return
                         CalcPhysicalDmg(
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) *
                             (0.45 + (0.05 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)), enemy);
-                // for each of 3
+                    // for each of 3
                 case SpellType.E:
                     throw new InvalidSpellTypeException();
                 case SpellType.R:
@@ -4383,12 +4429,15 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Skarner(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Skarner(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    return CalcPhysicalDmg((8 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 10)) + (0.4 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // basic bonus dmg
+                    return
+                        CalcPhysicalDmg(
+                            (8 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 10)) +
+                            (0.4 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // basic bonus dmg
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
@@ -4406,7 +4455,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Sona(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Sona(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4429,7 +4478,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Soraka(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Soraka(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4444,7 +4493,8 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 30)) +
-                            (0.4 * ObjectManager.Player.FlatMagicDamageMod) + (0.5 * ObjectManager.Player.MaxMana), enemy);
+                            (0.4 * ObjectManager.Player.FlatMagicDamageMod) + (0.5 * ObjectManager.Player.MaxMana),
+                            enemy);
                 case SpellType.R:
                     throw new InvalidSpellTypeException();
                 default:
@@ -4453,7 +4503,7 @@ namespace LeagueSharp.Common
         }
 
 
-        private static double Swain(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Swain(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4482,7 +4532,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Syndra(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Syndra(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4522,7 +4572,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Talon(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Talon(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4548,7 +4598,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Taric(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Taric(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4574,7 +4624,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Teemo /*Satan*/(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Teemo /*Satan*/(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4600,7 +4650,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Thresh(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Thresh(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4626,7 +4676,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Tristana(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Tristana(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4663,7 +4713,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Trundle(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Trundle(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4720,14 +4770,14 @@ namespace LeagueSharp.Common
                     {
                         additionalpercentper100ap = 18;
                     }
-                    double healthbase = enemy.MaxHealth / 100 * (basepercent + additionalpercentper100ap);
+                    var healthbase = enemy.MaxHealth / 100 * (basepercent + additionalpercentper100ap);
                     return CalcMagicDmg(healthbase, enemy);
                 default:
                     throw new InvalidSpellTypeException();
             }
         }
 
-        private static double Tryndamere(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Tryndamere(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4748,7 +4798,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double TwistedFate(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double TwistedFate(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4798,7 +4848,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Twitch(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Twitch(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4807,9 +4857,9 @@ namespace LeagueSharp.Common
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
-                    double basedmg = CalcPhysicalDmg(
+                    var basedmg = CalcPhysicalDmg(
                         5 + (15 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level), enemy);
-                    double perstack =
+                    var perstack =
                         CalcPhysicalDmg(
                             10 + (5 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level) +
                             (0.2 * ObjectManager.Player.FlatMagicDamageMod) +
@@ -4830,13 +4880,18 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Udyr(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Udyr(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    double percentadbonus = 1.1 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.1);
-                    return CalcPhysicalDmg((-20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 50)) + (percentadbonus * (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)), enemy);
+                    var percentadbonus = 1.1 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.1);
+                    return
+                        CalcPhysicalDmg(
+                            (-20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 50)) +
+                            (percentadbonus *
+                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)),
+                            enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
@@ -4851,7 +4906,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Urgot(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Urgot(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4875,7 +4930,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Varus(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Varus(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4905,17 +4960,17 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Vayne(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Vayne(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    double percentofbonusad = 0.25 + (0.05 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level);
+                    var percentofbonusad = 0.25 + (0.05 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level);
                     return
                         CalcPhysicalDmg(
                             percentofbonusad *
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                // ony the bonus dmg
+                    // ony the bonus dmg
                 case SpellType.W:
                     double flattruedmg = 10 + (10 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level);
                     double percentofenemyhp = 3 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level);
@@ -4928,13 +4983,13 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 70)) +
                                     (1.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // Damage when knock + against wall
+                            // Damage when knock + against wall
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
                                     (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 35)) +
                                     (0.5 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // Damage when knock starts
+                            // Damage when knock starts
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -4945,7 +5000,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Veigar(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Veigar(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -4971,7 +5026,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Velkoz(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Velkoz(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5016,7 +5071,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Vi(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Vi(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5026,8 +5081,8 @@ namespace LeagueSharp.Common
                             (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                             (0.80 * (ObjectManager.Player.FlatPhysicalDamageMod)), enemy);
                 case SpellType.W:
-                    double percentage = 2.5 * (1.5 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level);
-                    double bonusadpercentage = percentage + (ObjectManager.Player.FlatPhysicalDamageMod / 34);
+                    var percentage = 2.5 * (1.5 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level);
+                    var bonusadpercentage = percentage + (ObjectManager.Player.FlatPhysicalDamageMod / 34);
                     return (enemy.MaxHealth / 100 * bonusadpercentage);
                 case SpellType.E:
                     return
@@ -5045,7 +5100,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Viktor(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Viktor(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5069,7 +5124,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (70 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 120)) +
                                     (0.79 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // Total Initial Damage (initial + first dot)
+                            // Total Initial Damage (initial + first dot)
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -5088,7 +5143,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Vladimir(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Vladimir(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5114,7 +5169,7 @@ namespace LeagueSharp.Common
                             throw new InvalidSpellTypeException();
                     }
                 case SpellType.E:
-                    double edmg =
+                    var edmg =
                         CalcMagicDmg(
                             (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 25)) +
                             (0.45 * ObjectManager.Player.FlatMagicDamageMod), enemy);
@@ -5143,14 +5198,14 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Volibear(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Volibear(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
                     return CalcPhysicalDmg((ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 30), enemy);
                 case SpellType.W:
-                    double basedmg =
+                    var basedmg =
                         CalcPhysicalDmg(
                             (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 45)) +
                             (0.15 * ObjectManager.Player.ScriptHealthBonus), enemy);
@@ -5171,16 +5226,17 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Warwick(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Warwick(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
                 case SpellType.Q:
-                    double percentagedmg =
+                    var percentagedmg =
                         CalcMagicDmg(
-                            (enemy.MaxHealth / 100 * (6 + (2 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level))) +
+                            (enemy.MaxHealth / 100 *
+                             (6 + (2 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level))) +
                             (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                    double flatdmg =
+                    var flatdmg =
                         CalcMagicDmg(
                             (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 50)) +
                             (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
@@ -5200,7 +5256,8 @@ namespace LeagueSharp.Common
                             return
                                 CalcMagicDmg(
                                     (165 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 85)) +
-                                    (2.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // 5 hits => complete ult
+                                    (2.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
+                            // 5 hits => complete ult
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -5214,7 +5271,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double MonkeyKing(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double MonkeyKing(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5259,7 +5316,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Xerath(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Xerath(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5299,7 +5356,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double XinZhao(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double XinZhao(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5326,7 +5383,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Yasuo(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Yasuo(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5353,7 +5410,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Yorick(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Yorick(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5380,7 +5437,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Zac(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Zac(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5390,7 +5447,7 @@ namespace LeagueSharp.Common
                             (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40)) +
                             (0.50 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.W:
-                    double basedmg =
+                    var basedmg =
                         CalcMagicDmg(
                             (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 15)) +
                             (0.35 * ObjectManager.Player.FlatMagicDamageMod), enemy);
@@ -5436,7 +5493,7 @@ namespace LeagueSharp.Common
                     {
                         additionalpercentper100ap = 18;
                     }
-                    double healthbase = enemy.MaxHealth / 100 * (percentofmaxhealth + additionalpercentper100ap);
+                    var healthbase = enemy.MaxHealth / 100 * (percentofmaxhealth + additionalpercentper100ap);
                     return basedmg + CalcMagicDmg(healthbase, enemy);
                 case SpellType.E:
                     return
@@ -5464,7 +5521,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Zed(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Zed(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5483,14 +5540,15 @@ namespace LeagueSharp.Common
                 case SpellType.R:
                     return
                         CalcPhysicalDmg(
-                            1.0 * (ObjectManager.Player.FlatMagicDamageMod + ObjectManager.Player.BaseAttackDamage), enemy);
-                // base dmg
+                            1.0 * (ObjectManager.Player.FlatMagicDamageMod + ObjectManager.Player.BaseAttackDamage),
+                            enemy);
+                    // base dmg
                 default:
                     throw new InvalidSpellTypeException();
             }
         }
 
-        private static double Ziggs(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Ziggs(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5519,7 +5577,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Zyra(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Zyra(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5545,7 +5603,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double Zilean(Obj_AI_Hero enemy, SpellType type, StageType stagetype)
+        private static double Zilean(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
@@ -5565,30 +5623,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public enum SpellType
-        {
-            Q,
-            W,
-            E,
-            R,
-            AD,
-            IGNITE,
-            HEXGUN,
-            DFG,
-            BOTRK,
-            BILGEWATER,
-            TIAMAT,
-            HYDRA
-        }
-
-        public enum StageType
-        {
-            FirstDamage,
-            SecondDamage,
-            ThirdDamage,
-            FourthDamage,
-            Default,
-        }
+        private delegate double ChampDamage(Obj_AI_Base enemy, SpellType type, StageType stagetype);
     }
 
     internal class InvalidSpellTypeException : Exception

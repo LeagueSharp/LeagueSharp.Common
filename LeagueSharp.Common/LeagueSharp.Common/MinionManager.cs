@@ -8,31 +8,31 @@ using SharpDX;
 
 namespace LeagueSharp.Common
 {
+    public enum MinionOrderTypes
+    {
+        None,
+        Health,
+        MaxHealth,
+    }
+
+    public enum MinionTeam
+    {
+        Neutral,
+        Ally,
+        Enemy,
+        NotAlly,
+        All,
+    }
+
+    public enum MinionTypes
+    {
+        Ranged,
+        Melee,
+        All,
+    }
+
     public static class MinionManager
     {
-        public enum MinionOrderTypes
-        {
-            None,
-            Health,
-            MaxHealth,
-        }
-
-        public enum MinionTeam
-        {
-            Neutral,
-            Ally,
-            Enemy,
-            NotAlly,
-            All,
-        }
-
-        public enum MinionTypes
-        {
-            Ranged,
-            Melee,
-            All,
-        }
-
         static MinionManager()
         {
             if (Common.isInitialized == false)
@@ -52,30 +52,28 @@ namespace LeagueSharp.Common
 
             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (minion.IsValidTarget())
+                if (minion.IsValidTarget() &&
+                    Vector2.DistanceSquared(from.To2D(), minion.ServerPosition.To2D()) <= range)
                 {
-                    if (Vector2.DistanceSquared(from.To2D(), minion.ServerPosition.To2D()) <= range)
+                    if (team == MinionTeam.Neutral && minion.Team == GameObjectTeam.Neutral ||
+                        team == MinionTeam.Ally &&
+                        minion.Team ==
+                        (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                            ? GameObjectTeam.Chaos
+                            : GameObjectTeam.Order) ||
+                        team == MinionTeam.Enemy &&
+                        minion.Team ==
+                        (ObjectManager.Player.Team == GameObjectTeam.Chaos
+                            ? GameObjectTeam.Order
+                            : GameObjectTeam.Chaos) ||
+                        team == MinionTeam.NotAlly && minion.Team != ObjectManager.Player.Team ||
+                        team == MinionTeam.All)
                     {
-                        if (team == MinionTeam.Neutral && minion.Team == GameObjectTeam.Neutral ||
-                            team == MinionTeam.Ally &&
-                            minion.Team ==
-                            (ObjectManager.Player.Team == GameObjectTeam.Chaos
-                                ? GameObjectTeam.Chaos
-                                : GameObjectTeam.Order) ||
-                            team == MinionTeam.Enemy &&
-                            minion.Team ==
-                            (ObjectManager.Player.Team == GameObjectTeam.Chaos
-                                ? GameObjectTeam.Order
-                                : GameObjectTeam.Chaos) ||
-                            team == MinionTeam.NotAlly && minion.Team != ObjectManager.Player.Team ||
-                            team == MinionTeam.All)
+                        if (minion.IsMelee() && type == MinionTypes.Melee ||
+                            !minion.IsMelee() && type == MinionTypes.Ranged ||
+                            type == MinionTypes.All)
                         {
-                            if (minion.AttackRange <= 150 && type == MinionTypes.Melee ||
-                                minion.AttackRange >= 150 && type == MinionTypes.Ranged ||
-                                type == MinionTypes.All)
-                            {
-                                result.Add(minion);
-                            }
+                            result.Add(minion);
                         }
                     }
                 }
@@ -87,7 +85,7 @@ namespace LeagueSharp.Common
             }
             else if (order == MinionOrderTypes.MaxHealth)
             {
-                result = result.OrderBy(o => o.MaxHealth).ToList();
+                result = result.OrderBy(o => o.MaxHealth).Reverse().ToList();
             }
 
             return result;
@@ -104,6 +102,8 @@ namespace LeagueSharp.Common
             var minionCount = 0;
 
             range = range * range;
+
+            if (minionPositions.Count == 0) return new FarmLocation(result, minionCount);
 
             /* Use MEC to get the best positions only when there are less than 9 positions because it causes lag with more. */
             if (minionPositions.Count <= useMECMax)
@@ -190,6 +190,7 @@ namespace LeagueSharp.Common
             float range, bool collision, Prediction.SkillshotType stype, Vector3 rangeCheckFrom = new Vector3())
         {
             var result = new List<Vector2>();
+            from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
 
             foreach (var minion in minions)
             {

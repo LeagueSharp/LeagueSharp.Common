@@ -60,9 +60,9 @@ namespace LeagueSharp.Common
                     DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
                     DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
                                                            (int)(1000 *
-                                                                  (dashItem.Value.EndPos.Distance(
-                                                                      dashItem.Value.StartPos) /
-                                                                   dashItem.Value.Speed));
+                                                                 (dashItem.Value.EndPos.Distance(
+                                                                     dashItem.Value.StartPos) /
+                                                                  dashItem.Value.Speed));
                     DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
                     DetectedDashes[dashItem.Key].Processed = true;
 

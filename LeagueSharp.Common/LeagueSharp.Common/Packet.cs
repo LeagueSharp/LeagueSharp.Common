@@ -460,29 +460,6 @@
             }
 
             #endregion
-
-            /*
-                var packet = new GamePacket(args.PacketData);
-                packet.Position = 12;
-                var networkId = packet.ReadInteger();
-                var speed = packet.ReadFloat();
-                var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(networkId);
-
-                if (unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
-                {
-                    if (!DetectedDashes.ContainsKey(unit.NetworkId))
-                    {
-                        var detectedDash = new DashItem();
-                        DetectedDashes.Add(unit.NetworkId, detectedDash);
-                    }
-
-                    DetectedDashes[unit.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
-                    DetectedDashes[unit.NetworkId].Speed = speed;
-                    DetectedDashes[unit.NetworkId].StartPos = unit.ServerPosition.To2D();
-                    DetectedDashes[unit.NetworkId].Processed = false;
-                    DetectedDashes[unit.NetworkId].Unit = unit;
-                }
-             */
         }
     }
 }

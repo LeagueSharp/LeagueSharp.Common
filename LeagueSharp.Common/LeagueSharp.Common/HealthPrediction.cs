@@ -40,7 +40,7 @@ namespace LeagueSharp.Common
 
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == 0x33)
+            if (args.PacketData[0] == 0x34)
             {
                 var stream = new MemoryStream(args.PacketData);
                 var b = new BinaryReader(stream);
@@ -56,20 +56,6 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static Obj_AI_Base GetAttackTarget(Vector3 Position)
-        {
-            Obj_AI_Base result = null;
-            foreach (var Candidate in ObjectManager.Get<Obj_AI_Base>())
-            {
-                if (Candidate.IsValidTarget(float.MaxValue, false) &&
-                    Vector2.DistanceSquared(Candidate.ServerPosition.To2D(), Position.To2D()) <=
-                    Candidate.PathfindingCollisionRadius * Candidate.PathfindingCollisionRadius)
-                {
-                    result = Candidate;
-                }
-            }
-            return result;
-        }
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
@@ -80,7 +66,7 @@ namespace LeagueSharp.Common
                 /*Only auto-attacks for now*/
                 if (Orbwalking.IsAutoAttack(Spell.SData.Name))
                 {
-                    var target = GetAttackTarget(Spell.End);
+                    var target = Orbwalking.GetAutoAttackTarget(Spell.End);
                     if (target != null)
                     {
                         ActiveAttacks.Remove(unit.NetworkId);
@@ -89,7 +75,7 @@ namespace LeagueSharp.Common
                         var AttackData = new PredictedDamage(unit, target, Environment.TickCount - Game.Ping / 2,
                             unit.AttackCastDelay * 1000,
                             unit.AttackDelay * 1000,
-                            (Spell.SData.MissileSpeed == 0) ? int.MaxValue : (int)Spell.SData.MissileSpeed,
+                            unit.IsMelee() ? int.MaxValue : (int)Spell.SData.MissileSpeed,
                             (float)Damage);
                         ActiveAttacks.Add(unit.NetworkId, AttackData);
                     }

@@ -141,7 +141,7 @@ namespace LeagueSharp.Common
         {
             var result = new StringBuilder(rawPacket.Length * 3);
             foreach (var b in rawPacket)
-                result.AppendFormat("{0:x2} ", b);
+                result.AppendFormat("{0:X2} ", b);
             return result.ToString();
         }
 

@@ -133,7 +133,7 @@ namespace LeagueSharp.Common
 
             // Start wrapping up the other points.
             float sweep_angle = 0;
-            for (; ; )
+            for (;;)
             {
                 // If all of the points are on the hull, we're done.
                 if (points.Count == 0) break;

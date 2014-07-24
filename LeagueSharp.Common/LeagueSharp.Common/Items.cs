@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Casts the item on the target.
         /// </summary>
-        public static void UseItem(string name, Obj_AI_Hero target = null)
+        public static void UseItem(string name, Obj_AI_Base target = null)
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
@@ -93,14 +93,13 @@ namespace LeagueSharp.Common
                 {
                     slot.UseItem();
                 }
-
             }
         }
 
         /// <summary>
         /// Casts the item on the target.
         /// </summary>
-        public static void UseItem(int id, Obj_AI_Hero target = null)
+        public static void UseItem(int id, Obj_AI_Base target = null)
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
@@ -112,7 +111,6 @@ namespace LeagueSharp.Common
                 {
                     slot.UseItem();
                 }
-
             }
         }
     }
