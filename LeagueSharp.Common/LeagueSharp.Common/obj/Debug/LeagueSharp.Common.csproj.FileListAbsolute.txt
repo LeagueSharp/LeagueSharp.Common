@@ -1,0 +1,5 @@
+c:\users\hei\documents\visual studio 2013\Projects\LeagueSharp.Common\LeagueSharp.Common\obj\Debug\LeagueSharp.Common.csprojResolveAssemblyReference.cache
+c:\users\hei\documents\visual studio 2013\Projects\LeagueSharp.Common\LeagueSharp.Common\bin\Debug\LeagueSharp.Common.dll
+c:\users\hei\documents\visual studio 2013\Projects\LeagueSharp.Common\LeagueSharp.Common\bin\Debug\LeagueSharp.Common.pdb
+c:\users\hei\documents\visual studio 2013\Projects\LeagueSharp.Common\LeagueSharp.Common\obj\Debug\LeagueSharp.Common.dll
+c:\users\hei\documents\visual studio 2013\Projects\LeagueSharp.Common\LeagueSharp.Common\obj\Debug\LeagueSharp.Common.pdb

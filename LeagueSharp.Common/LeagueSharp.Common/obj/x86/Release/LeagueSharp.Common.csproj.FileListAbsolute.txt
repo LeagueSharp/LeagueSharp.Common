@@ -1,0 +1,9 @@
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.Common.dll
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.Common.pdb
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.dll
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\SharpDX.Direct3D9.dll
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\SharpDX.dll
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.xml
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.dll
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.pdb
+C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.csprojResolveAssemblyReference.cache
