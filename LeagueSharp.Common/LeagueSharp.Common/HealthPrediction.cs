@@ -59,7 +59,7 @@ namespace LeagueSharp.Common
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
-            if (unit.Team == ObjectManager.Player.Team && !(unit is Obj_AI_Hero) &&
+            if (unit.IsValid && unit.Team == ObjectManager.Player.Team && !(unit is Obj_AI_Hero) &&
                 Vector2.DistanceSquared(unit.ServerPosition.To2D(),
                     ObjectManager.Player.ServerPosition.To2D()) <= 3000 * 3000)
             {
@@ -134,7 +134,7 @@ namespace LeagueSharp.Common
             foreach (var attack in ActiveAttacks.Values)
             {
                 var AttackDamage = 0f;
-                if (attack.Attacked.NetworkId == unit.NetworkId &&
+                if (attack.Attacked.IsValidTarget(float.MaxValue, false) && attack.Attacked.NetworkId == unit.NetworkId &&
                     attack.Attacker.IsValidTarget(float.MaxValue, false))
                 {
                     var d = Vector2.Distance(unit.ServerPosition.To2D(),

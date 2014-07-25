@@ -343,7 +343,7 @@ namespace LeagueSharp.Common
                     /* Unit will be able to escape if we cast just in the position he is. TODO: Calculate the escape route he will likely take */
                     result.CastPosition = unit.ServerPosition;
                     result.Position = unit.ServerPosition;
-                    result.HitChance = HitChance.CantHit;
+                    result.HitChance = HitChance.HighHitchance;
                 }
             }
             else
@@ -419,7 +419,7 @@ namespace LeagueSharp.Common
                 CheckLocations.Add(unit.ServerPosition.To2D());
                 CheckLocations.Add(result.CastPosition.To2D());
 
-                var Col1 = GetCollision(@from.To2D(), CheckLocations, stype, width - GetHitBox(unit),
+                var Col1 = GetCollision(from.To2D(), CheckLocations, stype, width - GetHitBox(unit),
                     delay, speed, range);
 
                 if (Col1.Count > 0)
@@ -474,7 +474,7 @@ namespace LeagueSharp.Common
                         Vector2.DistanceSquared(from, collisionObject.Position.To2D()) <= Math.Pow(range * 1.5, 2))
                     {
                         var objectPrediction = GetBestPosition(collisionObject, delay, width, speed,
-                            @from.To3D(), float.MaxValue,
+                            from.To3D(), float.MaxValue,
                             false, stype, @from.To3D());
                         if (
                             objectPrediction.Position.To2D().Distance(from, TestPosition, true, true) <=

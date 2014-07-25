@@ -663,7 +663,8 @@ namespace LeagueSharp.Common
             if (enemy is Obj_AI_Hero)
             {
                 var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-                reducedmg = currentenemy.unyielding;
+                if (currentenemy != null)
+                    reducedmg = currentenemy.unyielding;
             }
 
             double newarmor = enemy.Armor * ObjectManager.Player.PercentArmorPenetrationMod;
@@ -725,7 +726,8 @@ namespace LeagueSharp.Common
             if (enemy is Obj_AI_Hero)
             {
                 var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-                reducedmg = currentenemy.unyielding;
+                if (currentenemy != null)
+                    reducedmg = currentenemy.unyielding;
             }
 
             double newspellblock = enemy.SpellBlock * ObjectManager.Player.PercentMagicPenetrationMod;
@@ -751,7 +753,8 @@ namespace LeagueSharp.Common
                         if (enemy is Obj_AI_Hero)
                         {
                             var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-                            dmgreduce = currentenemy.block;
+                            if (currentenemy != null)
+                                dmgreduce = currentenemy.block;
                         }
 
                         var reduce2 = 0;
@@ -789,7 +792,8 @@ namespace LeagueSharp.Common
                         if (enemy is Obj_AI_Hero)
                         {
                             var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
-                            dmgreduce = currentenemy.block;
+                            if (currentenemy != null)
+                                dmgreduce = currentenemy.block;
                         }
                         var reduce2 = 0;
                         double multiplier = 1;
