@@ -6,7 +6,7 @@ using LeagueSharp;
 
 #endregion
 
-namespace Leaguesharp.Common
+namespace LeagueSharp.Common
 {
     public class LastCastedSpellEntry
     {
