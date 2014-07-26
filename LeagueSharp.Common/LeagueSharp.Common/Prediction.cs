@@ -470,7 +470,7 @@ namespace LeagueSharp.Common
             {
                 foreach (var collisionObject in ObjectManager.Get<Obj_AI_Minion>())
                 {
-                    if (collisionObject.Team != ObjectManager.Player.Team && collisionObject.IsValidTarget() &&
+                    if (collisionObject.IsValidTarget() && collisionObject.Team != ObjectManager.Player.Team &&
                         Vector2.DistanceSquared(from, collisionObject.Position.To2D()) <= Math.Pow(range * 1.5, 2))
                     {
                         var objectPrediction = GetBestPosition(collisionObject, delay, width, speed,
