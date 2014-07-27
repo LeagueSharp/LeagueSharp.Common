@@ -138,7 +138,7 @@ namespace LeagueSharp.Common
             var result = ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
             if (target != null && target.IsValidTarget())
             {
-                return result + target.BoundingRadius - ((target.Path.Length > 0) ? 20 : 0);
+                return result + target.BoundingRadius - ((target.Path.Length > 0) ? 20 : 10);
             }
             return result;
         }
