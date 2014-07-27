@@ -4,12 +4,12 @@
     {
         public enum PingType
         {
-            Normal,
-            Fallback,
-            EnemyMissing,
-            Danger,
-            OnMyWay,
-            AssistMe,
+            Normal = 1,
+            Fallback = 5,
+            EnemyMissing = 3,
+            Danger = 2,
+            OnMyWay = 4,
+            AssistMe = 6,
         }
 
         static Packet()
