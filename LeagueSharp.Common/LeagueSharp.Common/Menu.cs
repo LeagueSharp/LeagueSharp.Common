@@ -1038,16 +1038,7 @@ namespace LeagueSharp.Common
 
         internal void SaveToConfigFile()
         {
-            var savedBytes = new byte[1];
-
-            if (File.Exists(_configFilePath))
-                savedBytes = File.ReadAllBytes(_configFilePath);
-
-
-            if (savedBytes != _serialized)
-            {
-                File.WriteAllBytes(_configFilePath, _serialized);
-            }
+            File.WriteAllBytes(_configFilePath, _serialized);
         }
     }
 }
