@@ -188,10 +188,12 @@ namespace LeagueSharp.Common
             Game.OnWndProc += GameOnOnWndProc;
             Game.OnGameUpdate += GameOnOnGameUpdate;
 
+            CustomEvents.Game.OnGameEnd += Game_OnGameEnd;
             Game.OnGameEnd += GameOnOnGameEnd;
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
         }
+
 
         public static bool Visible
         {
@@ -227,8 +229,14 @@ namespace LeagueSharp.Common
 
         private static void OnExit()
         {
-            Game.PrintChat("Saving");
             SaveItems();
+            Game.PrintChat("Saving");
+        }
+
+        private static void Game_OnGameEnd(EventArgs args)
+        {
+            if (!_enabled) return;
+            OnExit();
         }
 
         private static void GameOnOnGameEnd(GameEndEventArgs args)
