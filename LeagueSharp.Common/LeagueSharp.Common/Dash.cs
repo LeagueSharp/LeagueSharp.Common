@@ -33,7 +33,7 @@ namespace LeagueSharp.Common
                 var speed = decodedPacket.Speed;
                 var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(networkId);
 
-                if (unit != null && unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
+                if (unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
                 {
                     if (!DetectedDashes.ContainsKey(unit.NetworkId))
                     {
@@ -56,20 +56,17 @@ namespace LeagueSharp.Common
             {
                 if (!dashItem.Value.Processed)
                 {
-                    if (dashItem.Value.Unit.IsValid)
-                    { 
-                        DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
-                        DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
-                        DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
-                                                               (int)(1000 *
-                                                                     (dashItem.Value.EndPos.Distance(
-                                                                         dashItem.Value.StartPos) /
-                                                                      dashItem.Value.Speed));
-                        DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
-                        DetectedDashes[dashItem.Key].Processed = true;
+                    DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
+                    DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
+                    DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
+                                                           (int)(1000 *
+                                                                 (dashItem.Value.EndPos.Distance(
+                                                                     dashItem.Value.StartPos) /
+                                                                  dashItem.Value.Speed));
+                    DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
+                    DetectedDashes[dashItem.Key].Processed = true;
 
-                        CustomEvents.Unit.TriggerOnDash(dashItem.Value.Unit, DetectedDashes[dashItem.Key]);
-                    }
+                    CustomEvents.Unit.TriggerOnDash(dashItem.Value.Unit, DetectedDashes[dashItem.Key]);
                 }
             }
         }

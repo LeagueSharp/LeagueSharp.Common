@@ -460,45 +460,6 @@
             }
 
             #endregion
-
-            #region GameEnd
-
-            /// <summary>
-            /// Gets received when the game ends.
-            /// </summary>
-            public static class GameEnd
-            {
-                public static byte Header = 0xC6;
-
-                public static GamePacket Encoded(Struct packetStruct)
-                {
-                    var result = new GamePacket(Header);
-                    result.WriteInteger(0);
-                    result.WriteByte(packetStruct.Winner);
-                    return result;
-                }
-
-                public static Struct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var result = new Struct();
-                    packet.Position = 5;
-                    result.Winner = packet.ReadByte();
-                    return result;
-                }
-
-                public struct Struct
-                {
-                    public byte Winner;
-
-                    public Struct(byte winner = 1)
-                    {
-                        Winner = winner;
-                    }
-                }
-            }
-
-            #endregion
         }
     }
 }

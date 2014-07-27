@@ -467,7 +467,7 @@ namespace LeagueSharp.Common
             public bool Intersects;
             public Vector2 Point;
 
-            public IntersectionResult(bool Intersects = false, Vector2 Point = new Vector2())
+            public IntersectionResult(bool Intersects, Vector2 Point = new Vector2())
             {
                 this.Intersects = Intersects;
                 this.Point = Point;

@@ -19,7 +19,6 @@ namespace LeagueSharp.Common
         public class Game
         {
             public delegate void OnGameLoaded(EventArgs args);
-            public delegate void OnGameEnded(EventArgs args);
 
             static Game()
             {
@@ -31,11 +30,6 @@ namespace LeagueSharp.Common
             /// </summary>
             public static event OnGameLoaded OnGameLoad;
 
-            /// <summary>
-            /// OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
-            /// </summary>
-            public static event OnGameEnded OnGameEnd;
-
             private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
                 // Use Packets as they come exactly when a game starts GG
             {
@@ -44,12 +38,7 @@ namespace LeagueSharp.Common
                     OnGameLoad(new EventArgs());
                     LeagueSharp.Game.OnGameProcessPacket -= Game_OnGameProcessPacket; // delete the event
                 }
-
-                //Game end pkacet
-                if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
-                    OnGameEnd(new EventArgs());
             }
-
         }
 
         public class Unit
