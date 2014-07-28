@@ -133,12 +133,6 @@ namespace LeagueSharp.Common
                 {
                 }
             }
-
-            private class UnitBuff
-            {
-                public BuffInstance[] buffs;
-                public int networkid;
-            }
         }
     }
 }
