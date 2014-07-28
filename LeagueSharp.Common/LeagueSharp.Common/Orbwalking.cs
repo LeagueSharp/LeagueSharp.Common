@@ -286,8 +286,6 @@ namespace LeagueSharp.Common
                 Utility.DelayAction.Add(250, delegate { LastAATick = 0; });
             }
 
-            if(unit.IsMe)
-                Game.PrintChat(Spell.SData.Name);
             if (IsAutoAttack(Spell.SData.Name))
             {
                 if (unit.IsMe)

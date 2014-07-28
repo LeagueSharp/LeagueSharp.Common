@@ -28,8 +28,8 @@ namespace LeagueSharp.Common
 
         private static void bgw_DoWork(object sender, DoWorkEventArgs e)
         {
-            var myUpdater = new Updater("https://raw.githubusercontent.com/LeagueSharp/LeagueSharp/master/Versions/LeagueSharpCommon.txt",
-                    "https://github.com/LeagueSharp/LeagueSharp/raw/master/Release/LeagueSharp.Common.dll", localversion);
+            var myUpdater = new Updater("https://raw.githubusercontent.com/LeagueSharp/LeagueSharp/master/Versions/common.version",
+                    "https://github.com/LeagueSharp/LeagueSharp/raw/master/Releases/LeagueSharp.Common.dll", localversion);
             if (myUpdater.NeedUpdate)
             {
                 Game.PrintChat("<font color='#33FFFF'>LeagueSharp.Common: Updating ...");
