@@ -162,9 +162,17 @@ namespace LeagueSharp.Common
             return _cast(unit, packetCast, aoe);
         }
 
-        public void CastOnUnit(Obj_AI_Base unit)
+        public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+            if (packetCast)
+            {
+                Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
+            }
+            else
+            {
+                ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+            }
+            
         }
 
         public bool CastIfHitchanceEquals(Obj_AI_Base unit, Prediction.HitChance hitChance, bool packetCast = false)

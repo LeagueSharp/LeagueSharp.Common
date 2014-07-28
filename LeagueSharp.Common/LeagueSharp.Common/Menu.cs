@@ -1027,8 +1027,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            if (typeof (T).IsSerializable)
-                _serialized = Global.Serialize(newValue);
+             _serialized = Global.Serialize(newValue);
 
             _valueSet = true;
 
