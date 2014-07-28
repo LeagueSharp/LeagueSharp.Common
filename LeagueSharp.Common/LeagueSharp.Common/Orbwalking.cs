@@ -555,6 +555,11 @@ namespace LeagueSharp.Common
                 Config.AddItem(
                     new MenuItem("Orbwalk", "Combo").DontAppendAP().SetValue(new KeyBind(32, KeyBindType.Press, false)));
 
+                if (Common.isInitialized == false)
+                {
+                    Common.InitializeCommonLib();
+                }
+
                 Game.OnGameUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
             }
