@@ -9,7 +9,7 @@ namespace LeagueSharp.Common
 {
     internal static class Common
     {
-        private const int localversion = 17;
+        private const int localversion = 18;
         internal static bool isInitialized;
 
         internal static void InitializeCommonLib()
@@ -28,10 +28,8 @@ namespace LeagueSharp.Common
 
         private static void bgw_DoWork(object sender, DoWorkEventArgs e)
         {
-            var myUpdater =
-                new Updater("https://github.com/Andyi19/LeagueSharp/raw/master/Versions/LeagueSharp.Common.txt",
-                    "https://github.com/Andyi19/LeagueSharp/raw/master/LibAssemblies/LeagueSharp.Common.dll",
-                    localversion);
+            var myUpdater = new Updater("https://raw.githubusercontent.com/LeagueSharp/LeagueSharp/master/Versions/LeagueSharpCommon.txt",
+                    "https://github.com/LeagueSharp/LeagueSharp/raw/master/Release/LeagueSharp.Common.dll", localversion);
             if (myUpdater.NeedUpdate)
             {
                 Game.PrintChat("<font color='#33FFFF'>LeagueSharp.Common: Updating ...");
@@ -42,8 +40,7 @@ namespace LeagueSharp.Common
             }
             else
             {
-                Game.PrintChat("<font color='#33FFFF'>>>LeagueSharp.Common: Most recent version ({0}) loaded!",
-                    localversion);
+                Game.PrintChat("<font color='#33FFFF'>>>LeagueSharp.Common: Most recent version ({0}) loaded!", localversion);
             }
         }
     }
