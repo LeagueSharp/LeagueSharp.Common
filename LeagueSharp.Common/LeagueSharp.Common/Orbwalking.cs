@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
         };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
-        private static readonly string[] Attacks = { "frostarrow" };
+        private static readonly string[] Attacks = { "frostarrow", "caitlynheadshotmissile"};
 
         private static readonly List<AttackPassive> AttackPassives = new List<AttackPassive>();
 
@@ -286,6 +286,8 @@ namespace LeagueSharp.Common
                 Utility.DelayAction.Add(250, delegate { LastAATick = 0; });
             }
 
+            if(unit.IsMe)
+                Game.PrintChat(Spell.SData.Name);
             if (IsAutoAttack(Spell.SData.Name))
             {
                 if (unit.IsMe)

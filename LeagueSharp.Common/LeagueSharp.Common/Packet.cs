@@ -232,6 +232,48 @@
             }
 
             #endregion
+
+            #region BuyItem
+            /// <summary>
+            /// Packet sent when buying items.
+            /// </summary>
+            public static class BuyItem
+            {
+                public static byte Header = 0x82;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteInteger(packetStruct.ItemId);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.NetworkId = packet.ReadInteger();
+                    result.ItemId = packet.ReadInteger();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public int ItemId;
+
+                    public Struct(int itemId, int networkId = -1)
+                    {
+                        ItemId = itemId;
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+                }
+            }
+
+            #endregion
+
         }
 
         public static class S2C

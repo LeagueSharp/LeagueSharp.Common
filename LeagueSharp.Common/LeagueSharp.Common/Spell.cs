@@ -164,6 +164,8 @@ namespace LeagueSharp.Common
 
         public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
+            if (From.Distance(unit.ServerPosition) > Range) return;
+
             if (packetCast)
             {
                 Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
