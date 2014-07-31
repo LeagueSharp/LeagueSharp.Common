@@ -201,15 +201,37 @@ namespace LeagueSharp.Common
                     .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1000);
         }
 
+        internal static class CursorPosT
+        {
+            private static int _posX;
+            private static int _posY;
+
+            static CursorPosT()
+            {
+                Game.OnWndProc += Game_OnWndProc;
+            }
+
+            static void Game_OnWndProc(WndEventArgs args)
+            {
+                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
+                {
+                    _posX = unchecked((short)(long)args.LParam);
+                    _posY = unchecked((short)((long)args.LParam >> 16));
+                }
+            }
+
+            internal static Vector2 GetCursorPos()
+            {
+                return new Vector2(_posX, _posY);
+            }
+        }
+
         /// <summary>
         /// Returns the cursor position on the screen.
         /// </summary>
         public static Vector2 GetCursorPos()
         {
-            var rpos = Drawing.WorldToScreen(Game.CursorPos);
-            var de = Drawing.Direct3DDevice;
-
-            return new Vector2(rpos[0], rpos[1]);
+            return CursorPosT.GetCursorPos();
         }
 
         /// <summary>

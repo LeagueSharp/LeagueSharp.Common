@@ -2,13 +2,26 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.Xml;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
+    internal enum WindowsMessages
+    {
+        WM_MOUSEMOVE = 0x200,
+        WM_LBUTTONDOWN = 0x201,
+        WM_LBUTTONUP = 0x202,
+        WM_RBUTTONDOWN = 0x203,
+        WM_RBUTTONUP = 0x202,
+        WM_KEYDOWN = 0x0100,
+        WM_KEYUP = 0x101,
+    }
+
     [ Serializable ]
     public struct Circle
     {
@@ -27,13 +40,19 @@ namespace LeagueSharp.Common
     {
         public int MaxValue;
         public int MinValue;
-        public int Value;
+        private int _value;
 
         public Slider(int value = 0, int maxValue = 100, int minValue = 0)
         {
             MaxValue = maxValue;
-            Value = value;
+            _value = value;
             MinValue = minValue;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+            set { _value = Math.Min(Math.Max(value, MinValue), MaxValue); }
         }
     }
 
@@ -71,19 +90,27 @@ namespace LeagueSharp.Common
         }
     }
 
-    [ Serializable ]
     internal static class MenuSettings
     {
         public static Menu Config;
+        public static Vector2 BasePosition = new Vector2(10, 10);
         public static List<Color> ColorList = new List<Color>();
-        public static Color BooleanOnColor = Color.FromArgb(100, Color.Green);
-        public static Color BooleanOffColor = Color.FromArgb(100, Color.Red);
+        public static Color BooleanOnColor = Color.FromArgb(150, Color.Green);
+        public static Color BooleanOffColor = Color.FromArgb(150, Color.Red);
+        public static Color StringListColor = Color.FromArgb(150, Color.Blue);
 
+        public static XmlDocument xml = new XmlDocument();
         /* Slider */
         public static Color SliderIndicator = Color.FromArgb(150, Color.Yellow);
 
         /*String Lists*/
         public static Color NextBColor = Color.FromArgb(100, Color.Blue);
+
+        private static bool _drawTheMenu;
+        private static int _cachedWidth = -1;
+        private static int _cachedHeight = -1;
+        private static Color _chachedBgColor = Color.Transparent;
+        private static Color _chachedActiveColor = Color.Transparent;
 
         static MenuSettings()
         {
@@ -97,6 +124,71 @@ namespace LeagueSharp.Common
             ColorList.Add(Color.Lime);
             ColorList.Add(Color.Yellow);
             ColorList.Add(Color.Turquoise);
+
+            if (File.Exists(MenuSettingsPath))
+            {
+                xml.Load(MenuSettingsPath);
+            }
+            else
+            {
+                var rootNode = xml.CreateElement("MenuSettings");
+                xml.AppendChild(rootNode);
+
+                var varNode = xml.CreateElement("Width");
+                varNode.InnerText = "2";
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("Height");
+                varNode.InnerText = "25";
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("BackgroundColor");
+                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.DarkSlateGray);
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("BackgroundColorAlpha");
+                varNode.InnerText = "100";
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("ActiveColor");
+                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.Red);
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("ActiveColorAlpha");
+                varNode.InnerText = "150";
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("ShowMenuPress");
+                varNode.InnerText = "16";
+                rootNode.AppendChild(varNode);
+
+                varNode = xml.CreateElement("ShowMenuToggle");
+                varNode.InnerText = "27";
+                rootNode.AppendChild(varNode);
+            }
+
+            Directory.CreateDirectory(MenuConfigPath);
+
+            xml.Save(MenuSettingsPath);
+
+            Game.OnWndProc += Game_OnWndProc;
+            _drawTheMenu = Global.Read<bool>("DrawMenu", true);
+        }
+
+        internal static bool DrawMenu
+        {
+            get { return _drawTheMenu; }
+            set
+            {
+                Global.Write("DrawMenu", value);
+                _drawTheMenu = value;
+            }
+        }
+
+
+        public static string MenuSettingsPath
+        {
+            get { return MenuConfigPath + "MenuSettings.xml"; }
         }
 
         public static string MenuConfigPath
@@ -112,30 +204,9 @@ namespace LeagueSharp.Common
         {
             get
             {
-                var m = 6;
-                if (Config.Item("Width") != null)
-                {
-                    switch (Config.Item("Width").GetValue<StringList>().SelectedIndex)
-                    {
-                        case 0:
-                            m = 9;
-                            break;
-                        case 1:
-                            m = 7;
-                            break;
-                        case 2:
-                            m = 6;
-                            break;
-                        case 3:
-                            m = 5;
-                            break;
-                        case 4:
-                            m = 4;
-                            break;
-                    }
-                }
-
-                return Drawing.Width / m;
+                var m = _cachedWidth != -1 ? _cachedWidth : Convert.ToInt32(GetXmlValue("Width"));
+                _cachedWidth = m;
+                return Drawing.Width / (10 - m);
             }
         }
 
@@ -143,20 +214,21 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Config.Item("Height") != null)
-                    return Config.Item("Height").GetValue<Slider>().Value;
-                return 25;
+                _cachedHeight = _cachedHeight != -1 ? _cachedHeight : Convert.ToInt32(GetXmlValue("Height"));
+                return _cachedHeight;
             }
         }
-
 
         public static Color BackgroundColor
         {
             get
             {
-                if (Config.Item("BackgroundColor") != null)
-                    return Config.Item("BackgroundColor").GetValue<Color>();
-                return Color.FromArgb(150, Color.DarkSlateGray);
+                if (_chachedBgColor != Color.Transparent) return _chachedBgColor;
+
+                var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("BackgroundColor"));
+                var alpha = GetXmlValue("BackgroundColorAlpha");
+                _chachedBgColor = Color.FromArgb(Convert.ToInt32(alpha), color);
+                return _chachedBgColor;
             }
         }
 
@@ -164,411 +236,336 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Config.Item("SelectedColor") != null)
-                    return Config.Item("SelectedColor").GetValue<Color>();
-                return Color.FromArgb(150, Color.Red);
+                if (_chachedActiveColor != Color.Transparent) return _chachedActiveColor;
+
+                var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("ActiveColor"));
+                var alpha = GetXmlValue("ActiveColorAlpha");
+                _chachedActiveColor = Color.FromArgb(Convert.ToInt32(alpha), color);
+                return _chachedActiveColor;
             }
         }
 
+        private static void Game_OnWndProc(WndEventArgs args)
+        {
+            if ((args.Msg == (uint)WindowsMessages.WM_KEYUP || args.Msg == (uint)WindowsMessages.WM_KEYDOWN) &&
+                args.WParam == Convert.ToInt32(GetXmlValue("ShowMenuPress")))
+            {
+                DrawMenu = args.Msg == (uint)WindowsMessages.WM_KEYDOWN;
+            }
 
-        /* Booleans */
+            if (args.Msg == (uint)WindowsMessages.WM_KEYUP &&
+                args.WParam == Convert.ToInt32(GetXmlValue("ShowMenuToggle")))
+                DrawMenu = !DrawMenu;
+        }
+
+        private static string GetXmlValue(string tagName)
+        {
+            return xml.GetElementsByTagName(tagName)[0].InnerText;
+        }
     }
 
-    [ Serializable ]
-    internal static class MenuHandler
+    internal static class MenuDrawHelper
     {
-        private static bool _enabled;
-        public static List<Menu> Menus = new List<Menu>();
-        public static int LastTick = 0;
-        public static int LastMMoveTick = 0;
-
-        static MenuHandler()
+        internal static void DrawBox(Vector2 position, int width, int height, Color color, int borderwidth,
+            Color borderColor)
         {
-            Drawing.OnDraw += Drawing_OnDraw;
-            Game.OnWndProc += GameOnOnWndProc;
-            Game.OnGameUpdate += GameOnOnGameUpdate;
+            Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, height, color);
 
-            CustomEvents.Game.OnGameEnd += Game_OnGameEnd;
-            Game.OnGameEnd += GameOnOnGameEnd;
-            AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
-        }
-
-
-        public static bool Visible
-        {
-            get
+            if (borderwidth > 0)
             {
-                if (MenuSettings.Config.Item("showMenu") != null &&
-                    MenuSettings.Config.Item("showMenu").GetValue<KeyBind>().Active)
-                    return true;
-
-                if (MenuSettings.Config.Item("showMenu2") != null &&
-                    MenuSettings.Config.Item("showMenu2").GetValue<KeyBind>().Active)
-                    return true;
-
-                return false;
+                Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, borderwidth, borderColor);
+                Drawing.DrawLine(position.X, position.Y + height, position.X + width, position.Y + height, borderwidth,
+                    borderColor);
+                Drawing.DrawLine(position.X, position.Y, position.X, position.Y + height, borderwidth, borderColor);
+                Drawing.DrawLine(position.X + width, position.Y, position.X + width, position.Y + height, borderwidth,
+                    borderColor);
             }
         }
 
-        public static uint MenuKey
+        internal static void DrawOnOff(bool on, Vector2 position, MenuItem item)
         {
-            get
-            {
-                if (MenuSettings.Config.Item("showMenu") != null)
-                    return MenuSettings.Config.Item("showMenu").GetValue<KeyBind>().Key;
-                return 16;
-            }
+            DrawBox(position, item.Height, item.Height, on ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor,
+                1, Color.Black);
+            var s = on ? "On" : "Off";
+            Drawing.DrawText(
+                item.Position.X + item.Width - item.Height + (item.Height - Drawing.GetTextExtent(s).Width) / 2 - 2,
+                item.Position.Y + (item.Height - Drawing.GetTextExtent(s).Height) / 2, Color.White, s);
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        internal static void DrawArrow(string s, Vector2 position, MenuItem item, Color color)
         {
-            OnExit();
+            DrawBox(position, item.Height, item.Height, color, 1, Color.Black);
+            Drawing.DrawText(
+                position.X + (item.Height - Drawing.GetTextExtent(s).Width) / 2 - 2,
+                item.Position.Y + (item.Height - Drawing.GetTextExtent(s).Height) / 2, Color.White, s);
         }
 
-
-        private static void OnExit()
+        internal static void DrawSlider(Vector2 position, MenuItem item, int width = -1, bool drawText = true)
         {
-            SaveItems();
-            Game.PrintChat("Saving");
+            var val = item.GetValue<Slider>();
+            DrawSlider(position, item, val.MinValue, val.MaxValue, val.Value, width, drawText);
         }
 
-        private static void Game_OnGameEnd(EventArgs args)
+        internal static void DrawSlider(Vector2 position, MenuItem item, int min, int max, int value, int width,
+            bool drawText)
         {
-            if (!_enabled) return;
-            OnExit();
-        }
+            width = (width > 0 ? width : item.Width);
+            var percentage = 100 * (value - min) / (max - min);
+            var x = position.X + (percentage * width) / 100;
+            Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, MenuSettings.SliderIndicator);
 
-        private static void GameOnOnGameEnd(GameEndEventArgs args)
-        {
-            if (!_enabled) return;
-            OnExit();
-        }
-
-        private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
-        {
-            if (!_enabled) return;
-            OnExit();
-        }
-
-        private static void GameOnOnGameUpdate(EventArgs args)
-        {
-            if ((Environment.TickCount - LastTick < 500))
-                return;
-
-            Menus = GetMenus();
-
-            LastTick = Environment.TickCount;
-        }
-
-        public static List<Menu> GetMenus()
-        {
-            var result = new List<Menu>();
-
-            for (var i = 0; i < 30; i++)
-            {
-                var menu = Global.Read<Menu>("MENU" + i, true);
-                if (default(Menu) != menu)
-                {
-                    result.Add(menu);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        private static void GameOnOnWndProc(WndEventArgs args)
-        {
-            if (!_enabled)
-                return;
-
-            //Cap the mouse move event since it causes lag.
-            if (args.Msg == 0x200)
-            {
-                if (Environment.TickCount - LastMMoveTick < 100) return;
-                LastMMoveTick = Environment.TickCount;
-            }
-
-            if (args.Msg == 0x0100 || args.Msg == 0x0101)
-            {
-                SendKeys(args.WParam, args.Msg == 0x0101);
-            }
-
-            /* WM_LBUTTONDOWN, WM_LBUTTONUP and MouseMove */
-            if (args.Msg != 0x201 && args.Msg != 0x202 && args.Msg != 0x200)
-                return;
-
-            if (args.Msg != 0x202 && !Visible)
-                return;
-
-            int X = 10, Y = 10;
-            SendClick(X, Y, args.Msg);
-        }
-
-        public static void SaveItems(List<Menu> menuList = null)
-        {
-            if (menuList == null)
-                menuList = Menus;
-
-            foreach (var menu in menuList)
-            {
-                foreach (var item in menu.Items)
-                {
-                    item.SaveToConfigFile();
-                }
-                SaveItems(menu.Children);
-            }
-        }
-
-        public static void SendKeys(uint vKeyCode, bool up, List<Menu> menuList = null)
-        {
-            if (menuList == null)
-                menuList = Menus;
-
-            foreach (var menu in menuList)
-            {
-                foreach (var item in menu.Items)
-                {
-                    item.OnKeyMessage(vKeyCode, up);
-                }
-
-                SendKeys(vKeyCode, up, menu.Children);
-            }
-        }
-
-        public static void SendClick(int X, int Y, uint message, List<Menu> menuList = null)
-        {
-            if (menuList == null)
-                menuList = Menus;
-
-            var cursorPosition = Utility.GetCursorPos();
-
-            /*Draw all the root menus*/
-            for (var i = 0; i < menuList.Count; i++)
-            {
-                var menu = menuList[i];
-
-                if (Utility.IsUnderRectangle(cursorPosition, X, Y, MenuSettings.MenuItemWidth,
-                    MenuSettings.MenuItemHeight))
-                {
-                    if (message == 0x201)
-                    {
-                        menu.Open = !menu.Open;
-
-                        LastTick = Environment.TickCount + 10000;
-
-                        if (menu.Open)
-                        {
-                            /*Close the rest of the in the same level*/
-                            foreach (var test in menuList)
-                            {
-                                if (test.DisplayName != menu.DisplayName && test.Name != menu.Name)
-                                {
-                                    if (test.Open)
-                                        test.Open = false;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (menu.Open)
-                {
-                    /*Send the click messages to the submenus */
-                    SendClick(X + MenuSettings.MenuItemWidth, Y, message, menu.Children);
-
-                    /*Send the click messages to the items */
-
-                    /* Draw the items */
-                    for (var j = 0; j < menu.Items.Count; j++)
-                    {
-                        var item = menu.Items[j];
-
-
-                        var itemX = X + MenuSettings.MenuItemWidth;
-                        var itemY = Y + (j + menu.Children.Count) * MenuSettings.MenuItemHeight;
-                        if (
-                            Utility.IsUnderRectangle(cursorPosition, itemX, itemY, MenuSettings.MenuItemWidth,
-                                MenuSettings.MenuItemHeight) || message != 0x201)
-                        {
-                            if (message == 0x201 || message == 0x202)
-                            {
-                                LastTick = Environment.TickCount + 10000;
-                                item.OnClick(cursorPosition.X - itemX, cursorPosition.Y - itemY, message == 0x202);
-                            }
-
-
-                            if (message == 0x200)
-                                item.OnMoveMouse(cursorPosition.X - itemX, cursorPosition.Y - itemY);
-                        }
-                    }
-                }
-
-                Y += MenuSettings.MenuItemHeight;
-            }
-        }
-
-        private static void Drawing_OnDraw(EventArgs args)
-        {
-            if (!_enabled) return;
-            if (!Visible) return;
-
-            int X = 10, Y = 10;
-
-            DrawMenus(X, Y);
-        }
-
-        private static void DrawMenus(int X, int Y, List<Menu> menuList = null)
-        {
-            if (menuList == null)
-                menuList = Menus;
-
-            /*Draw all the root menus*/
-            for (var i = 0; i < menuList.Count; i++)
-            {
-                var menu = menuList[i];
-                DrawRectangle(X, Y, MenuSettings.MenuItemWidth, MenuSettings.MenuItemHeight,
-                    !menu.Open ? MenuSettings.BackgroundColor : MenuSettings.ActiveBackgroundColor);
-                menu.Draw(X, Y);
-
-                /*Draw the opened menus*/
-                if (menu.Open)
-                {
-                    DrawMenus(X + MenuSettings.MenuItemWidth, Y, menu.Children);
-
-                    /* Draw the items */
-                    for (var j = 0; j < menu.Items.Count; j++)
-                    {
-                        var item = menu.Items[j];
-                        DrawRectangle(X + MenuSettings.MenuItemWidth,
-                            Y + (j + menu.Children.Count) * MenuSettings.MenuItemHeight, MenuSettings.MenuItemWidth,
-                            MenuSettings.MenuItemHeight, MenuSettings.BackgroundColor);
-
-                        item.Draw(X + MenuSettings.MenuItemWidth,
-                            Y + (j + menu.Children.Count) * MenuSettings.MenuItemHeight);
-                    }
-                }
-
-                Y += MenuSettings.MenuItemHeight;
-            }
-        }
-
-        public static void DrawRectangle(float X, float Y, float width, float height, Color color, float thickness = 1)
-        {
-            /* Background */
-            Drawing.DrawLine(X, Y, X + width, Y, height, color);
-
-            /* Draw the borders */
-            Drawing.DrawLine(X, Y, X + width, Y, thickness, Color.Black);
-            Drawing.DrawLine(X, Y + height, X + width, Y + height, thickness, Color.Black);
-
-            Drawing.DrawLine(X, Y, X, Y + height, thickness, Color.Black);
-            Drawing.DrawLine(X + width, Y, X + width, Y + height, thickness, Color.Black);
-        }
-
-        public static void Enable()
-        {
-            _enabled = true;
+            if (drawText)
+                Drawing.DrawText(position.X - 7 + width - Drawing.GetTextExtent(value.ToString()).Width,
+                    position.Y + (item.Height - Drawing.GetTextExtent(value.ToString()).Height) / 2, Color.White,
+                    value.ToString());
         }
     }
 
-    [ Serializable ]
     public class Menu
     {
         public List<Menu> Children = new List<Menu>();
+
         public string DisplayName;
-
-        internal bool IsRootMenu;
-
+        public bool IsRootMenu;
         public List<MenuItem> Items = new List<MenuItem>();
         public string Name;
         public Menu Parent;
+        internal int _cachedMenuCount = -1;
+        internal int _cachedMenuCountT = 0;
 
-        private int _id = -1;
+        private bool _visible;
 
         public Menu(string displayName, string name, bool isRootMenu = false)
         {
-            Name = name;
             DisplayName = displayName;
+            Name = name;
             IsRootMenu = isRootMenu;
 
-            if (MenuSettings.Config == null && name != "Menu" && Global.Read<Menu>("MENU0", true) == default(Menu))
+            if (isRootMenu)
             {
-                MenuSettings.Config = new Menu("Menu", "Menu", true);
+                CustomEvents.Game.OnGameEnd += delegate { SaveAll(); };
+                Game.OnGameEnd += delegate { SaveAll(); };
+                AppDomain.CurrentDomain.DomainUnload += delegate
+                {
+                    var m = Global.Read<List<string>>("CommonMenuList", true);
+                    if (m == default(List<string>))
+                        m = new List<string>();
+                    m.Remove(DisplayName + Name);
+                    Global.Write("CommonMenuList", m);
 
-                var colors = new Menu("Colors", "Colors");
-
-                colors.AddItem(new MenuItem("BackgroundColor", "Background Color").SetValue(MenuSettings.BackgroundColor));
-                colors.AddItem(
-                    new MenuItem("SelectedColor", "Selected Color").SetValue(MenuSettings.ActiveBackgroundColor));
-                MenuSettings.Config.AddSubMenu(colors);
-
-                var sizes = new Menu("Sizes", "Sizes");
-                sizes.AddItem(
-                    new MenuItem("Width", "Width").SetValue(new StringList(new[] { "1", "2", "3", "4", "5" }, 2)));
-                sizes.AddItem(new MenuItem("Height", "Height").SetValue(new Slider(25, 100, 10)));
-                sizes.AddItem(new MenuItem("TextSize", "Text Size").SetValue(new Slider(50, 100, 0)));
-                MenuSettings.Config.AddSubMenu(sizes);
-
-                var hotkeys = new Menu("Hotkeys", "Hotkeys");
-                hotkeys.AddItem(
-                    new MenuItem("showMenu2", "Show the menu (Toggle)").SetValue(new KeyBind(27, KeyBindType.Toggle)));
-                hotkeys.AddItem(
-                    new MenuItem("showMenu", "Show the menu (Hold)").SetValue(new KeyBind(16, KeyBindType.Press)));
-
-                MenuSettings.Config.AddSubMenu(hotkeys);
-
-                MenuSettings.Config.AddToMainMenu();
+                    SaveAll();
+                };
+                AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
             }
         }
 
-        internal bool Open { get; set; }
-
-        internal int Id
+        internal int XLevel
         {
             get
             {
-                if (_id != -1) return _id;
-
-                for (var i = 0; i < 30; i++)
+                var result = 0;
+                var m = this;
+                while (m.Parent != null)
                 {
-                    var test = Global.Read<Menu>("MENU" + i, true);
-                    if (default(Menu) == test)
-                    {
-                        _id = i;
-
-                        if (i == 0)
-                            MenuHandler.Enable();
-
-                        return i;
-                    }
+                    m = m.Parent;
+                    result++;
                 }
 
-                return -1;
+                return result;
             }
         }
 
-        internal void Draw(int X, int Y)
+        internal int YLevel
         {
-            var v = (MenuSettings.MenuItemHeight - Drawing.GetTextExtent(DisplayName).Height) / 2;
-            Drawing.DrawText(X + 5, Y + v, Color.White, DisplayName);
+            get
+            {
+                if (IsRootMenu || Parent == null) return 0;
+                var result = 0;
+                foreach (var test in Parent.Children)
+                {
+                    if (test.Name == Name)
+                        break;
+                    result++;
+                }
+                return result;
+            }
+        }
+
+        internal int MenuCount
+        {
+            get
+            {
+                if (Environment.TickCount - _cachedMenuCountT < 500) return _cachedMenuCount;
+                var l = Global.Read<List<string>>("CommonMenuList");
+                var result = 0;
+                foreach (var s in l)
+                {
+                    if (s == DisplayName + Name)
+                        break;
+                    result++;
+                }
+
+                _cachedMenuCount = result;
+                _cachedMenuCountT = Environment.TickCount;
+                return result;
+            }
+        }
+
+        internal Vector2 MyBasePosition
+        {
+            get
+            {
+                if (IsRootMenu || Parent == null)
+                    return MenuSettings.BasePosition + MenuCount * new Vector2(0, MenuSettings.MenuItemHeight);
+
+                return Parent.MyBasePosition;
+            }
+        }
+
+        internal Vector2 Position
+        {
+            get
+            {
+                return MyBasePosition + XLevel * new Vector2(MenuSettings.MenuItemWidth, 0) +
+                       YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
+            }
+        }
+
+        internal int Width
+        {
+            get { return MenuSettings.MenuItemWidth; }
+        }
+
+        internal int Height
+        {
+            get { return MenuSettings.MenuItemHeight; }
+        }
+
+        internal bool Visible
+        {
+            get
+            {
+                if (!MenuSettings.DrawMenu) return false;
+                return IsRootMenu ? true : _visible;
+            }
+            set { _visible = value; }
+        }
+
+        internal bool IsInside(Vector2 position)
+        {
+            return Utility.IsUnderRectangle(position, Position.X, Position.Y, Width, Height);
+        }
+
+        internal void Game_OnWndProc(WndEventArgs args)
+        {
+            OnReceiveMessage((WindowsMessages)args.Msg, Utility.GetCursorPos(), args.WParam);
+        }
+
+        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
+        {
+            //Spread the message to the menu's children recursively
+            foreach (var child in Children)
+                child.OnReceiveMessage(message, cursorPos, key);
+
+
+            foreach (var item in Items)
+                item.OnReceiveMessage(message, cursorPos, key);
+
+            //Handle the left clicks on the menus to hide or show the submenus.
+            if (message != WindowsMessages.WM_LBUTTONDOWN) return;
+
+            if (IsRootMenu && Visible)
+            {
+                if (cursorPos.X - MenuSettings.BasePosition.X < MenuSettings.MenuItemWidth)
+                {
+                    var n = (int)(cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
+                    if (MenuCount != n && n < Global.Read<List<string>>("CommonMenuList").Count)
+                    {
+                        foreach (var schild in Children)
+                            schild.Visible = false;
+
+                        foreach (var sitem in Items)
+                            sitem.Visible = false;
+                    }
+                }
+            }
+
+            if (!IsInside(cursorPos)) return;
+            if (!Visible) return;
+
+            if (!IsRootMenu && Parent != null)
+                //Close all the submenus in the level 
+                foreach (var child in Parent.Children)
+                {
+                    if (child.Name != Name)
+                    {
+                        foreach (var schild in child.Children)
+                            schild.Visible = false;
+
+                        foreach (var sitem in child.Items)
+                            sitem.Visible = false;
+                    }
+                }
+
+            //Hide or Show the submenus.
+            foreach (var child in Children)
+                child.Visible = !child.Visible;
+
+            //Hide or Show the items.
+            foreach (var item in Items)
+                item.Visible = !item.Visible;
+        }
+
+        internal void Drawing_OnDraw(System.EventArgs args)
+        {
+            if (!Visible) return;
+
+            MenuDrawHelper.DrawBox(Position, Width, Height,
+                (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
+                    ? MenuSettings.ActiveBackgroundColor
+                    : MenuSettings.BackgroundColor, 1, Color.Black);
+            Drawing.DrawText(Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
+                Color.White, DisplayName);
+
+            Drawing.DrawText(Position.X  + Width - 15, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
+                Color.White, ">");
+
+            //Draw the menu submenus
+            foreach (var child in Children)
+                if (child.Visible)
+                    child.Drawing_OnDraw(args);
+
+            //Draw the items
+            for (var i = Items.Count - 1; i >= 0; i--)
+            {
+                var item = Items[i];
+                if (item.Visible)
+                    item.Drawing_OnDraw();
+            }
+        }
+
+        internal void SaveAll()
+        {
+            foreach (var child in Children)
+            {
+                child.SaveAll();
+            }
+
+            foreach (var item in Items)
+            {
+                item.SaveToFile();
+            }
         }
 
         public void AddToMainMenu()
         {
-            if (IsRootMenu)
-            {
-                Global.Write("MENU" + Id, this);
-            }
-
-            else if (Parent != null)
-            {
-                Parent.AddToMainMenu();
-            }
+            Drawing.OnDraw += Drawing_OnDraw;
+            Game.OnWndProc += Game_OnWndProc;
+            var m = Global.Read<List<string>>("CommonMenuList", true);
+            if (m == default(List<string>))
+                m = new List<string>();
+            m.Add(DisplayName + Name);
+            Global.Write("CommonMenuList", m);
         }
 
         public MenuItem AddItem(MenuItem item)
@@ -617,427 +614,450 @@ namespace LeagueSharp.Common
         }
     }
 
-    [ Serializable ]
+    internal enum MenuValueType
+    {
+        None,
+        Boolean,
+        Slider,
+        KeyBind,
+        Integer,
+        Color,
+        Circle,
+        StringList,
+    }
+
     public class MenuItem
     {
         private readonly string _assemblyPath;
+        internal int ColorId;
         public string DisplayName;
+        internal bool Interacting;
         public string Name;
 
         public Menu Parent;
+        internal MenuValueType ValueType;
 
-        internal string ValueType = "null";
-        private bool _appendAssemblyPathToId = true;
-
-        private int _colorId;
-        private string _configFilePath;
-        internal string _id;
-        private bool _interacting;
+        private bool _isShared;
+        private string _saveFilePath;
+        private bool _saved;
         private byte[] _serialized;
-
+        private object _value;
         private bool _valueSet;
-
-        private object lastReadValue;
-        private int lastReadValueT;
+        private bool _visible;
 
         public MenuItem(string name, string displayName)
         {
-            DisplayName = displayName;
             Name = name;
+            DisplayName = displayName;
             _assemblyPath = System.Reflection.Assembly.GetCallingAssembly().Location;
         }
 
-        public string Id
+        internal bool Visible
         {
             get
             {
-                if (_id != null) return Id;
-
-                return (_appendAssemblyPathToId ? _assemblyPath : "") + DisplayName + Name;
+                if (!MenuSettings.DrawMenu) return false;
+                return _visible;
             }
-            set { _id = value; }
+            set { _visible = value; }
         }
 
-        internal MenuItem DontAppendAP()
+        internal int XLevel
         {
-            _appendAssemblyPathToId = false;
+            get
+            {
+                if (Parent == null) return 1;
+                var result = 1;
+                var m = Parent;
+                while (m.Parent != null)
+                {
+                    m = m.Parent;
+                    result++;
+                }
+
+                return result;
+            }
+        }
+
+        internal int YLevel
+        {
+            get
+            {
+                if (Parent == null) return 0;
+                var result = Parent.YLevel + Parent.Children.Count;
+                foreach (var test in Parent.Items)
+                {
+                    if (test.Name == Name)
+                        break;
+                    result++;
+                }
+                return result;
+            }
+        }
+
+        internal Vector2 MyBasePosition
+        {
+            get
+            {
+                if (Parent == null)
+                    return MenuSettings.BasePosition;
+
+                return Parent.MyBasePosition;
+            }
+        }
+
+
+        internal Vector2 Position
+        {
+            get
+            {
+                return MyBasePosition + XLevel * new Vector2(MenuSettings.MenuItemWidth, 0) +
+                       YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
+            }
+        }
+
+        internal int Width
+        {
+            get { return MenuSettings.MenuItemWidth; }
+        }
+
+        internal int Height
+        {
+            get { return MenuSettings.MenuItemHeight; }
+        }
+
+        internal MenuItem SetShared()
+        {
+            _isShared = true;
             return this;
-        }
-
-        internal void OnClick(float X, float Y, bool up)
-        {
-            if (ValueType == "Boolean" && up == false && X > MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight)
-            {
-                SetValue(!GetValue<bool>());
-            }
-
-            if (ValueType == "Slider")
-            {
-                _interacting = !up;
-                OnMoveMouse(X, Y);
-            }
-
-            if (ValueType == "Color")
-            {
-                _interacting = false;
-                if (X < MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight)
-                {
-                    _interacting = !up;
-                }
-                else if (!up)
-                {
-                    var val = GetValue<Color>();
-                    _colorId = (_colorId != MenuSettings.ColorList.Count - 1) ? _colorId + 1 : 0;
-                    SetValue(Color.FromArgb(val.A, MenuSettings.ColorList[_colorId]));
-                }
-
-                OnMoveMouse(X, Y);
-            }
-
-            if (ValueType == "Circle")
-            {
-                _interacting = false;
-                if (X < MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight)
-                {
-                    _interacting = !up;
-                }
-                else if (X < MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight && !up)
-                {
-                    var val = GetValue<Circle>();
-                    var newVal = new Circle(!val.Active, val.Color);
-                    SetValue(newVal);
-                }
-                else if (!up)
-                {
-                    var val = GetValue<Circle>();
-                    _colorId = (_colorId != MenuSettings.ColorList.Count - 1) ? _colorId + 1 : 0;
-                    SetValue(new Circle(val.Active, Color.FromArgb(val.Color.A, MenuSettings.ColorList[_colorId])));
-                }
-
-                OnMoveMouse(X, Y);
-            }
-
-            if (ValueType == "KeyBind" && !up)
-            {
-                if (X > MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight)
-                {
-                    var val = GetValue<KeyBind>();
-                    val.Active = !val.Active;
-                    SetValue(val);
-                }
-                else
-                {
-                    _interacting = !_interacting;
-                }
-            }
-
-            if (ValueType == "StringList" && up == false)
-            {
-                if (X > MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight)
-                {
-                    var val = GetValue<StringList>();
-                    val.SelectedIndex = val.SelectedIndex == val.SList.Length - 1 ? 0 : (val.SelectedIndex + 1);
-                    SetValue(val);
-                }
-                else if (X > MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight)
-                {
-                    var val = GetValue<StringList>();
-                    val.SelectedIndex = val.SelectedIndex == 0 ? val.SList.Length - 1 : (val.SelectedIndex - 1);
-                    SetValue(val);
-                }
-            }
-        }
-
-        internal void OnKeyMessage(uint vKeyCode, bool up)
-        {
-            if (ValueType == "KeyBind")
-            {
-                var val = GetValue<KeyBind>();
-
-                if (MenuGUI.IsChatOpen)
-                {
-                    if (val.Type == KeyBindType.Press)
-                    {
-                        val.Active = false;
-                        SetValue(val);
-                    }
-
-                    return;
-                }
-
-                if (val.Key == vKeyCode)
-                {
-                    switch (val.Type)
-                    {
-                        case KeyBindType.Press:
-                            val.Active = !up;
-                            break;
-                        case KeyBindType.Toggle:
-                            if (up) val.Active = !val.Active;
-                            break;
-                    }
-
-                    SetValue(val);
-                }
-
-                if (_interacting && up)
-                {
-                    val.Key = vKeyCode;
-                    SetValue(val);
-
-                    _interacting = false;
-                }
-            }
-        }
-
-        internal void OnMoveMouse(float X, float Y)
-        {
-            if (ValueType == "Slider" && _interacting)
-            {
-                var val = GetValue<Slider>();
-                var t = val.MinValue + (X * (val.MaxValue - val.MinValue)) / MenuSettings.MenuItemWidth;
-                val.Value = (int)Math.Min(Math.Max(t, val.MinValue), val.MaxValue);
-                SetValue(val);
-            }
-
-            if (ValueType == "Color")
-            {
-                if (_interacting)
-                {
-                    var val = GetValue<Color>();
-                    var alpha = X * 255 / (MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight);
-
-                    alpha = Math.Max(Math.Min(alpha, 255), 0);
-                    var c = Color.FromArgb((int)alpha, val);
-
-                    SetValue(c);
-                }
-            }
-
-            if (ValueType == "Circle")
-            {
-                if (_interacting)
-                {
-                    var val = GetValue<Circle>();
-                    var alpha = X * 255 / (MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight * 2);
-
-                    alpha = Math.Max(Math.Min(alpha, 255), 0);
-                    var c = Color.FromArgb((int)alpha, val.Color);
-
-                    SetValue(new Circle(val.Active, c));
-                }
-            }
-        }
-
-        internal void Draw(int X, int Y)
-        {
-            var text = (_interacting && ValueType == "KeyBind") ? ("Press new key") : DisplayName;
-
-            if (ValueType == "KeyBind")
-            {
-                var valu = GetValue<KeyBind>();
-
-                var sKey = Utility.KeyToText(valu.Key);
-
-                text += " (" + sKey + ")";
-            }
-
-            var v = (MenuSettings.MenuItemHeight - Drawing.GetTextExtent(DisplayName).Height) / 2;
-            Drawing.DrawText(X + 5, Y + v, Color.White, text);
-
-
-            if (ValueType == "Boolean")
-            {
-                var val = GetValue<bool>();
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight,
-                    val ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor);
-                Drawing.DrawText(X + MenuSettings.MenuItemWidth - 7 - Drawing.GetTextExtent(val ? "On" : "Off").Width,
-                    Y + v, Color.White, val ? "On" : "Off");
-            }
-
-            if (ValueType == "Integer")
-            {
-                var val = GetValue<Int32>();
-                Drawing.DrawText(X + MenuSettings.MenuItemWidth - 7 - Drawing.GetTextExtent(val.ToString()).Width, Y + v,
-                    Color.White, val.ToString());
-            }
-
-            if (ValueType == "Slider")
-            {
-                var val = GetValue<Slider>();
-                Drawing.DrawText(
-                    X + MenuSettings.MenuItemWidth - 7 - Drawing.GetTextExtent(val.Value.ToString()).Width, Y + v,
-                    Color.White, val.Value.ToString());
-
-                var t = (MenuSettings.MenuItemWidth - 7) * (val.Value - val.MinValue) / (val.MaxValue - val.MinValue);
-
-                Drawing.DrawLine(X + 5 + t, Y + 2, X + 5 + t, Y + MenuSettings.MenuItemHeight - 1, 3,
-                    MenuSettings.SliderIndicator);
-            }
-
-
-            if (ValueType == "KeyBind")
-            {
-                var val = GetValue<KeyBind>();
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight,
-                    val.Active ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor);
-                Drawing.DrawText(
-                    X + MenuSettings.MenuItemWidth - 7 - Drawing.GetTextExtent(val.Active ? "On" : "Off").Width, Y + v,
-                    Color.White, val.Active ? "On" : "Off");
-            }
-
-            if (ValueType == "Color")
-            {
-                var val = GetValue<Color>();
-
-                var t = (MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight - 7) * (val.A) / (255);
-                Drawing.DrawLine(X + 5 + t, Y + 2, X + 5 + t, Y + MenuSettings.MenuItemHeight - 1, 3,
-                    MenuSettings.SliderIndicator);
-
-
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight, val);
-            }
-
-            if (ValueType == "Circle")
-            {
-                var val = GetValue<Circle>();
-
-                var t = (MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight - 7) * (val.Color.A) / (255);
-                Drawing.DrawLine(X + 5 + t, Y + 2, X + 5 + t, Y + MenuSettings.MenuItemHeight - 1, 3,
-                    MenuSettings.SliderIndicator);
-
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - 2 * MenuSettings.MenuItemHeight, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight,
-                    val.Active ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor);
-                Drawing.DrawText(
-                    X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight - 7 -
-                    Drawing.GetTextExtent(val.Active ? "On" : "Off").Width,
-                    Y + v, Color.White, val.Active ? "On" : "Off");
-
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight, val.Color);
-            }
-
-
-            if (ValueType == "StringList")
-            {
-                var val = GetValue<StringList>();
-                var s = val.SList[val.SelectedIndex];
-                Drawing.DrawText(
-                    X + MenuSettings.MenuItemWidth - Drawing.GetTextExtent(s).Width - 7 -
-                    2 * MenuSettings.MenuItemHeight,
-                    Y + v, Color.White, s);
-
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight * 2, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight, MenuSettings.NextBColor);
-                Drawing.DrawText(
-                    X + MenuSettings.MenuItemWidth - 9 - Drawing.GetTextExtent("<").Width - MenuSettings.MenuItemHeight,
-                    Y + v, Color.White, "<");
-
-                MenuHandler.DrawRectangle(X + MenuSettings.MenuItemWidth - MenuSettings.MenuItemHeight, Y,
-                    MenuSettings.MenuItemHeight, MenuSettings.MenuItemHeight, MenuSettings.NextBColor);
-                Drawing.DrawText(X + MenuSettings.MenuItemWidth - 9 - Drawing.GetTextExtent(">").Width, Y + v,
-                    Color.White, ">");
-            }
         }
 
         public T GetValue<T>()
         {
-            if (Environment.TickCount - lastReadValueT < 75) return (T)lastReadValue;
-
-            var val = Global.Read<T>(Id, true);
-            lastReadValue = val;
-            lastReadValueT = Environment.TickCount;
-
-            return val;
+            return (T)_value;
         }
 
         public MenuItem SetValue<T>(T newValue)
         {
+            ValueType = MenuValueType.None;
             if (newValue.GetType().ToString().Contains("Boolean"))
+                ValueType = MenuValueType.Boolean;
+            else if (newValue.GetType().ToString().Contains("Slider"))
+                ValueType = MenuValueType.Slider;
+            else if (newValue.GetType().ToString().Contains("KeyBind"))
+                ValueType = MenuValueType.KeyBind;
+            else if (newValue.GetType().ToString().Contains("Integer"))
+                ValueType = MenuValueType.Integer;
+            else if (newValue.GetType().ToString().Contains("Circle"))
+                ValueType = MenuValueType.Circle;
+            else if (newValue.GetType().ToString().Contains("StringList"))
+                ValueType = MenuValueType.StringList;
+            else if (newValue.GetType().ToString().Contains("Color"))
+                ValueType = MenuValueType.Color;
+            else
+                Game.PrintChat("CommonLibMenu: Data type not supported");
+
+            var dname = (_isShared ? "SharedConfig" : Path.GetFileName(_assemblyPath));
+            Directory.CreateDirectory(MenuSettings.MenuConfigPath);
+            Directory.CreateDirectory(MenuSettings.MenuConfigPath + dname);
+
+            _saveFilePath = MenuSettings.MenuConfigPath + dname + "\\" +
+                            Utility.Md5Hash("v2" + DisplayName + Name + newValue.GetType());
+
+            if (!_valueSet && File.Exists(_saveFilePath))
             {
-                ValueType = "Boolean";
-            }
-
-            if (newValue.GetType().ToString().Contains("Int32"))
-            {
-                ValueType = "Integer";
-            }
-
-            if (newValue.GetType().ToString().Contains("Slider"))
-            {
-                ValueType = "Slider";
-            }
-
-            if (newValue.GetType().ToString().Contains("KeyBind"))
-            {
-                ValueType = "KeyBind";
-            }
-
-            if (newValue.GetType().ToString().Contains("Color"))
-            {
-                ValueType = "Color";
-            }
-
-            if (newValue.GetType().ToString().Contains("StringList"))
-            {
-                ValueType = "StringList";
-            }
-
-            if (newValue.GetType().ToString().Contains("Circle"))
-            {
-                ValueType = "Circle";
-            }
-
-            /* Read the value from the saved configuration file.*/
-            var dName = Path.GetFileName(_assemblyPath);
-
-            Directory.CreateDirectory(MenuSettings.MenuConfigPath + dName);
-
-            _configFilePath = MenuSettings.MenuConfigPath + dName + "\\" +
-                              Utility.Md5Hash(DisplayName + Name + newValue.GetType());
-
-            if (!_valueSet)
-            {
-                if (File.Exists(_configFilePath))
+                if (ValueType == MenuValueType.KeyBind)
                 {
-                    var savedObject = File.ReadAllBytes(_configFilePath);
-
-                    //Prevent saving the Pressed keys.
-                    if (ValueType == "KeyBind")
-                    {
-                        var cValue = (KeyBind)(object)newValue;
-
-                        if (cValue.Type != KeyBindType.Press)
-                            newValue = Global.Deserialize<T>(savedObject);
-                        else
-                        {
-                            var savedValue = (KeyBind)(object)Global.Deserialize<T>(savedObject);
-                            cValue.Key = savedValue.Key;
-                            newValue = (T)(object)cValue;
-                        }
-                    }
-                    else
-                    {
-                        newValue = Global.Deserialize<T>(savedObject);
-                    }
+                    var SavedVal = (KeyBind)(object)Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                    if (SavedVal.Type == KeyBindType.Press)
+                        SavedVal.Active = false;
+                    newValue = (T)(object)SavedVal;
                 }
+                else
+                    newValue = Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
             }
-
-             _serialized = Global.Serialize(newValue);
 
             _valueSet = true;
 
-            Global.Write(Id, newValue);
+            _value = newValue;
+            _serialized = Global.Serialize(_value);
             return this;
         }
 
-        internal void SaveToConfigFile()
+        internal void SaveToFile()
         {
-            File.WriteAllBytes(_configFilePath, _serialized);
+            if (!_saved && _saveFilePath != null)
+            {
+                File.WriteAllBytes(_saveFilePath, _serialized);
+                _saved = true;
+            }
+        }
+
+        internal bool IsInside(Vector2 position)
+        {
+            return Utility.IsUnderRectangle(position, Position.X, Position.Y, Width, Height);
+        }
+
+        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
+        {
+            switch (ValueType)
+            {
+                case MenuValueType.Boolean:
+
+                    if (message != WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (!IsInside(cursorPos)) return;
+                    if (!Visible) return;
+
+                    if (cursorPos.X > Position.X + Width - Height)
+                        SetValue(!GetValue<bool>());
+
+                    break;
+
+                case MenuValueType.Slider:
+                    if (!Visible)
+                    {
+                        Interacting = false;
+                        return;
+                    }
+
+                    if (message == WindowsMessages.WM_MOUSEMOVE && Interacting ||
+                        message == WindowsMessages.WM_LBUTTONDOWN && !Interacting && IsInside(cursorPos))
+                    {
+                        var val = GetValue<Slider>();
+                        var t = val.MinValue + ((cursorPos.X - Position.X) * (val.MaxValue - val.MinValue)) / Width;
+                        val.Value = (int)t;
+                        SetValue(val);
+                    }
+
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP) return;
+                    if (!Visible) return;
+                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN) return;
+
+                    Interacting = message == WindowsMessages.WM_LBUTTONDOWN;
+                    break;
+
+                case MenuValueType.Color:
+                    if (!Visible)
+                    {
+                        Interacting = false;
+                        return;
+                    }
+
+                    if (message == WindowsMessages.WM_MOUSEMOVE && Interacting ||
+                        message == WindowsMessages.WM_LBUTTONDOWN && !Interacting && IsInside(cursorPos) &&
+                        cursorPos.X - Position.X < Width - Height)
+                    {
+                        var val = GetValue<Color>();
+                        var t = 1 + ((cursorPos.X - Position.X) * (254 - 1)) / (Width - Height);
+                        t = Math.Max(Math.Min(t, 255), 0);
+                        SetValue(Color.FromArgb((int)t, val));
+                    }
+
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP) return;
+                    if (!Visible) return;
+                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (cursorPos.X - Position.X > Width - Height)
+                    {
+                        if (message == WindowsMessages.WM_LBUTTONDOWN)
+                        {
+                            var val = GetValue<Color>();
+                            ColorId = (ColorId != MenuSettings.ColorList.Count - 1) ? ColorId + 1 : 0;
+                            SetValue(Color.FromArgb(val.A, MenuSettings.ColorList[ColorId]));
+                        }
+                        Interacting = false;
+                        return;
+                    }
+
+                    Interacting = message == WindowsMessages.WM_LBUTTONDOWN;
+                    break;
+                case MenuValueType.Circle:
+                    if (!Visible)
+                    {
+                        Interacting = false;
+                        return;
+                    }
+
+                    if (message == WindowsMessages.WM_MOUSEMOVE && Interacting ||
+                        message == WindowsMessages.WM_LBUTTONDOWN && !Interacting && IsInside(cursorPos) &&
+                        cursorPos.X - Position.X < Width - 2 * Height)
+                    {
+                        var val = GetValue<Circle>();
+                        var t = 1 + ((cursorPos.X - Position.X) * (254 - 1)) / (Width - Height * 2);
+                        t = Math.Max(Math.Min(t, 255), 0);
+                        val.Color = Color.FromArgb((int)t, val.Color);
+                        SetValue(val);
+                    }
+
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP) return;
+                    if (!Visible) return;
+                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (cursorPos.X - Position.X > Width - Height * 2)
+                    {
+                        if (message == WindowsMessages.WM_LBUTTONDOWN)
+                            if (cursorPos.X - Position.X > Width - Height)
+                            {
+                                var val = GetValue<Circle>();
+                                val.Active = !val.Active;
+                                SetValue(val);
+                            }
+                            else
+                            {
+                                var val = GetValue<Circle>();
+                                ColorId = (ColorId != MenuSettings.ColorList.Count - 1) ? ColorId + 1 : 0;
+                                val.Color = Color.FromArgb(val.Color.A, MenuSettings.ColorList[ColorId]);
+                                SetValue(val);
+                            }
+                        Interacting = false;
+                        return;
+                    }
+
+                    Interacting = message == WindowsMessages.WM_LBUTTONDOWN;
+                    break;
+                case MenuValueType.KeyBind:
+
+                    if (!MenuGUI.IsChatOpen)
+                        switch (message)
+                        {
+                            case WindowsMessages.WM_KEYDOWN:
+                                var val = GetValue<KeyBind>();
+                                if (key == val.Key)
+                                    if (val.Type == KeyBindType.Press)
+                                    {
+                                        if (!val.Active)
+                                        {
+                                            val.Active = true;
+                                            SetValue(val);
+                                        }
+                                    }
+                                break;
+                            case WindowsMessages.WM_KEYUP:
+
+                                var val2 = GetValue<KeyBind>();
+                                if (key == val2.Key)
+                                    if (val2.Type == KeyBindType.Press)
+                                    {
+                                        val2.Active = false;
+                                        SetValue(val2);
+                                    }
+                                    else
+                                    {
+                                        val2.Active = !val2.Active;
+                                        SetValue(val2);
+                                    }
+                                break;
+                        }
+
+                    if (!Visible) return;
+
+                    if (message == WindowsMessages.WM_KEYUP && Interacting)
+                    {
+                        var val = GetValue<KeyBind>();
+                        val.Key = key;
+                        SetValue(val);
+                        Interacting = false;
+                    }
+
+                    if (message != WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (!IsInside(cursorPos)) return;
+                    if (cursorPos.X > Position.X + Width - Height)
+                    {
+                        var val = GetValue<KeyBind>();
+                        val.Active = !val.Active;
+                        SetValue(val);
+                    }
+                    else
+                    {
+                        Interacting = !Interacting;
+                    }
+                    break;
+                case MenuValueType.StringList:
+                    if (!Visible) return;
+                    if (message != WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (!IsInside(cursorPos)) return;
+
+                    var slVal = GetValue<StringList>();
+                    if (cursorPos.X > Position.X + Width - Height)
+                    {
+                        slVal.SelectedIndex = slVal.SelectedIndex == slVal.SList.Length - 1
+                            ? 0
+                            : (slVal.SelectedIndex + 1);
+                        SetValue(slVal);
+                    }
+                    else if (cursorPos.X > Position.X + Width - 2 * Height)
+                    {
+                        slVal.SelectedIndex = slVal.SelectedIndex == 0
+                            ? slVal.SList.Length - 1
+                            : (slVal.SelectedIndex - 1);
+                        SetValue(slVal);
+                    }
+
+                    break;
+            }
+        }
+
+        internal void Drawing_OnDraw()
+        {
+            MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
+            var s = DisplayName;
+
+            switch (ValueType)
+            {
+                case MenuValueType.Boolean:
+                    MenuDrawHelper.DrawOnOff(GetValue<bool>(), new Vector2(Position.X + Width - Height, Position.Y), this);
+                    break;
+
+                case MenuValueType.Slider:
+                    MenuDrawHelper.DrawSlider(Position, this);
+                    break;
+
+                case MenuValueType.KeyBind:
+                    var val = GetValue<KeyBind>();
+                    s += " (" + Utility.KeyToText(val.Key) + ")";
+                    if (Interacting)
+                        s = "Press new key";
+                    MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
+
+                    break;
+
+                case MenuValueType.Integer:
+                    var intVal = GetValue<int>();
+                    Drawing.DrawText(Position.X + Width - Drawing.GetTextExtent(intVal.ToString()).Width - 7,
+                        Position.Y + (Height - Drawing.GetTextExtent(intVal.ToString()).Height) / 2, Color.White,
+                        intVal.ToString());
+                    break;
+
+                case MenuValueType.Color:
+                    var colorVal = GetValue<Color>();
+                    MenuDrawHelper.DrawSlider(Position, this, 1, 254, colorVal.A, Width - Height, false);
+                    MenuDrawHelper.DrawBox(Position + new Vector2(Width - Height, 0), Height, Height, colorVal, 1,
+                        Color.Black);
+                    break;
+
+                case MenuValueType.Circle:
+                    var circleVal = GetValue<Circle>();
+                    MenuDrawHelper.DrawSlider(Position, this, 1, 254, circleVal.Color.A, Width - Height * 2, false);
+                    MenuDrawHelper.DrawBox(Position + new Vector2(Width - Height * 2, 0), Height, Height, circleVal.Color, 1,
+                        Color.Black);
+                    MenuDrawHelper.DrawOnOff(circleVal.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
+                    break;
+
+                case MenuValueType.StringList:
+                    var slVal = GetValue<StringList>();
+
+                    var t = slVal.SList[slVal.SelectedIndex];
+
+                    MenuDrawHelper.DrawArrow("<", Position + new Vector2(Width - Height * 2, 0), this,
+                        MenuSettings.StringListColor);
+                    MenuDrawHelper.DrawArrow(">", Position + new Vector2(Width - Height, 0), this,
+                        MenuSettings.StringListColor);
+
+                    Drawing.DrawText(Position.X + Width - Drawing.GetTextExtent(t).Width - 2 * Height - 20,
+                        Position.Y + (Height - Drawing.GetTextExtent(t).Height) / 2, Color.White, t);
+
+                    break;
+            }
+
+            Drawing.DrawText(Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(s).Height) / 2, Color.White, s);
         }
     }
 }

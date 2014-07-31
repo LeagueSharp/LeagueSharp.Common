@@ -136,7 +136,7 @@ namespace LeagueSharp.Common
         public static float GetRealAutoAttackRange(Obj_AI_Base target)
         {
             var result = ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
-            if (target != null && target.IsValidTarget())
+            if (target.IsValidTarget())
             {
                 return result + target.BoundingRadius - ((target.Path.Length > 0) ? 20 : 10);
             }
@@ -213,22 +213,17 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void Orbwalk(Obj_AI_Base target, Vector3 Position, float ExtraWindup = 90)
         {
-            if (target != null)
-            {
-                if (CanAttack())
+
+                if (target != null && CanAttack())
                 {
                     ObjectManager.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                    if (target.Type != ObjectManager.Player.Type)
+                    if (!(target is Obj_AI_Hero))
                         LastAATick = Environment.TickCount + Game.Ping / 2;
                     return;
                 }
 
-                if (CanMove(ExtraWindup))
-                {
-                    MoveTo(Position);
-                }
-            }
-            else if (CanMove(ExtraWindup))
+
+            if (CanMove(ExtraWindup))
             {
                 MoveTo(Position);
             }
@@ -529,31 +524,31 @@ namespace LeagueSharp.Common
                 /* Farm submenu */
                 var drawings = new Menu("Drawings", "drawings");
                 drawings.AddItem(
-                    new MenuItem("AACircle", "AACircle").DontAppendAP()
+                    new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 Config.AddSubMenu(drawings);
 
                 /* Delay sliders */
                 Config.AddItem(
-                    new MenuItem("ExtraWindup", "Extra windup time").DontAppendAP().SetValue(new Slider(90, 200, 0)));
-                Config.AddItem(new MenuItem("FarmDelay", "Farm delay").DontAppendAP().SetValue(new Slider(70, 200, 0)));
+                    new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(50, 200, 0)));
+                Config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 200, 0)));
 
                 /*Load the menu*/
                 Config.AddItem(
-                    new MenuItem("LastHit", "Last hit").DontAppendAP()
+                    new MenuItem("LastHit", "Last hit").SetShared()
                         .SetValue(new KeyBind("X".ToCharArray()[0], KeyBindType.Press, false)));
 
                 Config.AddItem(
-                    new MenuItem("Farm", "Mixed").DontAppendAP()
+                    new MenuItem("Farm", "Mixed").SetShared()
                         .SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press, false)));
 
                 Config.AddItem(
-                    new MenuItem("LaneClear", "LaneClear").DontAppendAP()
+                    new MenuItem("LaneClear", "LaneClear").SetShared()
                         .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press,
                             false)));
 
                 Config.AddItem(
-                    new MenuItem("Orbwalk", "Combo").DontAppendAP().SetValue(new KeyBind(32, KeyBindType.Press, false)));
+                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
 
                 if (Common.isInitialized == false)
                 {
