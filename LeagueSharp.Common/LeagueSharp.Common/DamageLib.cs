@@ -1840,9 +1840,9 @@ namespace LeagueSharp.Common
                 case SpellType.Q:
                     return
                         CalcMagicDmg(
-                            (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)) +
-                            (0.45 * ObjectManager.Player.FlatMagicDamageMod) +
-                            (0.5 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
+                            (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 15)) +
+                            ((0.3 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05) * ObjectManager.Player.FlatMagicDamageMod) +
+                            ((0.45 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05) * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
@@ -2808,7 +2808,7 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 10)) +
-                            (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            (0.25 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.R:
                     throw new InvalidSpellTypeException();
                 default:
@@ -3125,7 +3125,7 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 40)) +
-                            (0.60 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            (0.40 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.E:
                     return
                         CalcMagicDmg(
@@ -3177,8 +3177,7 @@ namespace LeagueSharp.Common
                 case SpellType.Q:
                     return
                         CalcMagicDmg(
-                            (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) +
-                            (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)), enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
@@ -4697,7 +4696,7 @@ namespace LeagueSharp.Common
                         case StageType.Default:
                             return
                                 CalcMagicDmg(
-                                    (70 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40)) +
+                                    (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 45)) +
                                     (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy); // active
                         case StageType.FirstDamage:
                             return
