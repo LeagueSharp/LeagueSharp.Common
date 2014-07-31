@@ -195,9 +195,9 @@ namespace LeagueSharp.Common
             return false;
         }
 
-        private static void MoveTo(Vector3 position)
+        private static void MoveTo(Vector3 position, float holdAreaRadius = 0)
         {
-            if (ObjectManager.Player.ServerPosition.Distance(position) < 50)
+            if (ObjectManager.Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 ObjectManager.Player.IssueOrder(GameObjectOrder.HoldPosition, ObjectManager.Player.ServerPosition);
                 return;
@@ -211,7 +211,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Orbwalk a target while moving to Position.
         /// </summary>
-        public static void Orbwalk(Obj_AI_Base target, Vector3 Position, float ExtraWindup = 90)
+        public static void Orbwalk(Obj_AI_Base target, Vector3 Position, float ExtraWindup = 90, float holdAreaRadius = 0)
         {
 
                 if (target != null && CanAttack())
@@ -225,7 +225,7 @@ namespace LeagueSharp.Common
 
             if (CanMove(ExtraWindup))
             {
-                MoveTo(Position);
+                MoveTo(Position, holdAreaRadius);
             }
         }
 
@@ -521,12 +521,19 @@ namespace LeagueSharp.Common
             public Orbwalker(Menu attachToMenu)
             {
                 Config = attachToMenu;
-                /* Farm submenu */
+                /* Drawings submenu */
                 var drawings = new Menu("Drawings", "drawings");
                 drawings.AddItem(
                     new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 Config.AddSubMenu(drawings);
+
+                /* Misc options */
+                var misc = new Menu("Misc", "Misc");
+                misc.AddItem(
+                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared()
+                        .SetValue( new Slider(0, 150, 0)));
+                Config.AddSubMenu(misc);
 
                 /* Delay sliders */
                 Config.AddItem(
@@ -775,7 +782,8 @@ namespace LeagueSharp.Common
 
                 var target = GetTarget();
                 Orbwalk(target, (OrbwalkingPoint.To2D().IsValid()) ? OrbwalkingPoint : Game.CursorPos,
-                    Config.Item("ExtraWindup").GetValue<Slider>().Value);
+                    Config.Item("ExtraWindup").GetValue<Slider>().Value,
+                     Config.Item("HoldPosRadius").GetValue<Slider>().Value);
             }
 
             private void DrawingOnOnDraw(EventArgs args)
