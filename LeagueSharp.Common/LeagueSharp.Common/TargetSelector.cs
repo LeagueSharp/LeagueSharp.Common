@@ -321,8 +321,8 @@ namespace LeagueSharp.Common
 
         private static int GetPriority(Obj_AI_Hero hero)
         {
-            if (_config != null && _config.Item("SimpleTS" + hero.BaseSkinName) != null)
-                return _config.Item("SimpleTS" + hero.BaseSkinName).GetValue<Slider>().Value;
+            if (_config != null && _config.Item("SimpleTS" + hero.BaseSkinName + "Priority") != null)
+                return _config.Item("SimpleTS" + hero.BaseSkinName + "Priority").GetValue<Slider>().Value;
 
             return 1;
         }
