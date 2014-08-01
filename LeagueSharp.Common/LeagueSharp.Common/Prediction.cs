@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -125,7 +123,7 @@ namespace LeagueSharp.Common
                 {
                     if (!Dashes[unit.NetworkId].processed)
                     {
-                        var duration = Utils.GetPathLength(Utils.GetWaypoints(unit)) / Dashes[unit.NetworkId].Speed;
+                        var duration = unit.GetWaypoints().PathLength() / Dashes[unit.NetworkId].Speed;
                         Dashes[unit.NetworkId].endT = Game.Time + duration;
                         Dashes[unit.NetworkId].processed = true;
                         //Game.PrintChat("New Dash" + duration);
@@ -274,7 +272,7 @@ namespace LeagueSharp.Common
 
                 if (!Dashes[unit.NetworkId].IsBlink)
                 {
-                    var iPrediction = GetUnitPosition(Utils.GetWaypoints(unit),
+                    var iPrediction = GetUnitPosition(unit.GetWaypoints(),
                         Dashes[unit.NetworkId].Speed, delay, speed, 1, @from.To2D());
 
                     if (iPrediction.Valid)
@@ -287,7 +285,7 @@ namespace LeagueSharp.Common
                     else
                     {
                         /* Check if we can hit after landing */
-                        var endPoint = Utils.GetWaypoints(unit)[Utils.GetWaypoints(unit).Count - 1];
+                        var endPoint = unit.GetWaypoints()[unit.GetWaypoints().Count - 1];
                         var landtime = Game.Time +
                                        Vector2.Distance(endPoint,
                                            from.To2D()) / speed + delay;
@@ -348,7 +346,7 @@ namespace LeagueSharp.Common
             }
             else
             {
-                var Waypoints = Utils.GetWaypoints(unit);
+                var Waypoints = unit.GetWaypoints();
                 if (Waypoints.Count == 1)
                 {
                     /*Unit not moving*/
@@ -498,7 +496,7 @@ namespace LeagueSharp.Common
         {
             var result = new PredictionInternalOutput(new Vector2(), new Vector2(), false);
 
-            if (Utils.GetPathLength(waypoints) > (delay * unitSpeed - width))
+            if (waypoints.PathLength() > (delay * unitSpeed - width))
             {
                 var path = Utils.CutPath(waypoints, delay * unitSpeed, width);
 
@@ -1158,28 +1156,6 @@ namespace LeagueSharp.Common
 
 internal class Utils
 {
-    public static List<Vector2> GetWaypoints(Obj_AI_Base unit)
-    {
-        var result = new List<Vector2>();
-
-        result.Add(unit.ServerPosition.To2D());
-
-        foreach (var point in unit.Path)
-            result.Add(point.To2D());
-
-        return result;
-    }
-
-    public static float GetPathLength(List<Vector2> path)
-    {
-        var result = 0f;
-        for (var i = 0; i < path.Count - 1; i++)
-        {
-            result += Vector2.Distance(path[i], path[i + 1]);
-        }
-        return result;
-    }
-
     public static List<Vector2> CutPath(List<Vector2> path, float Distance, float Width)
     {
         var ElongedPath = new List<Vector2>();

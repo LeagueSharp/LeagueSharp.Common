@@ -174,7 +174,6 @@ namespace LeagueSharp.Common
             {
                 ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
             }
-            
         }
 
         public bool CastIfHitchanceEquals(Obj_AI_Base unit, Prediction.HitChance hitChance, bool packetCast = false)

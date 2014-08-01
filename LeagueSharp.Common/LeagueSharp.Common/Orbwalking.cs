@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
         };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
-        private static readonly string[] Attacks = { "frostarrow", "caitlynheadshotmissile"};
+        private static readonly string[] Attacks = { "frostarrow", "caitlynheadshotmissile" };
 
         private static readonly List<AttackPassive> AttackPassives = new List<AttackPassive>();
 
@@ -211,16 +211,16 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Orbwalk a target while moving to Position.
         /// </summary>
-        public static void Orbwalk(Obj_AI_Base target, Vector3 Position, float ExtraWindup = 90, float holdAreaRadius = 0)
+        public static void Orbwalk(Obj_AI_Base target, Vector3 Position, float ExtraWindup = 90,
+            float holdAreaRadius = 0)
         {
-
-                if (target != null && CanAttack())
-                {
-                    ObjectManager.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                    if (!(target is Obj_AI_Hero))
-                        LastAATick = Environment.TickCount + Game.Ping / 2;
-                    return;
-                }
+            if (target != null && CanAttack())
+            {
+                ObjectManager.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                if (!(target is Obj_AI_Hero))
+                    LastAATick = Environment.TickCount + Game.Ping / 2;
+                return;
+            }
 
 
             if (CanMove(ExtraWindup))
@@ -532,7 +532,7 @@ namespace LeagueSharp.Common
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared()
-                        .SetValue( new Slider(0, 150, 0)));
+                        .SetValue(new Slider(0, 150, 0)));
                 Config.AddSubMenu(misc);
 
                 /* Delay sliders */
@@ -783,7 +783,7 @@ namespace LeagueSharp.Common
                 var target = GetTarget();
                 Orbwalk(target, (OrbwalkingPoint.To2D().IsValid()) ? OrbwalkingPoint : Game.CursorPos,
                     Config.Item("ExtraWindup").GetValue<Slider>().Value,
-                     Config.Item("HoldPosRadius").GetValue<Slider>().Value);
+                    Config.Item("HoldPosRadius").GetValue<Slider>().Value);
             }
 
             private void DrawingOnOnDraw(EventArgs args)

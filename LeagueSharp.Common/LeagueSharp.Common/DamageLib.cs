@@ -1841,8 +1841,10 @@ namespace LeagueSharp.Common
                     return
                         CalcMagicDmg(
                             (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 15)) +
-                            ((0.3 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05) * ObjectManager.Player.FlatMagicDamageMod) +
-                            ((0.45 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05) * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
+                            ((0.3 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05) *
+                             ObjectManager.Player.FlatMagicDamageMod) +
+                            ((0.45 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05) *
+                             ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:

@@ -73,16 +73,42 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the path of the unit appending the ServerPosition at the start.
+        /// Returns the path of the unit appending the ServerPosition at the start, works even if the unit just entered fow.
         /// </summary>
         public static List<Vector2> GetWaypoints(this Obj_AI_Base unit)
         {
             var result = new List<Vector2>();
-            result.Add(unit.ServerPosition.To2D());
-            foreach (var point in unit.Path)
+
+            if (unit.IsVisible)
             {
-                result.Add(point.To2D());
+                result.Add(unit.ServerPosition.To2D());
+
+                foreach (var point in unit.Path)
+                    result.Add(point.To2D());
             }
+            else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
+            {
+                var path = WaypointTracker.StoredPaths[unit.NetworkId];
+                var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
+                if (path.PathLength() >= unit.MoveSpeed * timePassed)
+                {
+                    var d = unit.MoveSpeed * timePassed;
+                    for (var i = 0; i < path.Count - 1; i++)
+                    {
+                        var dist = path[i].Distance(path[i + 1]);
+                        if (dist > d)
+                        {
+                            result.Add(path[i] + d * (path[i + 1] - path[i]).Normalized());
+                            for (var j = i + 1; j < path.Count; j++)
+                                result.Add(path[j]);
+
+                            break;
+                        }
+                        d -= dist;
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -201,31 +227,6 @@ namespace LeagueSharp.Common
                     .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1000);
         }
 
-        internal static class CursorPosT
-        {
-            private static int _posX;
-            private static int _posY;
-
-            static CursorPosT()
-            {
-                Game.OnWndProc += Game_OnWndProc;
-            }
-
-            static void Game_OnWndProc(WndEventArgs args)
-            {
-                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
-                {
-                    _posX = unchecked((short)(long)args.LParam);
-                    _posY = unchecked((short)((long)args.LParam >> 16));
-                }
-            }
-
-            internal static Vector2 GetCursorPos()
-            {
-                return new Vector2(_posX, _posY);
-            }
-        }
-
         /// <summary>
         /// Returns the cursor position on the screen.
         /// </summary>
@@ -265,7 +266,6 @@ namespace LeagueSharp.Common
                     return "CAPS";
                 case 27:
                     return "ESC";
-
                 case 32:
                     return "Space";
                 case 45:
@@ -337,6 +337,31 @@ namespace LeagueSharp.Common
             }
         }
 
+        internal static class CursorPosT
+        {
+            private static int _posX;
+            private static int _posY;
+
+            static CursorPosT()
+            {
+                Game.OnWndProc += Game_OnWndProc;
+            }
+
+            private static void Game_OnWndProc(WndEventArgs args)
+            {
+                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
+                {
+                    _posX = unchecked((short)args.LParam);
+                    _posY = unchecked((short)((long)args.LParam >> 16));
+                }
+            }
+
+            internal static Vector2 GetCursorPos()
+            {
+                return new Vector2(_posX, _posY);
+            }
+        }
+
 
         public static class DelayAction
         {
@@ -376,6 +401,40 @@ namespace LeagueSharp.Common
                 {
                     Time = time + Environment.TickCount;
                     CallbackObject = callback;
+                }
+            }
+        }
+
+        internal static class WaypointTracker
+        {
+            public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
+            public static readonly Dictionary<int, int> StoredTick = new Dictionary<int, int>();
+
+            static WaypointTracker()
+            {
+                Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+            }
+
+            private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+            {
+                if (args.PacketData[0] == Packet.S2C.LoseVision.Header)
+                {
+                    var decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
+                    var networkId = decodedPacket.UnitNetworkId;
+                    var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(networkId);
+                    if (unit != null && unit.IsValid && unit.IsVisible)
+                    {
+                        if (!StoredPaths.ContainsKey(networkId))
+                        {
+                            StoredPaths.Add(networkId, GetWaypoints(unit));
+                            StoredTick.Add(networkId, Environment.TickCount);
+                        }
+                        else
+                        {
+                            StoredPaths[networkId] = GetWaypoints(unit);
+                            StoredTick[networkId] = Environment.TickCount;
+                        }
+                    }
                 }
             }
         }

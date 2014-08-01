@@ -92,7 +92,6 @@ namespace LeagueSharp.Common
 
     internal static class MenuSettings
     {
-        public static Menu Config;
         public static Vector2 BasePosition = new Vector2(10, 10);
         public static List<Color> ColorList = new List<Color>();
         public static Color BooleanOnColor = Color.FromArgb(150, Color.Green);
@@ -527,7 +526,8 @@ namespace LeagueSharp.Common
             Drawing.DrawText(Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
                 Color.White, DisplayName);
 
-            Drawing.DrawText(Position.X  + Width - 15, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
+            Drawing.DrawText(Position.X + Width - 15,
+                Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
                 Color.White, ">");
 
             //Draw the menu submenus
@@ -1003,7 +1003,8 @@ namespace LeagueSharp.Common
             switch (ValueType)
             {
                 case MenuValueType.Boolean:
-                    MenuDrawHelper.DrawOnOff(GetValue<bool>(), new Vector2(Position.X + Width - Height, Position.Y), this);
+                    MenuDrawHelper.DrawOnOff(GetValue<bool>(), new Vector2(Position.X + Width - Height, Position.Y),
+                        this);
                     break;
 
                 case MenuValueType.Slider:
@@ -1036,9 +1037,11 @@ namespace LeagueSharp.Common
                 case MenuValueType.Circle:
                     var circleVal = GetValue<Circle>();
                     MenuDrawHelper.DrawSlider(Position, this, 1, 254, circleVal.Color.A, Width - Height * 2, false);
-                    MenuDrawHelper.DrawBox(Position + new Vector2(Width - Height * 2, 0), Height, Height, circleVal.Color, 1,
+                    MenuDrawHelper.DrawBox(Position + new Vector2(Width - Height * 2, 0), Height, Height,
+                        circleVal.Color, 1,
                         Color.Black);
-                    MenuDrawHelper.DrawOnOff(circleVal.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
+                    MenuDrawHelper.DrawOnOff(circleVal.Active, new Vector2(Position.X + Width - Height, Position.Y),
+                        this);
                     break;
 
                 case MenuValueType.StringList:

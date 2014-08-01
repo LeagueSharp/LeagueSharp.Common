@@ -234,6 +234,7 @@
             #endregion
 
             #region BuyItem
+
             /// <summary>
             /// Packet sent when buying items.
             /// </summary>
@@ -261,8 +262,8 @@
 
                 public struct Struct
                 {
-                    public int NetworkId;
                     public int ItemId;
+                    public int NetworkId;
 
                     public Struct(int itemId, int networkId = -1)
                     {
@@ -273,7 +274,6 @@
             }
 
             #endregion
-
         }
 
         public static class S2C
@@ -385,7 +385,7 @@
             /// </summary>
             public static class LoseVision
             {
-                public static byte Header = 0x34;
+                public static byte Header = 0x51;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {

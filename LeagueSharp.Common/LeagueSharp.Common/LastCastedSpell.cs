@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using LeagueSharp;
 
 #endregion
 
@@ -52,8 +51,6 @@ namespace LeagueSharp.Common
         {
             if (CastedSpells.ContainsKey(unit.NetworkId))
                 return CastedSpells[unit.NetworkId].Tick;
-
-
             return 0;
         }
 
@@ -75,7 +72,6 @@ namespace LeagueSharp.Common
         {
             if (CastedSpells.ContainsKey(unit.NetworkId))
                 return CastedSpells[unit.NetworkId];
-
             return null;
         }
     }

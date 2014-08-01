@@ -57,7 +57,7 @@ namespace LeagueSharp.Common
                 if (!dashItem.Value.Processed)
                 {
                     if (dashItem.Value.Unit.IsValid)
-                    { 
+                    {
                         DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
                         DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
                         DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +

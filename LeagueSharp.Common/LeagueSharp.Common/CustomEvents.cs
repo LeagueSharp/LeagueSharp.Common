@@ -18,8 +18,9 @@ namespace LeagueSharp.Common
 
         public class Game
         {
-            public delegate void OnGameLoaded(EventArgs args);
             public delegate void OnGameEnded(EventArgs args);
+
+            public delegate void OnGameLoaded(EventArgs args);
 
             static Game()
             {
@@ -49,7 +50,6 @@ namespace LeagueSharp.Common
                 if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                     OnGameEnd(new EventArgs());
             }
-
         }
 
         public class Unit
