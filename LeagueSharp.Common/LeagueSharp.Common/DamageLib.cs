@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
@@ -662,7 +663,7 @@ namespace LeagueSharp.Common
 
             if (enemy is Obj_AI_Hero)
             {
-                var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                var currentenemy = EnemyList.FirstOrDefault(e => e.NetworkId == enemy.NetworkId);
                 if (currentenemy != null)
                     reducedmg = currentenemy.unyielding;
             }
@@ -725,7 +726,7 @@ namespace LeagueSharp.Common
 
             if (enemy is Obj_AI_Hero)
             {
-                var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                var currentenemy = EnemyList.FirstOrDefault(e => e.NetworkId == enemy.NetworkId);
                 if (currentenemy != null)
                     reducedmg = currentenemy.unyielding;
             }
@@ -752,7 +753,7 @@ namespace LeagueSharp.Common
                         var dmgreduce = 0;
                         if (enemy is Obj_AI_Hero)
                         {
-                            var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                            var currentenemy = EnemyList.FirstOrDefault(e => e.NetworkId == enemy.NetworkId);
                             if (currentenemy != null)
                                 dmgreduce = currentenemy.block;
                         }
@@ -791,7 +792,7 @@ namespace LeagueSharp.Common
                         var dmgreduce = 0;
                         if (enemy is Obj_AI_Hero)
                         {
-                            var currentenemy = EnemyList.Find(e => e.NetworkId == enemy.NetworkId);
+                            var currentenemy = EnemyList.FirstOrDefault(e => e.NetworkId == enemy.NetworkId);
                             if (currentenemy != null)
                                 dmgreduce = currentenemy.block;
                         }
@@ -4467,7 +4468,7 @@ namespace LeagueSharp.Common
                 case SpellType.Q:
                     return
                         CalcMagicDmg(
-                            (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 50) +
+                            (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40) +
                             (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();

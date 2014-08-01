@@ -184,12 +184,12 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns true if moving won't cancel the auto-attack.
         /// </summary>
-        public static bool CanMove(float wxtraWindup)
+        public static bool CanMove(float extraWindup)
         {
             if (LastAATick <= Environment.TickCount)
             {
                 return Environment.TickCount + Game.Ping / 2 >=
-                       LastAATick + ObjectManager.Player.AttackCastDelay * 1000 + wxtraWindup && Move;
+                       LastAATick + ObjectManager.Player.AttackCastDelay * 1000 + extraWindup && Move;
             }
 
             return false;
