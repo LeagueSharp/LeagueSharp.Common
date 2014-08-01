@@ -310,11 +310,29 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class SimpleTs
     {
+        private static Menu _config;
+
         public enum DamageType
         {
             Magical,
             Physical,
             True,
+        }
+
+        private static int GetPriority(Obj_AI_Hero hero)
+        {
+            if (_config != null && _config.Item("SimpleTS" + hero.BaseSkinName) != null)
+                return _config.Item("SimpleTS" + hero.BaseSkinName).GetValue<Slider>().Value;
+
+            return 1;
+        }
+
+        public static void AddToMenu(Menu Config)
+        {
+            _config = Config;
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
+                if (enemy.Team != ObjectManager.Player.Team)
+                    Config.AddItem(new MenuItem("SimpleTS" + enemy.BaseSkinName + "Priority", enemy.BaseSkinName).SetShared().SetValue(new Slider(1, 5, 1)));
         }
 
         public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
@@ -341,7 +359,7 @@ namespace LeagueSharp.Common
                             break;
                     }
 
-                    var Ratio = Damage / hero.Health;
+                    var Ratio = Damage / ( 1 + hero.Health) * GetPriority(hero);
 
                     if (Ratio > bestRatio)
                     {

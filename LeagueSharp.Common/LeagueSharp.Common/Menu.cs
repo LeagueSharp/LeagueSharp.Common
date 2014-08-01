@@ -379,13 +379,15 @@ namespace LeagueSharp.Common
             get
             {
                 if (IsRootMenu || Parent == null) return 0;
-                var result = 0;
+                var result = Parent.YLevel;
+                
                 foreach (var test in Parent.Children)
                 {
                     if (test.Name == Name)
                         break;
                     result++;
                 }
+
                 return result;
             }
         }
@@ -685,6 +687,7 @@ namespace LeagueSharp.Common
             {
                 if (Parent == null) return 0;
                 var result = Parent.YLevel + Parent.Children.Count;
+                
                 foreach (var test in Parent.Items)
                 {
                     if (test.Name == Name)
