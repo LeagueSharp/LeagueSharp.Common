@@ -222,7 +222,6 @@ namespace LeagueSharp.Common
                 return;
             }
 
-
             if (CanMove(ExtraWindup))
             {
                 MoveTo(Position, holdAreaRadius);
@@ -260,13 +259,13 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal static Obj_AI_Base GetAutoAttackTarget(Vector3 Position)
+        internal static Obj_AI_Base GetAutoAttackTarget(Vector3 position)
         {
             foreach (var unit in ObjectManager.Get<Obj_AI_Base>())
             {
                 if (unit.IsValidTarget(2000, false) &&
-                    Vector2.DistanceSquared(unit.ServerPosition.To2D(), Position.To2D()) <=
-                    unit.PathfindingCollisionRadius * unit.PathfindingCollisionRadius)
+                    Vector2.DistanceSquared(unit.ServerPosition.To2D(), position.To2D()) <=
+                    35 * 35)
                 {
                     return unit;
                 }
@@ -285,9 +284,9 @@ namespace LeagueSharp.Common
             {
                 if (unit.IsMe)
                 {
-                    _lastTarget = GetAutoAttackTarget(Spell.End);
                     LastAATick = Environment.TickCount - Game.Ping / 2;
 
+                    _lastTarget = GetAutoAttackTarget(Spell.End);
                     if (unit.IsMe && unit.IsMelee())
                     {
                         Utility.DelayAction.Add((int)(unit.AttackCastDelay * 1000 + 40),
@@ -781,6 +780,7 @@ namespace LeagueSharp.Common
                     return;
 
                 var target = GetTarget();
+                
                 Orbwalk(target, (OrbwalkingPoint.To2D().IsValid()) ? OrbwalkingPoint : Game.CursorPos,
                     Config.Item("ExtraWindup").GetValue<Slider>().Value,
                     Config.Item("HoldPosRadius").GetValue<Slider>().Value);
