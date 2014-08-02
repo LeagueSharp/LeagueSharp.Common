@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using SharpDX;
 
@@ -39,10 +40,18 @@ namespace LeagueSharp.Common
         private Vector3 _from;
         private Vector3 _rangeCheckFrom;
 
+
         public Spell(SpellSlot slot, float range)
         {
             Slot = slot;
             Range = range;
+        }
+
+        public int LastCastAttemptT = 0;
+
+        public int Level
+        {
+            get { return ObjectManager.Player.Spellbook.GetSpell(Slot).Level; }
         }
 
         public Vector3 From
@@ -109,6 +118,8 @@ namespace LeagueSharp.Common
                 if (ObjectManager.Player.Distance(unit) > Range)
                     return CastStates.OutOfRange;
 
+                LastCastAttemptT = Environment.TickCount;
+
                 if (packetCast)
                 {
                     Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
@@ -142,6 +153,8 @@ namespace LeagueSharp.Common
             if (prediction.HitChance < MinHitChange || (exactHitChance && prediction.HitChance != MinHitChange))
                 return CastStates.LowHitChance;
 
+            LastCastAttemptT = Environment.TickCount;
+
             if (packetCast)
             {
                 Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(0, Slot, -1, prediction.CastPosition.X,
@@ -165,6 +178,8 @@ namespace LeagueSharp.Common
         public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
             if (From.Distance(unit.ServerPosition) > Range) return;
+
+            LastCastAttemptT = Environment.TickCount;
 
             if (packetCast)
             {
@@ -191,8 +206,15 @@ namespace LeagueSharp.Common
             return castResult == CastStates.SuccessfullyCasted;
         }
 
+        public void Cast(Vector2 position, bool packetCast = false)
+        {
+            Cast(position.To3D(), packetCast);
+        }
+
         public void Cast(Vector3 position, bool packetCast = false)
         {
+            LastCastAttemptT = Environment.TickCount;
+
             if (packetCast)
             {
                 Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(0, Slot, -1, position.X,
@@ -218,7 +240,6 @@ namespace LeagueSharp.Common
             return HealthPrediction.GetHealthPrediction(unit, time);
         }
 
-
         public MinionManager.FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minionPositions,
             float overrideWidth = float.MaxValue)
         {
@@ -227,7 +248,6 @@ namespace LeagueSharp.Common
 
             return GetCircularFarmLocation(positions, overrideWidth);
         }
-
 
         public MinionManager.FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions,
             float overrideWidth = float.MaxValue)

@@ -6,13 +6,35 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
-    public class Items
+    public static class Items
     {
         static Items()
         {
             if (Common.isInitialized == false)
             {
                 Common.InitializeCommonLib();
+            }
+        }
+
+        public class Item
+        {
+            public int Id;
+            public float Range;
+            public Item(int id, float range)
+            {
+                Id = id;
+                Range = range;
+            }
+
+            public bool IsReady()
+            {
+                return CanUseItem(Id);
+            }
+
+            public void Cast(Obj_AI_Base target)
+            {
+                if(ObjectManager.Player.Distance(target) < Range)
+                    UseItem(Id, target);
             }
         }
 

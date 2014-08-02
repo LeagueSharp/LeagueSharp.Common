@@ -33,6 +33,22 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Calculates the 2D distance to the point.
+        /// </summary>
+        public static float Distance(this Obj_AI_Base unit, Vector3 point)
+        {
+            return unit.ServerPosition.To2D().Distance(point.To2D());
+        }
+
+        /// <summary>
+        ///     Calculates the 2D distance to the point.
+        /// </summary>
+        public static float Distance(this Obj_AI_Base unit, Vector2 point)
+        {
+            return unit.ServerPosition.To2D().Distance(point);
+        }
+
+        /// <summary>
         ///     Calculates the 3D distance to the unit.
         /// </summary>
         public static float Distance3D(this Obj_AI_Base unit, Obj_AI_Base anotherUnit)
@@ -126,6 +142,11 @@ namespace LeagueSharp.Common
             return v;
         }
 
+        public static Vector2 Extend(this Vector2 v, Vector2 to, float distance)
+        {
+            return v + distance * (to - v).Normalized();
+        }
+
         /// <summary>
         ///     Returns the perpendicular vector.
         /// </summary>
@@ -143,7 +164,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Rotates the vector a set angle.
+        ///     Rotates the vector a set angle (angle in radians).
         /// </summary>
         public static Vector2 Rotated(this Vector2 v, float angle)
         {

@@ -319,12 +319,26 @@ namespace LeagueSharp.Common
             True,
         }
 
-        private static int GetPriority(Obj_AI_Hero hero)
+        private static float GetPriority(Obj_AI_Hero hero)
         {
+            var p = 1;
             if (_config != null && _config.Item("SimpleTS" + hero.BaseSkinName + "Priority") != null)
-                return _config.Item("SimpleTS" + hero.BaseSkinName + "Priority").GetValue<Slider>().Value;
+                p = _config.Item("SimpleTS" + hero.BaseSkinName + "Priority").GetValue<Slider>().Value;
 
-            return 1;
+            switch (p)
+            {
+
+                case 2:
+                    return 1.5f;
+                case 3:
+                    return 2f;
+                case 4:
+                    return 2.5f;
+                case 5:
+                    return 2.5f;
+                default:
+                    return 1f;
+            }
         }
 
         public static void AddToMenu(Menu Config)
