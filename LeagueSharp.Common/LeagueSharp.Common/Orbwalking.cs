@@ -163,7 +163,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetMyProjectileSpeed()
         {
-            return ObjectManager.Player.BasicAttack.MissileSpeed;
+            return IsMelee(ObjectManager.Player) ? float.MaxValue : ObjectManager.Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -649,6 +649,7 @@ namespace LeagueSharp.Common
                 Obj_AI_Base result = null;
                 var r = float.MaxValue;
 
+
                 /*Killable Minion*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
                     ActiveMode == OrbwalkingMode.LastHit)
@@ -780,7 +781,7 @@ namespace LeagueSharp.Common
                     return;
 
                 var target = GetTarget();
-                
+
                 Orbwalk(target, (OrbwalkingPoint.To2D().IsValid()) ? OrbwalkingPoint : Game.CursorPos,
                     Config.Item("ExtraWindup").GetValue<Slider>().Value,
                     Config.Item("HoldPosRadius").GetValue<Slider>().Value);
