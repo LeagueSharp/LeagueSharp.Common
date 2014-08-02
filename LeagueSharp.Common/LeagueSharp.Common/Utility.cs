@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,6 +16,7 @@ namespace LeagueSharp.Common
 {
     public static class Utility
     {
+
         static Utility()
         {
             if (Common.isInitialized == false)
@@ -404,6 +406,57 @@ namespace LeagueSharp.Common
                 }
             }
         }
+
+        public static class Map
+        {
+            public enum MapType
+            {
+                Unknown,
+                SummonersRift,
+                CrystalScar,
+                TwistedTreeline,
+                HowlingAbyss
+            }
+
+            private static bool SameVector(Vector3 v1, Vector3 v2)
+            {
+                return (Math.Floor(v1.X) == Math.Floor(v2.X) && Math.Floor(v1.Y) == Math.Floor(v2.Y) && Math.Floor(v1.Z) == Math.Floor(v2.Z));
+            }
+
+            /// <summary>
+            /// Returns the current map.
+            /// </summary>
+            public static MapType GetMap()
+            {
+                Vector3[] SR = { new Vector3(13360.61f, 14586.56f, 218.222f), new Vector3(-174.2087f, 1056.653f, 163.7132f) };
+                Vector3[] DOM = { new Vector3(16.54065f, 4452.441f, 168.618f), new Vector3(13876.07f, 4445.496f, 99.3553f) };
+                Vector3[] TTT = { new Vector3(14125.37f, 8005.887f, 123.4631f), new Vector3(1313.361f, 8005.887f, 123.4631f) };
+                Vector3[] HA = { new Vector3(497.0624f, 1932.652f, -39.8721f), new Vector3(11065.5f, 12306.48f, -185.1475f) };
+                foreach (var pos in SR)
+                {
+                    if(ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position,pos)) != null)
+                        return MapType.SummonersRift;
+                }
+                foreach (var pos in DOM)
+                {
+                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                        return MapType.CrystalScar;
+                }
+                foreach (var pos in TTT)
+                {
+                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                        return MapType.TwistedTreeline;
+                }
+                foreach (var pos in HA)
+                {
+                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                        return MapType.HowlingAbyss;
+                }
+                return MapType.Unknown;
+            }
+        }
+
+        
 
         internal static class WaypointTracker
         {
