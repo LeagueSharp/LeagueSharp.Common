@@ -226,9 +226,14 @@ namespace LeagueSharp.Common
             }
         }
 
-        public bool IsReady()
+        public bool IsReady(int t = 0)
         {
-            return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready;
+            if (t == 0 || ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready)
+                return true;
+
+            return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown && (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= t / 1000f;
+
+                   
         }
 
         public float GetHealthPrediction(Obj_AI_Base unit)

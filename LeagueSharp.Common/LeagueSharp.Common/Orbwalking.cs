@@ -264,15 +264,21 @@ namespace LeagueSharp.Common
 
         internal static Obj_AI_Base GetAutoAttackTarget(Vector3 position)
         {
-            foreach (var unit in ObjectManager.Get<Obj_AI_Base>())
+            foreach (var gameObject in ObjectManager.Get<GameObject>())
             {
-                if (unit.IsValidTarget(2000, false) &&
-                    Vector2.DistanceSquared(unit.ServerPosition.To2D(), position.To2D()) <=
-                    35 * 35)
+                if (gameObject is Obj_AI_Base)
                 {
-                    return unit;
+                    var unit = (Obj_AI_Base)gameObject;
+                    if (unit.IsValidTarget(2000, false) &&
+                        Vector2.DistanceSquared(unit.ServerPosition.To2D(), position.To2D()) <=
+                        35 * 35)
+                    {
+                        return unit;
+                    }
                 }
             }
+
+
             return null;
         }
 
@@ -290,6 +296,7 @@ namespace LeagueSharp.Common
                     LastAATick = Environment.TickCount - Game.Ping / 2;
 
                     _lastTarget = GetAutoAttackTarget(Spell.End);
+
                     if (unit.IsMe && unit.IsMelee())
                     {
                         Utility.DelayAction.Add((int)(unit.AttackCastDelay * 1000 + 40),
@@ -304,7 +311,9 @@ namespace LeagueSharp.Common
         private static void LoadTheData()
         {
             /*Passive list*/
+
             #region Caitlyn
+
             var PassiveToAdd = new AttackPassive
             {
                 Champion = "Caitlyn",
@@ -313,8 +322,11 @@ namespace LeagueSharp.Common
                 DamageType = 2,
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Draven
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Draven",
@@ -323,8 +335,11 @@ namespace LeagueSharp.Common
                 DamageType = 2,
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Vayne
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Vayne",
@@ -333,8 +348,11 @@ namespace LeagueSharp.Common
                 DamageType = 2,
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Corki
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Corki",
@@ -343,8 +361,11 @@ namespace LeagueSharp.Common
                 DamageType = 0
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Teemo
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Teemo",
@@ -356,8 +377,11 @@ namespace LeagueSharp.Common
                 DamageType = 1
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Varus
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Varus",
@@ -369,8 +393,11 @@ namespace LeagueSharp.Common
                 DamageType = 1
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region MissFortune
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "MissFortune",
@@ -379,8 +406,11 @@ namespace LeagueSharp.Common
                 DamageType = 1
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Twisted Fate
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "TwistedFate",
@@ -404,8 +434,11 @@ namespace LeagueSharp.Common
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Orianna
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Orianna",
@@ -416,8 +449,11 @@ namespace LeagueSharp.Common
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
+
             #endregion
+
             #region Ziggs
+
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Ziggs",
@@ -428,8 +464,8 @@ namespace LeagueSharp.Common
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
-            #endregion
 
+            #endregion
         }
 
         internal class AttackPassive
