@@ -203,7 +203,7 @@ namespace LeagueSharp.Common
         {
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (enemy.IsValidTarget() && enemy.IsChanneling)
+                if (enemy.IsValidTarget())
                 {
                     foreach (var spell in Spells)
                     {
