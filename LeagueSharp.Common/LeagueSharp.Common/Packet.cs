@@ -1,4 +1,10 @@
-﻿namespace LeagueSharp.Common
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.Security;
+
+namespace LeagueSharp.Common
 {
     public static class Packet
     {
@@ -595,6 +601,121 @@
                         BOk = bOk;
                         SkinId = skinId;
                         ModelName = modelName;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Recall
+
+            /// <summary>
+            /// Gets received when a unit starts, aborts or finishes recalling.
+            /// </summary>
+            public static class Recall
+            {
+                public static byte Header = 0xD8;
+                internal static readonly Dictionary<int, int> RecallT = new Dictionary<int, int>();
+                internal static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
+
+                public enum RecallStatus
+                {
+                    RecallStarted,
+                    RecallAborted,
+                    RecallFinished,
+                    Unknown,
+                    TeleportStart,
+                    TeleportAbort,
+                    TeleportEnd,
+                }
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    //TODO when the packet is fully decoded.
+                    return new GamePacket(Header);
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    packet.Position = 5;
+                    result.UnitNetworkId = packet.ReadInteger();
+                    packet.Position = 112;
+                    var b = packet.ReadByte();
+                    packet.Position = 81;
+                    var b2 = packet.ReadByte();
+                    result.Status = RecallStatus.Unknown;
+
+                    var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.UnitNetworkId);
+                    if (unit != null && unit.IsValid && unit.Spellbook.GetSpell(SpellSlot.Recall) != null)
+                    {
+                        var rName = unit.Spellbook.GetSpell(SpellSlot.Recall).Name;
+                        var duration = 0;
+                        switch (rName)
+                        {
+                            case "Recall": duration = 8000; break;
+                            case "RecallImproved": duration = 7500; break;
+                            case "OdinRecall": duration = 4500; break;
+                            case "OdinRecallImproved": duration = 4000; break;
+                        }
+                        if (!RecallT.ContainsKey(result.UnitNetworkId))
+                            RecallT.Add(result.UnitNetworkId, 0);
+
+                        if (!TPT.ContainsKey(result.UnitNetworkId))
+                            TPT.Add(result.UnitNetworkId, 0);
+
+                        
+                        if (b2 != 0 || TPT.ContainsKey(result.UnitNetworkId) && Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
+                        {
+                            if (b2 != 0)
+                            {
+                                TPT[result.UnitNetworkId] = Environment.TickCount;
+                                result.Status = RecallStatus.TeleportStart;
+                            }
+                                
+                            else if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500)
+                            {
+                                result.Status = RecallStatus.TeleportAbort;
+                                TPT[result.UnitNetworkId] = 0;
+                            }else if (Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
+                            {
+                                result.Status = RecallStatus.TeleportEnd;
+                                TPT[result.UnitNetworkId] = 0;
+                            }
+                        }
+                        else
+                        if (b == 4)
+                        {
+                            if (RecallT.ContainsKey(result.UnitNetworkId))
+                            {
+                                if(Environment.TickCount - RecallT[result.UnitNetworkId] < duration)
+                                    result.Status = RecallStatus.RecallAborted;
+                                else if(Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
+                                    result.Status = RecallStatus.RecallFinished;
+                                RecallT[result.UnitNetworkId] = 0;
+                            }
+                        }
+                        else if (b == 6)
+                        {
+                            result.Status = RecallStatus.RecallStarted;
+                            RecallT[result.UnitNetworkId] = Environment.TickCount;
+                        }
+                    }
+                    
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int UnitNetworkId;
+                    public RecallStatus Status;
+                    public Struct(int unitNetworkId, RecallStatus status)
+                    {
+                        UnitNetworkId = unitNetworkId;
+                        Status = status;
                     }
                 }
             }
