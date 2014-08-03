@@ -21,14 +21,40 @@ namespace LeagueSharp.Common
         }
     }
 
+    public class LastCastPacketSentEntry
+    {
+        public SpellSlot Slot;
+        public int TargetNetworkId;
+        public int Tick;
+        
+        public LastCastPacketSentEntry(SpellSlot slot, int tick, int targetNetworkId)
+        {
+            Slot = slot;
+            Tick = tick;
+            TargetNetworkId = targetNetworkId;
+        }
+    }
+
     public static class LastCastedSpell
     {
-        private static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
+        internal static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
             new Dictionary<int, LastCastedSpellEntry>();
+
+        internal static LastCastPacketSentEntry LastCastPacketSent;
 
         static LastCastedSpell()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+            Game.OnGameSendPacket += Game_OnGameSendPacket;
+        }
+
+        static void Game_OnGameSendPacket(GamePacketEventArgs args)
+        {
+            if (args.PacketData[0] == Packet.C2S.Cast.Header)
+            {
+                var decodedPacket = Packet.C2S.Cast.Decoded(args.PacketData);
+                LastCastPacketSent = new LastCastPacketSentEntry(decodedPacket.Slot, Environment.TickCount, decodedPacket.TargetNetworkId);
+            }
         }
 
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

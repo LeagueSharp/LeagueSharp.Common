@@ -304,8 +304,7 @@ namespace LeagueSharp.Common
         private static void LoadTheData()
         {
             /*Passive list*/
-
-            /*Caitlyn*/
+            #region Caitlyn
             var PassiveToAdd = new AttackPassive
             {
                 Champion = "Caitlyn",
@@ -314,8 +313,8 @@ namespace LeagueSharp.Common
                 DamageType = 2,
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /*Draven*/
+            #endregion
+            #region Draven
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Draven",
@@ -324,8 +323,8 @@ namespace LeagueSharp.Common
                 DamageType = 2,
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /*Vayne*/
+            #endregion
+            #region Vayne
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Vayne",
@@ -334,8 +333,8 @@ namespace LeagueSharp.Common
                 DamageType = 2,
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /*Corki*/
+            #endregion
+            #region Corki
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Corki",
@@ -344,8 +343,8 @@ namespace LeagueSharp.Common
                 DamageType = 0
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /* Teemo*/
+            #endregion
+            #region Teemo
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Teemo",
@@ -357,8 +356,8 @@ namespace LeagueSharp.Common
                 DamageType = 1
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /* Varus*/
+            #endregion
+            #region Varus
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Varus",
@@ -370,8 +369,8 @@ namespace LeagueSharp.Common
                 DamageType = 1
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /* MissFortune*/
+            #endregion
+            #region MissFortune
             PassiveToAdd = new AttackPassive
             {
                 Champion = "MissFortune",
@@ -380,8 +379,8 @@ namespace LeagueSharp.Common
                 DamageType = 1
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /* Twisted Fate W*/
+            #endregion
+            #region Twisted Fate
             PassiveToAdd = new AttackPassive
             {
                 Champion = "TwistedFate",
@@ -394,7 +393,6 @@ namespace LeagueSharp.Common
             };
             AttackPassives.Add(PassiveToAdd);
 
-            /* Twisted Fate E*/
             PassiveToAdd = new AttackPassive
             {
                 Champion = "TwistedFate",
@@ -406,8 +404,8 @@ namespace LeagueSharp.Common
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /* Oriannas Passive*/
+            #endregion
+            #region Orianna
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Orianna",
@@ -418,8 +416,8 @@ namespace LeagueSharp.Common
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
-
-            /* Ziggs Passive*/
+            #endregion
+            #region Ziggs
             PassiveToAdd = new AttackPassive
             {
                 Champion = "Ziggs",
@@ -430,6 +428,8 @@ namespace LeagueSharp.Common
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
+            #endregion
+
         }
 
         internal class AttackPassive
@@ -781,8 +781,10 @@ namespace LeagueSharp.Common
                 if (ActiveMode == OrbwalkingMode.None)
                     return;
 
-                var target = GetTarget();
+                //Prevent canceling important channeled spells like Miss Fortunes R.
+                if (Player.IsChannelingImportantSpell()) return;
 
+                var target = GetTarget();
                 Orbwalk(target, (OrbwalkingPoint.To2D().IsValid()) ? OrbwalkingPoint : Game.CursorPos,
                     Config.Item("ExtraWindup").GetValue<Slider>().Value,
                     Config.Item("HoldPosRadius").GetValue<Slider>().Value);
@@ -791,10 +793,8 @@ namespace LeagueSharp.Common
             private void DrawingOnOnDraw(EventArgs args)
             {
                 if (Config.Item("AACircle").GetValue<Circle>().Active)
-                {
                     Utility.DrawCircle(Player.Position, GetRealAutoAttackRange(null) + 65,
                         Config.Item("AACircle").GetValue<Circle>().Color);
-                }
             }
         }
     }
