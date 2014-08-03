@@ -228,8 +228,7 @@ namespace LeagueSharp.Common
 
         public bool IsReady()
         {
-            return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready ||
-                   (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= 0.5f;
+            return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready;
         }
 
         public float GetHealthPrediction(Obj_AI_Base unit)
