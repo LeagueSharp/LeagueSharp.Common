@@ -229,7 +229,7 @@ namespace LeagueSharp.Common
         public bool IsReady(int t = 0)
         {
             if (t == 0 || ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready)
-                return true;
+                return (t == 0) ? ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready : true;
 
             return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown && (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= t / 1000f;
 
