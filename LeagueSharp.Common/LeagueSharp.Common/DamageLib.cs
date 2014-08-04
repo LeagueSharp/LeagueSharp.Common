@@ -265,6 +265,9 @@ namespace LeagueSharp.Common
                 case "Olaf":
                     Champ = Olaf;
                     break;
+                case "oriannanoball":
+                    Champ = Orianna;
+                    break;
                 case "Orianna":
                     Champ = Orianna;
                     break;
