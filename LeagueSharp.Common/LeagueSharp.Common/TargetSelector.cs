@@ -1,7 +1,9 @@
 ﻿#region
 
 using System;
+using System.Drawing;
 using System.Linq;
+using SharpDX;
 
 #endregion
 
@@ -311,12 +313,39 @@ namespace LeagueSharp.Common
     public static class SimpleTs
     {
         private static Menu _config;
-
+        private static Obj_AI_Hero _selectedTarget;
         public enum DamageType
         {
             Magical,
             Physical,
             True,
+        }
+
+        static SimpleTs()
+        {
+            Game.OnWndProc += Game_OnWndProc;
+            Drawing.OnDraw += Drawing_OnDraw;
+        }
+
+        static void Drawing_OnDraw(EventArgs args)
+        {
+            if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() && _config.Item("SelTColor").GetValue<Circle>().Active)
+                Utility.DrawCircle(_selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 3, 23);
+        }
+
+        static void Game_OnWndProc(WndEventArgs args)
+        {
+            if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
+            {
+                foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsValidTarget()).OrderByDescending(h => h.Distance(Game.CursorPos)))
+                {
+                    if (enemy.Distance(Game.CursorPos) < 300)
+                        if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
+                            _selectedTarget = null;
+                        else
+                            _selectedTarget = enemy;
+                }
+            }
         }
 
         private static float GetPriority(Obj_AI_Hero hero)
@@ -327,7 +356,6 @@ namespace LeagueSharp.Common
 
             switch (p)
             {
-
                 case 2:
                     return 1.5f;
                 case 3:
@@ -335,7 +363,7 @@ namespace LeagueSharp.Common
                 case 4:
                     return 2.5f;
                 case 5:
-                    return 2.5f;
+                    return 3f;
                 default:
                     return 1f;
             }
@@ -344,9 +372,12 @@ namespace LeagueSharp.Common
         public static void AddToMenu(Menu Config)
         {
             _config = Config;
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
-                if (enemy.Team != ObjectManager.Player.Team)
+            Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            Config.AddItem(new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, System.Drawing.Color.Red)));
+            Config.AddItem(new MenuItem("Sep", "").SetShared());
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
                     Config.AddItem(new MenuItem("SimpleTS" + enemy.BaseSkinName + "Priority", enemy.BaseSkinName).SetShared().SetValue(new Slider(1, 5, 1)));
+            
         }
 
         public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
@@ -354,30 +385,33 @@ namespace LeagueSharp.Common
             Obj_AI_Hero bestTarget = null;
             var bestRatio = 0f;
 
+            if (_selectedTarget.IsValidTarget(range))
+                return _selectedTarget;
+
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (hero.IsValidTarget(range))
                 {
-                    var Damage = 0f;
+                    var damage = 0f;
 
                     switch (damageType)
                     {
                         case DamageType.Magical:
-                            Damage = (float)DamageLib.CalcMagicDmg(100, hero);
+                            damage = (float)DamageLib.CalcMagicDmg(100, hero);
                             break;
                         case DamageType.Physical:
-                            Damage = (float)DamageLib.CalcPhysicalDmg(100, hero);
+                            damage = (float)DamageLib.CalcPhysicalDmg(100, hero);
                             break;
                         case DamageType.True:
-                            Damage = 100;
+                            damage = 100;
                             break;
                     }
 
-                    var Ratio = Damage / ( 1 + hero.Health) * GetPriority(hero);
+                    var ratio = damage / (1 + hero.Health) * GetPriority(hero);
 
-                    if (Ratio > bestRatio)
+                    if (ratio > bestRatio)
                     {
-                        bestRatio = Ratio;
+                        bestRatio = ratio;
                         bestTarget = hero;
                     }
                 }
