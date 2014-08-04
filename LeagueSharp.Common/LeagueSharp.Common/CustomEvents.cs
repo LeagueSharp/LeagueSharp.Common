@@ -46,7 +46,7 @@ namespace LeagueSharp.Common
                     LeagueSharp.Game.OnGameProcessPacket -= Game_OnGameProcessPacket; // delete the event
                 }
 
-                //Game end pkacet
+                //Game end packet
                 if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                     OnGameEnd(new EventArgs());
             }
