@@ -361,6 +361,15 @@ namespace LeagueSharp.Common
                 case "Udyr":
                     Champ = Udyr;
                     break;
+                case "udyrturtle":
+                    Champ = Udyr;
+                    break;
+                case "udyrphoenix":
+                    Champ = Udyr;
+                    break;
+                case "udyrtiger":
+                    Champ = Udyr;
+                    break;
                 case "Urgot":
                     Champ = Urgot;
                     break;
