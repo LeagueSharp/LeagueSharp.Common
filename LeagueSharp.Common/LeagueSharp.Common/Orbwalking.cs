@@ -724,21 +724,11 @@ namespace LeagueSharp.Common
 
                 /*Champions*/
                 if (ActiveMode != OrbwalkingMode.LastHit)
-                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
-                    {
-                        if (hero.IsValidTarget() && InAutoAttackRange(hero))
-                        {
-                            var ratio = hero.Health / DamageLib.CalcPhysicalDmg(100, hero);
-                            if (ratio <= r)
-                            {
-                                r = (float)ratio;
-                                result = hero;
-                            }
-                        }
-                    }
-
-                if (result != null)
-                    return result;
+                {
+                    var target = SimpleTs.GetTarget(-1, SimpleTs.DamageType.Physical);
+                    if (target != null)
+                        return target;
+                }
 
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)

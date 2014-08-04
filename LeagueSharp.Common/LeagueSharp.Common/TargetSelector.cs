@@ -314,6 +314,11 @@ namespace LeagueSharp.Common
     {
         private static Menu _config;
         private static Obj_AI_Hero _selectedTarget;
+
+        internal static Obj_AI_Hero SelectedTarget
+        {
+            get { return (_config != null && _config.Item("FocusSelected").GetValue<bool>() ? _selectedTarget : null); }
+        }
         public enum DamageType
         {
             Magical,
@@ -348,7 +353,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static float GetPriority(Obj_AI_Hero hero)
+        internal static float GetPriority(Obj_AI_Hero hero)
         {
             var p = 1;
             if (_config != null && _config.Item("SimpleTS" + hero.BaseSkinName + "Priority") != null)
@@ -385,12 +390,12 @@ namespace LeagueSharp.Common
             Obj_AI_Hero bestTarget = null;
             var bestRatio = 0f;
 
-            if (_selectedTarget.IsValidTarget(range))
+            if (_selectedTarget.IsValidTarget() && (range < 0 && Orbwalking.InAutoAttackRange(_selectedTarget) || ObjectManager.Player.Distance(_selectedTarget) < range ))
                 return _selectedTarget;
 
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (hero.IsValidTarget(range))
+                if (hero.IsValidTarget() && (range < 0 && Orbwalking.InAutoAttackRange(hero) || ObjectManager.Player.Distance(hero) < range))
                 {
                     var damage = 0f;
 
