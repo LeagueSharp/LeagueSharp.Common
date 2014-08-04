@@ -62,10 +62,14 @@ namespace LeagueSharp.Common
                 if (IsChargedSpell)
                 {
                     if (IsCharging)
+                    {
+                        var t = (Environment.TickCount - _chargedCastedT > 10000) ? _chargedReqPSentT : _chargedCastedT;
                         return ChargedMinRange +
                                Math.Min(ChargedMaxRange - ChargedMinRange,
-                                   (Environment.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
-                                   ChargeDuration);
+                                   (Environment.TickCount - t) * (ChargedMaxRange - ChargedMinRange) /
+                                   ChargeDuration - 150);
+                    }
+                        
                     return ChargedMaxRange;
                 }
 
@@ -80,7 +84,7 @@ namespace LeagueSharp.Common
             {
                 return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
                        Environment.TickCount - _chargedCastedT < 500 ||
-                       Environment.TickCount - _chargedReqPSentT < 150 + Game.Ping;
+                       Environment.TickCount - _chargedReqPSentT < 200 + Game.Ping;
             }
         }
 
@@ -161,15 +165,21 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && Environment.TickCount - _chargedReqSentT < 500)
+            if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && (Environment.TickCount - _chargedReqSentT < 500))
             {
                 var decoded = Packet.C2S.ChargedCast.Decoded(args.PacketData);
                 if (decoded.SourceNetworkId != ObjectManager.Player.NetworkId) return;
                 args.Process = false;
             }
 
-            if (args.PacketData[0] == Packet.C2S.Cast.Header && Packet.C2S.Cast.Decoded(args.PacketData).Slot == Slot)
-                _chargedReqPSentT = Environment.TickCount;
+            if (args.PacketData[0] == Packet.C2S.Cast.Header )
+            {
+                var decoded = Packet.C2S.Cast.Decoded(args.PacketData);
+                if (decoded.Slot != Slot) return;
+
+                if (IsCharging)
+                    Cast(new Vector2(decoded.ToX, decoded.ToY));
+            }
         }
 
         private void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

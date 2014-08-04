@@ -11,7 +11,7 @@ using Color = System.Drawing.Color;
 
 namespace LeagueSharp.Common
 {
-    internal enum WindowsMessages
+    public enum WindowsMessages
     {
         WM_MOUSEMOVE = 0x200,
         WM_LBUTTONDOWN = 0x201,
@@ -179,8 +179,8 @@ namespace LeagueSharp.Common
             get { return _drawTheMenu; }
             set
             {
-                Global.Write("DrawMenu", value);
                 _drawTheMenu = value;
+                Global.Write("DrawMenu", value);
             }
         }
 
@@ -380,7 +380,7 @@ namespace LeagueSharp.Common
             {
                 if (IsRootMenu || Parent == null) return 0;
                 var result = Parent.YLevel;
-                
+
                 foreach (var test in Parent.Children)
                 {
                     if (test.Name == Name)
@@ -562,6 +562,8 @@ namespace LeagueSharp.Common
         public void AddToMainMenu()
         {
             Drawing.OnDraw += Drawing_OnDraw;
+
+
             Game.OnWndProc += Game_OnWndProc;
             var m = Global.Read<List<string>>("CommonMenuList", true);
             if (m == default(List<string>))
@@ -687,7 +689,7 @@ namespace LeagueSharp.Common
             {
                 if (Parent == null) return 0;
                 var result = Parent.YLevel + Parent.Children.Count;
-                
+
                 foreach (var test in Parent.Items)
                 {
                     if (test.Name == Name)
