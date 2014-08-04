@@ -239,6 +239,59 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region ChargedCast
+
+            /// <summary>
+            /// Packet sent when casting charged spells second cast.
+            /// </summary>
+            public static class ChargedCast
+            {
+                public static byte Header = 0xE6;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.SourceNetworkId);
+                    result.WriteByte((byte)packetStruct.Slot);
+                    result.WriteFloat(packetStruct.ToX);
+                    result.WriteFloat(packetStruct.ToY);
+                    result.WriteFloat(packetStruct.ToZ);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.SourceNetworkId = packet.ReadInteger();
+                    result.Slot = (SpellSlot)packet.ReadByte();
+                    result.ToX = packet.ReadFloat();
+                    result.ToY = packet.ReadFloat();
+                    result.ToZ = packet.ReadFloat();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int SourceNetworkId;
+                    public SpellSlot Slot;
+                    public float ToX;
+                    public float ToY;
+                    public float ToZ;
+                    public Struct(SpellSlot slot, float toX = 0f, float toY = 0f, float toZ = 0f, int sourceNetworkId = -1)
+                    {
+                        SourceNetworkId = (sourceNetworkId == -1) ? ObjectManager.Player.NetworkId : sourceNetworkId;
+                        Slot = slot;
+                        ToX = toX;
+                        ToY = toY;
+                        ToZ = toZ;
+                    }
+                }
+            }
+
+            #endregion
+
             #region BuyItem
 
             /// <summary>

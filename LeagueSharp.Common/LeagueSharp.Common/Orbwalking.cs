@@ -186,7 +186,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanAttack()
         {
-            if (LastAATick <= Environment.TickCount)
+            if (LastAATick <= Environment.TickCount && ObjectManager.Player.CanAttack)
             {
                 return Environment.TickCount + Game.Ping / 2 + 25 >=
                        LastAATick + Player.AttackDelay * 1000 &&
