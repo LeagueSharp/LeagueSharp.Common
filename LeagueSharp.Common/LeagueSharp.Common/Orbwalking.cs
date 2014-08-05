@@ -698,7 +698,7 @@ namespace LeagueSharp.Common
                         if (minion.IsValidTarget() && InAutoAttackRange(minion))
                         {
                             var predHealth = HealthPrediction.GetHealthPrediction(minion,
-                                (int)(Player.AttackCastDelay * 1000) + 100 + Game.Ping / 2 +
+                                (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping/2 +
                                 1000 *
                                 (int)Player.Distance(minion) / (int)GetMyProjectileSpeed(),
                                 FarmDelay);
