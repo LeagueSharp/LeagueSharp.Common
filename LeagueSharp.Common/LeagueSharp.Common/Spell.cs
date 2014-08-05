@@ -43,7 +43,6 @@ namespace LeagueSharp.Common
         public Prediction.SkillshotType Type;
         public float Width;
         private int _chargedCastedT;
-        private int _chargedReqPSentT;
         private int _chargedReqSentT;
         private Vector3 _from;
         private float _range;
@@ -63,10 +62,9 @@ namespace LeagueSharp.Common
                 {
                     if (IsCharging)
                     {
-                        var t = (Environment.TickCount - _chargedCastedT > 10000) ? _chargedReqPSentT : _chargedCastedT;
                         return ChargedMinRange +
                                Math.Min(ChargedMaxRange - ChargedMinRange,
-                                   (Environment.TickCount - t) * (ChargedMaxRange - ChargedMinRange) /
+                                   (Environment.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
                                    ChargeDuration - 150);
                     }
                         
@@ -82,9 +80,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
-                       Environment.TickCount - _chargedCastedT < 500 ||
-                       Environment.TickCount - _chargedReqPSentT < 200 + Game.Ping;
+                return ObjectManager.Player.HasBuff(ChargedBuffName, true) || Environment.TickCount - _chargedCastedT < 300;
             }
         }
 
@@ -156,29 +152,33 @@ namespace LeagueSharp.Common
         /// </summary>
         public void StartCharging()
         {
-            if (!IsCharging)
+            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 300 + Game.Ping)
             {
-                _chargedReqSentT = Environment.TickCount;
                 Cast();
+                _chargedReqSentT = Environment.TickCount;
             }
         }
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && (Environment.TickCount - _chargedReqSentT < 500))
+            if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && Environment.TickCount - _chargedReqSentT < 3000)
             {
                 var decoded = Packet.C2S.ChargedCast.Decoded(args.PacketData);
                 if (decoded.SourceNetworkId != ObjectManager.Player.NetworkId) return;
                 args.Process = false;
             }
 
-            if (args.PacketData[0] == Packet.C2S.Cast.Header )
+            if (args.PacketData[0] == Packet.C2S.Cast.Header)
             {
                 var decoded = Packet.C2S.Cast.Decoded(args.PacketData);
                 if (decoded.Slot != Slot) return;
-
-                if (IsCharging)
-                    Cast(new Vector2(decoded.ToX, decoded.ToY));
+                if ((Environment.TickCount - _chargedReqSentT > 500))
+                {
+                    if (IsCharging)
+                    {
+                        Cast(new Vector2(decoded.ToX, decoded.ToY));
+                    }
+                }
             }
         }
 
@@ -290,7 +290,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            return ObjectManager.Player.Spellbook.CastSpell(Slot);
+            if(IsReady())
+                return ObjectManager.Player.Spellbook.CastSpell(Slot);
+            else
+                return false;
         }
 
         /// <summary>
