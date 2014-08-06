@@ -728,6 +728,8 @@ namespace LeagueSharp.Common
                                     case "OdinRecall": duration = 4500; break;
                                     case "OdinRecallImproved": duration = 4000; break;
                                 }
+                                result.Duration = duration;
+
                                 if (!RecallT.ContainsKey(result.UnitNetworkId))
                                     RecallT.Add(result.UnitNetworkId, 0);
 
@@ -777,7 +779,6 @@ namespace LeagueSharp.Common
                         {
                             if (gObject.IsValid)
                             {
-                                result.Status = RecallStatus.Unknown;
                                 result.Type = ObjectType.Turret;
 
                                 if (b2 != 0)
@@ -794,7 +795,6 @@ namespace LeagueSharp.Common
                         {
                             if (gObject.IsValid)
                             {
-                                result.Status = RecallStatus.Unknown;
                                 result.Type = ObjectType.Object;
                                 if(gObject.Name.Contains("Minion"))
                                     result.Type = ObjectType.Minion;
@@ -815,7 +815,6 @@ namespace LeagueSharp.Common
                         {
                             if (gObject.IsValid)
                             {
-                                result.Status = RecallStatus.Unknown;
                                 result.Type = ObjectType.Object;
                             }
                         }
@@ -830,11 +829,13 @@ namespace LeagueSharp.Common
                     public int UnitNetworkId;
                     public RecallStatus Status;
                     public ObjectType Type;
-                    public Struct(int unitNetworkId, RecallStatus status, ObjectType type)
+                    public int Duration;
+                    public Struct(int unitNetworkId, RecallStatus status, ObjectType type, int duration)
                     {
                         UnitNetworkId = unitNetworkId;
                         Status = status;
                         Type = type;
+                        Duration = duration;
                     }
                 }
             }
