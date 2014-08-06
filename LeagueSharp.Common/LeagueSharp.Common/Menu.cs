@@ -642,6 +642,8 @@ namespace LeagueSharp.Common
         internal MenuValueType ValueType;
 
         private bool _isShared;
+        private bool _dontSave;
+
         private string _saveFilePath;
         private bool _saved;
         private byte[] _serialized;
@@ -731,9 +733,15 @@ namespace LeagueSharp.Common
             get { return MenuSettings.MenuItemHeight; }
         }
 
-        internal MenuItem SetShared()
+        public MenuItem SetShared()
         {
             _isShared = true;
+            return this;
+        }
+
+        public MenuItem DontSave()
+        {
+            _dontSave = true;
             return this;
         }
 
@@ -791,7 +799,7 @@ namespace LeagueSharp.Common
 
         internal void SaveToFile()
         {
-            if (!_saved && _saveFilePath != null)
+            if (!_saved && _saveFilePath != null && !_dontSave)
             {
                 File.WriteAllBytes(_saveFilePath, _serialized);
                 _saved = true;
