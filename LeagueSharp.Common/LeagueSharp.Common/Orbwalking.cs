@@ -70,12 +70,12 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
-            if (sender is Obj_SpellMissile)
+            if (sender is Obj_SpellMissile && sender.IsValid)
             {
                 var missile = (Obj_SpellMissile)sender;
-                if (missile.SpellCaster is Obj_AI_Hero && IsAutoAttack(missile.SData.Name))
+                if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && IsAutoAttack(missile.SData.Name))
                 {
-                    FireAfterAttack((Obj_AI_Hero)missile.SpellCaster, _lastTarget);
+                    FireAfterAttack(missile.SpellCaster, _lastTarget);
                 }
             }
         }

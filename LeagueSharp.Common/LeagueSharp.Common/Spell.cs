@@ -433,24 +433,20 @@ namespace LeagueSharp.Common
                 Range);
         }
 
-        public int CountHits(List<Obj_AI_Base> units, Vector3 castPosition)
+        internal int CountHits(List<Obj_AI_Base> units, Vector3 castPosition)
         {
             var points = new List<Vector3>();
             foreach (var unit in units)
-            {
                 points.Add(GetPrediction(unit).Position);
-            }
             return CountHits(points, castPosition);
         }
 
-        public int CountHits(List<Vector3> points, Vector3 castPosition)
+        internal int CountHits(List<Vector3> points, Vector3 castPosition)
         {
             var hits = 0;
             foreach (var point in points)
-            {
                 if (WillHit(point, castPosition, 0))
                     hits++;
-            }
 
             return hits;
         }
@@ -510,6 +506,16 @@ namespace LeagueSharp.Common
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns if the point is in range of the spell.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public bool InRange(Vector3 point)
+        {
+            return RangeCheckFrom.Distance(point) < Range;
         }
     }
 }
