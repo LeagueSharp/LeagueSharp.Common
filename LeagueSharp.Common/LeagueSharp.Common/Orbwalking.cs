@@ -32,23 +32,30 @@ namespace LeagueSharp.Common
         //Spells that reset the attack timer.
         private static readonly string[] AttackResets =
         {
-            "vaynetumble", "dariusnoxiantacticsonh ", "fioraflurry",
-            "parley", "jaxempowertwo", "leonashieldofdaybreak", "mordekaisermaceofspades", "nasusq",
-            "nautiluspiercinggaze", "javelintoss", "poppydevastatingblow", "renektonpreexecute", "rengarq",
-            "shyvanadoubleattack", "sivirw", "talonnoxiandiplomacy", "trundletrollsmash ", "vie", "volibearq",
-            "monkeykingdoubleattack", "garenq", "khazixq", "cassiopeiatwinfang", "xenzhaocombotarget", "lucianq",
-            "luciane"
+            "blindingdart", "cassiopeiatwinfang", "dariusnoxiantacticsonh", "detonatingshot", "fioraflurry", "garenq",
+            "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "kogmawqmis", "leonashieldofdaybreak", "luciane",
+            "lucianq", "missfortunericochetshot", "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
+            "nautiluspiercinggaze", "netherblade", "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute",
+            "rengarq", "shyvanadoubleattack", "sivirw", "sonahymnofvalor", "takedown", "talonnoxiandiplomacy",
+            "trundletrollsmash", "vaynetumble", "vie", "volibearq", "xenzhaocombotarget", "yorickspectral"
         };
 
         //Spells that are not attacks even if they have the "attack" word in their name.
         private static readonly string[] NoAttacks =
         {
-            "shyvanadoubleattackdragon", "shyvanadoubleattack",
-            "monkeykingdoubleattack"
+            "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon",
+            "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire",
+            "zyragraspingplantattack2fire"
         };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
-        private static readonly string[] Attacks = { "frostarrow", "caitlynheadshotmissile" };
+        private static readonly string[] Attacks =
+        {
+            "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "lucianpassiveattack",
+            "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
+            "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
+            "xenzhaothrust3"
+        };
 
         private static readonly List<AttackPassive> AttackPassives = new List<AttackPassive>();
 
@@ -73,7 +80,8 @@ namespace LeagueSharp.Common
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
                 var missile = (Obj_SpellMissile)sender;
-                if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && IsAutoAttack(missile.SData.Name))
+                if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid &&
+                    IsAutoAttack(missile.SData.Name))
                 {
                     FireAfterAttack(missile.SpellCaster, _lastTarget);
                 }
@@ -444,8 +452,8 @@ namespace LeagueSharp.Common
                 Champion = "Orianna",
                 BuffName = "OrianaSpellSword",
                 APScaling = 0.15f,
-                LevelDamageArray = new float[]
-                { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 },
+                LevelDamageArray =
+                    new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 },
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
@@ -459,8 +467,8 @@ namespace LeagueSharp.Common
                 Champion = "Ziggs",
                 BuffName = "ziggsShortFuse",
                 APScaling = 0.25f,
-                LevelDamageArray = new float[]
-                { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 },
+                LevelDamageArray =
+                    new float[] { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 },
                 DamageType = 1,
             };
             AttackPassives.Add(PassiveToAdd);
@@ -698,7 +706,7 @@ namespace LeagueSharp.Common
                         if (minion.IsValidTarget() && InAutoAttackRange(minion))
                         {
                             var predHealth = HealthPrediction.GetHealthPrediction(minion,
-                                (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping/2 +
+                                (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 *
                                 (int)Player.Distance(minion) / (int)GetMyProjectileSpeed(),
                                 FarmDelay);
