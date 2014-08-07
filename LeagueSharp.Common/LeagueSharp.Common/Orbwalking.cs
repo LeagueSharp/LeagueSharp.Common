@@ -270,26 +270,6 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal static Obj_AI_Base GetAutoAttackTarget(Vector3 position)
-        {
-            foreach (var gameObject in ObjectManager.Get<GameObject>())
-            {
-                if (gameObject is Obj_AI_Base)
-                {
-                    var unit = (Obj_AI_Base)gameObject;
-                    if (unit.IsValidTarget(2000, false) &&
-                        Vector2.DistanceSquared(unit.ServerPosition.To2D(), position.To2D()) <=
-                        35 * 35)
-                    {
-                        return unit;
-                    }
-                }
-            }
-
-
-            return null;
-        }
-
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
             if (IsAutoAttackReset(Spell.SData.Name) && unit.IsMe)
@@ -302,8 +282,8 @@ namespace LeagueSharp.Common
                 if (unit.IsMe)
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
-
-                    _lastTarget = GetAutoAttackTarget(Spell.End);
+                    if(Spell.Target is Obj_AI_Base)
+                        _lastTarget = (Obj_AI_Base) Spell.Target;
 
                     if (unit.IsMe && unit.IsMelee())
                     {

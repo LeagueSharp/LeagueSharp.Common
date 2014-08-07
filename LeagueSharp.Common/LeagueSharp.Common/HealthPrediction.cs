@@ -56,7 +56,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
             if (unit.IsValid && unit.Team == ObjectManager.Player.Team && !(unit is Obj_AI_Hero) &&
@@ -66,12 +65,12 @@ namespace LeagueSharp.Common
                 /*Only auto-attacks for now*/
                 if (Orbwalking.IsAutoAttack(Spell.SData.Name))
                 {
-                    var target = Orbwalking.GetAutoAttackTarget(Spell.End);
-                    if (target != null)
+                    if (Spell.Target is Obj_AI_Base)
                     {
+                        var target = (Obj_AI_Base) Spell.Target;
                         ActiveAttacks.Remove(unit.NetworkId);
                         var Damage = CalcMinionToMinionDmg(unit, target);
-
+                        
                         var AttackData = new PredictedDamage(unit, target, Environment.TickCount - Game.Ping / 2,
                             unit.AttackCastDelay * 1000,
                             unit.AttackDelay * 1000,

@@ -62,7 +62,7 @@ namespace LeagueSharp.Common
             }
 
             // Get my Hero
-            switch (ObjectManager.Player.BaseSkinName)
+            switch (ObjectManager.Player.ChampionName)
             {
                 case "Aatrox":
                     Champ = Aatrox;
@@ -434,7 +434,7 @@ namespace LeagueSharp.Common
                     Champ = Zyra;
                     break;
                 default:
-                    Game.PrintChat("DamageLib: Could not find the champion '" + ObjectManager.Player.BaseSkinName +
+                    Game.PrintChat("DamageLib: Could not find the champion '" + ObjectManager.Player.ChampionName +
                                    "'. Please report this in the forums, it's either a wrong typed name or a new hero that needs to be added!");
                     break;
             }

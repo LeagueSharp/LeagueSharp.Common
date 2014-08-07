@@ -195,7 +195,7 @@ namespace LeagueSharp.Common
         private static void OnNewPath(Obj_AI_Base unit, EventArgs args)
         {
             //if (unit.Type == ObjectManager.Player.Type)
-            //    Game.PrintChat(Game.Time + " New path for: " + unit.BaseSkinName + " Length: " +
+            //    Game.PrintChat(Game.Time + " New path for: " + unit.ChampionName + " Length: " +
             //                   Utils.GetPathLength(Utils.GetWaypoints(unit)));
         }
 

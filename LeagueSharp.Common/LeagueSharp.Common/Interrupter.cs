@@ -222,7 +222,7 @@ namespace LeagueSharp.Common
         public static bool IsChannelingImportantSpell(this Obj_AI_Hero unit)
         {
             foreach (var spell in Spells)
-                if (spell.ChampionName == unit.BaseSkinName)
+                if (spell.ChampionName == unit.ChampionName)
                     if ((unit.LastCastedspell() != null &&
                          unit.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
                         Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||

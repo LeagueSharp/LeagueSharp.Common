@@ -95,7 +95,7 @@ namespace LeagueSharp.Common
                             {
                                 Target = hero;
                                 _maintarget = hero;
-                                Game.PrintChat("TargetSelector: New main target: " + _maintarget.BaseSkinName);
+                                Game.PrintChat("TargetSelector: New main target: " + _maintarget.ChampionName);
                             }
                         }
                         break;
@@ -229,20 +229,20 @@ namespace LeagueSharp.Common
                     if (autopriority == null)
                     {
                         autopriority = target;
-                        prio = FindPrioForTarget(target.BaseSkinName);
+                        prio = FindPrioForTarget(target.ChampionName);
                     }
                     else
                     {
-                        if (FindPrioForTarget(target.BaseSkinName) < prio)
+                        if (FindPrioForTarget(target.ChampionName) < prio)
                         {
                             autopriority = target;
-                            prio = FindPrioForTarget(target.BaseSkinName);
+                            prio = FindPrioForTarget(target.ChampionName);
                         }
-                        else if (FindPrioForTarget(target.BaseSkinName) == prio)
+                        else if (FindPrioForTarget(target.ChampionName) == prio)
                         {
                             if (!(target.Health < autopriority.Health)) continue;
                             autopriority = target;
-                            prio = FindPrioForTarget(target.BaseSkinName);
+                            prio = FindPrioForTarget(target.ChampionName);
                         }
                     }
                 }
@@ -250,17 +250,17 @@ namespace LeagueSharp.Common
             return autopriority;
         }
 
-        private static int FindPrioForTarget(string baseskinname)
+        private static int FindPrioForTarget(string ChampionName)
         {
-            if (ap.Contains(baseskinname))
+            if (ap.Contains(ChampionName))
                 return 2;
-            if (ad.Contains(baseskinname))
+            if (ad.Contains(ChampionName))
                 return 1;
-            if (sup.Contains(baseskinname))
+            if (sup.Contains(ChampionName))
                 return 3;
-            if (bruiser.Contains(baseskinname))
+            if (bruiser.Contains(ChampionName))
                 return 4;
-            if (tank.Contains(baseskinname))
+            if (tank.Contains(ChampionName))
                 return 5;
             return 5;
         }
@@ -303,7 +303,7 @@ namespace LeagueSharp.Common
 
         public override string ToString()
         {
-            return "Target: " + Target.BaseSkinName + "Range: " + _range + "Mode: " + _mode;
+            return "Target: " + Target.ChampionName + "Range: " + _range + "Mode: " + _mode;
         }
     }
 
@@ -356,8 +356,8 @@ namespace LeagueSharp.Common
         internal static float GetPriority(Obj_AI_Hero hero)
         {
             var p = 1;
-            if (_config != null && _config.Item("SimpleTS" + hero.BaseSkinName + "Priority") != null)
-                p = _config.Item("SimpleTS" + hero.BaseSkinName + "Priority").GetValue<Slider>().Value;
+            if (_config != null && _config.Item("SimpleTS" + hero.ChampionName + "Priority") != null)
+                p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>().Value;
 
             switch (p)
             {
@@ -381,7 +381,7 @@ namespace LeagueSharp.Common
             Config.AddItem(new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, System.Drawing.Color.Red)));
             Config.AddItem(new MenuItem("Sep", "").SetShared());
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
-                    Config.AddItem(new MenuItem("SimpleTS" + enemy.BaseSkinName + "Priority", enemy.BaseSkinName).SetShared().SetValue(new Slider(1, 5, 1)));
+                    Config.AddItem(new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared().SetValue(new Slider(1, 5, 1)));
             
         }
 
