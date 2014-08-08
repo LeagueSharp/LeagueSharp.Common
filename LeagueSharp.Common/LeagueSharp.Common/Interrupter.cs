@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using System;
 using System.Collections.Generic;
@@ -35,12 +35,13 @@ namespace LeagueSharp.Common
 
         static Interrupter()
         {
+
             #region Varus
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Varus",
                 SpellName = "VarusQ",
-                DangerLevel = InterruptableDangerLevel.High,
+                DangerLevel = InterruptableDangerLevel.Low,
                 Slot = SpellSlot.R,
                 BuffName = "VarusQ"
             });
@@ -55,24 +56,15 @@ namespace LeagueSharp.Common
                 BuffName = "UrgotSwap2"
             });
             #endregion
-            #region MissFortune
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "MissFortune",
-                SpellName = "MissFortuneBulletTime",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "MissFortuneBulletTime"
-            });
-            #endregion
             #region Caitlyn
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Caitlyn",
                 SpellName = "CaitlynAceintheHole",
-                DangerLevel = InterruptableDangerLevel.High,
+                DangerLevel = InterruptableDangerLevel.Medium,
                 Slot = SpellSlot.R,
-                BuffName = "CaitlynAceintheHole"
+                BuffName = "CaitlynAceintheHole",
+                ExtraDuration = 600
             });
             #endregion
             #region Warwick
@@ -248,7 +240,7 @@ namespace LeagueSharp.Common
                     {
                         if ((enemy.LastCastedspell() != null &&
                              enemy.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
-                             Environment.TickCount - enemy.LastCastedSpellT() < 350) ||
+                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
                             (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true)))
                         {
                             FireOnInterruptable(enemy, spell);
