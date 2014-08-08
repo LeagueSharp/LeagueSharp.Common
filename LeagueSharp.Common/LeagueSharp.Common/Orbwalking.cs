@@ -561,6 +561,10 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
+                drawings.AddItem(
+                    new MenuItem("HoldZone", "HoldZone").SetShared()
+                        .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
+                
                 Config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -817,6 +821,10 @@ namespace LeagueSharp.Common
                 if (Config.Item("AACircle").GetValue<Circle>().Active)
                     Utility.DrawCircle(Player.Position, GetRealAutoAttackRange(null) + 65,
                         Config.Item("AACircle").GetValue<Circle>().Color);
+
+                if (Config.Item("HoldZone").GetValue<Circle>().Active)
+                    Utility.DrawCircle(Player.Position, Config.Item("HoldPosRadius").GetValue<Slider>().Value,
+                        Config.Item("HoldZone").GetValue<Circle>().Color);
             }
         }
     }
