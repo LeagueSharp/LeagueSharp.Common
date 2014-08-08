@@ -59,7 +59,7 @@ namespace LeagueSharp.Common
 
         private static readonly List<AttackPassive> AttackPassives = new List<AttackPassive>();
 
-        private static int LastAATick;
+        public static int LastAATick;
 
         public static bool Attack = true;
         public static bool Move = true;
@@ -251,6 +251,14 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Resets the Auto-Attack timer.
+        /// </summary>
+        public static void ResetAutoAttackTimer()
+        {
+            LastAATick = 0;
+        }
+
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
             if (args.PacketData[0] == 0x34)
@@ -264,7 +272,7 @@ namespace LeagueSharp.Common
                 {
                     if (unit.IsMe)
                     {
-                        LastAATick = 0;
+                        ResetAutoAttackTimer();
                     }
                 }
             }
@@ -274,7 +282,7 @@ namespace LeagueSharp.Common
         {
             if (IsAutoAttackReset(Spell.SData.Name) && unit.IsMe)
             {
-                Utility.DelayAction.Add(250, delegate { LastAATick = 0; });
+                Utility.DelayAction.Add(250, delegate { ResetAutoAttackTimer(); });
             }
 
             if (IsAutoAttack(Spell.SData.Name))
