@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,46 @@ namespace LeagueSharp.Common
 
         static Interrupter()
         {
-
+            #region Varus
+            Spells.Add(new InterruptableSpell
+            {
+                ChampionName = "Varus",
+                SpellName = "VarusQ",
+                DangerLevel = InterruptableDangerLevel.High,
+                Slot = SpellSlot.R,
+                BuffName = "VarusQ"
+            });
+            #endregion
+            #region Urgot
+            Spells.Add(new InterruptableSpell
+            {
+                ChampionName = "Urgot",
+                SpellName = "UrgotSwap2",
+                DangerLevel = InterruptableDangerLevel.High,
+                Slot = SpellSlot.R,
+                BuffName = "UrgotSwap2"
+            });
+            #endregion
+            #region MissFortune
+            Spells.Add(new InterruptableSpell
+            {
+                ChampionName = "MissFortune",
+                SpellName = "MissFortuneBulletTime",
+                DangerLevel = InterruptableDangerLevel.High,
+                Slot = SpellSlot.R,
+                BuffName = "MissFortuneBulletTime"
+            });
+            #endregion
+            #region Caitlyn
+            Spells.Add(new InterruptableSpell
+            {
+                ChampionName = "Caitlyn",
+                SpellName = "CaitlynAceintheHole",
+                DangerLevel = InterruptableDangerLevel.High,
+                Slot = SpellSlot.R,
+                BuffName = "CaitlynAceintheHole"
+            });
+            #endregion
             #region Warwick
             Spells.Add(new InterruptableSpell
             {
