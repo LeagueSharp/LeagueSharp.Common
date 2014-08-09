@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
@@ -21,9 +22,9 @@ namespace LeagueSharp.Common
         public string BuffName;
         public string ChampionName;
         public InterruptableDangerLevel DangerLevel;
+        public int ExtraDuration;
         public SpellSlot Slot;
         public string SpellName;
-        public int ExtraDuration;
     }
 
     /// <summary>
@@ -35,8 +36,8 @@ namespace LeagueSharp.Common
 
         static Interrupter()
         {
-
             #region Varus
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Varus",
@@ -45,8 +46,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "VarusQ"
             });
+
             #endregion
+
             #region Urgot
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Urgot",
@@ -55,8 +59,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "UrgotSwap2"
             });
+
             #endregion
+
             #region Caitlyn
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Caitlyn",
@@ -66,8 +73,11 @@ namespace LeagueSharp.Common
                 BuffName = "CaitlynAceintheHole",
                 ExtraDuration = 600
             });
+
             #endregion
+
             #region Warwick
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Warwick",
@@ -76,8 +86,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "infiniteduresssound"
             });
+
             #endregion
+
             #region Shen
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Shen",
@@ -86,8 +99,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "NobodyPlaysShen:^)"
             });
+
             #endregion
+
             #region Malzahar
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Malzahar",
@@ -96,8 +112,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "alzaharnethergraspsound",
             });
+
             #endregion
+
             #region Nunu
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Nunu",
@@ -106,8 +125,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "AbsoluteZero",
             });
+
             #endregion
+
             #region Pantheon
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Pantheon",
@@ -116,8 +138,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "PantheonRJump"
             });
+
             #endregion
+
             #region Karthus
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Karthus",
@@ -126,8 +151,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "karthusfallenonecastsound"
             });
+
             #endregion
+
             #region Velkoz
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Velkoz",
@@ -136,8 +164,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "VelkozR",
             });
+
             #endregion
+
             #region Galio
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Galio",
@@ -147,8 +178,11 @@ namespace LeagueSharp.Common
                 BuffName = "GalioIdolOfDurand",
                 ExtraDuration = 200,
             });
+
             #endregion
+
             #region MissFortune
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "MissFortune",
@@ -157,8 +191,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "missfortunebulletsound",
             });
+
             #endregion
+
             #region Fiddlesticks
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "FiddleSticks",
@@ -176,8 +213,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "Crowstorm",
             });
+
             #endregion
+
             #region Katarina
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Katarina",
@@ -186,8 +226,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 BuffName = "katarinarsound"
             });
+
             #endregion
+
             #region MasterYi
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "MasterYi",
@@ -196,8 +239,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.W,
                 DangerLevel = InterruptableDangerLevel.Low,
             });
+
             #endregion
+
             #region Xerath
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Xerath",
@@ -206,8 +252,11 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 DangerLevel = InterruptableDangerLevel.Low,
             });
+
             #endregion
+
             #region Janna
+
             Spells.Add(new InterruptableSpell
             {
                 ChampionName = "Janna",
@@ -216,6 +265,7 @@ namespace LeagueSharp.Common
                 Slot = SpellSlot.R,
                 DangerLevel = InterruptableDangerLevel.Low,
             });
+
             #endregion
 
             Game.OnGameUpdate += Game_OnGameUpdate;
@@ -232,19 +282,16 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsValidTarget()))
             {
-                if (enemy.IsValidTarget())
+                foreach (var spell in Spells)
                 {
-                    foreach (var spell in Spells)
+                    if ((enemy.LastCastedspell() != null &&
+                         enemy.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
+                         Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                        (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true)))
                     {
-                        if ((enemy.LastCastedspell() != null &&
-                             enemy.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
-                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true)))
-                        {
-                            FireOnInterruptable(enemy, spell);
-                        }
+                        FireOnInterruptable(enemy, spell);
                     }
                 }
             }
@@ -252,18 +299,18 @@ namespace LeagueSharp.Common
 
         public static bool IsChannelingImportantSpell(this Obj_AI_Hero unit)
         {
-            foreach (var spell in Spells)
-                if (spell.ChampionName == unit.ChampionName)
-                    if ((unit.LastCastedspell() != null &&
-                         unit.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
-                        Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                        (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
-                        (ObjectManager.Player.NetworkId == unit.NetworkId && LastCastedSpell.LastCastPacketSent != null &&
-                         LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                         Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping))
-                        return true;
-
-            return false;
+            return
+                Spells.Where(spell => spell.ChampionName == unit.ChampionName)
+                    .Any(
+                        spell =>
+                            (unit.LastCastedspell() != null &&
+                             unit.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
+                             Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                            (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
+                            (ObjectManager.Player.NetworkId == unit.NetworkId &&
+                             LastCastedSpell.LastCastPacketSent != null &&
+                             LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
+                             Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping));
         }
     }
 }

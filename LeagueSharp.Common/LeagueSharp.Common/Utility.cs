@@ -74,6 +74,27 @@ namespace LeagueSharp.Common
             return true;
         }
 
+
+        public static List<Vector2> CutPath(this List<Vector2> path, float distance )
+        {
+            var result = new List<Vector2>();
+            var Distance = distance;
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                var dist = path[i].Distance(path[i + 1]);
+                if (dist > Distance)
+                {
+                    result.Add(path[i] + distance * (path[i + 1] - path[i]).Normalized());
+                    for (var j = i + 1; j < path.Count; j++)
+                        result.Add(path[j]);
+
+                    break;
+                }
+                Distance -= dist;
+            }
+            return result;
+        }
+
         /// <summary>
         /// Returns the path of the unit appending the ServerPosition at the start, works even if the unit just entered fow.
         /// </summary>
@@ -94,20 +115,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    var d = unit.MoveSpeed * timePassed;
-                    for (var i = 0; i < path.Count - 1; i++)
-                    {
-                        var dist = path[i].Distance(path[i + 1]);
-                        if (dist > d)
-                        {
-                            result.Add(path[i] + d * (path[i + 1] - path[i]).Normalized());
-                            for (var j = i + 1; j < path.Count; j++)
-                                result.Add(path[j]);
-
-                            break;
-                        }
-                        d -= dist;
-                    }
+                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
                 }
             }
 

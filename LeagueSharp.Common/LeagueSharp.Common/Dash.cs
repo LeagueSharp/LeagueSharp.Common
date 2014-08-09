@@ -36,10 +36,7 @@ namespace LeagueSharp.Common
                 if (unit != null && unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
                 {
                     if (!DetectedDashes.ContainsKey(unit.NetworkId))
-                    {
-                        var detectedDash = new DashItem();
-                        DetectedDashes.Add(unit.NetworkId, detectedDash);
-                    }
+                        DetectedDashes.Add(unit.NetworkId, new DashItem());
 
                     DetectedDashes[unit.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
                     DetectedDashes[unit.NetworkId].Speed = speed;

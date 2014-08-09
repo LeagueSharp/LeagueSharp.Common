@@ -21,6 +21,7 @@ namespace LeagueSharp.Common
         Ally,
         Enemy,
         NotAlly,
+        NotAllyForEnemy,
         All,
     }
 
@@ -29,6 +30,7 @@ namespace LeagueSharp.Common
         Ranged,
         Melee,
         All,
+        Wards,//TODO
     }
 
     public static class MinionManager
@@ -67,6 +69,8 @@ namespace LeagueSharp.Common
                             ? GameObjectTeam.Order
                             : GameObjectTeam.Chaos) ||
                         team == MinionTeam.NotAlly && minion.Team != ObjectManager.Player.Team ||
+                         team == MinionTeam.NotAlly && (minion.Team == ObjectManager.Player.Team || minion.Team == GameObjectTeam.Neutral)
+                        ||
                         team == MinionTeam.All)
                     {
                         if (minion.IsMelee() && type == MinionTypes.Melee ||
