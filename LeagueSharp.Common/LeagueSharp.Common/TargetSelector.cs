@@ -1,9 +1,8 @@
 ﻿#region
 
 using System;
-using System.Drawing;
+using System.Configuration;
 using System.Linq;
-using SharpDX;
 
 #endregion
 
@@ -312,13 +311,6 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class SimpleTs
     {
-        private static Menu _config;
-        private static Obj_AI_Hero _selectedTarget;
-
-        internal static Obj_AI_Hero SelectedTarget
-        {
-            get { return (_config != null && _config.Item("FocusSelected").GetValue<bool>() ? _selectedTarget : null); }
-        }
         public enum DamageType
         {
             Magical,
@@ -326,25 +318,39 @@ namespace LeagueSharp.Common
             True,
         }
 
+        private static Menu _config;
+        private static Obj_AI_Hero _selectedTarget;
+
         static SimpleTs()
         {
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += Drawing_OnDraw;
         }
 
-        static void Drawing_OnDraw(EventArgs args)
+        internal static Obj_AI_Hero SelectedTarget
         {
-            if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() && _config.Item("SelTColor").GetValue<Circle>().Active)
-                Utility.DrawCircle(_selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 3, 23);
+            get { return (_config != null && _config.Item("FocusSelected").GetValue<bool>() ? _selectedTarget : null); }
         }
 
-        static void Game_OnWndProc(WndEventArgs args)
+        private static void Drawing_OnDraw(EventArgs args)
+        {
+            if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() &&
+                _config.Item("SelTColor").GetValue<Circle>().Active)
+                Utility.DrawCircle(_selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 3,
+                    23);
+        }
+
+        private static void Game_OnWndProc(WndEventArgs args)
         {
             if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
-                foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsValidTarget()).OrderByDescending(h => h.Distance(Game.CursorPos)))
+                foreach (
+                    var enemy in
+                        ObjectManager.Get<Obj_AI_Hero>()
+                            .Where(hero => hero.IsValidTarget())
+                            .OrderByDescending(h => h.Distance(Game.CursorPos)))
                 {
-                    if (enemy.Distance(Game.CursorPos) < 300)
+                    if (enemy.Distance(Game.CursorPos) < 200)
                         if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
                             _selectedTarget = null;
                         else
@@ -353,7 +359,23 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal static float GetPriority(Obj_AI_Hero hero)
+        /// <summary>
+        /// Sets the priority of the hero
+        /// </summary>
+        public static void SetPriority(Obj_AI_Hero hero, int newPriority)
+        {
+            if (_config != null && _config.Item("SimpleTS" + hero.ChampionName + "Priority") != null)
+            {
+                var p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>();
+                p.Value = Math.Max(1, Math.Min(5, newPriority));
+                _config.Item("SimpleTS" + hero.ChampionName + "Priority").SetValue(p);
+            }
+        }
+
+        /// <summary>
+        /// Returns the priority of the hero
+        /// </summary>
+        public static float GetPriority(Obj_AI_Hero hero)
         {
             var p = 1;
             if (_config != null && _config.Item("SimpleTS" + hero.ChampionName + "Priority") != null)
@@ -364,38 +386,100 @@ namespace LeagueSharp.Common
                 case 2:
                     return 1.5f;
                 case 3:
-                    return 2f;
+                    return 1.75f;
                 case 4:
-                    return 2.5f;
+                    return 2f;
                 case 5:
-                    return 3f;
+                    return 2.5f;
                 default:
                     return 1f;
             }
+        }
+
+        private static int GetPriorityFromDb(string championName)
+        {
+            string[] p1 =
+            {
+                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Hecarim",
+                "Janna", "}Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu", "Olaf",
+                "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka",
+                "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
+            };
+            
+            string[] p2 =
+            {
+                "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax", "Lee Sin",
+                "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain", "Trundle",
+                "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao"
+            };
+
+            string[] p3 =
+            {
+                "Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin", "Kayle",
+                "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean"
+            };
+
+            string[] p4 =
+            {
+                "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven", "Ezreal",
+                "Graves", "Jinx", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "LeBlanc", "Lucian", "Lux",
+                "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo",
+                "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed",
+                "Ziggs"
+            };
+
+            if (p1.Contains(championName)) return 1;
+            if (p2.Contains(championName)) return 2;
+            if (p3.Contains(championName)) return 3;
+            if (p4.Contains(championName)) return 4;
+            return 1;
         }
 
         public static void AddToMenu(Menu Config)
         {
             _config = Config;
             Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
-            Config.AddItem(new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, System.Drawing.Color.Red)));
+            Config.AddItem(
+                new MenuItem("SelTColor", "Selected target color").SetShared()
+                    .SetValue(new Circle(true, System.Drawing.Color.Red)));
             Config.AddItem(new MenuItem("Sep", "").SetShared());
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
-                    Config.AddItem(new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared().SetValue(new Slider(1, 5, 1)));
+            var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
+            autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
             
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
+                )
+                Config.AddItem(
+                    new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
+                    .SetValue(new Slider(autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
+            Config.AddItem(autoPriorityItem);
+
+        }
+
+        static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
+        {
+            if (e.GetNewValue<bool>())
+            {
+                foreach (
+                    var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
+                    _config.Item("SimpleTS" + enemy.ChampionName + "Priority").SetValue(new Slider( GetPriorityFromDb(enemy.ChampionName), 5, 1));
+            }
         }
 
         public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
+            //TODO: Check for kayles and tryndamere buffs.
         {
             Obj_AI_Hero bestTarget = null;
             var bestRatio = 0f;
 
-            if (_selectedTarget.IsValidTarget() && (range < 0 && Orbwalking.InAutoAttackRange(_selectedTarget) || ObjectManager.Player.Distance(_selectedTarget) < range ))
+            if (_selectedTarget.IsValidTarget() &&
+                (range < 0 && Orbwalking.InAutoAttackRange(_selectedTarget) ||
+                 ObjectManager.Player.Distance(_selectedTarget) < range))
                 return _selectedTarget;
 
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (hero.IsValidTarget() && (range < 0 && Orbwalking.InAutoAttackRange(hero) || ObjectManager.Player.Distance(hero) < range))
+                if (hero.IsValidTarget() &&
+                    (range < 0 && Orbwalking.InAutoAttackRange(hero) || ObjectManager.Player.Distance(hero) < range))
                 {
                     var damage = 0f;
 

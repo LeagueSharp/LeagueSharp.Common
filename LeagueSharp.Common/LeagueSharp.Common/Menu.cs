@@ -630,8 +630,31 @@ namespace LeagueSharp.Common
         StringList,
     }
 
+    public class OnValueChangeEventArgs
+    {
+        private object _oldValue;
+        private object _newValue;
+
+        public OnValueChangeEventArgs(object oldValue, object newValue)
+        {
+            _oldValue = oldValue;
+            _newValue = newValue;
+        }
+
+        public T GetOldValue<T>()
+        {
+            return (T)_oldValue;
+        }
+        public T GetNewValue<T>()
+        {
+            return (T)_newValue;
+        }
+    }
+
     public class MenuItem
     {
+        public event EventHandler<OnValueChangeEventArgs> ValueChanged;
+
         private readonly string _assemblyPath;
         internal int ColorId;
         public string DisplayName;
@@ -788,6 +811,15 @@ namespace LeagueSharp.Common
                 }
                 else
                     newValue = Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+            }
+
+            if (_valueSet)
+            {
+                var handler = ValueChanged;
+                if (handler != null)
+                {
+                    handler(this, new OnValueChangeEventArgs(_value, newValue));
+                }
             }
 
             _valueSet = true;
