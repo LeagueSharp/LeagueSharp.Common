@@ -69,7 +69,7 @@ namespace LeagueSharp.Common
                             ? GameObjectTeam.Order
                             : GameObjectTeam.Chaos) ||
                         team == MinionTeam.NotAlly && minion.Team != ObjectManager.Player.Team ||
-                         team == MinionTeam.NotAlly && (minion.Team == ObjectManager.Player.Team || minion.Team == GameObjectTeam.Neutral)
+                         team == MinionTeam.NotAllyForEnemy && (minion.Team == ObjectManager.Player.Team || minion.Team == GameObjectTeam.Neutral)
                         ||
                         team == MinionTeam.All)
                     {
@@ -200,8 +200,8 @@ namespace LeagueSharp.Common
             {
                 var pos = Prediction.GetBestPosition(minion, delay, width, speed, from, range, collision, stype,
                     rangeCheckFrom);
-
-                result.Add(pos.Position.To2D());
+                if(pos.HitChance >= Prediction.HitChance.HighHitchance)
+                    result.Add(pos.Position.To2D());
             }
 
             return result;
