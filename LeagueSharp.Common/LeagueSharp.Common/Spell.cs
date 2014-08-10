@@ -411,23 +411,23 @@ namespace LeagueSharp.Common
         }
 
         public MinionManager.FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions,
-            float overrideWidth = float.MaxValue)
+            float overrideWidth = -1)
         {
             return MinionManager.GetBestCircularFarmLocation(minionPositions,
                 overrideWidth != -1 ? overrideWidth : Width, Range);
         }
 
         public MinionManager.FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions,
-            float overrideWidth = float.MaxValue)
+            float overrideWidth = -1)
         {
             var positions = MinionManager.GetMinionsPredictedPositions(minionPositions, Delay, Width, Speed,
-                From, Range, false, Prediction.SkillshotType.SkillshotCircle);
+                From, Range, false, Prediction.SkillshotType.SkillshotLine);
 
-            return GetCircularFarmLocation(positions, overrideWidth);
+            return GetLineFarmLocation(positions, overrideWidth != -1 ? overrideWidth : Width);
         }
 
         public MinionManager.FarmLocation GetLineFarmLocation(List<Vector2> minionPositions,
-            float overrideWidth = float.MaxValue)
+            float overrideWidth = -1)
         {
             return MinionManager.GetBestLineFarmLocation(minionPositions, overrideWidth != -1 ? overrideWidth : Width,
                 Range);
