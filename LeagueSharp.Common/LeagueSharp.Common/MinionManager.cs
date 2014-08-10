@@ -50,13 +50,12 @@ namespace LeagueSharp.Common
             MinionTeam team = MinionTeam.Enemy, MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result = new List<Obj_AI_Base>();
-            range = range * range;
-
+         
             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (minion.IsValidTarget() &&
-                    Vector2.DistanceSquared(from.To2D(), minion.ServerPosition.To2D()) <= range)
+                if (minion.IsValidTarget(range, false) )
                 {
+                    
                     if (team == MinionTeam.Neutral && minion.Team == GameObjectTeam.Neutral ||
                         team == MinionTeam.Ally &&
                         minion.Team ==
