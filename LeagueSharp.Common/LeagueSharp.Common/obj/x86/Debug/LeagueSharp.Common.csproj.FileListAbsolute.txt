@@ -39,3 +39,11 @@ C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\League
 C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Debug\LeagueSharp.Common.csprojResolveAssemblyReference.cache
 C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Debug\LeagueSharp.Common.dll
 C:\Users\Andy\Desktop\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Debug\LeagueSharp.Common.pdb
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\LeagueSharp.Common.dll
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\LeagueSharp.Common.pdb
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\LeagueSharp.dll
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\SharpDX.Direct3D9.dll
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\SharpDX.dll
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Debug\LeagueSharp.xml
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Debug\LeagueSharp.Common.dll
+C:\Users\Andy\Desktop\LeagueSharp_Org\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Debug\LeagueSharp.Common.pdb

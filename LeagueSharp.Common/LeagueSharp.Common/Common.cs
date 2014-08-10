@@ -9,7 +9,7 @@ namespace LeagueSharp.Common
 {
     internal static class Common
     {
-        private const int localversion = 18;
+        private const int localversion = 19;
         internal static bool isInitialized;
 
         internal static void InitializeCommonLib()
