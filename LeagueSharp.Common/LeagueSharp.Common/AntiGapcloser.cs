@@ -29,9 +29,9 @@ namespace LeagueSharp.Common
     {
         public Vector3 End;
         public Obj_AI_Base Sender;
+        public GapcloserType SkillType;
         public Vector3 Start;
         public int TickCount;
-        public GapcloserType SkillType;
     }
 
     public static class AntiGapcloser
@@ -382,7 +382,7 @@ namespace LeagueSharp.Common
             #endregion
 
             Game.OnGameUpdate += Game_OnGameUpdate;
-            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         public static event OnGapcloseH OnEnemyGapcloser;
@@ -394,29 +394,30 @@ namespace LeagueSharp.Common
 
             foreach (var gapcloser in ActiveGapclosers)
             {
-                if(gapcloser.SkillType == GapcloserType.Targeted || (gapcloser.SkillType == GapcloserType.Skillshot && gapcloser.Sender.IsValid && ObjectManager.Player.Distance(gapcloser.Sender) < 500))
-                OnEnemyGapcloser(gapcloser);
+                if (gapcloser.SkillType == GapcloserType.Targeted ||
+                    (gapcloser.SkillType == GapcloserType.Skillshot && gapcloser.Sender.IsValid &&
+                     ObjectManager.Player.Distance(gapcloser.Sender) < 500))
+                    OnEnemyGapcloser(gapcloser);
             }
-                
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!SpellIsGapcloser(args)) return;
 
-                ActiveGapclosers.Add(new ActiveGapcloser
-                {
-                    Start = args.Start,
-                    End = args.End,
-                    Sender = sender,
-                    TickCount = Environment.TickCount,
-                    SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot
-                });
+            ActiveGapclosers.Add(new ActiveGapcloser
+            {
+                Start = args.Start,
+                End = args.End,
+                Sender = sender,
+                TickCount = Environment.TickCount,
+                SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot
+            });
         }
 
         private static bool SpellIsGapcloser(GameObjectProcessSpellCastEventArgs args)
         {
-            return Enumerable.Any(Spells, spell => spell.SpellName == args.SData.Name.ToLower());
+            return Spells.Any(spell => spell.SpellName == args.SData.Name.ToLower());
         }
     }
 }
