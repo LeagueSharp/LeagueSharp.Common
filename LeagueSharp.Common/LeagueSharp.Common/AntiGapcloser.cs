@@ -395,7 +395,7 @@ namespace LeagueSharp.Common
             foreach (var gapcloser in ActiveGapclosers)
             {
                 if (gapcloser.SkillType == GapcloserType.Targeted ||
-                    (gapcloser.SkillType == GapcloserType.Skillshot && gapcloser.Sender.IsValid &&
+                    (gapcloser.SkillType == GapcloserType.Skillshot && gapcloser.Sender.IsValidTarget(float.MaxValue) &&
                      ObjectManager.Player.Distance(gapcloser.Sender) < 500))
                     OnEnemyGapcloser(gapcloser);
             }
