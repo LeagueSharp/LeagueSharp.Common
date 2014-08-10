@@ -1,8 +1,8 @@
-﻿/*
+/*
  * Library: DamageLib
- * Author: Vis, ZeroX
+ * Author: Vis, iMeh
  * Date: 21.04.2014
- * Version: 2 / 10.05.2014
+ * Version: 3 / 10.08.2014
  */
 
 #region
@@ -426,7 +426,7 @@ namespace LeagueSharp.Common
                     break;
                 default:
                     Game.PrintChat("DamageLib: Could not find the champion '" + ObjectManager.Player.ChampionName +
-                                   "'. Please report this in the forums, it's either a wrong typed name or a new hero that needs to be added!");
+                                   "'. Please report this in the IRC (#leaguesharp), it's either a wrong typed name or a new hero that needs to be added!");
                     break;
             }
 
@@ -4573,6 +4573,11 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (135 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 135)) +
                                     (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy); // minimum dmg (3 balls)
+                            case StageType.SecondDamage:
+                            return 
+                                CalcMagicDmg(
+                                    (285 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 345)) +
+                                    (1.4 * ObjectManager.Player.FlatMagicDamageMod), enemy); // max. dmg (7 balls)
                         default:
                             throw new InvalidSpellTypeException();
                     }
