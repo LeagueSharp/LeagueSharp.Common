@@ -231,7 +231,7 @@ namespace LeagueSharp.Common
                 ChampionName = "TwistedFate",
                 IsActive = minion => (Player.HasBuff("Pick A Card Blue")),
                 GetDamage =
-                    minion => (float)DamageLib.getDmg(minion, DamageLib.SpellType.W, DamageLib.StageType.FirstDamage),
+                    minion => (float)DamageLib.getDmg(minion, DamageLib.SpellType.W, DamageLib.StageType.FirstDamage) - (float)DamageLib.CalcPhysicalDmg((ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod), minion),
             };
             AttackPassives.Add(p);
 
@@ -496,7 +496,7 @@ namespace LeagueSharp.Common
         {
             if (IsAutoAttackReset(Spell.SData.Name) && unit.IsMe)
             {
-                Utility.DelayAction.Add(250, delegate { ResetAutoAttackTimer(); });
+                Utility.DelayAction.Add(250, ResetAutoAttackTimer);
             }
 
             if (IsAutoAttack(Spell.SData.Name))
@@ -510,7 +510,7 @@ namespace LeagueSharp.Common
                     if (unit.IsMe && unit.IsMelee())
                     {
                         Utility.DelayAction.Add((int)(unit.AttackCastDelay * 1000 + 40),
-                            delegate { FireAfterAttack(unit, _lastTarget); });
+                            () => FireAfterAttack(unit, _lastTarget));
                     }
                 }
 
@@ -580,6 +580,7 @@ namespace LeagueSharp.Common
                 {
                     Common.InitializeCommonLib();
                 }
+
                 Player = ObjectManager.Player;
                 Game.OnGameUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
@@ -743,7 +744,7 @@ namespace LeagueSharp.Common
                                 2 * DamageLib.CalcPhysicalMinionDmg(
                                     Player.BaseAttackDamage + Player.FlatPhysicalDamageMod,
                                     prevMinion, true) - 1 +
-                                Math.Max(0, Orbwalking.GetAutoAttackPassiveDamage(prevMinion) - 10) ||
+                                Math.Max(0, GetAutoAttackPassiveDamage(prevMinion) - 10) ||
                                 predHealth == prevMinion.Health)
                             {
                                 return prevMinion;
