@@ -42,7 +42,7 @@ namespace LeagueSharp.Common
         public int MinValue;
         private int _value;
 
-        public Slider(int value = 0, int minValue = 0, int maxValue = 0)
+        public Slider(int value = 0, int minValue = 100, int maxValue = 0)
         {
             MaxValue = Math.Max(maxValue, minValue);
             MinValue = Math.Min(maxValue, minValue);
