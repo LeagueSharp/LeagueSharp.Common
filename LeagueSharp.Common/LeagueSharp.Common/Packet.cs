@@ -668,8 +668,8 @@ namespace LeagueSharp.Common
             public static class Recall
             {
                 public static byte Header = 0xD8;
-                internal static readonly Dictionary<int, int> RecallT = new Dictionary<int, int>();
-                internal static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
+                public static readonly Dictionary<int, int> RecallT = new Dictionary<int, int>();
+                public static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
 
                 public enum RecallStatus
                 {
