@@ -3526,7 +3526,8 @@ namespace LeagueSharp.Common
             switch (type)
             {
                 case SpellType.Q:
-                    return CalcPhysicalDmg((10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)),
+                    return CalcPhysicalDmg((from buff in ObjectManager.Player.Buffs where buff.DisplayName == "NasusQStacks" select buff.Count)
+                            .FirstOrDefault() + (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)),
                         enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();

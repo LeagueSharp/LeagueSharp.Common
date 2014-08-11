@@ -21,69 +21,139 @@ namespace LeagueSharp.Common
 
         static HealthPrediction()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
-            Game.OnGameProcessPacket += OnProcessPacket;
-            Game.OnGameUpdate += OnTick;
+            Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
+            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+            Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
-        private static void OnTick(EventArgs args)
+        static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Environment.TickCount - LastTick > 10 * 1000)
+            if (Environment.TickCount - LastTick <= 60 * 1000) return;
+            ActiveAttacks.ToList()
+                .Where(pair => pair.Value.StartTick < Environment.TickCount - 60000)
+                .ToList()
+                .ForEach(pair => ActiveAttacks.Remove(pair.Key));
+            LastTick = Environment.TickCount;
+        }
+
+        static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+        {
+            if (args.PacketData[0] != 0x34) return;
+            var packet = new GamePacket(args.PacketData);
+            packet.Position = 1;
+            var networkId = packet.ReadInteger();
+            if (args.PacketData[9] != 17) return;
+            if (ActiveAttacks.ContainsKey(networkId))
             {
-                ActiveAttacks.ToList()
-                    .Where(pair => pair.Value.StartTick < Environment.TickCount - 10000)
-                    .ToList()
-                    .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-                LastTick = Environment.TickCount;
+                ActiveAttacks.Remove(networkId);
             }
         }
 
-        private static void OnProcessPacket(GamePacketEventArgs args)
+        private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (args.PacketData[0] == 0x34)
+            if (sender.IsValidTarget(3000, false) && sender.Team == ObjectManager.Player.Team && !(sender is Obj_AI_Hero))
             {
-                var stream = new MemoryStream(args.PacketData);
-                var b = new BinaryReader(stream);
-                b.BaseStream.Position = b.BaseStream.Position + 1;
-                var Nid = BitConverter.ToInt32(b.ReadBytes(4), 0);
-                if (args.PacketData[9] == 17)
+                if (Orbwalking.IsAutoAttack(args.SData.Name))
                 {
-                    if (ActiveAttacks.ContainsKey(Nid))
+                    if (args.Target is Obj_AI_Base)
                     {
-                        ActiveAttacks.Remove(Nid);
+                        var target = (Obj_AI_Base)args.Target;
+                        ActiveAttacks.Remove(sender.NetworkId);
+
+                        var attackData = new PredictedDamage(sender, target, Environment.TickCount - Game.Ping / 2,
+                            sender.AttackCastDelay * 1000,
+                            sender.AttackDelay * 1000,
+                            sender.IsMelee() ? int.MaxValue : (int)args.SData.MissileSpeed,
+                            (float)CalcMinionToMinionDmg(sender, target));
+                        ActiveAttacks.Add(sender.NetworkId, attackData);
                     }
                 }
             }
         }
 
-        private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
+        /// <summary>
+        /// Returns the unit health after a set time milliseconds. 
+        /// </summary>
+        public static float GetHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
         {
-            if (unit.IsValid && unit.Team == ObjectManager.Player.Team && !(unit is Obj_AI_Hero) &&
-                Vector2.DistanceSquared(unit.ServerPosition.To2D(),
-                    ObjectManager.Player.ServerPosition.To2D()) <= 3000 * 3000)
+            var predictedDamage = 0f;
+
+            foreach (var attack in ActiveAttacks.Values)
             {
-                /*Only auto-attacks for now*/
-                if (Orbwalking.IsAutoAttack(Spell.SData.Name))
+                var attackDamage = 0f;
+                if (attack.Source.IsValidTarget(float.MaxValue, false) &&
+                    attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
-                    if (Spell.Target is Obj_AI_Base)
+                    var landTime = attack.StartTick + attack.Delay + 1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
+
+                    if (Environment.TickCount < landTime - delay && landTime < Environment.TickCount + time)
                     {
-                        var target = (Obj_AI_Base) Spell.Target;
-                        ActiveAttacks.Remove(unit.NetworkId);
-                        var Damage = CalcMinionToMinionDmg(unit, target);
-                        
-                        var AttackData = new PredictedDamage(unit, target, Environment.TickCount - Game.Ping / 2,
-                            unit.AttackCastDelay * 1000,
-                            unit.AttackDelay * 1000,
-                            unit.IsMelee() ? int.MaxValue : (int)Spell.SData.MissileSpeed,
-                            (float)Damage);
-                        ActiveAttacks.Add(unit.NetworkId, AttackData);
+                        attackDamage = attack.Damage;
                     }
                 }
+
+                predictedDamage += attackDamage;
+            }
+
+            return unit.Health - predictedDamage;
+        }
+
+        /// <summary>
+        /// Returns the unit health after time milliseconds assuming that the past auto-attacks are periodic. 
+        /// </summary>
+        public static float LaneClearHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
+        {
+            var predictedDamage = 0f;
+
+            foreach (var attack in ActiveAttacks.Values)
+            {
+                var n = 0;
+                if (Environment.TickCount - 100 <= attack.StartTick + attack.AnimationTime &&
+                    attack.Target.IsValidTarget(float.MaxValue, false) &&
+                    attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
+                {
+                    var fromT = attack.StartTick;
+                    var toT = Environment.TickCount + time;
+
+                    while (fromT < toT)
+                    {
+                        if (fromT >= Environment.TickCount && (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
+                        {
+                            n++;
+                        }
+                        fromT += (int)attack.AnimationTime;
+                    }
+                }
+                predictedDamage += n * attack.Damage;
+            }
+
+            return unit.Health - predictedDamage;
+        }
+
+        private class PredictedDamage
+        {
+            public readonly float AnimationTime;
+            public readonly Obj_AI_Base Source;
+            public readonly Obj_AI_Base Target;
+
+            public readonly float Damage;
+            public readonly float Delay;
+            public readonly int ProjectileSpeed;
+            public readonly int StartTick;
+
+            public PredictedDamage(Obj_AI_Base source, Obj_AI_Base target, int startTick, float delay, float animationTime, int projectileSpeed, float damage)
+            {
+                Source = source;
+                Target = target;
+                StartTick = startTick;
+                Delay = delay;
+                ProjectileSpeed = projectileSpeed;
+                Damage = damage;
+                AnimationTime = animationTime;
             }
         }
 
-        private static double CalcMinionToMinionDmg(Obj_AI_Base attackminion, Obj_AI_Base shotminion,
-            double ExtraDamage = 0)
+        private static double CalcMinionToMinionDmg(Obj_AI_Base attackminion, Obj_AI_Base shotminion)
         {
             double armorPenPercent = attackminion.PercentArmorPenetrationMod;
             double armorPen = attackminion.FlatArmorPenetrationMod;
@@ -120,109 +190,7 @@ namespace LeagueSharp.Common
                 dmgreduction = 1.05 * dmgreduction;
             }
 
-            return (((attackminion.BaseAttackDamage + attackminion.FlatPhysicalDamageMod + ExtraDamage) * dmgreduction));
-        }
-
-        /// <summary>
-        /// Returns the unit health after a set time milliseconds. 
-        /// </summary>
-        public static float GetHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
-        {
-            var PredictedDamage = 0f;
-
-            foreach (var attack in ActiveAttacks.Values)
-            {
-                var AttackDamage = 0f;
-                if (attack.Attacked.IsValidTarget(float.MaxValue, false) && attack.Attacked.NetworkId == unit.NetworkId &&
-                    attack.Attacker.IsValidTarget(float.MaxValue, false))
-                {
-                    var d = Vector2.Distance(unit.ServerPosition.To2D(),
-                        attack.Attacker.ServerPosition.To2D());
-                    if (attack.FromEdgeToEdge)
-                    {
-                        d -= attack.Attacker.BoundingRadius - attack.Attacked.BoundingRadius;
-                        d = Math.Max(d, 0);
-                    }
-
-                    var landTime = attack.StartTick + attack.Delay + 1000 * d / attack.ProjectileSpeed + delay;
-
-                    if (Environment.TickCount < landTime - delay && landTime < Environment.TickCount + time)
-                    {
-                        AttackDamage = attack.Damage;
-                    }
-                }
-
-                PredictedDamage += AttackDamage;
-            }
-
-            return unit.Health - PredictedDamage;
-        }
-
-        /// <summary>
-        /// Returns the unit health after time milliseconds assuming that the past auto-attacks are periodic. 
-        /// </summary>
-        public static float LaneClearHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
-        {
-            var PredictedDamage = 0f;
-
-            foreach (var attack in ActiveAttacks.Values)
-            {
-                var n = 0;
-                if (Environment.TickCount - 100 <= attack.StartTick + attack.AnimationTime &&
-                    attack.Attacked.IsValidTarget(float.MaxValue, false) &&
-                    attack.Attacked.NetworkId == unit.NetworkId &&
-                    attack.Attacker.IsValidTarget(float.MaxValue, false))
-                {
-                    var FromT = attack.StartTick;
-                    var ToT = Environment.TickCount + time;
-
-                    var d = Vector2.Distance(unit.ServerPosition.To2D(),
-                        attack.Attacker.ServerPosition.To2D());
-                    if (attack.FromEdgeToEdge)
-                    {
-                        d -= attack.Attacker.BoundingRadius - attack.Attacked.BoundingRadius;
-                        d = Math.Max(d, 0);
-                    }
-
-                    while (FromT < ToT)
-                    {
-                        if (FromT >= Environment.TickCount && (FromT + attack.Delay + d / attack.ProjectileSpeed < ToT))
-                        {
-                            n++;
-                        }
-                        FromT += (int)attack.AnimationTime;
-                    }
-                }
-                PredictedDamage += n * attack.Damage;
-            }
-
-            return unit.Health - PredictedDamage;
-        }
-
-        private class PredictedDamage
-        {
-            public readonly float AnimationTime;
-            public readonly Obj_AI_Base Attacked;
-            public readonly Obj_AI_Base Attacker;
-
-            public readonly float Damage;
-            public readonly float Delay;
-            public readonly bool FromEdgeToEdge;
-            public readonly int ProjectileSpeed;
-            public readonly int StartTick;
-
-            public PredictedDamage(Obj_AI_Base Attacker, Obj_AI_Base Attacked, int StartTick, float Delay,
-                float AnimationTime, int ProjectileSpeed, float Damage, bool FromEdgeToEdge = true)
-            {
-                this.Attacked = Attacked;
-                this.Attacker = Attacker;
-                this.StartTick = StartTick;
-                this.Delay = Delay;
-                this.ProjectileSpeed = ProjectileSpeed;
-                this.Damage = Damage;
-                this.FromEdgeToEdge = false;
-                this.AnimationTime = AnimationTime;
-            }
+            return (((attackminion.BaseAttackDamage + attackminion.FlatPhysicalDamageMod) * dmgreduction));
         }
     }
 }

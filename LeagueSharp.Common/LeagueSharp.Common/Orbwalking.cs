@@ -20,6 +20,7 @@ namespace LeagueSharp.Common
 
         public delegate void OnAttackEvenH(Obj_AI_Base unit, Obj_AI_Base target);
 
+
         public enum OrbwalkingMode
         {
             LastHit,
@@ -57,7 +58,7 @@ namespace LeagueSharp.Common
             "xenzhaothrust3"
         };
 
-        private static readonly List<AttackPassive> AttackPassives = new List<AttackPassive>();
+        private static readonly List<PassiveDamage> AttackPassives = new List<PassiveDamage>();
 
         public static int LastAATick;
 
@@ -69,10 +70,233 @@ namespace LeagueSharp.Common
         static Orbwalking()
         {
             Player = ObjectManager.Player;
-            LoadTheData();
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Game.OnGameProcessPacket += OnProcessPacket;
+
+            //Add the passive damages
+            PassiveDamage p;
+
+            #region Caitlyn
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Caitlyn",
+                IsActive = minion => (Player.HasBuff("CaitlynHeadshotReady")),
+                GetDamage =
+                    minion =>
+                        ((float)
+                            DamageLib.CalcPhysicalDmg(1.5d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod),
+                                minion)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Draven
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Draven",
+                IsActive = minion => (Player.HasBuff("dravenspinning")),
+                GetDamage =
+                    minion =>
+                        ((float)
+                            DamageLib.CalcPhysicalDmg(0.45d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod),
+                                minion)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Corki
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Corki",
+                IsActive = minion => (Player.HasBuff("RapidReload")),
+                GetDamage = minion => ((float)0.1d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Jinx
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Jinx",
+                IsActive = minion => (Player.HasBuff("JinxQ")),
+                GetDamage =
+                minion =>
+                    ((float)
+                    DamageLib.CalcPhysicalDmg(0.1d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Katarina
+            p = new PassiveDamage
+            {
+                ChampionName = "Katarina",
+                IsActive = minion => (minion.HasBuff("KataQMark1")),
+                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.Q, DamageLib.StageType.FirstDamage)),
+            };
+            AttackPassives.Add(p);
+            #endregion
+
+            #region KogMaw
+
+            p = new PassiveDamage
+            {
+                ChampionName = "KogMaw",
+                IsActive = minion => (Player.HasBuff("KogMawBioArcaneBarrage")),
+                GetDamage =
+                    minion =>
+                        ((float)
+                            DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region MissFortune
+
+            p = new PassiveDamage
+            {
+                ChampionName = "MissFortune",
+                IsActive = minion => (Player.HasBuff("MissFortunePassive")),
+                GetDamage =
+                    minion =>
+                        (float)
+                            DamageLib.CalcMagicDmg(
+                                (float)0.06d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Nasus
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Nasus",
+                IsActive = minion => (Player.HasBuff("SiphoningStrike")),
+                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.Q)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Orianna
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Orianna",
+                IsActive = minion => (Player.HasBuff("OrianaSpellSword")),
+                GetDamage =
+                    minion =>
+                        (float)
+                            DamageLib.CalcMagicDmg(
+                                (float)0.15d * Player.FlatMagicDamageMod +
+                                new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 }[
+                                    Player.Level - 1], minion),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Teemo
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Teemo",
+                IsActive = minion => (Player.HasBuff("Toxic Attack")),
+                GetDamage =
+                    minion =>
+                        ((float)
+                            DamageLib.CalcMagicDmg(
+                                Player.Spellbook.GetSpell(SpellSlot.E).Level * 10 + Player.FlatMagicDamageMod * 0.3d,
+                                minion)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region TwistedFate
+
+            p = new PassiveDamage
+            {
+                ChampionName = "TwistedFate",
+                IsActive = minion => (Player.HasBuff("Pick A Card Blue")),
+                GetDamage =
+                    minion => (float)DamageLib.getDmg(minion, DamageLib.SpellType.W, DamageLib.StageType.FirstDamage),
+            };
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "TwistedFate",
+                IsActive = minion => (Player.HasBuff("CardMasterStackParticle")),
+                GetDamage = minion => (float)DamageLib.getDmg(minion, DamageLib.SpellType.E),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Varus
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Varus",
+                IsActive = minion => (Player.HasBuff("VarusW")),
+                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Vayne
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Vayne",
+                IsActive = minion => (Player.HasBuff("VayneTumble")),
+                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.Q)),
+            };
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Vayne",
+                IsActive =
+                    minion =>
+                        (from buff in minion.Buffs where buff.DisplayName == "VayneSilverDebuff" select buff.Count)
+                            .FirstOrDefault() == 2,
+                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Ziggs
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Ziggs",
+                IsActive = minion => (Player.HasBuff("ziggsShortFuse")),
+                GetDamage =
+                    minion =>
+                        (float)
+                            DamageLib.CalcMagicDmg(
+                                (float)0.25d * Player.FlatMagicDamageMod +
+                                new float[] { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
+                                    Player.Level - 1], minion),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
@@ -115,17 +339,7 @@ namespace LeagueSharp.Common
         /// </summary>
         private static float GetAutoAttackPassiveDamage(Obj_AI_Minion minion)
         {
-            var totaldamage = 0f;
-
-            foreach (var passive in AttackPassives)
-            {
-                if (Player.HasBuff(passive.BuffName))
-                {
-                    totaldamage += passive.CalcExtraDamage(minion);
-                }
-            }
-
-            return totaldamage;
+            return AttackPassives.Where(p => (p.ChampionName == "" || p.ChampionName == Player.ChampionName) && p.IsActive(minion)).Sum(passive => passive.GetDamage(minion));
         }
 
         /// <summary>
@@ -290,8 +504,8 @@ namespace LeagueSharp.Common
                 if (unit.IsMe)
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
-                    if(Spell.Target is Obj_AI_Base)
-                        _lastTarget = (Obj_AI_Base) Spell.Target;
+                    if (Spell.Target is Obj_AI_Base)
+                        _lastTarget = (Obj_AI_Base)Spell.Target;
 
                     if (unit.IsMe && unit.IsMelee())
                     {
@@ -304,240 +518,6 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static void LoadTheData()
-        {
-            /*Passive list*/
-
-            #region Caitlyn
-
-            var PassiveToAdd = new AttackPassive
-            {
-                Champion = "Caitlyn",
-                BuffName = "CaitlynHeadshotReady",
-                TotalDamageMultiplicator = 1.5f,
-                DamageType = 2,
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Draven
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Draven",
-                BuffName = "dravenspinning",
-                TotalDamageMultiplicator = 0.45f,
-                DamageType = 2,
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Vayne
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Vayne",
-                BuffName = "VayneTumble",
-                TotalDamageMultiplicator = 0.3f,
-                DamageType = 2,
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Corki
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Corki",
-                BuffName = "RapidReload",
-                TotalDamageMultiplicator = 0.1f,
-                DamageType = 0
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Teemo
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Teemo",
-                BuffName = "Toxic Attack",
-                APScaling = 0.3f,
-                slot = SpellSlot.E,
-                SpellBaseDamage = 0,
-                SpellDamagePerLevel = 10,
-                DamageType = 1
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Varus
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Varus",
-                BuffName = "VarusW",
-                APScaling = 0.25f,
-                slot = SpellSlot.W,
-                SpellBaseDamage = 6,
-                SpellDamagePerLevel = 4,
-                DamageType = 1
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region MissFortune
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "MissFortune",
-                BuffName = "MissFortunePassive",
-                TotalDamageMultiplicator = 0.06f,
-                DamageType = 1
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Twisted Fate
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "TwistedFate",
-                BuffName = "Pick A Card Blue",
-                APScaling = 0.5f,
-                slot = SpellSlot.E,
-                SpellBaseDamage = 20,
-                SpellDamagePerLevel = 20,
-                DamageType = 1
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "TwistedFate",
-                BuffName = "CardMasterStackParticle",
-                APScaling = 0.5f,
-                slot = SpellSlot.E,
-                SpellBaseDamage = 30,
-                SpellDamagePerLevel = 25,
-                DamageType = 1,
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Orianna
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Orianna",
-                BuffName = "OrianaSpellSword",
-                APScaling = 0.15f,
-                LevelDamageArray =
-                    new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 },
-                DamageType = 1,
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-
-            #region Ziggs
-
-            PassiveToAdd = new AttackPassive
-            {
-                Champion = "Ziggs",
-                BuffName = "ziggsShortFuse",
-                APScaling = 0.25f,
-                LevelDamageArray =
-                    new float[] { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 },
-                DamageType = 1,
-            };
-            AttackPassives.Add(PassiveToAdd);
-
-            #endregion
-        }
-
-        internal class AttackPassive
-        {
-            public float APScaling;
-            public float BaseDamageMultiplicator = 0f;
-            public string BuffName;
-            public string Champion;
-
-            public int DamageType; //0 True, 1 Magic, 2 Physical
-
-            public float LevelBaseDamage = 0;
-            public float[] LevelDamageArray;
-            public float LevelDamagePerLevel = 0;
-
-            public float SpellBaseDamage;
-            public float SpellDamagePerLevel;
-
-            public float TotalDamageMultiplicator;
-            public SpellSlot slot;
-
-            public AttackPassive()
-            {
-            }
-
-            public AttackPassive(string Champion, string BuffName)
-            {
-                this.Champion = Champion;
-                this.BuffName = BuffName;
-            }
-
-            public float CalcExtraDamage(Obj_AI_Minion minion)
-            {
-                var Damage = 0f;
-
-                if (LevelBaseDamage != 0)
-                    Damage += LevelBaseDamage;
-
-                if (LevelDamagePerLevel != 0)
-                    Damage += Player.Level * LevelDamagePerLevel;
-
-                if (LevelDamageArray != null)
-                    Damage += LevelDamageArray[Player.Level - 1];
-
-                if (SpellBaseDamage != 0)
-                {
-                    Damage += SpellBaseDamage;
-                }
-
-                if (SpellDamagePerLevel != 0)
-                {
-                    Damage += Player.Spellbook.GetSpell(slot).Level * SpellDamagePerLevel;
-                }
-                Damage += BaseDamageMultiplicator * (Player.BaseAttackDamage);
-                Damage += TotalDamageMultiplicator *
-                          (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod);
-
-                Damage += APScaling * Player.FlatMagicDamageMod *
-                          Player.PercentMagicDamageMod;
-
-                if (DamageType == 0)
-                {
-                    return Damage;
-                }
-
-                if (DamageType == 1)
-                {
-                    return (float)DamageLib.CalcMagicMinionDmg(Damage, minion, false);
-                }
-                if (DamageType == 2)
-                {
-                    return (float)DamageLib.CalcPhysicalMinionDmg(Damage, minion, false);
-                }
-                return 0f;
-            }
-        }
 
         /// <summary>
         ///     This class allows you to add an instance of "Orbwalker" to your assembly in order to control the orbwalking in an easy way.
@@ -564,7 +544,7 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
-                
+
                 Config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -782,7 +762,7 @@ namespace LeagueSharp.Common
                                         Player.BaseAttackDamage +
                                         Player.FlatPhysicalDamageMod,
                                         minion, true) - 1 +
-                                    Math.Max(0, Orbwalking.GetAutoAttackPassiveDamage(minion) - 10) ||
+                                    Math.Max(0, GetAutoAttackPassiveDamage(minion) - 10) ||
                                     predHealth == minion.Health)
                                 {
                                     if (minion.Health >= r || r == float.MaxValue)
@@ -826,6 +806,18 @@ namespace LeagueSharp.Common
                     Utility.DrawCircle(Player.Position, Config.Item("HoldPosRadius").GetValue<Slider>().Value,
                         Config.Item("HoldZone").GetValue<Circle>().Color);
             }
+        }
+
+        internal class PassiveDamage
+        {
+            public delegate float GetDamageD(Obj_AI_Base minion);
+
+            public delegate bool IsActiveD(Obj_AI_Base minion);
+
+            public string ChampionName = "";
+
+            public GetDamageD GetDamage;
+            public IsActiveD IsActive;
         }
     }
 }
