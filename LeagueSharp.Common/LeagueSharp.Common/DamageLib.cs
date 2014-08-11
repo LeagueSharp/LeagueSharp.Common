@@ -2262,7 +2262,7 @@ namespace LeagueSharp.Common
                                     (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 35)) +
                                     (0.8 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // for each struck hit
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.W:
                     return
@@ -2414,7 +2414,7 @@ namespace LeagueSharp.Common
                                     (0.6 * ObjectManager.Player.FlatPhysicalDamageMod) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy); // dmg per blade
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 default:
                     throw new InvalidSpellTypeException();
@@ -2466,7 +2466,7 @@ namespace LeagueSharp.Common
                             (25 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45)) +
                             (1.2 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                 case SpellType.W:
-                    throw new InvalidCastException();
+                    throw new InvalidSpellTypeException();
                 case SpellType.E:
                     return
                         CalcMagicDmg(
@@ -2616,7 +2616,7 @@ namespace LeagueSharp.Common
                                        (75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 50)) +
                                        (0.5 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // min dmg
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 default:
                     throw new InvalidSpellTypeException();
@@ -3943,7 +3943,7 @@ namespace LeagueSharp.Common
                                     45 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45) +
                                     ((1.2 * ObjectManager.Player.FlatPhysicalDamageMod)), enemy); // empowered q
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.W:
                     switch (stagetype)
@@ -3963,7 +3963,7 @@ namespace LeagueSharp.Common
                                       (ObjectManager.Player.FlatPhysicalDamageMod +
                                        ObjectManager.Player.BaseAttackDamage))), enemy); // empowered w
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.E:
                     switch (stagetype)
@@ -3979,7 +3979,7 @@ namespace LeagueSharp.Common
                                     0 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 45) +
                                     ((1.35 * (ObjectManager.Player.FlatPhysicalDamageMod))), enemy); // empowered e
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.R:
                     switch (stagetype)
@@ -4023,7 +4023,7 @@ namespace LeagueSharp.Common
                                     (1.5 * ObjectManager.Player.FlatPhysicalDamageMod +
                                      ObjectManager.Player.BaseAttackDamage), enemy); // empowered q
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.W:
                     switch (stagetype)
@@ -4040,7 +4040,7 @@ namespace LeagueSharp.Common
                                     (0.8 * ObjectManager.Player.FlatMagicDamageMod),
                                     enemy); // empowered w
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.E:
                     switch (stagetype)
@@ -4056,7 +4056,7 @@ namespace LeagueSharp.Common
                                     25 + (ObjectManager.Player.Level * 25) +
                                     (0.7 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // empowered e
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.R:
                     throw new InvalidSpellTypeException();
@@ -4087,7 +4087,7 @@ namespace LeagueSharp.Common
                                     (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
                                     enemy);
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.W:
                     return
@@ -4337,7 +4337,7 @@ namespace LeagueSharp.Common
                                     5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 15) +
                                     (0.2 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                         default:
-                            throw new InvalidCastException();
+                            throw new InvalidSpellTypeException();
                     }
                 case SpellType.E:
                     return
