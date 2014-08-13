@@ -757,18 +757,18 @@ namespace LeagueSharp.Common
                                     }
                                 }
                                 else
-                                    if (b == 4)
+                                    if (b == 4 || b == 77)
                                     {
                                         if (RecallT.ContainsKey(result.UnitNetworkId))
                                         {
-                                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1000)
+                                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
                                                 result.Status = RecallStatus.RecallAborted;
                                             else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
                                                 result.Status = RecallStatus.RecallFinished;
                                             RecallT[result.UnitNetworkId] = 0;
                                         }
                                     }
-                                    else if (b == 6)
+                                    else if (b == 6 || b == 141)
                                     {
                                         result.Status = RecallStatus.RecallStarted;
                                         RecallT[result.UnitNetworkId] = Environment.TickCount;
