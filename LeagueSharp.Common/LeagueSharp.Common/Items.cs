@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Linq;
 
 #endregion
@@ -135,5 +136,19 @@ namespace LeagueSharp.Common
                 }
             }
         }
+
+        /// <summary>
+        /// Returns the ward slot.
+        /// </summary>
+        public static InventorySlot GetWardSlot()
+        {
+            var wardIds = new int[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
+            foreach (var wardId in wardIds)
+                if (CanUseItem(wardId))
+                    return ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId);
+
+            return null;
+        }
+
     }
 }

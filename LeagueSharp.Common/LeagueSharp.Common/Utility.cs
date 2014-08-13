@@ -465,7 +465,6 @@ namespace LeagueSharp.Common
         }
 
         
-
         internal static class WaypointTracker
         {
             public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();

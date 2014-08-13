@@ -148,6 +148,9 @@ namespace LeagueSharp.Common
                 case "Garen":
                     Champ = Garen;
                     break;
+                case "Gnar":
+                    Champ = Gnar;
+                    break;
                 case "Gragas":
                     Champ = Gragas;
                     break;
@@ -2213,6 +2216,71 @@ namespace LeagueSharp.Common
             }
         }
 
+        private static double Gnar(Obj_AI_Base enemy, SpellType type, StageType stagetype)
+        {
+            switch (type)
+            {
+                case SpellType.Q:
+                    switch (stagetype)
+                    {
+                        case StageType.Default: //Mini Gnar
+                            return
+                                CalcPhysicalDmg(-25 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 35 + ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage,
+                                    enemy); 
+                        case StageType.FirstDamage: //MEGA Gnar
+                            return
+                                CalcPhysicalDmg(-30 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40 + 1.2 * (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
+                                    enemy);  
+                        default:
+                            throw new InvalidSpellTypeException();
+                    }
+                case SpellType.W:
+                    switch (stagetype)
+                    {
+                        case StageType.Default: //Mini Gnar
+                            return
+                                CalcMagicDmg(20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 5 + ObjectManager.Player.FlatMagicDamageMod + enemy.MaxHealth * (0.04 + 0.02 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level),
+                                    enemy);
+                        case StageType.FirstDamage: //MEGA Gnar
+                            return
+                                CalcPhysicalDmg(5 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 20 + (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
+                                    enemy);
+                        default:
+                            throw new InvalidSpellTypeException();
+                    }
+                case SpellType.E:
+                    switch (stagetype)
+                    {
+                        case StageType.Default: //Mini Gnar
+                            return
+                                CalcPhysicalDmg(-20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40  + ObjectManager.Player.MaxHealth * 0.06,
+                                    enemy);
+                        case StageType.FirstDamage: //MEGA Gnar
+                            return
+                                CalcPhysicalDmg(-20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40 + ObjectManager.Player.MaxHealth * 0.06,
+                                    enemy);
+                        default:
+                            throw new InvalidSpellTypeException();
+                    }
+                case SpellType.R:
+                    switch (stagetype)
+                    {
+                        case StageType.Default: //Default damage
+                            return
+                                CalcPhysicalDmg(100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 + ObjectManager.Player.FlatPhysicalDamageMod * 0.2,
+                                    enemy);
+                        case StageType.FirstDamage: //Max damage.
+                            return
+                                CalcPhysicalDmg(100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 + ObjectManager.Player.FlatPhysicalDamageMod * 0.2,
+                                    enemy) * 1.5;
+                        default:
+                            throw new InvalidSpellTypeException();
+                    }
+                default:
+                    throw new InvalidSpellTypeException();
+            }
+        }
+
         private static double Gragas(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
@@ -2972,9 +3040,9 @@ namespace LeagueSharp.Common
                 case SpellType.R:
                     return
                         CalcMagicDmg(
-                            (90 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 90)) +
+                            (80 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 80)) +
                             (0.3 * ObjectManager.Player.FlatMagicDamageMod) +
-                            (0.5 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // 125% bonus dmg to champs
+                            (0.5 * ObjectManager.Player.FlatPhysicalDamageMod), enemy); // 100% bonus dmg to champs
                 default:
                     throw new InvalidSpellTypeException();
             }
@@ -3477,12 +3545,12 @@ namespace LeagueSharp.Common
                         case StageType.Default:
                             return
                                 CalcMagicDmg(
-                                    (200 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 150)) +
+                                    (150 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 150)) +
                                     (1.40 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
-                                    (100 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 75)) +
+                                    (75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 75)) +
                                     (0.7 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                         default:
                             throw new InvalidSpellTypeException();

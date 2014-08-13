@@ -436,7 +436,8 @@ namespace LeagueSharp.Common
         {
             if (Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
-                Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
+                if(Player.Path.Count() > 0)
+                    Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
                 return;
             }
 
@@ -678,11 +679,10 @@ namespace LeagueSharp.Common
                     {
                         if (minion.IsValidTarget() && InAutoAttackRange(minion))
                         {
-                            var predHealth = HealthPrediction.GetHealthPrediction(minion,
-                                (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 *
-                                (int)Player.Distance(minion) / (int)GetMyProjectileSpeed(),
-                                FarmDelay);
+                            var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
+                                    1000 *
+                                    (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
+                            var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                             if (minion.Team != GameObjectTeam.Neutral && predHealth > 0 &&
                                 predHealth <=
@@ -778,8 +778,12 @@ namespace LeagueSharp.Common
                     }
                 }
 
-                if (result != null)
-                    return result;
+                /*turrets*/
+                if (ActiveMode == OrbwalkingMode.LaneClear)
+                    foreach (var turret in ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+
+                        return turret;
+
                 return result;
             }
 

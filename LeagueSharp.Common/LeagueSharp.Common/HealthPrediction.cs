@@ -15,7 +15,6 @@ namespace LeagueSharp.Common
     /// </summary>
     public class HealthPrediction
     {
-        private const bool OnlyMinionDamage = true;
         private static readonly Dictionary<int, PredictedDamage> ActiveAttacks = new Dictionary<int, PredictedDamage>();
         private static int LastTick;
 
