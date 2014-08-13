@@ -43,7 +43,6 @@ namespace LeagueSharp.Common
                 Common.InitializeCommonLib();
             }
 
-            Obj_AI_Base.OnNewPath += OnNewPath;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Game.OnGameProcessPacket += OnProcessPacket;
             Game.OnGameUpdate += OnTick;
@@ -190,13 +189,6 @@ namespace LeagueSharp.Common
                     Dashes[unit.NetworkId].IsBlink = false;
                 }
             }
-        }
-
-        private static void OnNewPath(Obj_AI_Base unit, EventArgs args)
-        {
-            //if (unit.Type == ObjectManager.Player.Type)
-            //    Game.PrintChat(Game.Time + " New path for: " + unit.ChampionName + " Length: " +
-            //                   Utils.GetPathLength(Utils.GetWaypoints(unit)));
         }
 
         private static void Draw(EventArgs args)
