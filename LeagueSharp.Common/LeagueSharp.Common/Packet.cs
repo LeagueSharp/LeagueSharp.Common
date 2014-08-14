@@ -344,7 +344,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class Ping
             {
-                public static byte Header = 0x3F;
+                public static byte Header = 0x40;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -480,7 +480,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class EmptyJungleCamp
             {
-                public static byte Header = 0xC2;
+                public static byte Header = 0xC3;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
