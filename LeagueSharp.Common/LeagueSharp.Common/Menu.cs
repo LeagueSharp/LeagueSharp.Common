@@ -162,7 +162,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = xml.CreateElement("ShowMenuToggle");
-                varNode.InnerText = "27";
+                varNode.InnerText = "120";
                 rootNode.AppendChild(varNode);
             }
 
