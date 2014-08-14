@@ -1580,10 +1580,10 @@ namespace LeagueSharp.Common
                     switch (stagetype)
                     {
                         case StageType.Default:
-                            return ((140 + (180 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level)) *
+                            return ((140 + (180 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level)) +
                                     (1.5 * ObjectManager.Player.FlatPhysicalDamageMod)); // at 5 stacks
                         case StageType.FirstDamage:
-                            return ((70 + (90 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level)) *
+                            return ((70 + (90 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level)) +
                                     (0.75 * ObjectManager.Player.FlatPhysicalDamageMod)); // foreach stack
                         default:
                             throw new InvalidSpellTypeException();
