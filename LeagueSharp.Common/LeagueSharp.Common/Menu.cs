@@ -1,4 +1,24 @@
-﻿#region
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// Menu.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -632,8 +652,8 @@ namespace LeagueSharp.Common
 
     public class OnValueChangeEventArgs
     {
-        private object _oldValue;
-        private object _newValue;
+        private readonly object _newValue;
+        private readonly object _oldValue;
 
         public OnValueChangeEventArgs(object oldValue, object newValue)
         {
@@ -645,6 +665,7 @@ namespace LeagueSharp.Common
         {
             return (T)_oldValue;
         }
+
         public T GetNewValue<T>()
         {
             return (T)_newValue;
@@ -653,8 +674,6 @@ namespace LeagueSharp.Common
 
     public class MenuItem
     {
-        public event EventHandler<OnValueChangeEventArgs> ValueChanged;
-
         private readonly string _assemblyPath;
         internal int ColorId;
         public string DisplayName;
@@ -664,8 +683,8 @@ namespace LeagueSharp.Common
         public Menu Parent;
         internal MenuValueType ValueType;
 
-        private bool _isShared;
         private bool _dontSave;
+        private bool _isShared;
 
         private string _saveFilePath;
         private bool _saved;
@@ -755,6 +774,8 @@ namespace LeagueSharp.Common
         {
             get { return MenuSettings.MenuItemHeight; }
         }
+
+        public event EventHandler<OnValueChangeEventArgs> ValueChanged;
 
         public MenuItem SetShared()
         {

@@ -1,6 +1,25 @@
-﻿#region
+﻿#region LICENSE
 
-using System;
+// Copyright 2014 - 2014 LeagueSharp
+// Items.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
 using System.Linq;
 
 #endregion
@@ -14,28 +33,6 @@ namespace LeagueSharp.Common
             if (Common.isInitialized == false)
             {
                 Common.InitializeCommonLib();
-            }
-        }
-
-        public class Item
-        {
-            public int Id;
-            public float Range;
-            public Item(int id, float range)
-            {
-                Id = id;
-                Range = range;
-            }
-
-            public bool IsReady()
-            {
-                return CanUseItem(Id);
-            }
-
-            public void Cast(Obj_AI_Base target)
-            {
-                if(ObjectManager.Player.Distance(target) < Range)
-                    UseItem(Id, target);
             }
         }
 
@@ -142,7 +139,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static InventorySlot GetWardSlot()
         {
-            var wardIds = new int[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
+            var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             foreach (var wardId in wardIds)
                 if (CanUseItem(wardId))
                     return ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId);
@@ -150,5 +147,27 @@ namespace LeagueSharp.Common
             return null;
         }
 
+        public class Item
+        {
+            public int Id;
+            public float Range;
+
+            public Item(int id, float range)
+            {
+                Id = id;
+                Range = range;
+            }
+
+            public bool IsReady()
+            {
+                return CanUseItem(Id);
+            }
+
+            public void Cast(Obj_AI_Base target)
+            {
+                if (ObjectManager.Player.Distance(target) < Range)
+                    UseItem(Id, target);
+            }
+        }
     }
 }

@@ -1,8 +1,29 @@
-﻿using System;
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// Packet.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Security;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
@@ -274,12 +295,14 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public int SourceNetworkId;
                     public SpellSlot Slot;
+                    public int SourceNetworkId;
                     public float ToX;
                     public float ToY;
                     public float ToZ;
-                    public Struct(SpellSlot slot, float toX = 0f, float toY = 0f, float toZ = 0f, int sourceNetworkId = -1)
+
+                    public Struct(SpellSlot slot, float toX = 0f, float toY = 0f, float toZ = 0f,
+                        int sourceNetworkId = -1)
                     {
                         SourceNetworkId = (sourceNetworkId == -1) ? ObjectManager.Player.NetworkId : sourceNetworkId;
                         Slot = slot;
@@ -615,11 +638,11 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteInteger(packetStruct.NetworkId & ~0x40000000);
-                    result.WriteByte((byte) (packetStruct.BOk ? 1 : 0));
+                    result.WriteByte((byte)(packetStruct.BOk ? 1 : 0));
                     result.WriteInteger(packetStruct.SkinId);
                     for (var i = 0; i < 32; i++)
-                        if(i < packetStruct.ModelName.Length)
-                            result.WriteByte((byte) packetStruct.ModelName[i]);
+                        if (i < packetStruct.ModelName.Length)
+                            result.WriteByte((byte)packetStruct.ModelName[i]);
                         else
                             result.WriteByte(0x00);
 
@@ -641,11 +664,11 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public int NetworkId;
-                    public int Id;
                     public bool BOk;
-                    public int SkinId;
+                    public int Id;
                     public string ModelName;
+                    public int NetworkId;
+                    public int SkinId;
 
                     public Struct(int networkId, int skinId, string modelName, bool bOk = true, int id = -1)
                     {
@@ -667,9 +690,14 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class Recall
             {
-                public static byte Header = 0xD8;
-                public static readonly Dictionary<int, int> RecallT = new Dictionary<int, int>();
-                public static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
+                public enum ObjectType
+                {
+                    Player,
+                    Turret,
+                    Minion,
+                    Ward,
+                    Object
+                }
 
                 public enum RecallStatus
                 {
@@ -682,14 +710,9 @@ namespace LeagueSharp.Common
                     TeleportEnd,
                 }
 
-                public enum ObjectType
-                {
-                    Player,
-                    Turret,
-                    Minion,
-                    Ward,
-                    Object
-                }
+                public static byte Header = 0xD8;
+                public static readonly Dictionary<int, int> RecallT = new Dictionary<int, int>();
+                public static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -723,10 +746,18 @@ namespace LeagueSharp.Common
                                 var duration = 0;
                                 switch (rName)
                                 {
-                                    case "Recall": duration = 8000; break;
-                                    case "RecallImproved": duration = 7000; break;
-                                    case "OdinRecall": duration = 4500; break;
-                                    case "OdinRecallImproved": duration = 4000; break;
+                                    case "Recall":
+                                        duration = 8000;
+                                        break;
+                                    case "RecallImproved":
+                                        duration = 7000;
+                                        break;
+                                    case "OdinRecall":
+                                        duration = 4500;
+                                        break;
+                                    case "OdinRecallImproved":
+                                        duration = 4000;
+                                        break;
                                 }
                                 result.Duration = duration;
 
@@ -737,7 +768,9 @@ namespace LeagueSharp.Common
                                     TPT.Add(result.UnitNetworkId, 0);
 
 
-                                if (b2 != 0 || TPT.ContainsKey(result.UnitNetworkId) && Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
+                                if (b2 != 0 ||
+                                    TPT.ContainsKey(result.UnitNetworkId) &&
+                                    Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
                                 {
                                     if (b2 != 0)
                                     {
@@ -756,23 +789,22 @@ namespace LeagueSharp.Common
                                         TPT[result.UnitNetworkId] = 0;
                                     }
                                 }
-                                else
-                                    if (b == 4 || b == 77)
+                                else if (b == 4 || b == 77)
+                                {
+                                    if (RecallT.ContainsKey(result.UnitNetworkId))
                                     {
-                                        if (RecallT.ContainsKey(result.UnitNetworkId))
-                                        {
-                                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
-                                                result.Status = RecallStatus.RecallAborted;
-                                            else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
-                                                result.Status = RecallStatus.RecallFinished;
-                                            RecallT[result.UnitNetworkId] = 0;
-                                        }
+                                        if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
+                                            result.Status = RecallStatus.RecallAborted;
+                                        else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
+                                            result.Status = RecallStatus.RecallFinished;
+                                        RecallT[result.UnitNetworkId] = 0;
                                     }
-                                    else if (b == 6 || b == 141)
-                                    {
-                                        result.Status = RecallStatus.RecallStarted;
-                                        RecallT[result.UnitNetworkId] = Environment.TickCount;
-                                    }
+                                }
+                                else if (b == 6 || b == 141)
+                                {
+                                    result.Status = RecallStatus.RecallStarted;
+                                    RecallT[result.UnitNetworkId] = Environment.TickCount;
+                                }
                             }
                         }
                         else if (gObject is Obj_AI_Turret)
@@ -796,7 +828,7 @@ namespace LeagueSharp.Common
                             if (gObject.IsValid)
                             {
                                 result.Type = ObjectType.Object;
-                                if(gObject.Name.Contains("Minion"))
+                                if (gObject.Name.Contains("Minion"))
                                     result.Type = ObjectType.Minion;
                                 if (gObject.Name.Contains("Ward"))
                                     result.Type = ObjectType.Ward;
@@ -819,17 +851,18 @@ namespace LeagueSharp.Common
                             }
                         }
                     }
-                        
-                                           
+
+
                     return result;
                 }
 
                 public struct Struct
                 {
-                    public int UnitNetworkId;
+                    public int Duration;
                     public RecallStatus Status;
                     public ObjectType Type;
-                    public int Duration;
+                    public int UnitNetworkId;
+
                     public Struct(int unitNetworkId, RecallStatus status, ObjectType type, int duration)
                     {
                         UnitNetworkId = unitNetworkId;

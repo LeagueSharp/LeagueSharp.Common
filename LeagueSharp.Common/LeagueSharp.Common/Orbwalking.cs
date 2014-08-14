@@ -1,4 +1,24 @@
-﻿#region
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// Orbwalking.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -302,7 +322,8 @@ namespace LeagueSharp.Common
                         (float)
                             DamageLib.CalcMagicDmg(
                                 (float)0.25d * Player.FlatMagicDamageMod +
-                                new float[] { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
+                                new float[]
+                                { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
                                     Player.Level - 1], minion),
             };
             AttackPassives.Add(p);

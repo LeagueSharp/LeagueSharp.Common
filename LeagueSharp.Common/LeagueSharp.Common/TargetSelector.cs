@@ -1,7 +1,26 @@
-﻿#region
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// TargetSelector.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
 
 using System;
-using System.Configuration;
 using System.Linq;
 
 #endregion
@@ -405,7 +424,7 @@ namespace LeagueSharp.Common
                 "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka",
                 "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
-            
+
             string[] p2 =
             {
                 "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax", "Lee Sin",
@@ -445,23 +464,25 @@ namespace LeagueSharp.Common
             Config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
-            
+
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
                 )
                 Config.AddItem(
                     new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
-                    .SetValue(new Slider(autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
+                        .SetValue(
+                            new Slider(autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5,
+                                1)));
             Config.AddItem(autoPriorityItem);
-
         }
 
-        static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
+        private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
         {
             if (e.GetNewValue<bool>())
             {
                 foreach (
                     var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
-                    _config.Item("SimpleTS" + enemy.ChampionName + "Priority").SetValue(new Slider( GetPriorityFromDb(enemy.ChampionName), 5, 1));
+                    _config.Item("SimpleTS" + enemy.ChampionName + "Priority")
+                        .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
             }
         }
 

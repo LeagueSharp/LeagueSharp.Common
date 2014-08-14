@@ -1,4 +1,24 @@
-﻿#region
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// MinionManager.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
 
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +50,7 @@ namespace LeagueSharp.Common
         Ranged,
         Melee,
         All,
-        Wards,//TODO
+        Wards, //TODO
     }
 
     public static class MinionManager
@@ -50,12 +70,11 @@ namespace LeagueSharp.Common
             MinionTeam team = MinionTeam.Enemy, MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result = new List<Obj_AI_Base>();
-         
+
             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (minion.IsValidTarget(range, false) )
+                if (minion.IsValidTarget(range, false))
                 {
-                    
                     if (team == MinionTeam.Neutral && minion.Team == GameObjectTeam.Neutral ||
                         team == MinionTeam.Ally &&
                         minion.Team ==
@@ -68,7 +87,8 @@ namespace LeagueSharp.Common
                             ? GameObjectTeam.Order
                             : GameObjectTeam.Chaos) ||
                         team == MinionTeam.NotAlly && minion.Team != ObjectManager.Player.Team ||
-                         team == MinionTeam.NotAllyForEnemy && (minion.Team == ObjectManager.Player.Team || minion.Team == GameObjectTeam.Neutral)
+                        team == MinionTeam.NotAllyForEnemy &&
+                        (minion.Team == ObjectManager.Player.Team || minion.Team == GameObjectTeam.Neutral)
                         ||
                         team == MinionTeam.All)
                     {
@@ -199,7 +219,7 @@ namespace LeagueSharp.Common
             {
                 var pos = Prediction.GetBestPosition(minion, delay, width, speed, from, range, collision, stype,
                     rangeCheckFrom);
-                if(pos.HitChance >= Prediction.HitChance.HighHitchance)
+                if (pos.HitChance >= Prediction.HitChance.HighHitchance)
                     result.Add(pos.Position.To2D());
             }
 

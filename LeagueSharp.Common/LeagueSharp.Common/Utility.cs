@@ -1,8 +1,27 @@
-﻿#region
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// Utility.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
 
 using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -16,7 +35,6 @@ namespace LeagueSharp.Common
 {
     public static class Utility
     {
-
         static Utility()
         {
             if (Common.isInitialized == false)
@@ -75,7 +93,7 @@ namespace LeagueSharp.Common
         }
 
 
-        public static List<Vector2> CutPath(this List<Vector2> path, float distance )
+        public static List<Vector2> CutPath(this List<Vector2> path, float distance)
         {
             var result = new List<Vector2>();
             var Distance = distance;
@@ -115,7 +133,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
                 }
             }
 
@@ -428,7 +446,8 @@ namespace LeagueSharp.Common
 
             private static bool SameVector(Vector3 v1, Vector3 v2)
             {
-                return (Math.Floor(v1.X) == Math.Floor(v2.X) && Math.Floor(v1.Y) == Math.Floor(v2.Y) && Math.Floor(v1.Z) == Math.Floor(v2.Z));
+                return (Math.Floor(v1.X) == Math.Floor(v2.X) && Math.Floor(v1.Y) == Math.Floor(v2.Y) &&
+                        Math.Floor(v1.Z) == Math.Floor(v2.Z));
             }
 
             /// <summary>
@@ -436,13 +455,29 @@ namespace LeagueSharp.Common
             /// </summary>
             public static MapType GetMap()
             {
-                Vector3[] SR = { new Vector3(13360.61f, 14586.56f, 218.222f), new Vector3(-174.2087f, 1056.653f, 163.7132f) };
-                Vector3[] DOM = { new Vector3(16.54065f, 4452.441f, 168.618f), new Vector3(13876.07f, 4445.496f, 99.3553f) };
-                Vector3[] TTT = { new Vector3(14125.37f, 8005.887f, 123.4631f), new Vector3(1313.361f, 8005.887f, 123.4631f) };
-                Vector3[] HA = { new Vector3(497.0624f, 1932.652f, -39.8721f), new Vector3(11065.5f, 12306.48f, -185.1475f) };
+                Vector3[] SR =
+                {
+                    new Vector3(13360.61f, 14586.56f, 218.222f),
+                    new Vector3(-174.2087f, 1056.653f, 163.7132f)
+                };
+                Vector3[] DOM =
+                {
+                    new Vector3(16.54065f, 4452.441f, 168.618f),
+                    new Vector3(13876.07f, 4445.496f, 99.3553f)
+                };
+                Vector3[] TTT =
+                {
+                    new Vector3(14125.37f, 8005.887f, 123.4631f),
+                    new Vector3(1313.361f, 8005.887f, 123.4631f)
+                };
+                Vector3[] HA =
+                {
+                    new Vector3(497.0624f, 1932.652f, -39.8721f),
+                    new Vector3(11065.5f, 12306.48f, -185.1475f)
+                };
                 foreach (var pos in SR)
                 {
-                    if(ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position,pos)) != null)
+                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
                         return MapType.SummonersRift;
                 }
                 foreach (var pos in DOM)
@@ -464,7 +499,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        
+
         internal static class WaypointTracker
         {
             public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
