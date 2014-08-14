@@ -1,9 +1,28 @@
-﻿/*
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// DamageLib.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+/*
  * Library: DamageLib
  * Author: Vis, iMeh
  * Date: 21.04.2014
  * Version: 3 / 10.08.2014
  */
+#endregion
 
 #region
 
@@ -993,7 +1012,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // q throw + hitted with something
+                            // q throw + hitted with something
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1121,7 +1140,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (60 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 60)) +
                                     (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // when stunned (both of dmg)
+                            // when stunned (both of dmg)
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -1185,7 +1204,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (85 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 125)) +
                                     (1.0 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // max damage with first tick of tibbers sunfire
+                            // max damage with first tick of tibbers sunfire
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -1193,7 +1212,7 @@ namespace LeagueSharp.Common
                                     (0.8 * ObjectManager.Player.FlatMagicDamageMod), enemy); // basic ult summoner dmg
                         case StageType.SecondDamage:
                             return CalcMagicDmg(35 + (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // per tick of tibbers sunfire
+                            // per tick of tibbers sunfire
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1228,7 +1247,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (37.5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 87.5)) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // dmg around the explode radius
+                            // dmg around the explode radius
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1252,7 +1271,7 @@ namespace LeagueSharp.Common
                     return
                         CalcPhysicalDmg(
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                // only the additional dmg
+                    // only the additional dmg
                 case SpellType.R:
                     switch (stagetype)
                     {
@@ -1312,7 +1331,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (150 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 300)) +
                                     (1.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // Max possible dmg to one unit
+                            // Max possible dmg to one unit
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -1559,7 +1578,7 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (52.5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 52.5)) +
                                     (1.05 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // max damage (outer half)
+                            // max damage (outer half)
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
@@ -1708,7 +1727,7 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (60 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 80)) +
                                     (0.88 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // minimum damage 2 hits
+                            // minimum damage 2 hits
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1947,7 +1966,7 @@ namespace LeagueSharp.Common
                                     (0.3 *
                                      (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage)) +
                                     (0.27 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // minimum damage after multiple targets were hitted
+                            // minimum damage after multiple targets were hitted
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1991,7 +2010,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (135 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 60)) +
                                     (1.35 * (ObjectManager.Player.FlatMagicDamageMod)), enemy);
-                        // max damage to the same target_
+                            // max damage to the same target_
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -2051,7 +2070,7 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (-20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 340)) +
                                     (2.4 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // max dmg to 1 target_ // TODO: Check if correct, Wiki giving some shit to me
+                            // max dmg to 1 target_ // TODO: Check if correct, Wiki giving some shit to me
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
@@ -2156,7 +2175,7 @@ namespace LeagueSharp.Common
                         CalcMagicDmg(
                             (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 45)) +
                             (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                // per canonball, 25 max but randomly
+                    // per canonball, 25 max but randomly
                 default:
                     throw new InvalidSpellTypeException();
             }
@@ -2225,12 +2244,17 @@ namespace LeagueSharp.Common
                     {
                         case StageType.Default: //Mini Gnar
                             return
-                                CalcPhysicalDmg(-25 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 35 + ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage,
-                                    enemy); 
+                                CalcPhysicalDmg(
+                                    -25 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 35 +
+                                    ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage,
+                                    enemy);
                         case StageType.FirstDamage: //MEGA Gnar
                             return
-                                CalcPhysicalDmg(-30 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40 + 1.2 * (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
-                                    enemy);  
+                                CalcPhysicalDmg(
+                                    -30 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40 +
+                                    1.2 *
+                                    (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
+                                    enemy);
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -2239,11 +2263,17 @@ namespace LeagueSharp.Common
                     {
                         case StageType.Default: //Mini Gnar
                             return
-                                CalcMagicDmg(20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 5 + ObjectManager.Player.FlatMagicDamageMod + enemy.MaxHealth * (0.04 + 0.02 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level),
+                                CalcMagicDmg(
+                                    20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 5 +
+                                    ObjectManager.Player.FlatMagicDamageMod +
+                                    enemy.MaxHealth *
+                                    (0.04 + 0.02 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level),
                                     enemy);
                         case StageType.FirstDamage: //MEGA Gnar
                             return
-                                CalcPhysicalDmg(5 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 20 + (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
+                                CalcPhysicalDmg(
+                                    5 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 20 +
+                                    (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
                                     enemy);
                         default:
                             throw new InvalidSpellTypeException();
@@ -2253,11 +2283,15 @@ namespace LeagueSharp.Common
                     {
                         case StageType.Default: //Mini Gnar
                             return
-                                CalcPhysicalDmg(-20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40  + ObjectManager.Player.MaxHealth * 0.06,
+                                CalcPhysicalDmg(
+                                    -20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40 +
+                                    ObjectManager.Player.MaxHealth * 0.06,
                                     enemy);
                         case StageType.FirstDamage: //MEGA Gnar
                             return
-                                CalcPhysicalDmg(-20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40 + ObjectManager.Player.MaxHealth * 0.06,
+                                CalcPhysicalDmg(
+                                    -20 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 40 +
+                                    ObjectManager.Player.MaxHealth * 0.06,
                                     enemy);
                         default:
                             throw new InvalidSpellTypeException();
@@ -2267,11 +2301,15 @@ namespace LeagueSharp.Common
                     {
                         case StageType.Default: //Default damage
                             return
-                                CalcPhysicalDmg(100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 + ObjectManager.Player.FlatPhysicalDamageMod * 0.2,
+                                CalcPhysicalDmg(
+                                    100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 +
+                                    ObjectManager.Player.FlatPhysicalDamageMod * 0.2,
                                     enemy);
                         case StageType.FirstDamage: //Max damage.
                             return
-                                CalcPhysicalDmg(100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 + ObjectManager.Player.FlatPhysicalDamageMod * 0.2,
+                                CalcPhysicalDmg(
+                                    100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 +
+                                    ObjectManager.Player.FlatPhysicalDamageMod * 0.2,
                                     enemy) * 1.5;
                         default:
                             throw new InvalidSpellTypeException();
@@ -2506,7 +2544,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.35 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // damage when directly casted
+                            // damage when directly casted
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -2627,7 +2665,7 @@ namespace LeagueSharp.Common
                         }
                     }
                     return 0;
-                // return 0, no exception as when switching the name isn't directly changed and ppl will already try to calculate
+                    // return 0, no exception as when switching the name isn't directly changed and ppl will already try to calculate
                 case SpellType.E:
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "JayceThunderingBlow")
                     {
@@ -2823,7 +2861,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40)) +
                                     (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // total dmg (mark + detonation)
+                            // total dmg (mark + detonation)
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -3065,7 +3103,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 25)) +
                                     (0.4 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // first q or detonation, same dmg
+                            // first q or detonation, same dmg
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -3087,7 +3125,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 25)) +
                                     (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // first e or detonation, same dmg
+                            // first e or detonation, same dmg
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -3594,9 +3632,14 @@ namespace LeagueSharp.Common
             switch (type)
             {
                 case SpellType.Q:
-                    return CalcPhysicalDmg((from buff in ObjectManager.Player.Buffs where buff.DisplayName == "NasusQStacks" select buff.Count)
-                            .FirstOrDefault() + (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)),
-                        enemy);
+                    return
+                        CalcPhysicalDmg(
+                            (from buff in ObjectManager.Player.Buffs
+                                where buff.DisplayName == "NasusQStacks"
+                                select buff.Count)
+                                .FirstOrDefault() +
+                            (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20)),
+                            enemy);
                 case SpellType.W:
                     throw new InvalidSpellTypeException();
                 case SpellType.E:
@@ -4497,7 +4540,7 @@ namespace LeagueSharp.Common
                         CalcPhysicalDmg(
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) *
                             (0.45 + (0.05 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)), enemy);
-                // for each of 3
+                    // for each of 3
                 case SpellType.E:
                     throw new InvalidSpellTypeException();
                 case SpellType.R:
@@ -4639,12 +4682,14 @@ namespace LeagueSharp.Common
                                     (0.2 * ObjectManager.Player.FlatMagicDamageMod), enemy); // for each orb
                         case StageType.FirstDamage:
                             return
-                                CalcMagicDmg((135 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 135)) + (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy); // minimum dmg (3 balls)
+                                CalcMagicDmg(
+                                    (135 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 135)) +
+                                    (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy); // minimum dmg (3 balls)
                         case StageType.SecondDamage:
                             return
-                            CalcMagicDmg(
-                            (285 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 345)) +
-                            (1.4 * ObjectManager.Player.FlatMagicDamageMod), enemy); // max. dmg (7 balls)
+                                CalcMagicDmg(
+                                    (285 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 345)) +
+                                    (1.4 * ObjectManager.Player.FlatMagicDamageMod), enemy); // max. dmg (7 balls)
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -5051,7 +5096,7 @@ namespace LeagueSharp.Common
                         CalcPhysicalDmg(
                             percentofbonusad *
                             (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                // ony the bonus dmg
+                    // ony the bonus dmg
                 case SpellType.W:
                     double flattruedmg = 10 + (10 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level);
                     double percentofenemyhp = 3 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level);
@@ -5064,13 +5109,13 @@ namespace LeagueSharp.Common
                                 CalcPhysicalDmg(
                                     (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 70)) +
                                     (1.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // Damage when knock + against wall
+                            // Damage when knock + against wall
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
                                     (10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 35)) +
                                     (0.5 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // Damage when knock starts
+                            // Damage when knock starts
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -5205,7 +5250,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (70 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 120)) +
                                     (0.79 * ObjectManager.Player.FlatMagicDamageMod), enemy);
-                        // Total Initial Damage (initial + first dot)
+                            // Total Initial Damage (initial + first dot)
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -5338,7 +5383,7 @@ namespace LeagueSharp.Common
                                 CalcMagicDmg(
                                     (165 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 85)) +
                                     (2.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                        // 5 hits => complete ult
+                            // 5 hits => complete ult
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
@@ -5623,7 +5668,7 @@ namespace LeagueSharp.Common
                         CalcPhysicalDmg(
                             1.0 * (ObjectManager.Player.FlatMagicDamageMod + ObjectManager.Player.BaseAttackDamage),
                             enemy);
-                // base dmg
+                    // base dmg
                 default:
                     throw new InvalidSpellTypeException();
             }

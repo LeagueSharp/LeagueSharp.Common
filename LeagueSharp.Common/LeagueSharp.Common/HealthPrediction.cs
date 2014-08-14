@@ -1,10 +1,28 @@
-﻿#region
+﻿#region LICENSE
+
+// Copyright 2014 - 2014 LeagueSharp
+// HealthPrediction.cs is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using SharpDX;
 
 #endregion
 
@@ -25,7 +43,7 @@ namespace LeagueSharp.Common
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
-        static void Game_OnGameUpdate(EventArgs args)
+        private static void Game_OnGameUpdate(EventArgs args)
         {
             if (Environment.TickCount - LastTick <= 60 * 1000) return;
             ActiveAttacks.ToList()
@@ -35,7 +53,7 @@ namespace LeagueSharp.Common
             LastTick = Environment.TickCount;
         }
 
-        static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+        private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
         {
             if (args.PacketData[0] != 0x34) return;
             var packet = new GamePacket(args.PacketData);
@@ -50,7 +68,8 @@ namespace LeagueSharp.Common
 
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsValidTarget(3000, false) && sender.Team == ObjectManager.Player.Team && !(sender is Obj_AI_Hero))
+            if (sender.IsValidTarget(3000, false) && sender.Team == ObjectManager.Player.Team &&
+                !(sender is Obj_AI_Hero))
             {
                 if (Orbwalking.IsAutoAttack(args.SData.Name))
                 {
@@ -83,7 +102,8 @@ namespace LeagueSharp.Common
                 if (attack.Source.IsValidTarget(float.MaxValue, false) &&
                     attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
-                    var landTime = attack.StartTick + attack.Delay + 1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
+                    var landTime = attack.StartTick + attack.Delay +
+                                   1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
 
                     if (Environment.TickCount < landTime - delay && landTime < Environment.TickCount + time)
                     {
@@ -116,7 +136,8 @@ namespace LeagueSharp.Common
 
                     while (fromT < toT)
                     {
-                        if (fromT >= Environment.TickCount && (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
+                        if (fromT >= Environment.TickCount &&
+                            (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
                         {
                             n++;
                         }
@@ -127,29 +148,6 @@ namespace LeagueSharp.Common
             }
 
             return unit.Health - predictedDamage;
-        }
-
-        private class PredictedDamage
-        {
-            public readonly float AnimationTime;
-            public readonly Obj_AI_Base Source;
-            public readonly Obj_AI_Base Target;
-
-            public readonly float Damage;
-            public readonly float Delay;
-            public readonly int ProjectileSpeed;
-            public readonly int StartTick;
-
-            public PredictedDamage(Obj_AI_Base source, Obj_AI_Base target, int startTick, float delay, float animationTime, int projectileSpeed, float damage)
-            {
-                Source = source;
-                Target = target;
-                StartTick = startTick;
-                Delay = delay;
-                ProjectileSpeed = projectileSpeed;
-                Damage = damage;
-                AnimationTime = animationTime;
-            }
         }
 
         private static double CalcMinionToMinionDmg(Obj_AI_Base attackminion, Obj_AI_Base shotminion)
@@ -190,6 +188,30 @@ namespace LeagueSharp.Common
             }
 
             return (((attackminion.BaseAttackDamage + attackminion.FlatPhysicalDamageMod) * dmgreduction));
+        }
+
+        private class PredictedDamage
+        {
+            public readonly float AnimationTime;
+
+            public readonly float Damage;
+            public readonly float Delay;
+            public readonly int ProjectileSpeed;
+            public readonly Obj_AI_Base Source;
+            public readonly int StartTick;
+            public readonly Obj_AI_Base Target;
+
+            public PredictedDamage(Obj_AI_Base source, Obj_AI_Base target, int startTick, float delay,
+                float animationTime, int projectileSpeed, float damage)
+            {
+                Source = source;
+                Target = target;
+                StartTick = startTick;
+                Delay = delay;
+                ProjectileSpeed = projectileSpeed;
+                Damage = damage;
+                AnimationTime = animationTime;
+            }
         }
     }
 }
