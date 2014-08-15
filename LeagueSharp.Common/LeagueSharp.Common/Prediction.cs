@@ -52,7 +52,7 @@ namespace LeagueSharp.Common
         private static readonly Dictionary<int, Dash> Dashes = new Dictionary<int, Dash>();
         private static readonly Dictionary<int, float> ImmobileT = new Dictionary<int, float>();
 
-        private static readonly Dictionary<string, BlinkData> Blinks = new Dictionary<string, BlinkData>();
+        private static readonly Dictionary<string, Prediction.BlinkData> Blinks = new Dictionary<string, BlinkData>();
         private static readonly Dictionary<string, float> ImmobileData = new Dictionary<string, float>();
         private static readonly Dictionary<string, float> DashData = new Dictionary<string, float>();
 
@@ -447,10 +447,11 @@ namespace LeagueSharp.Common
             SkillshotType spelltype, Vector3 rangeCheckFrom = new Vector3(), float accel = -1483)
         {
             var objects = new PredictionOutput(new Vector2(), new Vector2(), 0);
-            if (rangeCheckFrom.X.CompareTo(0) == 0)
+            if (!rangeCheckFrom.To2D().IsValid())
             {
                 rangeCheckFrom = ObjectManager.Player.ServerPosition;
             }
+
             switch (spelltype)
             {
                 case SkillshotType.SkillshotLine:
@@ -605,7 +606,7 @@ namespace LeagueSharp.Common
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (enemy.Team != ObjectManager.Player.Team && enemy.IsValidTarget() &&
-                    enemy.NetworkId != unit.NetworkId && Vector3.Distance(from, enemy.ServerPosition) <= range * 1.2)
+                    enemy.NetworkId != unit.NetworkId && Vector3.Distance(rangeCheckFrom, enemy.ServerPosition) <= range * 1.2)
                 {
                     var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
                         SkillshotType.SkillshotCircle, rangeCheckFrom);
@@ -706,7 +707,7 @@ namespace LeagueSharp.Common
             {
                 if (enemy.IsEnemy && enemy.NetworkId != unit.NetworkId && enemy.IsValidTarget() && !enemy.IsDead &&
                     enemy.IsValid &&
-                    Vector3.DistanceSquared(enemy.ServerPosition, ObjectManager.Player.ServerPosition) <=
+                    Vector3.DistanceSquared(enemy.ServerPosition, rangeCheckFrom) <=
                     (range * 1.2) * (range * 1.2))
                 {
                     var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
@@ -821,7 +822,7 @@ namespace LeagueSharp.Common
             {
                 if (enemy.IsEnemy && enemy.NetworkId != unit.NetworkId && enemy.IsValidTarget() && !enemy.IsDead &&
                     enemy.IsValid &&
-                    Vector3.Distance(from, enemy.ServerPosition) <= range)
+                    Vector3.Distance(rangeCheckFrom, enemy.ServerPosition) <= range)
                 {
                     var pred = GetBestPosition(enemy, delay, 1, speed, from, range, collision,
                         SkillshotType.SkillshotLine, rangeCheckFrom);
