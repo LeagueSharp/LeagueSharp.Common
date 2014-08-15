@@ -355,7 +355,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            #endregion
+                #endregion
         }
 
         public static class S2C
