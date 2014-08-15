@@ -173,6 +173,11 @@ namespace LeagueSharp.Common
                 if (ObjectManager.Player.Distance(target) < Range)
                     UseItem(Id, target);
             }
+
+            public void Buy()
+            {
+                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(Id, ObjectManager.Player.NetworkId)).Send();
+            }
         }
     }
 }
