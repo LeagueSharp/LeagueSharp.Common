@@ -239,7 +239,7 @@ namespace LeagueSharp.Common
             if (!IsSkillshot)
             {
                 //Target out of range
-                if (ObjectManager.Player.Distance(unit) > Range)
+                if (From.Distance(unit.ServerPosition) > Range)
                     return CastStates.OutOfRange;
 
                 LastCastAttemptT = Environment.TickCount;
