@@ -239,7 +239,7 @@ namespace LeagueSharp.Common
             if (!IsSkillshot)
             {
                 //Target out of range
-                if (From.Distance(unit.ServerPosition) > Range)
+                if (RangeCheckFrom.Distance(unit.ServerPosition) > Range)
                     return CastStates.OutOfRange;
 
                 LastCastAttemptT = Environment.TickCount;
@@ -270,7 +270,7 @@ namespace LeagueSharp.Common
                 return CastStates.Collision;
 
             //Target out of range.
-            if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) > Range)
+            if (RangeCheckFrom.Distance(prediction.CastPosition) > Range)
                 return CastStates.OutOfRange;
 
             //The hitchance is too low.
