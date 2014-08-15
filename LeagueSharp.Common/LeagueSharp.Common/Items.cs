@@ -163,6 +163,11 @@ namespace LeagueSharp.Common
                 return CanUseItem(Id);
             }
 
+            public void Cast()
+            {
+                UseItem(Id);
+            }
+
             public void Cast(Obj_AI_Base target)
             {
                 if (ObjectManager.Player.Distance(target) < Range)
