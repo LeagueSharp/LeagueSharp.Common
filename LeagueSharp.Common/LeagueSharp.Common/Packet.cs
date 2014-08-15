@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 #endregion
 
@@ -727,7 +728,7 @@ namespace LeagueSharp.Common
 
                     packet.Position = 5;
                     result.UnitNetworkId = packet.ReadInteger();
-                    packet.Position = 112;
+                    packet.Position = 184;
                     var b = packet.ReadByte();
                     packet.Position = 81;
                     var b2 = packet.ReadByte();
@@ -789,7 +790,7 @@ namespace LeagueSharp.Common
                                         TPT[result.UnitNetworkId] = 0;
                                     }
                                 }
-                                else if (b == 4 || b == 77)
+                                else if (b == 4)
                                 {
                                     if (RecallT.ContainsKey(result.UnitNetworkId))
                                     {
@@ -800,7 +801,7 @@ namespace LeagueSharp.Common
                                         RecallT[result.UnitNetworkId] = 0;
                                     }
                                 }
-                                else if (b == 6 || b == 141)
+                                else if (b == 6)
                                 {
                                     result.Status = RecallStatus.RecallStarted;
                                     RecallT[result.UnitNetworkId] = Environment.TickCount;
