@@ -156,6 +156,18 @@ namespace LeagueSharp.Common
             });
 
             #endregion
+            
+            #region Gnar
+            
+            Spells.Add(new Gapcloser)
+            {
+                ChampionName = "Gnar",
+                Slot = SpellSlot.E,
+                SpellName = "gnarbige",
+                SkillType = GapcloserType.Skillshot
+            });
+            
+            #endregion
 
             #region Gragas
 
