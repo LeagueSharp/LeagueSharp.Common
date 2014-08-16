@@ -222,7 +222,7 @@ namespace LeagueSharp.Common
                 SpellName = "Drain",
                 DangerLevel = InterruptableDangerLevel.Medium,
                 Slot = SpellSlot.W,
-                BuffName = "fearmonger",
+                BuffName = "Drain",
             });
 
             Spells.Add(new InterruptableSpell
