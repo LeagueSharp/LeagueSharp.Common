@@ -142,7 +142,18 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
+            #region Gnar
+            p = new PassiveDamage
+            {
+                ChampionName = "Gnar",
+                IsActive =
+                    minion =>
+                        (from buff in minion.Buffs where buff.DisplayName == "GnarWProc" select buff.Count)
+                            .FirstOrDefault() == 2,
+                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+            };
+            AttackPassives.Add(p);
+#endregion
             #region Jinx
 
             p = new PassiveDamage
