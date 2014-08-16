@@ -936,7 +936,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType/StageType tuple containing the combo spells</param>
         /// <returns>true if target is killable, false if not.</returns>
-        private static bool IsKillable(Obj_AI_Base target, Tuple<SpellType, StageType>[] spellCombo)
+        private static bool IsKillable(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
         {
             return GetComboDamage(target, spellCombo) > target.Health;
         }
