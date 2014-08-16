@@ -903,7 +903,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType array containing the combo spells</param>
         /// <returns>Returns the calculated combo damage</returns>
-        private static double GetComboDamage(Obj_AI_Base target, SpellType[] spellCombo)
+        private static double GetComboDamage(Obj_AI_Base target, IEnumerable<SpellType> spellCombo)
         {
             return GetComboDamage(target, spellCombo.Select(spell => Tuple.Create(spell, StageType.Default)).ToArray());
         }
@@ -925,7 +925,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType array containing the combo spells</param>
         /// <returns>true if target is killable, false if not.</returns>
-        private static bool IsKillable(Obj_AI_Base target, SpellType[] spellCombo)
+        private static bool IsKillable(Obj_AI_Base target, IEnumerable<SpellType> spellCombo)
         {
             return GetComboDamage(target, spellCombo) > target.Health;
         }
