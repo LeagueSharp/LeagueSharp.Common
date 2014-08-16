@@ -419,8 +419,8 @@ namespace LeagueSharp.Common
         {
             string[] p1 =
             {
-                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Hecarim",
-                "Janna", "}Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu", "Olaf",
+                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar", "Hecarim",
+                "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu", "Olaf",
                 "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka",
                 "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
@@ -450,8 +450,7 @@ namespace LeagueSharp.Common
             if (p1.Contains(championName)) return 1;
             if (p2.Contains(championName)) return 2;
             if (p3.Contains(championName)) return 3;
-            if (p4.Contains(championName)) return 4;
-            return 1;
+            return p4.Contains(championName) ? 4 : 1;
         }
 
         public static void AddToMenu(Menu Config)
