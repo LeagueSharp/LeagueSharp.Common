@@ -903,7 +903,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType array containing the combo spells</param>
         /// <returns>Returns the calculated combo damage</returns>
-        private static double GetComboDamage(Obj_AI_Base target, IEnumerable<SpellType> spellCombo)
+        public static double GetComboDamage(Obj_AI_Base target, IEnumerable<SpellType> spellCombo)
         {
             return GetComboDamage(target, spellCombo.Select(spell => Tuple.Create(spell, StageType.Default)).ToArray());
         }
@@ -914,7 +914,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType/StageType tuple containing the combo spells</param>
         /// <returns>Returns the calculated combo damage</returns>
-        private static double GetComboDamage(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
+        public static double GetComboDamage(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
         {
             return spellCombo.Sum(spell => getDmg(target, spell.Item1, spell.Item2));
         }
@@ -925,7 +925,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType array containing the combo spells</param>
         /// <returns>true if target is killable, false if not.</returns>
-        private static bool IsKillable(Obj_AI_Base target, IEnumerable<SpellType> spellCombo)
+        public static bool IsKillable(Obj_AI_Base target, IEnumerable<SpellType> spellCombo)
         {
             return GetComboDamage(target, spellCombo) > target.Health;
         }
@@ -936,7 +936,7 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType/StageType tuple containing the combo spells</param>
         /// <returns>true if target is killable, false if not.</returns>
-        private static bool IsKillable(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
+        public static bool IsKillable(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
         {
             return GetComboDamage(target, spellCombo) > target.Health;
         }
