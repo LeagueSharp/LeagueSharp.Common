@@ -434,7 +434,7 @@ namespace LeagueSharp.Common
             var result = Player.AttackRange + Player.BoundingRadius;
             if (target.IsValidTarget())
             {
-                return result + target.BoundingRadius - ((target.Path.Length > 0) ? 20 : 10);
+                return result + target.BoundingRadius - ((target.Path.Length > 0) ? 35 : 20);
             }
             return result;
         }
@@ -873,6 +873,7 @@ namespace LeagueSharp.Common
 
             private void DrawingOnOnDraw(EventArgs args)
             {
+
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
                     Utility.DrawCircle(Player.Position, GetRealAutoAttackRange(null) + 65,
                         _config.Item("AACircle").GetValue<Circle>().Color);
