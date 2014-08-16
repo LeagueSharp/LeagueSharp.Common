@@ -60,7 +60,7 @@ namespace LeagueSharp.Common
         internal static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
             new Dictionary<int, LastCastedSpellEntry>();
 
-        internal static LastCastPacketSentEntry LastCastPacketSent;
+        public static LastCastPacketSentEntry LastCastPacketSent;
 
         static LastCastedSpell()
         {
