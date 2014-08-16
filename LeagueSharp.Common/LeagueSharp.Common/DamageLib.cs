@@ -896,6 +896,33 @@ namespace LeagueSharp.Common
                     throw new InvalidSpellTypeException();
             }
         }
+        
+        /// <summary>
+        /// Calculates the combo damage of the given spell combo on the given target.
+        /// </summary>
+        /// <param name="target">The target object</param>
+        /// <param name="spellCombo">SpellType array containing the combo spells</param>
+        /// <returns>Returns the calculated combo damage</returns>
+        public static double GetComboDamage(Obj_AI_Base target, SpellType[] spellCombo)
+        {
+            double damage = 0;
+            
+            foreach(var spell in spellCombo)
+                damage += getDmg(target, spell);
+            
+            return damage;
+        }
+        
+        /// <summary>
+        /// Calculates the combo damage of the given spell combo on the given target and returns if that damage would kill the target.
+        /// </summary>
+        /// <param name="target">The target object</param>
+        /// <param name="spellCombo">SpellType array containing the combo spells</param>
+        /// <returns>true if target is killable, false if not.</returns>
+        public static bool IsKillable(Obj_AI_Base target, SpellType[] spellCombo)
+        {
+            return GetComboDamage(target, spellCombo) > target.Health;
+        }
 
         private static double Aatrox(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
