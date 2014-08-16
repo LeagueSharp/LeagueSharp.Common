@@ -159,7 +159,7 @@ namespace LeagueSharp.Common
             
             #region Gnar
             
-            Spells.Add(new Gapcloser)
+            Spells.Add(new Gapcloser
             {
                 ChampionName = "Gnar",
                 Slot = SpellSlot.E,
