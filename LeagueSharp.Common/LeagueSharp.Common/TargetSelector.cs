@@ -74,7 +74,7 @@ namespace LeagueSharp.Common
 
         private static readonly string[] bruiser =
         {
-            "Darius", "Elise", "Evelynn", "Fiora", "Gangplank", "Jayce",
+            "Darius", "Elise", "Evelynn", "Fiora", "Gangplank", "Gnar", "Jayce",
             "Pantheon", "Irelia", "JarvanIV", "Jax", "Khazix", "LeeSin", "Nocturne", "Olaf", "Poppy", "Renekton",
             "Rengar", "Riven", "Shyvana", "Trundle", "Tryndamere", "Udyr", "Vi", "MonkeyKing", "XinZhao", "Aatrox",
             "Rumble", "Shaco", "MasterYi"
