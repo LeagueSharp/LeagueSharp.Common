@@ -905,12 +905,7 @@ namespace LeagueSharp.Common
         /// <returns>Returns the calculated combo damage</returns>
         private static double GetComboDamage(Obj_AI_Base target, SpellType[] spellCombo)
         {
-            List<Tuple<SpellType, StageType>> comboList = new List<Tuple<SpellType, StageType>>();
-        
-            foreach (var spell in spellCombo)
-                comboList.Add(Tuple.Create(spell, StageType.Default));
-        
-            return GetComboDamage(target, comboList.ToArray());
+            return GetComboDamage(target, spellCombo.Select(spell => Tuple.Create(spell, StageType.Default)).ToArray());
         }
         
         /// <summary>
@@ -919,16 +914,11 @@ namespace LeagueSharp.Common
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType/StageType tuple containing the combo spells</param>
         /// <returns>Returns the calculated combo damage</returns>
-        private static double GetComboDamage(Obj_AI_Base target, Tuple<SpellType, StageType>[] spellCombo)
+        private static double GetComboDamage(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
         {
-            double damage = 0;
-        
-            foreach (var spell in spellCombo)
-                damage += getDmg(target, spell.Item1, spell.Item2);
-        
-            return damage;
+            return spellCombo.Sum(spell => getDmg(target, spell.Item1, spell.Item2));
         }
-        
+
         /// <summary>
         /// Calculates the combo damage of the given spell combo on the given target and returns if that damage would kill the target.
         /// </summary>
