@@ -21,6 +21,7 @@
 #region
 
 using System.Linq;
+using SharpDX;
 
 #endregion
 
@@ -135,6 +136,28 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        /// Casts the item on a Vector2 position.
+        /// </summary>
+        public static void UseItem(int id, Vector2 position)
+        {
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id).Where(slot => position != null))
+            {
+                slot.UseItem(position.To3D());
+            }
+        }
+
+        /// <summary>
+        /// Casts the item on a Vector3 position.
+        /// </summary>
+        public static void UseItem(int id, Vector3 position)
+        {
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id).Where(slot => position != null))
+            {
+                slot.UseItem(position);
+            }
+        }
+
+        /// <summary>
         /// Returns the ward slot.
         /// </summary>
         public static InventorySlot GetWardSlot()
@@ -172,6 +195,18 @@ namespace LeagueSharp.Common
             {
                 if (ObjectManager.Player.Distance(target) < Range)
                     UseItem(Id, target);
+            }
+
+            public void Cast(Vector2 position)
+            {
+                if (ObjectManager.Player.Distance(position) < Range)
+                    UseItem(Id, position.To3D());
+            }
+
+            public void Cast(Vector3 position)
+            {
+                if (ObjectManager.Player.Distance(position) < Range)
+                    UseItem(Id, position);
             }
 
             public void Buy()
