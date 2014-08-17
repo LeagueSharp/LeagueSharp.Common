@@ -22,6 +22,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 #endregion
@@ -135,6 +136,25 @@ namespace LeagueSharp.Common
         public void WriteInteger(int i)
         {
             Bw.Write(i);
+        }
+
+        /// <summary>
+        /// Writes the hex string as bytes to the packet.
+        /// </summary>
+        public void WriteHexString(string hex)
+        {
+            Bw.Write(Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray());
+        }
+
+        /// <summary>
+        /// Writes the string.
+        /// </summary>
+        public void WriteString(string str)
+        {
+            Bw.Write(Encoding.UTF8.GetBytes(str));
         }
 
         /// <summary>
