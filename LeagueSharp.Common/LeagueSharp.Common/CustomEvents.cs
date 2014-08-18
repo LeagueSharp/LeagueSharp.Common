@@ -62,8 +62,12 @@ namespace LeagueSharp.Common
             {
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
-                    OnGameLoad(new EventArgs());
-                    LeagueSharp.Game.OnGameProcessPacket -= Game_OnGameProcessPacket; // delete the event
+                    if(OnGameLoad != null)
+                    {
+                        OnGameLoad(new EventArgs());
+                        LeagueSharp.Game.OnGameProcessPacket -= Game_OnGameProcessPacket; // delete the event
+                    }
+
                 }
 
                 //Game end packet

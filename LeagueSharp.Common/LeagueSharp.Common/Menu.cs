@@ -803,7 +803,7 @@ namespace LeagueSharp.Common
                 ValueType = MenuValueType.Slider;
             else if (newValue.GetType().ToString().Contains("KeyBind"))
                 ValueType = MenuValueType.KeyBind;
-            else if (newValue.GetType().ToString().Contains("Integer"))
+            else if (newValue.GetType().ToString().Contains("Int"))
                 ValueType = MenuValueType.Integer;
             else if (newValue.GetType().ToString().Contains("Circle"))
                 ValueType = MenuValueType.Circle;
