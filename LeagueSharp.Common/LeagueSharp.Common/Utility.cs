@@ -190,7 +190,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Obj_AI_Turret GetNearestTower(Obj_AI_Base unit, bool enemyTurretsOnly = true)
         {
-            return GetNearestTowers(ObjectManager.Player, enemyTurretsOnly).FirstOrDefault();
+            return GetNearestTowers(unit, enemyTurretsOnly).FirstOrDefault();
         }
 
         /// <summary>
