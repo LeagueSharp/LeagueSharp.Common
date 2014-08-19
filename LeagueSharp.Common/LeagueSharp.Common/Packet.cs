@@ -658,7 +658,7 @@ namespace LeagueSharp.Common
 
                     public Struct(int turretNetworkId, int targetNetworkId)
                     {
-                        TurretNetworkId = turretNetworkId,
+                        TurretNetworkId = turretNetworkId;
                         TargetNetworkId = targetNetworkId;
                     }
                 }
