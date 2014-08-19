@@ -938,7 +938,7 @@ namespace LeagueSharp.Common
         /// <returns>true if target is killable, false if not.</returns>
         public static bool IsKillable(Obj_AI_Base target, IEnumerable<Tuple<SpellType, StageType>> spellCombo)
         {
-            return GetComboDamage(target, spellCombo) - 50 > target.Health; 
+            return GetComboDamage(target, spellCombo) - spellCombo.Count() * 20 > target.Health;
         }
 
         private static double Aatrox(Obj_AI_Base enemy, SpellType type, StageType stagetype)
