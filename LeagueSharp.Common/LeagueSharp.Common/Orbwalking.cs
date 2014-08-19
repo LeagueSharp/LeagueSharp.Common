@@ -778,7 +778,19 @@ namespace LeagueSharp.Common
                 {
                     var target = SimpleTs.GetTarget(-1, SimpleTs.DamageType.Physical);
                     if (target != null)
-                        return target;
+                    {
+                        if (ActiveMode != OrbwalkingMode.Combo)
+                        {
+                            if (!Utility.UnderTurret(target) || !Utility.UnderTurret(Player)) //ToDo: Check if ally has tower aggro and shoot on enemy
+                            {
+                                return target;
+                            }
+                        }
+                        else
+                        {
+                            return target;
+                        }
+                    }
                 }
 
                 /*Jungle minions*/
