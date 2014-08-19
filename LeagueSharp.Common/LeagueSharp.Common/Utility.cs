@@ -176,6 +176,22 @@ namespace LeagueSharp.Common
 
             return SpellSlot.Unknown;
         }
+        
+        /// <summary>
+        /// Returns true if Player has tower aggro.
+        /// </summary>
+        public static bool HasTowerAggro()
+        {
+            return HasTowerAggro(ObjectManager.Player);
+        }
+
+        /// <summary>
+        /// Returns true if the unit has tower aggro.
+        /// </summary>
+        public static bool HasTowerAggro(Obj_AI_Base unit)
+        {
+            return Packet.S2C.TowerAggro.AggroList.ContainsKey(unit.NetworkId);
+        }
 
         /// <summary>
         /// Returns true if Player is under tower range.
