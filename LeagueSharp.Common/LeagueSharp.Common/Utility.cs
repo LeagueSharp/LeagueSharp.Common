@@ -55,6 +55,9 @@ namespace LeagueSharp.Common
             if (checkTeam && unit.Team == ObjectManager.Player.Team)
                 return false;
 
+            if (unit.HasBuffOfType(BuffType.Invulnerability)) //Kayle: JudicatorIntervention, Tryndamere: UndyingRage
+                return false;
+
             if (range != float.MaxValue &&
                 Vector2.DistanceSquared(ObjectManager.Player.ServerPosition.To2D(), unit.ServerPosition.To2D()) >
                 range * range)
