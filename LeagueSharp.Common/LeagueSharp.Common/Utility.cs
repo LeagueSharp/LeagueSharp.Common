@@ -209,7 +209,7 @@ namespace LeagueSharp.Common
             return from tower in ObjectManager.Get<Obj_AI_Turret>()
                    where
                       tower.IsValid &&
-                      enemyTurretsOnly ? tower.IsEnemy : tower.IsValid && //keppo
+                      enemyTurretsOnly ? tower.IsEnemy : true && //keppo
                       tower.Health > 0
                    orderby tower.Distance(unit)
                    select tower;
