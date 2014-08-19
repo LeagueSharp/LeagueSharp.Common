@@ -778,7 +778,35 @@ namespace LeagueSharp.Common
                 {
                     var target = SimpleTs.GetTarget(-1, SimpleTs.DamageType.Physical);
                     if (target != null)
-                        return target;
+                    {
+                        if (ActiveMode != OrbwalkingMode.Combo)
+                        {
+                            if (Utility.UnderTurret(target) && Utility.UnderTurret(Player))
+                            {
+                                foreach (Obj_AI_Hero champ in ObjectManager.Get<Obj_AI_Hero>()) //IsAllyTankingTower?
+                                {
+                                    if (champ.IsAlly)
+                                    {
+                                        if (Utility.HasTowerAggro(champ))
+                                        {
+                                            if (Utility.GetNearestTower(champ, true) == Utility.GetNearestTower(true)) //same tower
+                                            {
+                                                return target; //ally is tanking tower
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return target;
+                            }
+                        }
+                        else
+                        {
+                            return target;
+                        }
+                    }
                 }
 
                 /*Jungle minions*/
