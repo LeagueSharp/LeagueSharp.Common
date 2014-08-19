@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 #endregion
 
@@ -356,7 +355,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-                #endregion
+            #endregion
         }
 
         public static class S2C
@@ -619,6 +618,48 @@ namespace LeagueSharp.Common
                     public Struct(byte winner = 1)
                     {
                         Winner = winner;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region TowerAggro
+
+            ///<summary>
+            /// Gets received when a tower starts targeting a unit
+            /// </summary>
+            public static class TowerAggro
+            {
+                public static byte Header = 0x6A;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.TurretNetworkId);
+                    result.WriteInteger(packetStruct.TargetNetworkId);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.TurretNetworkId = packet.ReadInteger();
+                    result.TargetNetworkId = packet.ReadInteger();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int TargetNetworkId;
+                    public int TurretNetworkId;
+
+                    public Struct(int turretNetworkId, int targetNetworkId)
+                    {
+                        TurretNetworkId = turretNetworkId,
+                        TargetNetworkId = targetNetworkId;
                     }
                 }
             }
