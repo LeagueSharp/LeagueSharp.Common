@@ -632,6 +632,7 @@ namespace LeagueSharp.Common
             public static class TowerAggro
             {
                 public static byte Header = 0x6A;
+                public static readonly Dictionary<int, int> AggroList = new Dictionary<int, int>();
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -648,6 +649,12 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.TurretNetworkId = packet.ReadInteger();
                     result.TargetNetworkId = packet.ReadInteger();
+                    
+                    if (result.TurretNetworkId != 0)
+                    {
+                        AggroList[result.TurretNetworkId] = result.TargetNetworkId;
+                    }
+                    
                     return result;
                 }
 
