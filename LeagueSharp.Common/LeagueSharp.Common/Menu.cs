@@ -1,20 +1,22 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 LeagueSharp
-// Menu.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #endregion
 
@@ -24,8 +26,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using SharpDX;
 using Color = System.Drawing.Color;
+
+using SharpDX;
 
 #endregion
 
@@ -42,7 +45,7 @@ namespace LeagueSharp.Common
         WM_KEYUP = 0x101,
     }
 
-    [ Serializable ]
+    [Serializable]
     public struct Circle
     {
         public bool Active;
@@ -55,7 +58,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    [ Serializable ]
+    [Serializable]
     public struct Slider
     {
         public int MaxValue;
@@ -76,7 +79,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    [ Serializable ]
+    [Serializable]
     public struct StringList
     {
         public string[] SList;
@@ -95,7 +98,7 @@ namespace LeagueSharp.Common
         Press,
     }
 
-    [ Serializable ]
+    [Serializable]
     public struct KeyBind
     {
         public bool Active;
@@ -242,7 +245,10 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (_chachedBgColor != Color.Transparent) return _chachedBgColor;
+                if (_chachedBgColor != Color.Transparent)
+                {
+                    return _chachedBgColor;
+                }
 
                 var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("BackgroundColor"));
                 var alpha = GetXmlValue("BackgroundColorAlpha");
@@ -255,7 +261,10 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (_chachedActiveColor != Color.Transparent) return _chachedActiveColor;
+                if (_chachedActiveColor != Color.Transparent)
+                {
+                    return _chachedActiveColor;
+                }
 
                 var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("ActiveColor"));
                 var alpha = GetXmlValue("ActiveColorAlpha");
@@ -266,15 +275,17 @@ namespace LeagueSharp.Common
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if ((args.Msg == (uint)WindowsMessages.WM_KEYUP || args.Msg == (uint)WindowsMessages.WM_KEYDOWN) &&
+            if ((args.Msg == (uint) WindowsMessages.WM_KEYUP || args.Msg == (uint) WindowsMessages.WM_KEYDOWN) &&
                 args.WParam == Convert.ToInt32(GetXmlValue("ShowMenuPress")))
             {
-                DrawMenu = args.Msg == (uint)WindowsMessages.WM_KEYDOWN;
+                DrawMenu = args.Msg == (uint) WindowsMessages.WM_KEYDOWN;
             }
 
-            if (args.Msg == (uint)WindowsMessages.WM_KEYUP &&
+            if (args.Msg == (uint) WindowsMessages.WM_KEYUP &&
                 args.WParam == Convert.ToInt32(GetXmlValue("ShowMenuToggle")))
+            {
                 DrawMenu = !DrawMenu;
+            }
         }
 
         private static string GetXmlValue(string tagName)
@@ -285,7 +296,11 @@ namespace LeagueSharp.Common
 
     internal static class MenuDrawHelper
     {
-        internal static void DrawBox(Vector2 position, int width, int height, Color color, int borderwidth,
+        internal static void DrawBox(Vector2 position,
+            int width,
+            int height,
+            Color color,
+            int borderwidth,
             Color borderColor)
         {
             Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, height, color);
@@ -293,18 +308,19 @@ namespace LeagueSharp.Common
             if (borderwidth > 0)
             {
                 Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, borderwidth, borderColor);
-                Drawing.DrawLine(position.X, position.Y + height, position.X + width, position.Y + height, borderwidth,
-                    borderColor);
+                Drawing.DrawLine(
+                    position.X, position.Y + height, position.X + width, position.Y + height, borderwidth, borderColor);
                 Drawing.DrawLine(position.X, position.Y, position.X, position.Y + height, borderwidth, borderColor);
-                Drawing.DrawLine(position.X + width, position.Y, position.X + width, position.Y + height, borderwidth,
-                    borderColor);
+                Drawing.DrawLine(
+                    position.X + width, position.Y, position.X + width, position.Y + height, borderwidth, borderColor);
             }
         }
 
         internal static void DrawOnOff(bool on, Vector2 position, MenuItem item)
         {
-            DrawBox(position, item.Height, item.Height, on ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor,
-                1, Color.Black);
+            DrawBox(
+                position, item.Height, item.Height, on ? MenuSettings.BooleanOnColor : MenuSettings.BooleanOffColor, 1,
+                Color.Black);
             var s = on ? "On" : "Off";
             Drawing.DrawText(
                 item.Position.X + item.Width - item.Height + (item.Height - Drawing.GetTextExtent(s).Width) / 2 - 2,
@@ -325,7 +341,12 @@ namespace LeagueSharp.Common
             DrawSlider(position, item, val.MinValue, val.MaxValue, val.Value, width, drawText);
         }
 
-        internal static void DrawSlider(Vector2 position, MenuItem item, int min, int max, int value, int width,
+        internal static void DrawSlider(Vector2 position,
+            MenuItem item,
+            int min,
+            int max,
+            int value,
+            int width,
             bool drawText)
         {
             width = (width > 0 ? width : item.Width);
@@ -334,9 +355,12 @@ namespace LeagueSharp.Common
             Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, MenuSettings.SliderIndicator);
 
             if (drawText)
-                Drawing.DrawText(position.X - 7 + width - Drawing.GetTextExtent(value.ToString()).Width,
+            {
+                Drawing.DrawText(
+                    position.X - 7 + width - Drawing.GetTextExtent(value.ToString()).Width,
                     position.Y + (item.Height - Drawing.GetTextExtent(value.ToString()).Height) / 2, Color.White,
                     value.ToString());
+            }
         }
     }
 
@@ -368,7 +392,9 @@ namespace LeagueSharp.Common
                 {
                     var m = Global.Read<List<string>>("CommonMenuList", true);
                     if (m == default(List<string>))
+                    {
                         m = new List<string>();
+                    }
                     m.Remove(DisplayName + Name);
                     Global.Write("CommonMenuList", m);
 
@@ -398,13 +424,18 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (IsRootMenu || Parent == null) return 0;
+                if (IsRootMenu || Parent == null)
+                {
+                    return 0;
+                }
                 var result = Parent.YLevel;
 
                 foreach (var test in Parent.Children)
                 {
                     if (test.Name == Name)
+                    {
                         break;
+                    }
                     result++;
                 }
 
@@ -416,13 +447,18 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Environment.TickCount - _cachedMenuCountT < 500) return _cachedMenuCount;
+                if (Environment.TickCount - _cachedMenuCountT < 500)
+                {
+                    return _cachedMenuCount;
+                }
                 var l = Global.Read<List<string>>("CommonMenuList");
                 var result = 0;
                 foreach (var s in l)
                 {
                     if (s == DisplayName + Name)
+                    {
                         break;
+                    }
                     result++;
                 }
 
@@ -437,7 +473,9 @@ namespace LeagueSharp.Common
             get
             {
                 if (IsRootMenu || Parent == null)
+                {
                     return MenuSettings.BasePosition + MenuCount * new Vector2(0, MenuSettings.MenuItemHeight);
+                }
 
                 return Parent.MyBasePosition;
             }
@@ -466,7 +504,10 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (!MenuSettings.DrawMenu) return false;
+                if (!MenuSettings.DrawMenu)
+                {
+                    return false;
+                }
                 return IsRootMenu ? true : _visible;
             }
             set { _visible = value; }
@@ -479,90 +520,128 @@ namespace LeagueSharp.Common
 
         internal void Game_OnWndProc(WndEventArgs args)
         {
-            OnReceiveMessage((WindowsMessages)args.Msg, Utility.GetCursorPos(), args.WParam);
+            OnReceiveMessage((WindowsMessages) args.Msg, Utility.GetCursorPos(), args.WParam);
         }
 
         internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
         {
             //Spread the message to the menu's children recursively
             foreach (var child in Children)
+            {
                 child.OnReceiveMessage(message, cursorPos, key);
+            }
 
 
             foreach (var item in Items)
+            {
                 item.OnReceiveMessage(message, cursorPos, key);
+            }
 
             //Handle the left clicks on the menus to hide or show the submenus.
-            if (message != WindowsMessages.WM_LBUTTONDOWN) return;
+            if (message != WindowsMessages.WM_LBUTTONDOWN)
+            {
+                return;
+            }
 
             if (IsRootMenu && Visible)
             {
                 if (cursorPos.X - MenuSettings.BasePosition.X < MenuSettings.MenuItemWidth)
                 {
-                    var n = (int)(cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
+                    var n = (int) (cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
                     if (MenuCount != n && n < Global.Read<List<string>>("CommonMenuList").Count)
                     {
                         foreach (var schild in Children)
+                        {
                             schild.Visible = false;
+                        }
 
                         foreach (var sitem in Items)
+                        {
                             sitem.Visible = false;
+                        }
                     }
                 }
             }
 
-            if (!IsInside(cursorPos)) return;
-            if (!Visible) return;
+            if (!IsInside(cursorPos))
+            {
+                return;
+            }
+            if (!Visible)
+            {
+                return;
+            }
 
             if (!IsRootMenu && Parent != null)
+            {
                 //Close all the submenus in the level 
                 foreach (var child in Parent.Children)
                 {
                     if (child.Name != Name)
                     {
                         foreach (var schild in child.Children)
+                        {
                             schild.Visible = false;
+                        }
 
                         foreach (var sitem in child.Items)
+                        {
                             sitem.Visible = false;
+                        }
                     }
                 }
+            }
 
             //Hide or Show the submenus.
             foreach (var child in Children)
+            {
                 child.Visible = !child.Visible;
+            }
 
             //Hide or Show the items.
             foreach (var item in Items)
+            {
                 item.Visible = !item.Visible;
+            }
         }
 
         internal void Drawing_OnDraw(System.EventArgs args)
         {
-            if (!Visible) return;
+            if (!Visible)
+            {
+                return;
+            }
 
-            MenuDrawHelper.DrawBox(Position, Width, Height,
+            MenuDrawHelper.DrawBox(
+                Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
                     ? MenuSettings.ActiveBackgroundColor
                     : MenuSettings.BackgroundColor, 1, Color.Black);
-            Drawing.DrawText(Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
-                Color.White, DisplayName);
+            Drawing.DrawText(
+                Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2, Color.White,
+                DisplayName);
 
-            Drawing.DrawText(Position.X + Width - 15,
-                Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
+            Drawing.DrawText(
+                Position.X + Width - 15, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
                 Color.White, ">");
 
             //Draw the menu submenus
             foreach (var child in Children)
+            {
                 if (child.Visible)
+                {
                     child.Drawing_OnDraw(args);
+                }
+            }
 
             //Draw the items
             for (var i = Items.Count - 1; i >= 0; i--)
             {
                 var item = Items[i];
                 if (item.Visible)
+                {
                     item.Drawing_OnDraw();
+                }
             }
         }
 
@@ -587,7 +666,9 @@ namespace LeagueSharp.Common
             Game.OnWndProc += Game_OnWndProc;
             var m = Global.Read<List<string>>("CommonMenuList", true);
             if (m == default(List<string>))
+            {
                 m = new List<string>();
+            }
             m.Add(DisplayName + Name);
             Global.Write("CommonMenuList", m);
         }
@@ -613,14 +694,18 @@ namespace LeagueSharp.Common
             foreach (var item in Items)
             {
                 if (item.Name == name)
+                {
                     return item;
+                }
             }
 
             //Search in submenus
             foreach (var subMenu in Children)
             {
                 if (subMenu.Item(name) != null)
+                {
                     return subMenu.Item(name);
+                }
             }
 
             return null;
@@ -632,7 +717,9 @@ namespace LeagueSharp.Common
             foreach (var subMenu in Children)
             {
                 if (subMenu.Name == name)
+                {
                     return subMenu;
+                }
             }
             return null;
         }
@@ -663,12 +750,12 @@ namespace LeagueSharp.Common
 
         public T GetOldValue<T>()
         {
-            return (T)_oldValue;
+            return (T) _oldValue;
         }
 
         public T GetNewValue<T>()
         {
-            return (T)_newValue;
+            return (T) _newValue;
         }
     }
 
@@ -704,7 +791,10 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (!MenuSettings.DrawMenu) return false;
+                if (!MenuSettings.DrawMenu)
+                {
+                    return false;
+                }
                 return _visible;
             }
             set { _visible = value; }
@@ -714,7 +804,10 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Parent == null) return 1;
+                if (Parent == null)
+                {
+                    return 1;
+                }
                 var result = 1;
                 var m = Parent;
                 while (m.Parent != null)
@@ -731,13 +824,18 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Parent == null) return 0;
+                if (Parent == null)
+                {
+                    return 0;
+                }
                 var result = Parent.YLevel + Parent.Children.Count;
 
                 foreach (var test in Parent.Items)
                 {
                     if (test.Name == Name)
+                    {
                         break;
+                    }
                     result++;
                 }
                 return result;
@@ -749,7 +847,9 @@ namespace LeagueSharp.Common
             get
             {
                 if (Parent == null)
+                {
                     return MenuSettings.BasePosition;
+                }
 
                 return Parent.MyBasePosition;
             }
@@ -791,28 +891,44 @@ namespace LeagueSharp.Common
 
         public T GetValue<T>()
         {
-            return (T)_value;
+            return (T) _value;
         }
 
         public MenuItem SetValue<T>(T newValue)
         {
             ValueType = MenuValueType.None;
             if (newValue.GetType().ToString().Contains("Boolean"))
+            {
                 ValueType = MenuValueType.Boolean;
+            }
             else if (newValue.GetType().ToString().Contains("Slider"))
+            {
                 ValueType = MenuValueType.Slider;
+            }
             else if (newValue.GetType().ToString().Contains("KeyBind"))
+            {
                 ValueType = MenuValueType.KeyBind;
+            }
             else if (newValue.GetType().ToString().Contains("Int"))
+            {
                 ValueType = MenuValueType.Integer;
+            }
             else if (newValue.GetType().ToString().Contains("Circle"))
+            {
                 ValueType = MenuValueType.Circle;
+            }
             else if (newValue.GetType().ToString().Contains("StringList"))
+            {
                 ValueType = MenuValueType.StringList;
+            }
             else if (newValue.GetType().ToString().Contains("Color"))
+            {
                 ValueType = MenuValueType.Color;
+            }
             else
+            {
                 Game.PrintChat("CommonLibMenu: Data type not supported");
+            }
 
             var dname = (_isShared ? "SharedConfig" : Path.GetFileName(_assemblyPath));
             Directory.CreateDirectory(MenuSettings.MenuConfigPath);
@@ -825,13 +941,17 @@ namespace LeagueSharp.Common
             {
                 if (ValueType == MenuValueType.KeyBind)
                 {
-                    var SavedVal = (KeyBind)(object)Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                    var SavedVal = (KeyBind) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
                     if (SavedVal.Type == KeyBindType.Press)
+                    {
                         SavedVal.Active = false;
-                    newValue = (T)(object)SavedVal;
+                    }
+                    newValue = (T) (object) SavedVal;
                 }
                 else
+                {
                     newValue = Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                }
             }
 
             if (_valueSet)
@@ -870,12 +990,23 @@ namespace LeagueSharp.Common
             {
                 case MenuValueType.Boolean:
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN) return;
-                    if (!IsInside(cursorPos)) return;
-                    if (!Visible) return;
+                    if (message != WindowsMessages.WM_LBUTTONDOWN)
+                    {
+                        return;
+                    }
+                    if (!IsInside(cursorPos))
+                    {
+                        return;
+                    }
+                    if (!Visible)
+                    {
+                        return;
+                    }
 
                     if (cursorPos.X > Position.X + Width - Height)
+                    {
                         SetValue(!GetValue<bool>());
+                    }
 
                     break;
 
@@ -891,13 +1022,22 @@ namespace LeagueSharp.Common
                     {
                         var val = GetValue<Slider>();
                         var t = val.MinValue + ((cursorPos.X - Position.X) * (val.MaxValue - val.MinValue)) / Width;
-                        val.Value = (int)t;
+                        val.Value = (int) t;
                         SetValue(val);
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP) return;
-                    if (!Visible) return;
-                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP)
+                    {
+                        return;
+                    }
+                    if (!Visible)
+                    {
+                        return;
+                    }
+                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN)
+                    {
+                        return;
+                    }
 
                     Interacting = message == WindowsMessages.WM_LBUTTONDOWN;
                     break;
@@ -916,12 +1056,21 @@ namespace LeagueSharp.Common
                         var val = GetValue<Color>();
                         var t = 1 + ((cursorPos.X - Position.X) * (254 - 1)) / (Width - Height);
                         t = Math.Max(Math.Min(t, 255), 0);
-                        SetValue(Color.FromArgb((int)t, val));
+                        SetValue(Color.FromArgb((int) t, val));
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP) return;
-                    if (!Visible) return;
-                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP)
+                    {
+                        return;
+                    }
+                    if (!Visible)
+                    {
+                        return;
+                    }
+                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN)
+                    {
+                        return;
+                    }
                     if (cursorPos.X - Position.X > Width - Height)
                     {
                         if (message == WindowsMessages.WM_LBUTTONDOWN)
@@ -950,16 +1099,26 @@ namespace LeagueSharp.Common
                         var val = GetValue<Circle>();
                         var t = 1 + ((cursorPos.X - Position.X) * (254 - 1)) / (Width - Height * 2);
                         t = Math.Max(Math.Min(t, 255), 0);
-                        val.Color = Color.FromArgb((int)t, val.Color);
+                        val.Color = Color.FromArgb((int) t, val.Color);
                         SetValue(val);
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP) return;
-                    if (!Visible) return;
-                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN) return;
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP)
+                    {
+                        return;
+                    }
+                    if (!Visible)
+                    {
+                        return;
+                    }
+                    if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN)
+                    {
+                        return;
+                    }
                     if (cursorPos.X - Position.X > Width - Height * 2)
                     {
                         if (message == WindowsMessages.WM_LBUTTONDOWN)
+                        {
                             if (cursorPos.X - Position.X > Width - Height)
                             {
                                 var val = GetValue<Circle>();
@@ -973,6 +1132,7 @@ namespace LeagueSharp.Common
                                 val.Color = Color.FromArgb(val.Color.A, MenuSettings.ColorList[ColorId]);
                                 SetValue(val);
                             }
+                        }
                         Interacting = false;
                         return;
                     }
@@ -982,11 +1142,13 @@ namespace LeagueSharp.Common
                 case MenuValueType.KeyBind:
 
                     if (!MenuGUI.IsChatOpen)
+                    {
                         switch (message)
                         {
                             case WindowsMessages.WM_KEYDOWN:
                                 var val = GetValue<KeyBind>();
                                 if (key == val.Key)
+                                {
                                     if (val.Type == KeyBindType.Press)
                                     {
                                         if (!val.Active)
@@ -995,11 +1157,13 @@ namespace LeagueSharp.Common
                                             SetValue(val);
                                         }
                                     }
+                                }
                                 break;
                             case WindowsMessages.WM_KEYUP:
 
                                 var val2 = GetValue<KeyBind>();
                                 if (key == val2.Key)
+                                {
                                     if (val2.Type == KeyBindType.Press)
                                     {
                                         val2.Active = false;
@@ -1010,10 +1174,15 @@ namespace LeagueSharp.Common
                                         val2.Active = !val2.Active;
                                         SetValue(val2);
                                     }
+                                }
                                 break;
                         }
+                    }
 
-                    if (!Visible) return;
+                    if (!Visible)
+                    {
+                        return;
+                    }
 
                     if (message == WindowsMessages.WM_KEYUP && Interacting)
                     {
@@ -1023,8 +1192,14 @@ namespace LeagueSharp.Common
                         Interacting = false;
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN) return;
-                    if (!IsInside(cursorPos)) return;
+                    if (message != WindowsMessages.WM_LBUTTONDOWN)
+                    {
+                        return;
+                    }
+                    if (!IsInside(cursorPos))
+                    {
+                        return;
+                    }
                     if (cursorPos.X > Position.X + Width - Height)
                     {
                         var val = GetValue<KeyBind>();
@@ -1037,9 +1212,18 @@ namespace LeagueSharp.Common
                     }
                     break;
                 case MenuValueType.StringList:
-                    if (!Visible) return;
-                    if (message != WindowsMessages.WM_LBUTTONDOWN) return;
-                    if (!IsInside(cursorPos)) return;
+                    if (!Visible)
+                    {
+                        return;
+                    }
+                    if (message != WindowsMessages.WM_LBUTTONDOWN)
+                    {
+                        return;
+                    }
+                    if (!IsInside(cursorPos))
+                    {
+                        return;
+                    }
 
                     var slVal = GetValue<StringList>();
                     if (cursorPos.X > Position.X + Width - Height)
@@ -1069,8 +1253,8 @@ namespace LeagueSharp.Common
             switch (ValueType)
             {
                 case MenuValueType.Boolean:
-                    MenuDrawHelper.DrawOnOff(GetValue<bool>(), new Vector2(Position.X + Width - Height, Position.Y),
-                        this);
+                    MenuDrawHelper.DrawOnOff(
+                        GetValue<bool>(), new Vector2(Position.X + Width - Height, Position.Y), this);
                     break;
 
                 case MenuValueType.Slider:
@@ -1081,14 +1265,17 @@ namespace LeagueSharp.Common
                     var val = GetValue<KeyBind>();
                     s += " (" + Utility.KeyToText(val.Key) + ")";
                     if (Interacting)
+                    {
                         s = "Press new key";
+                    }
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
 
                     break;
 
                 case MenuValueType.Integer:
                     var intVal = GetValue<int>();
-                    Drawing.DrawText(Position.X + Width - Drawing.GetTextExtent(intVal.ToString()).Width - 7,
+                    Drawing.DrawText(
+                        Position.X + Width - Drawing.GetTextExtent(intVal.ToString()).Width - 7,
                         Position.Y + (Height - Drawing.GetTextExtent(intVal.ToString()).Height) / 2, Color.White,
                         intVal.ToString());
                     break;
@@ -1096,18 +1283,17 @@ namespace LeagueSharp.Common
                 case MenuValueType.Color:
                     var colorVal = GetValue<Color>();
                     MenuDrawHelper.DrawSlider(Position, this, 1, 254, colorVal.A, Width - Height, false);
-                    MenuDrawHelper.DrawBox(Position + new Vector2(Width - Height, 0), Height, Height, colorVal, 1,
-                        Color.Black);
+                    MenuDrawHelper.DrawBox(
+                        Position + new Vector2(Width - Height, 0), Height, Height, colorVal, 1, Color.Black);
                     break;
 
                 case MenuValueType.Circle:
                     var circleVal = GetValue<Circle>();
                     MenuDrawHelper.DrawSlider(Position, this, 1, 254, circleVal.Color.A, Width - Height * 2, false);
-                    MenuDrawHelper.DrawBox(Position + new Vector2(Width - Height * 2, 0), Height, Height,
-                        circleVal.Color, 1,
-                        Color.Black);
-                    MenuDrawHelper.DrawOnOff(circleVal.Active, new Vector2(Position.X + Width - Height, Position.Y),
-                        this);
+                    MenuDrawHelper.DrawBox(
+                        Position + new Vector2(Width - Height * 2, 0), Height, Height, circleVal.Color, 1, Color.Black);
+                    MenuDrawHelper.DrawOnOff(
+                        circleVal.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
                     break;
 
                 case MenuValueType.StringList:
@@ -1115,18 +1301,20 @@ namespace LeagueSharp.Common
 
                     var t = slVal.SList[slVal.SelectedIndex];
 
-                    MenuDrawHelper.DrawArrow("<", Position + new Vector2(Width - Height * 2, 0), this,
-                        MenuSettings.StringListColor);
-                    MenuDrawHelper.DrawArrow(">", Position + new Vector2(Width - Height, 0), this,
-                        MenuSettings.StringListColor);
+                    MenuDrawHelper.DrawArrow(
+                        "<", Position + new Vector2(Width - Height * 2, 0), this, MenuSettings.StringListColor);
+                    MenuDrawHelper.DrawArrow(
+                        ">", Position + new Vector2(Width - Height, 0), this, MenuSettings.StringListColor);
 
-                    Drawing.DrawText(Position.X + Width - Drawing.GetTextExtent(t).Width - 2 * Height - 20,
+                    Drawing.DrawText(
+                        Position.X + Width - Drawing.GetTextExtent(t).Width - 2 * Height - 20,
                         Position.Y + (Height - Drawing.GetTextExtent(t).Height) / 2, Color.White, t);
 
                     break;
             }
 
-            Drawing.DrawText(Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(s).Height) / 2, Color.White, s);
+            Drawing.DrawText(
+                Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(s).Height) / 2, Color.White, s);
         }
     }
 }
