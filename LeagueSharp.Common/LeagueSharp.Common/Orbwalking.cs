@@ -511,7 +511,7 @@ namespace LeagueSharp.Common
         public static void Orbwalk(Obj_AI_Base target, Vector3 position, float extraWindup = 90,
             float holdAreaRadius = 0)
         {
-            if (target != null && CanAttack())
+            if (target != null && CanAttack() && !Player.HasBuffOfType(BuffType.Blind))
             {
                 DisableNextAttack = false;
                 FireBeforeAttack(target);
