@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -25,9 +27,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Xml;
-using Color = System.Drawing.Color;
 
 using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -1305,8 +1307,8 @@ namespace LeagueSharp.Common
 
             BackgroundSprite = (Render.Sprite) new Render.Sprite(Properties.Resources.CPForm, new Vector2(X, Y)).Add(1);
 
-            LuminitySprite = (Render.Sprite)new Render.Sprite(LuminityBitmap, new Vector2(X + 285, Y + 40)).Add(0);
-            OpacitySprite = (Render.Sprite)new Render.Sprite(OpacityBitmap, new Vector2(X + 349, Y + 40)).Add(0);
+            LuminitySprite = (Render.Sprite) new Render.Sprite(LuminityBitmap, new Vector2(X + 285, Y + 40)).Add(0);
+            OpacitySprite = (Render.Sprite) new Render.Sprite(OpacityBitmap, new Vector2(X + 349, Y + 40)).Add(0);
 
             PreviewRectangle =
                 (Render.Rectangle)
@@ -1682,7 +1684,7 @@ namespace LeagueSharp.Common
             private double luminosity = 1.0;
             private double saturation = 1.0;
 
-            public HSLColor() {}
+            public HSLColor() { }
 
             public HSLColor(Color color)
             {

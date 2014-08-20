@@ -37,7 +37,7 @@ using Font = SharpDX.Direct3D9.Font;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    /// The render class allows you to draw stuff using SharpDX easier.
+    ///     The render class allows you to draw stuff using SharpDX easier.
     /// </summary>
     public static class Render
     {
@@ -156,67 +156,60 @@ namespace LeagueSharp.Common
             private readonly SharpDX.Direct3D9.Sprite _sprite;
             public int X = 0;
             public int Y = 0;
+
             private int _height;
+            private bool _hide;
+            private Vector2 _scale = new Vector2(1, 1);
             private Texture _texture;
             private int _width;
 
-            public Sprite(Bitmap bitmap, Vector2 position, int width = -1, int height = -1)
+            public Sprite(Bitmap bitmap, Vector2 position)
             {
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
+                Position = position;
                 Bitmap = bitmap;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromMemory(
                     Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(bitmap, typeof(byte[])),
-                    width != -1 ? width : bitmap.Width, height != -1 ? height : bitmap.Height, 0, Usage.None, Format.A1,
-                    Pool.Managed, Filter.Default, Filter.Default, 0);
+                    bitmap.Width, bitmap.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
+                    0);
+                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
             }
 
-            public Sprite(Texture texture, Vector2 position, int width = -1, int height = -1)
+            public Sprite(Texture texture, Vector2 position)
             {
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = texture;
+                Position = position;
+                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
             }
 
-            public Sprite(Stream stream, Vector2 position, int width = -1, int height = -1)
+            public Sprite(Stream stream, Vector2 position)
             {
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
+                Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromStream(Drawing.Direct3DDevice, stream);
+                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
             }
 
-            public Sprite(byte[] bytesArray, Vector2 position, int width = -1, int height = -1)
+            public Sprite(byte[] bytesArray, Vector2 position)
             {
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
+                Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromStream(Drawing.Direct3DDevice, new MemoryStream(bytesArray));
+                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
             }
 
-            public Sprite(string fileLocation, Vector2 position, int width = -1, int height = -1)
+            public Sprite(string fileLocation, Vector2 position)
             {
                 if (!File.Exists((fileLocation)))
                 {
                     return;
                 }
 
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
+                Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromFile(Drawing.Direct3DDevice, fileLocation);
+                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
             }
 
             public int Width
@@ -231,7 +224,56 @@ namespace LeagueSharp.Common
                 get { return _height > 0 ? _height : Bitmap.Height; }
             }
 
+            public Vector2 Position
+            {
+                set
+                {
+                    X = (int) value.X;
+                    Y = (int) value.Y;
+                }
+
+                get { return new Vector2(X, Y); }
+            }
+
+            public Vector2 Size
+            {
+                set
+                {
+                    _width = (int) value.X;
+                    _height = (int) value.Y;
+                }
+
+                get
+                {
+                    return new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                }
+            }
+
+
+            public Vector2 Scale
+            {
+                set
+                {
+                    _scale = value;
+                    _width = (int) (_width * _scale.X);
+                    _height = (int) (_width * _scale.Y);
+                    //Transform _texture
+                }
+
+                get { return _scale; }
+            }
+
             public Bitmap Bitmap { get; set; }
+
+            public void Show()
+            {
+                _hide = false;
+            }
+
+            public void Hide()
+            {
+                _hide = true;
+            }
 
             public void UpdateTextureBitmap(Bitmap newBitmap)
             {
@@ -245,7 +287,7 @@ namespace LeagueSharp.Common
             {
                 try
                 {
-                    if (_sprite.IsDisposed || _texture.IsDisposed)
+                    if (_sprite.IsDisposed || _texture.IsDisposed || _hide)
                     {
                         return;
                     }
