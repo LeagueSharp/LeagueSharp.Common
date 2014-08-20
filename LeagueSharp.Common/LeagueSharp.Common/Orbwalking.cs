@@ -98,6 +98,7 @@ namespace LeagueSharp.Common
 
             //Add the passive damages
             PassiveDamage p;
+            #region PassiveDamages
 
             #region Caitlyn
 
@@ -142,7 +143,9 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
+
             #region Gnar
+
             p = new PassiveDamage
             {
                 ChampionName = "Gnar",
@@ -153,7 +156,9 @@ namespace LeagueSharp.Common
                 GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
             };
             AttackPassives.Add(p);
-#endregion
+
+            #endregion
+
             #region Jinx
 
             p = new PassiveDamage
@@ -339,6 +344,7 @@ namespace LeagueSharp.Common
             };
             AttackPassives.Add(p);
 
+            #endregion
             #endregion
         }
 
@@ -873,7 +879,6 @@ namespace LeagueSharp.Common
 
             private void DrawingOnOnDraw(EventArgs args)
             {
-
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
                     Utility.DrawCircle(Player.Position, GetRealAutoAttackRange(null) + 65,
                         _config.Item("AACircle").GetValue<Circle>().Color);

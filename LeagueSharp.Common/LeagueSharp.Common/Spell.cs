@@ -27,7 +27,9 @@ using SharpDX;
 #endregion
 
 namespace LeagueSharp.Common
-{
+{     
+
+
     /// <summary>
     /// This class allows you to handle the spells easily.
     /// </summary>
@@ -43,7 +45,6 @@ namespace LeagueSharp.Common
             NotEnoughTargets,
             LowHitChance,
         }
-
         public int ChargeDuration;
         public string ChargedBuffName;
         public int ChargedMaxRange;
@@ -53,7 +54,6 @@ namespace LeagueSharp.Common
         public bool Collision;
         public float Delay;
         public bool IsChargedSpell;
-
 
         public bool IsSkillshot;
         public int LastCastAttemptT = 0;
@@ -67,6 +67,14 @@ namespace LeagueSharp.Common
         private Vector3 _from;
         private float _range;
         private Vector3 _rangeCheckFrom;
+
+        public SpellDataInst Instance
+        {
+            get
+            {
+                return ObjectManager.Player.Spellbook.GetSpell(Slot);
+            }
+        }
 
         public Spell(SpellSlot slot, float range)
         {
@@ -224,6 +232,11 @@ namespace LeagueSharp.Common
                     RangeCheckFrom)
                 : Prediction.GetBestPosition(unit, Delay, Width, Speed, From, Range, Collision, Type,
                     RangeCheckFrom);
+        }
+
+        public List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> to, float delayOverride = -1)
+        {
+            return Prediction.GetCollision(from, to, Type, Width, delayOverride > 0 ? delayOverride : Delay, Speed);
         }
 
         private CastStates _cast(Obj_AI_Base unit, bool packetCast = false, bool aoe = false,

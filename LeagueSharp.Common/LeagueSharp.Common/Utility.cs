@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using SharpDX;
@@ -33,6 +34,9 @@ using Color = System.Drawing.Color;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Game functions related utilities.
+    /// </summary>
     public static class Utility
     {
         static Utility()
@@ -256,72 +260,6 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the cursor position on the screen.
-        /// </summary>
-        public static Vector2 GetCursorPos()
-        {
-            return CursorPosT.GetCursorPos();
-        }
-
-        /// <summary>
-        /// Returns true if the point is under the rectangle
-        /// </summary>
-        public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
-        {
-            return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
-        }
-
-
-        public static string KeyToText(uint vKey)
-        {
-            /*A-Z */
-            if (vKey >= 65 && vKey <= 90)
-                return ("" + (char)vKey);
-
-            /*F1-F12*/
-            if (vKey >= 112 && vKey <= 123)
-                return ("F" + (vKey - 111));
-
-            switch (vKey)
-            {
-                case 9:
-                    return "Tab";
-                case 16:
-                    return "Shift";
-                case 17:
-                    return "Ctrl";
-                case 20:
-                    return "CAPS";
-                case 27:
-                    return "ESC";
-                case 32:
-                    return "Space";
-                case 45:
-                    return "Insert";
-                case 220:
-                    return "º";
-                default:
-                    return vKey.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Returns the md5 hash from a string.
-        /// </summary>
-        public static string Md5Hash(string s)
-        {
-            var sb = new StringBuilder();
-            HashAlgorithm algorithm = MD5.Create();
-            var h = algorithm.ComputeHash(Encoding.UTF8.GetBytes(s));
-
-            foreach (var b in h)
-                sb.Append(b.ToString("x2"));
-
-            return sb.ToString();
-        }
-
-
-        /// <summary>
         /// Draws a "lag-free" circle
         /// </summary>
         public static void DrawCircle(Vector3 center, float radius, Color color, int thickness = 2, int quality = 30,
@@ -340,8 +278,8 @@ namespace LeagueSharp.Common
                 var A = pointList[i];
                 var B = pointList[i == pointList.Count - 1 ? 0 : i + 1];
 
-                float[] AonScreen;
-                float[] BonScreen;
+                Vector2 AonScreen;
+                Vector2 BonScreen;
                 if (onMinimap)
                 {
                     AonScreen = Drawing.WorldToMinimap(A);
@@ -352,44 +290,17 @@ namespace LeagueSharp.Common
                     AonScreen = Drawing.WorldToScreen(A);
                     BonScreen = Drawing.WorldToScreen(B);
                 }
-
                 if (onMinimap ||
-                    (AonScreen[0] < Drawing.Width * 1.5 && AonScreen[0] > -Drawing.Width * 1.5 &&
-                     BonScreen[0] < Drawing.Width * 1.5 && BonScreen[0] > -Drawing.Width * 1.5 &&
-                     AonScreen[1] < Drawing.Height * 1.5 && BonScreen[1] > -Drawing.Height * 1.5 &&
-                     BonScreen[1] < Drawing.Height * 1.5 && BonScreen[1] > -Drawing.Height * 1.5
+                    (AonScreen.X < Drawing.Width * 1.5 && AonScreen.X > -Drawing.Width * 1.5 &&
+                     BonScreen.X < Drawing.Width * 1.5 && BonScreen.X > -Drawing.Width * 1.5 &&
+                     AonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5 &&
+                     BonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5
                         ))
                 {
-                    Drawing.DrawLine(AonScreen[0], AonScreen[1], BonScreen[0], BonScreen[1], thickness, color);
+                    Drawing.DrawLine(AonScreen.X, AonScreen.Y, BonScreen.X, BonScreen.Y, thickness, color);
                 }
             }
         }
-
-        internal static class CursorPosT
-        {
-            private static int _posX;
-            private static int _posY;
-
-            static CursorPosT()
-            {
-                Game.OnWndProc += Game_OnWndProc;
-            }
-
-            private static void Game_OnWndProc(WndEventArgs args)
-            {
-                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
-                {
-                    _posX = unchecked((short)args.LParam);
-                    _posY = unchecked((short)((long)args.LParam >> 16));
-                }
-            }
-
-            internal static Vector2 GetCursorPos()
-            {
-                return new Vector2(_posX, _posY);
-            }
-        }
-
 
         public static class DelayAction
         {
@@ -500,6 +411,9 @@ namespace LeagueSharp.Common
         }
 
 
+        /// <summary>
+        /// Internal class used to get the waypoints even when the enemy enters the fow of war.
+        /// </summary>
         internal static class WaypointTracker
         {
             public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
@@ -533,5 +447,6 @@ namespace LeagueSharp.Common
                 }
             }
         }
+
     }
 }

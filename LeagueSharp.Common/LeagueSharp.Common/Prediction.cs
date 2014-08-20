@@ -430,7 +430,7 @@ namespace LeagueSharp.Common
                 CheckLocations.Add(result.CastPosition.To2D());
 
                 var Col1 = GetCollision(from.To2D(), CheckLocations, stype, width - GetHitBox(unit),
-                    delay, speed, range);
+                    delay, speed);
 
                 if (Col1.Count > 0)
                 {
@@ -472,7 +472,7 @@ namespace LeagueSharp.Common
         }
 
         public static List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> To, SkillshotType stype, float width,
-            float delay, float speed, float range)
+            float delay, float speed)
         {
             var result = new List<Obj_AI_Base>();
             delay -= ExtraDelay();
@@ -482,7 +482,7 @@ namespace LeagueSharp.Common
                 foreach (var collisionObject in ObjectManager.Get<Obj_AI_Minion>())
                 {
                     if (collisionObject.IsValidTarget() && collisionObject.Team != ObjectManager.Player.Team &&
-                        Vector2.DistanceSquared(from, collisionObject.Position.To2D()) <= Math.Pow(range * 1.5, 2))
+                        Vector2.DistanceSquared(from, collisionObject.Position.To2D()) <= 2000 * 2000)
                     {
                         var objectPrediction = GetBestPosition(collisionObject, delay, width, speed,
                             from.To3D(), float.MaxValue,
@@ -511,7 +511,7 @@ namespace LeagueSharp.Common
 
             if (waypoints.PathLength() > (delay * unitSpeed - width))
             {
-                var path = Utils.CutPath(waypoints, delay * unitSpeed, width);
+                var path = PredictionUtils.CutPath(waypoints, delay * unitSpeed, width);
 
                 if (missileSpeed == float.MaxValue)
                 {
@@ -1167,7 +1167,7 @@ namespace LeagueSharp.Common
     }
 }
 
-internal class Utils
+internal class PredictionUtils
 {
     public static List<Vector2> CutPath(List<Vector2> path, float Distance, float Width)
     {
