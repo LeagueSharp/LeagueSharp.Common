@@ -46,6 +46,7 @@ namespace LeagueSharp.Common
             Drawing.OnEndScene += Drawing_OnEndScene;
             Drawing.OnPreReset += DrawingOnOnPreReset;
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
 
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
@@ -197,7 +198,7 @@ namespace LeagueSharp.Common
                 Bitmap = newBitmap;
                 _texture = Texture.FromMemory(
                     Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(newBitmap, typeof(byte[])), Width,
-                    Height, 0, Usage.None, Format.A1, Pool.SystemMemory, Filter.Default, Filter.Default, 0);
+                    Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);
             }
 
             public override void OnEndScene()
