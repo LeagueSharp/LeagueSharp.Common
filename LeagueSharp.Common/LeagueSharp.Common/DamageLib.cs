@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 /*
@@ -3320,7 +3322,7 @@ namespace LeagueSharp.Common
                     return
                         CalcPhysicalDmg(
                             (50 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 30)) +
-                            (45 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 15)) *
+                            (45 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 15)) +
                             ObjectManager.Player.FlatPhysicalDamageMod, enemy);
                 case SpellType.W:
                     return
