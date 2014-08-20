@@ -1,4 +1,23 @@
-﻿#region
+﻿#region LICENSE
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+#endregion
+#region
 
 using System;
 using System.ComponentModel;
@@ -28,8 +47,11 @@ namespace LeagueSharp.Common
 
         private static void bgw_DoWork(object sender, DoWorkEventArgs e)
         {
-            var myUpdater = new Updater("https://raw.githubusercontent.com/LeagueSharp/LeagueSharp/master/Versions/common.version",
-                    "https://github.com/LeagueSharp/LeagueSharp/raw/master/Releases/LeagueSharp.Common.dll", localversion);
+            var myUpdater =
+                new Updater(
+                    "https://raw.githubusercontent.com/LeagueSharp/LeagueSharp/master/Versions/common.version",
+                    "https://github.com/LeagueSharp/LeagueSharp/raw/master/Releases/LeagueSharp.Common.dll",
+                    localversion);
             if (myUpdater.NeedUpdate)
             {
                 Game.PrintChat("<font color='#33FFFF'>LeagueSharp.Common: Updating ...");
@@ -40,7 +62,8 @@ namespace LeagueSharp.Common
             }
             else
             {
-                Game.PrintChat("<font color='#33FFFF'>>>LeagueSharp.Common: Most recent version ({0}) loaded!", localversion);
+                Game.PrintChat(
+                    "<font color='#33FFFF'>>>LeagueSharp.Common: Most recent version ({0}) loaded!", localversion);
             }
         }
     }
@@ -70,10 +93,11 @@ namespace LeagueSharp.Common
                     System.IO.File.Delete(
                         System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak");
                 }
-                System.IO.File.Move(System.Reflection.Assembly.GetExecutingAssembly().Location,
+                System.IO.File.Move(
+                    System.Reflection.Assembly.GetExecutingAssembly().Location,
                     System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location) + ".bak");
-                _wc.DownloadFile(_updatelink,
-                    System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                _wc.DownloadFile(
+                    _updatelink, System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location));
                 return true;
             }
             catch (Exception ex)

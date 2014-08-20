@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Utility.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -24,11 +24,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using SharpDX;
 using Color = System.Drawing.Color;
+
+using SharpDX;
 
 #endregion
 
@@ -54,15 +52,21 @@ namespace LeagueSharp.Common
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
                 unit.IsInvulnerable)
+            {
                 return false;
+            }
 
             if (checkTeam && unit.Team == ObjectManager.Player.Team)
+            {
                 return false;
+            }
 
             if (range != float.MaxValue &&
                 Vector2.DistanceSquared(ObjectManager.Player.ServerPosition.To2D(), unit.ServerPosition.To2D()) >
                 range * range)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -72,8 +76,8 @@ namespace LeagueSharp.Common
             var ms = new MemoryStream();
             var bw = new BinaryWriter(ms);
 
-            bw.Write((byte)0x39);
-            bw.Write((uint)ObjectManager.Player.NetworkId);
+            bw.Write((byte) 0x39);
+            bw.Write((uint) ObjectManager.Player.NetworkId);
             switch (slot.ToString())
             {
                 case "Q":
@@ -108,7 +112,9 @@ namespace LeagueSharp.Common
                 {
                     result.Add(path[i] + distance * (path[i + 1] - path[i]).Normalized());
                     for (var j = i + 1; j < path.Count; j++)
+                    {
                         result.Add(path[j]);
+                    }
 
                     break;
                 }
@@ -129,7 +135,9 @@ namespace LeagueSharp.Common
                 result.Add(unit.ServerPosition.To2D());
 
                 foreach (var point in unit.Path)
+                {
                     result.Add(point.To2D());
+                }
             }
             else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
             {
@@ -137,7 +145,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
                 }
             }
 
@@ -153,7 +161,9 @@ namespace LeagueSharp.Common
             {
                 if (((!dontUseDisplayName && buff.DisplayName == buffName) ||
                      (dontUseDisplayName && buff.Name == buffName)) && buff.IsActive && buff.EndTime - Game.Time >= 0)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -166,7 +176,9 @@ namespace LeagueSharp.Common
             foreach (var spell in unit.Spellbook.Spells)
             {
                 if (spell.Name == name)
+                {
                     return spell.Slot;
+                }
             }
 
             if (searchInSummoners)
@@ -174,7 +186,9 @@ namespace LeagueSharp.Common
                 foreach (var spell in unit.SummonerSpellbook.Spells)
                 {
                     if (spell.Name == name)
+                    {
                         return spell.Slot;
+                    }
                 }
             }
 
@@ -262,15 +276,21 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Draws a "lag-free" circle
         /// </summary>
-        public static void DrawCircle(Vector3 center, float radius, Color color, int thickness = 2, int quality = 30,
+        public static void DrawCircle(Vector3 center,
+            float radius,
+            Color color,
+            int thickness = 2,
+            int quality = 30,
             bool onMinimap = false)
         {
             var pointList = new List<Vector3>();
             for (var i = 0; i < quality; i++)
             {
                 var angle = i * Math.PI * 2 / quality;
-                pointList.Add(new Vector3(center.X + radius * (float)Math.Cos(angle),
-                    center.Y + radius * (float)Math.Sin(angle), center.Z));
+                pointList.Add(
+                    new Vector3(
+                        center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
+                        center.Z));
             }
 
             for (var i = 0; i < pointList.Count; i++)
@@ -294,8 +314,7 @@ namespace LeagueSharp.Common
                     (AonScreen.X < Drawing.Width * 1.5 && AonScreen.X > -Drawing.Width * 1.5 &&
                      BonScreen.X < Drawing.Width * 1.5 && BonScreen.X > -Drawing.Width * 1.5 &&
                      AonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5 &&
-                     BonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5
-                        ))
+                     BonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5))
                 {
                     Drawing.DrawLine(AonScreen.X, AonScreen.Y, BonScreen.X, BonScreen.Y, thickness, color);
                 }
@@ -389,22 +408,30 @@ namespace LeagueSharp.Common
                 foreach (var pos in SR)
                 {
                     if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                    {
                         return MapType.SummonersRift;
+                    }
                 }
                 foreach (var pos in DOM)
                 {
                     if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                    {
                         return MapType.CrystalScar;
+                    }
                 }
                 foreach (var pos in TTT)
                 {
                     if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                    {
                         return MapType.TwistedTreeline;
+                    }
                 }
                 foreach (var pos in HA)
                 {
                     if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
+                    {
                         return MapType.HowlingAbyss;
+                    }
                 }
                 return MapType.Unknown;
             }
@@ -447,6 +474,5 @@ namespace LeagueSharp.Common
                 }
             }
         }
-
     }
 }

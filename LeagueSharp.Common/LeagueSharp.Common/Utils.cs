@@ -1,11 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region LICENSE
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+#endregion
+
+#region
+
+using System;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+
 using SharpDX;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
@@ -38,11 +60,15 @@ namespace LeagueSharp.Common
         {
             /*A-Z */
             if (vKey >= 65 && vKey <= 90)
-                return ("" + (char)vKey);
+            {
+                return ("" + (char) vKey);
+            }
 
             /*F1-F12*/
             if (vKey >= 112 && vKey <= 123)
+            {
                 return ("F" + (vKey - 111));
+            }
 
             switch (vKey)
             {
@@ -77,7 +103,9 @@ namespace LeagueSharp.Common
             var h = algorithm.ComputeHash(Encoding.UTF8.GetBytes(s));
 
             foreach (var b in h)
+            {
                 sb.Append(b.ToString("x2"));
+            }
 
             return sb.ToString();
         }
@@ -95,10 +123,10 @@ namespace LeagueSharp.Common
 
             private static void Game_OnWndProc(WndEventArgs args)
             {
-                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
+                if (args.Msg == (uint) WindowsMessages.WM_MOUSEMOVE)
                 {
-                    _posX = unchecked((short)args.LParam);
-                    _posY = unchecked((short)((long)args.LParam >> 16));
+                    _posX = unchecked((short) args.LParam);
+                    _posY = unchecked((short) ((long) args.LParam >> 16));
                 }
             }
 
@@ -125,7 +153,5 @@ namespace LeagueSharp.Common
             FileLoc = Assembly.GetExecutingAssembly().Location;
             return FileLoc.Remove(FileLoc.LastIndexOf("\\", StringComparison.Ordinal));
         }
-
-
     }
 }

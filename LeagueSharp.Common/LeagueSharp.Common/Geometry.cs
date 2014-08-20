@@ -1,27 +1,29 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Geometry.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
+
 
 #region
 
 using System;
 using System.Collections.Generic;
+
 using SharpDX;
 
 #endregion
@@ -139,8 +141,11 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Retursn the distance to the line segment.
         /// </summary>
-        public static float Distance(this Vector2 point, Vector2 segmentStart, Vector2 segmentEnd,
-            bool onlyIfOnSegment = false, bool squared = false)
+        public static float Distance(this Vector2 point,
+            Vector2 segmentStart,
+            Vector2 segmentEnd,
+            bool onlyIfOnSegment = false,
+            bool squared = false)
         {
             var objects = point.ProjectOn(segmentStart, segmentEnd);
 
@@ -193,7 +198,7 @@ namespace LeagueSharp.Common
             c = Math.Cos(angle);
             s = Math.Sin(angle);
 
-            return new Vector2((float)(v.X * c - v.Y * s), (float)(v.Y * c + v.X * s));
+            return new Vector2((float) (v.X * c - v.Y * s), (float) (v.Y * c + v.X * s));
         }
 
         /// <summary>
@@ -206,12 +211,12 @@ namespace LeagueSharp.Common
 
         public static float RadianToDegree(double angle)
         {
-            return (float)(angle * (180.0 / Math.PI));
+            return (float) (angle * (180.0 / Math.PI));
         }
 
         public static float DegreeToRadian(double angle)
         {
-            return (float)(Math.PI * angle / 180.0);
+            return (float) (Math.PI * angle / 180.0);
         }
 
         /// <summary>
@@ -222,9 +227,13 @@ namespace LeagueSharp.Common
             if (Close(v1.X, 0, 0))
             {
                 if (v1.Y > 0)
+                {
                     return 90;
+                }
                 if (v1.Y < 0)
+                {
                     return 270;
+                }
 
                 return 0;
             }
@@ -248,9 +257,13 @@ namespace LeagueSharp.Common
         {
             var theta = p1.Polar() - p2.Polar();
             if (theta < 0)
+            {
                 theta = theta + 360;
+            }
             if (theta > 180)
+            {
                 theta = 360 - theta;
+            }
             return theta;
         }
 
@@ -287,7 +300,7 @@ namespace LeagueSharp.Common
             var bx = segmentEnd.X;
             var by = segmentEnd.Y;
             var rL = ((cx - ax) * (bx - ax) + (cy - ay) * (by - ay)) /
-                     ((float)Math.Pow(bx - ax, 2) + (float)Math.Pow(by - ay, 2));
+                     ((float) Math.Pow(bx - ax, 2) + (float) Math.Pow(by - ay, 2));
             var pointLine = new Vector2(ax + rL * (bx - ax), ay + rL * (by - ay));
             float rS;
             if (rL < 0)
@@ -328,8 +341,10 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Intersects two line segments.
         /// </summary>
-        public static IntersectionResult Intersection(this Vector2 lineSegment1Start, Vector2 lineSegment1End,
-            Vector2 lineSegment2Start, Vector2 lineSegment2End)
+        public static IntersectionResult Intersection(this Vector2 lineSegment1Start,
+            Vector2 lineSegment1End,
+            Vector2 lineSegment2Start,
+            Vector2 lineSegment2End)
         {
             double deltaACy = lineSegment1Start.Y - lineSegment2Start.Y;
             double deltaDCx = lineSegment2End.X - lineSegment2Start.X;
@@ -373,12 +388,16 @@ namespace LeagueSharp.Common
                 return new IntersectionResult();
             }
 
-            return new IntersectionResult(true,
-                new Vector2((float)(lineSegment1Start.X + r * deltaBAx), (float)(lineSegment1Start.Y + r * deltaBAy)));
+            return new IntersectionResult(
+                true,
+                new Vector2((float) (lineSegment1Start.X + r * deltaBAx), (float) (lineSegment1Start.Y + r * deltaBAy)));
         }
 
-        public static Object[] VectorMovementCollision(Vector2 startPoint1, Vector2 endPoint1, float v1,
-            Vector2 startPoint2, float v2)
+        public static Object[] VectorMovementCollision(Vector2 startPoint1,
+            Vector2 endPoint1,
+            float v1,
+            Vector2 startPoint2,
+            float v2)
         {
             float sP1x = startPoint1.X,
                 sP1y = startPoint1.Y,
@@ -388,7 +407,7 @@ namespace LeagueSharp.Common
                 sP2y = startPoint2.Y;
 
             float d = eP1x - sP1x, e = eP1y - sP1y;
-            float dist = (float)Math.Sqrt(d * d + e * e), t1 = float.NaN, t2 = float.NaN;
+            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN, t2 = float.NaN;
             float S = dist != 0f ? v1 * d / dist : 0, K = (dist != 0) ? v1 * e / dist : 0f;
 
             float r = sP2x - sP1x, j = sP2y - sP1y;
@@ -408,8 +427,7 @@ namespace LeagueSharp.Common
                 }
                 else
                 {
-                    float a = S * S + K * K - v2 * v2,
-                        b = -r * S - j * K;
+                    float a = S * S + K * K - v2 * v2, b = -r * S - j * K;
 
                     if (a == 0f)
                     {
@@ -428,7 +446,7 @@ namespace LeagueSharp.Common
                         var sqr = b * b - a * c;
                         if (sqr >= 0)
                         {
-                            var nom = (float)Math.Sqrt(sqr);
+                            var nom = (float) Math.Sqrt(sqr);
                             var t = (-nom - b) / a;
                             t1 = v2 * t >= 0f ? t : float.NaN;
                             t = (nom - b) / a;
@@ -485,10 +503,12 @@ namespace LeagueSharp.Common
             var D = center1.Distance(center2);
             //The Circles dont intersect:
             if (D > radius1 + radius2)
+            {
                 return new Vector2[] { };
+            }
 
             var A = (radius1 * radius1 - radius2 * radius2 + D * D) / (2 * D);
-            var H = (float)Math.Sqrt(radius1 * radius1 - A * A);
+            var H = (float) Math.Sqrt(radius1 * radius1 - A * A);
             var Direction = (center2 - center1).Normalized();
             var PA = center1 + A * Direction;
             var S1 = PA + H * Direction.Perpendicular();
@@ -499,7 +519,9 @@ namespace LeagueSharp.Common
         public static bool Close(float a, float b, float eps)
         {
             if (eps == 0)
-                eps = (float)1e-9;
+            {
+                eps = (float) 1e-9;
+            }
             return Math.Abs(a - b) <= eps;
         }
 

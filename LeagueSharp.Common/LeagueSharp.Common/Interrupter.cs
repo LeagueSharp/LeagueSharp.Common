@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Interrupter.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -58,233 +58,251 @@ namespace LeagueSharp.Common
         {
             #region Varus
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Varus",
-                SpellName = "VarusQ",
-                DangerLevel = InterruptableDangerLevel.Low,
-                Slot = SpellSlot.R,
-                BuffName = "VarusQ"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Varus",
+                    SpellName = "VarusQ",
+                    DangerLevel = InterruptableDangerLevel.Low,
+                    Slot = SpellSlot.R,
+                    BuffName = "VarusQ"
+                });
 
             #endregion
 
             #region Urgot
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Urgot",
-                SpellName = "UrgotSwap2",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "UrgotSwap2"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Urgot",
+                    SpellName = "UrgotSwap2",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "UrgotSwap2"
+                });
 
             #endregion
 
             #region Caitlyn
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Caitlyn",
-                SpellName = "CaitlynAceintheHole",
-                DangerLevel = InterruptableDangerLevel.Medium,
-                Slot = SpellSlot.R,
-                BuffName = "CaitlynAceintheHole",
-                ExtraDuration = 600
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Caitlyn",
+                    SpellName = "CaitlynAceintheHole",
+                    DangerLevel = InterruptableDangerLevel.Medium,
+                    Slot = SpellSlot.R,
+                    BuffName = "CaitlynAceintheHole",
+                    ExtraDuration = 600
+                });
 
             #endregion
 
             #region Warwick
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Warwick",
-                SpellName = "InfiniteDuress",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "infiniteduresssound"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Warwick",
+                    SpellName = "InfiniteDuress",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "infiniteduresssound"
+                });
 
             #endregion
 
             #region Shen
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Shen",
-                SpellName = "ShenStandUnited",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "NobodyPlaysShen:^)"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Shen",
+                    SpellName = "ShenStandUnited",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "NobodyPlaysShen:^)"
+                });
 
             #endregion
 
             #region Malzahar
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Malzahar",
-                SpellName = "AlZaharNetherGrasp",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "alzaharnethergraspsound",
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Malzahar",
+                    SpellName = "AlZaharNetherGrasp",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "alzaharnethergraspsound",
+                });
 
             #endregion
 
             #region Nunu
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Nunu",
-                SpellName = "AbsoluteZero",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "AbsoluteZero",
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Nunu",
+                    SpellName = "AbsoluteZero",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "AbsoluteZero",
+                });
 
             #endregion
 
             #region Pantheon
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Pantheon",
-                SpellName = "PantheonRJump",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "PantheonRJump"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Pantheon",
+                    SpellName = "PantheonRJump",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "PantheonRJump"
+                });
 
             #endregion
 
             #region Karthus
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Karthus",
-                SpellName = "KarthusFallenOne",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "karthusfallenonecastsound"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Karthus",
+                    SpellName = "KarthusFallenOne",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "karthusfallenonecastsound"
+                });
 
             #endregion
 
             #region Velkoz
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Velkoz",
-                SpellName = "VelkozR",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "VelkozR",
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Velkoz",
+                    SpellName = "VelkozR",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "VelkozR",
+                });
 
             #endregion
 
             #region Galio
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Galio",
-                SpellName = "GalioIdolOfDurand",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "GalioIdolOfDurand",
-                ExtraDuration = 200,
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Galio",
+                    SpellName = "GalioIdolOfDurand",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "GalioIdolOfDurand",
+                    ExtraDuration = 200,
+                });
 
             #endregion
 
             #region MissFortune
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "MissFortune",
-                SpellName = "MissFortuneBulletTime",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "missfortunebulletsound",
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "MissFortune",
+                    SpellName = "MissFortuneBulletTime",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "missfortunebulletsound",
+                });
 
             #endregion
 
             #region Fiddlesticks
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "FiddleSticks",
-                SpellName = "Drain",
-                DangerLevel = InterruptableDangerLevel.Medium,
-                Slot = SpellSlot.W,
-                BuffName = "Drain",
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "FiddleSticks",
+                    SpellName = "Drain",
+                    DangerLevel = InterruptableDangerLevel.Medium,
+                    Slot = SpellSlot.W,
+                    BuffName = "Drain",
+                });
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "FiddleSticks",
-                SpellName = "Crowstorm",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "Crowstorm",
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "FiddleSticks",
+                    SpellName = "Crowstorm",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "Crowstorm",
+                });
 
             #endregion
 
             #region Katarina
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Katarina",
-                SpellName = "KatarinaR",
-                DangerLevel = InterruptableDangerLevel.High,
-                Slot = SpellSlot.R,
-                BuffName = "katarinarsound"
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Katarina",
+                    SpellName = "KatarinaR",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "katarinarsound"
+                });
 
             #endregion
 
             #region MasterYi
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "MasterYi",
-                SpellName = "Meditate",
-                BuffName = "Meditate",
-                Slot = SpellSlot.W,
-                DangerLevel = InterruptableDangerLevel.Low,
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "MasterYi",
+                    SpellName = "Meditate",
+                    BuffName = "Meditate",
+                    Slot = SpellSlot.W,
+                    DangerLevel = InterruptableDangerLevel.Low,
+                });
 
             #endregion
 
             #region Xerath
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Xerath",
-                SpellName = "XerathLocusOfPower2",
-                BuffName = "XerathLocusOfPower2",
-                Slot = SpellSlot.R,
-                DangerLevel = InterruptableDangerLevel.Low,
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Xerath",
+                    SpellName = "XerathLocusOfPower2",
+                    BuffName = "XerathLocusOfPower2",
+                    Slot = SpellSlot.R,
+                    DangerLevel = InterruptableDangerLevel.Low,
+                });
 
             #endregion
 
             #region Janna
 
-            Spells.Add(new InterruptableSpell
-            {
-                ChampionName = "Janna",
-                SpellName = "ReapTheWhirlwind",
-                BuffName = "ReapTheWhirlwind",
-                Slot = SpellSlot.R,
-                DangerLevel = InterruptableDangerLevel.Low,
-            });
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Janna",
+                    SpellName = "ReapTheWhirlwind",
+                    BuffName = "ReapTheWhirlwind",
+                    Slot = SpellSlot.R,
+                    DangerLevel = InterruptableDangerLevel.Low,
+                });
 
             #endregion
 
@@ -297,7 +315,9 @@ namespace LeagueSharp.Common
         private static void FireOnInterruptable(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (OnPosibleToInterrupt != null)
+            {
                 OnPosibleToInterrupt(unit, spell);
+            }
         }
 
         private static void Game_OnGameUpdate(EventArgs args)

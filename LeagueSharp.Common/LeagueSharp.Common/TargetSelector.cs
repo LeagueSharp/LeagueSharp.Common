@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// TargetSelector.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -99,7 +99,10 @@ namespace LeagueSharp.Common
 
         private void Game_OnWndProc(WndEventArgs args)
         {
-            if (MenuGUI.IsChatOpen || ObjectManager.Player.Spellbook.SelectedSpellSlot != SpellSlot.Unknown) return;
+            if (MenuGUI.IsChatOpen || ObjectManager.Player.Spellbook.SelectedSpellSlot != SpellSlot.Unknown)
+            {
+                return;
+            }
 
             if (args.WParam == 1) // LMouse
             {
@@ -134,7 +137,10 @@ namespace LeagueSharp.Common
             if (Environment.TickCount > _lasttick + 100)
             {
                 _lasttick = Environment.TickCount;
-                if (!_update) return;
+                if (!_update)
+                {
+                    return;
+                }
                 if (_maintarget == null)
                 {
                     GetNormalTarget();
@@ -258,7 +264,10 @@ namespace LeagueSharp.Common
                         }
                         else if (FindPrioForTarget(target.ChampionName) == prio)
                         {
-                            if (!(target.Health < autopriority.Health)) continue;
+                            if (!(target.Health < autopriority.Health))
+                            {
+                                continue;
+                            }
                             autopriority = target;
                             prio = FindPrioForTarget(target.ChampionName);
                         }
@@ -271,15 +280,25 @@ namespace LeagueSharp.Common
         private static int FindPrioForTarget(string ChampionName)
         {
             if (ap.Contains(ChampionName))
+            {
                 return 2;
+            }
             if (ad.Contains(ChampionName))
+            {
                 return 1;
+            }
             if (sup.Contains(ChampionName))
+            {
                 return 3;
+            }
             if (bruiser.Contains(ChampionName))
+            {
                 return 4;
+            }
             if (tank.Contains(ChampionName))
+            {
                 return 5;
+            }
             return 5;
         }
 
@@ -355,25 +374,32 @@ namespace LeagueSharp.Common
         {
             if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() &&
                 _config.Item("SelTColor").GetValue<Circle>().Active)
-                Utility.DrawCircle(_selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 3,
-                    23);
+            {
+                Utility.DrawCircle(
+                    _selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 3, 23);
+            }
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg == (uint) WindowsMessages.WM_LBUTTONDOWN)
             {
-                foreach (
-                    var enemy in
-                        ObjectManager.Get<Obj_AI_Hero>()
-                            .Where(hero => hero.IsValidTarget())
-                            .OrderByDescending(h => h.Distance(Game.CursorPos)))
+                foreach (var enemy in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(hero => hero.IsValidTarget())
+                        .OrderByDescending(h => h.Distance(Game.CursorPos)))
                 {
                     if (enemy.Distance(Game.CursorPos) < 200)
+                    {
                         if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
+                        {
                             _selectedTarget = null;
+                        }
                         else
+                        {
                             _selectedTarget = enemy;
+                        }
+                    }
                 }
             }
         }
@@ -398,7 +424,9 @@ namespace LeagueSharp.Common
         {
             var p = 1;
             if (_config != null && _config.Item("SimpleTS" + hero.ChampionName + "Priority") != null)
+            {
                 p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>().Value;
+            }
 
             switch (p)
             {
@@ -419,37 +447,47 @@ namespace LeagueSharp.Common
         {
             string[] p1 =
             {
-                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar", "Hecarim",
-                "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu", "Olaf",
-                "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona", "Soraka",
-                "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
+                "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
+                "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu",
+                "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona",
+                "Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
 
             string[] p2 =
             {
-                "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax", "Lee Sin",
-                "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain", "Trundle",
-                "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao"
+                "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax",
+                "Lee Sin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain",
+                "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao"
             };
 
             string[] p3 =
             {
-                "Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin", "Kayle",
-                "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo", "Zilean"
+                "Akali", "Diana", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin",
+                "Kayle", "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo",
+                "Zilean"
             };
 
             string[] p4 =
             {
-                "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven", "Ezreal",
-                "Graves", "Jinx", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "LeBlanc", "Lucian", "Lux",
-                "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo",
+                "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
+                "Ezreal", "Graves", "Jinx", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "LeBlanc", "Lucian",
+                "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo",
                 "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed",
                 "Ziggs"
             };
 
-            if (p1.Contains(championName)) return 1;
-            if (p2.Contains(championName)) return 2;
-            if (p3.Contains(championName)) return 3;
+            if (p1.Contains(championName))
+            {
+                return 1;
+            }
+            if (p2.Contains(championName))
+            {
+                return 2;
+            }
+            if (p3.Contains(championName))
+            {
+                return 3;
+            }
             return p4.Contains(championName) ? 4 : 1;
         }
 
@@ -466,11 +504,13 @@ namespace LeagueSharp.Common
 
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
                 )
+            {
                 Config.AddItem(
                     new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
                         .SetValue(
-                            new Slider(autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5,
-                                1)));
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
+            }
             Config.AddItem(autoPriorityItem);
         }
 
@@ -480,8 +520,10 @@ namespace LeagueSharp.Common
             {
                 foreach (
                     var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
+                {
                     _config.Item("SimpleTS" + enemy.ChampionName + "Priority")
                         .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
+                }
             }
         }
 
@@ -494,7 +536,9 @@ namespace LeagueSharp.Common
             if (_selectedTarget.IsValidTarget() &&
                 (range < 0 && Orbwalking.InAutoAttackRange(_selectedTarget) ||
                  ObjectManager.Player.Distance(_selectedTarget) < range))
+            {
                 return _selectedTarget;
+            }
 
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
@@ -506,10 +550,10 @@ namespace LeagueSharp.Common
                     switch (damageType)
                     {
                         case DamageType.Magical:
-                            damage = (float)DamageLib.CalcMagicDmg(100, hero);
+                            damage = (float) DamageLib.CalcMagicDmg(100, hero);
                             break;
                         case DamageType.Physical:
-                            damage = (float)DamageLib.CalcPhysicalDmg(100, hero);
+                            damage = (float) DamageLib.CalcPhysicalDmg(100, hero);
                             break;
                         case DamageType.True:
                             damage = 100;

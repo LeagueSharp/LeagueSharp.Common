@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Packet.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -65,7 +65,7 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.X);
                     result.WriteFloat(packetStruct.Y);
                     result.WriteInteger(packetStruct.TargetNetworkId);
-                    result.WriteByte((byte)packetStruct.Type);
+                    result.WriteByte((byte) packetStruct.Type);
                     return result;
                 }
 
@@ -73,8 +73,8 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     packet.Position = 5;
-                    return new Struct(packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(),
-                        (PingType)packet.ReadByte());
+                    return new Struct(
+                        packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), (PingType) packet.ReadByte());
                 }
 
                 public struct Struct
@@ -109,7 +109,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteFloat(packetStruct.NetworkId);
-                    result.WriteByte((byte)packetStruct.Slot);
+                    result.WriteByte((byte) packetStruct.Slot);
                     result.WriteByte(0);
                     return result;
                 }
@@ -118,7 +118,7 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     packet.Position = 1;
-                    return new Struct(packet.ReadInteger(), (SpellSlot)packet.ReadByte());
+                    return new Struct(packet.ReadInteger(), (SpellSlot) packet.ReadByte());
                 }
 
                 public struct Struct
@@ -183,8 +183,12 @@ namespace LeagueSharp.Common
                     public float X;
                     public float Y;
 
-                    public Struct(float x = 0f, float y = 0f, byte moveType = 2, int targetNetworkId = 0,
-                        int unitNetworkId = -1, int sourceNetworkId = -1)
+                    public Struct(float x = 0f,
+                        float y = 0f,
+                        byte moveType = 2,
+                        int targetNetworkId = 0,
+                        int unitNetworkId = -1,
+                        int sourceNetworkId = -1)
                     {
                         SourceNetworkId = (sourceNetworkId == -1) ? ObjectManager.Player.NetworkId : sourceNetworkId;
                         MoveType = moveType;
@@ -211,7 +215,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte)packetStruct.Slot);
+                    result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
                     result.WriteFloat(packetStruct.ToX);
@@ -226,7 +230,7 @@ namespace LeagueSharp.Common
                     var result = new Struct();
                     packet.Position = 1;
                     result.SourceNetworkId = packet.ReadInteger();
-                    result.Slot = (SpellSlot)packet.ReadByte();
+                    result.Slot = (SpellSlot) packet.ReadByte();
                     result.FromX = packet.ReadFloat();
                     result.FromY = packet.ReadFloat();
                     result.ToX = packet.ReadFloat();
@@ -244,8 +248,13 @@ namespace LeagueSharp.Common
                     public float ToX;
                     public float ToY;
 
-                    public Struct(int targetNetworkId = 0, SpellSlot slot = SpellSlot.Q, int sourceNetworkId = -1,
-                        float fromX = 0f, float fromY = 0f, float toX = 0f, float toY = 0f)
+                    public Struct(int targetNetworkId = 0,
+                        SpellSlot slot = SpellSlot.Q,
+                        int sourceNetworkId = -1,
+                        float fromX = 0f,
+                        float fromY = 0f,
+                        float toX = 0f,
+                        float toY = 0f)
                     {
                         SourceNetworkId = (sourceNetworkId == -1) ? ObjectManager.Player.NetworkId : sourceNetworkId;
                         Slot = slot;
@@ -273,7 +282,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte)packetStruct.Slot);
+                    result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
                     result.WriteFloat(packetStruct.ToZ);
@@ -286,7 +295,7 @@ namespace LeagueSharp.Common
                     var result = new Struct();
                     packet.Position = 1;
                     result.SourceNetworkId = packet.ReadInteger();
-                    result.Slot = (SpellSlot)packet.ReadByte();
+                    result.Slot = (SpellSlot) packet.ReadByte();
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
                     result.ToZ = packet.ReadFloat();
@@ -301,7 +310,10 @@ namespace LeagueSharp.Common
                     public float ToY;
                     public float ToZ;
 
-                    public Struct(SpellSlot slot, float toX = 0f, float toY = 0f, float toZ = 0f,
+                    public Struct(SpellSlot slot,
+                        float toX = 0f,
+                        float toY = 0f,
+                        float toZ = 0f,
                         int sourceNetworkId = -1)
                     {
                         SourceNetworkId = (sourceNetworkId == -1) ? ObjectManager.Player.NetworkId : sourceNetworkId;
@@ -377,7 +389,7 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.Y);
                     result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte)packetStruct.Type);
+                    result.WriteByte((byte) packetStruct.Type);
                     return result;
                 }
 
@@ -385,8 +397,9 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     packet.Position = 5;
-                    return new Struct(packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), packet.ReadInteger(),
-                        (PingType)packet.ReadByte());
+                    return new Struct(
+                        packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), packet.ReadInteger(),
+                        (PingType) packet.ReadByte());
                 }
 
                 public struct Struct
@@ -397,7 +410,10 @@ namespace LeagueSharp.Common
                     public float X;
                     public float Y;
 
-                    public Struct(float x = 0f, float y = 0f, int targetNetworkId = 0, int sourceNetworkId = 0,
+                    public Struct(float x = 0f,
+                        float y = 0f,
+                        int targetNetworkId = 0,
+                        int sourceNetworkId = 0,
                         PingType type = PingType.Normal)
                     {
                         X = x;
@@ -649,12 +665,12 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.TurretNetworkId = packet.ReadInteger();
                     result.TargetNetworkId = packet.ReadInteger();
-                    
+
                     if (result.TurretNetworkId != 0)
                     {
                         AggroList[result.TurretNetworkId] = result.TargetNetworkId;
                     }
-                    
+
                     return result;
                 }
 
@@ -687,13 +703,19 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteInteger(packetStruct.NetworkId & ~0x40000000);
-                    result.WriteByte((byte)(packetStruct.BOk ? 1 : 0));
+                    result.WriteByte((byte) (packetStruct.BOk ? 1 : 0));
                     result.WriteInteger(packetStruct.SkinId);
                     for (var i = 0; i < 32; i++)
+                    {
                         if (i < packetStruct.ModelName.Length)
-                            result.WriteByte((byte)packetStruct.ModelName[i]);
+                        {
+                            result.WriteByte((byte) packetStruct.ModelName[i]);
+                        }
                         else
+                        {
                             result.WriteByte(0x00);
+                        }
+                    }
 
                     return result;
                 }
@@ -787,7 +809,7 @@ namespace LeagueSharp.Common
                     {
                         if (gObject is Obj_AI_Hero)
                         {
-                            var unit = (Obj_AI_Hero)gObject;
+                            var unit = (Obj_AI_Hero) gObject;
                             if (unit.IsValid && unit.Spellbook.GetSpell(SpellSlot.Recall) != null)
                             {
                                 result.Type = ObjectType.Player;
@@ -811,10 +833,14 @@ namespace LeagueSharp.Common
                                 result.Duration = duration;
 
                                 if (!RecallT.ContainsKey(result.UnitNetworkId))
+                                {
                                     RecallT.Add(result.UnitNetworkId, 0);
+                                }
 
                                 if (!TPT.ContainsKey(result.UnitNetworkId))
+                                {
                                     TPT.Add(result.UnitNetworkId, 0);
+                                }
 
 
                                 if (b2 != 0 ||
@@ -843,9 +869,13 @@ namespace LeagueSharp.Common
                                     if (RecallT.ContainsKey(result.UnitNetworkId))
                                     {
                                         if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
+                                        {
                                             result.Status = RecallStatus.RecallAborted;
+                                        }
                                         else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
+                                        {
                                             result.Status = RecallStatus.RecallFinished;
+                                        }
                                         RecallT[result.UnitNetworkId] = 0;
                                     }
                                 }
@@ -878,9 +908,13 @@ namespace LeagueSharp.Common
                             {
                                 result.Type = ObjectType.Object;
                                 if (gObject.Name.Contains("Minion"))
+                                {
                                     result.Type = ObjectType.Minion;
+                                }
                                 if (gObject.Name.Contains("Ward"))
+                                {
                                     result.Type = ObjectType.Ward;
+                                }
 
                                 if (b2 != 0)
                                 {

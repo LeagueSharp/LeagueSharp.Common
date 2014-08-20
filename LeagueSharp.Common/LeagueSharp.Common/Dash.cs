@@ -1,27 +1,28 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Dash.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
 
 using System;
 using System.Collections.Generic;
+
 using SharpDX;
 
 #endregion
@@ -56,7 +57,9 @@ namespace LeagueSharp.Common
                 if (unit != null && unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
                 {
                     if (!DetectedDashes.ContainsKey(unit.NetworkId))
+                    {
                         DetectedDashes.Add(unit.NetworkId, new DashItem());
+                    }
 
                     DetectedDashes[unit.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
                     DetectedDashes[unit.NetworkId].Speed = speed;
@@ -78,10 +81,10 @@ namespace LeagueSharp.Common
                         DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
                         DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
                         DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
-                                                               (int)(1000 *
-                                                                     (dashItem.Value.EndPos.Distance(
-                                                                         dashItem.Value.StartPos) /
-                                                                      dashItem.Value.Speed));
+                                                               (int)
+                                                                   (1000 *
+                                                                    (dashItem.Value.EndPos.Distance(
+                                                                        dashItem.Value.StartPos) / dashItem.Value.Speed));
                         DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
                         DetectedDashes[dashItem.Key].Processed = true;
 

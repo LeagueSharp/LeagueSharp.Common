@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Prediction.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -23,8 +23,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SharpDX;
 using Color = System.Drawing.Color;
+
+using SharpDX;
 
 #endregion
 
@@ -138,6 +139,7 @@ namespace LeagueSharp.Common
         private static void OnTick(EventArgs args)
         {
             foreach (var unit in ObjectManager.Get<Obj_AI_Hero>())
+            {
                 if (Dashes.ContainsKey(unit.NetworkId))
                 {
                     if (!Dashes[unit.NetworkId].processed)
@@ -148,6 +150,7 @@ namespace LeagueSharp.Common
                         //Game.PrintChat("New Dash" + duration);
                     }
                 }
+            }
         }
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs args)
@@ -178,7 +181,9 @@ namespace LeagueSharp.Common
                     endPos = p[p.Count() - 1].To2D();
 
                     if (!Dashes.ContainsKey(unit.NetworkId))
+                    {
                         Dashes.Add(unit.NetworkId, new Dash(0, 0, true, new Vector2()));
+                    }
 
                     Dashes[unit.NetworkId].endT = Game.Time + bdata.delay;
                     Dashes[unit.NetworkId].EndPos = endPos;
@@ -202,7 +207,9 @@ namespace LeagueSharp.Common
                 if (unit.IsValid && unit.Type == GameObjectType.obj_AI_Hero)
                 {
                     if (!Dashes.ContainsKey(unit.NetworkId))
+                    {
                         Dashes.Add(unit.NetworkId, new Dash(0, 0, false, new Vector2()));
+                    }
 
                     Dashes[unit.NetworkId].processed = false;
                     Dashes[unit.NetworkId].Speed = decodedPacket.Speed;
@@ -217,8 +224,8 @@ namespace LeagueSharp.Common
             {
                 if (hero.Team != ObjectManager.Player.Team)
                 {
-                    var Out = GetBestPosition(hero, 0.25f, 75, 1000, Game.CursorPos, 900, true,
-                        SkillshotType.SkillshotCircle, Game.CursorPos);
+                    var Out = GetBestPosition(
+                        hero, 0.25f, 75, 1000, Game.CursorPos, 900, true, SkillshotType.SkillshotCircle, Game.CursorPos);
 
                     Drawing.DrawCircle(Out.CastPosition, 200, Color.White);
                     Drawing.DrawCircle(Out.Position, 200, Color.GreenYellow);
@@ -249,11 +256,8 @@ namespace LeagueSharp.Common
             foreach (var buff in unit.Buffs)
             {
                 if (buff.IsActive && Game.Time <= buff.EndTime &&
-                    (buff.Type == BuffType.Charm ||
-                     buff.Type == BuffType.Knockup ||
-                     buff.Type == BuffType.Stun ||
-                     buff.Type == BuffType.Suppression ||
-                     buff.Type == BuffType.Snare))
+                    (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                     buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
                 {
                     result = Math.Max(result, buff.EndTime);
                 }
@@ -261,9 +265,15 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        public static PredictionOutput GetBestPosition(Obj_AI_Base unit, float delay, float width, float speed,
+        public static PredictionOutput GetBestPosition(Obj_AI_Base unit,
+            float delay,
+            float width,
+            float speed,
             Vector3 from,
-            float range, bool collision, SkillshotType stype, Vector3 rangeCheckFrom = new Vector3())
+            float range,
+            bool collision,
+            SkillshotType stype,
+            Vector3 rangeCheckFrom = new Vector3())
         {
             var result = new PredictionOutput(new Vector2(), new Vector2(), 0);
             if (!rangeCheckFrom.To2D().IsValid())
@@ -284,8 +294,8 @@ namespace LeagueSharp.Common
 
                 if (!Dashes[unit.NetworkId].IsBlink)
                 {
-                    var iPrediction = GetUnitPosition(unit.GetWaypoints(),
-                        Dashes[unit.NetworkId].Speed, delay, speed, 1, @from.To2D());
+                    var iPrediction = GetUnitPosition(
+                        unit.GetWaypoints(), Dashes[unit.NetworkId].Speed, delay, speed, 1, @from.To2D());
 
                     if (iPrediction.Valid)
                     {
@@ -298,9 +308,7 @@ namespace LeagueSharp.Common
                     {
                         /* Check if we can hit after landing */
                         var endPoint = unit.GetWaypoints()[unit.GetWaypoints().Count - 1];
-                        var landtime = Game.Time +
-                                       Vector2.Distance(endPoint,
-                                           from.To2D()) / speed + delay;
+                        var landtime = Game.Time + Vector2.Distance(endPoint, from.To2D()) / speed + delay;
 
                         if ((landtime - Dashes[unit.NetworkId].endT) * unit.MoveSpeed < width * 1.25 ||
                             unit.BaseSkinName == "Riven")
@@ -368,8 +376,7 @@ namespace LeagueSharp.Common
                 }
                 else
                 {
-                    var iPrediction = GetUnitPosition(Waypoints, unit.MoveSpeed, delay, speed,
-                        width, @from.To2D());
+                    var iPrediction = GetUnitPosition(Waypoints, unit.MoveSpeed, delay, speed, width, @from.To2D());
 
                     if (iPrediction.Valid)
                     {
@@ -396,8 +403,7 @@ namespace LeagueSharp.Common
                         result.HitChance = HitChance.CantHit;
                     }
 
-                    if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.CastPosition.To2D()) >=
-                        range * range)
+                    if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.CastPosition.To2D()) >= range * range)
                     {
                         result.HitChance = HitChance.CantHit;
                     }
@@ -416,9 +422,11 @@ namespace LeagueSharp.Common
                     }
 
                     if (Vector2.DistanceSquared(rangeCheckFrom.To2D(), result.CastPosition.To2D()) >= range * range)
+                    {
                         result.CastPosition = rangeCheckFrom +
                                               (range - 10) *
                                               (result.CastPosition - rangeCheckFrom).To2D().Normalized().To3D();
+                    }
                 }
             }
 
@@ -429,8 +437,7 @@ namespace LeagueSharp.Common
                 CheckLocations.Add(unit.ServerPosition.To2D());
                 CheckLocations.Add(result.CastPosition.To2D());
 
-                var Col1 = GetCollision(from.To2D(), CheckLocations, stype, width - GetHitBox(unit),
-                    delay, speed);
+                var Col1 = GetCollision(from.To2D(), CheckLocations, stype, width - GetHitBox(unit), delay, speed);
 
                 if (Col1.Count > 0)
                 {
@@ -442,9 +449,16 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        public static PredictionOutput GetBestAOEPosition(Obj_AI_Base unit, float delay, float width, float speed,
-            Vector3 from, float range, bool collision,
-            SkillshotType spelltype, Vector3 rangeCheckFrom = new Vector3(), float accel = -1483)
+        public static PredictionOutput GetBestAOEPosition(Obj_AI_Base unit,
+            float delay,
+            float width,
+            float speed,
+            Vector3 from,
+            float range,
+            bool collision,
+            SkillshotType spelltype,
+            Vector3 rangeCheckFrom = new Vector3(),
+            float accel = -1483)
         {
             var objects = new PredictionOutput(new Vector2(), new Vector2(), 0);
             if (!rangeCheckFrom.To2D().IsValid())
@@ -471,8 +485,12 @@ namespace LeagueSharp.Common
             return objects;
         }
 
-        public static List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> To, SkillshotType stype, float width,
-            float delay, float speed)
+        public static List<Obj_AI_Base> GetCollision(Vector2 from,
+            List<Vector2> To,
+            SkillshotType stype,
+            float width,
+            float delay,
+            float speed)
         {
             var result = new List<Obj_AI_Base>();
             delay -= ExtraDelay();
@@ -484,16 +502,15 @@ namespace LeagueSharp.Common
                     if (collisionObject.IsValidTarget() && collisionObject.Team != ObjectManager.Player.Team &&
                         Vector2.DistanceSquared(from, collisionObject.Position.To2D()) <= 2000 * 2000)
                     {
-                        var objectPrediction = GetBestPosition(collisionObject, delay, width, speed,
-                            from.To3D(), float.MaxValue,
-                            false, stype, @from.To3D());
-                        if (
-                            objectPrediction.Position.To2D().Distance(from, TestPosition, true, true) <=
+                        var objectPrediction = GetBestPosition(
+                            collisionObject, delay, width, speed, from.To3D(), float.MaxValue, false, stype,
+                            @from.To3D());
+                        if (objectPrediction.Position.To2D().Distance(from, TestPosition, true, true) <=
                             Math.Pow((width + 15 + collisionObject.BoundingRadius), 2))
                         {
                             result.Add(collisionObject);
-                            Drawing.DrawCircle(objectPrediction.Position, width + collisionObject.BoundingRadius,
-                                Color.Red);
+                            Drawing.DrawCircle(
+                                objectPrediction.Position, width + collisionObject.BoundingRadius, Color.Red);
                         }
                     }
                 }
@@ -504,8 +521,12 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        private static PredictionInternalOutput GetUnitPosition(List<Vector2> waypoints, float unitSpeed, float delay,
-            float missileSpeed, float width, Vector2 from)
+        private static PredictionInternalOutput GetUnitPosition(List<Vector2> waypoints,
+            float unitSpeed,
+            float delay,
+            float missileSpeed,
+            float width,
+            Vector2 from)
         {
             var result = new PredictionInternalOutput(new Vector2(), new Vector2(), false);
 
@@ -539,16 +560,15 @@ namespace LeagueSharp.Common
 
 
                     var Sol = Geometry.VectorMovementCollision(A, B, unitSpeed, from, missileSpeed);
-                    var t1 = (float)Sol[0];
-                    var p1 = (Vector2)Sol[1];
+                    var t1 = (float) Sol[0];
+                    var p1 = (Vector2) Sol[1];
                     var t = float.NaN;
                     var Tc = Tb;
                     Tb = T + Vector2.Distance(A, B) / unitSpeed;
 
                     if (!float.IsNaN(t1))
                     {
-                        if (((t1 >= T) && (t1 <= Tb))
-                            )
+                        if (((t1 >= T) && (t1 <= Tb)))
                         {
                             t = t1;
                         }
@@ -594,11 +614,17 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        private static PredictionOutput GetAoeCirclePrediction(Obj_AI_Base unit, float width, float range,
-            float delay, float speed, bool collision, Vector3 from, Vector3 rangeCheckFrom)
+        private static PredictionOutput GetAoeCirclePrediction(Obj_AI_Base unit,
+            float width,
+            float range,
+            float delay,
+            float speed,
+            bool collision,
+            Vector3 from,
+            Vector3 rangeCheckFrom)
         {
-            var result = GetBestPosition(unit, delay, width, speed, from, range, collision,
-                SkillshotType.SkillshotCircle, rangeCheckFrom);
+            var result = GetBestPosition(
+                unit, delay, width, speed, from, range, collision, SkillshotType.SkillshotCircle, rangeCheckFrom);
             var Points = new List<Vector2>();
 
             Points.Add(result.Position.To2D());
@@ -606,10 +632,12 @@ namespace LeagueSharp.Common
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (enemy.Team != ObjectManager.Player.Team && enemy.IsValidTarget() &&
-                    enemy.NetworkId != unit.NetworkId && Vector3.Distance(rangeCheckFrom, enemy.ServerPosition) <= range * 1.2)
+                    enemy.NetworkId != unit.NetworkId &&
+                    Vector3.Distance(rangeCheckFrom, enemy.ServerPosition) <= range * 1.2)
                 {
-                    var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
-                        SkillshotType.SkillshotCircle, rangeCheckFrom);
+                    var pred = GetBestPosition(
+                        enemy, delay, width, speed, from, range, collision, SkillshotType.SkillshotCircle,
+                        rangeCheckFrom);
 
                     if (pred.HitChance >= HitChance.CantHit)
                     {
@@ -652,8 +680,8 @@ namespace LeagueSharp.Common
         private static Vector2[] GetPossiblePoints(Vector2 from, Vector2 pos, float width, float range)
         {
             var middlePoint = (from + pos) / 2;
-            var vectors = Geometry.CircleCircleIntersection(from, middlePoint, width,
-                Vector2.Distance(middlePoint, from));
+            var vectors = Geometry.CircleCircleIntersection(
+                from, middlePoint, width, Vector2.Distance(middlePoint, from));
             var P1 = vectors[0];
             var P2 = vectors[1];
 
@@ -693,12 +721,17 @@ namespace LeagueSharp.Common
             return new Object[] { hits, nPoints };
         }
 
-        private static PredictionOutput GetAoeLinePrediction(Obj_AI_Base unit, float width, float range, float delay,
+        private static PredictionOutput GetAoeLinePrediction(Obj_AI_Base unit,
+            float width,
+            float range,
+            float delay,
             float speed,
-            bool collision, Vector3 from, Vector3 rangeCheckFrom)
+            bool collision,
+            Vector3 from,
+            Vector3 rangeCheckFrom)
         {
-            var result = GetBestPosition(unit, delay, width, speed, from, range, collision,
-                SkillshotType.SkillshotLine, rangeCheckFrom);
+            var result = GetBestPosition(
+                unit, delay, width, speed, from, range, collision, SkillshotType.SkillshotLine, rangeCheckFrom);
             var points = new List<Vector2>();
 
             points.Add(result.Position.To2D());
@@ -707,11 +740,10 @@ namespace LeagueSharp.Common
             {
                 if (enemy.IsEnemy && enemy.NetworkId != unit.NetworkId && enemy.IsValidTarget() && !enemy.IsDead &&
                     enemy.IsValid &&
-                    Vector3.DistanceSquared(enemy.ServerPosition, rangeCheckFrom) <=
-                    (range * 1.2) * (range * 1.2))
+                    Vector3.DistanceSquared(enemy.ServerPosition, rangeCheckFrom) <= (range * 1.2) * (range * 1.2))
                 {
-                    var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
-                        SkillshotType.SkillshotLine, rangeCheckFrom);
+                    var pred = GetBestPosition(
+                        enemy, delay, width, speed, from, range, collision, SkillshotType.SkillshotLine, rangeCheckFrom);
 
                     if (pred.HitChance >= HitChance.CantHit)
                     {
@@ -733,17 +765,17 @@ namespace LeagueSharp.Common
                     Vector2 C1 = possiblePoints[0], C2 = possiblePoints[1];
                     var countHits1 = CountHits(@from.To2D(), C1, width, points);
                     var countHits2 = CountHits(@from.To2D(), C2, width, points);
-                    if ((int)countHits1[0] >= maxHit)
+                    if ((int) countHits1[0] >= maxHit)
                     {
                         maxHitPos = C1;
-                        maxHit = (int)countHits1[0];
-                        maxHitPoints = (List<Vector2>)countHits1[1];
+                        maxHit = (int) countHits1[0];
+                        maxHitPoints = (List<Vector2>) countHits1[1];
                     }
-                    if ((int)countHits2[0] >= maxHit)
+                    if ((int) countHits2[0] >= maxHit)
                     {
                         maxHitPos = C2;
-                        maxHit = (int)countHits2[0];
-                        maxHitPoints = (List<Vector2>)countHits2[1];
+                        maxHit = (int) countHits2[0];
+                        maxHitPoints = (List<Vector2>) countHits2[1];
                     }
                 }
             }
@@ -761,9 +793,8 @@ namespace LeagueSharp.Common
                         var objects01 = maxHitPoints[i].ProjectOn(startP, endP);
                         var objects02 = maxHitPoints[j].ProjectOn(startP, endP);
 
-                        var dist =
-                            Vector2.DistanceSquared(maxHitPoints[i], objects01.LinePoint) +
-                            Vector2.DistanceSquared(maxHitPoints[j], objects02.LinePoint);
+                        var dist = Vector2.DistanceSquared(maxHitPoints[i], objects01.LinePoint) +
+                                   Vector2.DistanceSquared(maxHitPoints[j], objects02.LinePoint);
                         if (dist >= maxDistance)
                         {
                             maxDistance = dist;
@@ -808,12 +839,17 @@ namespace LeagueSharp.Common
             return CountVectorBetween(v1, v2, points);
         }
 
-        private static PredictionOutput GetAoeConePrediction(Obj_AI_Base unit, float angle, float range, float delay,
+        private static PredictionOutput GetAoeConePrediction(Obj_AI_Base unit,
+            float angle,
+            float range,
+            float delay,
             float speed,
-            bool collision, Vector3 from, Vector3 rangeCheckFrom)
+            bool collision,
+            Vector3 from,
+            Vector3 rangeCheckFrom)
         {
-            var result = GetBestPosition(unit, delay, 1, speed, from, range, collision,
-                SkillshotType.SkillshotLine, rangeCheckFrom);
+            var result = GetBestPosition(
+                unit, delay, 1, speed, from, range, collision, SkillshotType.SkillshotLine, rangeCheckFrom);
             var points = new List<Vector2>();
 
             points.Add(result.Position.To2D());
@@ -821,11 +857,10 @@ namespace LeagueSharp.Common
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (enemy.IsEnemy && enemy.NetworkId != unit.NetworkId && enemy.IsValidTarget() && !enemy.IsDead &&
-                    enemy.IsValid &&
-                    Vector3.Distance(rangeCheckFrom, enemy.ServerPosition) <= range)
+                    enemy.IsValid && Vector3.Distance(rangeCheckFrom, enemy.ServerPosition) <= range)
                 {
-                    var pred = GetBestPosition(enemy, delay, 1, speed, from, range, collision,
-                        SkillshotType.SkillshotLine, rangeCheckFrom);
+                    var pred = GetBestPosition(
+                        enemy, delay, 1, speed, from, range, collision, SkillshotType.SkillshotLine, rangeCheckFrom);
 
                     if (pred.HitChance >= HitChance.CantHit)
                     {
@@ -847,11 +882,11 @@ namespace LeagueSharp.Common
                     var pos2 = point.Rotated(-angle / 2);
 
                     var objects3 = CheckHit(pos1, angle, points);
-                    var hits3 = (int)objects3[0];
-                    var points3 = (List<Vector2>)objects3[1];
+                    var hits3 = (int) objects3[0];
+                    var points3 = (List<Vector2>) objects3[1];
                     var objects4 = CheckHit(pos2, angle, points);
-                    var hits4 = (int)objects4[0];
-                    var points4 = (List<Vector2>)objects4[1];
+                    var hits4 = (int) objects4[0];
+                    var points4 = (List<Vector2>) objects4[1];
 
                     if (hits3 >= maxHit)
                     {
@@ -915,9 +950,11 @@ namespace LeagueSharp.Common
                     {
                         if (i != j)
                         {
-                            v1 = new Vector2(targets[i].X - ObjectManager.Player.ServerPosition.X,
+                            v1 = new Vector2(
+                                targets[i].X - ObjectManager.Player.ServerPosition.X,
                                 targets[i].Y - ObjectManager.Player.ServerPosition.Y);
-                            v2 = new Vector2(targets[j].X - ObjectManager.Player.ServerPosition.X,
+                            v2 = new Vector2(
+                                targets[j].X - ObjectManager.Player.ServerPosition.X,
                                 targets[j].Y - ObjectManager.Player.ServerPosition.Y);
                             if (targets.Count == 2)
                             {
@@ -931,7 +968,8 @@ namespace LeagueSharp.Common
                                 {
                                     if (k != i && k != j)
                                     {
-                                        v3 = new Vector2(targets[k].X - ObjectManager.Player.ServerPosition.X,
+                                        v3 = new Vector2(
+                                            targets[k].X - ObjectManager.Player.ServerPosition.X,
                                             targets[k].Y - ObjectManager.Player.ServerPosition.Y);
                                         if (AreClockwise(v3, v1) && !AreClockwise(v3, v2))
                                         {
@@ -994,10 +1032,12 @@ namespace LeagueSharp.Common
                             tsTargetOriginal = new Vector2(points[0].X - from.X, points[0].Y - from.Y);
                             tsTarget = tsTargetOriginal.Rotated(theta);
                             tsAngle = Geometry.DegreeToRadian((-47) - (830 - range) / (-20)); //interpolate launch angle
-                            tsVo = (float)Math.Sqrt((range * accel) / Math.Sin(2 * tsAngle)); //initial velocity
-                            tsTestZ = (float)(Math.Tan(tsAngle) * tsTarget.X -
-                                              (accel / (Math.Pow(2 * tsVo, 2) * Math.Pow(Math.Cos(tsAngle), 2))) *
-                                              Math.Pow(tsTarget.X, 2));
+                            tsVo = (float) Math.Sqrt((range * accel) / Math.Sin(2 * tsAngle)); //initial velocity
+                            tsTestZ =
+                                (float)
+                                    (Math.Tan(tsAngle) * tsTarget.X -
+                                     (accel / (Math.Pow(2 * tsVo, 2) * Math.Pow(Math.Cos(tsAngle), 2))) *
+                                     Math.Pow(tsTarget.X, 2));
                             if (Math.Abs(Math.Ceiling(tsTestZ) - Math.Ceiling(points[0].Y)) <= roundRange)
                             {
                                 tsFlag = true;
@@ -1019,14 +1059,14 @@ namespace LeagueSharp.Common
                                     targetOriginal = new Vector2(hero.X - from.X, hero.Y - from.Y);
                                     targetAngle = targetOriginal.Polar();
 
-                                    if ((targetAngle <= newTheta) &&
-                                        ((tsTargetAngle <= newTheta)))
+                                    if ((targetAngle <= newTheta) && ((tsTargetAngle <= newTheta)))
                                         //angle of theta must be greater than target
                                     {
                                         target = targetOriginal.Rotated(theta); //rotate to neutral axis
                                         angle = Geometry.DegreeToRadian((-47) - (830 - range) / (-20));
                                         //interpolate launch angle
-                                        vo = (float)Math.Sqrt((range * accel) / Math.Sin(2 * angle)); //initial velocity
+                                        vo = (float) Math.Sqrt((range * accel) / Math.Sin(2 * angle));
+                                            //initial velocity
                                         testZ =
                                             (float)
                                                 (Math.Tan(angle) * target.X -
@@ -1055,19 +1095,25 @@ namespace LeagueSharp.Common
             }
             return new Object[]
             {
-                (float)(ObjectManager.Player.ServerPosition.X + highestRange * Math.Cos(highestAngle)),
-                (float)(ObjectManager.Player.ServerPosition.Y + highestRange * Math.Sin(highestAngle)),
+                (float) (ObjectManager.Player.ServerPosition.X + highestRange * Math.Cos(highestAngle)),
+                (float) (ObjectManager.Player.ServerPosition.Y + highestRange * Math.Sin(highestAngle)),
                 highestCollision
             };
         }
 
         //Not working like it should
-        private static PredictionOutput GetAoeArcPrediction(Obj_AI_Base unit, float width, float range, float delay,
+        private static PredictionOutput GetAoeArcPrediction(Obj_AI_Base unit,
+            float width,
+            float range,
+            float delay,
             float speed,
-            bool collision, Vector3 from, Vector3 rangeCheckFrom, float accel)
+            bool collision,
+            Vector3 from,
+            Vector3 rangeCheckFrom,
+            float accel)
         {
-            var result = GetBestPosition(unit, delay, width, speed, from, range, collision,
-                SkillshotType.SkillshotLine, rangeCheckFrom);
+            var result = GetBestPosition(
+                unit, delay, width, speed, from, range, collision, SkillshotType.SkillshotLine, rangeCheckFrom);
             var points = new List<Vector2>();
 
             points.Add(result.Position.To2D());
@@ -1075,11 +1121,10 @@ namespace LeagueSharp.Common
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (enemy.IsEnemy && enemy.NetworkId != unit.NetworkId && enemy.IsValidTarget() && !enemy.IsDead &&
-                    enemy.IsValid &&
-                    Vector3.Distance(from, enemy.ServerPosition) <= range)
+                    enemy.IsValid && Vector3.Distance(from, enemy.ServerPosition) <= range)
                 {
-                    var pred = GetBestPosition(enemy, delay, width, speed, from, range, collision,
-                        SkillshotType.SkillshotLine, rangeCheckFrom);
+                    var pred = GetBestPosition(
+                        enemy, delay, width, speed, from, range, collision, SkillshotType.SkillshotLine, rangeCheckFrom);
 
                     if (pred.HitChance >= HitChance.CantHit)
                     {
@@ -1092,8 +1137,8 @@ namespace LeagueSharp.Common
             if (points.Count > 1)
             {
                 var obj = CrescentCollision(points, @from.To2D(), range, accel);
-                result.CastPosition = new Vector2((float)obj[0], (float)obj[1]).To3D();
-                result.TargetsHit = (int)obj[2];
+                result.CastPosition = new Vector2((float) obj[0], (float) obj[1]).To3D();
+                result.TargetsHit = (int) obj[2];
             }
 
             return result;
@@ -1196,7 +1241,9 @@ internal class PredictionUtils
                 result.Add(FirstPoint);
 
                 for (var j = i + 1; j < ElongedPath.Count; j++)
+                {
                     result.Add(ElongedPath[j]);
+                }
 
                 return result;
             }

@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// Orbwalking.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -24,8 +24,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SharpDX;
 using Color = System.Drawing.Color;
+
+using SharpDX;
 
 #endregion
 
@@ -54,28 +55,29 @@ namespace LeagueSharp.Common
         //Spells that reset the attack timer.
         private static readonly string[] AttackResets =
         {
-            "blindingdart", "cassiopeiatwinfang", "dariusnoxiantacticsonh", "detonatingshot", "fioraflurry", "garenq",
-            "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "kogmawqmis", "leonashieldofdaybreak", "luciane",
-            "lucianq", "missfortunericochetshot", "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq",
-            "nautiluspiercinggaze", "netherblade", "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute",
-            "rengarq", "shyvanadoubleattack", "sivirw", "sonahymnofvalor", "takedown", "talonnoxiandiplomacy",
-            "trundletrollsmash", "vaynetumble", "vie", "volibearq", "xenzhaocombotarget", "yorickspectral"
+            "blindingdart", "cassiopeiatwinfang", "dariusnoxiantacticsonh",
+            "detonatingshot", "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
+            "kogmawqmis", "leonashieldofdaybreak", "luciane", "lucianq", "missfortunericochetshot",
+            "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
+            "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+            "sivirw", "sonahymnofvalor", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie",
+            "volibearq", "xenzhaocombotarget", "yorickspectral"
         };
 
         //Spells that are not attacks even if they have the "attack" word in their name.
         private static readonly string[] NoAttacks =
         {
-            "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon",
-            "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire",
-            "zyragraspingplantattack2fire"
+            "jarvanivcataclysmattack", "monkeykingdoubleattack",
+            "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
+            "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
         };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
         private static readonly string[] Attacks =
         {
-            "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "lucianpassiveattack",
-            "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
-            "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
+            "caitlynheadshotmissile", "frostarrow", "garenslash2",
+            "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", "quinnwenhanced", "renektonexecute",
+            "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
             "xenzhaothrust3"
         };
 
@@ -98,6 +100,7 @@ namespace LeagueSharp.Common
 
             //Add the passive damages
             PassiveDamage p;
+
             #region PassiveDamages
 
             #region Caitlyn
@@ -109,8 +112,8 @@ namespace LeagueSharp.Common
                 GetDamage =
                     minion =>
                         ((float)
-                            DamageLib.CalcPhysicalDmg(1.5d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod),
-                                minion)),
+                            DamageLib.CalcPhysicalDmg(
+                                1.5d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion)),
             };
             AttackPassives.Add(p);
 
@@ -125,8 +128,8 @@ namespace LeagueSharp.Common
                 GetDamage =
                     minion =>
                         ((float)
-                            DamageLib.CalcPhysicalDmg(0.45d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod),
-                                minion)),
+                            DamageLib.CalcPhysicalDmg(
+                                0.45d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion)),
             };
             AttackPassives.Add(p);
 
@@ -138,7 +141,7 @@ namespace LeagueSharp.Common
             {
                 ChampionName = "Corki",
                 IsActive = minion => (Player.HasBuff("RapidReload")),
-                GetDamage = minion => ((float)0.1d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod)),
+                GetDamage = minion => ((float) 0.1d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod)),
             };
             AttackPassives.Add(p);
 
@@ -153,7 +156,7 @@ namespace LeagueSharp.Common
                     minion =>
                         (from buff in minion.Buffs where buff.DisplayName == "GnarWProc" select buff.Count)
                             .FirstOrDefault() == 2,
-                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+                GetDamage = minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.W)),
             };
             AttackPassives.Add(p);
 
@@ -168,8 +171,8 @@ namespace LeagueSharp.Common
                 GetDamage =
                     minion =>
                         ((float)
-                            DamageLib.CalcPhysicalDmg(0.1d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod),
-                                minion)),
+                            DamageLib.CalcPhysicalDmg(
+                                0.1d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion)),
             };
             AttackPassives.Add(p);
 
@@ -182,7 +185,7 @@ namespace LeagueSharp.Common
                 ChampionName = "Katarina",
                 IsActive = minion => (minion.HasBuff("KataQMark1")),
                 GetDamage =
-                    minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.Q, DamageLib.StageType.FirstDamage)),
+                    minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.Q, DamageLib.StageType.FirstDamage)),
             };
             AttackPassives.Add(p);
 
@@ -194,10 +197,7 @@ namespace LeagueSharp.Common
             {
                 ChampionName = "KogMaw",
                 IsActive = minion => (Player.HasBuff("KogMawBioArcaneBarrage")),
-                GetDamage =
-                    minion =>
-                        ((float)
-                            DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+                GetDamage = minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.W)),
             };
             AttackPassives.Add(p);
 
@@ -213,7 +213,7 @@ namespace LeagueSharp.Common
                     minion =>
                         (float)
                             DamageLib.CalcMagicDmg(
-                                (float)0.06d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion),
+                                (float) 0.06d * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod), minion),
             };
             AttackPassives.Add(p);
 
@@ -225,7 +225,7 @@ namespace LeagueSharp.Common
             {
                 ChampionName = "Nasus",
                 IsActive = minion => (Player.HasBuff("SiphoningStrike")),
-                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.Q)),
+                GetDamage = minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.Q)),
             };
             AttackPassives.Add(p);
 
@@ -241,7 +241,7 @@ namespace LeagueSharp.Common
                     minion =>
                         (float)
                             DamageLib.CalcMagicDmg(
-                                (float)0.15d * Player.FlatMagicDamageMod +
+                                (float) 0.15d * Player.FlatMagicDamageMod +
                                 new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 }[
                                     Player.Level - 1], minion),
             };
@@ -274,7 +274,7 @@ namespace LeagueSharp.Common
                 IsActive = minion => (Player.HasBuff("Pick A Card Blue")),
                 GetDamage =
                     minion =>
-                        (float)DamageLib.getDmg(minion, DamageLib.SpellType.W, DamageLib.StageType.FirstDamage) -
+                        (float) DamageLib.getDmg(minion, DamageLib.SpellType.W, DamageLib.StageType.FirstDamage) -
                         (float)
                             DamageLib.CalcPhysicalDmg(
                                 (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod),
@@ -286,7 +286,7 @@ namespace LeagueSharp.Common
             {
                 ChampionName = "TwistedFate",
                 IsActive = minion => (Player.HasBuff("CardMasterStackParticle")),
-                GetDamage = minion => (float)DamageLib.getDmg(minion, DamageLib.SpellType.E),
+                GetDamage = minion => (float) DamageLib.getDmg(minion, DamageLib.SpellType.E),
             };
             AttackPassives.Add(p);
 
@@ -298,7 +298,7 @@ namespace LeagueSharp.Common
             {
                 ChampionName = "Varus",
                 IsActive = minion => (Player.HasBuff("VarusW")),
-                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+                GetDamage = minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.W)),
             };
             AttackPassives.Add(p);
 
@@ -310,7 +310,7 @@ namespace LeagueSharp.Common
             {
                 ChampionName = "Vayne",
                 IsActive = minion => (Player.HasBuff("VayneTumble")),
-                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.Q)),
+                GetDamage = minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.Q)),
             };
             AttackPassives.Add(p);
 
@@ -321,7 +321,7 @@ namespace LeagueSharp.Common
                     minion =>
                         (from buff in minion.Buffs where buff.DisplayName == "VayneSilverDebuff" select buff.Count)
                             .FirstOrDefault() == 2,
-                GetDamage = minion => ((float)DamageLib.getDmg(minion, DamageLib.SpellType.W)),
+                GetDamage = minion => ((float) DamageLib.getDmg(minion, DamageLib.SpellType.W)),
             };
             AttackPassives.Add(p);
 
@@ -337,7 +337,7 @@ namespace LeagueSharp.Common
                     minion =>
                         (float)
                             DamageLib.CalcMagicDmg(
-                                (float)0.25d * Player.FlatMagicDamageMod +
+                                (float) 0.25d * Player.FlatMagicDamageMod +
                                 new float[]
                                 { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
                                     Player.Level - 1], minion),
@@ -345,6 +345,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
+
             #endregion
         }
 
@@ -352,7 +353,7 @@ namespace LeagueSharp.Common
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
-                var missile = (Obj_SpellMissile)sender;
+                var missile = (Obj_SpellMissile) sender;
                 if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid &&
                     IsAutoAttack(missile.SData.Name))
                 {
@@ -379,21 +380,29 @@ namespace LeagueSharp.Common
         private static void FireBeforeAttack(Obj_AI_Base target)
         {
             if (BeforeAttack != null)
+            {
                 BeforeAttack(new BeforeAttackEventArgs { Target = target });
+            }
             else
+            {
                 DisableNextAttack = false;
+            }
         }
 
         private static void FireOnAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
             if (OnAttack != null)
+            {
                 OnAttack(unit, target);
+            }
         }
 
         private static void FireAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
             if (AfterAttack != null)
+            {
                 AfterAttack(unit, target);
+            }
         }
 
         /// <summary>
@@ -453,9 +462,8 @@ namespace LeagueSharp.Common
             if (target != null)
             {
                 var myRange = GetRealAutoAttackRange(target);
-                return
-                    Vector2.DistanceSquared(target.ServerPosition.To2D(),
-                        Player.ServerPosition.To2D()) <= myRange * myRange;
+                return Vector2.DistanceSquared(target.ServerPosition.To2D(), Player.ServerPosition.To2D()) <=
+                       myRange * myRange;
             }
             return false;
         }
@@ -475,9 +483,7 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return Environment.TickCount + Game.Ping / 2 + 25 >=
-                       LastAATick + Player.AttackDelay * 1000 &&
-                       Attack;
+                return Environment.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
             }
 
             return false;
@@ -490,8 +496,8 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return Environment.TickCount + Game.Ping / 2 >=
-                       LastAATick + Player.AttackCastDelay * 1000 + extraWindup && Move;
+                return Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup &&
+                       Move;
             }
 
             return false;
@@ -502,7 +508,9 @@ namespace LeagueSharp.Common
             if (Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (Player.Path.Count() > 0)
+                {
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
+                }
                 return;
             }
 
@@ -514,7 +522,9 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Orbwalk a target while moving to Position.
         /// </summary>
-        public static void Orbwalk(Obj_AI_Base target, Vector3 position, float extraWindup = 90,
+        public static void Orbwalk(Obj_AI_Base target,
+            Vector3 position,
+            float extraWindup = 90,
             float holdAreaRadius = 0)
         {
             if (target != null && CanAttack())
@@ -526,7 +536,9 @@ namespace LeagueSharp.Common
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                     if (!(target is Obj_AI_Hero))
+                    {
                         LastAATick = Environment.TickCount + Game.Ping / 2;
+                    }
                     return;
                 }
             }
@@ -557,7 +569,9 @@ namespace LeagueSharp.Common
                 if (args.PacketData[9] == 17)
                 {
                     if (unit.IsMe)
+                    {
                         ResetAutoAttackTimer();
+                    }
                 }
             }
         }
@@ -565,7 +579,9 @@ namespace LeagueSharp.Common
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
             if (IsAutoAttackReset(Spell.SData.Name) && unit.IsMe)
+            {
                 Utility.DelayAction.Add(250, ResetAutoAttackTimer);
+            }
 
             if (IsAutoAttack(Spell.SData.Name))
             {
@@ -573,12 +589,14 @@ namespace LeagueSharp.Common
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
                     if (Spell.Target is Obj_AI_Base)
-                        _lastTarget = (Obj_AI_Base)Spell.Target;
+                    {
+                        _lastTarget = (Obj_AI_Base) Spell.Target;
+                    }
 
                     if (unit.IsMelee())
                     {
-                        Utility.DelayAction.Add((int)(unit.AttackCastDelay * 1000 + 40),
-                            () => FireAfterAttack(unit, _lastTarget));
+                        Utility.DelayAction.Add(
+                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
                     }
                 }
 
@@ -634,8 +652,7 @@ namespace LeagueSharp.Common
                 /* Misc options */
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
-                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared()
-                        .SetValue(new Slider(0, 150, 0)));
+                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 150, 0)));
                 _config.AddSubMenu(misc);
 
                 /* Delay sliders */
@@ -654,8 +671,7 @@ namespace LeagueSharp.Common
 
                 _config.AddItem(
                     new MenuItem("LaneClear", "LaneClear").SetShared()
-                        .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press,
-                            false)));
+                        .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press, false)));
 
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
@@ -680,16 +696,24 @@ namespace LeagueSharp.Common
                 get
                 {
                     if (_config.Item("Orbwalk").GetValue<KeyBind>().Active)
+                    {
                         return OrbwalkingMode.Combo;
+                    }
 
                     if (_config.Item("LaneClear").GetValue<KeyBind>().Active)
+                    {
                         return OrbwalkingMode.LaneClear;
+                    }
 
                     if (_config.Item("Farm").GetValue<KeyBind>().Active)
+                    {
                         return OrbwalkingMode.Mixed;
+                    }
 
                     if (_config.Item("LastHit").GetValue<KeyBind>().Active)
+                    {
                         return OrbwalkingMode.LastHit;
+                    }
 
 
                     return OrbwalkingMode.None;
@@ -737,10 +761,11 @@ namespace LeagueSharp.Common
                             minion =>
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) &&
-                                HealthPrediction.LaneClearHealthPrediction(minion,
-                                    (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
-                                DamageLib.CalcPhysicalMinionDmg(Player.BaseAttackDamage + Player.FlatPhysicalDamageMod,
-                                    minion, true) - 1 + Math.Max(0, GetAutoAttackPassiveDamage(minion) - 10));
+                                HealthPrediction.LaneClearHealthPrediction(
+                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
+                                DamageLib.CalcPhysicalMinionDmg(
+                                    Player.BaseAttackDamage + Player.FlatPhysicalDamageMod, minion, true) - 1 +
+                                Math.Max(0, GetAutoAttackPassiveDamage(minion) - 10));
             }
 
             public Obj_AI_Base GetTarget()
@@ -751,27 +776,26 @@ namespace LeagueSharp.Common
                 /*Killable Minion*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
                     ActiveMode == OrbwalkingMode.LastHit)
-                    foreach (
-                        var minion in
-                            ObjectManager.Get<Obj_AI_Minion>()
-                                .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion)))
+                {
+                    foreach (var minion in
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion)))
                     {
-                        var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 *
-                                (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
+                        var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
+                                1000 * (int) Player.Distance(minion) / (int) GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && predHealth > 0 &&
                             predHealth <=
                             DamageLib.CalcPhysicalMinionDmg(
-                                Player.BaseAttackDamage + Player.FlatPhysicalDamageMod,
-                                minion,
-                                true) - 1 + Math.Max(0, GetAutoAttackPassiveDamage(minion) - 10))
+                                Player.BaseAttackDamage + Player.FlatPhysicalDamageMod, minion, true) - 1 +
+                            Math.Max(0, GetAutoAttackPassiveDamage(minion) - 10))
                         {
                             //Game.PrintChat("Current Health: " + minion.Health + " Predicted Health:" + (DamageLib.CalcPhysicalMinionDmg(Player.BaseAttackDamage + Player.FlatPhysicalDamageMod, minion, true) - 1 + Orbwalking.GetPassiveDamage(minion)));
                             return minion;
                         }
                     }
+                }
 
                 //Forced target
                 if (_forcedTarget != null && _forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
@@ -784,24 +808,30 @@ namespace LeagueSharp.Common
                 {
                     var target = SimpleTs.GetTarget(-1, SimpleTs.DamageType.Physical);
                     if (target != null)
+                    {
                         return target;
+                    }
                 }
 
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
-                    foreach (
-                        var mob in
-                            ObjectManager.Get<Obj_AI_Minion>()
-                                .Where(mob => mob.IsValidTarget() && InAutoAttackRange(mob) &&
-                                              mob.Team == GameObjectTeam.Neutral)
-                                .Where(mob => mob.MaxHealth >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon))
+                {
+                    foreach (var mob in
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(
+                                mob =>
+                                    mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
+                            .Where(mob => mob.MaxHealth >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon))
                     {
                         result = mob;
                         r[0] = mob.MaxHealth;
                     }
+                }
 
                 if (result != null)
+                {
                     return result;
+                }
 
                 /*Lane Clear minions*/
                 r[0] = float.MaxValue;
@@ -811,13 +841,12 @@ namespace LeagueSharp.Common
                     {
                         if (_prevMinion != null && _prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
-                            var predHealth = HealthPrediction.LaneClearHealthPrediction(_prevMinion,
-                                (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod),
-                                FarmDelay);
+                            var predHealth = HealthPrediction.LaneClearHealthPrediction(
+                                _prevMinion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
                             if (predHealth >=
-                                2 * DamageLib.CalcPhysicalMinionDmg(
-                                    Player.BaseAttackDamage + Player.FlatPhysicalDamageMod,
-                                    _prevMinion, true) - 1 +
+                                2 *
+                                DamageLib.CalcPhysicalMinionDmg(
+                                    Player.BaseAttackDamage + Player.FlatPhysicalDamageMod, _prevMinion, true) - 1 +
                                 Math.Max(0, GetAutoAttackPassiveDamage(_prevMinion) - 10) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
@@ -825,19 +854,16 @@ namespace LeagueSharp.Common
                             }
                         }
 
-                        foreach (
-                            var minion in
-                                ObjectManager.Get<Obj_AI_Minion>()
-                                    .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion)))
+                        foreach (var minion in
+                            ObjectManager.Get<Obj_AI_Minion>()
+                                .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion)))
                         {
-                            var predHealth = HealthPrediction.LaneClearHealthPrediction(minion,
-                                (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod),
-                                FarmDelay);
+                            var predHealth = HealthPrediction.LaneClearHealthPrediction(
+                                minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
                             if (predHealth >=
-                                2 * DamageLib.CalcPhysicalMinionDmg(
-                                    Player.BaseAttackDamage +
-                                    Player.FlatPhysicalDamageMod,
-                                    minion, true) - 1 +
+                                2 *
+                                DamageLib.CalcPhysicalMinionDmg(
+                                    Player.BaseAttackDamage + Player.FlatPhysicalDamageMod, minion, true) - 1 +
                                 Math.Max(0, GetAutoAttackPassiveDamage(minion) - 10) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon)
                             {
@@ -854,11 +880,13 @@ namespace LeagueSharp.Common
 
                 /*turrets*/
                 if (ActiveMode == OrbwalkingMode.LaneClear)
-                    foreach (
-                        var turret in
-                            ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-
+                {
+                    foreach (var turret in
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
                         return turret;
+                    }
+                }
 
                 return result;
             }
@@ -866,13 +894,19 @@ namespace LeagueSharp.Common
             private void GameOnOnGameUpdate(EventArgs args)
             {
                 if (ActiveMode == OrbwalkingMode.None)
+                {
                     return;
+                }
 
                 //Prevent canceling important channeled spells like Miss Fortunes R.
-                if (Player.IsChannelingImportantSpell()) return;
+                if (Player.IsChannelingImportantSpell())
+                {
+                    return;
+                }
 
                 var target = GetTarget();
-                Orbwalk(target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                Orbwalk(
+                    target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
                     _config.Item("ExtraWindup").GetValue<Slider>().Value,
                     _config.Item("HoldPosRadius").GetValue<Slider>().Value);
             }
@@ -880,12 +914,18 @@ namespace LeagueSharp.Common
             private void DrawingOnOnDraw(EventArgs args)
             {
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
-                    Utility.DrawCircle(Player.Position, GetRealAutoAttackRange(null) + 65,
+                {
+                    Utility.DrawCircle(
+                        Player.Position, GetRealAutoAttackRange(null) + 65,
                         _config.Item("AACircle").GetValue<Circle>().Color);
+                }
 
                 if (_config.Item("HoldZone").GetValue<Circle>().Active)
-                    Utility.DrawCircle(Player.Position, _config.Item("HoldPosRadius").GetValue<Slider>().Value,
+                {
+                    Utility.DrawCircle(
+                        Player.Position, _config.Item("HoldPosRadius").GetValue<Slider>().Value,
                         _config.Item("HoldZone").GetValue<Circle>().Color);
+                }
             }
         }
 

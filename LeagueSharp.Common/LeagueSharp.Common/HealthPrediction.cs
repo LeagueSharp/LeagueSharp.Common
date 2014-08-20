@@ -1,21 +1,21 @@
 ﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// HealthPrediction.cs is part of LeagueSharp.Common.
-// 
-// LeagueSharp.Common is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// LeagueSharp.Common is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Orbwalking.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
 #endregion
 
 #region
@@ -45,7 +45,10 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Environment.TickCount - LastTick <= 60 * 1000) return;
+            if (Environment.TickCount - LastTick <= 60 * 1000)
+            {
+                return;
+            }
             ActiveAttacks.ToList()
                 .Where(pair => pair.Value.StartTick < Environment.TickCount - 60000)
                 .ToList()
@@ -55,11 +58,17 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] != 0x34) return;
+            if (args.PacketData[0] != 0x34)
+            {
+                return;
+            }
             var packet = new GamePacket(args.PacketData);
             packet.Position = 1;
             var networkId = packet.ReadInteger();
-            if (args.PacketData[9] != 17) return;
+            if (args.PacketData[9] != 17)
+            {
+                return;
+            }
             if (ActiveAttacks.ContainsKey(networkId))
             {
                 ActiveAttacks.Remove(networkId);
@@ -75,14 +84,13 @@ namespace LeagueSharp.Common
                 {
                     if (args.Target is Obj_AI_Base)
                     {
-                        var target = (Obj_AI_Base)args.Target;
+                        var target = (Obj_AI_Base) args.Target;
                         ActiveAttacks.Remove(sender.NetworkId);
 
-                        var attackData = new PredictedDamage(sender, target, Environment.TickCount - Game.Ping / 2,
-                            sender.AttackCastDelay * 1000,
-                            sender.AttackDelay * 1000,
-                            sender.IsMelee() ? int.MaxValue : (int)args.SData.MissileSpeed,
-                            (float)CalcMinionToMinionDmg(sender, target));
+                        var attackData = new PredictedDamage(
+                            sender, target, Environment.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
+                            sender.AttackDelay * 1000, sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
+                            (float) CalcMinionToMinionDmg(sender, target));
                         ActiveAttacks.Add(sender.NetworkId, attackData);
                     }
                 }
@@ -141,7 +149,7 @@ namespace LeagueSharp.Common
                         {
                             n++;
                         }
-                        fromT += (int)attack.AnimationTime;
+                        fromT += (int) attack.AnimationTime;
                     }
                 }
                 predictedDamage += n * attack.Damage;
@@ -180,7 +188,9 @@ namespace LeagueSharp.Common
             if (attackminion is Obj_AI_Turret &&
                 (shotminion.BaseSkinName == "Red_Minion_Wizard" || shotminion.BaseSkinName == "Blue_Minion_Wizard" ||
                  shotminion.BaseSkinName == "Red_Minion_Basic" || shotminion.BaseSkinName == "Blue_Minion_Basic"))
+            {
                 dmgreduction = (1 / 0.875) * dmgreduction;
+            }
 
             if (attackminion is Obj_AI_Turret)
             {
@@ -201,8 +211,13 @@ namespace LeagueSharp.Common
             public readonly int StartTick;
             public readonly Obj_AI_Base Target;
 
-            public PredictedDamage(Obj_AI_Base source, Obj_AI_Base target, int startTick, float delay,
-                float animationTime, int projectileSpeed, float damage)
+            public PredictedDamage(Obj_AI_Base source,
+                Obj_AI_Base target,
+                int startTick,
+                float delay,
+                float animationTime,
+                int projectileSpeed,
+                float damage)
             {
                 Source = source;
                 Target = target;
