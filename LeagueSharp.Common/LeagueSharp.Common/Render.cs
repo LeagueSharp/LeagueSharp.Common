@@ -25,8 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -69,17 +67,23 @@ namespace LeagueSharp.Common
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
+            if (Drawing.Direct3DDevice == null)
+            {
+                return;
+            }
+            if (Drawing.Direct3DDevice.IsDisposed)
             {
                 return;
             }
 
             for (var i = -5; i < 5; i++)
             {
-                foreach (var renderObject in
-                    RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
+                foreach (var renderObject in RenderObjects)
                 {
-                    renderObject.OnEndScene();
+                    if (renderObject.Layer == i && renderObject.Visible)
+                    {
+                        renderObject.OnEndScene();
+                    }
                 }
             }
         }
@@ -103,7 +107,8 @@ namespace LeagueSharp.Common
                 Width = width;
                 Height = height;
                 Color = color;
-                _line = new Line(Drawing.Direct3DDevice) { Width = height };
+                _line = new Line(Drawing.Direct3DDevice);
+                _line.Width = height;
             }
 
             public int X { get; set; }
@@ -119,14 +124,13 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-
                     _line.Begin();
                     _line.Draw(new[] { new Vector2(X, Y + Height / 2), new Vector2(X + Width, Y + Height / 2) }, Color);
                     _line.End();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(@"Common.Render.Rectangle.OnEndScene: " + e);
+                    Console.WriteLine("Common.Render.Rectangle.OnEndScene: " + e);
                 }
             }
 
@@ -146,9 +150,10 @@ namespace LeagueSharp.Common
             public int Layer = 0;
             public bool Visible = true;
 
-            public virtual void OnEndScene() { }
-            public virtual void OnPreReset() { }
-            public virtual void OnUnload() { }
+            public virtual void OnEndScene() {}
+            public virtual void OnPreReset() {}
+
+            public virtual void OnUnload() {}
         }
 
         public class Sprite : RenderObject
@@ -160,10 +165,10 @@ namespace LeagueSharp.Common
             private Texture _texture;
             private int _width;
 
-            public Sprite(Bitmap bitmap, Vector2 position, int width = -1, int height = -1)
+            public Sprite(int x, int y, Bitmap bitmap, int width = -1, int height = -1)
             {
-                X = (int) position.X;
-                Y = (int) position.Y;
+                X = x;
+                Y = y;
                 _width = width;
                 _height = height;
                 Bitmap = bitmap;
@@ -172,41 +177,6 @@ namespace LeagueSharp.Common
                     Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(bitmap, typeof(byte[])),
                     width != -1 ? width : bitmap.Width, height != -1 ? height : bitmap.Height, 0, Usage.None, Format.A1,
                     Pool.Managed, Filter.Default, Filter.Default, 0);
-            }
-
-            public Sprite(Texture texture, Vector2 position, int width = -1, int height = -1)
-            {
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
-                _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = texture;
-            }
-
-            public Sprite(Stream stream, Vector2 position, int width = -1, int height = -1)
-            {
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
-                _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = Texture.FromStream(Drawing.Direct3DDevice, stream);
-            }
-
-            public Sprite(string fileLocation, Vector2 position, int width = -1, int height = -1)
-            {
-                if (!File.Exists((fileLocation)))
-                {
-                    return;
-                }
-
-                X = (int) position.X;
-                Y = (int) position.Y;
-                _width = width;
-                _height = height;
-                _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = Texture.FromFile(Drawing.Direct3DDevice, fileLocation);
             }
 
             public int Width
@@ -239,14 +209,13 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-
                     _sprite.Begin();
                     _sprite.Draw(_texture, new ColorBGRA(255, 255, 255, 255), null, new Vector3(-X, -Y, 0));
                     _sprite.End();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(@"Common.Render.Sprite.OnEndScene: " + e);
+                    Console.WriteLine("Common.Render.Sprite.OnEndScene: " + e);
                 }
             }
 
@@ -297,12 +266,11 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-
-                    _textFont.DrawText(null, text, X, Y, Color);
+                    _textFont.DrawText(null, "text", X, Y, Color);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(@"Common.Render.Text.OnEndScene: " + e);
+                    Console.WriteLine("Common.Render.Text.OnEndScene: " + e);
                 }
             }
 
