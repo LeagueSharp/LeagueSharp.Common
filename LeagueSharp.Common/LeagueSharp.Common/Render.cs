@@ -194,6 +194,16 @@ namespace LeagueSharp.Common
                 _texture = Texture.FromStream(Drawing.Direct3DDevice, stream);
             }
 
+            public Sprite(byte[] bytesArray, Vector2 position, int width = -1, int height = -1)
+            {
+                X = (int) position.X;
+                Y = (int) position.Y;
+                _width = width;
+                _height = height;
+                _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
+                _texture = Texture.FromStream(Drawing.Direct3DDevice, new MemoryStream(bytesArray));
+            }
+
             public Sprite(string fileLocation, Vector2 position, int width = -1, int height = -1)
             {
                 if (!File.Exists((fileLocation)))
