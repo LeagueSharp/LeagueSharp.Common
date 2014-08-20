@@ -73,7 +73,7 @@ namespace LeagueSharp.Common
             get { return ObjectManager.Player.Spellbook.GetSpell(Slot); }
         }
 
-        public Spell(SpellSlot slot, float range)
+        public Spell(SpellSlot slot, float range = float.MaxValue)
         {
             Slot = slot;
             Range = range;
