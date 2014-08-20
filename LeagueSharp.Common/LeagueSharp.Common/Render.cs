@@ -156,6 +156,7 @@ namespace LeagueSharp.Common
             private readonly SharpDX.Direct3D9.Sprite _sprite;
             public int X = 0;
             public int Y = 0;
+            private ColorBGRA _color = SharpDX.Color.White;
 
             private int _height;
             private bool _hide;
@@ -172,7 +173,8 @@ namespace LeagueSharp.Common
                     Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(bitmap, typeof(byte[])),
                     bitmap.Width, bitmap.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
                     0);
-                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                _width = _texture.GetLevelDescription(0).Width;
+                _height = _texture.GetLevelDescription(0).Height;
             }
 
             public Sprite(Texture texture, Vector2 position)
@@ -180,7 +182,8 @@ namespace LeagueSharp.Common
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = texture;
                 Position = position;
-                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                _width = _texture.GetLevelDescription(0).Width;
+                _height = _texture.GetLevelDescription(0).Height;
             }
 
             public Sprite(Stream stream, Vector2 position)
@@ -188,7 +191,8 @@ namespace LeagueSharp.Common
                 Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromStream(Drawing.Direct3DDevice, stream);
-                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                _width = _texture.GetLevelDescription(0).Width;
+                _height = _texture.GetLevelDescription(0).Height;
             }
 
             public Sprite(byte[] bytesArray, Vector2 position)
@@ -196,7 +200,8 @@ namespace LeagueSharp.Common
                 Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromStream(Drawing.Direct3DDevice, new MemoryStream(bytesArray));
-                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                _width = _texture.GetLevelDescription(0).Width;
+                _height = _texture.GetLevelDescription(0).Height;
             }
 
             public Sprite(string fileLocation, Vector2 position)
@@ -209,19 +214,28 @@ namespace LeagueSharp.Common
                 Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
                 _texture = Texture.FromFile(Drawing.Direct3DDevice, fileLocation);
-                Size = new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                _width = _texture.GetLevelDescription(0).Width;
+                _height = _texture.GetLevelDescription(0).Height;
             }
+
+            public Bitmap Bitmap { get; set; }
 
             public int Width
             {
-                set { _width = value; }
-                get { return _width > 0 ? _width : Bitmap.Width; }
+                get { return (int) Size.X; }
             }
 
             public int Height
             {
-                set { _height = value; }
-                get { return _height > 0 ? _height : Bitmap.Height; }
+                get { return (int) Size.Y; }
+            }
+
+            public Vector2 Size
+            {
+                get
+                {
+                    return new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                }
             }
 
             public Vector2 Position
@@ -235,35 +249,22 @@ namespace LeagueSharp.Common
                 get { return new Vector2(X, Y); }
             }
 
-            public Vector2 Size
-            {
-                set
-                {
-                    _width = (int) value.X;
-                    _height = (int) value.Y;
-                }
-
-                get
-                {
-                    return new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
-                }
-            }
-
-
             public Vector2 Scale
             {
                 set
                 {
                     _scale = value;
-                    _width = (int) (_width * _scale.X);
-                    _height = (int) (_width * _scale.Y);
                     //Transform _texture
                 }
 
                 get { return _scale; }
             }
 
-            public Bitmap Bitmap { get; set; }
+            public ColorBGRA Color
+            {
+                set { _color = value; }
+                get { return _color; }
+            }
 
             public void Show()
             {
@@ -293,7 +294,7 @@ namespace LeagueSharp.Common
                     }
 
                     _sprite.Begin();
-                    _sprite.Draw(_texture, new ColorBGRA(255, 255, 255, 255), null, new Vector3(-X, -Y, 0));
+                    _sprite.Draw(_texture, _color, null, new Vector3(-X, -Y, 0));
                     _sprite.End();
                 }
                 catch (Exception e)
