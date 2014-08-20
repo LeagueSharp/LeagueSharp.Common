@@ -1303,10 +1303,10 @@ namespace LeagueSharp.Common
             UpdateLuminosityBitmap(Color.White, true);
             UpdateOpacityBitmap(Color.White, true);
 
-            BackgroundSprite = (Render.Sprite) new Render.Sprite(X, Y, Properties.Resources.CPForm).Add(1);
+            BackgroundSprite = (Render.Sprite) new Render.Sprite(Properties.Resources.CPForm, new Vector2(X, Y)).Add(1);
 
-            LuminitySprite = (Render.Sprite) new Render.Sprite(X + 285, Y + 40, LuminityBitmap).Add(0);
-            OpacitySprite = (Render.Sprite) new Render.Sprite(X + 349, Y + 40, OpacityBitmap).Add(0);
+            LuminitySprite = (Render.Sprite)new Render.Sprite(LuminityBitmap, new Vector2(X + 285, Y + 40)).Add(0);
+            OpacitySprite = (Render.Sprite)new Render.Sprite(OpacityBitmap, new Vector2(X + 349, Y + 40)).Add(0);
 
             PreviewRectangle =
                 (Render.Rectangle)
@@ -1578,8 +1578,8 @@ namespace LeagueSharp.Common
                 _y = y;
                 Height = height - Properties.Resources.CPActiveSlider.Height;
                 Percent = percent;
-                ActiveSprite = new Render.Sprite(sX, sY, Properties.Resources.CPActiveSlider);
-                InactiveSprite = new Render.Sprite(sX, sY, Properties.Resources.CPInactiveSlider);
+                ActiveSprite = new Render.Sprite(Properties.Resources.CPActiveSlider, new Vector2(sX, sY));
+                InactiveSprite = new Render.Sprite(Properties.Resources.CPInactiveSlider, new Vector2(sX, sY));
 
                 ActiveSprite.Add(2);
                 InactiveSprite.Add(2);
