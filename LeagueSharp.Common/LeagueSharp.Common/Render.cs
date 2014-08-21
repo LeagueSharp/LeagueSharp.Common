@@ -595,7 +595,7 @@ namespace LeagueSharp.Common
                 _effect.SetValue("ProjectionMatrix", Matrix.Translation(position.SwitchYZ()) * Drawing.View * Drawing.Projection);
                 _effect.SetValue("CircleColor", new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
                 _effect.SetValue("Radius", radius);
-                _effect.SetValue("Border", 2 + width);
+                _effect.SetValue("Border", 2f + width);
 
                 Drawing.Direct3DDevice.SetStreamSource(0, _vertices, 0, Utilities.SizeOf<Vector4>() * 2);
                 Drawing.Direct3DDevice.VertexDeclaration = _vertexDeclaration;

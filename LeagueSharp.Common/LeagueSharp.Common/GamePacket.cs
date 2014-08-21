@@ -109,9 +109,12 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Writes a byte.
         /// </summary>
-        public void WriteByte(byte b)
+        public void WriteByte(byte b, int repeat = 1)
         {
-            Bw.Write(b);
+            for (int i = 0; i < repeat; i++)
+            {
+                Bw.Write(b);
+            }
         }
 
         /// <summary>
