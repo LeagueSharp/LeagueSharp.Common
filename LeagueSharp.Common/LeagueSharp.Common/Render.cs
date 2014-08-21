@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
@@ -49,10 +49,11 @@ namespace LeagueSharp.Common
             Drawing.OnEndScene += Drawing_OnEndScene;
             Drawing.OnPreReset += DrawingOnOnPreReset;
             Drawing.OnPostReset += DrawingOnOnPostReset;
-
+            Drawing.OnDraw +=Drawing_OnDraw;
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
+
 
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
         {
@@ -75,6 +76,23 @@ namespace LeagueSharp.Common
             foreach (var renderObject in RenderObjects)
             {
                 renderObject.OnPreReset();
+            }
+        }
+
+        private static void Drawing_OnDraw(EventArgs args)
+        {
+            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
+            {
+                return;
+            }
+
+            for (var i = -5; i < 5; i++)
+            {
+                foreach (var renderObject in
+                    RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
+                {
+                    renderObject.OnDraw();
+                }
             }
         }
 
@@ -107,6 +125,7 @@ namespace LeagueSharp.Common
             public int Layer = 0;
             public bool Visible = true;
 
+            public virtual void OnDraw() { }
             public virtual void OnEndScene() { }
             public virtual void OnPreReset() { }
 
@@ -411,6 +430,7 @@ namespace LeagueSharp.Common
             public int Width { get; set; }
             public int Quality { get; set; }
             public bool ZDeep { get; set; }
+
             public Circle(Obj_AI_Base unit, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
             {
                 Color = color;
@@ -433,7 +453,7 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
             }
 
-            public override void OnEndScene()
+            public override void OnDraw()
             {
                 try
                 {
@@ -441,7 +461,7 @@ namespace LeagueSharp.Common
                     {
                         DrawCircle(Unit.Position, Radius, Color, Antialias, Width, ZDeep, Quality);
                     }
-                    else
+                    else if (Position.To2D().IsValid())
                     {
                         DrawCircle(Position, Radius, Color, Antialias, Width, ZDeep, Quality);
                     }
@@ -480,11 +500,11 @@ namespace LeagueSharp.Common
                     var bAngle = (i + 1) * Math.PI * 2 / quality;
 
                     v3[0].X = position.X + radius * (float)Math.Cos(aAngle);
-                    v3[0].Y = position.Z;
+                    v3[0].Y = position.Z + 30;
                     v3[0].Z = position.Y + radius * (float)Math.Sin(aAngle);
 
                     v3[1].X = position.X + radius * (float)Math.Cos(bAngle);
-                    v3[1].Y = position.Z;
+                    v3[1].Y = position.Z + 30;
                     v3[1].Z = position.Y + radius * (float)Math.Sin(bAngle);
 
                     var aOnScreen = Drawing.WorldToScreen(v3[0].SwitchYZ());
@@ -492,6 +512,9 @@ namespace LeagueSharp.Common
                         _line.DrawTransform(v3, Drawing.View * Drawing.Projection, new ColorBGRA(color.R, color.G, color.B, color.A));
                 }
                 _line.End();
+
+                if (zDeep)
+                    Drawing.Direct3DDevice.SetRenderState(RenderState.ZEnable, false);
             }
 
         }
