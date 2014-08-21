@@ -27,10 +27,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-
+using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -47,6 +48,8 @@ namespace LeagueSharp.Common
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
             Drawing.OnPreReset += DrawingOnOnPreReset;
+            Drawing.OnPostReset += DrawingOnOnPostReset;
+
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
@@ -56,6 +59,14 @@ namespace LeagueSharp.Common
             foreach (var renderObject in RenderObjects)
             {
                 renderObject.OnUnload();
+            }
+        }
+
+        private static void DrawingOnOnPostReset(EventArgs args)
+        {
+            foreach (var renderObject in RenderObjects)
+            {
+                renderObject.OnPostReset();
             }
         }
 
@@ -89,6 +100,18 @@ namespace LeagueSharp.Common
             renderObject.Layer = layer != int.MaxValue ? layer : renderObject.Layer;
             RenderObjects.Add(renderObject);
             return renderObject;
+        }
+
+        public class RenderObject
+        {
+            public int Layer = 0;
+            public bool Visible = true;
+
+            public virtual void OnEndScene() { }
+            public virtual void OnPreReset() { }
+
+            public virtual void OnPostReset() { }
+            public virtual void OnUnload() { }
         }
 
         public class Rectangle : RenderObject
@@ -135,20 +158,15 @@ namespace LeagueSharp.Common
                 _line.OnLostDevice();
             }
 
+            public override void OnPostReset()
+            {
+                _line.OnResetDevice();
+            }
+
             public override void OnUnload()
             {
                 _line.Dispose();
             }
-        }
-
-        public class RenderObject
-        {
-            public int Layer = 0;
-            public bool Visible = true;
-
-            public virtual void OnEndScene() { }
-            public virtual void OnPreReset() { }
-            public virtual void OnUnload() { }
         }
 
         public class Sprite : RenderObject
@@ -308,6 +326,11 @@ namespace LeagueSharp.Common
                 _sprite.OnLostDevice();
             }
 
+            public override void OnPostReset()
+            {
+                _sprite.OnResetDevice();
+            }
+
             public override void OnUnload()
             {
                 _sprite.Dispose();
@@ -364,10 +387,113 @@ namespace LeagueSharp.Common
                 _textFont.OnLostDevice();
             }
 
+            public override void OnPostReset()
+            {
+                _textFont.OnResetDevice();
+            }
+
             public override void OnUnload()
             {
                 _textFont.Dispose();
             }
+        }
+
+        public class Circle : RenderObject
+        {
+            private static Line _line;
+
+            public Vector3 Position { get; set; }
+            public Obj_AI_Base Unit { get; set; }
+
+            public float Radius { get; set; }
+            public Color Color { get; set; }
+            public bool Antialias { get; set; }
+            public int Width { get; set; }
+            public int Quality { get; set; }
+            public bool ZDeep { get; set; }
+            public Circle(Obj_AI_Base unit, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
+            {
+                Color = color;
+                Unit = unit;
+                Radius = radius;
+                Antialias = antialias;
+                Width = width;
+                Quality = quality;
+                ZDeep = zDeep;
+            }
+
+            public Circle(Vector3 position, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
+            {
+                Color = color;
+                Position = position;
+                Radius = radius;
+                Antialias = antialias;
+                Width = width;
+                Quality = quality;
+                ZDeep = zDeep;
+            }
+
+            public override void OnEndScene()
+            {
+                try
+                {
+                    if (Unit != null && Unit.IsValid)
+                    {
+                        DrawCircle(Unit.Position, Radius, Color, Antialias, Width, ZDeep, Quality);
+                    }
+                    else
+                    {
+                        DrawCircle(Position, Radius, Color, Antialias, Width, ZDeep, Quality);
+                    }
+                   
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(@"Common.Render.Circle.OnEndScene: " + e);
+                }
+            }
+
+            public static void DrawCircle(Vector3 position, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
+            {
+                if (_line == null)
+                {
+                    _line = new Line(Drawing.Direct3DDevice);
+                    Drawing.OnPreReset += delegate { _line.OnLostDevice(); };
+                    Drawing.OnPostReset += delegate { _line.OnResetDevice(); };
+                    AppDomain.CurrentDomain.DomainUnload += delegate { _line.Dispose(); };
+                }
+                    
+
+                if(_line.IsDisposed) return;
+
+                _line.Width = width;
+                _line.Antialias = antialias;
+
+                if(zDeep)
+                    Drawing.Direct3DDevice.SetRenderState(RenderState.ZEnable, true);
+                
+                _line.Begin();
+                var v3 = new []{new Vector3(),new Vector3(), };
+                for (var i = 0; i < quality; i++)
+                {
+                    var aAngle = i * Math.PI * 2 / quality;
+                    var bAngle = (i + 1) * Math.PI * 2 / quality;
+
+                    v3[0].X = position.X + radius * (float)Math.Cos(aAngle);
+                    v3[0].Y = position.Z;
+                    v3[0].Z = position.Y + radius * (float)Math.Sin(aAngle);
+
+                    v3[1].X = position.X + radius * (float)Math.Cos(bAngle);
+                    v3[1].Y = position.Z;
+                    v3[1].Z = position.Y + radius * (float)Math.Sin(bAngle);
+
+                    var aOnScreen = Drawing.WorldToScreen(v3[0].SwitchYZ());
+                    if (aOnScreen.X > -Drawing.Width * 0.5f && aOnScreen.X < Drawing.Width * 1.5f && aOnScreen.Y > -Drawing.Height * 0.5f && aOnScreen.Y < Drawing.Height * 1.5f)
+                        _line.DrawTransform(v3, Drawing.View * Drawing.Projection, new ColorBGRA(color.R, color.G, color.B, color.A));
+                }
+                _line.End();
+            }
+
         }
     }
 }

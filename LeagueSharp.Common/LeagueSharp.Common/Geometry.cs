@@ -172,6 +172,11 @@ namespace LeagueSharp.Common
             return v + distance * (to - v).Normalized();
         }
 
+        public static Vector3 SwitchYZ(this Vector3 v)
+        {
+            return new Vector3(v.X, v.Z, v.Y);
+        }
+
         /// <summary>
         ///     Returns the perpendicular vector.
         /// </summary>
