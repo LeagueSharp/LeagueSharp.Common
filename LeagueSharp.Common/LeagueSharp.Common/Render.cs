@@ -431,7 +431,7 @@ namespace LeagueSharp.Common
             public int Quality { get; set; }
             public bool ZDeep { get; set; }
 
-            public Circle(Obj_AI_Base unit, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
+            public Circle(Obj_AI_Base unit, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = false, int quality = 24)
             {
                 Color = color;
                 Unit = unit;
@@ -442,7 +442,7 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
             }
 
-            public Circle(Vector3 position, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
+            public Circle(Vector3 position, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = false, int quality = 24)
             {
                 Color = color;
                 Position = position;
@@ -473,7 +473,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            public static void DrawCircle(Vector3 position, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = true, int quality = 24)
+            public static void DrawCircle(Vector3 position, float radius, Color color, bool antialias = true, int width = 1, bool zDeep = false, int quality = 24)
             {
                 if (_line == null)
                 {
