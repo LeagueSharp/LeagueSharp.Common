@@ -194,6 +194,60 @@ namespace LeagueSharp.Common
 
             return SpellSlot.Unknown;
         }
+        
+        /// <summary>
+        /// Returns the nearest tower to Player
+        /// </summary>
+        public static Obj_AI_Turret GetNearestTower(bool enemyTurretsOnly = true)
+        {
+            return GetNearestTower(ObjectManager.Player, enemyTurretsOnly);
+        }
+
+        /// <summary>
+        /// Returns the nearest tower to the unit
+        /// </summary>
+        public static Obj_AI_Turret GetNearestTower(Obj_AI_Base unit, bool enemyTurretsOnly = true)
+        {
+            return GetNearestTowers(unit, enemyTurretsOnly).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Returns the nearest towers to Player
+        /// </summary>
+        public static IOrderedEnumerable<Obj_AI_Turret> GetNearestTowers(bool enemyTurretsOnly = true)
+        {
+            return GetNearestTowers(ObjectManager.Player, enemyTurretsOnly);
+        }
+
+        /// <summary>
+        /// Returns the nearest towers to the unit
+        /// </summary>
+        public static IOrderedEnumerable<Obj_AI_Turret> GetNearestTowers(Obj_AI_Base unit, bool enemyTurretsOnly = true)
+        {
+            return from tower in ObjectManager.Get<Obj_AI_Turret>()
+                   where
+                      tower.IsValid &&
+                      enemyTurretsOnly ? tower.IsEnemy : true && //keppo
+                      tower.Health > 0
+                   orderby tower.Distance(unit)
+                   select tower;
+        }
+        
+        /// <summary>
+        /// Returns true if Player has tower aggro.
+        /// </summary>
+        public static bool HasTowerAggro()
+        {
+            return HasTowerAggro(ObjectManager.Player);
+        }
+
+        /// <summary>
+        /// Returns true if the unit has tower aggro.
+        /// </summary>
+        public static bool HasTowerAggro(Obj_AI_Base unit)
+        {
+            return Packet.S2C.TowerAggro.AggroList.ContainsKey(unit.NetworkId);
+        }
 
         /// <summary>
         /// Returns true if Player is under tower range.
