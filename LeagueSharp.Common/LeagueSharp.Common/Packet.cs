@@ -368,6 +368,63 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region SellItem
+
+            /// <summary>
+            /// Packet sent when selling items.
+            /// </summary>
+            public static class SellItem
+            {
+                public static byte Header = 0x09;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteByte(packetStruct.SlotByte);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.NetworkId = packet.ReadInteger();
+                    result.SlotByte = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public SpellSlot SlotId;
+                    public byte SlotByte;
+                    public int NetworkId;
+
+                    public Struct(SpellSlot slotId, int networkId = -1)
+                    {
+                        SlotId = slotId;
+                        SlotByte = (byte)slotId;
+                        if (SlotByte >= (byte)SpellSlot.Item1 && SlotByte <= (byte)SpellSlot.Item6)
+                            SlotByte = (byte)(0x80 + SlotByte - (byte)SpellSlot.Item1);
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+
+                    public Struct(byte slotByte, int networkId = -1)
+                    {
+                        SlotByte = slotByte;
+                        SlotId = (SpellSlot) slotByte;
+                        if(slotByte >= 0x80 && slotByte <= 0x85)
+                            SlotId = (SpellSlot)((byte)SpellSlot.Item1 + slotByte - 0x80);
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+                }
+            }
+
+            #endregion
+
+
         }
 
         public static class S2C
