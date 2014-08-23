@@ -5804,13 +5804,16 @@ namespace LeagueSharp.Common
         private delegate double ChampDamage(Obj_AI_Base enemy, SpellType type, StageType stagetype);
     }
 
-    internal class InvalidSpellTypeException : Exception
+    public class InvalidSpellTypeException : Exception
     {
+        private static String _errorMessage = "<font color='#33FFFF'>DamageLib: InvalidSpellTypeException: Tried to get the damage of an invalid spell, a spell without damage, a wrong stagetype of a spell or a not supported spell</font>";
+
         public InvalidSpellTypeException()
-        {
-            Console.WriteLine(
-                "<font color='#33FFFF'>DamageLib: InvalidSpellTypeException: Tried to get the damage of an invalid spell, a spell without damage, a wrong stagetype of a spell or a not supported spell</font>");
-        }
+            : base(_errorMessage)
+        {}
+
+        public InvalidSpellTypeException(String message) : base(message)
+        {}
     }
 
     internal class Enemy
