@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -399,16 +401,18 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public SpellSlot SlotId;
-                    public byte SlotByte;
                     public int NetworkId;
+                    public byte SlotByte;
+                    public SpellSlot SlotId;
 
                     public Struct(SpellSlot slotId, int networkId = -1)
                     {
                         SlotId = slotId;
-                        SlotByte = (byte)slotId;
-                        if (SlotByte >= (byte)SpellSlot.Item1 && SlotByte <= (byte)SpellSlot.Item6)
-                            SlotByte = (byte)(0x80 + SlotByte - (byte)SpellSlot.Item1);
+                        SlotByte = (byte) slotId;
+                        if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Item6)
+                        {
+                            SlotByte = (byte) (0x80 + SlotByte - (byte) SpellSlot.Item1);
+                        }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
 
@@ -416,16 +420,16 @@ namespace LeagueSharp.Common
                     {
                         SlotByte = slotByte;
                         SlotId = (SpellSlot) slotByte;
-                        if(slotByte >= 0x80 && slotByte <= 0x85)
-                            SlotId = (SpellSlot)((byte)SpellSlot.Item1 + slotByte - 0x80);
+                        if (slotByte >= 0x80 && slotByte <= 0x85)
+                        {
+                            SlotId = (SpellSlot) ((byte) SpellSlot.Item1 + slotByte - 0x80);
+                        }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
                 }
             }
 
             #endregion
-
-
         }
 
         public static class S2C
