@@ -110,7 +110,7 @@ namespace LeagueSharp.Common
                 var dist = path[i].Distance(path[i + 1]);
                 if (dist > Distance)
                 {
-                    result.Add(path[i] + distance * (path[i + 1] - path[i]).Normalized());
+                    result.Add(path[i] + Distance * (path[i + 1] - path[i]).Normalized());
                     for (var j = i + 1; j < path.Count; j++)
                     {
                         result.Add(path[j]);
