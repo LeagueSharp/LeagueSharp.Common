@@ -913,7 +913,7 @@ namespace LeagueSharp.Common
                         {
                             var t = Environment.TickCount + (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
                                     .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
-                            if (t < WallCastT + 3900)
+                            if (t < WallCastT + 4000)
                             {
                                 result.Add(ObjectManager.Player);
                             }
