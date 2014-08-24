@@ -227,7 +227,7 @@ namespace LeagueSharp.Common
         {
             PredictionOutput result = null;
 
-            if (!input.Unit.IsValidTarget())
+            if (!input.Unit.IsValidTarget(float.MaxValue, false))
             {
                 return new PredictionOutput();
             }
@@ -805,6 +805,23 @@ namespace LeagueSharp.Common
 
     public static class Collision
     {
+        private static int WallCastT;
+        private static Vector2 YasuoWallCastedPos;
+
+        static Collision()
+        {
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+        }
+
+        private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
+            {
+                WallCastT = Environment.TickCount;
+                YasuoWallCastedPos = sender.ServerPosition.To2D();
+            }
+        }
+
         /// <summary>
         /// Returns the list of the units that the skillshot will hit before reaching the set positions.
         /// </summary>
@@ -866,7 +883,43 @@ namespace LeagueSharp.Common
                             break;
 
                         case CollisionableObjects.YasuoWall:
+
+                            if (Environment.TickCount - WallCastT > 4000) break;
+
+                        GameObject wall = null;
+                        foreach (var gameObject in ObjectManager.Get<GameObject>())
+                        {
+                            if (gameObject.IsValid &&
+                                System.Text.RegularExpressions.Regex.IsMatch(
+                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",//Yasuo_base_w_windwall_enemy_01.troy
+                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                            {
+                                wall = gameObject;
+                            }
+                        }
+                        if (wall == null)
+                        {
                             break;
+                        }
+                        var level = wall.Name.Substring(wall.Name.Length - 6, 1);
+                        var wallWidth = (300 + 50 * Convert.ToInt32(level));
+
+
+                        var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
+                        var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
+                        var wallEnd = wallStart - wallWidth * wallDirection;
+                       
+                        if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
+                        {
+                            var t = Environment.TickCount + (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
+                                    .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
+                            if (t < WallCastT + 3900)
+                            {
+                                result.Add(ObjectManager.Player);
+                            }
+                        }
+                                
+                        break;
                     }
                 }
             }
