@@ -125,6 +125,7 @@ namespace LeagueSharp.Common
             public Vector2 StartPos;
             public int StartTick;
             public Obj_AI_Base Unit;
+            public bool IsBlink;
         }
     }
 }

@@ -227,19 +227,29 @@ namespace LeagueSharp.Common
             Vector3 from,
             float range,
             bool collision,
-            Prediction.SkillshotType stype,
+            SkillshotType stype,
             Vector3 rangeCheckFrom = new Vector3())
         {
             var result = new List<Vector2>();
             from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
-
             foreach (var minion in minions)
             {
-                var pos = Prediction.GetBestPosition(
-                    minion, delay, width, speed, from, range, collision, stype, rangeCheckFrom);
-                if (pos.HitChance >= Prediction.HitChance.HighHitchance)
+                var pos = Prediction.GetPrediction(new PredictionInput
                 {
-                    result.Add(pos.Position.To2D());
+                    Unit = minion,
+                    Delay = delay,
+                    Radius = width,
+                    Speed = speed,
+                    From = from,
+                    Range = range,
+                    Collision = collision,
+                    Type = stype,
+                    RangeCheckFrom = rangeCheckFrom
+                });
+                 
+                if (pos.Hitchance >= HitChance.High)
+                {
+                    result.Add(pos.UnitPosition.To2D());
                 }
             }
 

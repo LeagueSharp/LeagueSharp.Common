@@ -375,8 +375,7 @@ namespace LeagueSharp.Common
             if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() &&
                 _config.Item("SelTColor").GetValue<Circle>().Active)
             {
-                Utility.DrawCircle(
-                    _selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 3, 23);
+                Render.Circle.DrawCircle(_selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 7, true);
             }
         }
 

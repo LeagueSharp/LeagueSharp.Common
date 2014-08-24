@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
-        public static bool IsValidTarget(this Obj_AI_Base unit, float range = float.MaxValue, bool checkTeam = true)
+        public static bool IsValidTarget(this Obj_AI_Base unit, float range = float.MaxValue, bool checkTeam = true, Vector3 from = new Vector3())
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
                 unit.IsInvulnerable)
@@ -62,7 +62,7 @@ namespace LeagueSharp.Common
             }
 
             if (range != float.MaxValue &&
-                Vector2.DistanceSquared(ObjectManager.Player.ServerPosition.To2D(), unit.ServerPosition.To2D()) >
+                Vector2.DistanceSquared((from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(), unit.ServerPosition.To2D()) >
                 range * range)
             {
                 return false;
@@ -279,10 +279,16 @@ namespace LeagueSharp.Common
         public static void DrawCircle(Vector3 center,
             float radius,
             Color color,
-            int thickness = 2,
+            int thickness = 5,
             int quality = 30,
             bool onMinimap = false)
         {
+            if (!onMinimap)
+            {
+                Render.Circle.DrawCircle(center, radius, color, thickness);
+                return;
+            }
+
             var pointList = new List<Vector3>();
             for (var i = 0; i < quality; i++)
             {

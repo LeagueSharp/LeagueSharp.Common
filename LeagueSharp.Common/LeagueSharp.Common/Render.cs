@@ -25,12 +25,15 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
 using Color = System.Drawing.Color;
+using Matrix = SharpDX.Matrix;
 
 #endregion
 
@@ -247,9 +250,14 @@ namespace LeagueSharp.Common
                     return;
                 }
 
+                var bitmap = new Bitmap(fileLocation);
                 Position = position;
+                Bitmap = bitmap;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = Texture.FromFile(Drawing.Direct3DDevice, fileLocation);
+                _texture = Texture.FromMemory(
+                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(bitmap, typeof(byte[])),
+                    bitmap.Width, bitmap.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
+                    0);
                 _width = _texture.GetLevelDescription(0).Width;
                 _height = _texture.GetLevelDescription(0).Height;
             }
@@ -290,7 +298,24 @@ namespace LeagueSharp.Common
                 set
                 {
                     _scale = value;
-                    //Transform _texture
+
+                    var stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp);
+                    var original = new Bitmap(stream);
+                    var target = new Bitmap((int)(_scale.X * _width), (int)(_scale.Y * _height));
+
+                    using (var g = Graphics.FromImage(target))
+                    {
+                        g.SmoothingMode = SmoothingMode.HighQuality;
+                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        g.DrawImage(original, 0, 0, target.Width, target.Height);
+                    }
+                    _texture = Texture.FromMemory(
+                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(target, typeof(byte[])),
+                    target.Width, target.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
+                    0);
+                    _width = _texture.GetLevelDescription(0).Width;
+                    _height = _texture.GetLevelDescription(0).Height;
                 }
 
                 get { return _scale; }
@@ -552,7 +577,7 @@ namespace LeagueSharp.Common
 
                             if(distance < Border && distance > -Border)
                             {
-                                output.Color.w = (1 - CircleColor.w * abs(distance / Border));
+                                output.Color.w = (CircleColor.w - CircleColor.w * abs(distance / Border));
                             }
                             else
                             {
@@ -562,9 +587,11 @@ namespace LeagueSharp.Common
 	                        return output.Color;
                         }
 
-
                         technique Main {
 	                        pass P0 {
+                                AlphaBlendEnable = TRUE;
+                                DestBlend = INVSRCALPHA;
+                                SrcBlend = SRCALPHA;
 		                        VertexShader = compile vs_2_0 VS();
                                 PixelShader  = compile ps_2_0 PS();
 	                        }

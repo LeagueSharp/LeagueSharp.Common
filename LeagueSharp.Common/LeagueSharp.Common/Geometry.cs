@@ -402,7 +402,8 @@ namespace LeagueSharp.Common
             Vector2 endPoint1,
             float v1,
             Vector2 startPoint2,
-            float v2)
+            float v2,
+            float delay = 0f)
         {
             float sP1x = startPoint1.X,
                 sP1y = startPoint1.Y,
@@ -459,7 +460,10 @@ namespace LeagueSharp.Common
 
                             if (!float.IsNaN(t2) && !float.IsNaN(t1))
                             {
-                                t1 = Math.Min(t1, t2);
+                                if(t1 >= delay && t2 >= delay)
+                                    t1 = Math.Min(t1, t2);
+                                else if (t2 >= delay)
+                                    t1 = t2;
                             }
                         }
                     }

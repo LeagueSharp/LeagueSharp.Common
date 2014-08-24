@@ -22,7 +22,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -54,14 +54,14 @@ namespace LeagueSharp.Common
         public bool Collision;
         public float Delay;
         public bool IsChargedSpell;
-
         public bool IsSkillshot;
         public int LastCastAttemptT = 0;
-        public Prediction.HitChance MinHitChange = Prediction.HitChance.HighHitchance;
+        public HitChance MinHitChange = HitChance.High;
         public SpellSlot Slot;
         public float Speed;
-        public Prediction.SkillshotType Type;
+        public SkillshotType Type;
         public float Width;
+
         private int _chargedCastedT;
         private int _chargedReqSentT;
         private Vector3 _from;
@@ -158,7 +158,7 @@ namespace LeagueSharp.Common
             float width,
             float speed,
             bool collision,
-            Prediction.SkillshotType type,
+            SkillshotType type,
             Vector3 from = new Vector3(),
             Vector3 rangeCheckFrom = new Vector3())
         {
@@ -171,7 +171,6 @@ namespace LeagueSharp.Common
             RangeCheckFrom = rangeCheckFrom;
             IsSkillshot = true;
         }
-
 
         public void SetCharged(string spellName, string buffName, int minRange, int maxRange, float deltaT)
         {
@@ -242,16 +241,35 @@ namespace LeagueSharp.Common
             RangeCheckFrom = rangeCheckFrom;
         }
 
-        public Prediction.PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false)
+        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false)
         {
-            return aoe
-                ? Prediction.GetBestAOEPosition(unit, Delay, Width, Speed, From, Range, Collision, Type, RangeCheckFrom)
-                : Prediction.GetBestPosition(unit, Delay, Width, Speed, From, Range, Collision, Type, RangeCheckFrom);
+            /*unit, Delay, Width, Speed, From, Range, Collision, Type, RangeCheckFrom*/
+            return Prediction.GetPrediction(new PredictionInput
+            {
+                Unit = unit,
+                Delay = Delay,
+                Radius = Width,
+                Speed = Speed,
+                From = From,
+                Range = Range,
+                Collision = Collision,
+                Type = Type,
+                RangeCheckFrom = RangeCheckFrom,
+                Aoe = aoe,
+            });
         }
 
         public List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> to, float delayOverride = -1)
         {
-            return Prediction.GetCollision(from, to, Type, Width, delayOverride > 0 ? delayOverride : Delay, Speed);
+            return LeagueSharp.Common.Collision.GetCollision(to.Select(h => h.To3D()).ToList(), new PredictionInput
+            {
+                From = from.To3D(),
+                Type = Type,
+                Radius = Width,
+                Delay = delayOverride > 0 ? delayOverride : Delay,
+                Speed = Speed,
+            });
+            
         }
 
         private CastStates _cast(Obj_AI_Base unit,
@@ -302,13 +320,13 @@ namespace LeagueSharp.Common
             //Get the best position to cast the spell.
             var prediction = GetPrediction(unit, aoe);
 
-            if (minTargets != -1 && prediction.TargetsHit < minTargets)
+            if (minTargets != -1 && prediction.AoeTargetsHitCount < minTargets)
             {
                 return CastStates.NotEnoughTargets;
             }
 
             //Skillshot collides.
-            if (prediction.CollisionUnitsList.Count > 0)
+            if (prediction.CollisionObjects.Count > 0)
             {
                 return CastStates.Collision;
             }
@@ -320,7 +338,7 @@ namespace LeagueSharp.Common
             }
 
             //The hitchance is too low.
-            if (prediction.HitChance < MinHitChange || (exactHitChance && prediction.HitChance != MinHitChange))
+            if (prediction.Hitchance < MinHitChange || (exactHitChance && prediction.Hitchance != MinHitChange))
             {
                 return CastStates.LowHitChance;
             }
@@ -444,7 +462,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Casts the spell if the hitchance equals the set hitchance.
         /// </summary>
-        public bool CastIfHitchanceEquals(Obj_AI_Base unit, Prediction.HitChance hitChance, bool packetCast = false)
+        public bool CastIfHitchanceEquals(Obj_AI_Base unit, HitChance hitChance, bool packetCast = false)
         {
             var currentHitchance = MinHitChange;
             MinHitChange = hitChance;
@@ -489,7 +507,7 @@ namespace LeagueSharp.Common
             float overrideWidth = float.MaxValue)
         {
             var positions = MinionManager.GetMinionsPredictedPositions(
-                minionPositions, Delay, Width, Speed, From, Range, false, Prediction.SkillshotType.SkillshotCircle);
+                minionPositions, Delay, Width, Speed, From, Range, false, SkillshotType.SkillshotCircle);
 
             return GetCircularFarmLocation(positions, overrideWidth);
         }
@@ -505,7 +523,7 @@ namespace LeagueSharp.Common
             float overrideWidth = -1)
         {
             var positions = MinionManager.GetMinionsPredictedPositions(
-                minionPositions, Delay, Width, Speed, From, Range, false, Prediction.SkillshotType.SkillshotLine);
+                minionPositions, Delay, Width, Speed, From, Range, false, SkillshotType.SkillshotLine);
 
             return GetLineFarmLocation(positions, overrideWidth != -1 ? overrideWidth : Width);
         }
@@ -521,7 +539,7 @@ namespace LeagueSharp.Common
             var points = new List<Vector3>();
             foreach (var unit in units)
             {
-                points.Add(GetPrediction(unit).Position);
+                points.Add(GetPrediction(unit).UnitPosition);
             }
             return CountHits(points, castPosition);
         }
@@ -570,12 +588,12 @@ namespace LeagueSharp.Common
         public bool WillHit(Obj_AI_Base unit,
             Vector3 castPosition,
             int extraWidth = 0,
-            Prediction.HitChance minHitChance = Prediction.HitChance.HighHitchance)
+            HitChance minHitChance = HitChance.High)
         {
             var unitPosition = GetPrediction(unit);
-            if (unitPosition.HitChance >= minHitChance)
+            if (unitPosition.Hitchance >= minHitChance)
             {
-                return WillHit(unitPosition.Position, castPosition, extraWidth);
+                return WillHit(unitPosition.UnitPosition, castPosition, extraWidth);
             }
 
             return false;
@@ -588,20 +606,20 @@ namespace LeagueSharp.Common
         {
             switch (Type)
             {
-                case Prediction.SkillshotType.SkillshotCircle:
+                case SkillshotType.SkillshotCircle:
                     if (point.To2D().Distance(castPosition) < Width)
                     {
                         return true;
                     }
                     break;
 
-                case Prediction.SkillshotType.SkillshotLine:
+                case SkillshotType.SkillshotLine:
                     if (point.To2D().Distance(castPosition.To2D(), From.To2D(), true) < Width + extraWidth)
                     {
                         return true;
                     }
                     break;
-                case Prediction.SkillshotType.SkillshotCone:
+                case SkillshotType.SkillshotCone:
                     var edge1 = (castPosition.To2D() - From.To2D()).Rotated(-Width / 2);
                     var edge2 = edge1.Rotated(Width);
                     var v = point.To2D() - From.To2D();
