@@ -264,7 +264,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Vector2(_texture.GetLevelDescription(0).Width, _texture.GetLevelDescription(0).Height);
+                    return new Vector2(Bitmap.Width, Bitmap.Height);
                 }
             }
 
@@ -324,8 +324,9 @@ namespace LeagueSharp.Common
                 _texture = Texture.FromMemory(
                     Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(newBitmap, typeof(byte[])), Width,
                     Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);
-                _width = _texture.GetLevelDescription(0).Width;
-                _height = _texture.GetLevelDescription(0).Height;
+                _width = newBitmap.Width;
+                _height = newBitmap.Height;
+                
             }
 
             public override void OnEndScene()
