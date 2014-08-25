@@ -55,12 +55,12 @@ namespace LeagueSharp.Common
         //Spells that reset the attack timer.
         private static readonly string[] AttackResets =
         {
-            "blindingdart", "cassiopeiatwinfang", "dariusnoxiantacticsonh",
-            "detonatingshot", "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
-            "kogmawqmis", "leonashieldofdaybreak", "luciane", "lucianq", "missfortunericochetshot",
+            "dariusnoxiantacticsonh",
+            "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
+             "leonashieldofdaybreak", "luciane", "lucianq", 
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
             "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
-            "sivirw", "sonahymnofvalor", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie",
+            "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie",
             "volibearq", "xenzhaocombotarget", "yorickspectral"
         };
 
@@ -653,7 +653,10 @@ namespace LeagueSharp.Common
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 150, 0)));
+                misc.AddItem(
+                    new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 _config.AddSubMenu(misc);
+
 
                 /* Delay sliders */
                 _config.AddItem(
@@ -772,6 +775,15 @@ namespace LeagueSharp.Common
             {
                 Obj_AI_Base result = null;
                 float[] r = { float.MaxValue };
+
+                if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) && !_config.Item("PriorizeFarm").GetValue<bool>())
+                {
+                    var target = SimpleTs.GetTarget(-1, SimpleTs.DamageType.Physical);
+                    if (target != null)
+                    {
+                        return target;
+                    }
+                }
 
                 /*Killable Minion*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
