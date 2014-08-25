@@ -320,10 +320,6 @@ namespace LeagueSharp.Common
             //Normal dashes.
             if (!dashData.IsBlink)
             {
-                Drawing.DrawText(100, 100, Color.White, "Speed: " + dashData.Speed);
-                Drawing.DrawText(100, 150, Color.White, "Path Length" + dashData.Path.PathLength());
-                Drawing.DrawText(100, 200, Color.White, "Duration" + dashData.Duration);
-
                 //Mid air:
                 var dashPred = GetPositionOnPath(
                     input, new List<Vector2> { input.Unit.ServerPosition.To2D(), dashData.Path.Last() }, dashData.Speed);
@@ -333,8 +329,6 @@ namespace LeagueSharp.Common
                     dashPred.Hitchance = HitChance.Dashing;
                     return dashPred;
                 }
-
-                Drawing.DrawText(100, 250, Color.White, "End");
 
                 //At the end of the dash:
                 if (dashData.Path.PathLength() > 200)
