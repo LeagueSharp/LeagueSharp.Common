@@ -133,11 +133,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (!_rangeCheckFrom.To2D().IsValid())
-                {
-                    return ObjectManager.Player.ServerPosition;
-                }
-                return _rangeCheckFrom;
+                return !_rangeCheckFrom.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _rangeCheckFrom;
             }
             set { _rangeCheckFrom = value; }
         }

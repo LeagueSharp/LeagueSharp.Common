@@ -206,14 +206,8 @@ namespace LeagueSharp.Common
             public Sprite(Bitmap bitmap, Vector2 position)
             {
                 Position = position;
-                Bitmap = bitmap;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = Texture.FromMemory(
-                    Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(bitmap, typeof(byte[])),
-                    bitmap.Width, bitmap.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
-                    0);
-                _width = _texture.GetLevelDescription(0).Width;
-                _height = _texture.GetLevelDescription(0).Height;
+                UpdateTextureBitmap(bitmap);
             }
 
             public Sprite(Texture texture, Vector2 position)
@@ -229,9 +223,7 @@ namespace LeagueSharp.Common
             {
                 Position = position;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = Texture.FromStream(Drawing.Direct3DDevice, stream);
-                _width = _texture.GetLevelDescription(0).Width;
-                _height = _texture.GetLevelDescription(0).Height;
+                UpdateTextureBitmap((Bitmap)Bitmap.FromStream(stream));
             }
 
             public Sprite(byte[] bytesArray, Vector2 position)
@@ -250,17 +242,11 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                var bitmap = new Bitmap(fileLocation);
                 Position = position;
-                Bitmap = bitmap;
                 _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-                _texture = Texture.FromMemory(
-                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(bitmap, typeof(byte[])),
-                    bitmap.Width, bitmap.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
-                    0);
-                _width = _texture.GetLevelDescription(0).Width;
-                _height = _texture.GetLevelDescription(0).Height;
+                UpdateTextureBitmap(new Bitmap(fileLocation));
             }
+
 
             public Bitmap Bitmap { get; set; }
 
@@ -310,12 +296,7 @@ namespace LeagueSharp.Common
                         g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                         g.DrawImage(original, 0, 0, target.Width, target.Height);
                     }
-                    _texture = Texture.FromMemory(
-                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(target, typeof(byte[])),
-                    target.Width, target.Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default,
-                    0);
-                    _width = _texture.GetLevelDescription(0).Width;
-                    _height = _texture.GetLevelDescription(0).Height;
+                    UpdateTextureBitmap(target);
                 }
 
                 get { return _scale; }
@@ -343,6 +324,8 @@ namespace LeagueSharp.Common
                 _texture = Texture.FromMemory(
                     Drawing.Direct3DDevice, (byte[]) new ImageConverter().ConvertTo(newBitmap, typeof(byte[])), Width,
                     Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);
+                _width = _texture.GetLevelDescription(0).Width;
+                _height = _texture.GetLevelDescription(0).Height;
             }
 
             public override void OnEndScene()
@@ -381,6 +364,9 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Object used to draw text on the screen.
+        /// </summary>
         public class Text : RenderObject
         {
             private readonly Font _textFont;
@@ -574,7 +560,7 @@ namespace LeagueSharp.Common
                             output.Color.x = CircleColor.x;
                             output.Color.y = CircleColor.y;
                             output.Color.z = CircleColor.z;
-
+                            
                             if(distance < Border && distance > -Border)
                             {
                                 output.Color.w = (CircleColor.w - CircleColor.w * abs(distance / Border));
@@ -582,6 +568,11 @@ namespace LeagueSharp.Common
                             else
                             {
                                 output.Color.w = 0;
+                            }
+                            
+                            if(Border < 1 && distance >= 0)
+                            {
+                                output.Color.w = CircleColor.w;
                             }
 
 	                        return output.Color;
@@ -632,11 +623,13 @@ namespace LeagueSharp.Common
                 _effect.EndPass();
                 _effect.End();
 
-                if (!zDeep)
+                if (zDeep)
                     Drawing.Direct3DDevice.SetRenderState(RenderState.ZEnable, false);
 
                 Drawing.Direct3DDevice.VertexDeclaration = olddec;
             }
         }
+
+
     }
 }
