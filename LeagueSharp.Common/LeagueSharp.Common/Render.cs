@@ -395,9 +395,33 @@ namespace LeagueSharp.Common
 
         public class Sprite : RenderObject
         {
+            public delegate Vector2 PositionDelegate();
             private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-            public int X = 0;
-            public int Y = 0;
+            private int _x = 0;
+            private int _y = 0;
+
+            public int X
+            {
+                get
+                {
+                    if (PositionD != null)
+                        return (int)PositionD().X;
+                    return _x;
+                }
+                set { _x = value; }
+            }
+
+            public int Y
+            {
+                get
+                {
+                    if (PositionD != null)
+                        return (int)PositionD().Y;
+                    return _y;
+                }
+                set { _y = value; }
+            }
+
             private ColorBGRA _color = SharpDX.Color.White;
 
             private bool _hide;
@@ -461,6 +485,8 @@ namespace LeagueSharp.Common
 
                 get { return new Vector2(X, Y); }
             }
+
+            public PositionDelegate PositionUpdate { get; set; }
 
             public Vector2 Scale
             {
