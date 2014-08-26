@@ -60,7 +60,7 @@ namespace LeagueSharp.Common
         {
             foreach (var renderObject in RenderObjects)
             {
-                renderObject.OnUnload();
+                renderObject.Dispose();
             }
         }
 
@@ -374,9 +374,12 @@ namespace LeagueSharp.Common
                 _line.OnResetDevice();
             }
 
-            public override void OnUnload()
+            public override void Dispose()
             {
-                _line.Dispose();
+                if (!_line.IsDisposed)
+                {
+                    _line.Dispose();
+                }
             }
         }
 
@@ -389,7 +392,7 @@ namespace LeagueSharp.Common
             public virtual void OnEndScene() { }
             public virtual void OnPreReset() { }
             public virtual void OnPostReset() { }
-            public virtual void OnUnload() { }
+            public virtual void Dispose() { }
         }
 
         public class Sprite : RenderObject
@@ -572,10 +575,17 @@ namespace LeagueSharp.Common
                 _sprite.OnResetDevice();
             }
 
-            public override void OnUnload()
+            public override void Dispose()
             {
-                _sprite.Dispose();
-                _texture.Dispose();
+                if (!_sprite.IsDisposed)
+                {
+                    _sprite.Dispose();
+                }
+
+                if (!_texture.IsDisposed)
+                {
+                    _texture.Dispose();
+                }
             }
         }
 
@@ -636,9 +646,12 @@ namespace LeagueSharp.Common
                 _textFont.OnResetDevice();
             }
 
-            public override void OnUnload()
+            public override void Dispose()
             {
-                _textFont.Dispose();
+                if (!_textFont.IsDisposed)
+                {
+                    _textFont.Dispose();
+                }
             }
         }
     }
