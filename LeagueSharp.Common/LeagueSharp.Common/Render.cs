@@ -388,7 +388,6 @@ namespace LeagueSharp.Common
             public virtual void OnDraw() { }
             public virtual void OnEndScene() { }
             public virtual void OnPreReset() { }
-
             public virtual void OnPostReset() { }
             public virtual void OnUnload() { }
         }
@@ -396,37 +395,14 @@ namespace LeagueSharp.Common
         public class Sprite : RenderObject
         {
             public delegate Vector2 PositionDelegate();
+
             private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
-            private int _x = 0;
-            private int _y = 0;
-
-            public int X
-            {
-                get
-                {
-                    if (PositionUpdate != null)
-                        return (int)PositionUpdate().X;
-                    return _x;
-                }
-                set { _x = value; }
-            }
-
-            public int Y
-            {
-                get
-                {
-                    if (PositionUpdate != null)
-                        return (int)PositionUpdate().Y;
-                    return _y;
-                }
-                set { _y = value; }
-            }
-
             private ColorBGRA _color = SharpDX.Color.White;
-
             private bool _hide;
             private Vector2 _scale = new Vector2(1, 1);
             private Texture _texture;
+            private int _x;
+            private int _y;
 
             public Sprite(Bitmap bitmap, Vector2 position)
             {
@@ -435,7 +411,8 @@ namespace LeagueSharp.Common
 
             public Sprite(BaseTexture texture, Vector2 position)
             {
-                UpdateTextureBitmap((Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)), position);
+                UpdateTextureBitmap(
+                    (Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)), position);
             }
 
             public Sprite(Stream stream, Vector2 position)
@@ -456,6 +433,32 @@ namespace LeagueSharp.Common
                 }
 
                 UpdateTextureBitmap(new Bitmap(fileLocation), position);
+            }
+
+            public int X
+            {
+                get
+                {
+                    if (PositionUpdate != null)
+                    {
+                        return (int) PositionUpdate().X;
+                    }
+                    return _x;
+                }
+                set { _x = value; }
+            }
+
+            public int Y
+            {
+                get
+                {
+                    if (PositionUpdate != null)
+                    {
+                        return (int) PositionUpdate().Y;
+                    }
+                    return _y;
+                }
+                set { _y = value; }
             }
 
             public Bitmap Bitmap { get; set; }
