@@ -434,7 +434,7 @@ namespace LeagueSharp.Common
                 var p = (pLength >= input.Delay * speed)
                     ? path.CutPath(Math.Max(0, input.Delay * speed))
                     : new List<Vector2> { path.Last() };
-                var cp = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
+                var cp = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius - 20));
 
                 return new PredictionOutput
                 {
@@ -470,7 +470,7 @@ namespace LeagueSharp.Common
                             var alpha = (input.From.To2D() - pos).AngleBetween(a - b);
                             if (alpha > 17 && alpha < 180 - 17)
                             {
-                                var beta = (float)Math.Asin(input.RealRadius / pos.Distance(input.From));
+                                var beta = (float)Math.Asin((input.RealRadius) / pos.Distance(input.From));
                                 var cp1 = input.From.To2D() + (pos - input.From.To2D()).Rotated(beta);
                                 var cp2 = input.From.To2D() + (pos - input.From.To2D()).Rotated(-beta);
 
