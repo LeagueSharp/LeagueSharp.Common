@@ -24,6 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 
 using SharpDX;
@@ -73,33 +75,9 @@ namespace LeagueSharp.Common
 
         public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
         {
-            var ms = new MemoryStream();
-            var bw = new BinaryWriter(ms);
-
-            bw.Write((byte) 0x39);
-            bw.Write((uint) ObjectManager.Player.NetworkId);
-            switch (slot.ToString())
-            {
-                case "Q":
-                    bw.Write(0);
-                    break;
-                case "W":
-                    bw.Write(1);
-                    break;
-                case "E":
-                    bw.Write(2);
-                    break;
-                case "R":
-                    bw.Write(3);
-                    break;
-                default:
-                    return false;
-            }
-
-            Game.SendPacket(ms.ToArray(), PacketChannel.C2S, PacketProtocolFlags.NoFlags);
+            Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot)).Send();
             return true;
         }
-
 
         public static List<Vector2> CutPath(this List<Vector2> path, float distance)
         {
@@ -443,6 +421,55 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static class HpBarDamageIndicator
+        {
+            private const int XOffset = 10;
+            private const int YOffset = 20;
+            private const int Width = 103;
+            private const int Height = 8;
+            public delegate float DamageToUnitDelegate(Obj_AI_Hero hero);
+            public static Color Color = Color.Lime;
+            public static bool Enabled = true;
+            private static DamageToUnitDelegate _damageToUnit;
+            private static Render.Text _text = new Render.Text(0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
+
+            public static DamageToUnitDelegate DamageToUnit
+            {
+                get { return _damageToUnit; }
+
+                set
+                {
+                    if (_damageToUnit == null)
+                    {
+                        Drawing.OnDraw +=Drawing_OnDraw;
+                    }
+                    _damageToUnit = value;
+                }
+            }
+
+            static void Drawing_OnDraw(EventArgs args)
+            {
+                if (!Enabled || _damageToUnit == null)
+                    return;
+                foreach (var unit in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy))
+                {
+                    var barPos = unit.HPBarPosition;
+                    var damage = _damageToUnit(unit);
+                    var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
+                    var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
+
+                    if (damage > unit.Health)
+                    {
+                        _text.X = (int)barPos.X + XOffset;
+                        _text.Y = (int)barPos.Y + YOffset - 13;
+                        _text.text = ((int)(unit.Health - damage)).ToString();
+                        _text.OnEndScene();
+                    }
+
+                    Drawing.DrawLine(xPos, barPos.Y + YOffset, xPos, barPos.Y + YOffset + Height, 1, Color);
+                }
+            }
+        }
 
         /// <summary>
         /// Internal class used to get the waypoints even when the enemy enters the fow of war.
