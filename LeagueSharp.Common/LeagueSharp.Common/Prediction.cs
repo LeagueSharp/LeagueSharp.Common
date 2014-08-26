@@ -258,13 +258,12 @@ namespace LeagueSharp.Common
             {
                 //Unit is immobile.
                 var remainingImmobileT = UnitIsImmobileUntil(input.Unit);
-                if (remainingImmobileT >= 0d ||
-                    (input.Unit is Obj_AI_Hero && ((Obj_AI_Hero)input.Unit).IsChannelingImportantSpell()))
+                if (remainingImmobileT >= 0d)
                 {
                     result = GetImmobilePrediction(input, remainingImmobileT);
                 }
             }
-
+            
             //Normal prediction
             if (result == null)
             {
@@ -451,7 +450,7 @@ namespace LeagueSharp.Common
                             var alpha = (input.From.To2D() - p).AngleBetween(a - b);
                             if (alpha > 17 && alpha < 180 - 17)
                             {
-                                var beta = (float)Math.Asin((input.RealRadius) / p.Distance(input.From));
+                                var beta = (float)Math.Asin((input.RealRadius - 10) / p.Distance(input.From));
                                 var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
                                 var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
 
@@ -497,7 +496,7 @@ namespace LeagueSharp.Common
                             var alpha = (input.From.To2D() - pos).AngleBetween(a - b);
                             if (alpha > 17 && alpha < 180 - 17)
                             {
-                                var beta = (float)Math.Asin((input.RealRadius) / pos.Distance(input.From));
+                                var beta = (float)Math.Asin(input.RealRadius / pos.Distance(input.From));
                                 var cp1 = input.From.To2D() + (pos - input.From.To2D()).Rotated(beta);
                                 var cp2 = input.From.To2D() + (pos - input.From.To2D()).Rotated(-beta);
 
