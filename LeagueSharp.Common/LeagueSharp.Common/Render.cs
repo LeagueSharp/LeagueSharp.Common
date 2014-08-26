@@ -406,22 +406,22 @@ namespace LeagueSharp.Common
 
             public Sprite(Bitmap bitmap, Vector2 position)
             {
-                UpdateTextureBitmap(bitmap);
+                UpdateTextureBitmap(bitmap, position);
             }
 
-            public Sprite(Texture texture, Vector2 position)
+            public Sprite(BaseTexture texture, Vector2 position)
             {
-                UpdateTextureBitmap((Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)));
+                UpdateTextureBitmap((Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)), position);
             }
 
             public Sprite(Stream stream, Vector2 position)
             {
-                UpdateTextureBitmap((Bitmap) Image.FromStream(stream));
+                UpdateTextureBitmap((Bitmap) Image.FromStream(stream), position);
             }
 
             public Sprite(byte[] bytesArray, Vector2 position)
             {
-                UpdateTextureBitmap((Bitmap) Image.FromStream(new MemoryStream(bytesArray)));
+                UpdateTextureBitmap((Bitmap) Image.FromStream(new MemoryStream(bytesArray)), position);
             }
 
             public Sprite(string fileLocation, Vector2 position)
@@ -431,9 +431,8 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                UpdateTextureBitmap(new Bitmap(fileLocation));
+                UpdateTextureBitmap(new Bitmap(fileLocation), position);
             }
-
 
             public Bitmap Bitmap { get; set; }
 
