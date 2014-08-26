@@ -173,9 +173,9 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Receives the packet.
         /// </summary>
-        public void Process()
+        public void Process(PacketChannel channel = PacketChannel.GamePlay)
         {
-            // Game.ProcessPacket(Ms.ToArray());
+            Game.ProcessPacket(Ms.ToArray(), channel);
         }
 
         /// <summary>
