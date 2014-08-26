@@ -173,7 +173,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Receives the packet.
         /// </summary>
-        public void Process(PacketChannel channel = PacketChannel.GamePlay)
+        public void Process(PacketChannel channel = PacketChannel.S2C)
         {
             Game.ProcessPacket(Ms.ToArray(), channel);
         }
