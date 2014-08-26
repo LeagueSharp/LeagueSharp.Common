@@ -51,7 +51,7 @@ namespace LeagueSharp.Common
         public static bool IsValidTarget(this Obj_AI_Base unit, float range = float.MaxValue, bool checkTeam = true, Vector3 from = new Vector3())
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable)
+                unit.IsInvulnerable || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1) || unit.HasBuff("JudicatorIntervention"))
             {
                 return false;
             }
