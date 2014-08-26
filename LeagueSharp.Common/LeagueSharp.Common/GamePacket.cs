@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -111,7 +113,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void WriteByte(byte b, int repeat = 1)
         {
-            for (int i = 0; i < repeat; i++)
+            for (var i = 0; i < repeat; i++)
             {
                 Bw.Write(b);
             }
