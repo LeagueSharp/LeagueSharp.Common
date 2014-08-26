@@ -27,7 +27,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Xml;
-
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -111,7 +110,7 @@ namespace LeagueSharp.Common
         public static Color BooleanOffColor = Color.FromArgb(150, Color.Red);
         public static Color StringListColor = Color.FromArgb(150, Color.Blue);
 
-        public static XmlDocument xml = new XmlDocument();
+        public static XmlDocument Xml = new XmlDocument();
         /* Slider */
         public static Color SliderIndicator = Color.FromArgb(150, Color.Yellow);
 
@@ -139,49 +138,49 @@ namespace LeagueSharp.Common
 
             if (File.Exists(MenuSettingsPath))
             {
-                xml.Load(MenuSettingsPath);
+                Xml.Load(MenuSettingsPath);
             }
             else
             {
-                var rootNode = xml.CreateElement("MenuSettings");
-                xml.AppendChild(rootNode);
+                var rootNode = Xml.CreateElement("MenuSettings");
+                Xml.AppendChild(rootNode);
 
-                var varNode = xml.CreateElement("Width");
+                var varNode = Xml.CreateElement("Width");
                 varNode.InnerText = "2";
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("Height");
+                varNode = Xml.CreateElement("Height");
                 varNode.InnerText = "25";
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("BackgroundColor");
+                varNode = Xml.CreateElement("BackgroundColor");
                 varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.DarkSlateGray);
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("BackgroundColorAlpha");
+                varNode = Xml.CreateElement("BackgroundColorAlpha");
                 varNode.InnerText = "100";
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("ActiveColor");
+                varNode = Xml.CreateElement("ActiveColor");
                 varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.Red);
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("ActiveColorAlpha");
+                varNode = Xml.CreateElement("ActiveColorAlpha");
                 varNode.InnerText = "150";
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("ShowMenuPress");
+                varNode = Xml.CreateElement("ShowMenuPress");
                 varNode.InnerText = "16";
                 rootNode.AppendChild(varNode);
 
-                varNode = xml.CreateElement("ShowMenuToggle");
+                varNode = Xml.CreateElement("ShowMenuToggle");
                 varNode.InnerText = "120";
                 rootNode.AppendChild(varNode);
             }
 
             Directory.CreateDirectory(MenuConfigPath);
 
-            xml.Save(MenuSettingsPath);
+            Xml.Save(MenuSettingsPath);
 
             Game.OnWndProc += Game_OnWndProc;
             _drawTheMenu = Global.Read<bool>("DrawMenu", true);
@@ -280,7 +279,7 @@ namespace LeagueSharp.Common
 
         private static string GetXmlValue(string tagName)
         {
-            return xml.GetElementsByTagName(tagName)[0].InnerText;
+            return Xml.GetElementsByTagName(tagName)[0].InnerText;
         }
     }
 

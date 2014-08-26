@@ -196,7 +196,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Saves the packet dump to a file
         /// </summary>
-        public void SaveToFile(string filePath = "E:\\PacketLog.txt")
+        public void SaveToFile(string filePath)
         {
             var w = File.AppendText(filePath);
             w.WriteLine(Dump());
