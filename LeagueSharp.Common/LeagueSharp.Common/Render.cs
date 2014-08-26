@@ -404,8 +404,8 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    if (PositionD != null)
-                        return (int)PositionD().X;
+                    if (PositionUpdate != null)
+                        return (int)PositionUpdate().X;
                     return _x;
                 }
                 set { _x = value; }
@@ -415,8 +415,8 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    if (PositionD != null)
-                        return (int)PositionD().Y;
+                    if (PositionUpdate != null)
+                        return (int)PositionUpdate().Y;
                     return _y;
                 }
                 set { _y = value; }
