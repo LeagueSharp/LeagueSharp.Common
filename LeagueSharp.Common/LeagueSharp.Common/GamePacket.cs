@@ -148,6 +148,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public void WriteHexString(string hex)
         {
+            hex = hex.Replace(" ", string.Empty);
+
+            if ((hex.Length % 2) != 0)
+            {
+                hex = "0" + hex;
+            }
+
             Bw.Write(
                 Enumerable.Range(0, hex.Length)
                     .Where(x => x % 2 == 0)
