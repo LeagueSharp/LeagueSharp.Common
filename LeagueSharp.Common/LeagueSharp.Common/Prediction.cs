@@ -595,6 +595,7 @@ namespace LeagueSharp.Common
                             UnitPosition = mainTargetPrediction.UnitPosition,
                             Hitchance = mainTargetPrediction.Hitchance,
                             Input = input,
+                            _aoeTargetsHitCount = posibleTargets.Count,
                         };
                     }
 
