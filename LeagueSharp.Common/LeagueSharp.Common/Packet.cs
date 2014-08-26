@@ -41,6 +41,14 @@ namespace LeagueSharp.Common
             AssistMe = 6,
         }
 
+        public enum Emotes
+        {
+           Dance = 0x00,
+           Joke = 0x03,
+           Taunt = 0x01,
+           Laugh = 0x02,
+        }
+
         static Packet()
         {
             if (Common.isInitialized == false)
@@ -395,7 +403,7 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.NetworkId = packet.ReadInteger();
                     result.SlotByte = packet.ReadByte();
-                    result.SlotId = (SpellSlot) (result.SlotByte - 0x80 + (byte) SpellSlot.Item1);
+                    result.SlotId = (SpellSlot)(result.SlotByte - 0x80 + (byte)SpellSlot.Item1);
                     return result;
                 }
 
@@ -408,10 +416,10 @@ namespace LeagueSharp.Common
                     public Struct(SpellSlot slotId, int networkId = -1)
                     {
                         SlotId = slotId;
-                        SlotByte = (byte) slotId;
-                        if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Item6)
+                        SlotByte = (byte)slotId;
+                        if (SlotByte >= (byte)SpellSlot.Item1 && SlotByte <= (byte)SpellSlot.Item6)
                         {
-                            SlotByte = (byte) (0x80 + SlotByte - (byte) SpellSlot.Item1);
+                            SlotByte = (byte)(0x80 + SlotByte - (byte)SpellSlot.Item1);
                         }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
@@ -419,10 +427,10 @@ namespace LeagueSharp.Common
                     public Struct(byte slotByte, int networkId = -1)
                     {
                         SlotByte = slotByte;
-                        SlotId = (SpellSlot) slotByte;
+                        SlotId = (SpellSlot)slotByte;
                         if (slotByte >= 0x80 && slotByte <= 0x85)
                         {
-                            SlotId = (SpellSlot) ((byte) SpellSlot.Item1 + slotByte - 0x80);
+                            SlotId = (SpellSlot)((byte)SpellSlot.Item1 + slotByte - 0x80);
                         }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
@@ -430,6 +438,49 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region Emote
+
+            /// <summary>
+            /// Packet sent when sending emotes.
+            /// </summary>
+            public static class Emote
+            {
+                public static byte Header = 0x48;
+                
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteByte(packetStruct.EmoteId);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.NetworkId = packet.ReadInteger();
+                    result.EmoteId = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public byte EmoteId;
+
+                    public Struct(byte emoteId, int networkId = -1)
+                    {
+                        EmoteId = emoteId;
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+                }
+            }
+
+            #endregion
+
         }
 
         public static class S2C
@@ -1019,6 +1070,49 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region PlayEmote
+
+            /// <summary>
+            /// Gets received when an unit uses an emote.
+            /// </summary>
+            public static class PlayEmote
+            {
+                public static byte Header = 0x42;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteByte(packetStruct.EmoteId);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.NetworkId = packet.ReadInteger();
+                    result.EmoteId = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public byte EmoteId;
+
+                    public Struct(byte emoteId, int networkId = -1)
+                    {
+                        EmoteId = emoteId;
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+                }
+            }
+
+            #endregion
+
         }
     }
 }
