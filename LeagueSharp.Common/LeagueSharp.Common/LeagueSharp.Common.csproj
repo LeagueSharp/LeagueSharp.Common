@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alerter.cs" />
     <Compile Include="AntiGapcloser.cs" />
     <Compile Include="Dash.cs" />
     <Compile Include="GamePacket.cs" />
