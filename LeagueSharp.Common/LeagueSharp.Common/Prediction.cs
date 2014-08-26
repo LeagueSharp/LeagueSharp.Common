@@ -235,7 +235,7 @@ namespace LeagueSharp.Common
             if (ft)
             {
                 //Increase the delay due to the latency and server tick:
-                input.Delay += Game.Ping / 2000f;
+                input.Delay += Game.Ping / 2000f + 0.05f;
 
                 if (input.Aoe)
                 {
@@ -429,24 +429,51 @@ namespace LeagueSharp.Common
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed == double.MaxValue)
+            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed == float.MaxValue)
             {
-                var p = (pLength >= input.Delay * speed)
-                    ? path.CutPath(Math.Max(0, input.Delay * speed))
-                    : new List<Vector2> { path.Last() };
-                var cp = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius - 20));
+                var tDistance = input.Delay * speed;
 
-                return new PredictionOutput
+                for (var i = 0; i < path.Count - 1; i++)
                 {
-                    Input = input,
-                    CastPosition = cp.First().To3D(),
-                    UnitPosition = p.First().To3D(),
-                    Hitchance = HitChance.High,
-                };
+                    var a = path[i];
+                    var b = path[i + 1];
+                    var d = a.Distance(b);
+                    if (d >= tDistance || i == path.Count - 2)
+                    {
+                        tDistance = (i == path.Count - 2 && d < tDistance) ? d : tDistance;
+
+                        var direction = (b - a).Normalized();
+                        var cp = a + direction * (tDistance - input.RealRadius);
+                        var p = a + direction * tDistance;
+
+                        if (input.Type == SkillshotType.SkillshotLine)
+                        {
+                            var alpha = (input.From.To2D() - p).AngleBetween(a - b);
+                            if (alpha > 17 && alpha < 180 - 17)
+                            {
+                                var beta = (float)Math.Asin((input.RealRadius) / p.Distance(input.From));
+                                var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
+                                var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
+
+                                cp = cp1.Distance(cp) < cp2.Distance(cp) ? cp1 : cp2;
+                            }
+                        }
+
+                        return new PredictionOutput
+                        {
+                            Input = input,
+                            CastPosition = cp.To3D(),
+                            UnitPosition = p.To3D(),
+                            Hitchance = HitChance.High,
+                        };
+                    }
+
+                    tDistance -= d;
+                }
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed && input.Speed != double.MaxValue)
+            if (pLength >= input.Delay * speed && input.Speed != float.MaxValue)
             {
                 path = path.CutPath(Math.Max(0, input.Delay * speed));
                 var tT = 0f;
@@ -878,7 +905,7 @@ namespace LeagueSharp.Common
 
                         case CollisionableObjects.YasuoWall:
 
-                            if (Environment.TickCount - WallCastT > 4000) break;
+                        if (Environment.TickCount - WallCastT > 4000) break;
 
                         GameObject wall = null;
                         foreach (var gameObject in ObjectManager.Get<GameObject>())
@@ -897,7 +924,6 @@ namespace LeagueSharp.Common
                         }
                         var level = wall.Name.Substring(wall.Name.Length - 6, 1);
                         var wallWidth = (300 + 50 * Convert.ToInt32(level));
-
 
                         var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
                         var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
