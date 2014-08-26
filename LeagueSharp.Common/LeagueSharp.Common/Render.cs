@@ -246,7 +246,7 @@ namespace LeagueSharp.Common
                             
                             if(distance < Border && distance > -Border)
                             {
-                                output.Color.w = (CircleColor.w - CircleColor.w * abs(distance / Border));
+                                output.Color.w = (CircleColor.w - CircleColor.w * abs(distance * 1.75 / Border));
                             }
                             else
                             {
