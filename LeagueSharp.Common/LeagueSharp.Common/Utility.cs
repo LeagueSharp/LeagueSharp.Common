@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,19 +17,16 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using SharpDX.Direct3D9;
-using Color = System.Drawing.Color;
-
 using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -50,10 +48,14 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
-        public static bool IsValidTarget(this Obj_AI_Base unit, float range = float.MaxValue, bool checkTeam = true, Vector3 from = new Vector3())
+        public static bool IsValidTarget(this Obj_AI_Base unit,
+            float range = float.MaxValue,
+            bool checkTeam = true,
+            Vector3 from = new Vector3())
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1) || unit.HasBuff("JudicatorIntervention"))
+                unit.IsInvulnerable || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1) ||
+                unit.HasBuff("JudicatorIntervention"))
             {
                 return false;
             }
@@ -63,9 +65,10 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            if (range != float.MaxValue &&
-                Vector2.DistanceSquared((from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(), unit.ServerPosition.To2D()) >
-                range * range)
+            if (Math.Abs(range - float.MaxValue) > float.Epsilon &&
+                Vector2.DistanceSquared(
+                    (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(),
+                    unit.ServerPosition.To2D()) > range * range)
             {
                 return false;
             }
@@ -75,7 +78,8 @@ namespace LeagueSharp.Common
 
         public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
         {
-            Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot)).Send();
+            Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot))
+                .Send();
             return true;
         }
 
@@ -151,22 +155,16 @@ namespace LeagueSharp.Common
         /// </summary>
         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name, bool searchInSummoners = true)
         {
-            foreach (var spell in unit.Spellbook.Spells)
+            foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name == name))
             {
-                if (spell.Name == name)
-                {
-                    return spell.Slot;
-                }
+                return spell.Slot;
             }
 
             if (searchInSummoners)
             {
-                foreach (var spell in unit.SummonerSpellbook.Spells)
+                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name == name))
                 {
-                    if (spell.Name == name)
-                    {
-                        return spell.Slot;
-                    }
+                    return spell.Slot;
                 }
             }
 
@@ -248,7 +246,7 @@ namespace LeagueSharp.Common
             return
                 ObjectManager.Get<Obj_Shop>()
                     .Where(shop => shop.IsAlly)
-                    .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1000);
+                    .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1250);
         }
 
         /// <summary>
@@ -279,29 +277,13 @@ namespace LeagueSharp.Common
 
             for (var i = 0; i < pointList.Count; i++)
             {
-                var A = pointList[i];
-                var B = pointList[i == pointList.Count - 1 ? 0 : i + 1];
+                var a = pointList[i];
+                var b = pointList[i == pointList.Count - 1 ? 0 : i + 1];
 
-                Vector2 AonScreen;
-                Vector2 BonScreen;
-                if (onMinimap)
-                {
-                    AonScreen = Drawing.WorldToMinimap(A);
-                    BonScreen = Drawing.WorldToMinimap(B);
-                }
-                else
-                {
-                    AonScreen = Drawing.WorldToScreen(A);
-                    BonScreen = Drawing.WorldToScreen(B);
-                }
-                if (onMinimap ||
-                    (AonScreen.X < Drawing.Width * 1.5 && AonScreen.X > -Drawing.Width * 1.5 &&
-                     BonScreen.X < Drawing.Width * 1.5 && BonScreen.X > -Drawing.Width * 1.5 &&
-                     AonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5 &&
-                     BonScreen.Y < Drawing.Height * 1.5 && BonScreen.Y > -Drawing.Height * 1.5))
-                {
-                    Drawing.DrawLine(AonScreen.X, AonScreen.Y, BonScreen.X, BonScreen.Y, thickness, color);
-                }
+                var aonScreen = Drawing.WorldToMinimap(a);
+                var bonScreen = Drawing.WorldToMinimap(b);
+
+                Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
         }
 
@@ -309,7 +291,7 @@ namespace LeagueSharp.Common
         {
             public delegate void Callback();
 
-            public static List<Action> actionList = new List<Action>();
+            public static List<Action> ActionList = new List<Action>();
 
             static DelayAction()
             {
@@ -318,12 +300,12 @@ namespace LeagueSharp.Common
 
             private static void GameOnOnGameUpdate(EventArgs args)
             {
-                for (var i = actionList.Count - 1; i >= 0; i--)
+                for (var i = ActionList.Count - 1; i >= 0; i--)
                 {
-                    if (actionList[i].Time <= Environment.TickCount)
+                    if (ActionList[i].Time <= Environment.TickCount)
                     {
-                        actionList[i].CallbackObject();
-                        actionList.RemoveAt(i);
+                        ActionList[i].CallbackObject();
+                        ActionList.RemoveAt(i);
                     }
                 }
             }
@@ -331,7 +313,7 @@ namespace LeagueSharp.Common
             public static void Add(int time, Callback func)
             {
                 var action = new Action(time, func);
-                actionList.Add(action);
+                ActionList.Add(action);
             }
 
             public struct Action
@@ -343,6 +325,65 @@ namespace LeagueSharp.Common
                 {
                     Time = time + Environment.TickCount;
                     CallbackObject = callback;
+                }
+            }
+        }
+
+        public static class HpBarDamageIndicator
+        {
+            public delegate float DamageToUnitDelegate(Obj_AI_Hero hero);
+
+            private const int XOffset = 10;
+            private const int YOffset = 20;
+            private const int Width = 103;
+            private const int Height = 8;
+
+            public static Color Color = Color.Lime;
+            public static bool Enabled = true;
+            private static DamageToUnitDelegate _damageToUnit;
+
+            private static readonly Render.Text Text = new Render.Text(
+                0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
+
+            public static DamageToUnitDelegate DamageToUnit
+            {
+                get { return _damageToUnit; }
+
+                set
+                {
+                    if (_damageToUnit == null)
+                    {
+                        Drawing.OnDraw += Drawing_OnDraw;
+                    }
+                    _damageToUnit = value;
+                }
+            }
+
+            private static void Drawing_OnDraw(EventArgs args)
+            {
+                if (!Enabled || _damageToUnit == null)
+                {
+                    return;
+                }
+
+                foreach (
+                    var unit in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy)
+                    )
+                {
+                    var barPos = unit.HPBarPosition;
+                    var damage = _damageToUnit(unit);
+                    var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
+                    var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
+
+                    if (damage > unit.Health)
+                    {
+                        Text.X = (int) barPos.X + XOffset;
+                        Text.Y = (int) barPos.Y + YOffset - 13;
+                        Text.text = ((int) (unit.Health - damage)).ToString();
+                        Text.OnEndScene();
+                    }
+
+                    Drawing.DrawLine(xPos, barPos.Y + YOffset, xPos, barPos.Y + YOffset + Height, 1, Color);
                 }
             }
         }
@@ -360,8 +401,9 @@ namespace LeagueSharp.Common
 
             private static bool SameVector(Vector3 v1, Vector3 v2)
             {
-                return (Math.Floor(v1.X) == Math.Floor(v2.X) && Math.Floor(v1.Y) == Math.Floor(v2.Y) &&
-                        Math.Floor(v1.Z) == Math.Floor(v2.Z));
+                return (Math.Abs(Math.Floor(v1.X) - Math.Floor(v2.X)) < float.Epsilon &&
+                        Math.Abs(Math.Floor(v1.Y) - Math.Floor(v2.Y)) < float.Epsilon &&
+                        Math.Abs(Math.Floor(v1.Z) - Math.Floor(v2.Z)) < float.Epsilon);
             }
 
             /// <summary>
@@ -369,105 +411,57 @@ namespace LeagueSharp.Common
             /// </summary>
             public static MapType GetMap()
             {
-                Vector3[] SR =
+                Vector3[] sr =
                 {
                     new Vector3(13360.61f, 14586.56f, 218.222f),
                     new Vector3(-174.2087f, 1056.653f, 163.7132f)
                 };
-                Vector3[] DOM =
+                Vector3[] dom =
                 {
                     new Vector3(16.54065f, 4452.441f, 168.618f),
                     new Vector3(13876.07f, 4445.496f, 99.3553f)
                 };
-                Vector3[] TTT =
+                Vector3[] ttt =
                 {
                     new Vector3(14125.37f, 8005.887f, 123.4631f),
                     new Vector3(1313.361f, 8005.887f, 123.4631f)
                 };
-                Vector3[] HA =
+                Vector3[] ha =
                 {
                     new Vector3(497.0624f, 1932.652f, -39.8721f),
                     new Vector3(11065.5f, 12306.48f, -185.1475f)
                 };
-                foreach (var pos in SR)
+
+                if (
+                    sr.Any(
+                        pos =>
+                            ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
-                    {
-                        return MapType.SummonersRift;
-                    }
+                    return MapType.SummonersRift;
                 }
-                foreach (var pos in DOM)
+                if (
+                    dom.Any(
+                        pos =>
+                            ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
-                    {
-                        return MapType.CrystalScar;
-                    }
+                    return MapType.CrystalScar;
                 }
-                foreach (var pos in TTT)
+                if (
+                    ttt.Any(
+                        pos =>
+                            ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
-                    {
-                        return MapType.TwistedTreeline;
-                    }
+                    return MapType.TwistedTreeline;
                 }
-                foreach (var pos in HA)
+                if (
+                    ha.Any(
+                        pos =>
+                            ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    if (ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null)
-                    {
-                        return MapType.HowlingAbyss;
-                    }
+                    return MapType.HowlingAbyss;
                 }
+
                 return MapType.Unknown;
-            }
-        }
-
-        public static class HpBarDamageIndicator
-        {
-            private const int XOffset = 10;
-            private const int YOffset = 20;
-            private const int Width = 103;
-            private const int Height = 8;
-            public delegate float DamageToUnitDelegate(Obj_AI_Hero hero);
-            public static Color Color = Color.Lime;
-            public static bool Enabled = true;
-            private static DamageToUnitDelegate _damageToUnit;
-            private static Render.Text _text = new Render.Text(0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
-
-            public static DamageToUnitDelegate DamageToUnit
-            {
-                get { return _damageToUnit; }
-
-                set
-                {
-                    if (_damageToUnit == null)
-                    {
-                        Drawing.OnDraw +=Drawing_OnDraw;
-                    }
-                    _damageToUnit = value;
-                }
-            }
-
-            static void Drawing_OnDraw(EventArgs args)
-            {
-                if (!Enabled || _damageToUnit == null)
-                    return;
-                foreach (var unit in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy))
-                {
-                    var barPos = unit.HPBarPosition;
-                    var damage = _damageToUnit(unit);
-                    var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
-                    var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
-
-                    if (damage > unit.Health)
-                    {
-                        _text.X = (int)barPos.X + XOffset;
-                        _text.Y = (int)barPos.Y + YOffset - 13;
-                        _text.text = ((int)(unit.Health - damage)).ToString();
-                        _text.OnEndScene();
-                    }
-
-                    Drawing.DrawLine(xPos, barPos.Y + YOffset, xPos, barPos.Y + YOffset + Height, 1, Color);
-                }
             }
         }
 
