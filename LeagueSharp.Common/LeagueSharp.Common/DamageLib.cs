@@ -2366,12 +2366,12 @@ namespace LeagueSharp.Common
                             return
                                 CalcPhysicalDmg(
                                     100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 +
-                                    ObjectManager.Player.FlatPhysicalDamageMod * 0.2, enemy);
+                                    ObjectManager.Player.FlatPhysicalDamageMod * 0.2 + ObjectManager.Player.FlatMagicDamageMod * 0.5, enemy);
                         case StageType.FirstDamage: //Max damage.
                             return
                                 CalcPhysicalDmg(
                                     100 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100 +
-                                    ObjectManager.Player.FlatPhysicalDamageMod * 0.2, enemy) * 1.5;
+                                    ObjectManager.Player.FlatPhysicalDamageMod * 0.2 + ObjectManager.Player.FlatMagicDamageMod * 0.5, enemy) * 1.5;
                         default:
                             throw new InvalidSpellTypeException();
                     }

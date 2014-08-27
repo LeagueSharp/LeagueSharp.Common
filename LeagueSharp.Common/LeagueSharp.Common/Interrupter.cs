@@ -120,7 +120,7 @@ namespace LeagueSharp.Common
                 {
                     ChampionName = "Shen",
                     SpellName = "ShenStandUnited",
-                    DangerLevel = InterruptableDangerLevel.High,
+                    DangerLevel = InterruptableDangerLevel.Low,
                     Slot = SpellSlot.R,
                     BuffName = "NobodyPlaysShen:^)"
                 });

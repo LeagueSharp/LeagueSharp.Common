@@ -239,7 +239,7 @@ namespace LeagueSharp.Common
 
         public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1)
         {
-            /*unit, Delay, Width, Speed, From, Range, Collision, Type, RangeCheckFrom*/
+
             return Prediction.GetPrediction(new PredictionInput
             {
                 Unit = unit,
