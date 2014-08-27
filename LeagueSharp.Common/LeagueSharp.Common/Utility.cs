@@ -383,7 +383,7 @@ namespace LeagueSharp.Common
                         Text.OnEndScene();
                     }
 
-                    Drawing.DrawLine(xPos, barPos.Y + YOffset, xPos, barPos.Y + YOffset + Height, 1, Color);
+                    Drawing.DrawLine(xPos, barPos.Y + YOffset, xPos, barPos.Y + YOffset + Height, 2, Color);
                 }
             }
         }
