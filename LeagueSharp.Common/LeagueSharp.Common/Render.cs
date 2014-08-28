@@ -292,7 +292,6 @@ namespace LeagueSharp.Common
 
                 _effect.Technique = _technique;
 
-
                 _effect.Begin();
                 _effect.BeginPass(0);
                 _effect.SetValue(
@@ -301,6 +300,11 @@ namespace LeagueSharp.Common
                     "CircleColor", new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
                 _effect.SetValue("Radius", radius);
                 _effect.SetValue("Border", 2f + width);
+
+                var rs1 = Drawing.Direct3DDevice.GetRenderState<bool>(RenderState.AlphaBlendEnable);
+                var rs2 = Drawing.Direct3DDevice.GetRenderState<SharpDX.Direct3D9.Blend>(RenderState.DestinationBlend);
+                var rs3 = Drawing.Direct3DDevice.GetRenderState<SharpDX.Direct3D9.Blend>(RenderState.SourceBlend);
+                var rs4 = Drawing.Direct3DDevice.GetRenderState<bool>(RenderState.AlphaTestEnable);
 
                 Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
                 Drawing.Direct3DDevice.SetRenderState(RenderState.DestinationBlend, SharpDX.Direct3D9.Blend.InverseSourceAlpha);
@@ -312,10 +316,14 @@ namespace LeagueSharp.Common
 
                 Drawing.Direct3DDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
 
+                
                 _effect.EndPass();
                 _effect.End();
-
                 Drawing.Direct3DDevice.SetRenderState(RenderState.ZEnable, zDeep ? ZBufferType.UseZBuffer : ZBufferType.DontUseZBuffer);
+                Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, rs1);
+                Drawing.Direct3DDevice.SetRenderState(RenderState.DestinationBlend, rs2);
+                Drawing.Direct3DDevice.SetRenderState(RenderState.SourceBlend, rs3);
+                Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaTestEnable, rs4);
 
                 Drawing.Direct3DDevice.VertexDeclaration = olddec;
             }
