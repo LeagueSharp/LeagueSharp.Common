@@ -525,6 +525,8 @@ namespace LeagueSharp.Common
         public static double CalcPhysicalMinionDmg(double dmg, Obj_AI_Minion minion, bool isAA)
         {
             double additionaldmg = 0;
+            double bonusmagicdmg = 0;
+
             if (doubleedgedsword)
             {
                 if (ObjectManager.Player.CombatType == GameObjectCombatType.Melee)
@@ -540,10 +542,17 @@ namespace LeagueSharp.Common
             {
                 additionaldmg += dmg * 0.03;
             }
+
             if (butcher)
             {
                 additionaldmg += 2;
             }
+
+            if (arcaneblade)
+            {
+                bonusmagicdmg = CalcMagicDmg(0.05 * ObjectManager.Player.FlatMagicDamageMod, minion);
+            }
+
             if (isAA)
             {
                 foreach (var slot in ObjectManager.Player.InventoryItems)
@@ -562,7 +571,7 @@ namespace LeagueSharp.Common
 
             double newarmor = minion.Armor * ObjectManager.Player.PercentArmorPenetrationMod;
             var dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
-            return (((dmg + additionaldmg) * dmgreduction));
+            return (((dmg + additionaldmg) * dmgreduction)) + bonusmagicdmg;
         }
 
         public static double CalcMagicMinionDmg(double dmg, Obj_AI_Minion minion, bool isSingleTargetSpell)
