@@ -31,6 +31,14 @@ namespace LeagueSharp.Common
 {
     public static class Packet
     {
+        public enum Emotes
+        {
+            Dance = 0x00,
+            Joke = 0x03,
+            Taunt = 0x01,
+            Laugh = 0x02,
+        }
+
         public enum PingType
         {
             Normal = 1,
@@ -39,14 +47,6 @@ namespace LeagueSharp.Common
             Danger = 2,
             OnMyWay = 4,
             AssistMe = 6,
-        }
-
-        public enum Emotes
-        {
-           Dance = 0x00,
-           Joke = 0x03,
-           Taunt = 0x01,
-           Laugh = 0x02,
         }
 
         static Packet()
@@ -403,7 +403,7 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.NetworkId = packet.ReadInteger();
                     result.SlotByte = packet.ReadByte();
-                    result.SlotId = (SpellSlot)(result.SlotByte - 0x80 + (byte)SpellSlot.Item1);
+                    result.SlotId = (SpellSlot) (result.SlotByte - 0x80 + (byte) SpellSlot.Item1);
                     return result;
                 }
 
@@ -416,10 +416,10 @@ namespace LeagueSharp.Common
                     public Struct(SpellSlot slotId, int networkId = -1)
                     {
                         SlotId = slotId;
-                        SlotByte = (byte)slotId;
-                        if (SlotByte >= (byte)SpellSlot.Item1 && SlotByte <= (byte)SpellSlot.Item6)
+                        SlotByte = (byte) slotId;
+                        if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Item6)
                         {
-                            SlotByte = (byte)(0x80 + SlotByte - (byte)SpellSlot.Item1);
+                            SlotByte = (byte) (0x80 + SlotByte - (byte) SpellSlot.Item1);
                         }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
@@ -427,10 +427,10 @@ namespace LeagueSharp.Common
                     public Struct(byte slotByte, int networkId = -1)
                     {
                         SlotByte = slotByte;
-                        SlotId = (SpellSlot)slotByte;
+                        SlotId = (SpellSlot) slotByte;
                         if (slotByte >= 0x80 && slotByte <= 0x85)
                         {
-                            SlotId = (SpellSlot)((byte)SpellSlot.Item1 + slotByte - 0x80);
+                            SlotId = (SpellSlot) ((byte) SpellSlot.Item1 + slotByte - 0x80);
                         }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
@@ -447,7 +447,7 @@ namespace LeagueSharp.Common
             public static class Emote
             {
                 public static byte Header = 0x48;
-                
+
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
@@ -468,8 +468,8 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public int NetworkId;
                     public byte EmoteId;
+                    public int NetworkId;
 
                     public Struct(byte emoteId, int networkId = -1)
                     {
@@ -480,7 +480,6 @@ namespace LeagueSharp.Common
             }
 
             #endregion
-
         }
 
         public static class S2C
@@ -1100,8 +1099,8 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public int NetworkId;
                     public byte EmoteId;
+                    public int NetworkId;
 
                     public Struct(byte emoteId, int networkId = -1)
                     {
@@ -1113,6 +1112,72 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Damage
+
+            /// <summary>
+            /// Packet received when a unit deals damage.
+            /// </summary>
+            public class Damage
+            {
+                public static byte Header = 0x65;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var packet = new GamePacket(Header);
+
+                    packet.WriteInteger(packetStruct.TargetNetworkId);
+                    packet.WriteByte(packetStruct.AttackType);
+                    packet.WriteInteger(packetStruct.TargetNetworkIdCopy);
+                    packet.WriteInteger(packetStruct.SourceNetworkId);
+                    packet.WriteFloat(packetStruct.Damage);
+
+                    return packet;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    packet.Position = 1;
+                    result.TargetNetworkId = packet.ReadInteger();
+                    result.AttackType = packet.ReadByte();
+                    result.TargetNetworkIdCopy = packet.ReadInteger();
+                    result.SourceNetworkId = packet.ReadInteger();
+                    result.Damage = packet.ReadFloat();
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    /**
+                     * 4 spell
+                     * 12 AA 
+                     * 36 ignite 
+                     **/
+                    public byte AttackType;
+                    public float Damage;
+                    public int SourceNetworkId;
+                    public int TargetNetworkId;
+                    public int TargetNetworkIdCopy;
+
+                    public Struct(int targetNetworkId,
+                        byte attackType,
+                        int targetNetworkIdCopy,
+                        int sourceNetworkId,
+                        float damage)
+                    {
+                        TargetNetworkId = targetNetworkId;
+                        SourceNetworkId = sourceNetworkId;
+                        TargetNetworkIdCopy = targetNetworkIdCopy;
+                        AttackType = attackType;
+                        Damage = damage;
+                    }
+                }
+            }
+
+            #endregion
         }
     }
 }
