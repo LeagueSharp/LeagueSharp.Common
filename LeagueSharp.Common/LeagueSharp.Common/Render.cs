@@ -221,7 +221,7 @@ namespace LeagueSharp.Common
                         float4 CircleColor;
                         float Radius;
                         float Border;
-
+                        bool zEnabled;
                         VS_S VS( VS_S input )
                         {
 	                        VS_S output = (VS_S)0;
@@ -263,6 +263,7 @@ namespace LeagueSharp.Common
 
                         technique Main {
 	                        pass P0 {
+                                ZEnable = zEnabled;
                                 AlphaBlendEnable = TRUE;
                                 DestBlend = INVSRCALPHA;
                                 SrcBlend = SRCALPHA;
@@ -291,10 +292,8 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                if (zDeep)
-                {
-                    Drawing.Direct3DDevice.SetRenderState(RenderState.ZEnable, true);
-                }
+
+                
 
                 var olddec = Drawing.Direct3DDevice.VertexDeclaration;
 
@@ -307,6 +306,8 @@ namespace LeagueSharp.Common
                     "CircleColor", new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
                 _effect.SetValue("Radius", radius);
                 _effect.SetValue("Border", 2f + width);
+                _effect.SetValue("zEnabled", zDeep);
+                
 
                 Drawing.Direct3DDevice.SetStreamSource(0, _vertices, 0, Utilities.SizeOf<Vector4>() * 2);
                 Drawing.Direct3DDevice.VertexDeclaration = _vertexDeclaration;
@@ -316,11 +317,8 @@ namespace LeagueSharp.Common
                 _effect.EndPass();
                 _effect.End();
 
-                if (zDeep)
-                {
-                    Drawing.Direct3DDevice.SetRenderState(RenderState.ZEnable, false);
-                }
 
+                
                 Drawing.Direct3DDevice.VertexDeclaration = olddec;
             }
         }
