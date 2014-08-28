@@ -155,14 +155,15 @@ namespace LeagueSharp.Common
         /// </summary>
         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name, bool searchInSummoners = true)
         {
-            foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name == name))
+            name = name.ToLower();
+            foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
             {
                 return spell.Slot;
             }
 
             if (searchInSummoners)
             {
-                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name == name))
+                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
                 {
                     return spell.Slot;
                 }
