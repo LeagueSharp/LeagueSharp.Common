@@ -55,7 +55,7 @@ namespace LeagueSharp.Common
         {
             
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable || !unit.IsHPBarRendered || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1f) ||
+                unit.IsInvulnerable || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1f) ||
                 unit.HasBuff("JudicatorIntervention"))
             {
                 return false;
