@@ -763,7 +763,7 @@ namespace LeagueSharp.Common
                         {
                             var hits =
                                 GetHits(
-                                    input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3),
+                                    input.From.To2D(), candidate, input.Radius,
                                     positionsList).ToList();
                             var hitsCount = hits.Count;
                             if (hitsCount >= bestCandidateHits)
