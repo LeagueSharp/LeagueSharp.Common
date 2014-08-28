@@ -244,7 +244,7 @@ namespace LeagueSharp.Common
             }
 
             //Target too far away.
-            if (input.Range != double.MaxValue && input.Unit.Distance(input.RangeCheckFrom) >= input.Range * 1.5d)
+            if (input.Range != float.MaxValue && input.Unit.Distance(input.RangeCheckFrom) >= input.Range * 1.5d)
             {
                 return new PredictionOutput { Input = input };
             }
@@ -271,7 +271,7 @@ namespace LeagueSharp.Common
             }
 
             //Check if the unit position is in range
-            if (input.Range != double.MaxValue)
+            if (input.Range != float.MaxValue)
             {
                 if (result.Hitchance == HitChance.High &&
                     input.RangeCheckFrom.Distance(input.Unit.Position) > input.Range + input.RealRadius * 3 / 4)
@@ -859,7 +859,7 @@ namespace LeagueSharp.Common
                         case CollisionableObjects.Minions:
                             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                             {
-                                if (minion.IsValidTarget(input.Range + input.Radius + 100, true, input.RangeCheckFrom))
+                                if (minion.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
                                 {
                                     input.Unit = minion;
                                     var minionPrediction = Prediction.GetPrediction(input, false, false);
@@ -876,7 +876,7 @@ namespace LeagueSharp.Common
                         case CollisionableObjects.Heroes:
                             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                             {
-                                if (hero.IsValidTarget(input.Range + input.Radius + 100, true, input.RangeCheckFrom))
+                                if (hero.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
                                 {
                                     input.Unit = hero;
                                     var prediction = Prediction.GetPrediction(input, false, false);
@@ -912,7 +912,7 @@ namespace LeagueSharp.Common
                         {
                             if (gameObject.IsValid &&
                                 System.Text.RegularExpressions.Regex.IsMatch(
-                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",//Yasuo_base_w_windwall_enemy_01.troy
+                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
                                     System.Text.RegularExpressions.RegexOptions.IgnoreCase))
                             {
                                 wall = gameObject;

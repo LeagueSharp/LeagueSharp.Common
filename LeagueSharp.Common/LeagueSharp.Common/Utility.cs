@@ -55,7 +55,7 @@ namespace LeagueSharp.Common
         {
             
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable || !unit.IsHPBarRendered || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1) ||
+                unit.IsInvulnerable || !unit.IsHPBarRendered || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1f) ||
                 unit.HasBuff("JudicatorIntervention"))
             {
                 return false;
@@ -66,7 +66,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            if (Math.Abs(range - float.MaxValue) > float.Epsilon &&
+            if (range < float.MaxValue &&
                 Vector2.DistanceSquared(
                     (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(),
                     unit.ServerPosition.To2D()) > range * range)
