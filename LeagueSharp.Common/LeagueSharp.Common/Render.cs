@@ -263,6 +263,7 @@ namespace LeagueSharp.Common
 
                         technique Main {
 	                        pass P0 {
+                                ZEnable = zEnabled;
                                 AlphaBlendEnable = TRUE;
                                 DestBlend = INVSRCALPHA;
                                 SrcBlend = SRCALPHA;
