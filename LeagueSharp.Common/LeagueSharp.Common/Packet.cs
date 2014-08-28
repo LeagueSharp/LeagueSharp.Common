@@ -31,6 +31,13 @@ namespace LeagueSharp.Common
 {
     public static class Packet
     {
+        public enum DamageTypePacket
+        {
+            Magical = 4,
+            Physical = 12,
+            True = 36,
+        }
+
         public enum Emotes
         {
             Dance = 0x00,
@@ -507,8 +514,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data);
-                    packet.Position = 5;
+                    var packet = new GamePacket(data) { Position = 5 };
                     return new Struct(
                         packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), packet.ReadInteger(),
                         (PingType) packet.ReadByte());
@@ -1126,10 +1132,10 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(Header);
 
                     packet.WriteInteger(packetStruct.TargetNetworkId);
-                    packet.WriteByte(packetStruct.AttackType);
+                    packet.WriteByte((byte) packetStruct.Type);
                     packet.WriteInteger(packetStruct.TargetNetworkIdCopy);
                     packet.WriteInteger(packetStruct.SourceNetworkId);
-                    packet.WriteFloat(packetStruct.Damage);
+                    packet.WriteFloat(packetStruct.DamageAmount);
 
                     return packet;
                 }
@@ -1141,38 +1147,33 @@ namespace LeagueSharp.Common
 
                     packet.Position = 1;
                     result.TargetNetworkId = packet.ReadInteger();
-                    result.AttackType = packet.ReadByte();
+                    result.Type = (DamageTypePacket) packet.ReadByte();
                     result.TargetNetworkIdCopy = packet.ReadInteger();
                     result.SourceNetworkId = packet.ReadInteger();
-                    result.Damage = packet.ReadFloat();
+                    result.DamageAmount = packet.ReadFloat();
 
                     return result;
                 }
 
                 public struct Struct
                 {
-                    /**
-                     * 4 spell
-                     * 12 AA 
-                     * 36 ignite 
-                     **/
-                    public byte AttackType;
-                    public float Damage;
+                    public float DamageAmount;
                     public int SourceNetworkId;
                     public int TargetNetworkId;
                     public int TargetNetworkIdCopy;
+                    public DamageTypePacket Type;
 
-                    public Struct(int targetNetworkId,
-                        byte attackType,
-                        int targetNetworkIdCopy,
+                    public Struct(float damageAmount,
                         int sourceNetworkId,
-                        float damage)
+                        int targetNetworkId,
+                        int targetNetworkIdCopy,
+                        DamageTypePacket type)
                     {
-                        TargetNetworkId = targetNetworkId;
+                        DamageAmount = damageAmount;
                         SourceNetworkId = sourceNetworkId;
+                        TargetNetworkId = targetNetworkId;
                         TargetNetworkIdCopy = targetNetworkIdCopy;
-                        AttackType = attackType;
-                        Damage = damage;
+                        Type = type;
                     }
                 }
             }
