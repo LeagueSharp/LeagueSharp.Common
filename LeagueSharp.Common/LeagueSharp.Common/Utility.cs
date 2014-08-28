@@ -53,8 +53,9 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
+            
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1) ||
+                unit.IsInvulnerable || !unit.IsHPBarRendered || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1) ||
                 unit.HasBuff("JudicatorIntervention"))
             {
                 return false;
