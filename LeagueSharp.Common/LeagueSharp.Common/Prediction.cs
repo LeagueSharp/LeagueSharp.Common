@@ -383,6 +383,12 @@ namespace LeagueSharp.Common
         {
             var speed = input.Unit.MoveSpeed;
 
+            if (input.Unit.Distance(input.From) < 300)
+            {
+                input.Delay /= 2;
+                speed *= 2;
+            }
+
             var result = GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
 
             if (result.Hitchance >= HitChance.High && input.Unit is Obj_AI_Hero) { }
@@ -756,8 +762,7 @@ namespace LeagueSharp.Common
 
                     foreach (var candidate in candidates)
                     {
-                        if (
-                            GetHits(
+                        if (GetHits(
                                 input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3 - 10),
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {

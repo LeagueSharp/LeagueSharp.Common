@@ -190,6 +190,7 @@ namespace LeagueSharp.Common
             if (!IsCharging && Environment.TickCount - _chargedReqSentT > 300 + Game.Ping)
             {
                 Cast();
+                _chargedCastedT = Environment.TickCount;
                 _chargedReqSentT = Environment.TickCount;
             }
         }
@@ -203,6 +204,7 @@ namespace LeagueSharp.Common
                 {
                     return;
                 }
+                Console.WriteLine((byte)decoded.Slot);
                 args.Process = false;
             }
 
@@ -347,7 +349,7 @@ namespace LeagueSharp.Common
                 {
                     Packet.C2S.ChargedCast.Encoded(
                         new Packet.C2S.ChargedCast.Struct(
-                            (SpellSlot) (0x80 + (byte) Slot), prediction.CastPosition.X, prediction.CastPosition.Z,
+                            (SpellSlot) (0x80 + (byte) Slot), prediction.CastPosition.X, ObjectManager.Player.ServerPosition.Z,
                             prediction.CastPosition.Y)).Send();
                 }
                 else
