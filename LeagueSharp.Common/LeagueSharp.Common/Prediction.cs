@@ -556,7 +556,7 @@ namespace LeagueSharp.Common
             {
                 input.Unit = enemy;
                 var prediction = Prediction.GetPrediction(input, false, false);
-                if (prediction.Hitchance >= HitChance.Medium)
+                if (prediction.Hitchance >= HitChance.High)
                 {
                     result.Add(new PosibleTarget { Position = prediction.UnitPosition.To2D(), Unit = enemy });
                 }
