@@ -107,7 +107,7 @@ namespace LeagueSharp.Common
             get
             {
                 return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
-                       Environment.TickCount - _chargedCastedT < 300;
+                       Environment.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
         }
 
@@ -187,10 +187,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public void StartCharging()
         {
-            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 300 + Game.Ping)
+            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
                 Cast();
-                _chargedCastedT = Environment.TickCount;
                 _chargedReqSentT = Environment.TickCount;
             }
         }
