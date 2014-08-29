@@ -1126,11 +1126,6 @@ namespace LeagueSharp.Common
                         }
                     }
 
-                    if (!Visible)
-                    {
-                        return;
-                    }
-
                     if (message == WindowsMessages.WM_KEYUP && Interacting)
                     {
                         var val = GetValue<KeyBind>();
@@ -1139,10 +1134,16 @@ namespace LeagueSharp.Common
                         Interacting = false;
                     }
 
+                    if (!Visible)
+                    {
+                        return;
+                    }
+
                     if (message != WindowsMessages.WM_LBUTTONDOWN)
                     {
                         return;
                     }
+
                     if (!IsInside(cursorPos))
                     {
                         return;
