@@ -125,9 +125,9 @@ namespace LeagueSharp.Common
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
-                    result.WriteFloat(packetStruct.NetworkId);
+                    result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte((byte) packetStruct.Slot);
-                    result.WriteByte(0);
+                    result.WriteByte(0x00);
                     return result;
                 }
 
