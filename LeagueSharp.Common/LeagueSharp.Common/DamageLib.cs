@@ -224,8 +224,8 @@ namespace LeagueSharp.Common
                 case "Kennen":
                     Champ = Kennen;
                     break;
-                case "KhaZix":
-                    Champ = KhaZix;
+                case "Khazix":
+                    Champ = Khazix;
                     break;
                 case "KogMaw":
                     Champ = KogMaw;
@@ -3049,7 +3049,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static double KhaZix(Obj_AI_Base enemy, SpellType type, StageType stagetype)
+        private static double Khazix(Obj_AI_Base enemy, SpellType type, StageType stagetype)
         {
             switch (type)
             {
