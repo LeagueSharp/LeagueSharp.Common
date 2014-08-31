@@ -17,8 +17,10 @@ C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharpCommon\LeagueSharp.
 C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.pdb
 C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.Common.dll
 C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.Common.pdb
-C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.dll
-C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\SharpDX.dll
 C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.xml
 C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.dll
 C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.pdb
+C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.csprojResolveAssemblyReference.cache
+C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.Properties.Resources.resources
+C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\obj\x86\Release\LeagueSharp.Common.csproj.GenerateResource.Cache
+C:\Users\ZeroX\Documents\GitHub\LeagueSharpCommon\LeagueSharp.Common\LeagueSharp.Common\bin\x86\Release\LeagueSharp.dll
