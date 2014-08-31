@@ -50,8 +50,8 @@ namespace LeagueSharp.Common
         /// </summary>
         public static MecCircle GetMec(List<Vector2> points)
         {
-            var center = new Vector2();
-            float radius = 0;
+            Vector2 center;
+            float radius;
 
             var ConvexHull = MakeConvexHull(points);
             FindMinimalBoundingCircle(ConvexHull, out center, out radius);
@@ -164,19 +164,15 @@ namespace LeagueSharp.Common
 
             // Find the remaining point with the smallest Y value.
             // if (there's a tie, take the one with the smaller X value.
-            var best_pt = points[0];
-            foreach (var pt in points)
-            {
-                if ((pt.Y < best_pt.Y) || ((pt.Y == best_pt.Y) && (pt.X < best_pt.X)))
-                {
-                    best_pt = pt;
-                }
+            Vector2[] best_pt = { points[0] };
+            foreach (var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))) {
+                best_pt[0] = pt;
             }
 
             // Move this point to the convex hull.
             var hull = new List<Vector2>();
-            hull.Add(best_pt);
-            points.Remove(best_pt);
+            hull.Add(best_pt[0]);
+            points.Remove(best_pt[0]);
 
             // Start wrapping up the other points.
             float sweep_angle = 0;
@@ -192,7 +188,7 @@ namespace LeagueSharp.Common
                 // from the last point.
                 var X = hull[hull.Count - 1].X;
                 var Y = hull[hull.Count - 1].Y;
-                best_pt = points[0];
+                best_pt[0] = points[0];
                 float best_angle = 3600;
 
                 // Search the rest of the points.
@@ -202,7 +198,7 @@ namespace LeagueSharp.Common
                     if ((test_angle >= sweep_angle) && (best_angle > test_angle))
                     {
                         best_angle = test_angle;
-                        best_pt = pt;
+                        best_pt[0] = pt;
                     }
                 }
 
@@ -216,8 +212,8 @@ namespace LeagueSharp.Common
                 }
 
                 // Add the best point to the convex hull.
-                hull.Add(best_pt);
-                points.Remove(best_pt);
+                hull.Add(best_pt[0]);
+                points.Remove(best_pt[0]);
 
                 sweep_angle = best_angle;
             }

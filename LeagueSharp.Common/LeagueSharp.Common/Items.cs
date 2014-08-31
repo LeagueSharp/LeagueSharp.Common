@@ -150,7 +150,7 @@ namespace LeagueSharp.Common
             foreach (
                 var slot in
                     ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
-                        .Where(slot => position != null))
+                        .Where(slot => true))
             {
                 slot.UseItem(position.To3D());
             }
@@ -164,7 +164,7 @@ namespace LeagueSharp.Common
             foreach (
                 var slot in
                     ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
-                        .Where(slot => position != null))
+                        .Where(slot => true))
             {
                 slot.UseItem(position);
             }

@@ -992,11 +992,6 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
-            if (!TrackAllies && sender.Team != ObjectManager.Player.Team)
-            {
-                return;
-            }
-
             if (!StoredPaths.ContainsKey(sender.NetworkId))
             {
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());
