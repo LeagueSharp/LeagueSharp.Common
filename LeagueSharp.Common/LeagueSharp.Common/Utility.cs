@@ -24,7 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -382,7 +381,7 @@ namespace LeagueSharp.Common
                     {
                         Text.X = (int) barPos.X + XOffset;
                         Text.Y = (int) barPos.Y + YOffset - 13;
-                        Text.text = ((int) (unit.Health - damage)).ToString(CultureInfo.InvariantCulture);
+                        Text.text = ((int) (unit.Health - damage)).ToString();
                         Text.OnEndScene();
                     }
 

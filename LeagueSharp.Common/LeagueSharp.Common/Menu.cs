@@ -154,7 +154,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("BackgroundColor");
-                varNode.InnerText = ColorTranslator.ToHtml(Color.DarkSlateGray);
+                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.DarkSlateGray);
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("BackgroundColorAlpha");
@@ -162,7 +162,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("ActiveColor");
-                varNode.InnerText = ColorTranslator.ToHtml(Color.Red);
+                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.Red);
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("ActiveColorAlpha");

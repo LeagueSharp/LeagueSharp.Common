@@ -42,7 +42,8 @@ namespace LeagueSharp.Common
 
         static Global()
         {
-            using (new CustomMutex(100)) {
+            using (var mut = new CustomMutex(100))
+            {
                 MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared", MemoryCapacity);
             }
 
@@ -77,7 +78,8 @@ namespace LeagueSharp.Common
 
         public static T Read<T>(string key, bool defaultIfMissing = false)
         {
-            using (new CustomMutex(350)) {
+            using (var mut = new CustomMutex(350))
+            {
                 using (var strm = MMFile.CreateViewAccessor())
                 {
                     var hash = CalculateHash(key);
@@ -163,7 +165,8 @@ namespace LeagueSharp.Common
                     count++;
                 }
             }
-            using (new CustomMutex(650)) {
+            using (var mut = new CustomMutex(650))
+            {
                 using (var strm = MMFile.CreateViewAccessor())
                 {
                     var signature = strm.ReadInt32(0);
@@ -225,7 +228,8 @@ namespace LeagueSharp.Common
 
         public static int Save(string path, string[] keys)
         {
-            using (new CustomMutex(1200)) {
+            using (var mut = new CustomMutex(1200))
+            {
                 using (var strm = MMFile.CreateViewAccessor())
                 {
                     using (var fl = new System.IO.BinaryWriter(System.IO.File.Create(path)))
@@ -274,11 +278,12 @@ namespace LeagueSharp.Common
 
         public static void Write<T>(string key, T val)
         {
-            using (new CustomMutex(700)) {
+            using (var mut = new CustomMutex(700))
+            {
                 using (var strm = MMFile.CreateViewAccessor())
                 {
                     var hash = CalculateHash(key);
-                    int requiredCapacity;
+                    var requiredCapacity = 8;
                     byte[] serialized = null;
                     if (typeof(T).IsValueType)
                     {
@@ -332,13 +337,11 @@ namespace LeagueSharp.Common
                                 }
                                 else if (typeof(T) != typeof(string))
                                 {
-                                    if (serialized != null) {
-                                        strm.WriteArray(
-                                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0,
-                                            sizeof (int));
-                                        strm.WriteArray(
-                                            thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
-                                    }
+                                    strm.WriteArray(
+                                        thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0,
+                                        sizeof (int));
+                                    strm.WriteArray(
+                                        thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
                                 }
                                 else
                                 {
@@ -369,11 +372,9 @@ namespace LeagueSharp.Common
                     }
                     else if (typeof(T) != typeof(string))
                     {
-                        if (serialized != null) {
-                            strm.WriteArray(
-                                thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0, sizeof (int));
-                            strm.WriteArray(thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
-                        }
+                        strm.WriteArray(
+                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0, sizeof (int));
+                        strm.WriteArray(thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
                     }
                     else
                     {
@@ -447,20 +448,24 @@ namespace LeagueSharp.Common
             InitMutex();
             try
             {
-                // note, you may want to time out here instead of waiting forever
-                // edited by acidzombie24
-                // mutex.WaitOne(Timeout.Infinite, false);
-                hasHandle = mutex.WaitOne(timeOut > 0 ? timeOut : Timeout.Infinite, false);
-                if (hasHandle == false)
+                try
                 {
-                    throw new TimeoutException("Timeout waiting for exclusive access");
+                    // note, you may want to time out here instead of waiting forever
+                    // edited by acidzombie24
+                    // mutex.WaitOne(Timeout.Infinite, false);
+                    hasHandle = mutex.WaitOne(timeOut > 0 ? timeOut : Timeout.Infinite, false);
+                    if (hasHandle == false)
+                    {
+                        throw new TimeoutException("Timeout waiting for exclusive access");
+                    }
+                }
+                catch (AbandonedMutexException)
+                {
+                    // Log the fact the mutex was abandoned in another process, it will still get aquired
+                    hasHandle = true;
                 }
             }
-            catch (AbandonedMutexException)
-            {
-                // Log the fact the mutex was abandoned in another process, it will still get aquired
-                hasHandle = true;
-            }
+            finally {}
         }
 
 

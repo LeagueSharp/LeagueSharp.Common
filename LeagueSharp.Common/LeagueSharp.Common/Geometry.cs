@@ -329,8 +329,15 @@ namespace LeagueSharp.Common
             {
                 isOnSegment = false;
             }
-            Vector2 pointSegment;
-            pointSegment = isOnSegment ? pointLine : new Vector2(ax + rS * (bx - ax), ay + rS * (@by - ay));
+            var pointSegment = new Vector2();
+            if (isOnSegment)
+            {
+                pointSegment = pointLine;
+            }
+            else
+            {
+                pointSegment = new Vector2(ax + rS * (bx - ax), ay + rS * (by - ay));
+            }
             return new ProjectionInfo(isOnSegment, pointSegment, pointLine);
         }
 
@@ -406,7 +413,7 @@ namespace LeagueSharp.Common
                 sP2y = startPoint2.Y;
 
             float d = eP1x - sP1x, e = eP1y - sP1y;
-            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN;
+            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN, t2 = float.NaN;
             float S = dist != 0f ? v1 * d / dist : 0, K = (dist != 0) ? v1 * e / dist : 0f;
 
             float r = sP2x - sP1x, j = sP2y - sP1y;
@@ -449,7 +456,7 @@ namespace LeagueSharp.Common
                             var t = (-nom - b) / a;
                             t1 = v2 * t >= 0f ? t : float.NaN;
                             t = (nom - b) / a;
-                            var t2 = (v2 * t >= 0f) ? t : float.NaN;
+                            t2 = (v2 * t >= 0f) ? t : float.NaN;
 
                             if (!float.IsNaN(t2) && !float.IsNaN(t1))
                             {
@@ -467,7 +474,7 @@ namespace LeagueSharp.Common
                 t1 = 0f;
             }
 
-            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
+            return new Object[2] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
         }
 
         /// <summary>

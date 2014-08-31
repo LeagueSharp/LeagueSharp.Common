@@ -958,7 +958,9 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return TextUpdate != null ? TextUpdate() : _text;
+                    if (TextUpdate != null)
+                        return TextUpdate();
+                    return _text;
                 }
                 set { _text = value; }
             }
