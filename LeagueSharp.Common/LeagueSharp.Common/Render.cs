@@ -281,7 +281,8 @@ namespace LeagueSharp.Common
                         */
                         var compiledEffect = new byte[]
                         {
-                            0x01, 0x09, 0xFF, 0xFE, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
+                            0x01, 0x09, 0xFF, 0xFE, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00,
+                            0x00,
                             0x02, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             0x00, 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -815,10 +816,24 @@ namespace LeagueSharp.Common
                 get { return _color; }
             }
 
-            public void Crop(SharpDX.Rectangle rect)
+            public void Crop(int x, int y, int w, int h, bool scale = false)
+            {
+                _crop = new SharpDX.Rectangle(x, y, w, h);
+
+                if (scale)
+                    _crop = new SharpDX.Rectangle((int)(_scale.X * x), (int)(_scale.Y * y), (int)(_scale.X * w),
+                        (int)(_scale.Y * h));
+            }
+
+            public void Crop(SharpDX.Rectangle rect, bool scale = false)
             {
                 _crop = rect;
+
+                if (scale)
+                    _crop = new SharpDX.Rectangle((int)(_scale.X * rect.X), (int)(_scale.Y * rect.Y),
+                        (int)(_scale.X * rect.Width), (int)(_scale.Y * rect.Height));
             }
+
 
             public void Show()
             {
@@ -839,7 +854,7 @@ namespace LeagueSharp.Common
 
                 Bitmap = newBitmap;
                 _texture = Texture.FromMemory(
-                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(newBitmap, typeof(byte[])), Width,
+                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(newBitmap, typeof (byte[])), Width,
                     Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);
             }
 
