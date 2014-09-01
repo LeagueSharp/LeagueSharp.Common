@@ -54,11 +54,11 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable || unit.IsInvulnerable)
+            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable || unit.IsInvulnerable || unit.IsImmovable)
             {
                 return false;
             }
-
+            
             if (checkTeam && unit.Team == ObjectManager.Player.Team)
             {
                 return false;
