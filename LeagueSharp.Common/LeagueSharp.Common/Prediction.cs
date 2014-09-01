@@ -421,7 +421,6 @@ namespace LeagueSharp.Common
                 var rTime = input.Delay + input.Unit.Distance(input.From) / input.Speed - input.RealRadius / speed -
                             0.15d;
 
-
                 return new PredictionOutput
                 {
                     Input = input,
@@ -436,33 +435,20 @@ namespace LeagueSharp.Common
             //Skillshots with only a delay
             if (pLength >= input.Delay * speed - input.RealRadius && input.Speed == float.MaxValue)
             {
-                var tDistance = input.Delay * speed;
+                var tDistance = input.Delay * speed - input.RealRadius;
 
                 for (var i = 0; i < path.Count - 1; i++)
                 {
                     var a = path[i];
                     var b = path[i + 1];
                     var d = a.Distance(b);
-                    if (d >= tDistance || i == path.Count - 2)
+
+                    if (d >= tDistance)
                     {
-                        tDistance = (i == path.Count - 2 && d < tDistance) ? d : tDistance;
-
                         var direction = (b - a).Normalized();
-                        var cp = a + direction * (tDistance - input.RealRadius);
-                        var p = a + direction * tDistance;
 
-                        if (input.Type == SkillshotType.SkillshotLine)
-                        {
-                            var alpha = (input.From.To2D() - p).AngleBetween(a - b);
-                            if (alpha > 30 && alpha < 180 - 30)
-                            {
-                                var beta = (float)Math.Asin((input.RealRadius - 10) / p.Distance(input.From));
-                                var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
-                                var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
-
-                                cp = cp1.Distance(cp) < cp2.Distance(cp) ? cp1 : cp2;
-                            }
-                        }
+                        var cp = a + direction * tDistance;
+                        var p = a + direction * ((i == path.Count - 2) ? Math.Min(tDistance + input.RealRadius, d) : (tDistance + input.RealRadius));
 
                         return new PredictionOutput
                         {
@@ -478,9 +464,9 @@ namespace LeagueSharp.Common
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed && input.Speed != float.MaxValue)
+            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed != float.MaxValue)
             {
-                path = path.CutPath(Math.Max(0, input.Delay * speed));
+                path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
                 var tT = 0f;
                 for (var i = 0; i < path.Count - 1; i++)
                 {
@@ -495,26 +481,26 @@ namespace LeagueSharp.Common
 
                     if (pos.IsValid() && t >= tT && t <= tT + tB)
                     {
-                        var cp = pos - input.RealRadius * direction;
+                        var p = pos + input.RealRadius * direction;
 
                         if (input.Type == SkillshotType.SkillshotLine)
                         {
-                            var alpha = (input.From.To2D() - pos).AngleBetween(a - b);
+                            var alpha = (input.From.To2D() - p).AngleBetween(a - b);
                             if (alpha > 30 && alpha < 180 - 30)
                             {
-                                var beta = (float)Math.Asin(input.RealRadius / pos.Distance(input.From));
-                                var cp1 = input.From.To2D() + (pos - input.From.To2D()).Rotated(beta);
-                                var cp2 = input.From.To2D() + (pos - input.From.To2D()).Rotated(-beta);
+                                var beta = (float)Math.Asin(input.RealRadius / p.Distance(input.From));
+                                var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
+                                var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
 
-                                cp = cp1.Distance(cp) < cp2.Distance(cp) ? cp1 : cp2;
+                                pos = cp1.Distance(pos) < cp2.Distance(pos) ? cp1 : cp2;
                             }
                         }
 
                         return new PredictionOutput
                         {
                             Input = input,
-                            CastPosition = cp.To3D(),
-                            UnitPosition = pos.To3D(),
+                            CastPosition = pos.To3D(),
+                            UnitPosition = p.To3D(),
                             Hitchance = HitChance.High,
                         };
                     }
