@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -53,7 +54,6 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
                 unit.IsInvulnerable || (unit.HasBuff("Undying Rage") && unit.Health / unit.MaxHealth <= 0.1f) ||
                 unit.HasBuff("JudicatorIntervention"))
@@ -75,6 +75,12 @@ namespace LeagueSharp.Common
             }
 
             return true;
+        }
+
+        public static string GetAssemblyLocation()
+        {
+            var fileLoc = Assembly.GetExecutingAssembly().Location;
+            return fileLoc.Remove(fileLoc.LastIndexOf("\\System\\", StringComparison.Ordinal));
         }
 
         public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
@@ -128,7 +134,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
                 }
             }
 
@@ -273,7 +279,7 @@ namespace LeagueSharp.Common
                 var angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
-                        center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
+                        center.X + radius * (float)Math.Cos(angle), center.Y + radius * (float)Math.Sin(angle),
                         center.Z));
             }
 
@@ -379,9 +385,9 @@ namespace LeagueSharp.Common
 
                     if (damage > unit.Health)
                     {
-                        Text.X = (int) barPos.X + XOffset;
-                        Text.Y = (int) barPos.Y + YOffset - 13;
-                        Text.text = ((int) (unit.Health - damage)).ToString();
+                        Text.X = (int)barPos.X + XOffset;
+                        Text.Y = (int)barPos.Y + YOffset - 13;
+                        Text.text = ((int)(unit.Health - damage)).ToString();
                         Text.OnEndScene();
                     }
 
