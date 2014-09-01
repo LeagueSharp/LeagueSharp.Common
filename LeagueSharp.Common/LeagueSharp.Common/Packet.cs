@@ -54,6 +54,9 @@ namespace LeagueSharp.Common
             Danger = 2,
             OnMyWay = 4,
             AssistMe = 6,
+            NormalSound = 176,
+            FallbackSound = 181,
+
         }
 
         static Packet()

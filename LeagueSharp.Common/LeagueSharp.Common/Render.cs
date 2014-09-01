@@ -44,7 +44,7 @@ namespace LeagueSharp.Common
     public static class Render
     {
         private static readonly List<RenderObject> RenderObjects = new List<RenderObject>();
-
+        public static Device Device { get { return Drawing.Direct3DDevice; } }
         static Render()
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
+            if (Device == null || Device.IsDisposed)
             {
                 return;
             }
@@ -98,7 +98,7 @@ namespace LeagueSharp.Common
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
+            if (Device == null || Device.IsDisposed)
             {
                 return;
             }
@@ -132,7 +132,7 @@ namespace LeagueSharp.Common
             private static VertexDeclaration _vertexDeclaration;
             private static Effect _effect;
             private static EffectHandle _technique;
-
+            private static bool Initialized;
             public Circle(Obj_AI_Base unit, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -178,17 +178,15 @@ namespace LeagueSharp.Common
                 }
             }
 
-            public static void DrawCircle(Vector3 position, float radius, Color color, int width = 1, bool zDeep = false)
+            public static void CreateVertexes()
             {
-                if (_vertices == null)
-                {
-                    const float x = 6000f;
-                    _vertices = new VertexBuffer(
-                        Drawing.Direct3DDevice, Utilities.SizeOf<Vector4>() * 2 * 6, Usage.WriteOnly, VertexFormat.None,
-                        Pool.Managed);
+                const float x = 6000f;
+                _vertices = new VertexBuffer(
+                    Device, Utilities.SizeOf<Vector4>() * 2 * 6, Usage.WriteOnly, VertexFormat.None,
+                    Pool.Managed);
 
-                    _vertices.Lock(0, 0, LockFlags.None).WriteRange(
-                        new[]
+                _vertices.Lock(0, 0, LockFlags.None).WriteRange(
+                    new[]
                         {
                             //T1
                             new Vector4(-x, 0f, -x, 1.0f), new Vector4(), new Vector4(-x, 0f, x, 1.0f), new Vector4(),
@@ -198,9 +196,9 @@ namespace LeagueSharp.Common
                             new Vector4(x, 0f, x, 1.0f), new Vector4(), new Vector4(-x, 0f, x, 1.0f), new Vector4(),
                             new Vector4(x, 0f, -x, 1.0f), new Vector4()
                         });
-                    _vertices.Unlock();
+                _vertices.Unlock();
 
-                    _vertexElements = new[]
+                _vertexElements = new[]
                     {
                         new VertexElement(
                             0, 0, DeclarationType.Float4, DeclarationMethod.Default, DeclarationUsage.Position, 0),
@@ -209,77 +207,78 @@ namespace LeagueSharp.Common
                         VertexElement.VertexDeclarationEnd
                     };
 
-                    _vertexDeclaration = new VertexDeclaration(Drawing.Direct3DDevice, _vertexElements);
+                _vertexDeclaration = new VertexDeclaration(Device, _vertexElements);
 
-                    #region Effect
 
-                    try
-                    {
-                        /*   
-                        _effect = Effect.FromString(Drawing.Direct3DDevice, @"
-                        struct VS_S
-                         {
-                             float4 Position : POSITION;
-                             float4 Color : COLOR0;
-                             float4 Position3D : TEXCOORD0;
-                         };
+                #region Effect
 
-                         float4x4 ProjectionMatrix;
-                         float4 CircleColor;
-                         float Radius;
-                         float Border;
-                         bool zEnabled;
-                         VS_S VS( VS_S input )
-                         {
-                             VS_S output = (VS_S)0;
+                try
+                {
+                    /*   
+                    _effect = Effect.FromString(Device, @"
+                    struct VS_S
+                     {
+                         float4 Position : POSITION;
+                         float4 Color : COLOR0;
+                         float4 Position3D : TEXCOORD0;
+                     };
+
+                     float4x4 ProjectionMatrix;
+                     float4 CircleColor;
+                     float Radius;
+                     float Border;
+                     bool zEnabled;
+                     VS_S VS( VS_S input )
+                     {
+                         VS_S output = (VS_S)0;
 	
-                             output.Position = mul(input.Position, ProjectionMatrix);
-                             output.Color = input.Color;
-                             output.Position3D = input.Position;
-                             return output;
-                         }
+                         output.Position = mul(input.Position, ProjectionMatrix);
+                         output.Color = input.Color;
+                         output.Position3D = input.Position;
+                         return output;
+                     }
 
-                         float4 PS( VS_S input ) : COLOR
-                         {
-                             VS_S output = (VS_S)0;
-                             output = input;
+                     float4 PS( VS_S input ) : COLOR
+                     {
+                         VS_S output = (VS_S)0;
+                         output = input;
 
-                             float4 v = output.Position3D; 
-                             float distance = Radius - sqrt(v.x * v.x + v.z*v.z); // Distance to the circle arc.
+                         float4 v = output.Position3D; 
+                         float distance = Radius - sqrt(v.x * v.x + v.z*v.z); // Distance to the circle arc.
     
-                             output.Color.x = CircleColor.x;
-                             output.Color.y = CircleColor.y;
-                             output.Color.z = CircleColor.z;
+                         output.Color.x = CircleColor.x;
+                         output.Color.y = CircleColor.y;
+                         output.Color.z = CircleColor.z;
                             
-                             if(distance < Border && distance > -Border)
-                             {
-                                 output.Color.w = (CircleColor.w - CircleColor.w * abs(distance * 1.75 / Border));
-                             }
-                             else
-                             {
-                                 output.Color.w = 0;
-                             }
+                         if(distance < Border && distance > -Border)
+                         {
+                             output.Color.w = (CircleColor.w - CircleColor.w * abs(distance * 1.75 / Border));
+                         }
+                         else
+                         {
+                             output.Color.w = 0;
+                         }
                             
-                             if(Border < 1 && distance >= 0)
-                             {
-                                 output.Color.w = CircleColor.w;
-                             }
-
-                             return output.Color;
+                         if(Border < 1 && distance >= 0)
+                         {
+                             output.Color.w = CircleColor.w;
                          }
 
-                         technique Main {
-                             pass P0 {
-                                 ZEnable = zEnabled;
-                                 AlphaBlendEnable = TRUE;
-                                 DestBlend = INVSRCALPHA;
-                                 SrcBlend = SRCALPHA;
-                                 VertexShader = compile vs_2_0 VS();
-                                 PixelShader  = compile ps_2_0 PS();
-                             }
-                         }", ShaderFlags.None);
-                        */
-                        var compiledEffect = new byte[]
+                         return output.Color;
+                     }
+
+                     technique Main {
+                         pass P0 {
+                             ZEnable = zEnabled;
+                             AlphaBlendEnable = TRUE;
+                             DestBlend = INVSRCALPHA;
+                             SrcBlend = SRCALPHA;
+                             VertexShader = compile vs_2_0 VS();
+                             PixelShader  = compile ps_2_0 PS();
+                         }
+                     }", ShaderFlags.None);
+                    */
+                    var compiledEffect = new byte[]
                         {
                             0x01, 0x09, 0xFF, 0xFE, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00,
                             0x00,
@@ -448,57 +447,110 @@ namespace LeagueSharp.Common
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
                             0xF0, 0xF0, 0xF0, 0x0F, 0x0F, 0x0F, 0x0F, 0xFF, 0xFF, 0x00, 0x00
                         };
-                        _effect = Effect.FromMemory(Drawing.Direct3DDevice, compiledEffect, ShaderFlags.None);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        return;
-                    }
-
-                    #endregion
-
-                    _technique = _effect.GetTechnique(0);
-
-                    Drawing.OnPreReset += delegate { _effect.OnLostDevice(); };
-                    Drawing.OnPostReset += delegate { _effect.OnResetDevice(); };
-                    AppDomain.CurrentDomain.DomainUnload += delegate
-                    {
-                        _effect.Dispose();
-                        _vertices.Dispose();
-                        _vertexDeclaration.Dispose();
-                    };
+                    _effect = Effect.FromMemory(Device, compiledEffect, ShaderFlags.None);
                 }
-
-
-                if (_vertices.IsDisposed || _vertexDeclaration.IsDisposed || _effect.IsDisposed)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     return;
                 }
 
-                var olddec = Drawing.Direct3DDevice.VertexDeclaration;
+                #endregion
 
-                _effect.Technique = _technique;
+                _technique = _effect.GetTechnique(0);
 
-                _effect.Begin();
-                _effect.BeginPass(0);
-                _effect.SetValue(
-                    "ProjectionMatrix", Matrix.Translation(position.SwitchYZ()) * Drawing.View * Drawing.Projection);
-                _effect.SetValue(
-                    "CircleColor", new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
-                _effect.SetValue("Radius", radius);
-                _effect.SetValue("Border", 2f + width);
-                _effect.SetValue("zEnabled", zDeep);
+                if (!Initialized)
+                {
+                    Initialized = true;
+                    Drawing.OnPreReset += OnPreReset;
+                    Drawing.OnPreReset += OnPostReset;
+                    AppDomain.CurrentDomain.DomainUnload += Dispose;
+                }
+            }
 
-                Drawing.Direct3DDevice.SetStreamSource(0, _vertices, 0, Utilities.SizeOf<Vector4>() * 2);
-                Drawing.Direct3DDevice.VertexDeclaration = _vertexDeclaration;
+            private static void OnPreReset(EventArgs args)
+            {
+                if (_effect != null && !_effect.IsDisposed)
+                {
+                    _effect.OnLostDevice();
+                }
+            }
 
-                Drawing.Direct3DDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
+            private static void OnPostReset(EventArgs args)
+            {
+                if (_effect != null && !_effect.IsDisposed)
+                {
+                    _effect.OnResetDevice();
+                }
+            }
 
-                _effect.EndPass();
-                _effect.End();
+            private static void Dispose(object sender, EventArgs e)
+            {
+                if (_effect != null && !_effect.IsDisposed)
+                {
+                    _effect.Dispose();
+                }
 
-                Drawing.Direct3DDevice.VertexDeclaration = olddec;
+                if (_vertices != null && !_vertices.IsDisposed)
+                {
+                    _vertices.Dispose();
+                }
+
+                if (_vertexDeclaration != null && !_vertexDeclaration.IsDisposed)
+                {
+                    _vertexDeclaration.Dispose();
+                }
+            }
+
+            public static void DrawCircle(Vector3 position, float radius, Color color, int width = 1, bool zDeep = false)
+            {
+                try
+                {
+                    if (Device == null || Device.IsDisposed)
+                    {
+                        return;
+                    }
+
+                    if (_vertices == null)
+                    {
+                        CreateVertexes();
+                    }
+
+                    if (_vertices == null || _vertices.IsDisposed || _vertexDeclaration.IsDisposed || _effect.IsDisposed || _technique.IsDisposed)
+                    {
+                        return;
+                    }
+
+                    var olddec = Device.VertexDeclaration;
+
+                    _effect.Technique = _technique;
+                    
+                    _effect.Begin();
+                    _effect.BeginPass(0);
+                    _effect.SetValue(
+                        "ProjectionMatrix", Matrix.Translation(position.SwitchYZ()) * Drawing.View * Drawing.Projection);
+                    _effect.SetValue(
+                        "CircleColor", new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f));
+                    _effect.SetValue("Radius", radius);
+                    _effect.SetValue("Border", 2f + width);
+                    _effect.SetValue("zEnabled", zDeep);
+
+                    Device.SetStreamSource(0, _vertices, 0, Utilities.SizeOf<Vector4>() * 2);
+                    Device.VertexDeclaration = _vertexDeclaration;
+
+                    Device.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
+
+                    _effect.EndPass();
+                    _effect.End();
+
+                    Device.VertexDeclaration = olddec;
+                }
+                catch (Exception e)
+                {
+                    _vertices = null;
+                    Console.WriteLine("DrawCircle: " + e);
+                }
+                
             }
         }
 
@@ -514,7 +566,7 @@ namespace LeagueSharp.Common
 
             public Line(Vector2 start, Vector2 end, int width, ColorBGRA color)
             {
-                _line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice);
+                _line = new SharpDX.Direct3D9.Line(Device);
                 Width = width;
                 Color = color;
                 _start = start;
@@ -606,7 +658,7 @@ namespace LeagueSharp.Common
                 Width = width;
                 Height = height;
                 Color = color;
-                _line = new SharpDX.Direct3D9.Line(Drawing.Direct3DDevice) { Width = height };
+                _line = new SharpDX.Direct3D9.Line(Device) { Width = height };
             }
 
             public int X { get; set; }
@@ -691,9 +743,9 @@ namespace LeagueSharp.Common
         {
             public delegate Vector2 PositionDelegate();
 
-            private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Drawing.Direct3DDevice);
+            private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
             private ColorBGRA _color = SharpDX.Color.White;
-            private SharpDX.Rectangle _crop;
+            private SharpDX.Rectangle? _crop = null;
             private bool _hide;
             private Vector2 _scale = new Vector2(1, 1);
             private Texture _texture;
@@ -854,7 +906,7 @@ namespace LeagueSharp.Common
 
                 Bitmap = newBitmap;
                 _texture = Texture.FromMemory(
-                    Drawing.Direct3DDevice, (byte[])new ImageConverter().ConvertTo(newBitmap, typeof (byte[])), Width,
+                    Device, (byte[])new ImageConverter().ConvertTo(newBitmap, typeof (byte[])), Width,
                     Height, 0, Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);
             }
 
@@ -929,7 +981,7 @@ namespace LeagueSharp.Common
                 this.text = text;
 
                 _textFont = new Font(
-                    Drawing.Direct3DDevice,
+                    Device,
                     new FontDescription
                     {
                         FaceName = faceName,
