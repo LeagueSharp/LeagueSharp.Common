@@ -526,23 +526,33 @@ namespace LeagueSharp.Common
             }
         }
 
+        private static bool IsInvulnerable(Obj_AI_Base target)
+        {
+            //TODO: add yasuo wall, spellshields, etc.
+            if (target.HasBuff("Undying Rage") && target.Health >= 2f)
+                return true;
+
+            if (target.HasBuff("JudicatorIntervention"))
+                return true;
+
+            return false;
+        }
+
         public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
-            //TODO: Check for kayles and tryndamere buffs.
         {
             Obj_AI_Hero bestTarget = null;
             var bestRatio = 0f;
 
-            if (_selectedTarget.IsValidTarget() &&
-                (range < 0 && Orbwalking.InAutoAttackRange(_selectedTarget) ||
-                 ObjectManager.Player.Distance(_selectedTarget) < range))
+            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget) &&
+                (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) ||
+                 ObjectManager.Player.Distance(SelectedTarget) < range))
             {
-                return _selectedTarget;
+                return SelectedTarget;
             }
 
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (hero.IsValidTarget() &&
-                    (range < 0 && Orbwalking.InAutoAttackRange(hero) || ObjectManager.Player.Distance(hero) < range))
+                if (hero.IsValidTarget() && !IsInvulnerable(hero) && (range < 0 && Orbwalking.InAutoAttackRange(hero) || ObjectManager.Player.Distance(hero) < range))
                 {
                     var damage = 0f;
 
