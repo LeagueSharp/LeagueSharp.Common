@@ -274,18 +274,18 @@ namespace LeagueSharp.Common
             if (input.Range != float.MaxValue)
             {
                 if (result.Hitchance == HitChance.High &&
-                    input.RangeCheckFrom.Distance(input.Unit.Position) > input.Range + input.RealRadius * 3 / 4)
+                    input.RangeCheckFrom.Distance(input.Unit.Position, true) > Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
                 {
                     result.Hitchance = HitChance.Medium;
                 }
 
-                if (input.RangeCheckFrom.Distance(result.UnitPosition) >
-                    input.Range + (input.Type == SkillshotType.SkillshotCircle ? input.RealRadius : 0))
+                if (input.RangeCheckFrom.Distance(result.UnitPosition, true) >
+                    Math.Pow(input.Range + (input.Type == SkillshotType.SkillshotCircle ? input.RealRadius : 0), 2))
                 {
                     result.Hitchance = HitChance.OutOfRange;
                 }
 
-                if (input.RangeCheckFrom.Distance(result.CastPosition) > input.Range)
+                if (input.RangeCheckFrom.Distance(result.CastPosition, true) > Math.Pow(input.Range, 2))
                 {
                     if (result.Hitchance != HitChance.OutOfRange)
                     {
@@ -383,7 +383,7 @@ namespace LeagueSharp.Common
         {
             var speed = input.Unit.MoveSpeed;
 
-            if (input.Unit.Distance(input.From) < 300)
+            if (input.Unit.Distance(input.From, true) < 300 * 300)
             {
                 input.Delay /= 2;
                 speed *= 2;
@@ -492,7 +492,7 @@ namespace LeagueSharp.Common
                                 var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
                                 var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
 
-                                pos = cp1.Distance(pos) < cp2.Distance(pos) ? cp1 : cp2;
+                                pos = cp1.Distance(pos, true) < cp2.Distance(pos, true) ? cp1 : cp2;
                             }
                         }
 
@@ -618,7 +618,7 @@ namespace LeagueSharp.Common
                 {
                     var edge1 = end.Rotated(-angle / 2);
                     var edge2 = edge1.Rotated(angle);
-                    if (point.Distance(new Vector2()) < range && edge1.CrossProduct(point) > 0 &&
+                    if (point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
                         point.CrossProduct(edge2) > 0)
                     {
                         result++;
@@ -680,7 +680,7 @@ namespace LeagueSharp.Common
                         }
                     }
 
-                    if (bestCandidateHits > 1 && input.From.To2D().Distance(bestCandidate) > 50)
+                    if (bestCandidateHits > 1 && input.From.To2D().Distance(bestCandidate, true) > 50 * 50)
                     {
                         return new PredictionOutput
                         {

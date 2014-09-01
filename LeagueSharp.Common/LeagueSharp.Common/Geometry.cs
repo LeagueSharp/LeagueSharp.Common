@@ -41,41 +41,41 @@ namespace LeagueSharp.Common
         }
 
         //Obj_AI_Base class extended methods:
-        public static float Distance(Obj_AI_Base anotherUnit)
+        public static float Distance(Obj_AI_Base anotherUnit, bool squared = false)
         {
-            return ObjectManager.Player.Distance(anotherUnit);
+            return ObjectManager.Player.Distance(anotherUnit, squared);
         }
 
         /// <summary>
         ///     Calculates the 2D distance to the unit.
         /// </summary>
-        public static float Distance(this Obj_AI_Base unit, Obj_AI_Base anotherUnit)
+        public static float Distance(this Obj_AI_Base unit, Obj_AI_Base anotherUnit, bool squared = false)
         {
-            return unit.ServerPosition.To2D().Distance(anotherUnit.ServerPosition.To2D());
+            return unit.ServerPosition.To2D().Distance(anotherUnit.ServerPosition.To2D(), squared);
         }
 
         /// <summary>
         ///     Calculates the 2D distance to the point.
         /// </summary>
-        public static float Distance(this Obj_AI_Base unit, Vector3 point)
+        public static float Distance(this Obj_AI_Base unit, Vector3 point, bool squared = false)
         {
-            return unit.ServerPosition.To2D().Distance(point.To2D());
+            return unit.ServerPosition.To2D().Distance(point.To2D(), squared);
         }
 
         /// <summary>
         ///     Calculates the 2D distance to the point.
         /// </summary>
-        public static float Distance(this Obj_AI_Base unit, Vector2 point)
+        public static float Distance(this Obj_AI_Base unit, Vector2 point, bool squared = false)
         {
-            return unit.ServerPosition.To2D().Distance(point);
+            return unit.ServerPosition.To2D().Distance(point, squared);
         }
 
         /// <summary>
         ///     Calculates the 3D distance to the unit.
         /// </summary>
-        public static float Distance3D(this Obj_AI_Base unit, Obj_AI_Base anotherUnit)
+        public static float Distance3D(this Obj_AI_Base unit, Obj_AI_Base anotherUnit, bool squared = false)
         {
-            return Vector3.Distance(unit.Position, anotherUnit.Position);
+            return squared ? Vector3.DistanceSquared(unit.Position, anotherUnit.Position) :  Vector3.Distance(unit.Position, anotherUnit.Position);
         }
 
         //Vector3 class extended methods:
@@ -91,9 +91,9 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the 2D distance (XY plane) between two vector.
         /// </summary>
-        public static float Distance(this Vector3 v, Vector3 other)
+        public static float Distance(this Vector3 v, Vector3 other, bool squared = false)
         {
-            return v.To2D().Distance(other);
+            return v.To2D().Distance(other, squared);
         }
 
         //Vector2 class extended methods:
@@ -117,23 +117,23 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Calculates the distance to the Vector2.
         /// </summary>
-        public static float Distance(this Vector2 v, Vector2 to)
+        public static float Distance(this Vector2 v, Vector2 to, bool squared = false)
         {
-            return Vector2.Distance(v, to);
+            return squared ? Vector2.DistanceSquared(v, to) : Vector2.Distance(v, to);
         }
 
         /// <summary>
         ///     Calculates the distance to the Vector3.
         /// </summary>
-        public static float Distance(this Vector2 v, Vector3 to)
+        public static float Distance(this Vector2 v, Vector3 to, bool squared = false)
         {
-            return v.Distance(to.To2D());
+            return v.Distance(to.To2D(), squared);
         }
 
         /// <summary>
         ///     Calculates the distance to the unit.
         /// </summary>
-        public static float Distance(this Vector2 v, Obj_AI_Base to)
+        public static float Distance(this Vector2 v, Obj_AI_Base to, bool squared = false)
         {
             return v.Distance(to.ServerPosition.To2D());
         }

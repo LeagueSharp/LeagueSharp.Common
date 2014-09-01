@@ -447,9 +447,9 @@ namespace LeagueSharp.Common
         public static float GetRealAutoAttackRange(Obj_AI_Base target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.IsValidTarget())
+            if (target != null)
             {
-                return result + target.BoundingRadius - ((target.Path.Length > 0) ? 35 : 20);
+                return result + target.BoundingRadius - (target is Obj_AI_Hero ? 50 : 0);
             }
             return result;
         }
