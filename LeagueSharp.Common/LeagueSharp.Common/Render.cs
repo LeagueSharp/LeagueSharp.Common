@@ -56,6 +56,11 @@ namespace LeagueSharp.Common
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
 
+        public static bool OnScreen(Vector2 point)
+        {
+            return point.X > 0 && point.Y > 0 && point.X < Drawing.Width && point.Y < Drawing.Height;
+        }
+
         public static Device Device
         {
             get { return Drawing.Direct3DDevice; }
