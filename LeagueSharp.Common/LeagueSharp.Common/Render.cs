@@ -1061,6 +1061,43 @@ namespace LeagueSharp.Common
             private int _x;
             private int _y;
 
+            public Text(string text, int x, int y, int size, ColorBGRA color, string faceName = "Calibri")
+            {
+                Color = color;
+                this.text = text;
+
+                _x = x;
+                _y = y;
+                _textFont = new Font(
+                    Device,
+                    new FontDescription
+                    {
+                        FaceName = faceName,
+                        Height = size,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default,
+                    });
+            }
+
+
+            public Text(string text, Vector2 position, int size, ColorBGRA color, string faceName = "Calibri")
+            {
+                Color = color;
+                this.text = text;
+                _x = (int)position.X;
+                _y = (int)position.Y;
+                _textFont = new Font(
+                    Device,
+                    new FontDescription
+                    {
+                        FaceName = faceName,
+                        Height = size,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default,
+                    });
+            }
+
+
             public Text(int x, int y, string text, int size, ColorBGRA color, string faceName = "Calibri")
             {
                 Color = color;
