@@ -749,6 +749,9 @@ namespace LeagueSharp.Common
         {
             public delegate Vector2 PositionDelegate();
 
+            public delegate void OnResetting(Sprite sprite);
+            public event OnResetting OnReset;
+
             private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
             private ColorBGRA _color = SharpDX.Color.White;
             private SharpDX.Rectangle? _crop;
@@ -906,8 +909,12 @@ namespace LeagueSharp.Common
 
             public void Reset()
             {
+
                 UpdateTextureBitmap(
                     (Bitmap)Image.FromStream(BaseTexture.ToStream(_originalTexture, ImageFileFormat.Bmp)));
+
+                if (OnReset != null)
+                    OnReset(this);
             }
 
             public void GrayScale()
@@ -1037,6 +1044,7 @@ namespace LeagueSharp.Common
                     _texture.Dispose();
                 }
             }
+
         }
 
         /// <summary>
