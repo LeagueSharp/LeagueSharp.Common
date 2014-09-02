@@ -1,6 +1,4 @@
-﻿#region
-
-#region LICENSE
+﻿#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -29,8 +27,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SharpDX;
-
-#endregion
 
 #endregion
 
