@@ -1,4 +1,6 @@
-﻿#region LICENSE
+﻿#region
+
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -27,6 +29,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SharpDX;
+
+#endregion
 
 #endregion
 
@@ -214,16 +218,21 @@ namespace LeagueSharp.Common
                 hex = "0" + hex;
             }
 
-            return rawPacket.IndexOf(Enumerable.Range(0, hex.Length)
-                .Where(x => x % 2 == 0)
-                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                .ToArray()).ToArray();
+            return
+                rawPacket.IndexOf(
+                    Enumerable.Range(0, hex.Length)
+                        .Where(x => x % 2 == 0)
+                        .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                        .ToArray()).ToArray();
         }
 
         public int[] SearchObject(GameObject obj)
         {
             if (obj == null || !obj.IsValid || obj.NetworkId == 0)
+            {
                 return null;
+            }
+
             return SearchInteger(obj.NetworkId);
         }
 
@@ -238,7 +247,10 @@ namespace LeagueSharp.Common
             var y = SearchFloat(position.Y);
 
             if (x == null || y == null)
+            {
                 return null;
+            }
+
             return new[] { x, y };
         }
 
@@ -258,7 +270,9 @@ namespace LeagueSharp.Common
             var pos2 = SearchPosition(unit.ServerPosition.To2D());
 
             if (pos == null)
+            {
                 return pos2;
+            }
 
             return pos2 == null ? pos : null;
         }
