@@ -26,6 +26,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SharpDX;
 
 #endregion
 
@@ -39,8 +40,8 @@ namespace LeagueSharp.Common
         private readonly BinaryReader Br;
         private readonly BinaryWriter Bw;
         private readonly MemoryStream Ms;
-        private readonly byte[] rawPacket;
         private readonly byte _header;
+        private readonly byte[] rawPacket;
 
         public GamePacket(byte[] data)
         {
@@ -68,6 +69,7 @@ namespace LeagueSharp.Common
         {
             get { return _header; }
         }
+
         public long Position
         {
             get { return Br.BaseStream.Position; }
@@ -185,12 +187,12 @@ namespace LeagueSharp.Common
 
         public int[] SearchShort(short num)
         {
-            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();   
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         public int[] SearchFloat(float num)
         {
-            return  rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         public int[] SearchInteger(int num)
@@ -213,10 +215,70 @@ namespace LeagueSharp.Common
             }
 
             return rawPacket.IndexOf(Enumerable.Range(0, hex.Length)
-                    .Where(x => x % 2 == 0)
-                    .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                    .ToArray()).ToArray();
+                .Where(x => x % 2 == 0)
+                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                .ToArray()).ToArray();
         }
+
+        public int[] SearchObject(GameObject obj)
+        {
+            if (obj == null || !obj.IsValid || obj.NetworkId == 0)
+                return null;
+            return SearchInteger(obj.NetworkId);
+        }
+
+        public int[] SearchObject(int networkId)
+        {
+            return networkId == 0 ? null : SearchInteger(networkId);
+        }
+
+        public int[][] SearchPosition(Vector2 position)
+        {
+            var x = SearchFloat(position.X);
+            var y = SearchFloat(position.Y);
+
+            if (x == null || y == null)
+                return null;
+            return new[] { x, y };
+        }
+
+        public int[][] SearchPosition(Vector3 position)
+        {
+            return SearchPosition(position.To2D());
+        }
+
+        public int[][] SearchPosition(GameObject unit)
+        {
+            return SearchPosition(unit.Position.To2D());
+        }
+
+        public int[][] SearchPosition(Obj_AI_Base unit)
+        {
+            var pos = SearchPosition(unit.Position.To2D());
+            var pos2 = SearchPosition(unit.ServerPosition.To2D());
+
+            if (pos == null)
+                return pos2;
+
+            return pos2 == null ? pos : null;
+        }
+
+        /* public int[][] SearchGameTile(Vector2 position)
+        {
+            var x = SearchShort(Utility.GetGameTile(position.X));
+            var y = SearchShort(Utility.GetGameTile(position.Y));
+        }
+
+        public int[][] SearchGameTile(Vector3 position)
+        {
+            return SearchGameTile(position.To2D());
+        }
+
+        public int[][] SearchGameTile(GameObject obj)
+        {
+            return SearchGameTile(obj.Position.To2D());
+        }
+        */
 
         /// <summary>
         /// Sends the packet
