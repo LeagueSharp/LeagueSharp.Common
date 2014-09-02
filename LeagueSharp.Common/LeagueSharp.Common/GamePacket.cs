@@ -40,6 +40,7 @@ namespace LeagueSharp.Common
         private readonly BinaryWriter Bw;
         private readonly MemoryStream Ms;
         private readonly byte[] rawPacket;
+        private readonly byte _header;
 
         public GamePacket(byte[] data)
         {
@@ -49,6 +50,7 @@ namespace LeagueSharp.Common
             Br.BaseStream.Position = 0;
             Bw.BaseStream.Position = 0;
             rawPacket = data;
+            _header = data[0];
         }
 
         public GamePacket(byte header)
@@ -59,8 +61,13 @@ namespace LeagueSharp.Common
             Br.BaseStream.Position = 0;
             Bw.BaseStream.Position = 0;
             WriteByte(header);
+            _header = header;
         }
 
+        public byte Header
+        {
+            get { return _header; }
+        }
         public long Position
         {
             get { return Br.BaseStream.Position; }
