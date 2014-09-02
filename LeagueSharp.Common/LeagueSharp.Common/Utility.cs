@@ -81,6 +81,23 @@ namespace LeagueSharp.Common
             return fileLoc.Remove(fileLoc.LastIndexOf("\\System\\", StringComparison.Ordinal));
         }
 
+        public static string FormatTime(float time)
+        {
+            var t = TimeSpan.FromSeconds(time);
+            return string.Format("{0:D2}:{1:D2}",
+                            t.Minutes,
+                            t.Seconds);
+        }
+
+        public static string FormatTime(double time)
+        {
+            var t = TimeSpan.FromSeconds(time);
+            return string.Format("{0:D2}:{1:D2}",
+                            t.Minutes,
+                            t.Seconds);
+        }
+
+
         public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
         {
             Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot))
