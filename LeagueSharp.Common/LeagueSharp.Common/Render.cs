@@ -1179,7 +1179,7 @@ namespace LeagueSharp.Common
             {
                 try
                 {
-                    if (_textFont.IsDisposed)
+                    if (_textFont.IsDisposed || text == "")
                     {
                         return;
                     }
