@@ -54,11 +54,12 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable || unit.IsInvulnerable)
+            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
+                unit.IsInvulnerable)
             {
                 return false;
             }
-            
+
             if (checkTeam && unit.Team == ObjectManager.Player.Team)
             {
                 return false;
@@ -85,18 +86,51 @@ namespace LeagueSharp.Common
         {
             var t = TimeSpan.FromSeconds(time);
             return string.Format("{0:D2}:{1:D2}",
-                            t.Minutes,
-                            t.Seconds);
+                t.Minutes,
+                t.Seconds);
         }
 
         public static string FormatTime(double time)
         {
             var t = TimeSpan.FromSeconds(time);
             return string.Format("{0:D2}:{1:D2}",
-                            t.Minutes,
-                            t.Seconds);
+                t.Minutes,
+                t.Seconds);
         }
 
+        /// <summary>
+        /// Searches in the haystack array for the given needle using the default equality operator and returns the index at which the needle starts.
+        /// </summary>
+        /// <typeparam name="T">Type of the arrays.</typeparam>
+        /// <param name="haystack">Sequence to operate on.</param>
+        /// <param name="needle">Sequence to search for.</param>
+        /// <returns>Index of the needle within the haystack or -1 if the needle isn't contained.</returns>
+        public static IEnumerable<int> IndexOf<T>(this T[] haystack, T[] needle)
+        {
+            if ((needle == null) || (haystack.Length < needle.Length)) yield break;
+
+            for (var l = 0; l < haystack.Length - needle.Length + 1; l++)
+            {
+                if (!needle.Where((data, index) => !haystack[l + index].Equals(data)).Any())
+                {
+                    yield return l;
+                }
+            }
+        }
+
+        public static byte[] GetBytes(string str)
+        {
+            var bytes = new byte[str.Length * sizeof (char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        public static string GetString(byte[] bytes)
+        {
+            var chars = new char[bytes.Length / sizeof (char)];
+            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
+        }
 
         public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
         {

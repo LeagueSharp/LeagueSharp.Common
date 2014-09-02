@@ -177,6 +177,47 @@ namespace LeagueSharp.Common
             Bw.Write(Encoding.UTF8.GetBytes(str));
         }
 
+        public int[] SearchByte(byte num)
+        {
+            //return rawPacket.IndexOf(new byte[num]).ToArray();
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+        }
+
+        public int[] SearchShort(short num)
+        {
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();   
+        }
+
+        public int[] SearchFloat(float num)
+        {
+            return  rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+        }
+
+        public int[] SearchInteger(int num)
+        {
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+        }
+
+        public int[] SearchString(string str)
+        {
+            return rawPacket.IndexOf(Utility.GetBytes(str)).ToArray();
+        }
+
+        public int[] SearchHexString(string hex)
+        {
+            hex = hex.Replace(" ", string.Empty);
+
+            if ((hex.Length % 2) != 0)
+            {
+                hex = "0" + hex;
+            }
+
+            return rawPacket.IndexOf(Enumerable.Range(0, hex.Length)
+                    .Where(x => x % 2 == 0)
+                    .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                    .ToArray()).ToArray();
+        }
+
         /// <summary>
         /// Sends the packet
         /// </summary>
