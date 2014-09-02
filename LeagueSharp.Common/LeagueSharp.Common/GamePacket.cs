@@ -48,6 +48,7 @@ namespace LeagueSharp.Common
             Ms = new MemoryStream(data);
             Br = new BinaryReader(Ms);
             Bw = new BinaryWriter(Ms);
+
             Br.BaseStream.Position = 0;
             Bw.BaseStream.Position = 0;
             rawPacket = data;
@@ -59,6 +60,7 @@ namespace LeagueSharp.Common
             Ms = new MemoryStream();
             Br = new BinaryReader(Ms);
             Bw = new BinaryWriter(Ms);
+
             Br.BaseStream.Position = 0;
             Bw.BaseStream.Position = 0;
             WriteByte(header);
@@ -313,10 +315,12 @@ namespace LeagueSharp.Common
         public string Dump()
         {
             var result = new StringBuilder(rawPacket.Length * 3);
+
             foreach (var b in rawPacket)
             {
                 result.AppendFormat("{0:X2} ", b);
             }
+
             return result.ToString();
         }
 
@@ -326,6 +330,7 @@ namespace LeagueSharp.Common
         public void SaveToFile(string filePath)
         {
             var w = File.AppendText(filePath);
+
             w.WriteLine(Dump());
             w.Close();
         }
