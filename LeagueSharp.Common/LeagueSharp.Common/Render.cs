@@ -63,7 +63,7 @@ namespace LeagueSharp.Common
 
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
         {
-            foreach (RenderObject renderObject in RenderObjects)
+            foreach (var renderObject in RenderObjects)
             {
                 renderObject.Dispose();
             }
@@ -71,7 +71,7 @@ namespace LeagueSharp.Common
 
         private static void DrawingOnOnPostReset(EventArgs args)
         {
-            foreach (RenderObject renderObject in RenderObjects)
+            foreach (var renderObject in RenderObjects)
             {
                 renderObject.OnPostReset();
             }
@@ -79,7 +79,7 @@ namespace LeagueSharp.Common
 
         private static void DrawingOnOnPreReset(EventArgs args)
         {
-            foreach (RenderObject renderObject in RenderObjects)
+            foreach (var renderObject in RenderObjects)
             {
                 renderObject.OnPreReset();
             }
@@ -92,9 +92,9 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            for (int i = -5; i < 5; i++)
+            for (var i = -5; i < 5; i++)
             {
-                foreach (RenderObject renderObject in
+                foreach (var renderObject in
                     RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
                 {
                     renderObject.OnDraw();
@@ -109,9 +109,9 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            for (int i = -5; i < 5; i++)
+            for (var i = -5; i < 5; i++)
             {
-                foreach (RenderObject renderObject in
+                foreach (var renderObject in
                     RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
                 {
                     renderObject.OnEndScene();
@@ -528,7 +528,7 @@ namespace LeagueSharp.Common
                         return;
                     }
 
-                    VertexDeclaration olddec = Device.VertexDeclaration;
+                    var olddec = Device.VertexDeclaration;
 
                     _effect.Technique = _technique;
 
@@ -852,11 +852,11 @@ namespace LeagueSharp.Common
                 {
                     _scale = value;
 
-                    DataStream stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp);
-                    Bitmap original = Bitmap ?? new Bitmap(stream);
+                    var stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp);
+                    var original = Bitmap ?? new Bitmap(stream);
                     var target = new Bitmap((int)(_scale.X * original.Width), (int)(_scale.Y * original.Height));
 
-                    using (Graphics g = Graphics.FromImage(target))
+                    using (var g = Graphics.FromImage(target))
                     {
                         g.SmoothingMode = SmoothingMode.HighQuality;
                         g.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -904,42 +904,76 @@ namespace LeagueSharp.Common
                 _hide = true;
             }
 
-            public void GrayScale(bool useGrayScale = true)
-            {
-                if (useGrayScale)
-                    UpdateTextureBitmap(GrayScaleBitmap(Bitmap));
-                else
-                    Reset();
-            }
-
             public void Reset()
             {
                 UpdateTextureBitmap(
                     (Bitmap)Image.FromStream(BaseTexture.ToStream(_originalTexture, ImageFileFormat.Bmp)));
             }
 
-            private Bitmap GrayScaleBitmap(Bitmap original)
+            public void GrayScale()
             {
+                SetSaturation(0.0f);
+            }
+
+            public void Fade()
+            {
+                SetSaturation(0.5f);
+            }
+
+            public void Complement()
+            {
+                SetSaturation(-1.0f);
+            }
+
+            public void SetSaturation(float saturiation)
+            {
+                UpdateTextureBitmap(SaturateBitmap(Bitmap, saturiation));
+            }
+
+            private Bitmap SaturateBitmap(Bitmap original, float saturation)
+            {
+                var rWeight = 0.3086f;
+                var gWeight = 0.6094f;
+                var bWeight = 0.0820f;
+
+                var a = (1.0f - saturation) * rWeight + saturation;
+                var b = (1.0f - saturation) * rWeight;
+                var c = (1.0f - saturation) * rWeight;
+                var d = (1.0f - saturation) * gWeight;
+                var e = (1.0f - saturation) * gWeight + saturation;
+                var f = (1.0f - saturation) * gWeight;
+                var g = (1.0f - saturation) * bWeight;
+                var h = (1.0f - saturation) * bWeight;
+                var i = (1.0f - saturation) * bWeight + saturation;
+
                 var newBitmap = new Bitmap(original.Width, original.Height);
-                Graphics g = Graphics.FromImage(newBitmap);
+                var gr = Graphics.FromImage(newBitmap);
 
-                var colorMatrix = new ColorMatrix(
-                    new[]
-                    {
-                        new[] { .3f, .3f, .3f, 0, 0 },
-                        new[] { .59f, .59f, .59f, 0, 0 },
-                        new[] { .11f, .11f, .11f, 0, 0 },
-                        new float[] { 0, 0, 0, 1, 0 },
-                        new float[] { 0, 0, 0, 0, 1 }
-                    });
-
-                var attributes = new ImageAttributes();
-                attributes.SetColorMatrix(colorMatrix);
-
-                g.DrawImage(original, new System.Drawing.Rectangle(0, 0, original.Width, original.Height),
-                    0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
-
-                g.Dispose();
+                // ColorMatrix elements
+                float[][] ptsArray =
+                {
+                    new[] { a, b, c, 0, 0 },
+                    new[] { d, e, f, 0, 0 },
+                    new[] { g, h, i, 0, 0 },
+                    new float[] { 0, 0, 0, 1, 0 },
+                    new float[] { 0, 0, 0, 0, 1 }
+                };
+                // Create ColorMatrix
+                var clrMatrix = new ColorMatrix(ptsArray);
+                // Create ImageAttributes
+                var imgAttribs = new ImageAttributes();
+                // Set color matrix
+                imgAttribs.SetColorMatrix(clrMatrix,
+                    ColorMatrixFlag.Default,
+                    ColorAdjustType.Default);
+                // Draw Image with no effects
+                gr.DrawImage(original, 0, 0, original.Width, original.Height);
+                // Draw Image with image attributes
+                gr.DrawImage(original,
+                    new System.Drawing.Rectangle(0, 0, original.Width, original.Height),
+                    0, 0, original.Width, original.Height,
+                    GraphicsUnit.Pixel, imgAttribs);
+                gr.Dispose();
 
                 return newBitmap;
             }
@@ -1047,7 +1081,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    int dx = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Width / 2 : 0;
+                    var dx = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Width / 2 : 0;
 
                     if (PositionUpdate != null)
                         return (int)PositionUpdate().X + dx;
@@ -1061,7 +1095,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    int dy = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Height / 2 : 0;
+                    var dy = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Height / 2 : 0;
 
                     if (PositionUpdate != null)
                         return (int)PositionUpdate().Y + dy;
@@ -1092,8 +1126,8 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-                    int xP = X;
-                    int yP = Y;
+                    var xP = X;
+                    var yP = Y;
                     if (OutLined)
                     {
                         var outlineColor = new ColorBGRA(0, 0, 0, 255);
