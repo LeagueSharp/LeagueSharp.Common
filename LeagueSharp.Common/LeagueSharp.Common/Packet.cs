@@ -46,6 +46,35 @@ namespace LeagueSharp.Common
             Laugh = 0x02,
         }
 
+        public enum FloatTextPacket
+        {
+            Invulnerable,
+            Special,
+            Heal,
+            ManaHeal,
+            ManaDmg,
+            Dodge,
+            Critical,
+            Experience,
+            Gold,
+            Level,
+            Disable,
+            QuestRecv,
+            QuestDone,
+            Score,
+            PhysDmg,
+            MagicDmg,
+            TrueDmg,
+            EnemyPhysDmg,
+            EnemyMagicDmg,
+            EnemyTrueDmg,
+            EnemyCritical,
+            Countdown,
+            Legacy,
+            LegacyCritical,
+            Debug
+        }
+
         public enum PingType
         {
             Normal = 1,
@@ -1229,6 +1258,61 @@ namespace LeagueSharp.Common
                         SourceNetworkId = sourceNetworkId;
                         TargetNetworkId = targetNetworkId;
                         TargetNetworkIdCopy = targetNetworkIdCopy;
+                        Type = type;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region FloatText
+
+            /// <summary>
+            /// Packet received print float text.
+            /// </summary>
+            public class FloatText
+            {
+                public static byte Header = 0x19;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var packet = new GamePacket(Header);
+
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(packetStruct.NetworkId);
+                    packet.WriteByte((byte)packetStruct.Type);
+                    packet.WriteInteger(packetStruct.NetworkId);
+                    packet.WriteString(packetStruct.Text);
+                    packet.WriteByte(0);
+
+                    return packet;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+
+                    packet.Position = 1;
+                    result.NetworkId = packet.ReadInteger();
+                    result.Type = (FloatTextPacket) packet.ReadByte();
+                    //result.Text = packet.ReadString();
+
+                    return result;
+                }
+
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public FloatTextPacket Type;
+                    public string Text;
+
+                    public Struct(string text, FloatTextPacket type, int networkId = 0)
+                    {
+                        NetworkId = networkId == 0 ? ObjectManager.Player.NetworkId : networkId;
+                        Text = text;
                         Type = type;
                     }
                 }

@@ -76,6 +76,11 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        public static void PrintFloatText(GameObject obj,  string text, Packet.FloatTextPacket type)
+        {
+            Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId));
+        }
+
         public static string GetAssemblyLocation()
         {
             var fileLoc = Assembly.GetExecutingAssembly().Location;
