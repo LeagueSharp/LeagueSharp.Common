@@ -78,7 +78,7 @@ namespace LeagueSharp.Common
 
         public static void PrintFloatText(GameObject obj,  string text, Packet.FloatTextPacket type)
         {
-            Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId));
+            Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
 
         public static string GetAssemblyLocation()
