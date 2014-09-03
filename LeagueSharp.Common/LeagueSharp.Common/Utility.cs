@@ -132,6 +132,49 @@ namespace LeagueSharp.Common
             return new string(chars);
         }
 
+        public static int GetRecallTime(Obj_AI_Hero obj)
+        {
+            int duration = 0;
+
+            switch (obj.Spellbook.GetSpell(SpellSlot.Recall).Name)
+            {
+                case "Recall":
+                    duration = 8000;
+                    break;
+                case "RecallImproved":
+                    duration = 7000;
+                    break;
+                case "OdinRecall":
+                    duration = 4500;
+                    break;
+                case "OdinRecallImproved":
+                    duration = 4000;
+                    break;
+            }
+            return duration;
+        }
+
+        public static int GetRecallTime(string recallName)
+        {
+            int duration = 0;
+
+            switch (recallName){
+                case "Recall":
+                    duration = 8000;
+                    break;
+                case "RecallImproved":
+                    duration = 7000;
+                    break;
+                case "OdinRecall":
+                    duration = 4500;
+                    break;
+                case "OdinRecallImproved":
+                    duration = 4000;
+                    break;
+            }
+            return duration;
+        }
+
         public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
         {
             Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot))
