@@ -780,7 +780,7 @@ namespace LeagueSharp.Common
 
             public Sprite(Stream stream, Vector2 position)
             {
-                UpdateTextureBitmap((Bitmap)Image.FromStream(stream), position);
+                UpdateTextureBitmap(new Bitmap(stream), position);
             }
 
             public Sprite(byte[] bytesArray, Vector2 position)

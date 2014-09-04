@@ -118,6 +118,26 @@ namespace LeagueSharp.Common
             return BitConverter.ToInt32(Br.ReadBytes(4), 0);
         }
 
+        /// <summary>
+        /// Reads and returns a string.
+        /// </summary>
+        public string ReadString()
+        {
+            string result = "";
+
+            for (int i = 1; i < (Size() - Position); i++)
+            {
+                byte num = ReadByte();
+
+                if (num == 0)
+                    return result;
+
+                result += num.ToString();
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// Writes a byte.
