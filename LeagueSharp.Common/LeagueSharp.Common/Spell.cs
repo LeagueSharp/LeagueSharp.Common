@@ -290,7 +290,7 @@ namespace LeagueSharp.Common
             if (!IsSkillshot)
             {
                 //Target out of range
-                if (RangeCheckFrom.Distance(unit.ServerPosition) > Range)
+                if (RangeCheckFrom.Distance(unit.ServerPosition, true) > Range * Range)
                 {
                     return CastStates.OutOfRange;
                 }
@@ -329,7 +329,7 @@ namespace LeagueSharp.Common
             }
 
             //Target out of range.
-            if (RangeCheckFrom.Distance(prediction.CastPosition) > Range)
+            if (RangeCheckFrom.Distance(prediction.CastPosition, true) > Range * Range)
             {
                 return CastStates.OutOfRange;
             }
@@ -513,7 +513,7 @@ namespace LeagueSharp.Common
             float overrideWidth = -1)
         {
             return MinionManager.GetBestCircularFarmLocation(
-                minionPositions, overrideWidth != -1 ? overrideWidth : Width, Range);
+                minionPositions, overrideWidth >= 0 ? overrideWidth : Width, Range);
         }
 
         public MinionManager.FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions,
@@ -522,13 +522,13 @@ namespace LeagueSharp.Common
             var positions = MinionManager.GetMinionsPredictedPositions(
                 minionPositions, Delay, Width, Speed, From, Range, false, SkillshotType.SkillshotLine);
 
-            return GetLineFarmLocation(positions, overrideWidth != -1 ? overrideWidth : Width);
+            return GetLineFarmLocation(positions, overrideWidth >= 0 ? overrideWidth : Width);
         }
 
         public MinionManager.FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
             return MinionManager.GetBestLineFarmLocation(
-                minionPositions, overrideWidth != -1 ? overrideWidth : Width, Range);
+                minionPositions, overrideWidth >= 0 ? overrideWidth : Width, Range);
         }
 
         internal int CountHits(List<Obj_AI_Base> units, Vector3 castPosition)
@@ -633,11 +633,9 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Returns if the point is in range of the spell.
         /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
         public bool InRange(Vector3 point)
         {
-            return RangeCheckFrom.Distance(point) < Range;
+            return RangeCheckFrom.Distance(point, true) < Range * Range;
         }
     }
 }
