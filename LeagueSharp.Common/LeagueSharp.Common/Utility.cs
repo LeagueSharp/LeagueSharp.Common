@@ -498,9 +498,9 @@ namespace LeagueSharp.Common
             float fountainRange = 750;
             if (Map.GetMap() == Map.MapType.SummonersRift)
                 fountainRange = 1050;
-            return ObjectManager.Get<Obj_SpawnPoint>()
-                    .Where(spawnPoint => spawnPoint.IsAlly)
-                    .Any(spawnPoint => Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) < fountainRange);
+            return ObjectManager.Get<GameObject>()
+                    .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
+                    .Any(spawnPoint => Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) < fountainRange);;
         }
 
         public static class Map
