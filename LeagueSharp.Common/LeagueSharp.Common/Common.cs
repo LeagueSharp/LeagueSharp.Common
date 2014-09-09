@@ -34,7 +34,7 @@ namespace LeagueSharp.Common
         internal static void InitializeCommonLib()
         {
             isInitialized = true;
-            UpdateCheck();
+            //UpdateCheck();
         }
 
         private static void UpdateCheck()
