@@ -414,10 +414,9 @@ namespace LeagueSharp.Common
 
         internal static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
         {
-
             speed = (speed == -1) ? input.Unit.MoveSpeed : speed;
 
-            if (path == null || path.Count == 0 || path.Count == 1)
+            if (path.Count == 1)
             {
                 var rTime = input.Delay + input.Unit.Distance(input.From) / input.Speed - input.RealRadius / speed -
                             0.15d;
