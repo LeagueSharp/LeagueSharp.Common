@@ -99,9 +99,8 @@ namespace LeagueSharp.Common
 
             for (var i = -5; i < 5; i++)
             {
-                var i1 = i;
                 foreach (var renderObject in
-                    RenderObjects.Where(renderObject => renderObject.Layer == i1 && renderObject.Visible))
+                    RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
                 {
                     renderObject.OnDraw();
                 }
@@ -117,9 +116,8 @@ namespace LeagueSharp.Common
 
             for (var i = -5; i < 5; i++)
             {
-                var i1 = i;
                 foreach (var renderObject in
-                    RenderObjects.Where(renderObject => renderObject.Layer == i1 && renderObject.Visible))
+                    RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
                 {
                     renderObject.OnEndScene();
                 }
@@ -1183,7 +1181,9 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return TextUpdate != null ? TextUpdate() : _text;
+                    if (TextUpdate != null)
+                        return TextUpdate();
+                    return _text;
                 }
                 set { _text = value; }
             }

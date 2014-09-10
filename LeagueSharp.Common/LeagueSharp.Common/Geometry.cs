@@ -330,7 +330,14 @@ namespace LeagueSharp.Common
                 isOnSegment = false;
             }
             var pointSegment = new Vector2();
-            pointSegment = isOnSegment ? pointLine : new Vector2(ax + rS * (bx - ax), ay + rS * (@by - ay));
+            if (isOnSegment)
+            {
+                pointSegment = pointLine;
+            }
+            else
+            {
+                pointSegment = new Vector2(ax + rS * (bx - ax), ay + rS * (by - ay));
+            }
             return new ProjectionInfo(isOnSegment, pointSegment, pointLine);
         }
 
@@ -356,22 +363,22 @@ namespace LeagueSharp.Common
 
             if (denominator == 0)
             {
-                if (numerator != 0)
+                if (numerator == 0)
                 {
+                    // collinear. Potentially infinite intersection points.
+                    // Check and return one of them.
+                    if (lineSegment1Start.X >= lineSegment2Start.X && lineSegment1Start.X <= lineSegment2End.X)
+                    {
+                        return new IntersectionResult(true, lineSegment1Start);
+                    }
+                    if (lineSegment2Start.X >= lineSegment1Start.X && lineSegment2Start.X <= lineSegment1End.X)
+                    {
+                        return new IntersectionResult(true, lineSegment2Start);
+                    }
                     return new IntersectionResult();
                 }
-                // collinear. Potentially infinite intersection points.
-                // Check and return one of them.
-                if (lineSegment1Start.X >= lineSegment2Start.X && lineSegment1Start.X <= lineSegment2End.X)
-                {
-                    return new IntersectionResult(true, lineSegment1Start);
-                }
-                if (lineSegment2Start.X >= lineSegment1Start.X && lineSegment2Start.X <= lineSegment1End.X)
-                {
-                    return new IntersectionResult(true, lineSegment2Start);
-                }
-                return new IntersectionResult();
                 // parallel
+                return new IntersectionResult();
             }
 
             var r = numerator / denominator;
@@ -406,7 +413,7 @@ namespace LeagueSharp.Common
                 sP2y = startPoint2.Y;
 
             float d = eP1x - sP1x, e = eP1y - sP1y;
-            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN, t2;
+            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN, t2 = float.NaN;
             float S = dist != 0f ? v1 * d / dist : 0, K = (dist != 0) ? v1 * e / dist : 0f;
 
             float r = sP2x - sP1x, j = sP2y - sP1y;
@@ -467,7 +474,7 @@ namespace LeagueSharp.Common
                 t1 = 0f;
             }
 
-            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
+            return new Object[2] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
         }
 
         /// <summary>

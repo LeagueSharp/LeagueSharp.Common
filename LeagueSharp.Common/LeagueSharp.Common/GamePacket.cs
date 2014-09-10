@@ -23,7 +23,6 @@
 #region
 
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -133,7 +132,7 @@ namespace LeagueSharp.Common
                 if (num == 0)
                     return result;
 
-                result += num.ToString(CultureInfo.InvariantCulture);
+                result += num.ToString();
             }
 
             return result;

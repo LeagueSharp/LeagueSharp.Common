@@ -543,7 +543,16 @@ namespace LeagueSharp.Common
 
         internal int CountHits(List<Vector3> points, Vector3 castPosition)
         {
-            return points.Count(point => WillHit(point, castPosition));
+            var hits = 0;
+            foreach (var point in points)
+            {
+                if (WillHit(point, castPosition, 0))
+                {
+                    hits++;
+                }
+            }
+
+            return hits;
         }
 
         /// <summary>

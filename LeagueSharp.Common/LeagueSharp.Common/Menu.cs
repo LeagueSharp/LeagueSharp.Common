@@ -25,11 +25,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Xml;
-using LeagueSharp.Common.Properties;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -157,7 +154,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("BackgroundColor");
-                varNode.InnerText = ColorTranslator.ToHtml(Color.DarkSlateGray);
+                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.DarkSlateGray);
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("BackgroundColorAlpha");
@@ -165,7 +162,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("ActiveColor");
-                varNode.InnerText = ColorTranslator.ToHtml(Color.Red);
+                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.Red);
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("ActiveColorAlpha");
@@ -209,7 +206,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
+                return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) +
                        "\\CommonLibMenuConfig\\";
             }
         }
@@ -242,7 +239,7 @@ namespace LeagueSharp.Common
                     return _chachedBgColor;
                 }
 
-                var color = ColorTranslator.FromHtml(GetXmlValue("BackgroundColor"));
+                var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("BackgroundColor"));
                 var alpha = GetXmlValue("BackgroundColorAlpha");
                 _chachedBgColor = Color.FromArgb(Convert.ToInt32(alpha), color);
                 return _chachedBgColor;
@@ -258,7 +255,7 @@ namespace LeagueSharp.Common
                     return _chachedActiveColor;
                 }
 
-                var color = ColorTranslator.FromHtml(GetXmlValue("ActiveColor"));
+                var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("ActiveColor"));
                 var alpha = GetXmlValue("ActiveColorAlpha");
                 _chachedActiveColor = Color.FromArgb(Convert.ToInt32(alpha), color);
                 return _chachedActiveColor;
@@ -349,9 +346,9 @@ namespace LeagueSharp.Common
             if (drawText)
             {
                 Drawing.DrawText(
-                    position.X - 7 + width - Drawing.GetTextExtent(value.ToString(CultureInfo.InvariantCulture)).Width,
-                    position.Y + (item.Height - Drawing.GetTextExtent(value.ToString(CultureInfo.InvariantCulture)).Height) / 2, Color.White,
-                    value.ToString(CultureInfo.InvariantCulture));
+                    position.X - 7 + width - Drawing.GetTextExtent(value.ToString()).Width,
+                    position.Y + (item.Height - Drawing.GetTextExtent(value.ToString()).Height) / 2, Color.White,
+                    value.ToString());
             }
         }
     }
@@ -597,7 +594,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal void Drawing_OnDraw(EventArgs args)
+        internal void Drawing_OnDraw(System.EventArgs args)
         {
             if (!Visible)
             {
@@ -775,7 +772,7 @@ namespace LeagueSharp.Common
         {
             Name = name;
             DisplayName = displayName;
-            _assemblyPath = Assembly.GetCallingAssembly().Location;
+            _assemblyPath = System.Reflection.Assembly.GetCallingAssembly().Location;
         }
 
         internal bool Visible
@@ -1021,6 +1018,10 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
+                    if (!Visible)
+                    {
+                        return;
+                    }
                     if (!IsInside(cursorPos) && message == WindowsMessages.WM_LBUTTONDOWN)
                     {
                         return;
@@ -1222,9 +1223,9 @@ namespace LeagueSharp.Common
                 case MenuValueType.Integer:
                     var intVal = GetValue<int>();
                     Drawing.DrawText(
-                        Position.X + Width - Drawing.GetTextExtent(intVal.ToString(CultureInfo.InvariantCulture)).Width - 7,
-                        Position.Y + (Height - Drawing.GetTextExtent(intVal.ToString(CultureInfo.InvariantCulture)).Height) / 2, Color.White,
-                        intVal.ToString(CultureInfo.InvariantCulture));
+                        Position.X + Width - Drawing.GetTextExtent(intVal.ToString()).Width - 7,
+                        Position.Y + (Height - Drawing.GetTextExtent(intVal.ToString()).Height) / 2, Color.White,
+                        intVal.ToString());
                     break;
 
                 case MenuValueType.Color:
@@ -1304,7 +1305,7 @@ namespace LeagueSharp.Common
             UpdateLuminosityBitmap(Color.White, true);
             UpdateOpacityBitmap(Color.White, true);
 
-            BackgroundSprite = (Render.Sprite) new Render.Sprite(Resources.CPForm, new Vector2(X, Y)).Add(1);
+            BackgroundSprite = (Render.Sprite) new Render.Sprite(Properties.Resources.CPForm, new Vector2(X, Y)).Add(1);
 
             LuminitySprite = (Render.Sprite) new Render.Sprite(LuminityBitmap, new Vector2(X + 285, Y + 40)).Add(0);
             OpacitySprite = (Render.Sprite) new Render.Sprite(OpacityBitmap, new Vector2(X + 349, Y + 40)).Add(0);
@@ -1313,8 +1314,8 @@ namespace LeagueSharp.Common
                 (Render.Rectangle)
                     new Render.Rectangle(X + 375, Y + 44, 54, 80, new ColorBGRA(255, 255, 255, 255)).Add(0);
 
-            LuminositySlider = new CPSlider(285 - Resources.CPActiveSlider.Width / 3, 35, 248);
-            AlphaSlider = new CPSlider(350 - Resources.CPActiveSlider.Width / 3, 35, 248);
+            LuminositySlider = new CPSlider(285 - Properties.Resources.CPActiveSlider.Width / 3, 35, 248);
+            AlphaSlider = new CPSlider(350 - Properties.Resources.CPActiveSlider.Width / 3, 35, 248);
 
             Game.OnWndProc += Game_OnWndProc;
         }
@@ -1577,10 +1578,10 @@ namespace LeagueSharp.Common
             {
                 _x = x;
                 _y = y;
-                Height = height - Resources.CPActiveSlider.Height;
+                Height = height - Properties.Resources.CPActiveSlider.Height;
                 Percent = percent;
-                ActiveSprite = new Render.Sprite(Resources.CPActiveSlider, new Vector2(sX, sY));
-                InactiveSprite = new Render.Sprite(Resources.CPInactiveSlider, new Vector2(sX, sY));
+                ActiveSprite = new Render.Sprite(Properties.Resources.CPActiveSlider, new Vector2(sX, sY));
+                InactiveSprite = new Render.Sprite(Properties.Resources.CPInactiveSlider, new Vector2(sX, sY));
 
                 ActiveSprite.Add(2);
                 InactiveSprite.Add(2);
@@ -1621,7 +1622,7 @@ namespace LeagueSharp.Common
 
             public int Width
             {
-                get { return Resources.CPActiveSlider.Width; }
+                get { return Properties.Resources.CPActiveSlider.Width; }
             }
 
             public float Percent
@@ -1637,7 +1638,7 @@ namespace LeagueSharp.Common
             private void UpdatePercent()
             {
                 var pos = Utils.GetCursorPos();
-                Percent = (pos.Y - Resources.CPActiveSlider.Height / 2 - sY) / Height;
+                Percent = (pos.Y - Properties.Resources.CPActiveSlider.Height / 2 - sY) / Height;
                 UpdateColor();
                 ActiveSprite.Y = sY + (int) (Percent * Height);
                 InactiveSprite.Y = sY + (int) (Percent * Height);
@@ -1650,7 +1651,7 @@ namespace LeagueSharp.Common
                     case (uint) WindowsMessages.WM_LBUTTONDOWN:
                         var pos = Utils.GetCursorPos();
                         if (Utils.IsUnderRectangle(
-                            pos, sX, sY, Width, Height + Resources.CPActiveSlider.Height))
+                            pos, sX, sY, Width, Height + Properties.Resources.CPActiveSlider.Height))
                         {
                             Moving = true;
                             ActiveSprite.Visible = Moving;
@@ -1757,22 +1758,21 @@ namespace LeagueSharp.Common
             public static implicit operator Color(HSLColor hslColor)
             {
                 double r = 0, g = 0, b = 0;
-                if (hslColor.luminosity == 0)
+                if (hslColor.luminosity != 0)
                 {
-                    return Color.FromArgb((int) (255 * r), (int) (255 * g), (int) (255 * b));
-                }
-                if (hslColor.saturation == 0)
-                {
-                    r = g = b = hslColor.luminosity;
-                }
-                else
-                {
-                    var temp2 = GetTemp2(hslColor);
-                    var temp1 = 2.0 * hslColor.luminosity - temp2;
+                    if (hslColor.saturation == 0)
+                    {
+                        r = g = b = hslColor.luminosity;
+                    }
+                    else
+                    {
+                        var temp2 = GetTemp2(hslColor);
+                        var temp1 = 2.0 * hslColor.luminosity - temp2;
 
-                    r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0 / 3.0);
-                    g = GetColorComponent(temp1, temp2, hslColor.hue);
-                    b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
+                        r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0 / 3.0);
+                        g = GetColorComponent(temp1, temp2, hslColor.hue);
+                        b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
+                    }
                 }
                 return Color.FromArgb((int) (255 * r), (int) (255 * g), (int) (255 * b));
             }
