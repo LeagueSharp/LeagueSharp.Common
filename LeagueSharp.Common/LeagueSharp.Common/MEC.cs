@@ -50,8 +50,8 @@ namespace LeagueSharp.Common
         /// </summary>
         public static MecCircle GetMec(List<Vector2> points)
         {
-            var center = new Vector2();
-            float radius = 0;
+            Vector2 center;
+            float radius;
 
             var ConvexHull = MakeConvexHull(points);
             FindMinimalBoundingCircle(ConvexHull, out center, out radius);
@@ -165,12 +165,9 @@ namespace LeagueSharp.Common
             // Find the remaining point with the smallest Y value.
             // if (there's a tie, take the one with the smaller X value.
             var best_pt = points[0];
-            foreach (var pt in points)
+            foreach (var pt in points.Where(pt => (pt.Y < best_pt.Y) || ((pt.Y == best_pt.Y) && (pt.X < best_pt.X))))
             {
-                if ((pt.Y < best_pt.Y) || ((pt.Y == best_pt.Y) && (pt.X < best_pt.X)))
-                {
-                    best_pt = pt;
-                }
+                best_pt = pt;
             }
 
             // Move this point to the convex hull.

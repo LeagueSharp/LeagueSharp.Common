@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
-using Color = System.Drawing.Color;
 
 #endregion
 
@@ -418,9 +417,6 @@ namespace LeagueSharp.Common
 
             if (path.Count == 1)
             {
-                var rTime = input.Delay + input.Unit.Distance(input.From) / input.Speed - input.RealRadius / speed -
-                            0.15d;
-
                 return new PredictionOutput
                 {
                     Input = input,
@@ -978,11 +974,6 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
-            if (!TrackAllies && sender.Team != ObjectManager.Player.Team)
-            {
-                return;
-            }
-
             if (!StoredPaths.ContainsKey(sender.NetworkId))
             {
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());

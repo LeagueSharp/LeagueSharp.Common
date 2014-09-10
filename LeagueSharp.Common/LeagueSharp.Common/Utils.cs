@@ -21,6 +21,7 @@
 #region
 
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -52,7 +53,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Vector2 GetCursorPos()
         {
-            return Utils.CursorPosT.GetCursorPos();
+            return CursorPosT.GetCursorPos();
         }
 
 
@@ -89,7 +90,7 @@ namespace LeagueSharp.Common
                 case 220:
                     return "º";
                 default:
-                    return vKey.ToString();
+                    return vKey.ToString(CultureInfo.InvariantCulture);
             }
         }
 

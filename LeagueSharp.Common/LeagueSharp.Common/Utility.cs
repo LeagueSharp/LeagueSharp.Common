@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using SharpDX;
@@ -126,14 +127,14 @@ namespace LeagueSharp.Common
         public static byte[] GetBytes(string str)
         {
             var bytes = new byte[str.Length * sizeof (char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
             var chars = new char[bytes.Length / sizeof (char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
 
@@ -484,7 +485,7 @@ namespace LeagueSharp.Common
                     {
                         Text.X = (int)barPos.X + XOffset;
                         Text.Y = (int)barPos.Y + YOffset - 13;
-                        Text.text = ((int)(unit.Health - damage)).ToString();
+                        Text.text = ((int)(unit.Health - damage)).ToString(CultureInfo.InvariantCulture);
                         Text.OnEndScene();
                     }
 
@@ -500,7 +501,7 @@ namespace LeagueSharp.Common
                 fountainRange = 1050;
             return ObjectManager.Get<GameObject>()
                     .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
-                    .Any(spawnPoint => Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) < fountainRange);;
+                    .Any(spawnPoint => Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) < fountainRange);
         }
 
         public static class Map

@@ -666,18 +666,18 @@ namespace LeagueSharp.Common
                 /*Load the menu*/
                 _config.AddItem(
                     new MenuItem("LastHit", "Last hit").SetShared()
-                        .SetValue(new KeyBind("X".ToCharArray()[0], KeyBindType.Press, false)));
+                        .SetValue(new KeyBind("X".ToCharArray()[0], KeyBindType.Press)));
 
                 _config.AddItem(
                     new MenuItem("Farm", "Mixed").SetShared()
-                        .SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press, false)));
+                        .SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
 
                 _config.AddItem(
                     new MenuItem("LaneClear", "LaneClear").SetShared()
-                        .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press, false)));
+                        .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
+                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
                 if (Common.isInitialized == false)
                 {
