@@ -168,6 +168,16 @@ namespace LeagueSharp.Common
             }
 
 
+            public Circle(Vector3 position, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
+            {
+                Color = color;
+                Position = position;
+                Radius = radius;
+                Width = width;
+                ZDeep = zDeep;
+                Offset = offset;
+            }
+
             public Circle(Vector3 position, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -199,9 +209,9 @@ namespace LeagueSharp.Common
                     {
                         DrawCircle(Unit.Position + _offset, Radius, Color, Width, ZDeep);
                     }
-                    else if (Position.To2D().IsValid())
+                    else if ((Position+_offset).To2D().IsValid())
                     {
-                        DrawCircle(Position, Radius, Color, Width, ZDeep);
+                        DrawCircle(Position + _offset, Radius, Color, Width, ZDeep);
                     }
                 }
                 catch (Exception e)
