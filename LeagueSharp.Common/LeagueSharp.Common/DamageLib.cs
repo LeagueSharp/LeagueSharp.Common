@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -4269,22 +4269,21 @@ namespace LeagueSharp.Common
                 case SpellType.W:
                     return
                         CalcPhysicalDmg(
-                            20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 30) +
+                            20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 30) +
                             (1.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                 case SpellType.E:
                     throw new InvalidSpellTypeException();
                 case SpellType.R:
-                    if ((enemy.Health / enemy.MaxHealth) * 100 > 25)
-                    {
-                        return
-                            CalcPhysicalDmg(
-                                40 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 40) +
-                                (0.6 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
-                    }
-                    return
-                        CalcPhysicalDmg(
-                            120 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 120) +
-                            (1.8 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
+                    var minDmg = (80 + (40 * (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level - 1))) +
+                        0.6 * ((0.2 * (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)) +
+                        ObjectManager.Player.FlatPhysicalDamageMod);
+                    var dmg = 0.0;
+                    if (100 * (1 - enemy.MaxHealth / enemy.Health) > 75)
+                        dmg = minDmg * 2;
+                    else
+                        dmg = minDmg * (0.0267 * (100 * (1 - enemy.MaxHealth / enemy.Health)));
+
+                    return CalcPhysicalDmg(dmg, enemy);
                 default:
                     throw new InvalidSpellTypeException();
             }
