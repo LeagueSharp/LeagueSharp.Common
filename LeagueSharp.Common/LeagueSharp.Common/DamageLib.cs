@@ -1493,22 +1493,22 @@ namespace LeagueSharp.Common
                             return
                                 CalcMagicDmg(
                                     (12 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 13)) +
-                                    (0.2666 * ObjectManager.Player.FlatMagicDamageMod), enemy); // first sec
+                                    (0.11 * ObjectManager.Player.FlatMagicDamageMod), enemy); // first sec
                         case StageType.SecondDamage:
                             return
                                 CalcMagicDmg(
                                     (24 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 26)) +
-                                    (0.5333 * ObjectManager.Player.FlatMagicDamageMod), enemy); // second sec
+                                    (0.22 * ObjectManager.Player.FlatMagicDamageMod), enemy); // second sec
                         case StageType.Default:
                             return
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40)) +
-                                    (0.8 * ObjectManager.Player.FlatMagicDamageMod), enemy); // all dmg
+                                    (0.35 * ObjectManager.Player.FlatMagicDamageMod), enemy); // all dmg
                         case StageType.ThirdDamage:
                             return
                                 CalcMagicDmg(
                                     (35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 40)) +
-                                    (0.8 * ObjectManager.Player.FlatMagicDamageMod), enemy); // 3 hits -> all dmg
+                                    (0.24 * ObjectManager.Player.FlatMagicDamageMod), enemy); // 3 hits -> all dmg
                         default:
                             throw new InvalidSpellTypeException();
                     }
@@ -1518,26 +1518,26 @@ namespace LeagueSharp.Common
                         case StageType.Default:
                             return
                                 CalcMagicDmg(
-                                    (135 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 90)) +
-                                    (1.35 * ObjectManager.Player.FlatMagicDamageMod), enemy); // complete w dmg
+                                    (45 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 45)) +
+                                    (0.9 * ObjectManager.Player.FlatMagicDamageMod), enemy); // complete w dmg
                         case StageType.FirstDamage:
                             return
                                 CalcMagicDmg(
-                                    (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 10)) +
-                                    (0.15 * ObjectManager.Player.FlatMagicDamageMod), enemy); // per second
+                                    (5 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 5)) +
+                                    (0.1 * ObjectManager.Player.FlatMagicDamageMod), enemy); // per second
                         default:
                             throw new InvalidSpellTypeException();
                     }
                 case SpellType.E:
                     return
                         CalcMagicDmg(
-                            (15 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 35)) +
-                            (0.55 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            (20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 35)) +
+                            ((0.35 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level * 0.05) * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 case SpellType.R:
                     return
                         CalcMagicDmg(
-                            (75 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 125)) +
-                            (0.6 * ObjectManager.Player.FlatMagicDamageMod), enemy);
+                            (50 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 100)) +
+                            (0.5 * ObjectManager.Player.FlatMagicDamageMod), enemy);
                 default:
                     throw new InvalidSpellTypeException();
             }
