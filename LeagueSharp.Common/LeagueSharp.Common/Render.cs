@@ -56,14 +56,14 @@ namespace LeagueSharp.Common
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
 
-        public static bool OnScreen(Vector2 point)
-        {
-            return point.X > 0 && point.Y > 0 && point.X < Drawing.Width && point.Y < Drawing.Height;
-        }
-
         public static Device Device
         {
             get { return Drawing.Direct3DDevice; }
+        }
+
+        public static bool OnScreen(Vector2 point)
+        {
+            return point.X > 0 && point.Y > 0 && point.X < Drawing.Width && point.Y < Drawing.Height;
         }
 
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
@@ -145,6 +145,9 @@ namespace LeagueSharp.Common
             private static EffectHandle _technique;
             private static bool Initialized;
 
+            private static Vector3 _offset = new Vector3(0, 0, 0);
+
+
             public Circle(Obj_AI_Base unit, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -153,6 +156,17 @@ namespace LeagueSharp.Common
                 Width = width;
                 ZDeep = zDeep;
             }
+
+            public Circle(Obj_AI_Base unit, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
+            {
+                Color = color;
+                Unit = unit;
+                Radius = radius;
+                Width = width;
+                ZDeep = zDeep;
+                Offset = offset;
+            }
+
 
             public Circle(Vector3 position, float radius, Color color, int width = 1, bool zDeep = false)
             {
@@ -171,13 +185,19 @@ namespace LeagueSharp.Common
             public int Width { get; set; }
             public bool ZDeep { get; set; }
 
+            public Vector3 Offset
+            {
+                get { return _offset; }
+                set { _offset = value; }
+            }
+
             public override void OnDraw()
             {
                 try
                 {
                     if (Unit != null && Unit.IsValid)
                     {
-                        DrawCircle(Unit.Position, Radius, Color, Width, ZDeep);
+                        DrawCircle(Unit.Position + _offset, Radius, Color, Width, ZDeep);
                     }
                     else if (Position.To2D().IsValid())
                     {
@@ -752,10 +772,9 @@ namespace LeagueSharp.Common
 
         public class Sprite : RenderObject
         {
-            public delegate Vector2 PositionDelegate();
-
             public delegate void OnResetting(Sprite sprite);
-            public event OnResetting OnReset;
+
+            public delegate Vector2 PositionDelegate();
 
             private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
             private ColorBGRA _color = SharpDX.Color.White;
@@ -883,6 +902,8 @@ namespace LeagueSharp.Common
                 get { return _color; }
             }
 
+            public event OnResetting OnReset;
+
             public void Crop(int x, int y, int w, int h, bool scale = false)
             {
                 _crop = new SharpDX.Rectangle(x, y, w, h);
@@ -914,7 +935,6 @@ namespace LeagueSharp.Common
 
             public void Reset()
             {
-
                 UpdateTextureBitmap(
                     (Bitmap)Image.FromStream(BaseTexture.ToStream(_originalTexture, ImageFileFormat.Bmp)));
 
@@ -1049,7 +1069,6 @@ namespace LeagueSharp.Common
                     _texture.Dispose();
                 }
             }
-
         }
 
         /// <summary>
