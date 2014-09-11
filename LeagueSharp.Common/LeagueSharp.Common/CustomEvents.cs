@@ -28,14 +28,6 @@ namespace LeagueSharp.Common
 {
     public static class CustomEvents
     {
-        static CustomEvents()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         public class Game
         {
             public delegate void OnGameEnded(EventArgs args);

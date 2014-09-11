@@ -46,11 +46,6 @@ namespace LeagueSharp.Common
             {
                 MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared", MemoryCapacity);
             }
-
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
         }
 
         // Convert an object to a byte array

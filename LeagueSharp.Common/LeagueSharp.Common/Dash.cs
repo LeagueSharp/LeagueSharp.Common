@@ -35,11 +35,6 @@ namespace LeagueSharp.Common
 
         static Dash()
         {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-
             Game.OnGameUpdate += GameOnOnGameUpdate;
             Game.OnGameProcessPacket += GameOnOnGameProcessPacket;
         }

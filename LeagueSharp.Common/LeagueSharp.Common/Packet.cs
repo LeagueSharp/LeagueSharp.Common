@@ -87,14 +87,6 @@ namespace LeagueSharp.Common
             FallbackSound = 181,
         }
 
-        static Packet()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         public static class C2S
         {
             #region Ping

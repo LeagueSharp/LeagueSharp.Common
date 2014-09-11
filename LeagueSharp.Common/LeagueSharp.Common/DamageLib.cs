@@ -81,11 +81,6 @@ namespace LeagueSharp.Common
 
         static DamageLib()
         {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-
             // Get my Hero
             switch (ObjectManager.Player.ChampionName)
             {

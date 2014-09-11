@@ -32,14 +32,6 @@ namespace LeagueSharp.Common
 {
     public static class Geometry
     {
-        static Geometry()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         //Obj_AI_Base class extended methods:
         public static float Distance(Obj_AI_Base anotherUnit, bool squared = false)
         {

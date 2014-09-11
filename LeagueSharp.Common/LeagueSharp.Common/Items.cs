@@ -30,14 +30,6 @@ namespace LeagueSharp.Common
 {
     public static class Items
     {
-        static Items()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         /// <summary>
         /// Returns if the Player has an item.
         /// </summary>

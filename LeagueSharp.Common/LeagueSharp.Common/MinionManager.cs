@@ -56,14 +56,6 @@ namespace LeagueSharp.Common
 
     public static class MinionManager
     {
-        static MinionManager()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         /// <summary>
         /// Returns the minions in range from From.
         /// </summary>

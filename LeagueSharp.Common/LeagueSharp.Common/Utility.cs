@@ -38,14 +38,6 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Utility
     {
-        static Utility()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         /// <summary>
         /// Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>

@@ -679,10 +679,6 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
 
-                if (Common.isInitialized == false)
-                {
-                    Common.InitializeCommonLib();
-                }
 
                 Player = ObjectManager.Player;
                 Game.OnGameUpdate += GameOnOnGameUpdate;

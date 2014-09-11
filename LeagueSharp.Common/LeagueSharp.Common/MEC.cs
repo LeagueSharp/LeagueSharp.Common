@@ -37,14 +37,6 @@ namespace LeagueSharp.Common
         public static RectangleF g_MinMaxBox;
         public static Vector2[] g_NonCulledPoints;
 
-        static MEC()
-        {
-            if (Common.isInitialized == false)
-            {
-                Common.InitializeCommonLib();
-            }
-        }
-
         /// <summary>
         /// Returns the mininimum enclosing circle from a list of points.
         /// </summary>
