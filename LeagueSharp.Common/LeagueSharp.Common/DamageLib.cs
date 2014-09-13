@@ -565,7 +565,7 @@ namespace LeagueSharp.Common
             }
 
             double newarmor = minion.Armor * ObjectManager.Player.PercentArmorPenetrationMod;
-            var dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
+            var dmgreduction = 100 / (100 + Math.Max(newarmor - ObjectManager.Player.FlatArmorPenetrationMod, 0));
             return (((dmg + additionaldmg) * dmgreduction)) + bonusmagicdmg;
         }
 
@@ -593,7 +593,7 @@ namespace LeagueSharp.Common
             }
 
             double newmr = minion.SpellBlock * ObjectManager.Player.PercentMagicPenetrationMod;
-            var dmgreduction = 100 / (100 + newmr - ObjectManager.Player.FlatMagicPenetrationMod);
+            var dmgreduction = 100 / (100 + Math.Max(newmr - ObjectManager.Player.FlatMagicPenetrationMod, 0));
             return (((dmg + additionaldmg) * dmgreduction));
         }
 
@@ -704,7 +704,7 @@ namespace LeagueSharp.Common
             }
 
             double newarmor = enemy.Armor * ObjectManager.Player.PercentArmorPenetrationMod;
-            var dmgreduction = 100 / (100 + newarmor - ObjectManager.Player.FlatArmorPenetrationMod);
+            var dmgreduction = 100 / (100 + Math.Max(newarmor - ObjectManager.Player.FlatArmorPenetrationMod, 0));
             return (((dmg + additionaldmg) * dmgreduction)) - reducedmg;
         }
 
@@ -769,7 +769,7 @@ namespace LeagueSharp.Common
             }
 
             double newspellblock = enemy.SpellBlock * ObjectManager.Player.PercentMagicPenetrationMod;
-            var dmgreduction = 100 / (100 + newspellblock - ObjectManager.Player.FlatMagicPenetrationMod);
+            var dmgreduction = 100 / (100 + Math.Max(newspellblock - ObjectManager.Player.FlatMagicPenetrationMod, 0));
             return (((dmg + additionaldmg) * dmgreduction)) - reducedmg;
         }
 
