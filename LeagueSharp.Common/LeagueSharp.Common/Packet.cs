@@ -1288,7 +1288,7 @@ namespace LeagueSharp.Common
 
                     packet.Position = 1;
                     result.NetworkId = packet.ReadInteger();
-                    result.Type = (FloatTextPacket) packet.ReadByte();
+                    result.Type = (FloatTextPacket)packet.ReadByte();
                     //result.Text = packet.ReadString();
 
                     return result;
@@ -1298,8 +1298,8 @@ namespace LeagueSharp.Common
                 public struct Struct
                 {
                     public int NetworkId;
-                    public FloatTextPacket Type;
                     public string Text;
+                    public FloatTextPacket Type;
 
                     public Struct(string text, FloatTextPacket type, int networkId = 0)
                     {
@@ -1328,6 +1328,50 @@ namespace LeagueSharp.Common
                     packet.WriteByte(0, 8);
                     packet.WriteString(debugString);
                     packet.WriteByte(0);
+                    return packet;
+                }
+            }
+
+            #endregion
+
+            #region HighlightUnit
+
+            /// <summary>
+            /// Packet highlights unit.
+            /// </summary>
+            public class HighlightUnit
+            {
+                public static byte Header = 0x59;
+
+                public static GamePacket Encoded(int networkId)
+                {
+                    var packet = new GamePacket(Header);
+
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(networkId);
+
+                    return packet;
+                }
+            }
+
+            #endregion
+
+            #region RemoveHighlightUnit
+
+            /// <summary>
+            /// Packet remove highlights unit.
+            /// </summary>
+            public class RemoveHighlightUnit
+            {
+                public static byte Header = 0xB4;
+
+                public static GamePacket Encoded(int networkId)
+                {
+                    var packet = new GamePacket(Header);
+
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(networkId);
+
                     return packet;
                 }
             }
