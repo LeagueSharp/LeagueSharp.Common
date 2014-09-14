@@ -68,6 +68,11 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        public static void DebugMessage(string debugMessage)
+        {
+            Packet.S2C.DebugMessage.Encoded(debugMessage).Process();
+        }
+
         public static void PrintFloatText(GameObject obj,  string text, Packet.FloatTextPacket type)
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();

@@ -1311,6 +1311,28 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region DebugMessage
+
+            /// <summary>
+            /// Packet received for debug message.
+            /// </summary>
+            public class DebugMessage
+            {
+                public static byte Header = 0xF7;
+
+                public static GamePacket Encoded(String debugString)
+                {
+                    var packet = new GamePacket(Header);
+
+                    packet.WriteByte(0, 8);
+                    packet.WriteString(debugString);
+                    packet.WriteByte(0);
+                    return packet;
+                }
+            }
+
+            #endregion
         }
     }
 }
