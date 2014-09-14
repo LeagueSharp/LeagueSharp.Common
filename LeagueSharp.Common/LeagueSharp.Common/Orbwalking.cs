@@ -529,6 +529,7 @@ namespace LeagueSharp.Common
         {
             if (target != null && CanAttack())
             {
+                Packet.S2C.HighlightUnit.Encoded(target.NetworkId);
                 DisableNextAttack = false;
                 FireBeforeAttack(target);
 
@@ -539,6 +540,7 @@ namespace LeagueSharp.Common
                     {
                         LastAATick = Environment.TickCount + Game.Ping / 2;
                     }
+                    Packet.S2C.RemoveHighlightUnit.Encoded(target.NetworkId);
                     return;
                 }
             }
