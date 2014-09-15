@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Xml;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -418,7 +417,18 @@ namespace LeagueSharp.Common
                 {
                     return 0;
                 }
-                return Parent.YLevel + Parent.Children.TakeWhile(test => test.Name != Name).Count();
+                var result = Parent.YLevel;
+
+                foreach (var test in Parent.Children)
+                {
+                    if (test.Name == Name)
+                    {
+                        break;
+                    }
+                    result++;
+                }
+
+                return result;
             }
         }
 
@@ -431,7 +441,15 @@ namespace LeagueSharp.Common
                     return _cachedMenuCount;
                 }
                 var l = Global.Read<List<string>>("CommonMenuList");
-                var result = l.TakeWhile(s => s != DisplayName + Name).Count();
+                var result = 0;
+                foreach (var s in l)
+                {
+                    if (s == DisplayName + Name)
+                    {
+                        break;
+                    }
+                    result++;
+                }
 
                 _cachedMenuCount = result;
                 _cachedMenuCountT = Environment.TickCount;
@@ -479,7 +497,7 @@ namespace LeagueSharp.Common
                 {
                     return false;
                 }
-                return IsRootMenu || _visible;
+                return IsRootMenu ? true : _visible;
             }
             set { _visible = value; }
         }
@@ -671,13 +689,28 @@ namespace LeagueSharp.Common
             }
 
             //Search in submenus
-            return (from subMenu in Children where subMenu.Item(name) != null select subMenu.Item(name)).FirstOrDefault();
+            foreach (var subMenu in Children)
+            {
+                if (subMenu.Item(name) != null)
+                {
+                    return subMenu.Item(name);
+                }
+            }
+
+            return null;
         }
 
         public Menu SubMenu(string name)
         {
             //Search in submenus
-            return Children.FirstOrDefault(subMenu => subMenu.Name == name);
+            foreach (var subMenu in Children)
+            {
+                if (subMenu.Name == name)
+                {
+                    return subMenu;
+                }
+            }
+            return null;
         }
     }
 
@@ -783,7 +816,17 @@ namespace LeagueSharp.Common
                 {
                     return 0;
                 }
-                return Parent.YLevel + Parent.Children.Count + Parent.Items.TakeWhile(test => test.Name != Name).Count();
+                var result = Parent.YLevel + Parent.Children.Count;
+
+                foreach (var test in Parent.Items)
+                {
+                    if (test.Name == Name)
+                    {
+                        break;
+                    }
+                    result++;
+                }
+                return result;
             }
         }
 
@@ -1005,7 +1048,7 @@ namespace LeagueSharp.Common
                     if (cursorPos.X > Position.X + Width - Height)
                     {
                         var c = GetValue<Color>();
-                        ColorPicker.Load(args => SetValue(args), c);
+                        ColorPicker.Load(delegate(Color args) { SetValue(args); }, c);
                     }
 
                     break;

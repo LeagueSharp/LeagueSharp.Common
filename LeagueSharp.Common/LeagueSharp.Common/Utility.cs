@@ -216,7 +216,11 @@ namespace LeagueSharp.Common
             if (unit.IsVisible)
             {
                 result.Add(unit.ServerPosition.To2D());
-                result.AddRange(unit.Path.Select(point => point.To2D()));
+
+                foreach (var point in unit.Path)
+                {
+                    result.Add(point.To2D());
+                }
             }
             else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
             {
@@ -236,7 +240,15 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName = false)
         {
-            return unit.Buffs.Any(buff => ((!dontUseDisplayName && buff.DisplayName == buffName) || (dontUseDisplayName && buff.Name == buffName)) && buff.IsActive && buff.EndTime - Game.Time >= 0);
+            foreach (var buff in unit.Buffs)
+            {
+                if (((!dontUseDisplayName && buff.DisplayName == buffName) ||
+                     (dontUseDisplayName && buff.Name == buffName)) && buff.IsActive && buff.EndTime - Game.Time >= 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>

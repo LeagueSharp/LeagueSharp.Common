@@ -460,7 +460,7 @@ namespace LeagueSharp.Common
 
             foreach (var gapcloser in ActiveGapclosers)
             {
-                if (gapcloser.Sender.IsValidTarget())
+                if (gapcloser.Sender.IsValidTarget(float.MaxValue))
                 {
                     if (gapcloser.SkillType == GapcloserType.Targeted ||
                         (gapcloser.SkillType == GapcloserType.Skillshot &&

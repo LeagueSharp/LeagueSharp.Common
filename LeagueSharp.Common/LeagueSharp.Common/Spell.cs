@@ -484,7 +484,7 @@ namespace LeagueSharp.Common
         {
             if (t == 0 || ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready)
             {
-                return (t != 0) || ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready;
+                return (t == 0) ? ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready : true;
             }
 
             return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
@@ -533,13 +533,26 @@ namespace LeagueSharp.Common
 
         internal int CountHits(List<Obj_AI_Base> units, Vector3 castPosition)
         {
-            var points = units.Select(unit => GetPrediction(unit).UnitPosition).ToList();
+            var points = new List<Vector3>();
+            foreach (var unit in units)
+            {
+                points.Add(GetPrediction(unit).UnitPosition);
+            }
             return CountHits(points, castPosition);
         }
 
         internal int CountHits(List<Vector3> points, Vector3 castPosition)
         {
-            return points.Count(point => WillHit(point, castPosition));
+            var hits = 0;
+            foreach (var point in points)
+            {
+                if (WillHit(point, castPosition, 0))
+                {
+                    hits++;
+                }
+            }
+
+            return hits;
         }
 
         /// <summary>
