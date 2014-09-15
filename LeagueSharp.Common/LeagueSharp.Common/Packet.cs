@@ -1377,6 +1377,37 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region PlayerDisconnect
+
+            /// <summary>
+            /// Packet received on player disconnect.
+            /// </summary>
+            public class PlayerDisconnect
+            {
+                public static byte Header = 0x98;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+
+                    packet.Position = 5;
+                    result.NetworkId = packet.ReadInteger();
+                    result.Player = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.NetworkId);
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public Obj_AI_Hero Player;
+                }
+            }
+
+            #endregion
         }
     }
 }
