@@ -62,8 +62,8 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-            var packet = new GamePacket(args.PacketData);
-            packet.Position = 1;
+            var packet = new GamePacket(args.PacketData) 
+            { Position = 1 };
             var networkId = packet.ReadInteger();
             if (args.PacketData[9] != 17)
             {

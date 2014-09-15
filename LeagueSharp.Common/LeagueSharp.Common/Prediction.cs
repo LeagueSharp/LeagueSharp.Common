@@ -400,16 +400,7 @@ namespace LeagueSharp.Common
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
-            var result = 0d;
-            foreach (var buff in unit.Buffs)
-            {
-                if (buff.IsActive && Game.Time <= buff.EndTime &&
-                    (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
-                     buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
-                {
-                    result = Math.Max(result, buff.EndTime);
-                }
-            }
+            var result = unit.Buffs.Where(buff => buff.IsActive && Game.Time <= buff.EndTime && (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun || buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare)).Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
             return (result - Game.Time);
         }
 
@@ -420,9 +411,6 @@ namespace LeagueSharp.Common
 
             if (path.Count == 1)
             {
-                var rTime = input.Delay + input.Unit.Distance(input.From) / input.Speed - input.RealRadius / speed -
-                            0.15d;
-
                 return new PredictionOutput
                 {
                     Input = input,
@@ -615,19 +603,7 @@ namespace LeagueSharp.Common
         {
             internal static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
             {
-                var result = 0;
-                foreach (var point in points)
-                {
-                    var edge1 = end.Rotated(-angle / 2);
-                    var edge2 = edge1.Rotated(angle);
-                    if (point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
-                        point.CrossProduct(edge2) > 0)
-                    {
-                        result++;
-                    }
-                }
-
-                return result;
+                return (from point in points let edge1 = end.Rotated(-angle / 2) let edge2 = edge1.Rotated(angle) where point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 && point.CrossProduct(edge2) > 0 select point).Count();
             }
 
             public static PredictionOutput GetPrediction(PredictionInput input)
@@ -980,11 +956,6 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
-            if (!TrackAllies && sender.Team != ObjectManager.Player.Team)
-            {
-                return;
-            }
-
             if (!StoredPaths.ContainsKey(sender.NetworkId))
             {
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());
@@ -1015,7 +986,7 @@ namespace LeagueSharp.Common
 
             foreach (var path in paths)
             {
-                var k = 1; //(MaxTime - path.Time);
+                const int k = 1; //(MaxTime - path.Time);
                 result = result + k * (path.EndPoint - unit.ServerPosition.To2D() /*path.StartPoint*/).Normalized();
             }
 

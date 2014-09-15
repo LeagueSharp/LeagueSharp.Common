@@ -149,8 +149,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static string GetLocation()
         {
-            string FileLoc;
-            FileLoc = Assembly.GetExecutingAssembly().Location;
+            var FileLoc = Assembly.GetExecutingAssembly().Location;
             return FileLoc.Remove(FileLoc.LastIndexOf("\\", StringComparison.Ordinal));
         }
     }
