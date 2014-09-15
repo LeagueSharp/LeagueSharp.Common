@@ -312,24 +312,10 @@ namespace LeagueSharp.Common
             {
                 rS = rL;
             }
-            bool isOnSegment;
-            if (rS.CompareTo(rL) == 0)
-            {
-                isOnSegment = true;
-            }
-            else
-            {
-                isOnSegment = false;
-            }
+
+            var isOnSegment = rS.CompareTo(rL) == 0;
             var pointSegment = new Vector2();
-            if (isOnSegment)
-            {
-                pointSegment = pointLine;
-            }
-            else
-            {
-                pointSegment = new Vector2(ax + rS * (bx - ax), ay + rS * (by - ay));
-            }
+            pointSegment = isOnSegment ? pointLine : new Vector2(ax + rS * (bx - ax), ay + rS * (@by - ay));
             return new ProjectionInfo(isOnSegment, pointSegment, pointLine);
         }
 
