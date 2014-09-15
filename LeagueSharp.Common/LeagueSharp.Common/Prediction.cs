@@ -305,6 +305,7 @@ namespace LeagueSharp.Common
             {
                 var positions = new List<Vector3> { result.UnitPosition, result.CastPosition, input.Unit.Position };
                 result.CollisionObjects = Collision.GetCollision(positions, input);
+                result.CollisionObjects.Remove(input.Unit);
                 result.Hitchance = result.CollisionObjects.Count > 0 ? HitChance.Collision : result.Hitchance;
             }
 
