@@ -90,6 +90,7 @@ namespace LeagueSharp.Common
         public static bool Move = true;
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
+        public static Obj_AI_Base LastHighlighted;
 
         static Orbwalking()
         {
@@ -529,7 +530,9 @@ namespace LeagueSharp.Common
         {
             if (target != null && CanAttack())
             {
-                Packet.S2C.HighlightUnit.Encoded(target.NetworkId);
+
+                Orbwalker.HighlightTarget(target);
+
                 DisableNextAttack = false;
                 FireBeforeAttack(target);
 
@@ -540,7 +543,7 @@ namespace LeagueSharp.Common
                     {
                         LastAATick = Environment.TickCount + Game.Ping / 2;
                     }
-                    Packet.S2C.RemoveHighlightUnit.Encoded(target.NetworkId);
+
                     return;
                 }
             }
@@ -630,7 +633,7 @@ namespace LeagueSharp.Common
         {
             private const float LaneClearWaitTimeMod = 2f;
             private readonly Obj_AI_Hero Player;
-            private readonly Menu _config;
+            private static Menu _config;
 
             private Obj_AI_Base _forcedTarget;
             private Vector3 _orbwalkingPoint;
@@ -648,7 +651,9 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
-
+                drawings.AddItem(
+              new MenuItem("Highlight", "Highlight Target").SetShared()
+                  .SetValue(true));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -745,6 +750,20 @@ namespace LeagueSharp.Common
                 _forcedTarget = target;
             }
 
+            /// <summary>
+            ///     Highlights or removes a highlight from a unit.
+            /// </summary>
+            public static void HighlightTarget(Obj_AI_Base target)
+            {
+                if (!_config.Item("Highlight").GetValue<bool>())
+                    return;
+
+                if (Orbwalking.LastHighlighted == null || Orbwalking.LastHighlighted != target){
+                    Utility.HighlightUnit(target);
+                    Utility.HighlightUnit(Orbwalking.LastHighlighted, false);
+                    Orbwalking.LastHighlighted = target;
+                }
+            }
 
             /// <summary>
             ///     Forces the orbwalker to move to that point while orbwalking (Game.CursorPos by default).

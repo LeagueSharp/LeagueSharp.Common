@@ -68,6 +68,14 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        public static void HighlightUnit(Obj_AI_Base unit, bool showHighlight = true)
+        {
+            if (showHighlight)
+                Packet.S2C.HighlightUnit.Encoded(unit.NetworkId).Process();
+            else
+                Packet.S2C.RemoveHighlightUnit.Encoded(unit.NetworkId).Process();
+        }
+
         public static void DebugMessage(string debugMessage)
         {
             Packet.S2C.DebugMessage.Encoded(debugMessage).Process();
