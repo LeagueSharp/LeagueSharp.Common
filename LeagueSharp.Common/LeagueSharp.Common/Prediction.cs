@@ -418,7 +418,7 @@ namespace LeagueSharp.Common
         {
             speed = (speed == -1) ? input.Unit.MoveSpeed : speed;
 
-            if (path.Count == 1)
+            if (path.Count <= 1)
             {
                 var rTime = input.Delay + input.Unit.Distance(input.From) / input.Speed - input.RealRadius / speed -
                             0.15d;
