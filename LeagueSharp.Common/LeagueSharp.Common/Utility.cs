@@ -203,7 +203,7 @@ namespace LeagueSharp.Common
                 }
                 Distance -= dist;
             }
-            return result;
+            return result.Count > 0 ? result : path.Last();
         }
 
         /// <summary>
