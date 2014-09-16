@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -24,9 +26,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Color = System.Drawing.Color;
-
 using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -43,6 +44,8 @@ namespace LeagueSharp.Common
 
         public delegate void OnAttackEvenH(Obj_AI_Base unit, Obj_AI_Base target);
 
+        public delegate void OnTargetChangeH(Obj_AI_Base oldTarget, Obj_AI_Base newTarget);
+
         public enum OrbwalkingMode
         {
             LastHit,
@@ -55,13 +58,12 @@ namespace LeagueSharp.Common
         //Spells that reset the attack timer.
         private static readonly string[] AttackResets =
         {
-            "dariusnoxiantacticsonh",
-            "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
-             "leonashieldofdaybreak", "luciane", "lucianq", 
+            "dariusnoxiantacticsonh", "fioraflurry", "garenq",
+            "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane", "lucianq",
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
             "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
-            "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie",
-            "volibearq", "xenzhaocombotarget", "yorickspectral"
+            "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+            "xenzhaocombotarget", "yorickspectral"
         };
 
         //Spells that are not attacks even if they have the "attack" word in their name.
@@ -378,6 +380,11 @@ namespace LeagueSharp.Common
         /// </summary>
         public static event AfterAttackEvenH AfterAttack;
 
+        /// <summary>
+        ///     Gets called on target switches
+        /// </summary>
+        public static event OnTargetChangeH OnTargetChange;
+
         private static void FireBeforeAttack(Obj_AI_Base target)
         {
             if (BeforeAttack != null)
@@ -403,6 +410,14 @@ namespace LeagueSharp.Common
             if (AfterAttack != null)
             {
                 AfterAttack(unit, target);
+            }
+        }
+
+        private static void FireOnTargetSwitch(Obj_AI_Base newTarget)
+        {
+            if (OnTargetChange != null && _lastTarget != null && _lastTarget.NetworkId != newTarget.NetworkId)
+            {
+                OnTargetChange(_lastTarget, newTarget);
             }
         }
 
@@ -595,6 +610,7 @@ namespace LeagueSharp.Common
                     LastAATick = Environment.TickCount - Game.Ping / 2;
                     if (Spell.Target is Obj_AI_Base)
                     {
+                        FireOnTargetSwitch((Obj_AI_Base) Spell.Target);
                         _lastTarget = (Obj_AI_Base) Spell.Target;
                     }
 
@@ -660,8 +676,7 @@ namespace LeagueSharp.Common
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 150, 0)));
-                misc.AddItem(
-                    new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
+                misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 _config.AddSubMenu(misc);
 
 
@@ -793,7 +808,8 @@ namespace LeagueSharp.Common
                 Obj_AI_Base result = null;
                 float[] r = { float.MaxValue };
 
-                if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) && !_config.Item("PriorizeFarm").GetValue<bool>())
+                if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
+                    !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = SimpleTs.GetTarget(-1, SimpleTs.DamageType.Physical);
                     if (target != null)
