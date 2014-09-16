@@ -381,7 +381,7 @@ namespace LeagueSharp.Common
         public static event AfterAttackEvenH AfterAttack;
 
         /// <summary>
-        ///     Gets called on target switches
+        ///     Gets called on target changes
         /// </summary>
         public static event OnTargetChangeH OnTargetChange;
 
