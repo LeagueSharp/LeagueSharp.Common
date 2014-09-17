@@ -75,7 +75,11 @@ namespace LeagueSharp.Common
         public long Position
         {
             get { return Br.BaseStream.Position; }
-            set { Br.BaseStream.Position = value; }
+            set
+            {
+                if (value >= 0L)
+                    Br.BaseStream.Position = value;
+            }
         }
 
         /// <summary>
@@ -89,41 +93,47 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Reads a byte from the packet and increases the position by 1.
         /// </summary>
-        public byte ReadByte()
+        public byte ReadByte(long position = -1)
         {
+            Position = position;
             return Br.ReadBytes(1)[0];
         }
 
         /// <summary>
         /// Reads and returns a double byte.
         /// </summary>
-        public short ReadShort()
+        public short ReadShort(long position = -1)
         {
+            Position = position;
             return BitConverter.ToInt16(Br.ReadBytes(2), 0);
         }
 
         /// <summary>
         /// Reads and returns a float.
         /// </summary>
-        public float ReadFloat()
+        public float ReadFloat(long position = -1)
         {
+            Position = position;
             return BitConverter.ToSingle(Br.ReadBytes(4), 0);
         }
 
         /// <summary>
         /// Reads and returns an integer.
         /// </summary>
-        public int ReadInteger()
+        public int ReadInteger(long position = -1)
         {
+            Position = position;
             return BitConverter.ToInt32(Br.ReadBytes(4), 0);
         }
 
         /// <summary>
         /// Reads and returns a string.
         /// </summary>
-        public string ReadString()
+        public string ReadString(long position = -1)
         {
+
             string result = "";
+            Position = position;
 
             for (int i = 1; i < (Size() - Position); i++)
             {

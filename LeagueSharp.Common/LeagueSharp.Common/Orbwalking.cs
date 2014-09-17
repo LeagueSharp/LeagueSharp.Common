@@ -415,8 +415,10 @@ namespace LeagueSharp.Common
 
         private static void FireOnTargetSwitch(Obj_AI_Base newTarget)
         {
-            if (OnTargetChange != null && _lastTarget != null && _lastTarget.NetworkId != newTarget.NetworkId)
+            if (OnTargetChange != null && (_lastTarget == null || _lastTarget.NetworkId != newTarget.NetworkId))
             {
+                Orbwalker.HighlightTarget(newTarget);
+                Orbwalker.HighlightTarget(_lastTarget, false);
                 OnTargetChange(_lastTarget, newTarget);
             }
         }
@@ -523,7 +525,7 @@ namespace LeagueSharp.Common
         {
             if (Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
-                if (Player.Path.Count() > 0)
+                if (Player.Path.Count() >= 0)
                 {
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
                 }
@@ -545,9 +547,6 @@ namespace LeagueSharp.Common
         {
             if (target != null && CanAttack())
             {
-
-                Orbwalker.HighlightTarget(target);
-
                 DisableNextAttack = false;
                 FireBeforeAttack(target);
 
@@ -579,21 +578,8 @@ namespace LeagueSharp.Common
 
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == 0x34)
-            {
-                var stream = new MemoryStream(args.PacketData);
-                var b = new BinaryReader(stream);
-                b.BaseStream.Position = b.BaseStream.Position + 1;
-                var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(BitConverter.ToInt32(b.ReadBytes(4), 0));
-
-                if (args.PacketData[9] == 17)
-                {
-                    if (unit.IsMe)
-                    {
-                        ResetAutoAttackTimer();
-                    }
-                }
-            }
+            if (args.PacketData[0] == 0x34 && args.PacketData[9] == 17 && new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
+                ResetAutoAttackTimer();
         }
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
@@ -768,16 +754,13 @@ namespace LeagueSharp.Common
             /// <summary>
             ///     Highlights or removes a highlight from a unit.
             /// </summary>
-            public static void HighlightTarget(Obj_AI_Base target)
+            public static void HighlightTarget(Obj_AI_Base target, bool showHighlight = true)
             {
-                if (!_config.Item("Highlight").GetValue<bool>())
+                if (!_config.Item("Highlight").GetValue<bool>() || !(target is Obj_AI_Hero))
                     return;
+                
+                Utility.HighlightUnit(target, showHighlight);
 
-                if (Orbwalking.LastHighlighted == null || Orbwalking.LastHighlighted != target){
-                    Utility.HighlightUnit(target);
-                    Utility.HighlightUnit(Orbwalking.LastHighlighted, false);
-                    Orbwalking.LastHighlighted = target;
-                }
             }
 
             /// <summary>
