@@ -148,7 +148,7 @@ namespace LeagueSharp.Common
             private static Vector3 _offset = new Vector3(0, 0, 0);
 
 
-            public Circle(Obj_AI_Base unit, float radius, Color color, int width = 1, bool zDeep = false)
+            public Circle(GameObject unit, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
                 Unit = unit;
@@ -157,7 +157,7 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
             }
 
-            public Circle(Obj_AI_Base unit, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
+            public Circle(GameObject unit, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
                 Unit = unit;
@@ -188,7 +188,7 @@ namespace LeagueSharp.Common
             }
 
             public Vector3 Position { get; set; }
-            public Obj_AI_Base Unit { get; set; }
+            public GameObject Unit { get; set; }
 
             public float Radius { get; set; }
             public Color Color { get; set; }
