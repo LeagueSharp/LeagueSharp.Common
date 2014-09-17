@@ -92,7 +92,6 @@ namespace LeagueSharp.Common
         public static bool Move = true;
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
-        public static Obj_AI_Base LastHighlighted;
 
         static Orbwalking()
         {
