@@ -524,7 +524,7 @@ namespace LeagueSharp.Common
         {
             if (Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
-                if (Player.Path.Count() >= 0)
+                if (Player.Path.Count() > 1)
                 {
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
                 }
