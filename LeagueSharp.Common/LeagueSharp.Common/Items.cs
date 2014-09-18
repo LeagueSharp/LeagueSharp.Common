@@ -168,15 +168,10 @@ namespace LeagueSharp.Common
         public static InventorySlot GetWardSlot()
         {
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
-            foreach (var wardId in wardIds)
-            {
-                if (CanUseItem(wardId))
-                {
-                    return ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId) wardId);
-                }
-            }
-
-            return null;
+            return (from wardId in wardIds
+                where CanUseItem(wardId)
+                select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId) wardId))
+                .FirstOrDefault();
         }
 
         public class Item

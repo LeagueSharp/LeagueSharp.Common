@@ -132,12 +132,12 @@ namespace LeagueSharp.Common
         public string ReadString(long position = -1)
         {
 
-            string result = "";
+            var result = "";
             Position = position;
 
-            for (int i = 1; i < (Size() - Position); i++)
+            for (var i = 1; i < (Size() - Position); i++)
             {
-                byte num = ReadByte();
+                var num = ReadByte();
 
                 if (num == 0)
                     return result;
