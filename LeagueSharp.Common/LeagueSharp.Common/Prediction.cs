@@ -969,7 +969,6 @@ namespace LeagueSharp.Common
 
     internal static class PathTracker
     {
-        private const bool TrackAllies = true;
         private const double MaxTime = 1.5d;
         private static readonly Dictionary<int, List<StoredPath>> StoredPaths = new Dictionary<int, List<StoredPath>>();
 
@@ -980,11 +979,6 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
-            if (!TrackAllies && sender.Team != ObjectManager.Player.Team)
-            {
-                return;
-            }
-
             if (!StoredPaths.ContainsKey(sender.NetworkId))
             {
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());
