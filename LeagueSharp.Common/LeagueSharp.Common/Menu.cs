@@ -154,7 +154,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("BackgroundColor");
-                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.DarkSlateGray);
+                varNode.InnerText = ColorTranslator.ToHtml(Color.DarkSlateGray);
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("BackgroundColorAlpha");
@@ -162,7 +162,7 @@ namespace LeagueSharp.Common
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("ActiveColor");
-                varNode.InnerText = System.Drawing.ColorTranslator.ToHtml(Color.Red);
+                varNode.InnerText = ColorTranslator.ToHtml(Color.Red);
                 rootNode.AppendChild(varNode);
 
                 varNode = Xml.CreateElement("ActiveColorAlpha");
@@ -239,7 +239,7 @@ namespace LeagueSharp.Common
                     return _chachedBgColor;
                 }
 
-                var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("BackgroundColor"));
+                var color = ColorTranslator.FromHtml(GetXmlValue("BackgroundColor"));
                 var alpha = GetXmlValue("BackgroundColorAlpha");
                 _chachedBgColor = Color.FromArgb(Convert.ToInt32(alpha), color);
                 return _chachedBgColor;
@@ -255,7 +255,7 @@ namespace LeagueSharp.Common
                     return _chachedActiveColor;
                 }
 
-                var color = System.Drawing.ColorTranslator.FromHtml(GetXmlValue("ActiveColor"));
+                var color = ColorTranslator.FromHtml(GetXmlValue("ActiveColor"));
                 var alpha = GetXmlValue("ActiveColorAlpha");
                 _chachedActiveColor = Color.FromArgb(Convert.ToInt32(alpha), color);
                 return _chachedActiveColor;
@@ -594,7 +594,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal void Drawing_OnDraw(System.EventArgs args)
+        internal void Drawing_OnDraw(EventArgs args)
         {
             if (!Visible)
             {
@@ -1015,10 +1015,6 @@ namespace LeagueSharp.Common
                     }
 
                     if (message != WindowsMessages.WM_LBUTTONDOWN && message != WindowsMessages.WM_LBUTTONUP)
-                    {
-                        return;
-                    }
-                    if (!Visible)
                     {
                         return;
                     }

@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
-using Color = System.Drawing.Color;
 
 #endregion
 
@@ -420,9 +419,6 @@ namespace LeagueSharp.Common
 
             if (path.Count <= 1)
             {
-                var rTime = input.Delay + input.Unit.Distance(input.From) / input.Speed - input.RealRadius / speed -
-                            0.15d;
-
                 return new PredictionOutput
                 {
                     Input = input,

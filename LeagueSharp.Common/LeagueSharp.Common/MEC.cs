@@ -43,7 +43,7 @@ namespace LeagueSharp.Common
         public static MecCircle GetMec(List<Vector2> points)
         {
             var center = new Vector2();
-            float radius = 0;
+            float radius;
 
             var ConvexHull = MakeConvexHull(points);
             FindMinimalBoundingCircle(ConvexHull, out center, out radius);

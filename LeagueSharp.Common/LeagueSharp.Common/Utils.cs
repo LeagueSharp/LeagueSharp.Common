@@ -52,7 +52,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Vector2 GetCursorPos()
         {
-            return Utils.CursorPosT.GetCursorPos();
+            return CursorPosT.GetCursorPos();
         }
 
 

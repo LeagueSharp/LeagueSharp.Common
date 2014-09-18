@@ -258,7 +258,7 @@ namespace LeagueSharp.Common
 
         public List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> to, float delayOverride = -1)
         {
-            return LeagueSharp.Common.Collision.GetCollision(to.Select(h => h.To3D()).ToList(), new PredictionInput
+            return Common.Collision.GetCollision(to.Select(h => h.To3D()).ToList(), new PredictionInput
             {
                 From = from.To3D(),
                 Type = Type,
@@ -539,7 +539,7 @@ namespace LeagueSharp.Common
 
         internal int CountHits(List<Vector3> points, Vector3 castPosition)
         {
-            return points.Count(point => WillHit(point, castPosition, 0));
+            return points.Count(point => WillHit(point, castPosition));
         }
 
         /// <summary>
