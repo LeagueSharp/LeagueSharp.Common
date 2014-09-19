@@ -4247,15 +4247,15 @@ namespace LeagueSharp.Common
                         case StageType.Default:
                             return
                                 CalcPhysicalDmg(
-                                    20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 60) +
-                                    (1.05 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.15)) *
+                                    30 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 60) +
+                                    (105 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 15)) *
                                     (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
                                     enemy);
                         case StageType.FirstDamage:
                             return
                                 CalcPhysicalDmg(
                                     -10 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 20) +
-                                    (0.35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.05)) *
+                                    (0.35 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 0.5)) *
                                     (ObjectManager.Player.FlatPhysicalDamageMod + ObjectManager.Player.BaseAttackDamage),
                                     enemy);
                         default:
@@ -4264,24 +4264,22 @@ namespace LeagueSharp.Common
                 case SpellType.W:
                     return
                         CalcPhysicalDmg(
-                            50 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level * 30) +
+                            20 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 30) +
                             (1.0 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                 case SpellType.E:
                     throw new InvalidSpellTypeException();
                 case SpellType.R:
-                    var minDmg = 0.0;
-                    var dmg = 0.0
-                    minDmg = (80 + (40 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R - 1))) + 0.6 * ((0.2 * (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)) + Player.FlatPhysicalDamageMod);
-                    var targetPercentHealthMissing = 100 * (1 - enemy.Health / enemy.MaxHealth);
-                    if (targetPercentHealthMissing > 75.0f)
+                    if ((enemy.Health / enemy.MaxHealth) * 100 > 25)
                     {
-                        dmg = minDmg * 3;
+                        return
+                            CalcPhysicalDmg(
+                                40 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 40) +
+                                (0.6 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                     }
-                    else
-                    {
-                        dmg = minDmg + minDmg * (0.0267 * targetPercentHealthMissing);
-                    }
-                    return CalcPhysicalDmg(dmg - 10, enemy);
+                    return
+                        CalcPhysicalDmg(
+                            120 + (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level * 120) +
+                            (1.8 * ObjectManager.Player.FlatPhysicalDamageMod), enemy);
                 default:
                     throw new InvalidSpellTypeException();
             }
