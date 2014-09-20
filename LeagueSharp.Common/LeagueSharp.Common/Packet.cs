@@ -447,7 +447,7 @@ namespace LeagueSharp.Common
                     {
                         SlotId = slotId;
                         SlotByte = (byte)slotId;
-                        if (SlotByte >= (byte)SpellSlot.Item1 && SlotByte <= (byte)SpellSlot.Item6)
+                        if (SlotByte >= (byte)SpellSlot.Item1 && SlotByte <= (byte)SpellSlot.Trinket)
                         {
                             SlotByte = (byte)(0x80 + SlotByte - (byte)SpellSlot.Item1);
                         }
