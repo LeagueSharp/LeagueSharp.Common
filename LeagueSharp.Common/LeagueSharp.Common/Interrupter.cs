@@ -28,6 +28,7 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
+    public delegate void OnPosibleToInterruptH(Obj_AI_Base unit, InterruptableSpell spell);
     public delegate void OnPossibleToInterruptH(Obj_AI_Base unit, InterruptableSpell spell);
 
     public enum InterruptableDangerLevel
@@ -309,7 +310,7 @@ namespace LeagueSharp.Common
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
-
+        public static event OnPosibleToInterruptH OnPosibleToInterrupt;
         public static event OnPossibleToInterruptH OnPossibleToInterrupt;
 
         private static void FireOnInterruptable(Obj_AI_Base unit, InterruptableSpell spell)
@@ -317,6 +318,11 @@ namespace LeagueSharp.Common
             if (OnPossibleToInterrupt != null)
             {
                 OnPossibleToInterrupt(unit, spell);
+            }
+
+            if (OnPosibleToInterrupt != null)
+            {           
+                OnPosibleToInterrupt(unit, spell);
             }
         }
 
