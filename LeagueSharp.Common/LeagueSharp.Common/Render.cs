@@ -209,7 +209,7 @@ namespace LeagueSharp.Common
                     {
                         DrawCircle(Unit.Position + _offset, Radius, Color, Width, ZDeep);
                     }
-                    else if ((Position+_offset).To2D().IsValid())
+                    else if ((Position + _offset).To2D().IsValid())
                     {
                         DrawCircle(Position + _offset, Radius, Color, Width, ZDeep);
                     }
@@ -1093,28 +1093,31 @@ namespace LeagueSharp.Common
             private readonly Font _textFont;
 
             public bool Centered = false;
+            public Vector2 Offset;
             public bool OutLined = false;
 
             public PositionDelegate PositionUpdate;
             public FontDescription TextFontDescription;
             public TextDelegate TextUpdate;
+            public Obj_AI_Base Unit;
 
             private string _text;
             private int _x;
             private int _y;
 
-            public Text(string text, int x, int y, int size, ColorBGRA color, string faceName = "Calibri")
+            public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri")
             {
                 Color = color;
                 this.text = text;
 
                 _x = x;
                 _y = y;
+
                 _textFont = new Font(
                     Device,
                     new FontDescription
                     {
-                        FaceName = faceName,
+                        FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
                         Quality = FontQuality.Default,
@@ -1122,7 +1125,70 @@ namespace LeagueSharp.Common
             }
 
 
-            public Text(string text, Vector2 position, int size, ColorBGRA color, string faceName = "Calibri")
+            public Text(string text, Vector2 position, int size, ColorBGRA color, string fontName = "Calibri")
+            {
+                Color = color;
+                this.text = text;
+
+                _x = (int)position.X;
+                _y = (int)position.Y;
+
+                _textFont = new Font(
+                    Device,
+                    new FontDescription
+                    {
+                        FaceName = fontName,
+                        Height = size,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default,
+                    });
+            }
+
+            public Text(string text, Obj_AI_Base unit, Vector2 offset, int size, ColorBGRA color,
+                string fontName = "Calibri")
+            {
+                Unit = unit;
+                Color = color;
+                this.text = text;
+                Offset = offset;
+
+                var pos = unit.HPBarPosition + offset;
+
+                _x = (int)pos.X;
+                _y = (int)pos.Y;
+
+                _textFont = new Font(
+                    Device,
+                    new FontDescription
+                    {
+                        FaceName = fontName,
+                        Height = size,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default,
+                    });
+            }
+
+            public Text(int x, int y, string text, int size, ColorBGRA color, string fontName = "Calibri")
+            {
+                Color = color;
+                this.text = text;
+
+                _x = x;
+                _y = y;
+
+                _textFont = new Font(
+                    Device,
+                    new FontDescription
+                    {
+                        FaceName = fontName,
+                        Height = size,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default,
+                    });
+            }
+
+
+            public Text(Vector2 position, string text, int size, ColorBGRA color, string fontName = "Calibri")
             {
                 Color = color;
                 this.text = text;
@@ -1132,44 +1198,7 @@ namespace LeagueSharp.Common
                     Device,
                     new FontDescription
                     {
-                        FaceName = faceName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default,
-                    });
-            }
-
-
-            public Text(int x, int y, string text, int size, ColorBGRA color, string faceName = "Calibri")
-            {
-                Color = color;
-                this.text = text;
-
-                _x = x;
-                _y = y;
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = faceName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default,
-                    });
-            }
-
-
-            public Text(Vector2 position, string text, int size, ColorBGRA color, string faceName = "Calibri")
-            {
-                Color = color;
-                this.text = text;
-                _x = (int)position.X;
-                _y = (int)position.Y;
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = faceName,
+                        FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
                         Quality = FontQuality.Default,
@@ -1225,6 +1254,14 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
+
+                    if (Unit != null && Unit.IsValid)
+                    {
+                        var pos = Unit.HPBarPosition + Offset;
+                        X = (int)pos.X;
+                        Y = (int)pos.Y;
+                    }
+
                     var xP = X;
                     var yP = Y;
                     if (OutLined)
