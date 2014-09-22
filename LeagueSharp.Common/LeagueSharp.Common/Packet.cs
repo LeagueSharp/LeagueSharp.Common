@@ -33,8 +33,9 @@ namespace LeagueSharp.Common
     {
         public enum DamageTypePacket
         {
-            Magical = 4,
-            Physical = 12,
+            Spell = 4,
+            CriticalAttack = 11,
+            Attack = 12,
             True = 36,
         }
 
