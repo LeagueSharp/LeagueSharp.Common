@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -171,65 +173,64 @@ namespace LeagueSharp.Common
             Obj_AI_Hero newtarget = null;
             if (_mode != TargetingMode.AutoPriority)
             {
-                foreach (var target in ObjectManager.Get<Obj_AI_Hero>())
+                foreach (var target in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(target => target.IsValidTarget() && Geometry.Distance(target) <= _range))
                 {
-                    if (target.IsValidTarget() && Geometry.Distance(target) <= _range)
+                    if (newtarget == null)
                     {
-                        if (newtarget == null)
+                        newtarget = target;
+                    }
+                    else
+                    {
+                        switch (_mode)
                         {
-                            newtarget = target;
-                        }
-                        else
-                        {
-                            switch (_mode)
-                            {
-                                case TargetingMode.LowHP:
-                                    if (target.Health < newtarget.Health)
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                                case TargetingMode.MostAD:
-                                    if (target.BaseAttackDamage + target.FlatPhysicalDamageMod <
-                                        newtarget.BaseAttackDamage + newtarget.FlatPhysicalDamageMod)
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                                case TargetingMode.MostAP:
-                                    if (target.FlatMagicDamageMod < newtarget.FlatMagicDamageMod)
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                                case TargetingMode.Closest:
-                                    if (Geometry.Distance(target) < Geometry.Distance(newtarget))
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                                case TargetingMode.NearMouse:
-                                    if (SharpDX.Vector2.Distance(Game.CursorPos.To2D(), target.Position.To2D()) <
-                                        SharpDX.Vector2.Distance(Game.CursorPos.To2D(), newtarget.Position.To2D()))
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                                case TargetingMode.LessAttack:
-                                    if ((target.Health - DamageLib.CalcPhysicalDmg(target.Health, target)) <
-                                        (newtarget.Health - DamageLib.CalcPhysicalDmg(newtarget.Health, newtarget)))
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                                case TargetingMode.LessCast:
-                                    if ((target.Health - DamageLib.CalcMagicDmg(target.Health, target)) <
-                                        (target.Health - DamageLib.CalcMagicDmg(newtarget.Health, newtarget)))
-                                    {
-                                        newtarget = target;
-                                    }
-                                    break;
-                            }
+                            case TargetingMode.LowHP:
+                                if (target.Health < newtarget.Health)
+                                {
+                                    newtarget = target;
+                                }
+                                break;
+                            case TargetingMode.MostAD:
+                                if (target.BaseAttackDamage + target.FlatPhysicalDamageMod <
+                                    newtarget.BaseAttackDamage + newtarget.FlatPhysicalDamageMod)
+                                {
+                                    newtarget = target;
+                                }
+                                break;
+                            case TargetingMode.MostAP:
+                                if (target.FlatMagicDamageMod < newtarget.FlatMagicDamageMod)
+                                {
+                                    newtarget = target;
+                                }
+                                break;
+                            case TargetingMode.Closest:
+                                if (Geometry.Distance(target) < Geometry.Distance(newtarget))
+                                {
+                                    newtarget = target;
+                                }
+                                break;
+                            case TargetingMode.NearMouse:
+                                if (SharpDX.Vector2.Distance(Game.CursorPos.To2D(), target.Position.To2D()) + 50 <
+                                    SharpDX.Vector2.Distance(Game.CursorPos.To2D(), newtarget.Position.To2D()))
+                                {
+                                    newtarget = target;
+                                }
+                                break;
+                            case TargetingMode.LessAttack:
+                                if ((target.Health - DamageLib.CalcPhysicalDmg(target.Health, target)) <
+                                    (newtarget.Health - DamageLib.CalcPhysicalDmg(newtarget.Health, newtarget)))
+                                {
+                                    newtarget = target;
+                                }
+                                break;
+                            case TargetingMode.LessCast:
+                                if ((target.Health - DamageLib.CalcMagicDmg(target.Health, target)) <
+                                    (target.Health - DamageLib.CalcMagicDmg(newtarget.Health, newtarget)))
+                                {
+                                    newtarget = target;
+                                }
+                                break;
                         }
                     }
                 }
@@ -246,31 +247,33 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Hero autopriority = null;
             var prio = 5;
-            foreach (var target in ObjectManager.Get<Obj_AI_Hero>())
+            foreach (
+                var target in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(
+                            target => target != null && target.IsValidTarget() && Geometry.Distance(target) <= _range))
             {
-                if (target != null && target.IsValidTarget() && Geometry.Distance(target) <= _range)
+                var priority = FindPrioForTarget(target.ChampionName);
+                if (autopriority == null)
                 {
-                    if (autopriority == null)
+                    autopriority = target;
+                    prio = priority;
+                }
+                else
+                {
+                    if (priority < prio)
                     {
                         autopriority = target;
                         prio = FindPrioForTarget(target.ChampionName);
                     }
-                    else
+                    else if (priority == prio)
                     {
-                        if (FindPrioForTarget(target.ChampionName) < prio)
+                        if (!(target.Health < autopriority.Health))
                         {
-                            autopriority = target;
-                            prio = FindPrioForTarget(target.ChampionName);
+                            continue;
                         }
-                        else if (FindPrioForTarget(target.ChampionName) == prio)
-                        {
-                            if (!(target.Health < autopriority.Health))
-                            {
-                                continue;
-                            }
-                            autopriority = target;
-                            prio = FindPrioForTarget(target.ChampionName);
-                        }
+                        autopriority = target;
+                        prio = priority;
                     }
                 }
             }
@@ -375,30 +378,32 @@ namespace LeagueSharp.Common
             if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() &&
                 _config.Item("SelTColor").GetValue<Circle>().Active)
             {
-                Render.Circle.DrawCircle(_selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 7, true);
+                Render.Circle.DrawCircle(
+                    _selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 7, true);
             }
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if (args.Msg == (uint) WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
             {
-                foreach (var enemy in
+                return;
+            }
+
+            foreach (
+                var enemy in
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(hero => hero.IsValidTarget())
-                        .OrderByDescending(h => h.Distance(Game.CursorPos)))
+                        .OrderByDescending(h => h.Distance(Game.CursorPos))
+                        .Where(enemy => enemy.Distance(Game.CursorPos) < 200))
+            {
+                if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
                 {
-                    if (enemy.Distance(Game.CursorPos) < 200)
-                    {
-                        if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
-                        {
-                            _selectedTarget = null;
-                        }
-                        else
-                        {
-                            _selectedTarget = enemy;
-                        }
-                    }
+                    _selectedTarget = null;
+                }
+                else
+                {
+                    _selectedTarget = enemy;
                 }
             }
         }
@@ -408,12 +413,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void SetPriority(Obj_AI_Hero hero, int newPriority)
         {
-            if (_config != null && _config.Item("SimpleTS" + hero.ChampionName + "Priority") != null)
+            if (_config == null || _config.Item("SimpleTS" + hero.ChampionName + "Priority") == null)
             {
-                var p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>();
-                p.Value = Math.Max(1, Math.Min(5, newPriority));
-                _config.Item("SimpleTS" + hero.ChampionName + "Priority").SetValue(p);
+                return;
             }
+            var p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>();
+            p.Value = Math.Max(1, Math.Min(5, newPriority));
+            _config.Item("SimpleTS" + hero.ChampionName + "Priority").SetValue(p);
         }
 
         /// <summary>
@@ -515,14 +521,15 @@ namespace LeagueSharp.Common
 
         private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
         {
-            if (e.GetNewValue<bool>())
+            if (!e.GetNewValue<bool>())
             {
-                foreach (
-                    var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team))
-                {
-                    _config.Item("SimpleTS" + enemy.ChampionName + "Priority")
-                        .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
-                }
+                return;
+            }
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
+                )
+            {
+                _config.Item("SimpleTS" + enemy.ChampionName + "Priority")
+                    .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
             }
         }
 
@@ -530,10 +537,14 @@ namespace LeagueSharp.Common
         {
             //TODO: add yasuo wall, spellshields, etc.
             if (target.HasBuff("Undying Rage") && target.Health >= 2f)
+            {
                 return true;
+            }
 
             if (target.HasBuff("JudicatorIntervention"))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -552,30 +563,33 @@ namespace LeagueSharp.Common
 
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (hero.IsValidTarget() && !IsInvulnerable(hero) && (range < 0 && Orbwalking.InAutoAttackRange(hero) || ObjectManager.Player.Distance(hero) < range))
+                if (!hero.IsValidTarget() || IsInvulnerable(hero) ||
+                    ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) &&
+                     !(ObjectManager.Player.Distance(hero) < range)))
                 {
-                    var damage = 0f;
+                    continue;
+                }
+                var damage = 0f;
 
-                    switch (damageType)
-                    {
-                        case DamageType.Magical:
-                            damage = (float) DamageLib.CalcMagicDmg(100, hero);
-                            break;
-                        case DamageType.Physical:
-                            damage = (float) DamageLib.CalcPhysicalDmg(100, hero);
-                            break;
-                        case DamageType.True:
-                            damage = 100;
-                            break;
-                    }
+                switch (damageType)
+                {
+                    case DamageType.Magical:
+                        damage = (float) DamageLib.CalcMagicDmg(100, hero);
+                        break;
+                    case DamageType.Physical:
+                        damage = (float) DamageLib.CalcPhysicalDmg(100, hero);
+                        break;
+                    case DamageType.True:
+                        damage = 100;
+                        break;
+                }
 
-                    var ratio = damage / (1 + hero.Health) * GetPriority(hero);
+                var ratio = damage / (1 + hero.Health) * GetPriority(hero);
 
-                    if (ratio > bestRatio)
-                    {
-                        bestRatio = ratio;
-                        bestTarget = hero;
-                    }
+                if (ratio > bestRatio)
+                {
+                    bestRatio = ratio;
+                    bestTarget = hero;
                 }
             }
 
