@@ -39,11 +39,13 @@ namespace LeagueSharp.Common
     {
         public bool Active;
         public Color Color;
+        public float Radius;
 
-        public Circle(bool enabled, Color color)
+        public Circle(bool enabled, Color color, float radius = 100)
         {
             Active = enabled;
             Color = color;
+            Radius = radius;
         }
     }
 
