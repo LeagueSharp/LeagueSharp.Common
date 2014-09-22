@@ -963,9 +963,9 @@ namespace LeagueSharp.Common
 
             private Bitmap SaturateBitmap(Bitmap original, float saturation)
             {
-                var rWeight = 0.3086f;
-                var gWeight = 0.6094f;
-                var bWeight = 0.0820f;
+                const float rWeight = 0.3086f;
+                const float gWeight = 0.6094f;
+                const float bWeight = 0.0820f;
 
                 var a = (1.0f - saturation) * rWeight + saturation;
                 var b = (1.0f - saturation) * rWeight;
