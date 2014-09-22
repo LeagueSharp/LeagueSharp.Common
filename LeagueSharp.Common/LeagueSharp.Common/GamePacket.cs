@@ -78,7 +78,9 @@ namespace LeagueSharp.Common
             set
             {
                 if (value >= 0L)
+                {
                     Br.BaseStream.Position = value;
+                }
             }
         }
 
@@ -131,7 +133,6 @@ namespace LeagueSharp.Common
         /// </summary>
         public string ReadString(long position = -1)
         {
-
             var result = "";
             Position = position;
 
@@ -140,7 +141,9 @@ namespace LeagueSharp.Common
                 var num = ReadByte();
 
                 if (num == 0)
+                {
                     return result;
+                }
 
                 result += num.ToString();
             }
@@ -305,10 +308,15 @@ namespace LeagueSharp.Common
             return pos2 == null ? pos : null;
         }
 
-        /* public int[][] SearchGameTile(Vector2 position)
+        public int[][] SearchGameTile(Vector2 position)
         {
-            var x = SearchShort(Utility.GetGameTile(position.X));
-            var y = SearchShort(Utility.GetGameTile(position.Y));
+            var tile = NavMesh.WorldToGrid(position.X, position.Y);
+            var cell = NavMesh.GetCell((short) tile.X, (short) tile.Y);
+
+            var x = SearchShort(cell.GridX);
+            var y = SearchShort(cell.GridY);
+
+            return new[] { x, y };
         }
 
         public int[][] SearchGameTile(Vector3 position)
@@ -320,7 +328,7 @@ namespace LeagueSharp.Common
         {
             return SearchGameTile(obj.Position.To2D());
         }
-        */
+
 
         /// <summary>
         /// Sends the packet
