@@ -310,7 +310,9 @@ namespace LeagueSharp.Common
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
+        [Obsolete("OnPosibleToInterrupt is deprecated, please use OnPossibleToInterrupt instead.")]
         public static event OnPosibleToInterruptH OnPosibleToInterrupt;
+
         public static event OnPossibleToInterruptH OnPossibleToInterrupt;
 
         private static void FireOnInterruptable(Obj_AI_Base unit, InterruptableSpell spell)
