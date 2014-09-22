@@ -24,7 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -577,8 +576,11 @@ namespace LeagueSharp.Common
 
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == 0x34 && args.PacketData[9] == 17 && new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
+            if (args.PacketData[0] == 0x34 && args.PacketData[9] == 17 &&
+                new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
+            {
                 ResetAutoAttackTimer();
+            }
         }
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
@@ -633,8 +635,8 @@ namespace LeagueSharp.Common
         public class Orbwalker
         {
             private const float LaneClearWaitTimeMod = 2f;
-            private readonly Obj_AI_Hero Player;
             private static Menu _config;
+            private readonly Obj_AI_Hero Player;
 
             private Obj_AI_Base _forcedTarget;
             private Vector3 _orbwalkingPoint;
@@ -652,9 +654,7 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
-                drawings.AddItem(
-              new MenuItem("Highlight", "Highlight Target").SetShared()
-                  .SetValue(true));
+                drawings.AddItem(new MenuItem("Highlight", "Highlight Target").SetShared().SetValue(true));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -756,10 +756,11 @@ namespace LeagueSharp.Common
             public static void HighlightTarget(Obj_AI_Base target, bool showHighlight = true)
             {
                 if (!_config.Item("Highlight").GetValue<bool>() || !(target is Obj_AI_Hero))
+                {
                     return;
-                
-                Utility.HighlightUnit(target, showHighlight);
+                }
 
+                //Utility.HighlightUnit(target, showHighlight);
             }
 
             /// <summary>
