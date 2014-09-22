@@ -34,14 +34,15 @@ namespace LeagueSharp.Common
         public enum DamageTypePacket
         {
             Magical = 4,
-            Physical = 12,
+            CriticalAttack = 11,
+            Physical = 12, 
             True = 36,
         }
 
         public enum Emotes
         {
             Dance = 0x00,
-            Joke = 0x03,
+            Joke  = 0x03,
             Taunt = 0x01,
             Laugh = 0x02,
         }
@@ -111,8 +112,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data);
-                    packet.Position = 5;
+                    var packet = new GamePacket(data) {Position = 5};
                     return new Struct(
                         packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), (PingType)packet.ReadByte());
                 }
@@ -156,8 +156,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data);
-                    packet.Position = 1;
+                    var packet = new GamePacket(data) {Position = 1};
                     return new Struct(packet.ReadInteger(), (SpellSlot)packet.ReadByte());
                 }
 
@@ -723,8 +722,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data);
-                    packet.Position = 1;
+                    var packet = new GamePacket(data) {Position = 1};
                     return new Struct(packet.ReadInteger());
                 }
 
