@@ -128,6 +128,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static bool IsWall(Vector3 position)
+        {
+            var cFlags = NavMesh.GetCollisionFlags(position);
+            return (cFlags == CollisionFlags.Wall || cFlags == CollisionFlags.Building || cFlags == CollisionFlags.Prop);
+        }
+
         public static byte[] GetBytes(string str)
         {
             var bytes = new byte[str.Length * sizeof (char)];
