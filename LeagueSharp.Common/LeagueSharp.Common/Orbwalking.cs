@@ -652,6 +652,9 @@ namespace LeagueSharp.Common
                     new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
+                     new MenuItem("AACircle2", "Enemy AA circle").SetShared()
+                          .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
+                drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(new MenuItem("Highlight", "Highlight Target").SetShared().SetValue(true));
@@ -946,6 +949,16 @@ namespace LeagueSharp.Common
                     Utility.DrawCircle(
                         Player.Position, GetRealAutoAttackRange(null) + 65,
                         _config.Item("AACircle").GetValue<Circle>().Color);
+                }
+
+                if (_config.Item("AACircle2").GetValue<Circle>().Active)
+                {
+                    foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
+                    {
+                        Utility.DrawCircle(
+                            target.Position, GetRealAutoAttackRange(target) + 65,
+                            _config.Item("AACircle2").GetValue<Circle>().Color);
+                    }
                 }
 
                 if (_config.Item("HoldZone").GetValue<Circle>().Active)
