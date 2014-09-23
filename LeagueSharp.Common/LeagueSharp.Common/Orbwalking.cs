@@ -653,7 +653,7 @@ namespace LeagueSharp.Common
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
                      new MenuItem("AACircle2", "Enemy AA circle").SetShared()
-                          .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
+                          .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
