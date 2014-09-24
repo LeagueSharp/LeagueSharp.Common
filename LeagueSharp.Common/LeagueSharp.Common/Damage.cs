@@ -52,6 +52,24 @@ namespace LeagueSharp.Common
             True
         }
 
+        public enum SummonerSpell
+        {
+            Ignite
+        }
+
+        public enum DamageItems
+        {
+            Hexgun,
+            Dfg,
+            Botrk,
+            Bilgewater,
+            Tiamat,
+            Hydra,
+            BlackFireTorch,
+            OdingVeils,
+            FrostQueenClaim
+        }
+
         static Damage()
         {
             //Add the passive damages
@@ -1647,6 +1665,21 @@ namespace LeagueSharp.Common
             });
 
             #endregion
+        }
+
+        public static double GetSummonerSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SummonerSpell summonerSpell)
+        {
+            if (summonerSpell == SummonerSpell.Ignite)
+            {
+                return 50 + 20 * source.Level;
+            }
+
+            return 0d;
+        }
+
+        public static double GetItemDamage(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems item)
+        {
+            return 0d;
         }
 
         public static double GetAutoAttackDamage(this Obj_AI_Base source, Obj_AI_Base target, bool includePassive = false)
