@@ -71,9 +71,13 @@ namespace LeagueSharp.Common
         public static void HighlightUnit(Obj_AI_Base unit, bool showHighlight = true)
         {
             if (showHighlight)
+            {
                 Packet.S2C.HighlightUnit.Encoded(unit.NetworkId).Process();
+            }
             else
+            {
                 Packet.S2C.RemoveHighlightUnit.Encoded(unit.NetworkId).Process();
+            }
         }
 
         public static void DebugMessage(string debugMessage)
@@ -81,7 +85,7 @@ namespace LeagueSharp.Common
             Packet.S2C.DebugMessage.Encoded(debugMessage).Process();
         }
 
-        public static void PrintFloatText(GameObject obj,  string text, Packet.FloatTextPacket type)
+        public static void PrintFloatText(GameObject obj, string text, Packet.FloatTextPacket type)
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
@@ -95,17 +99,13 @@ namespace LeagueSharp.Common
         public static string FormatTime(float time)
         {
             var t = TimeSpan.FromSeconds(time);
-            return string.Format("{0:D2}:{1:D2}",
-                t.Minutes,
-                t.Seconds);
+            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         }
 
         public static string FormatTime(double time)
         {
             var t = TimeSpan.FromSeconds(time);
-            return string.Format("{0:D2}:{1:D2}",
-                t.Minutes,
-                t.Seconds);
+            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         }
 
         /// <summary>
@@ -117,7 +117,10 @@ namespace LeagueSharp.Common
         /// <returns>Index of the needle within the haystack or -1 if the needle isn't contained.</returns>
         public static IEnumerable<int> IndexOf<T>(this T[] haystack, T[] needle)
         {
-            if ((needle == null) || (haystack.Length < needle.Length)) yield break;
+            if ((needle == null) || (haystack.Length < needle.Length))
+            {
+                yield break;
+            }
 
             for (var l = 0; l < haystack.Length - needle.Length + 1; l++)
             {
@@ -150,7 +153,7 @@ namespace LeagueSharp.Common
 
         public static int GetRecallTime(Obj_AI_Hero obj)
         {
-            int duration = 0;
+            var duration = 0;
 
             switch (obj.Spellbook.GetSpell(SpellSlot.Recall).Name)
             {
@@ -172,9 +175,10 @@ namespace LeagueSharp.Common
 
         public static int GetRecallTime(string recallName)
         {
-            int duration = 0;
+            var duration = 0;
 
-            switch (recallName){
+            switch (recallName)
+            {
                 case "Recall":
                     duration = 8000;
                     break;
@@ -238,7 +242,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
                 }
             }
 
@@ -380,7 +384,7 @@ namespace LeagueSharp.Common
                 var angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
-                        center.X + radius * (float)Math.Cos(angle), center.Y + radius * (float)Math.Sin(angle),
+                        center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
                         center.Z));
             }
 
@@ -394,6 +398,23 @@ namespace LeagueSharp.Common
 
                 Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
+        }
+
+        public static bool InFountain()
+        {
+            float fountainRange = 750;
+            var map = Map.GetMap();
+            if (map != null && map._MapType == Map.MapType.SummonersRift)
+            {
+                fountainRange = 1050;
+            }
+            return
+                ObjectManager.Get<GameObject>()
+                    .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
+                    .Any(
+                        spawnPoint =>
+                            Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) <
+                            fountainRange);
         }
 
         public static class DelayAction
@@ -486,9 +507,9 @@ namespace LeagueSharp.Common
 
                     if (damage > unit.Health)
                     {
-                        Text.X = (int)barPos.X + XOffset;
-                        Text.Y = (int)barPos.Y + YOffset - 13;
-                        Text.text = ((int)(unit.Health - damage)).ToString();
+                        Text.X = (int) barPos.X + XOffset;
+                        Text.Y = (int) barPos.Y + YOffset - 13;
+                        Text.text = ((int) (unit.Health - damage)).ToString();
                         Text.OnEndScene();
                     }
 
@@ -497,17 +518,8 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool InFountain()
-        {
-            float fountainRange = 750;
-            if (Map.GetMap() == Map.MapType.SummonersRift)
-                fountainRange = 1050;
-            return ObjectManager.Get<GameObject>()
-                    .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
-                    .Any(spawnPoint => Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) < fountainRange);
-        }
 
-        public static class Map
+        public class Map
         {
             public enum MapType
             {
@@ -516,6 +528,20 @@ namespace LeagueSharp.Common
                 CrystalScar,
                 TwistedTreeline,
                 HowlingAbyss
+            }
+
+            public Vector2 Grid;
+
+            public string Name;
+            public string ShortName;
+            public MapType _MapType;
+
+            public Map(string name, string shortName, MapType map, Vector2 grid)
+            {
+                Name = name;
+                ShortName = shortName;
+                _MapType = map;
+                Grid = grid;
             }
 
             private static bool SameVector(Vector3 v1, Vector3 v2)
@@ -528,7 +554,7 @@ namespace LeagueSharp.Common
             /// <summary>
             /// Returns the current map.
             /// </summary>
-            public static MapType GetMap()
+            public static Map GetMap()
             {
                 Vector3[] sr =
                 {
@@ -556,33 +582,39 @@ namespace LeagueSharp.Common
                         pos =>
                             ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    return MapType.SummonersRift;
+                    return new Map(
+                        "Summoner's Rift", "summonerRift", MapType.SummonersRift, new Vector2(13982 / 2, 14446 / 2));
                 }
                 if (
                     dom.Any(
                         pos =>
                             ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    return MapType.CrystalScar;
+                    return new Map(
+                        "The Crystal Scar", "crystalScar", MapType.CrystalScar, new Vector2(13894 / 2, 13218 / 2));
                 }
                 if (
                     ttt.Any(
                         pos =>
                             ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    return MapType.TwistedTreeline;
+                    return new Map(
+                        "The Twisted Treeline", "twistedTreeline", MapType.TwistedTreeline,
+                        new Vector2(15436 / 2, 14474 / 2));
                 }
                 if (
                     ha.Any(
                         pos =>
                             ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
-                    return MapType.HowlingAbyss;
+                    return new Map(
+                        "Howling Abyss", "howlingAbyss", MapType.HowlingAbyss, new Vector2(13120 / 2, 12618 / 2));
                 }
 
-                return MapType.Unknown;
+                return new Map("Unknown", "unknown", MapType.Unknown, new Vector2(0, 0));
             }
         }
+
 
         /// <summary>
         /// Internal class used to get the waypoints even when the enemy enters the fow of war.
