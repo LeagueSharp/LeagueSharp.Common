@@ -90,7 +90,7 @@ namespace LeagueSharp.Common
                         var attackData = new PredictedDamage(
                             sender, target, Environment.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
                             sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0), sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
-                            (float) CalcMinionToMinionDmg(sender, target));
+                            (float) sender.GetAutoAttackDamage(target, true));
                         ActiveAttacks.Add(sender.NetworkId, attackData);
                     }
                 }
@@ -156,48 +156,6 @@ namespace LeagueSharp.Common
             }
 
             return unit.Health - predictedDamage;
-        }
-
-        private static double CalcMinionToMinionDmg(Obj_AI_Base attackminion, Obj_AI_Base shotminion)
-        {
-            double armorPenPercent = attackminion.PercentArmorPenetrationMod;
-            double armorPen = attackminion.FlatArmorPenetrationMod;
-
-            if (attackminion is Obj_AI_Minion)
-            {
-                armorPen = 0;
-                armorPenPercent = 1;
-            }
-
-            if (attackminion is Obj_AI_Turret)
-            {
-                armorPen = 0;
-                armorPenPercent = 0.7f;
-            }
-
-            var newarmor = shotminion.Armor * armorPenPercent;
-            var dmgreduction = 100 / (100 + Math.Max(newarmor - armorPen, 0));
-
-            if ((attackminion is Obj_AI_Turret) &&
-                (shotminion.BaseSkinName == "Red_Minion_MechCannon" ||
-                 shotminion.BaseSkinName == "Blue_Minion_MechCannon"))
-            {
-                dmgreduction = 0.8 * dmgreduction;
-            }
-
-            if (attackminion is Obj_AI_Turret &&
-                (shotminion.BaseSkinName == "Red_Minion_Wizard" || shotminion.BaseSkinName == "Blue_Minion_Wizard" ||
-                 shotminion.BaseSkinName == "Red_Minion_Basic" || shotminion.BaseSkinName == "Blue_Minion_Basic"))
-            {
-                dmgreduction = (1 / 0.875) * dmgreduction;
-            }
-
-            if (attackminion is Obj_AI_Turret)
-            {
-                dmgreduction = 1.05 * dmgreduction;
-            }
-
-            return (((attackminion.BaseAttackDamage + attackminion.FlatPhysicalDamageMod) * dmgreduction));
         }
 
         private class PredictedDamage
