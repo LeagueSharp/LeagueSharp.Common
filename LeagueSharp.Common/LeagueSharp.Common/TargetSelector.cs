@@ -552,12 +552,16 @@ namespace LeagueSharp.Common
 
         public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
         {
+            return GetTarget(ObjectManager.Player, range, damageType);
+        }
+        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
+        {
             Obj_AI_Hero bestTarget = null;
             var bestRatio = 0f;
 
             if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget) &&
                 (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) ||
-                 ObjectManager.Player.Distance(SelectedTarget) < range))
+                 champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
             }
@@ -566,7 +570,7 @@ namespace LeagueSharp.Common
             {
                 if (!hero.IsValidTarget() || IsInvulnerable(hero) ||
                     ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) &&
-                     !(ObjectManager.Player.Distance(hero) < range)))
+                     !(champion.Distance(hero) < range)))
                 {
                     continue;
                 }
