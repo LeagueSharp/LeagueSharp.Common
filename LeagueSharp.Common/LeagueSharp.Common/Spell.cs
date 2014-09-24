@@ -545,6 +545,15 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Gets the damage that the skillshot will deal to the target using the damage lib.
         /// </summary>
+        public float GetDamage(Obj_AI_Base target, int stage = 0)
+        {
+            return (float)ObjectManager.Player.GetSpellDamage(target, Slot, stage);
+        }
+
+        /// <summary>
+        /// Gets the damage that the skillshot will deal to the target using the OLD damage lib.
+        /// </summary>
+        [Obsolete("GetDamage(Obj_AI_Base target, DamageLib.StageType stagetype = DamageLib.StageType.Default) is deprecated, please use GetDamage(Obj_AI_Base target, int stage = 0) instead.")]
         public float GetDamage(Obj_AI_Base target, DamageLib.StageType stagetype = DamageLib.StageType.Default)
         {
             var type = DamageLib.SpellType.Q;

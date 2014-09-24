@@ -217,16 +217,17 @@ namespace LeagueSharp.Common
                                     newtarget = target;
                                 }
                                 break;
+                                
                             case TargetingMode.LessAttack:
-                                if ((target.Health - DamageLib.CalcPhysicalDmg(target.Health, target)) <
-                                    (newtarget.Health - DamageLib.CalcPhysicalDmg(newtarget.Health, newtarget)))
+                                if ((target.Health - ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, target.Health) <
+                                    (newtarget.Health - ObjectManager.Player.CalcDamage(newtarget, Damage.DamageType.Physical, newtarget.Health))))
                                 {
                                     newtarget = target;
                                 }
                                 break;
                             case TargetingMode.LessCast:
-                                if ((target.Health - DamageLib.CalcMagicDmg(target.Health, target)) <
-                                    (target.Health - DamageLib.CalcMagicDmg(newtarget.Health, newtarget)))
+                                if ((target.Health - ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, target.Health) <
+                                    (newtarget.Health - ObjectManager.Player.CalcDamage(newtarget, Damage.DamageType.Magical, newtarget.Health))))
                                 {
                                     newtarget = target;
                                 }
@@ -574,10 +575,10 @@ namespace LeagueSharp.Common
                 switch (damageType)
                 {
                     case DamageType.Magical:
-                        damage = (float) DamageLib.CalcMagicDmg(100, hero);
+                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
                         break;
                     case DamageType.Physical:
-                        damage = (float) DamageLib.CalcPhysicalDmg(100, hero);
+                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
                         break;
                     case DamageType.True:
                         damage = 100;

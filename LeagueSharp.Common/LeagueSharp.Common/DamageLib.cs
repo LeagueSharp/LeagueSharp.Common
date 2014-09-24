@@ -37,6 +37,7 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
+    [Obsolete("DamageLib class is deprecated, please use Damage class instead.")]
     public static class DamageLib
     {
         public enum SpellType
