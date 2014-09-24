@@ -54,7 +54,8 @@ namespace LeagueSharp.Common
 
         public enum SummonerSpell
         {
-            Ignite
+            Ignite,
+            Smite,
         }
 
         public enum DamageItems
@@ -1674,12 +1675,18 @@ namespace LeagueSharp.Common
                 return 50 + 20 * source.Level;
             }
 
+            if (summonerSpell == SummonerSpell.Smite)
+            {
+                return new double[]{ 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[source.Level - 1];
+            }
+
             return 0d;
         }
 
         public static double GetItemDamage(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems item)
         {
-            return 0d;
+            //TODO
+            return 1d;
         }
 
         public static double GetAutoAttackDamage(this Obj_AI_Base source, Obj_AI_Base target, bool includePassive = false)
