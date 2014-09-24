@@ -1343,7 +1343,7 @@ namespace LeagueSharp.Common
                 //R - min damage
                 new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{270, 405, 540}[level] + 0.6 * source.FlatMagicDamageMod },
                 //R - per sphere
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{90, 135, 180}[level] + 0.2 * source.FlatMagicDamageMod },
+                new DamageSpell{Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{90, 135, 180}[level] + 0.2 * source.FlatMagicDamageMod },
             });
 
             Spells.Add("Talon", new List<DamageSpell>

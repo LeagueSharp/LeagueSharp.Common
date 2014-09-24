@@ -551,31 +551,6 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the damage that the skillshot will deal to the target using the OLD damage lib.
-        /// </summary>
-        [Obsolete("GetDamage(Obj_AI_Base target, DamageLib.StageType stagetype = DamageLib.StageType.Default) is deprecated, please use GetDamage(Obj_AI_Base target, int stage = 0) instead.")]
-        public float GetDamage(Obj_AI_Base target, DamageLib.StageType stagetype = DamageLib.StageType.Default)
-        {
-            var type = DamageLib.SpellType.Q;
-            switch (Slot)
-            {
-                case SpellSlot.Q:
-                    type = DamageLib.SpellType.Q;
-                    break;
-                case SpellSlot.W:
-                    type = DamageLib.SpellType.W;
-                    break;
-                case SpellSlot.E:
-                    type = DamageLib.SpellType.E;
-                    break;
-                case SpellSlot.R:
-                    type = DamageLib.SpellType.R;
-                    break;
-            }
-            return (float) DamageLib.getDmg(target, type, stagetype);
-        }
-
-        /// <summary>
         /// Returns if the spell will hit the unit when casted on castPosition.
         /// </summary>
         public bool WillHit(Obj_AI_Base unit,
