@@ -1761,6 +1761,29 @@ namespace LeagueSharp.Common
             return 0d;
         }
 
+
+        /// <summary>
+        /// Calculates the combo damage of the given spell combo on the given target.
+        /// </summary>
+        /// <param name="target">The target object</param>
+        /// <param name="spellCombo">SpellType array containing the combo spells</param>
+        /// <returns>Returns the calculated combo damage</returns>
+        public static double GetComboDamage(this Obj_AI_Hero source, Obj_AI_Base target, IEnumerable<SpellSlot> spellCombo)
+        {
+            return source.GetComboDamage(target, spellCombo.Select(spell => Tuple.Create(spell, 0)).ToArray());
+        }
+
+        /// <summary>
+        /// Calculates the combo damage of the given spell combo on the given target respecting the stage type of each spell
+        /// </summary>
+        /// <param name="target">The target object</param>
+        /// <param name="spellCombo">SpellType/StageType tuple containing the combo spells</param>
+        /// <returns>Returns the calculated combo damage</returns>
+        public static double GetComboDamage(this Obj_AI_Hero source, Obj_AI_Base target, IEnumerable<Tuple<SpellSlot, int>> spellCombo)
+        {
+            return spellCombo.Sum(spell => source.GetSpellDamage(target, spell.Item1, spell.Item2));
+        }
+
         public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
         {
             if (Spells.ContainsKey(source.ChampionName))
