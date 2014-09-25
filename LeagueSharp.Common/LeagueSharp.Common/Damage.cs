@@ -1798,7 +1798,6 @@ namespace LeagueSharp.Common
             return GetComboDamage(source, target, spellCombo) > target.Health;    
         }
 
-
         public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
         {
             if (Spells.ContainsKey(source.ChampionName))
