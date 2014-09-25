@@ -1765,6 +1765,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Calculates the combo damage of the given spell combo on the given target.
         /// </summary>
+        /// <param name="source">The source object</param>
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType array containing the combo spells</param>
         /// <returns>Returns the calculated combo damage</returns>
@@ -1776,6 +1777,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Calculates the combo damage of the given spell combo on the given target respecting the stage type of each spell
         /// </summary>
+        /// <param name="source">The source object</param>
         /// <param name="target">The target object</param>
         /// <param name="spellCombo">SpellType/StageType tuple containing the combo spells</param>
         /// <returns>Returns the calculated combo damage</returns>
@@ -1783,6 +1785,19 @@ namespace LeagueSharp.Common
         {
             return spellCombo.Sum(spell => source.GetSpellDamage(target, spell.Item1, spell.Item2));
         }
+
+        /// <summary>
+        /// Calculates the combo damage of the given spell combo on the given target and returns if that damage would kill the target.
+        /// </summary>
+        /// <param name="source">The source object</param>
+        /// <param name="target">The target object</param>
+        /// <param name="spellCombo">SpellType array containing the combo spells</param>
+        /// <returns>true if target is killable, false if not.</returns>
+        public static bool IsKillable(this Obj_AI_Hero source, Obj_AI_Base target, IEnumerable<Tuple<SpellSlot, int>> spellCombo)
+        {
+            return GetComboDamage(source, target, spellCombo) > target.Health;    
+        }
+
 
         public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
         {
