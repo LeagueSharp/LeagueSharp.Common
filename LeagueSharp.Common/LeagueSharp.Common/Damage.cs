@@ -1683,7 +1683,7 @@ namespace LeagueSharp.Common
         {
             if (summonerSpell == SummonerSpell.Ignite)
             {
-                return 50 + 20 * source.Level;
+                return 50 + 20 * source.Level - (target.HPRegenRate / 5 * 3);
             }
 
             if (summonerSpell == SummonerSpell.Smite)
