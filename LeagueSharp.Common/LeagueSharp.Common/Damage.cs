@@ -1948,7 +1948,7 @@ namespace LeagueSharp.Common
                 //  Increases damage dealt to champions below 20 / 35 / 50% by 5%. 
                 if (target is Obj_AI_Hero)
                 {
-                    var mastery = ((Obj_AI_Hero)source).Masteries.First(m => m.Page == MasteryPage.Offense && m.Id == 146);
+                    var mastery = ((Obj_AI_Hero)source).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Offense && m.Id == 100);
                     if (mastery != null && mastery.Points >= 1)
                     {
                         if (target.Health / target.MaxHealth <= 0.05d + 0.15d * mastery.Points)
