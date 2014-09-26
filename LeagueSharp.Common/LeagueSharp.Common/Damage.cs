@@ -78,6 +78,17 @@ namespace LeagueSharp.Common
 
             #region PassiveDamages
 
+            #region Aatrox
+            p = new PassiveDamage
+            {
+                ChampionName = "Aatrox",
+                IsActive = (source, target) => (source.HasBuff("aatroxwpower") && source.HasBuff("aatroxwonhpowerbuff")),
+                GetDamage =
+                    (source, target) =>
+                              ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
+            #endregion
+
             #region Caitlyn
 
             p = new PassiveDamage
