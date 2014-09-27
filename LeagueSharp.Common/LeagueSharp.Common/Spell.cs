@@ -317,7 +317,7 @@ namespace LeagueSharp.Common
             //Get the best position to cast the spell.
             var prediction = GetPrediction(unit, aoe);
 
-            if (minTargets != -1 && prediction.AoeTargetsHitCount < minTargets)
+            if (minTargets != -1 && prediction.AoeTargetsHitCount <= minTargets)
             {
                 return CastStates.NotEnoughTargets;
             }
