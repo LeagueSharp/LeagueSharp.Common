@@ -65,7 +65,7 @@ namespace LeagueSharp.Common
                     ChampionName = "Varus",
                     SpellName = "VarusQ",
                     DangerLevel = InterruptableDangerLevel.Low,
-                    Slot = SpellSlot.R,
+                    Slot = SpellSlot.Q,
                     BuffName = "VarusQ"
                 });
 
