@@ -22,6 +22,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+
 #endregion
 
 namespace LeagueSharp.Common
@@ -1696,7 +1698,27 @@ namespace LeagueSharp.Common
 
         public static double GetItemDamage(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems item)
         {
-            //TODO
+            switch (item)
+            {
+                case DamageItems.Bilgewater:
+                    return source.CalcDamage(target, DamageType.Magical, 100);
+                case DamageItems.BlackFireTorch:
+                    return source.CalcDamage(target, DamageType.Magical, target.MaxHealth * 0.2);
+                case DamageItems.Botrk:
+                    return source.CalcDamage(target, DamageType.Physical, target.MaxHealth * 0.1);
+                case DamageItems.Dfg:
+                    return source.CalcDamage(target, DamageType.Magical, target.MaxHealth * 0.15);
+                case DamageItems.FrostQueenClaim:
+                    return source.CalcDamage(target, DamageType.Magical, 50 + 5 * source.Level);
+                case DamageItems.Hexgun: 
+                    return source.CalcDamage(target, DamageType.Magical, 150 + 0.4 * source.FlatMagicDamageMod);
+                case DamageItems.Hydra:
+                    return source.CalcDamage(target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+                case DamageItems.OdingVeils:
+                    return source.CalcDamage(target, DamageType.Magical, 200);
+                case DamageItems.Tiamat:
+                    return source.CalcDamage(target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+            }
             return 1d;
         }
 
