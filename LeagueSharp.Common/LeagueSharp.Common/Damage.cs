@@ -1835,16 +1835,16 @@ namespace LeagueSharp.Common
         {
             if (Spells.ContainsKey(source.ChampionName))
             {
-                var spell = Spells[source.ChampionName].First(s => s.Slot == slot && stage == s.Stage);
+                var spell = Spells[source.ChampionName].FirstOrDefault(s => s.Slot == slot && stage == s.Stage);
 
                 if (spell == null)
                 {
-                    spell = Spells[source.ChampionName].First(s => s.Slot == slot);
+                    spell = Spells[source.ChampionName].FirstOrDefault(s => s.Slot == slot);
                 }
 
                 if (spell != null)
                 {
-                    var rawDamage = spell.Damage(source, target, source.Spellbook.GetSpell(slot).Level - 1);
+                    var rawDamage = spell.Damage(source, target, Math.Max(1, Math.Min(source.Spellbook.GetSpell(slot).Level - 1, 6)));
                     return CalcDamage(source, target, spell.DamageType, rawDamage);
                 }
             }
