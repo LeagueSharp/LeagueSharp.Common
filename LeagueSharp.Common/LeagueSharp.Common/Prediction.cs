@@ -33,8 +33,9 @@ namespace LeagueSharp.Common
 {
     public enum HitChance
     {
-        Dashing = 7,
-        Immobile = 6,
+        Dashing = 8,
+        Immobile = 7,
+        VeryHigh = 6,
         High = 5,
         Medium = 4,
         Low = 3,
@@ -424,7 +425,7 @@ namespace LeagueSharp.Common
                     Input = input,
                     UnitPosition = input.Unit.ServerPosition,
                     CastPosition = input.Unit.ServerPosition,
-                    Hitchance = HitChance.High
+                    Hitchance = HitChance.VeryHigh
                 };
             }
 
@@ -453,7 +454,7 @@ namespace LeagueSharp.Common
                             Input = input,
                             CastPosition = cp.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance = HitChance.High,
+                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 100 ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
 
@@ -499,7 +500,7 @@ namespace LeagueSharp.Common
                             Input = input,
                             CastPosition = pos.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance = HitChance.High,
+                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 100 ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
                     tT += tB;

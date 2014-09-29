@@ -250,7 +250,7 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup &&
+                return (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup) &&
                        Move;
             }
 
@@ -289,10 +289,7 @@ namespace LeagueSharp.Common
                 if (!DisableNextAttack)
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                    if (!(target is Obj_AI_Hero))
-                    {
-                        LastAATick = Environment.TickCount + Game.Ping / 2;
-                    }
+                    LastAATick = Environment.TickCount + Game.Ping / 2;
 
                     return;
                 }
@@ -408,7 +405,7 @@ namespace LeagueSharp.Common
 
                 /* Delay sliders */
                 _config.AddItem(
-                    new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(50, 200, 0)));
+                    new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(80, 200, 0)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 200, 0)));
 
                 /*Load the menu*/
@@ -496,6 +493,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public static void HighlightTarget(Obj_AI_Base target, bool showHighlight = true)
             {
+                return;
                 if (!_config.Item("Highlight").GetValue<bool>() || !(target is Obj_AI_Hero))
                 {
                     return;
@@ -521,13 +519,13 @@ namespace LeagueSharp.Common
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <= Player.GetAutoAttackDamage(minion, false));
+                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <= Player.GetAutoAttackDamage(minion));
             }
 
             public Obj_AI_Base GetTarget()
             {
                 Obj_AI_Base result = null;
-                float[] r = { float.MaxValue };
+                var r = float.MaxValue;
 
                 if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
@@ -584,10 +582,10 @@ namespace LeagueSharp.Common
                             .Where(
                                 mob =>
                                     mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
-                            .Where(mob => mob.MaxHealth >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon))
+                            .Where(mob => mob.MaxHealth >= r || Math.Abs(r - float.MaxValue) < float.Epsilon))
                     {
                         result = mob;
-                        r[0] = mob.MaxHealth;
+                        r = mob.MaxHealth;
                     }
                 }
 
@@ -597,7 +595,7 @@ namespace LeagueSharp.Common
                 }
 
                 /*Lane Clear minions*/
-                r[0] = float.MaxValue;
+                r = float.MaxValue;
                 if (ActiveMode == OrbwalkingMode.LaneClear)
                 {
                     if (!ShouldWait())
@@ -626,10 +624,10 @@ namespace LeagueSharp.Common
                                 Player.GetAutoAttackDamage(minion, false) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon)
                             {
-                                if (minion.Health >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon)
+                                if (minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon)
                                 {
                                     result = minion;
-                                    r[0] = minion.Health;
+                                    r = minion.Health;
                                     _prevMinion = minion;
                                 }
                             }
