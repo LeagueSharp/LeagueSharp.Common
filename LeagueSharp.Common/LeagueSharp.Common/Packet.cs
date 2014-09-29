@@ -84,8 +84,12 @@ namespace LeagueSharp.Common
             Danger = 2,
             OnMyWay = 4,
             AssistMe = 6,
-            NormalSound = 176,
+            NormalSound = 177,
+            DangerSound = 178,
+            EnemyMissingSound = 179,
+            OnMyWaySound = 180,
             FallbackSound = 181,
+            AssistMeSound = 182,
         }
 
         public static class C2S
