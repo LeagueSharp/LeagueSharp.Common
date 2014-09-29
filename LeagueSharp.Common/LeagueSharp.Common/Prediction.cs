@@ -454,7 +454,7 @@ namespace LeagueSharp.Common
                             Input = input,
                             CastPosition = cp.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 100 ? HitChance.VeryHigh : HitChance.High,
+                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
 
@@ -500,7 +500,7 @@ namespace LeagueSharp.Common
                             Input = input,
                             CastPosition = pos.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 100 ? HitChance.VeryHigh : HitChance.High,
+                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
                     tT += tB;
