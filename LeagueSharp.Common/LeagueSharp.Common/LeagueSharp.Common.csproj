@@ -103,7 +103,6 @@
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
     <Compile Include="CustomEvents.cs" />
-    <Compile Include="DamageLib.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Items.cs" />
     <Compile Include="MEC.cs" />
