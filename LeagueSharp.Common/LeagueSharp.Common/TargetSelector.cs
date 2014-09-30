@@ -390,7 +390,7 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-
+            _selectedTarget = null;
             foreach (
                 var enemy in
                     ObjectManager.Get<Obj_AI_Hero>()
@@ -398,14 +398,7 @@ namespace LeagueSharp.Common
                         .OrderByDescending(h => h.Distance(Game.CursorPos))
                         .Where(enemy => enemy.Distance(Game.CursorPos) < 200))
             {
-                if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
-                {
-                    _selectedTarget = null;
-                }
-                else
-                {
-                    _selectedTarget = enemy;
-                }
+              _selectedTarget = enemy;
             }
         }
 
