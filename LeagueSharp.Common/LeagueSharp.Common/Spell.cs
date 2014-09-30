@@ -551,6 +551,14 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        /// Gets the damage that the skillshot will deal to the target using the damage lib and returns if the target is killable or not.
+        /// </summary>
+        public bool IsKillable(Obj_AI_Base target, int stage = 0)
+        {
+            return ObjectManager.Player.GetSpellDamage(target, Slot, stage) > target.Health;
+        }
+
+        /// <summary>
         /// Returns if the spell will hit the unit when casted on castPosition.
         /// </summary>
         public bool WillHit(Obj_AI_Base unit,
