@@ -904,7 +904,7 @@ namespace LeagueSharp.Common
                 //Q
                 new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{50, 80, 110, 140, 170}[level] + 0.9 * source.FlatPhysicalDamageMod },
                 //Q - 2nd
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{50, 80, 110, 140, 170}[level] + 0.9 * source.FlatPhysicalDamageMod + 0.08 * (target.MaxHealth - target.Health)},
+                new DamageSpell{Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{50, 80, 110, 140, 170}[level] + 0.9 * source.FlatPhysicalDamageMod + 0.08 * (target.MaxHealth - target.Health)},
                 //E
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 95, 130, 165, 200}[level] + 1 * source.FlatPhysicalDamageMod },
                 //R
