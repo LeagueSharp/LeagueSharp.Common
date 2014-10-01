@@ -601,6 +601,25 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region SetTarget
+
+            /// <summary>
+            /// Packet sent when left clicking a target.
+            /// </summary>
+            public static class SetTarget
+            {
+                public static byte Header = 0xAF;
+
+                public static int Decoded(byte[] data)
+                {
+                    return new GamePacket(data).ReadInteger(5);
+                }
+            }
+
+            #endregion
+
+
         }
 
         public static class S2C

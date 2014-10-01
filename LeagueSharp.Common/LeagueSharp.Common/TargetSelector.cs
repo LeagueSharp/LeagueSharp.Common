@@ -365,6 +365,7 @@ namespace LeagueSharp.Common
 
         static SimpleTs()
         {
+            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += Drawing_OnDraw;
         }
@@ -401,6 +402,26 @@ namespace LeagueSharp.Common
               _selectedTarget = enemy;
             }
         }
+
+
+        private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+        {
+            /*
+            if (args.PacketData[0] != Packet.C2S.SetTarget.Header)
+                return;
+
+            var targetNetworkId = Packet.C2S.SetTarget.Decoded(args.PacketData);
+            var target =
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .FirstOrDefault(obj => obj.IsValidTarget() && obj.NetworkId == targetNetworkId);
+            
+            if (targetNetworkId == 0 || target == null)
+                return;
+
+            _selectedTarget = target;
+             */
+        }
+
 
         /// <summary>
         /// Sets the priority of the hero
