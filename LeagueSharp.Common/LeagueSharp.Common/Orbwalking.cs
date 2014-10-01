@@ -87,6 +87,7 @@ namespace LeagueSharp.Common
         public static bool Attack = true;
         public static bool DisableNextAttack = false;
         public static bool Move = true;
+        public static int LastMoveCommandT = 0;
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
 
@@ -259,6 +260,13 @@ namespace LeagueSharp.Common
 
         private static void MoveTo(Vector3 position, float holdAreaRadius = 0)
         {
+            if (Environment.TickCount - LastMoveCommandT < 70)
+            {
+                return;
+            }
+
+            LastMoveCommandT = Environment.TickCount;
+
             if (Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (Player.Path.Count() > 1)
