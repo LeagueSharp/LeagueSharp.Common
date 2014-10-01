@@ -260,7 +260,7 @@ namespace LeagueSharp.Common
 
         private static void MoveTo(Vector3 position, float holdAreaRadius = 0)
         {
-            if (Environment.TickCount - LastMoveCommandT < 10)
+            if (Environment.TickCount - LastMoveCommandT < 80)
             {
                 return;
             }
