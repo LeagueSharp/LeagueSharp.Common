@@ -472,6 +472,52 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region SwapItem
+
+            /// <summary>
+            /// Packet sent when swapping items.
+            /// </summary>
+            public static class SwapItem
+            {
+                public static byte Header = 0x21;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteByte(packetStruct.FromSlotByte);
+                    result.WriteByte(packetStruct.ToSlotByte);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    packet.Position = 1;
+                    result.NetworkId = packet.ReadInteger();
+                    result.FromSlotByte = packet.ReadByte();
+                    result.ToSlotByte = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public byte FromSlotByte;
+                    public int NetworkId;
+                    public byte ToSlotByte;
+
+                    public Struct(byte fromSlotByte, byte toSlotByte, int networkId = -1)
+                    {
+                        FromSlotByte = fromSlotByte;
+                        ToSlotByte = toSlotByte;
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+                }
+            }
+
+            #endregion
+
             #region Emote
 
             /// <summary>
@@ -550,52 +596,6 @@ namespace LeagueSharp.Common
                     {
                         SourceNetworkId = networkId;
                         ObjectNetworkId = objectNetworkId;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region SwapItem
-
-            /// <summary>
-            /// Packet sent when swapping items.
-            /// </summary>
-            public static class SwapItem
-            {
-                public static byte Header = 0x21;
-
-                public static GamePacket Encoded(Struct packetStruct)
-                {
-                    var result = new GamePacket(Header);
-                    result.WriteInteger(packetStruct.NetworkId);
-                    result.WriteByte(packetStruct.FromSlotByte);
-                    result.WriteByte(packetStruct.ToSlotByte);
-                    return result;
-                }
-
-                public static Struct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var result = new Struct();
-                    packet.Position = 1;
-                    result.NetworkId = packet.ReadInteger();
-                    result.FromSlotByte = packet.ReadByte();
-                    result.ToSlotByte = packet.ReadByte();
-                    return result;
-                }
-
-                public struct Struct
-                {
-                    public byte FromSlotByte;
-                    public int NetworkId;
-                    public byte ToSlotByte;
-
-                    public Struct(byte fromSlotByte, byte toSlotByte, int networkId = -1)
-                    {
-                        FromSlotByte = fromSlotByte;
-                        ToSlotByte = toSlotByte;
-                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
                 }
             }

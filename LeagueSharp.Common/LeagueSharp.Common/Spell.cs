@@ -380,11 +380,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            if (IsReady())
-            {
-                return ObjectManager.Player.Spellbook.CastSpell(Slot);
-            }
-            return false;
+            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot);
         }
 
         /// <summary>
@@ -392,7 +388,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (From.Distance(unit.ServerPosition) > Range)
+            if (!IsReady() || From.Distance(unit.ServerPosition) > Range)
             {
                 return;
             }
