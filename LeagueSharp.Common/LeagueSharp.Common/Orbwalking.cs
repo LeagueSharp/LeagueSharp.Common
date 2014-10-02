@@ -258,9 +258,9 @@ namespace LeagueSharp.Common
             return false;
         }
 
-        private static void MoveTo(Vector3 position, float holdAreaRadius = 0)
+        private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false)
         {
-            if (Environment.TickCount - LastMoveCommandT < 80)
+            if (Environment.TickCount - LastMoveCommandT < 80 && !overrideTimer)
             {
                 return;
             }
