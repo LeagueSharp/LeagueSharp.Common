@@ -334,7 +334,7 @@ namespace LeagueSharp.Common
         /// Sends the packet
         /// </summary>
         public void Send(PacketChannel channel = PacketChannel.C2S,
-            PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
+            PacketProtocolFlags flags = PacketProtocolFlags.NoFlags)
         {
             Game.SendPacket(Ms.ToArray(), channel, flags);
         }
