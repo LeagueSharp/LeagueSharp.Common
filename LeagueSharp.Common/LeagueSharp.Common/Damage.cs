@@ -35,6 +35,7 @@ namespace LeagueSharp.Common
         public SpellSlot Slot;
         public SpellDamageDelegate Damage;
         public Damage.DamageType DamageType;
+        public double CalculatedDamage = 0d;
 
         public DamageSpell()
         {
@@ -1775,26 +1776,6 @@ namespace LeagueSharp.Common
             return CalcPhysicalDamage(source, target, result) * k - reduction;
         }
 
-        public static double GetSpellDamage(this Obj_AI_Base source, Obj_AI_Base target, string spellName)
-        {
-            if (Orbwalking.IsAutoAttack(spellName))
-            {
-                return GetAutoAttackDamage(source, target, true);
-            }
-
-            if (source is Obj_AI_Hero)
-                foreach (var spell in source.Spellbook.Spells)
-                {
-                    if (String.Equals(spell.Name, spellName, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        return GetSpellDamage((Obj_AI_Hero)source, target, spell.Slot);
-                    }
-                }
-
-            return 0d;
-        }
-
-
         /// <summary>
         /// Calculates the combo damage of the given spell combo on the given target.
         /// </summary>
@@ -1831,7 +1812,30 @@ namespace LeagueSharp.Common
             return GetComboDamage(source, target, spellCombo) > target.Health;    
         }
 
-        public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
+        public static DamageSpell GetDamageSpell(this Obj_AI_Base source, Obj_AI_Base target, string spellName)
+        {
+            if (Orbwalking.IsAutoAttack(spellName))
+            {
+                return new DamageSpell 
+                { 
+                    DamageType = DamageType.Physical,
+                    CalculatedDamage = GetAutoAttackDamage(source, target, true),
+                };
+            }
+
+            if (source is Obj_AI_Hero)
+                foreach (var spell in source.Spellbook.Spells)
+                {
+                    if (String.Equals(spell.Name, spellName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return GetDamageSpell((Obj_AI_Hero)source, target, spell.Slot);
+                    }
+                }
+
+            return null;
+        }
+
+        public static DamageSpell GetDamageSpell(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
         {
             if (Spells.ContainsKey(source.ChampionName))
             {
@@ -1845,11 +1849,36 @@ namespace LeagueSharp.Common
                 if (spell != null)
                 {
                     var rawDamage = spell.Damage(source, target, Math.Max(1, Math.Min(source.Spellbook.GetSpell(slot).Level - 1, 6)));
-                    return CalcDamage(source, target, spell.DamageType, rawDamage);
+                    spell.CalculatedDamage = CalcDamage(source, target, spell.DamageType, rawDamage);
+                    return spell;
                 }
             }
 
             //Spell not found.
+            return null;
+        }
+
+        public static double GetSpellDamage(this Obj_AI_Base source, Obj_AI_Base target, string spellName)
+        {
+            var spell = GetDamageSpell(source, target, spellName);
+
+            if (spell != null)
+            {
+                return spell.CalculatedDamage;
+            }
+
+            return 0d;
+        }
+
+        public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
+        {
+            var spell = GetDamageSpell(source, target, slot, stage);
+            
+            if(spell != null)
+            {
+                return spell.CalculatedDamage;
+            }
+
             return 0d;
         }
 
