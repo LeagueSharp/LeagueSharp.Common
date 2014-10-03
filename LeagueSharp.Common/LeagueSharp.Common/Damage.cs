@@ -1241,10 +1241,17 @@ namespace LeagueSharp.Common
             {
                 //Q - total  damage
                 new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{75, 135, 195, 255, 315}[level] + 1 * source.FlatMagicDamageMod },
+                //Q - Danger Zone total damage
+                new DamageSpell{Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{112.5, 202.5, 292.5, 382.5, 472.5}[level] + 1.5 * source.FlatMagicDamageMod },
                 //E
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{45, 70, 95, 120, 145}[level] + 0.4 * source.FlatMagicDamageMod },
+                //E - Danger Zone
+                new DamageSpell{Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{67.5, 105, 142.5, 180, 217.5}[level] + 0.6 * source.FlatMagicDamageMod },
                 //R - per second
                 new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{130, 185, 240}[level] + 0.3 * source.FlatMagicDamageMod  },
+                //R - Total
+                new DamageSpell{Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{650, 925, 1200}[level] + 1.5 * source.FlatMagicDamageMod  },
+                
             });
 
             Spells.Add("Ryze", new List<DamageSpell>
