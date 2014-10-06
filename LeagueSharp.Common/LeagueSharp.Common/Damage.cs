@@ -1461,10 +1461,10 @@ namespace LeagueSharp.Common
 
             Spells.Add("Twitch", new List<DamageSpell>
             {
-                //E - 1 stack
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{15, 20, 25, 30, 35}[level] + new double[]{20, 35, 50, 65, 80}[level] + 0.2 * source.FlatMagicDamageMod },
+                //E - current stacks
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => (from buff in target.Buffs where buff.DisplayName.ToLower() == "twitchdeadlyvenom" select buff.Count).FirstOrDefault() * (new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod) + new double[]{20, 35, 50, 65, 80}[level]},
                 //E - per stack
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod },
             });
 
             Spells.Add("Udyr", new List<DamageSpell>
