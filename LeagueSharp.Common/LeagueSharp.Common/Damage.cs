@@ -180,11 +180,11 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region KogMaw
+            #region Kogmaw
 
             p = new PassiveDamage
             {
-                ChampionName = "KogMaw",
+                ChampionName = "Kogmaw",
                 IsActive = (source, target) => (source.HasBuff("KogMawBioArcaneBarrage")),
                 GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
@@ -876,7 +876,7 @@ namespace LeagueSharp.Common
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{65, 100, 135, 170, 205}[level] + 0.2 * source.FlatPhysicalDamageMod },
             });
 
-            Spells.Add("KogMaw", new List<DamageSpell>
+            Spells.Add("Kogmaw", new List<DamageSpell>
             {
                 //Q
                 new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 130, 180, 230, 280}[level] + 0.5 * source.FlatMagicDamageMod },

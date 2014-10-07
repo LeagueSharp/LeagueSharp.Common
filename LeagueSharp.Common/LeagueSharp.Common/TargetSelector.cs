@@ -69,7 +69,7 @@ namespace LeagueSharp.Common
 
         private static readonly string[] ad =
         {
-            "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "KogMaw",
+            "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Kogmaw",
             "MissFortune", "Quinn", "Sivir", "Talon", "Tristana", "Twitch", "Urgot", "Varus", "Vayne", "Zed", "Jinx",
             "Yasuo", "Lucian"
         };
@@ -491,7 +491,7 @@ namespace LeagueSharp.Common
             string[] p4 =
             {
                 "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
-                "Ezreal", "Graves", "Jinx", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "LeBlanc", "Lucian",
+                "Ezreal", "Graves", "Jinx", "Karma", "Karthus", "Katarina", "Kennen", "Kogmaw", "LeBlanc", "Lucian",
                 "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo",
                 "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed",
                 "Ziggs"
