@@ -552,7 +552,7 @@ namespace LeagueSharp.Common
                 //E
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{70, 105, 140, 175, 210}[level] + 0.5 * source.FlatPhysicalDamageMod},
                 //R
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{175, 275, 375}[level] + 1.1 * source.FlatMagicDamageMod},
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{175, 275, 375}[level] + 1.1 * source.FlatPhysicalDamageMod},
             });
 
             Spells.Add("Elise", new List<DamageSpell>
