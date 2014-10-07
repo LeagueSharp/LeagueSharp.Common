@@ -476,7 +476,7 @@ namespace LeagueSharp.Common
                 //E
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 130, 180, 230, 280}[level] + 0.8 * source.FlatMagicDamageMod},
                 //R
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{250, 475, 700}[level] + 2 * source.FlatPhysicalDamageMod},
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{250, 475, 700}[level] + 2 * source.FlatPhysicalDamageMod},
             });
 
             Spells.Add("Cassiopeia", new List<DamageSpell>
@@ -524,7 +524,7 @@ namespace LeagueSharp.Common
                 //Q - Blade
                 new DamageSpell{Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{105, 157.5, 210, 262.5, 315}[level] + 1.05 * source.FlatPhysicalDamageMod},
                 //W
-                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{20, 40, 60, 80, 100}[level] / 100 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
+                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{20, 40, 60, 80, 100}[level] / 100 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
                 //R 
                 new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.True, Damage = (source, target, level) => new double[]{160, 250, 340}[level] + 0.75 * source.FlatPhysicalDamageMod},
            });
@@ -685,7 +685,7 @@ namespace LeagueSharp.Common
                 //W
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{ 60, 110, 160, 210, 260}[level] + 0.7 * source.FlatMagicDamageMod},
                 //R - Max damage
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{ 250, 400, 550}[level] + 1.5 * source.FlatPhysicalDamageMod},
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{ 250, 400, 550}[level] + 1.5 * source.FlatPhysicalDamageMod},
             });
 
             Spells.Add("Hecarim", new List<DamageSpell>
@@ -951,7 +951,7 @@ namespace LeagueSharp.Common
                 //Q
                 new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 125, 170, 215, 260}[level] + 0.5 * source.FlatMagicDamageMod },
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{80, 110, 140, 170, 200}[level] + 0.4 * source.FlatMagicDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 110, 140, 170, 200}[level] + 0.4 * source.FlatMagicDamageMod },
             });
 
             Spells.Add("Lux", new List<DamageSpell>
@@ -1027,13 +1027,13 @@ namespace LeagueSharp.Common
             Spells.Add("MonkeyKing", new List<DamageSpell> //AKA wukong
             {
                 //Q - bonus
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{30, 60, 90, 120, 150}[level]+ 0.1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{30, 60, 90, 120, 150}[level]+ 0.1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
                 //W
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{70, 115, 160, 205, 250}[level] + 0.6 * source.FlatMagicDamageMod },
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 105, 150, 195, 240}[level] + 0.8 * source.FlatPhysicalDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{60, 105, 150, 195, 240}[level] + 0.8 * source.FlatPhysicalDamageMod },
                 //R - per second
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{20, 110, 200}[level] + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{20, 110, 200}[level] + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
             });
 
             Spells.Add("Mordekaiser", new List<DamageSpell>
@@ -1224,7 +1224,7 @@ namespace LeagueSharp.Common
                 //W
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{50, 80, 110, 140, 170}[level] + 0.8 * source.FlatMagicDamageMod  },
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{50, 100, 150, 200, 250}[level] + 0.7 * source.FlatPhysicalDamageMod  },
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{50, 100, 150, 200, 250}[level] + 0.7 * source.FlatPhysicalDamageMod  },
             });
 
             Spells.Add("Riven", new List<DamageSpell>
@@ -1274,7 +1274,7 @@ namespace LeagueSharp.Common
             Spells.Add("Shaco", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{140, 160, 180, 200, 220}[level] / 100 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{140, 160, 180, 200, 220}[level] / 100 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
                 //W - per attack
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{35, 50, 65, 80, 95}[level] + 0.2 * source.FlatMagicDamageMod },
                 //E
@@ -1322,9 +1322,9 @@ namespace LeagueSharp.Common
             Spells.Add("Sivir", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{25, 45, 65, 85, 105}[level] + new double[]{70, 80, 90, 100, 110}[level] / 100 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) + 0.5 * source.FlatMagicDamageMod },
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{25, 45, 65, 85, 105}[level] + new double[]{70, 80, 90, 100, 110}[level] / 100 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) + 0.5 * source.FlatMagicDamageMod },
                 //W - bounce
-                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{50, 55, 60, 65, 70}[level]/100 * source.FlatPhysicalDamageMod },
+                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{50, 55, 60, 65, 70}[level]/100 * source.FlatPhysicalDamageMod },
             });
 
             Spells.Add("Skarner", new List<DamageSpell>
@@ -1442,7 +1442,7 @@ namespace LeagueSharp.Common
             Spells.Add("Tryndamere", new List<DamageSpell>
             {
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{70, 100, 130, 160, 190}[level] + 1.2 * source.FlatPhysicalDamageMod + 1 * source.FlatMagicDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{70, 100, 130, 160, 190}[level] + 1.2 * source.FlatPhysicalDamageMod + 1 * source.FlatMagicDamageMod },
             });
 
             Spells.Add("TwistedFate", new List<DamageSpell>
@@ -1462,15 +1462,15 @@ namespace LeagueSharp.Common
             Spells.Add("Twitch", new List<DamageSpell>
             {
                 //E - current stacks
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => (from buff in target.Buffs where buff.DisplayName.ToLower() == "twitchdeadlyvenom" select buff.Count).FirstOrDefault() * (new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod) + new double[]{20, 35, 50, 65, 80}[level]},
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => (from buff in target.Buffs where buff.DisplayName.ToLower() == "twitchdeadlyvenom" select buff.Count).FirstOrDefault() * (new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod + 0.25 * source.FlatPhysicalDamageMod) + new double[]{20, 35, 50, 65, 80}[level]},
                 //E - per stack
-                new DamageSpell{Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{15, 20, 25, 30, 35}[level] + 0.2 * source.FlatMagicDamageMod + 0.25 * source.FlatPhysicalDamageMod},
             });
 
             Spells.Add("Udyr", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{30, 80, 130, 180, 230}[level] + (new double[]{120, 130, 140, 150, 160}[level] / 100) * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{30, 80, 130, 180, 230}[level] + (new double[]{120, 130, 140, 150, 160}[level] / 100) * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
                 //R - per wave
                 new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{15, 25, 35, 45, 55}[level] + 0.25 * source.FlatMagicDamageMod },
             });
@@ -1478,9 +1478,9 @@ namespace LeagueSharp.Common
             Spells.Add("Urgot", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{10, 40, 70, 100, 130}[level] + 0.85 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{10, 40, 70, 100, 130}[level] + 0.85 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{75, 130, 185, 240, 295}[level] + 0.6 * source.FlatPhysicalDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{75, 130, 185, 240, 295}[level] + 0.6 * source.FlatPhysicalDamageMod },
             });
 
             Spells.Add("Varus", new List<DamageSpell>
@@ -1616,7 +1616,7 @@ namespace LeagueSharp.Common
                 //E - min
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{70, 90, 110, 130, 150}[level] + 0.6 * source.FlatMagicDamageMod },
                 //R
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{200, 300, 400}[level] + 1.5 * source.FlatPhysicalDamageMod },
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{200, 300, 400}[level] + 1.5 * source.FlatPhysicalDamageMod },
             });
 
             Spells.Add("Yorick", new List<DamageSpell>
@@ -1644,11 +1644,11 @@ namespace LeagueSharp.Common
             Spells.Add("Zed", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{75, 115, 155, 195, 235}[level] + 1 * source.FlatPhysicalDamageMod},
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{75, 115, 155, 195, 235}[level] + 1 * source.FlatPhysicalDamageMod},
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 90, 120, 150, 180}[level] + 0.8 * source.FlatPhysicalDamageMod },
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{60, 90, 120, 150, 180}[level] + 0.8 * source.FlatPhysicalDamageMod },
                 //R
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) },
             });
 
             Spells.Add("Ziggs", new List<DamageSpell>
