@@ -29,6 +29,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
+using System.Diagnostics;
 
 #endregion
 
@@ -44,7 +45,7 @@ namespace LeagueSharp.Common
         {
             using (new CustomMutex(100))
             {
-                MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared", MemoryCapacity);
+                MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
 
