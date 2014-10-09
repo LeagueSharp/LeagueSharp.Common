@@ -258,7 +258,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte(0xEC);
+                    result.WriteByte(CustomEvents.Game.SCastByte);
                     result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
