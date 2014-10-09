@@ -30,9 +30,6 @@ namespace LeagueSharp.Common
     {
         public class Game
         {
-
-            public static byte SCastByte = 0;
-
             public delegate void OnGameEnded(EventArgs args);
 
             public delegate void OnGameLoaded(EventArgs args);
@@ -40,10 +37,7 @@ namespace LeagueSharp.Common
             static Game()
             {
                 LeagueSharp.Game.OnGameProcessPacket += Game_OnGameProcessPacket;
-                LeagueSharp.Game.OnGameSendPacket += Game_OnGameSendPacket;
             }
-
-
 
             /// <summary>
             /// OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already running) and when reloading an assembly
@@ -71,14 +65,6 @@ namespace LeagueSharp.Common
                 if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                 {
                     OnGameEnd(new EventArgs());
-                }
-            }
-
-            private static void Game_OnGameSendPacket(GamePacketEventArgs args)
-            {
-                if (args.PacketData[0] == Packet.C2S.Cast.Header && SCastByte == 0)
-                {
-                    SCastByte = args.PacketData[5];
                 }
             }
         }
