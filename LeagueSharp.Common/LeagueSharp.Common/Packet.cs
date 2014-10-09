@@ -259,6 +259,7 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
                     result.WriteByte((byte) packetStruct.Slot);
+                    result.WriteByte(0xEC);
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
                     result.WriteFloat(packetStruct.ToX);
@@ -274,6 +275,7 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.SourceNetworkId = packet.ReadInteger();
                     result.Slot = (SpellSlot) packet.ReadByte();
+                    packet.Position += 1;
                     result.FromX = packet.ReadFloat();
                     result.FromY = packet.ReadFloat();
                     result.ToX = packet.ReadFloat();
