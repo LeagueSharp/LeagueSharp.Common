@@ -796,7 +796,7 @@ namespace LeagueSharp.Common
                 new DamageSpell{Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 140, 220, 300}[level] + 0.6 * source.FlatMagicDamageMod },
             });
 
-            Spells.Add("Khartus", new List<DamageSpell>
+            Spells.Add("Karthus", new List<DamageSpell>
             {
                 //Q
                 new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => (new double[]{40, 60, 80, 100, 120}[level] + 0.3 * source.FlatMagicDamageMod) * 2 },
