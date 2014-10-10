@@ -219,7 +219,7 @@ namespace LeagueSharp.Common
             {
                 var m = _cachedWidth != -1 ? _cachedWidth : Convert.ToInt32(GetXmlValue("Width"));
                 _cachedWidth = m;
-                return Drawing.Width / (10 - m);
+                return Math.Min(Drawing.Width / (10 - m), 275);
             }
         }
 
