@@ -380,7 +380,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot);
+            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
         }
 
         /// <summary>
