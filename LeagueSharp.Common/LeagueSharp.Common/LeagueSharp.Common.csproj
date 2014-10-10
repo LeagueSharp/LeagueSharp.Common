@@ -13,7 +13,6 @@
     <FileAlignment>512</FileAlignment>
     <PreBuildEvent />
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
