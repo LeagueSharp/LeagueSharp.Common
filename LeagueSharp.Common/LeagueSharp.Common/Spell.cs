@@ -189,7 +189,7 @@ namespace LeagueSharp.Common
         {
             if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
-                Cast();
+                ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q);
                 _chargedReqSentT = Environment.TickCount;
             }
         }
