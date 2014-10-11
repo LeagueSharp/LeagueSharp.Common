@@ -18,6 +18,10 @@
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+ Hi there BoL devs - looking for an update again? :^ ) 
+*/
+
 #endregion
 
 #region
