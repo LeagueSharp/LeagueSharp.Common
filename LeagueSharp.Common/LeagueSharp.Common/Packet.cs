@@ -315,9 +315,9 @@ namespace LeagueSharp.Common
                             return 0;
                         case SpellSlot.Recall:
                             return 0;
-                        case (SpellSlot) 44:
+                        case (SpellSlot) 0x64:
                             return 0xEF;
-                        case (SpellSlot) 45:
+                        case (SpellSlot) 0x65:
                             return 0xEF;
                         case SpellSlot.Unknown:
                             return 0;
