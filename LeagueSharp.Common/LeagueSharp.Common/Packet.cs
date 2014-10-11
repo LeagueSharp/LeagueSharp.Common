@@ -1289,10 +1289,11 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(Header);
 
                     packet.WriteInteger(packetStruct.TargetNetworkId);
-                    packet.WriteByte((byte) packetStruct.Type);
+                    packet.WriteShort((short) packetStruct.Type);
+                    packet.WriteFloat(packetStruct.DamageAmount);
                     packet.WriteInteger(packetStruct.TargetNetworkIdCopy);
                     packet.WriteInteger(packetStruct.SourceNetworkId);
-                    packet.WriteFloat(packetStruct.DamageAmount);
+
 
                     return packet;
                 }
@@ -1304,10 +1305,10 @@ namespace LeagueSharp.Common
 
                     packet.Position = 1;
                     result.TargetNetworkId = packet.ReadInteger();
-                    result.Type = (DamageTypePacket) packet.ReadByte();
+                    result.Type = (DamageTypePacket) packet.ReadShort();
+                    result.DamageAmount = packet.ReadFloat();
                     result.TargetNetworkIdCopy = packet.ReadInteger();
                     result.SourceNetworkId = packet.ReadInteger();
-                    result.DamageAmount = packet.ReadFloat();
 
                     return result;
                 }
