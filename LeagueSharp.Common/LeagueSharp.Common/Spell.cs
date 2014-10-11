@@ -434,7 +434,7 @@ namespace LeagueSharp.Common
                 {
                     Packet.C2S.ChargedCast.Encoded(
                         new Packet.C2S.ChargedCast.Struct(
-                            (SpellSlot) (0x80 + (byte) Slot), position.X, position.Z, position.Y)).Send();
+                            (SpellSlot) ((byte) Slot), position.X, position.Z, position.Y)).Send();
                 }
                 else
                 {
