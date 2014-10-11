@@ -263,7 +263,7 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
                     result.WriteByte(GetSpellByte(packetStruct.Slot));
-                    result.WriteByte((byte) packetStruct.Slot);
+                    result.WriteByte(GetSpellSlot(packetStruct.Slot));
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
                     result.WriteFloat(packetStruct.ToX);
@@ -285,6 +285,19 @@ namespace LeagueSharp.Common
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
                     return result;
+                }
+
+                private static byte GetSpellSlot(SpellSlot spell)
+                {
+                    switch (spell)
+                    {
+                        case (SpellSlot)64:
+                            return 0x00;
+                        case (SpellSlot)65:
+                            return 0x01;
+                        default:
+                            return (byte)spell;
+                    }
                 }
 
                 private static byte GetSpellByte(SpellSlot spell)
@@ -315,9 +328,9 @@ namespace LeagueSharp.Common
                             return 0;
                         case SpellSlot.Recall:
                             return 0;
-                        case (SpellSlot) 44:
+                        case (SpellSlot) 64:
                             return 0xEF;
-                        case (SpellSlot) 45:
+                        case (SpellSlot) 65:
                             return 0xEF;
                         case SpellSlot.Unknown:
                             return 0;
