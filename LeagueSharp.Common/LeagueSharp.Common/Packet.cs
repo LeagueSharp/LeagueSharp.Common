@@ -1289,7 +1289,8 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(Header);
 
                     packet.WriteInteger(packetStruct.TargetNetworkId);
-                    packet.WriteShort((short) packetStruct.Type);
+                    packet.WriteByte((byte) packetStruct.Type);
+                    packet.WriteShort(packetStruct.Unknown); // Unknown value
                     packet.WriteFloat(packetStruct.DamageAmount);
                     packet.WriteInteger(packetStruct.TargetNetworkIdCopy);
                     packet.WriteInteger(packetStruct.SourceNetworkId);
@@ -1305,7 +1306,8 @@ namespace LeagueSharp.Common
 
                     packet.Position = 1;
                     result.TargetNetworkId = packet.ReadInteger();
-                    result.Type = (DamageTypePacket) packet.ReadShort();
+                    result.Type = (DamageTypePacket) packet.ReadByte();
+                    result.Unknown = packet.ReadShort();
                     result.DamageAmount = packet.ReadFloat();
                     result.TargetNetworkIdCopy = packet.ReadInteger();
                     result.SourceNetworkId = packet.ReadInteger();
@@ -1319,19 +1321,21 @@ namespace LeagueSharp.Common
                     public int SourceNetworkId;
                     public int TargetNetworkId;
                     public int TargetNetworkIdCopy;
+                    public short Unknown;
                     public DamageTypePacket Type;
 
                     public Struct(float damageAmount,
                         int sourceNetworkId,
                         int targetNetworkId,
                         int targetNetworkIdCopy,
-                        DamageTypePacket type)
+                        DamageTypePacket type, short unknown)
                     {
                         DamageAmount = damageAmount;
                         SourceNetworkId = sourceNetworkId;
                         TargetNetworkId = targetNetworkId;
                         TargetNetworkIdCopy = targetNetworkIdCopy;
                         Type = type;
+                        Unknown = unknown;
                     }
                 }
             }
