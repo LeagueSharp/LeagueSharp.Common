@@ -194,6 +194,18 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Start charging the spell if its not charging.
+        /// </summary>
+        public void StartCharging(Vector3 position)
+        {
+            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            {
+                ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q, position);
+                _chargedReqSentT = Environment.TickCount;
+            }
+        }
+
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
             if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && Environment.TickCount - _chargedReqSentT < 3000)
