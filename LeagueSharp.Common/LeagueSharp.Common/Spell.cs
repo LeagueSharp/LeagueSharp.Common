@@ -459,7 +459,7 @@ namespace LeagueSharp.Common
         {
             var currentHitchance = MinHitChange;
             MinHitChange = hitChance;
-            var castResult = _cast(unit, packetCast, false, true);
+            var castResult = _cast(unit, packetCast, false, false);
             MinHitChange = currentHitchance;
             return castResult == CastStates.SuccessfullyCasted;
         }
