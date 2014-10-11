@@ -1306,6 +1306,7 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.TargetNetworkId = packet.ReadInteger();
                     result.Type = (DamageTypePacket) packet.ReadShort();
+                    packet.Position = 8;
                     result.DamageAmount = packet.ReadFloat();
                     result.TargetNetworkIdCopy = packet.ReadInteger();
                     result.SourceNetworkId = packet.ReadInteger();
