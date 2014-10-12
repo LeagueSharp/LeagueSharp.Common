@@ -694,7 +694,9 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.Y);
                     result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte) packetStruct.Type);
+                    result.WriteByte((byte)packetStruct.Type);
+                    result.WriteByte(0xFB);
+
                     return result;
                 }
 
