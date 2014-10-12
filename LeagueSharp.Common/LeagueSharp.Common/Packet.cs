@@ -370,7 +370,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte(0xEA);
+                    result.WriteByte((byte)(packetStruct.Slot == SpellSlot.Q ? 0xEA : 0x9C));
                     result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
