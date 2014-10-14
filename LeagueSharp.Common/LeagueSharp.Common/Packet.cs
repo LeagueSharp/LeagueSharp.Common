@@ -278,13 +278,35 @@ namespace LeagueSharp.Common
                     var result = new Struct();
                     packet.Position = 1;
                     result.SourceNetworkId = packet.ReadInteger();
-                    packet.Position += 1;
-                    result.Slot = (SpellSlot) packet.ReadByte();
+                    result.Slot = GetSpellSlot(packet.ReadByte(), (SpellSlot) packet.ReadByte());
                     result.FromX = packet.ReadFloat();
                     result.FromY = packet.ReadFloat();
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
                     return result;
+                }
+
+                private static SpellSlot GetSpellSlot(byte spellByte, SpellSlot spellSlot)
+                {
+                    if (spellByte != 0xE9 && spellByte != 0xEF && spellByte != 0x8B && spellByte != 0xED &&
+                        spellByte != 0x63)
+                    {
+                        return spellSlot;
+                    }
+
+                    if (spellSlot == SpellSlot.Q)
+                    {
+                        return (SpellSlot) 0x64;
+                        //Summoner 1, this is incorrect though and should be SpellSlot.Summoner1
+                    }
+
+                    if (spellSlot == SpellSlot.W)
+                    {
+                        return (SpellSlot) 0x65;
+                        //Summoner 2, this is incorrect though and should be SpellSlot.Summoner2
+                    }
+
+                    return spellSlot;
                 }
 
                 private static byte GetSpellByte(SpellSlot spell)
@@ -370,7 +392,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte)(packetStruct.Slot == SpellSlot.Q ? 0xEA : 0x9C));
+                    result.WriteByte((byte) (packetStruct.Slot == SpellSlot.Q ? 0xEA : 0x9C));
                     result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
@@ -694,7 +716,7 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.Y);
                     result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte)packetStruct.Type);
+                    result.WriteByte((byte) packetStruct.Type);
                     result.WriteByte(0xFB);
 
                     return result;
@@ -1317,14 +1339,15 @@ namespace LeagueSharp.Common
                     public int SourceNetworkId;
                     public int TargetNetworkId;
                     public int TargetNetworkIdCopy;
-                    public short Unknown;
                     public DamageTypePacket Type;
+                    public short Unknown;
 
                     public Struct(float damageAmount,
                         int sourceNetworkId,
                         int targetNetworkId,
                         int targetNetworkIdCopy,
-                        DamageTypePacket type, short unknown)
+                        DamageTypePacket type,
+                        short unknown)
                     {
                         DamageAmount = damageAmount;
                         SourceNetworkId = sourceNetworkId;
