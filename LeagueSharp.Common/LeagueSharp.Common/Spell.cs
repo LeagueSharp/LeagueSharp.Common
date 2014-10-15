@@ -288,7 +288,7 @@ namespace LeagueSharp.Common
             int minTargets = -1)
         {
             //Spell not ready.
-            if (ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready && !packetCast)
+            if (!CanCast(Slot))
             {
                 return CastStates.NotReady;
             }
@@ -392,7 +392,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
+            return CanCast(Slot) && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
         }
 
         /// <summary>
@@ -438,6 +438,12 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Cast(Vector3 position, bool packetCast = false)
         {
+
+            if (!CanCast(Slot))
+            {
+                return;
+            }
+
             LastCastAttemptT = Environment.TickCount;
 
             if (IsChargedSpell)
@@ -623,6 +629,12 @@ namespace LeagueSharp.Common
         public bool InRange(Vector3 point)
         {
             return RangeCheckFrom.Distance(point, true) < Range * Range;
+        }
+
+        public bool CanCast(SpellSlot spell)
+        {
+            return !ObjectManager.Player.IsDead && ObjectManager.Player.CanCast &&
+                   ObjectManager.Player.Spellbook.CanUseSpell(spell) == SpellState.Ready;
         }
     }
 }
