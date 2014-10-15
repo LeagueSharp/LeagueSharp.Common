@@ -201,15 +201,18 @@ namespace LeagueSharp.Common
 
         public static string MenuSettingsPath
         {
-            get { return MenuConfigPath + "MenuSettings.xml"; }
+            get
+            {
+                return MenuConfigPath + "MenuSettings.xml";
+            }
+            
         }
 
         public static string MenuConfigPath
         {
             get
             {
-                return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) +
-                       "\\CommonLibMenuConfig\\";
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuConfig");
             }
         }
 
