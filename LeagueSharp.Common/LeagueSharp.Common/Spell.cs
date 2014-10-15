@@ -502,13 +502,9 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            if (t == 0)
-            {
-                return true;
-            }
-
-            return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
-                   (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= t / 1000f;
+            return t == 0 ||
+                   (ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
+                    (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= t / 1000f);
         }
 
         /// <summary>
