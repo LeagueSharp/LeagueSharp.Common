@@ -496,10 +496,15 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool IsReady(int t = 0)
         {
-            if (ObjectManager.Player.IsDead || !ObjectManager.Player.CanCast ||
+            if (ObjectManager.Player.IsDead ||
                 (t == 0 && ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready))
             {
                 return false;
+            }
+
+            if (t == 0)
+            {
+                return true;
             }
 
             return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
