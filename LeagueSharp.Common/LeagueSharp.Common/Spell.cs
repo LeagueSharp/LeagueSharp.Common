@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -68,15 +70,15 @@ namespace LeagueSharp.Common
         private float _range;
         private Vector3 _rangeCheckFrom;
 
-        public SpellDataInst Instance
-        {
-            get { return ObjectManager.Player.Spellbook.GetSpell(Slot); }
-        }
-
         public Spell(SpellSlot slot, float range = float.MaxValue)
         {
             Slot = slot;
             Range = range;
+        }
+
+        public SpellDataInst Instance
+        {
+            get { return ObjectManager.Player.Spellbook.GetSpell(Slot); }
         }
 
         public float Range
@@ -131,10 +133,7 @@ namespace LeagueSharp.Common
 
         public Vector3 RangeCheckFrom
         {
-            get
-            {
-                return !_rangeCheckFrom.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _rangeCheckFrom;
-            }
+            get { return !_rangeCheckFrom.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _rangeCheckFrom; }
             set { _rangeCheckFrom = value; }
         }
 
@@ -215,7 +214,7 @@ namespace LeagueSharp.Common
                 {
                     return;
                 }
-                Console.WriteLine((byte)decoded.Slot);
+                Console.WriteLine((byte) decoded.Slot);
                 args.Process = false;
             }
 
@@ -252,33 +251,35 @@ namespace LeagueSharp.Common
 
         public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1)
         {
-
-            return Prediction.GetPrediction(new PredictionInput
-            {
-                Unit = unit,
-                Delay = Delay,
-                Radius = Width,
-                Speed = Speed,
-                From = From,
-                Range = (overrideRange > 0) ? overrideRange : Range,
-                Collision = Collision,
-                Type = Type,
-                RangeCheckFrom = RangeCheckFrom,
-                Aoe = aoe,
-            });
+            return
+                Prediction.GetPrediction(
+                    new PredictionInput
+                    {
+                        Unit = unit,
+                        Delay = Delay,
+                        Radius = Width,
+                        Speed = Speed,
+                        From = From,
+                        Range = (overrideRange > 0) ? overrideRange : Range,
+                        Collision = Collision,
+                        Type = Type,
+                        RangeCheckFrom = RangeCheckFrom,
+                        Aoe = aoe,
+                    });
         }
 
         public List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> to, float delayOverride = -1)
         {
-            return Common.Collision.GetCollision(to.Select(h => h.To3D()).ToList(), new PredictionInput
-            {
-                From = from.To3D(),
-                Type = Type,
-                Radius = Width,
-                Delay = delayOverride > 0 ? delayOverride : Delay,
-                Speed = Speed,
-            });
-            
+            return Common.Collision.GetCollision(
+                to.Select(h => h.To3D()).ToList(),
+                new PredictionInput
+                {
+                    From = from.To3D(),
+                    Type = Type,
+                    Radius = Width,
+                    Delay = delayOverride > 0 ? delayOverride : Delay,
+                    Speed = Speed,
+                });
         }
 
         private CastStates _cast(Obj_AI_Base unit,
@@ -288,7 +289,7 @@ namespace LeagueSharp.Common
             int minTargets = -1)
         {
             //Spell not ready.
-            if (!CanCast(Slot))
+            if (!IsReady())
             {
                 return CastStates.NotReady;
             }
@@ -392,7 +393,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            return CanCast(Slot) && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
+            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
         }
 
         /// <summary>
@@ -438,8 +439,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Cast(Vector3 position, bool packetCast = false)
         {
-
-            if (!CanCast(Slot))
+            if (!IsReady())
             {
                 return;
             }
@@ -451,8 +451,8 @@ namespace LeagueSharp.Common
                 if (IsCharging)
                 {
                     Packet.C2S.ChargedCast.Encoded(
-                        new Packet.C2S.ChargedCast.Struct(
-                            (SpellSlot) ((byte) Slot), position.X, position.Z, position.Y)).Send();
+                        new Packet.C2S.ChargedCast.Struct((SpellSlot) ((byte) Slot), position.X, position.Z, position.Y))
+                        .Send();
                 }
                 else
                 {
@@ -496,9 +496,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool IsReady(int t = 0)
         {
-            if (t == 0 || ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready)
+            if (ObjectManager.Player.IsDead || !ObjectManager.Player.CanCast ||
+                (t == 0 && ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready))
             {
-                return (t != 0) || ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready;
+                return false;
             }
 
             return ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
@@ -561,7 +562,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public float GetDamage(Obj_AI_Base target, int stage = 0)
         {
-            return (float)ObjectManager.Player.GetSpellDamage(target, Slot, stage);
+            return (float) ObjectManager.Player.GetSpellDamage(target, Slot, stage);
         }
 
         /// <summary>
@@ -629,12 +630,6 @@ namespace LeagueSharp.Common
         public bool InRange(Vector3 point)
         {
             return RangeCheckFrom.Distance(point, true) < Range * Range;
-        }
-
-        public bool CanCast(SpellSlot spell)
-        {
-            return !ObjectManager.Player.IsDead && ObjectManager.Player.CanCast &&
-                   ObjectManager.Player.Spellbook.CanUseSpell(spell) == SpellState.Ready;
         }
     }
 }

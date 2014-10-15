@@ -165,8 +165,6 @@ namespace LeagueSharp.Common
         {
             if (OnTargetChange != null && (_lastTarget == null || _lastTarget.NetworkId != newTarget.NetworkId))
             {
-                Orbwalker.HighlightTarget(newTarget);
-                Orbwalker.HighlightTarget(_lastTarget, false);
                 OnTargetChange(_lastTarget, newTarget);
             }
         }
@@ -402,7 +400,6 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
-                drawings.AddItem(new MenuItem("Highlight", "Highlight Target").SetShared().SetValue(true));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -496,20 +493,6 @@ namespace LeagueSharp.Common
             public void ForceTarget(Obj_AI_Base target)
             {
                 _forcedTarget = target;
-            }
-
-            /// <summary>
-            ///     Highlights or removes a highlight from a unit.
-            /// </summary>
-            public static void HighlightTarget(Obj_AI_Base target, bool showHighlight = true)
-            {
-                return;
-                if (!_config.Item("Highlight").GetValue<bool>() || !(target is Obj_AI_Hero))
-                {
-                    return;
-                }
-
-                //Utility.HighlightUnit(target, showHighlight);
             }
 
             /// <summary>
