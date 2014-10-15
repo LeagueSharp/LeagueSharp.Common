@@ -472,7 +472,16 @@ namespace LeagueSharp.Common
             /// <summary>
             ///     Enables or disables the auto-attacks.
             /// </summary>
+            [Obsolete("Use SetAttack", true)]
             public void SetAttacks(bool b)
+            {
+                Attack = b;
+            }
+
+            /// <summary>
+            ///     Enables or disables the auto-attacks.
+            /// </summary>
+            public void SetAttack(bool b)
             {
                 Attack = b;
             }
