@@ -23,7 +23,6 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -97,7 +96,6 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Game.OnGameProcessPacket += OnProcessPacket;
-
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
@@ -249,8 +247,8 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup) &&
-                       Move;
+                return (Environment.TickCount + Game.Ping / 2 >=
+                        LastAATick + Player.AttackCastDelay * 1000 + extraWindup) && Move;
             }
 
             return false;
@@ -395,8 +393,8 @@ namespace LeagueSharp.Common
                     new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
-                     new MenuItem("AACircle2", "Enemy AA circle").SetShared()
-                          .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
+                    new MenuItem("AACircle2", "Enemy AA circle").SetShared()
+                        .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
@@ -512,7 +510,8 @@ namespace LeagueSharp.Common
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <= Player.GetAutoAttackDamage(minion));
+                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
+                                Player.GetAutoAttackDamage(minion));
             }
 
             public Obj_AI_Base GetTarget()
@@ -597,9 +596,7 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >=
-                                2 *
-                                Player.GetAutoAttackDamage(_prevMinion, false) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion, false) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -612,9 +609,7 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >=
-                                2 *
-                                Player.GetAutoAttackDamage(minion, false) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(minion, false) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon)
                             {
                                 if (minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon)
@@ -688,6 +683,5 @@ namespace LeagueSharp.Common
                 }
             }
         }
-
     }
 }
