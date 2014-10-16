@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="Render.cs" />
     <Compile Include="Spell.cs" />
+    <Compile Include="SpellHumanizer.cs" />
     <Compile Include="TargetSelector.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="MinionManager.cs" />
