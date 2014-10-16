@@ -1,6 +1,6 @@
 ﻿namespace LeagueSharp.Common
 {
-    internal class SpellHumanizer
+    public static class SpellHumanizer
     {
         static SpellHumanizer()
         {
