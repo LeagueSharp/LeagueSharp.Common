@@ -269,6 +269,9 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
                     result.WriteInteger(packetStruct.TargetNetworkId);
+                    
+                    result.Block = !SpellHumanizer.Check(result);
+
                     return result;
                 }
 

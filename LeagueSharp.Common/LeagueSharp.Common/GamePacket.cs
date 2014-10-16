@@ -45,6 +45,7 @@ namespace LeagueSharp.Common
 
         public GamePacket(byte[] data)
         {
+            Block = false;
             Ms = new MemoryStream(data);
             Br = new BinaryReader(Ms);
             Bw = new BinaryWriter(Ms);
@@ -57,6 +58,7 @@ namespace LeagueSharp.Common
 
         public GamePacket(byte header)
         {
+            Block = false;
             Ms = new MemoryStream();
             Br = new BinaryReader(Ms);
             Bw = new BinaryWriter(Ms);
@@ -69,7 +71,7 @@ namespace LeagueSharp.Common
 
         public byte Header
         {
-            get { return _header; }
+            get { return ReadByte(0); } //Better in case header changes, but also resets position.
         }
 
         public long Position
@@ -83,6 +85,8 @@ namespace LeagueSharp.Common
                 }
             }
         }
+
+        public bool Block { get; set; }
 
         /// <summary>
         /// Returns the packet size.
@@ -336,7 +340,10 @@ namespace LeagueSharp.Common
         public void Send(PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.NoFlags)
         {
-            Game.SendPacket(Ms.ToArray(), channel, flags);
+            if (!Block)
+            {
+                Game.SendPacket(Ms.ToArray(), channel, flags);
+            }
         }
 
         /// <summary>
@@ -344,7 +351,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Process(PacketChannel channel = PacketChannel.S2C)
         {
-            Game.ProcessPacket(Ms.ToArray(), channel);
+            if (!Block)
+            {
+                Game.ProcessPacket(Ms.ToArray(), channel);
+            }
         }
 
         /// <summary>
