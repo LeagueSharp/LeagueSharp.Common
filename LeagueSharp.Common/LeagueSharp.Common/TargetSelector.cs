@@ -655,13 +655,13 @@ namespace LeagueSharp.Common
                         }
                         break;
                     case 6:
-                        if (hero.Health - damage < bestTarget.Health - damage)
+                        if (hero.Health/ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100) < bestTarget.Health/ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Physical, 100))
                         {
                             bestTarget = hero;
                         }
                         break;
                     case 7:
-                        if (hero.Health - damage < bestTarget.Health - damage)
+                        if (hero.Health/ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100) < bestTarget.Health/ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, 100))
                         {
                             bestTarget = hero;
                         }
