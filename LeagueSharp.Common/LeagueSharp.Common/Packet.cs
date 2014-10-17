@@ -269,7 +269,7 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
                     result.WriteInteger(packetStruct.TargetNetworkId);
-                    
+
                     result.Block = !SpellHumanizer.Check(result);
 
                     return result;
@@ -1509,6 +1509,97 @@ namespace LeagueSharp.Common
                 {
                     public int NetworkId;
                     public Obj_AI_Hero Player;
+                }
+            }
+
+            #endregion
+
+            #region GainBuff
+
+            /// <summary>
+            /// Packet received on gaining buff.
+            /// </summary>
+            public class GainBuff
+            {
+                public static byte Header = 0xB7;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
+
+                    result.BuffSlot = packet.ReadByte();
+                    result.Type = (BuffType) packet.ReadByte();
+                    result.Stack = packet.ReadByte();
+                    result.Visible = packet.ReadByte() > 0;
+                    result.BuffId = packet.ReadInteger();
+
+                    result.TargetNetworkId = packet.ReadInteger();
+                    result.Target = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.TargetNetworkId);
+
+                    packet.Position += 4;
+
+                    result.Duration = packet.ReadFloat();
+
+                    result.SourceNetworkId = packet.ReadInteger();
+                    result.Source = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.SourceNetworkId);
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int BuffId;
+                    public byte BuffSlot;
+                    public float Duration;
+                    public int NetworkId;
+                    public Obj_AI_Base Source;
+                    public int SourceNetworkId;
+                    public int Stack;
+                    public Obj_AI_Base Target;
+                    public int TargetNetworkId;
+                    public BuffType Type;
+                    public Obj_AI_Base Unit;
+                    public bool Visible;
+                }
+            }
+
+            #endregion
+
+            #region LoseBuff
+
+            /// <summary>
+            /// Packet received on losing buff.
+            /// </summary>
+            public class LoseBuff
+            {
+                public static byte Header = 0x7B;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
+
+                    result.BuffSlot = packet.ReadByte();
+                    result.BuffId = packet.ReadInteger();
+                    result.Duration = packet.ReadFloat();
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int BuffId;
+                    public byte BuffSlot;
+                    public float Duration;
+                    public int NetworkId;
+                    public Obj_AI_Base Unit;
                 }
             }
 
