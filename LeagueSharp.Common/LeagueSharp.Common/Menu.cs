@@ -201,18 +201,15 @@ namespace LeagueSharp.Common
 
         public static string MenuSettingsPath
         {
-            get
-            {
-                return MenuConfigPath + "MenuSettings.xml";
-            }
-            
+            get { return MenuConfigPath + "MenuSettings.xml"; }
         }
 
         public static string MenuConfigPath
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuConfig");
+                return Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuConfig");
             }
         }
 
@@ -606,6 +603,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
+            SaveAll();
             MenuDrawHelper.DrawBox(
                 Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
