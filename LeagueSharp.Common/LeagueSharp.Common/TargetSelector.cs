@@ -570,6 +570,11 @@ namespace LeagueSharp.Common
             return GetTarget(ObjectManager.Player, range, damageType);
         }
 
+        public static Obj_AI_Hero GetSelectedTarget()
+        {
+            return SelectedTarget;
+        }
+        
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
         {
             Obj_AI_Hero bestTarget = null;
@@ -593,7 +598,7 @@ namespace LeagueSharp.Common
                 switch (damageType)
                 {
                     case DamageType.Magical:
-                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
+                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
                         break;
                     case DamageType.Physical:
                         damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
