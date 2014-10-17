@@ -603,7 +603,6 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            SaveAll();
             MenuDrawHelper.DrawBox(
                 Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
