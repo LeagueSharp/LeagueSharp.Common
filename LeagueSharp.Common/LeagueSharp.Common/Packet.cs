@@ -88,12 +88,14 @@ namespace LeagueSharp.Common
             Danger = 2,
             OnMyWay = 4,
             AssistMe = 6,
-            NormalSound = 177,
-            DangerSound = 178,
-            EnemyMissingSound = 179,
-            OnMyWaySound = 180,
-            FallbackSound = 181,
-            AssistMeSound = 182,
+
+            //after 4.18 soundless pings are not posible.
+            NormalSound = 1,
+            DangerSound = 2,
+            EnemyMissingSound = 3,
+            OnMyWaySound = 4,
+            FallbackSound = 5,
+            AssistMeSound = 6,
         }
 
         public static class C2S
