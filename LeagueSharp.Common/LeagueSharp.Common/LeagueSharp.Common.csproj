@@ -103,7 +103,6 @@
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
     <Compile Include="CustomEvents.cs" />
-    <Compile Include="DamageLib.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Items.cs" />
     <Compile Include="MEC.cs" />
@@ -114,6 +113,7 @@
     </Compile>
     <Compile Include="Render.cs" />
     <Compile Include="Spell.cs" />
+    <Compile Include="SpellHumanizer.cs" />
     <Compile Include="TargetSelector.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="MinionManager.cs" />

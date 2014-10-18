@@ -33,8 +33,8 @@ namespace LeagueSharp.Common
 {
     public enum HitChance
     {
-        Dashing = 8,
-        Immobile = 7,
+        Immobile = 8,
+        Dashing = 7,
         VeryHigh = 6,
         High = 5,
         Medium = 4,

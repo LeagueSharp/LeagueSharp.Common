@@ -29,12 +29,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
+using System.Diagnostics;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
-    public static class Global
+    public static class Global 
     {
         internal static MemoryMappedFile MMFile;
         internal static int MemoryCapacity = 75200;
@@ -44,7 +45,7 @@ namespace LeagueSharp.Common
         {
             using (new CustomMutex(100))
             {
-                MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared", MemoryCapacity);
+                MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
 
@@ -73,74 +74,82 @@ namespace LeagueSharp.Common
 
         public static T Read<T>(string key, bool defaultIfMissing = false)
         {
-            using (new CustomMutex(350))
+            try
             {
-                using (var strm = MMFile.CreateViewAccessor())
+                using (new CustomMutex(350))
                 {
-                    var hash = CalculateHash(key);
+                    using (var strm = MMFile.CreateViewAccessor())
+                    {
+                        var hash = CalculateHash(key);
 
-                    var signature = strm.ReadInt32(0);
-                    var startingOffset = 2 * sizeof (int);
-                    int currentOffset;
-                    if (signature == 0x34CFABC0)
-                    {
-                        currentOffset = strm.ReadInt32(sizeof (int));
-                    }
-                    else
-                    {
-                        strm.Write(0, 0x34CFABC0);
-                        strm.Write(sizeof (int), startingOffset);
-                        currentOffset = startingOffset;
-                    }
-                    var thisOffset = startingOffset;
-                    OffsetEntry entry;
-                    while (thisOffset != currentOffset)
-                    {
-                        var buff = new byte[OffsetEntrySize];
-                        strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
-                        entry = FromByteArray<OffsetEntry>(buff);
-                        if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
+                        var signature = strm.ReadInt32(0);
+                        var startingOffset = 2 * sizeof (int);
+                        int currentOffset;
+                        if (signature == 0x34CFABC0)
                         {
-                            if (typeof(T).IsValueType)
-                            {
-                                var buff2 = new byte[Marshal.SizeOf(typeof(T))];
-                                strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, Marshal.SizeOf(typeof(T)));
-                                return FromByteArray<T>(buff2);
-                            }
-                            else
-                            {
-                                byte[] buff2;
-                                if (typeof(T) == typeof(string))
-                                {
-                                    buff2 = new byte[entry.Capacity];
-                                    strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, entry.Capacity);
-                                    var data = System.Text.Encoding.UTF8.GetString(buff2, 0, entry.Capacity);
-                                    var end = data.IndexOf('\0');
-                                    var result = data.Substring(0, end);
-                                    return (T) (object) result;
-                                }
-                                if (typeof(T).IsSerializable)
-                                {
-                                    var size = strm.ReadInt32(thisOffset + OffsetEntrySize);
-                                    buff2 = new byte[size];
-                                    strm.ReadArray(thisOffset + OffsetEntrySize + sizeof (int), buff2, 0, size);
-
-
-                                    // it is a class, must serialize.
-                                    return Deserialize<T>(buff2);
-                                }
-                                throw new Exception(
-                                    String.Format("Type {0} is not serializable!  Cannot read.", typeof(T)));
-                            }
+                            currentOffset = strm.ReadInt32(sizeof (int));
                         }
-                        thisOffset += OffsetEntrySize + entry.Capacity;
+                        else
+                        {
+                            strm.Write(0, 0x34CFABC0);
+                            strm.Write(sizeof (int), startingOffset);
+                            currentOffset = startingOffset;
+                        }
+                        var thisOffset = startingOffset;
+                        OffsetEntry entry;
+                        while (thisOffset != currentOffset)
+                        {
+                            var buff = new byte[OffsetEntrySize];
+                            strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
+                            entry = FromByteArray<OffsetEntry>(buff);
+                            if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
+                            {
+                                if (typeof(T).IsValueType)
+                                {
+                                    var buff2 = new byte[Marshal.SizeOf(typeof(T))];
+                                    strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, Marshal.SizeOf(typeof(T)));
+                                    return FromByteArray<T>(buff2);
+                                }
+                                else
+                                {
+                                    byte[] buff2;
+                                    if (typeof(T) == typeof(string))
+                                    {
+                                        buff2 = new byte[entry.Capacity];
+                                        strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, entry.Capacity);
+                                        var data = System.Text.Encoding.UTF8.GetString(buff2, 0, entry.Capacity);
+                                        var end = data.IndexOf('\0');
+                                        var result = data.Substring(0, end);
+                                        return (T) (object) result;
+                                    }
+                                    if (typeof(T).IsSerializable)
+                                    {
+                                        var size = strm.ReadInt32(thisOffset + OffsetEntrySize);
+                                        buff2 = new byte[size];
+                                        strm.ReadArray(thisOffset + OffsetEntrySize + sizeof (int), buff2, 0, size);
+
+
+                                        // it is a class, must serialize.
+                                        return Deserialize<T>(buff2);
+                                    }
+                                    throw new Exception(
+                                        String.Format("Type {0} is not serializable!  Cannot read.", typeof(T)));
+                                }
+                            }
+                            thisOffset += OffsetEntrySize + entry.Capacity;
+                        }
+                        if (!defaultIfMissing)
+                        {
+                            throw new Exception(String.Format("Config key '{0}' not found!", key));
+                        }
+                        return default(T);
                     }
-                    if (!defaultIfMissing)
-                    {
-                        throw new Exception(String.Format("Config key '{0}' not found!", key));
-                    }
-                    return default(T);
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return default(T);
             }
         }
 
@@ -273,112 +282,120 @@ namespace LeagueSharp.Common
 
         public static void Write<T>(string key, T val)
         {
-            using (new CustomMutex(700))
+            try
             {
-                using (var strm = MMFile.CreateViewAccessor())
+
+                using (new CustomMutex(700))
                 {
-                    var hash = CalculateHash(key);
-                    var requiredCapacity = 8;
-                    byte[] serialized = null;
-                    if (typeof(T).IsValueType)
+                    using (var strm = MMFile.CreateViewAccessor())
                     {
-                        requiredCapacity = Marshal.SizeOf(typeof(T));
-                    }
-                    else if (typeof(T) == typeof(string))
-                    {
-                        requiredCapacity = val.ToString().Length + 1;
-                    }
-                    else if (typeof(T).IsSerializable)
-                    {
-                        // also store the sizeof the serialized object as what's ref'd by ptr
-                        serialized = Serialize(val);
-                        requiredCapacity = serialized.Length + sizeof (int);
-                    }
-                    else
-                    {
-                        throw new Exception(String.Format("Type {0} is not serializable!  Cannot write.", typeof(T)));
-                    }
-
-                    var signature = strm.ReadInt32(0);
-                    var startingOffset = 2 * sizeof (int);
-                    int currentOffset;
-                    if (signature == 0x34CFABC0)
-                    {
-                        currentOffset = strm.ReadInt32(sizeof (int));
-                    }
-                    else
-                    {
-                        strm.Write(0, 0x34CFABC0);
-                        strm.Write(sizeof (int), startingOffset);
-                        currentOffset = startingOffset;
-                    }
-                    var thisOffset = startingOffset;
-                    OffsetEntry entry;
-                    while (thisOffset != currentOffset)
-                    {
-                        var buff = new byte[OffsetEntrySize];
-                        strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
-                        entry = FromByteArray<OffsetEntry>(buff);
-                        if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
+                        var hash = CalculateHash(key);
+                        var requiredCapacity = 8;
+                        byte[] serialized = null;
+                        if (typeof(T).IsValueType)
                         {
-                            if (requiredCapacity <= entry.Capacity)
-                            {
-                                if (typeof(T).IsValueType)
-                                {
-                                    var tobewritten = ToByteArray(val, entry.Capacity);
-                                    strm.WriteArray(
-                                        thisOffset + OffsetEntrySize, tobewritten, 0,
-                                        buff.Length <= entry.Capacity ? buff.Length : entry.Capacity);
-                                }
-                                else if (typeof(T) != typeof(string))
-                                {
-                                    strm.WriteArray(
-                                        thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0,
-                                        sizeof (int));
-                                    strm.WriteArray(
-                                        thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
-                                }
-                                else
-                                {
-                                    var strz = System.Text.Encoding.UTF8.GetBytes(val + "\0");
-                                    strm.WriteArray(thisOffset + OffsetEntrySize, strz, 0, strz.Length);
-                                }
-                                return;
-                            }
-                            var overwriteEntry = entry;
-                            entry.Type = EntryType.Invalid;
-                            strm.WriteArray(
-                                thisOffset, ToByteArray(overwriteEntry, OffsetEntrySize), 0, OffsetEntrySize);
+                            requiredCapacity = Marshal.SizeOf(typeof(T));
                         }
-                        thisOffset += OffsetEntrySize + entry.Capacity;
-                    }
-                    OffsetEntry newEntry;
-                    newEntry.KeyHash = hash;
-                    newEntry.Capacity = (typeof(T).IsValueType ? 1 : 2) * requiredCapacity;
-                    newEntry.Type = EntryType.Basic;
-                    strm.WriteArray(currentOffset, ToByteArray(newEntry, OffsetEntrySize), 0, OffsetEntrySize);
+                        else if (typeof(T) == typeof(string))
+                        {
+                            requiredCapacity = val.ToString().Length + 1;
+                        }
+                        else if (typeof(T).IsSerializable)
+                        {
+                            // also store the sizeof the serialized object as what's ref'd by ptr
+                            serialized = Serialize(val);
+                            requiredCapacity = serialized.Length + sizeof(int);
+                        }
+                        else
+                        {
+                            throw new Exception(String.Format("Type {0} is not serializable!  Cannot write.", typeof(T)));
+                        }
 
-                    if (typeof(T).IsValueType)
-                    {
-                        var buffr = ToByteArray(val, newEntry.Capacity);
-                        strm.WriteArray(
-                            currentOffset + OffsetEntrySize, buffr, 0,
-                            buffr.Length <= newEntry.Capacity ? buffr.Length : newEntry.Capacity);
+                        var signature = strm.ReadInt32(0);
+                        var startingOffset = 2 * sizeof(int);
+                        int currentOffset;
+                        if (signature == 0x34CFABC0)
+                        {
+                            currentOffset = strm.ReadInt32(sizeof(int));
+                        }
+                        else
+                        {
+                            strm.Write(0, 0x34CFABC0);
+                            strm.Write(sizeof(int), startingOffset);
+                            currentOffset = startingOffset;
+                        }
+                        var thisOffset = startingOffset;
+                        OffsetEntry entry;
+                        while (thisOffset != currentOffset)
+                        {
+                            var buff = new byte[OffsetEntrySize];
+                            strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
+                            entry = FromByteArray<OffsetEntry>(buff);
+                            if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
+                            {
+                                if (requiredCapacity <= entry.Capacity)
+                                {
+                                    if (typeof(T).IsValueType)
+                                    {
+                                        var tobewritten = ToByteArray(val, entry.Capacity);
+                                        strm.WriteArray(
+                                            thisOffset + OffsetEntrySize, tobewritten, 0,
+                                            buff.Length <= entry.Capacity ? buff.Length : entry.Capacity);
+                                    }
+                                    else if (typeof(T) != typeof(string))
+                                    {
+                                        strm.WriteArray(
+                                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof(int)), 0,
+                                            sizeof(int));
+                                        strm.WriteArray(
+                                            thisOffset + OffsetEntrySize + sizeof(int), serialized, 0, serialized.Length);
+                                    }
+                                    else
+                                    {
+                                        var strz = System.Text.Encoding.UTF8.GetBytes(val + "\0");
+                                        strm.WriteArray(thisOffset + OffsetEntrySize, strz, 0, strz.Length);
+                                    }
+                                    return;
+                                }
+                                var overwriteEntry = entry;
+                                entry.Type = EntryType.Invalid;
+                                strm.WriteArray(
+                                    thisOffset, ToByteArray(overwriteEntry, OffsetEntrySize), 0, OffsetEntrySize);
+                            }
+                            thisOffset += OffsetEntrySize + entry.Capacity;
+                        }
+                        OffsetEntry newEntry;
+                        newEntry.KeyHash = hash;
+                        newEntry.Capacity = (typeof(T).IsValueType ? 1 : 2) * requiredCapacity;
+                        newEntry.Type = EntryType.Basic;
+                        strm.WriteArray(currentOffset, ToByteArray(newEntry, OffsetEntrySize), 0, OffsetEntrySize);
+
+                        if (typeof(T).IsValueType)
+                        {
+                            var buffr = ToByteArray(val, newEntry.Capacity);
+                            strm.WriteArray(
+                                currentOffset + OffsetEntrySize, buffr, 0,
+                                buffr.Length <= newEntry.Capacity ? buffr.Length : newEntry.Capacity);
+                        }
+                        else if (typeof(T) != typeof(string))
+                        {
+                            strm.WriteArray(
+                                thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof(int)), 0, sizeof(int));
+                            strm.WriteArray(thisOffset + OffsetEntrySize + sizeof(int), serialized, 0, serialized.Length);
+                        }
+                        else
+                        {
+                            var arr = System.Text.Encoding.UTF8.GetBytes(val + "\0");
+                            strm.WriteArray(currentOffset + OffsetEntrySize, arr, 0, arr.Length);
+                        }
+                        // write new currentoffset
+                        strm.Write(sizeof(int), currentOffset + OffsetEntrySize + newEntry.Capacity);
                     }
-                    else if (typeof(T) != typeof(string))
-                    {
-                        strm.WriteArray(
-                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0, sizeof (int));
-                        strm.WriteArray(thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
-                    }
-                    else
-                    {
-                        var arr = System.Text.Encoding.UTF8.GetBytes(val + "\0");
-                        strm.WriteArray(currentOffset + OffsetEntrySize, arr, 0, arr.Length);
-                    }
-                    // write new currentoffset
-                    strm.Write(sizeof (int), currentOffset + OffsetEntrySize + newEntry.Capacity);
                 }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 

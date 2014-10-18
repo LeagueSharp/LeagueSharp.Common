@@ -23,7 +23,6 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -87,6 +86,7 @@ namespace LeagueSharp.Common
         public static bool Attack = true;
         public static bool DisableNextAttack = false;
         public static bool Move = true;
+        public static int LastMoveCommandT = 0;
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
 
@@ -96,7 +96,6 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Game.OnGameProcessPacket += OnProcessPacket;
-
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
@@ -164,8 +163,6 @@ namespace LeagueSharp.Common
         {
             if (OnTargetChange != null && (_lastTarget == null || _lastTarget.NetworkId != newTarget.NetworkId))
             {
-                Orbwalker.HighlightTarget(newTarget);
-                Orbwalker.HighlightTarget(_lastTarget, false);
                 OnTargetChange(_lastTarget, newTarget);
             }
         }
@@ -250,15 +247,22 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup) &&
-                       Move;
+                return (Environment.TickCount + Game.Ping / 2 >=
+                        LastAATick + Player.AttackCastDelay * 1000 + extraWindup) && Move;
             }
 
             return false;
         }
 
-        private static void MoveTo(Vector3 position, float holdAreaRadius = 0)
+        private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false)
         {
+            if (Environment.TickCount - LastMoveCommandT < 80 && !overrideTimer)
+            {
+                return;
+            }
+
+            LastMoveCommandT = Environment.TickCount;
+
             if (Player.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (Player.Path.Count() > 1)
@@ -289,8 +293,10 @@ namespace LeagueSharp.Common
                 if (!DisableNextAttack)
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                    LastAATick = Environment.TickCount + Game.Ping / 2;
-
+                    if (!(target is Obj_AI_Hero))
+                    {
+                        LastAATick = Environment.TickCount + Game.Ping / 2;
+                    }
                     return;
                 }
             }
@@ -387,12 +393,11 @@ namespace LeagueSharp.Common
                     new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
-                     new MenuItem("AACircle2", "Enemy AA circle").SetShared()
-                          .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
+                    new MenuItem("AACircle2", "Enemy AA circle").SetShared()
+                        .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
-                drawings.AddItem(new MenuItem("Highlight", "Highlight Target").SetShared().SetValue(true));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -467,7 +472,16 @@ namespace LeagueSharp.Common
             /// <summary>
             ///     Enables or disables the auto-attacks.
             /// </summary>
+            [Obsolete("Use SetAttack")]
             public void SetAttacks(bool b)
+            {
+                Attack = b;
+            }
+
+            /// <summary>
+            ///     Enables or disables the auto-attacks.
+            /// </summary>
+            public void SetAttack(bool b)
             {
                 Attack = b;
             }
@@ -489,20 +503,6 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            ///     Highlights or removes a highlight from a unit.
-            /// </summary>
-            public static void HighlightTarget(Obj_AI_Base target, bool showHighlight = true)
-            {
-                return;
-                if (!_config.Item("Highlight").GetValue<bool>() || !(target is Obj_AI_Hero))
-                {
-                    return;
-                }
-
-                //Utility.HighlightUnit(target, showHighlight);
-            }
-
-            /// <summary>
             ///     Forces the orbwalker to move to that point while orbwalking (Game.CursorPos by default).
             /// </summary>
             public void SetOrbwalkingPoint(Vector3 point)
@@ -519,7 +519,8 @@ namespace LeagueSharp.Common
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <= Player.GetAutoAttackDamage(minion));
+                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
+                                Player.GetAutoAttackDamage(minion));
             }
 
             public Obj_AI_Base GetTarget()
@@ -604,9 +605,7 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >=
-                                2 *
-                                Player.GetAutoAttackDamage(_prevMinion, false) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion, false) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -619,9 +618,7 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >=
-                                2 *
-                                Player.GetAutoAttackDamage(minion, false) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(minion, false) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon)
                             {
                                 if (minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon)
@@ -695,6 +692,5 @@ namespace LeagueSharp.Common
                 }
             }
         }
-
     }
 }

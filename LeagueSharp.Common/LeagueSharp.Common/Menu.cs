@@ -208,8 +208,8 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) +
-                       "\\CommonLibMenuConfig\\";
+                return Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuConfig");
             }
         }
 
@@ -219,7 +219,7 @@ namespace LeagueSharp.Common
             {
                 var m = _cachedWidth != -1 ? _cachedWidth : Convert.ToInt32(GetXmlValue("Width"));
                 _cachedWidth = m;
-                return Drawing.Width / (10 - m);
+                return Math.Min(Drawing.Width / (10 - m), 275);
             }
         }
 

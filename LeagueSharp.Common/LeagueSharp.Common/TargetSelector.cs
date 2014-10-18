@@ -217,17 +217,23 @@ namespace LeagueSharp.Common
                                     newtarget = target;
                                 }
                                 break;
-                                
+
                             case TargetingMode.LessAttack:
-                                if ((target.Health - ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, target.Health) <
-                                    (newtarget.Health - ObjectManager.Player.CalcDamage(newtarget, Damage.DamageType.Physical, newtarget.Health))))
+                                if ((target.Health -
+                                     ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, target.Health) <
+                                     (newtarget.Health -
+                                      ObjectManager.Player.CalcDamage(
+                                          newtarget, Damage.DamageType.Physical, newtarget.Health))))
                                 {
                                     newtarget = target;
                                 }
                                 break;
                             case TargetingMode.LessCast:
-                                if ((target.Health - ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, target.Health) <
-                                    (newtarget.Health - ObjectManager.Player.CalcDamage(newtarget, Damage.DamageType.Magical, newtarget.Health))))
+                                if ((target.Health -
+                                     ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, target.Health) <
+                                     (newtarget.Health -
+                                      ObjectManager.Player.CalcDamage(
+                                          newtarget, Damage.DamageType.Magical, newtarget.Health))))
                                 {
                                     newtarget = target;
                                 }
@@ -248,11 +254,9 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Hero autopriority = null;
             var prio = 5;
-            foreach (
-                var target in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            target => target != null && target.IsValidTarget() && Geometry.Distance(target) <= _range))
+            foreach (var target in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(target => target != null && target.IsValidTarget() && Geometry.Distance(target) <= _range))
             {
                 var priority = FindPrioForTarget(target.ChampionName);
                 if (autopriority == null)
@@ -365,6 +369,7 @@ namespace LeagueSharp.Common
 
         static SimpleTs()
         {
+            Game.OnGameSendPacket += Game_OnGameSendPacket;
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += Drawing_OnDraw;
         }
@@ -390,24 +395,34 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-
-            foreach (
-                var enemy in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => hero.IsValidTarget())
-                        .OrderByDescending(h => h.Distance(Game.CursorPos))
-                        .Where(enemy => enemy.Distance(Game.CursorPos) < 200))
+            _selectedTarget = null;
+            foreach (var enemy in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(hero => hero.IsValidTarget())
+                    .OrderByDescending(h => h.Distance(Game.CursorPos))
+                    .Where(enemy => enemy.Distance(Game.CursorPos) < 200))
             {
-                if (_selectedTarget != null && enemy.NetworkId == _selectedTarget.NetworkId)
-                {
-                    _selectedTarget = null;
-                }
-                else
-                {
-                    _selectedTarget = enemy;
-                }
+                _selectedTarget = enemy;
             }
         }
+
+
+        private static void Game_OnGameSendPacket(GamePacketEventArgs args)
+        {
+            if (args.PacketData[0] != Packet.C2S.SetTarget.Header)
+            {
+                return;
+            }
+
+            var packet = Packet.C2S.SetTarget.Decoded(args.PacketData);
+
+            if (packet.NetworkId != 0 && packet.Unit.IsValid && packet.Unit is Obj_AI_Hero &&
+                packet.Unit.IsValidTarget())
+            {
+                _selectedTarget = (Obj_AI_Hero) packet.Unit;
+            }
+        }
+
 
         /// <summary>
         /// Sets the priority of the hero
@@ -554,14 +569,19 @@ namespace LeagueSharp.Common
         {
             return GetTarget(ObjectManager.Player, range, damageType);
         }
+
+        public static Obj_AI_Hero GetSelectedTarget()
+        {
+            return SelectedTarget;
+        }
+        
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
         {
             Obj_AI_Hero bestTarget = null;
             var bestRatio = 0f;
 
             if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget) &&
-                (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) ||
-                 champion.Distance(SelectedTarget) < range))
+                (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
             }
@@ -569,8 +589,7 @@ namespace LeagueSharp.Common
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (!hero.IsValidTarget() || IsInvulnerable(hero) ||
-                    ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) &&
-                     !(champion.Distance(hero) < range)))
+                    ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) && !(champion.Distance(hero) < range)))
                 {
                     continue;
                 }
@@ -579,7 +598,7 @@ namespace LeagueSharp.Common
                 switch (damageType)
                 {
                     case DamageType.Magical:
-                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
+                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
                         break;
                     case DamageType.Physical:
                         damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
