@@ -496,8 +496,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool IsReady(int t = 0)
         {
-            if (ObjectManager.Player.IsDead ||
-                (t == 0 && ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready))
+            if (t == 0 && ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready)
             {
                 return false;
             }
