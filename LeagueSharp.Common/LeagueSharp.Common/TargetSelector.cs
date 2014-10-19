@@ -24,6 +24,7 @@
 
 using System;
 using System.Linq;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -173,6 +174,7 @@ namespace LeagueSharp.Common
             Obj_AI_Hero newtarget = null;
             if (_mode != TargetingMode.AutoPriority)
             {
+                //Game.PrintChat("debuuug");
                 foreach (var target in
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(target => target.IsValidTarget() && Geometry.Distance(target) <= _range))
@@ -345,7 +347,6 @@ namespace LeagueSharp.Common
         {
             _mode = mode;
         }
-
         public override string ToString()
         {
             return "Target: " + Target.ChampionName + "Range: " + _range + "Mode: " + _mode;
@@ -366,6 +367,7 @@ namespace LeagueSharp.Common
 
         private static Menu _config;
         private static Obj_AI_Hero _selectedTarget;
+        private static Obj_AI_Hero currentTarget;
 
         static SimpleTs()
         {
@@ -386,6 +388,11 @@ namespace LeagueSharp.Common
             {
                 Render.Circle.DrawCircle(
                     _selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 7, true);
+            }
+            //var DrawTarget = ;
+            if (currentTarget != null && _config.Item("debug").GetValue<bool>())
+            {
+                Drawing.DrawText(Drawing.Width * 0.1f, Drawing.Height * 0.5f, Color.Red , "Targeting: " + currentTarget.Name.ToString());
             }
         }
 
@@ -516,6 +523,7 @@ namespace LeagueSharp.Common
         {
             _config = Config;
             Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            Config.AddItem(new MenuItem("TargetingMode", "Targeting Mode").SetValue(new StringList(new[] { "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack", "LessCast" }, 5)));
             Config.AddItem(
                 new MenuItem("SelTColor", "Selected target color").SetShared()
                     .SetValue(new Circle(true, System.Drawing.Color.Red)));
@@ -532,6 +540,7 @@ namespace LeagueSharp.Common
                             new Slider(
                                 autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
             }
+            Config.AddItem(new MenuItem("debug", "Draw Target").SetShared().SetValue(false));
             Config.AddItem(autoPriorityItem);
         }
 
@@ -565,16 +574,16 @@ namespace LeagueSharp.Common
             return false;
         }
 
+        public static Obj_AI_Hero GetSelectedTarget()
+        {
+            return SelectedTarget;
+        }
+
         public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
         {
             return GetTarget(ObjectManager.Player, range, damageType);
         }
 
-        public static Obj_AI_Hero GetSelectedTarget()
-        {
-            return SelectedTarget;
-        }
-        
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
         {
             Obj_AI_Hero bestTarget = null;
@@ -607,16 +616,66 @@ namespace LeagueSharp.Common
                         damage = 100;
                         break;
                 }
-
-                var ratio = damage / (1 + hero.Health) * GetPriority(hero);
-
-                if (ratio > bestRatio)
+                if (bestTarget == null)
                 {
-                    bestRatio = ratio;
                     bestTarget = hero;
                 }
-            }
+                switch (_config.Item("TargetingMode").GetValue<StringList>().SelectedIndex)
+                {
+                    case 0:
+                        if (hero.Health < bestTarget.Health)
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 1:
+                        if (hero.BaseAttackDamage + hero.FlatPhysicalDamageMod > bestTarget.BaseAttackDamage + bestTarget.FlatPhysicalDamageMod)
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 2:
+                        if (hero.FlatMagicDamageMod > bestTarget.FlatMagicDamageMod)
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 3:
+                        if (Geometry.Distance(ObjectManager.Player, hero) < Geometry.Distance(ObjectManager.Player, bestTarget))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 4:
+                        if (SharpDX.Vector2.Distance(Game.CursorPos.To2D(), hero.Position.To2D()) + 50 < SharpDX.Vector2.Distance(Game.CursorPos.To2D(), bestTarget.Position.To2D()))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 5:
+                        var ratio = damage / (1 + hero.Health) * GetPriority(hero);
 
+                        if (ratio > bestRatio)
+                        {
+                            bestRatio = ratio;
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 6:
+                        if (hero.Health / ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100) < bestTarget.Health / ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Physical, 100))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 7:
+                        if (hero.Health / ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100) < bestTarget.Health / ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, 100))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                }
+            }
+            currentTarget = bestTarget;
             return bestTarget;
         }
     }

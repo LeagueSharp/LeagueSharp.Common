@@ -92,6 +92,7 @@
     <Compile Include="Alerter.cs" />
     <Compile Include="AntiGapcloser.cs" />
     <Compile Include="Damage.cs" />
+    <Compile Include="DamageLib.cs" />
     <Compile Include="Dash.cs" />
     <Compile Include="GamePacket.cs" />
     <Compile Include="Global.cs" />
