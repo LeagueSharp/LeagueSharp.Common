@@ -940,7 +940,7 @@ namespace LeagueSharp.Common
                     return new ReturnStruct
                     {
                         UnknownNetworkId = unknownNetworkId,
-                        UnknownByte = unknownByte;
+                        UnknownByte = unknownByte,
                     };
                 }
 
@@ -971,7 +971,7 @@ namespace LeagueSharp.Common
                     return new ReturnStruct
                     {
                         UnknownNetworkId = unknownNetworkId,
-                        UnknownByte = unknownByte;
+                        UnknownByte = unknownByte,
                     };
                 }
 
