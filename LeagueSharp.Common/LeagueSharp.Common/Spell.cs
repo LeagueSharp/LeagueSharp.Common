@@ -58,7 +58,9 @@ namespace LeagueSharp.Common
         public bool IsChargedSpell;
         public bool IsSkillshot;
         public int LastCastAttemptT = 0;
+        [Obsolete("Use MinHitChance")]
         public HitChance MinHitChange = HitChance.High;
+        public HitChance MinHitChance = HitChance.High;
         public SpellSlot Slot;
         public float Speed;
         public SkillshotType Type;
@@ -348,7 +350,7 @@ namespace LeagueSharp.Common
             }
 
             //The hitchance is too low.
-            if (prediction.Hitchance < MinHitChange || (exactHitChance && prediction.Hitchance != MinHitChange))
+            if (prediction.Hitchance < MinHitChance || (exactHitChance && prediction.Hitchance != MinHitChance))
             {
                 return CastStates.LowHitChance;
             }
@@ -475,10 +477,12 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool CastIfHitchanceEquals(Obj_AI_Base unit, HitChance hitChance, bool packetCast = false)
         {
-            var currentHitchance = MinHitChange;
-            MinHitChange = hitChance;
+            var currentHitchance = MinHitChance;
+            MinHitChance = hitChance;
+            MinHitChange = MinHitChance;
             var castResult = _cast(unit, packetCast, false, false);
-            MinHitChange = currentHitchance;
+            MinHitChance = currentHitchance;
+            MinHitChange = MinHitChance;
             return castResult == CastStates.SuccessfullyCasted;
         }
 
