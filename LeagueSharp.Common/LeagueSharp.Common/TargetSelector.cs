@@ -516,6 +516,7 @@ namespace LeagueSharp.Common
         {
             _config = Config;
             Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            Config.AddItem(new MenuItem("TargetingMode", "Targeting Mode").SetValue(new StringList(new[] { "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack", "LessCast" }, 5)));
             Config.AddItem(
                 new MenuItem("SelTColor", "Selected target color").SetShared()
                     .SetValue(new Circle(true, System.Drawing.Color.Red)));
@@ -608,12 +609,63 @@ namespace LeagueSharp.Common
                         break;
                 }
 
-                var ratio = damage / (1 + hero.Health) * GetPriority(hero);
-
-                if (ratio > bestRatio)
+                if (bestTarget == null)
                 {
-                    bestRatio = ratio;
                     bestTarget = hero;
+                }
+                switch (_config.Item("TargetingMode").GetValue<StringList>().SelectedIndex)
+                {
+                    case 0:
+                        if (hero.Health < bestTarget.Health)
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 1:
+                        if (hero.BaseAttackDamage + hero.FlatPhysicalDamageMod > bestTarget.BaseAttackDamage + bestTarget.FlatPhysicalDamageMod)
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 2:
+                        if (hero.FlatMagicDamageMod > bestTarget.FlatMagicDamageMod)
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 3:
+                        if (Geometry.Distance(ObjectManager.Player, hero) < Geometry.Distance(ObjectManager.Player, bestTarget))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 4:
+                        if (SharpDX.Vector2.Distance(Game.CursorPos.To2D(), hero.Position.To2D()) + 50 < SharpDX.Vector2.Distance(Game.CursorPos.To2D(), bestTarget.Position.To2D()))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 5:
+                        var ratio = damage / (1 + hero.Health) * GetPriority(hero);
+
+                        if (ratio > bestRatio)
+                        {
+                            bestRatio = ratio;
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 6:
+                        if (hero.Health/ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100) < bestTarget.Health/ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Physical, 100))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+                    case 7:
+                        if (hero.Health/ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100) < bestTarget.Health/ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, 100))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
                 }
             }
 
