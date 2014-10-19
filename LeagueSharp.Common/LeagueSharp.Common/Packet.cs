@@ -80,6 +80,29 @@ namespace LeagueSharp.Common
             Debug
         }
 
+        public enum MultiPacketType
+        {
+            Unknown100 = 0x00,
+            Unknown101 = 0x01,
+            Unknown102 = 0x02,
+            Unknown104 = 0x04,
+            Unknown109 = 0x09,
+            Unknown115 = 0x15,
+            Unknown116 = 0x16,
+            Unknown11A = 0x1A,
+            Unknown11E = 0x1E,
+            Unknown127 = 0x27, // ?? triggers on respawn
+            InitSpell = 0x07,
+            RefundToken = 0x0B,
+            RefundConfirm = 0x0C,
+            OnAttack = 0x0F,
+            SurrenderState = 0x0E,
+            DeathTimer = 0x17,
+            ItemSubsitution = 0x1C,
+            ActionState = 0x21, // ?? triggers on recall
+            Unknown = 0xFF, // Default, not real packet
+        }
+
         public enum PingType
         {
             Normal = 1,
@@ -97,6 +120,7 @@ namespace LeagueSharp.Common
             FallbackSound = 5,
             AssistMeSound = 6,
         }
+
 
         public static class C2S
         {
@@ -700,6 +724,51 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+        }
+
+        public static class MultiPacket
+        {
+            #region INFO
+
+            /*
+             * This is the MultiPacket packet. 
+             * Packets in LoL are restricted to one byte i.e. (0-254) or (0 - 0xFE). 
+             * Riot needed to add more packets, but couldn't add anymore headers.
+             * The new packets are being added to 0xFE with a sub-header in order to be identified. 
+             */
+
+            #endregion
+
+            public static byte Header = 0xFE;
+
+            public static Struct DecodeHeader(byte[] data)
+            {
+                var packet = new GamePacket(data);
+
+                var networkId = packet.ReadInteger(1);
+                var subHeader = packet.ReadByte(5);
+
+                if (Enum.GetName(typeof(MultiPacketType), subHeader) == null)
+                {
+                    return new Struct(networkId, MultiPacketType.Unknown, subHeader);
+                }
+
+                return new Struct(networkId, (MultiPacketType) subHeader);
+            }
+
+            public struct Struct
+            {
+                public int NetworkId;
+                public byte SubHeader;
+                public MultiPacketType Type;
+
+                public Struct(int networkId, MultiPacketType type, byte subHeader = 0xFF)
+                {
+                    NetworkId = networkId;
+                    Type = type;
+                    SubHeader = subHeader == 0xFF ? (byte) type : subHeader;
+                }
+            }
         }
 
         public static class S2C
