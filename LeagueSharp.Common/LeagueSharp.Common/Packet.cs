@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using SharpDX;
 
 #endregion
 
@@ -35,6 +36,13 @@ namespace LeagueSharp.Common
 {
     public static class Packet
     {
+        public enum AttackTypePacket
+        {
+            Circular = 0,
+            ConeSkillShot = 1, // Cone and Skillshot spells
+            TargetedAA = 2, // Targeted spells and AAs
+        }
+
         public enum DamageTypePacket
         {
             Magical = 4,
@@ -748,12 +756,9 @@ namespace LeagueSharp.Common
                 var networkId = packet.ReadInteger(1);
                 var subHeader = packet.ReadByte(5);
 
-                if (Enum.GetName(typeof(MultiPacketType), subHeader) == null)
-                {
-                    return new Struct(networkId, MultiPacketType.Unknown, subHeader);
-                }
-
-                return new Struct(networkId, (MultiPacketType) subHeader);
+                return Enum.GetName(typeof(MultiPacketType), subHeader) == null
+                    ? new Struct(networkId, MultiPacketType.Unknown, subHeader)
+                    : new Struct(networkId, (MultiPacketType) subHeader);
             }
 
             public struct Struct
@@ -769,6 +774,114 @@ namespace LeagueSharp.Common
                     SubHeader = subHeader == 0xFF ? (byte) type : subHeader;
                 }
             }
+
+            #region OnAttack
+
+            /// <summary>
+            /// Received when attacking or casting a spell on a unit.'
+            /// This packet comes before 0xB5 (S2C.Cast)
+            /// The attack can be cancelled and the packet will still be received.
+            /// </summary>
+            public static class OnAttack
+            {
+                public static byte SubHeader = (byte) MultiPacketType.OnAttack;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var returnStruct = new ReturnStruct
+                    {
+                        Type = (AttackTypePacket) packet.ReadByte(7),
+                        Position = new Vector3(packet.ReadFloat(), packet.ReadFloat(16), packet.ReadFloat(12)),
+                        TargetNetworkId = packet.ReadInteger(20)
+                    };
+
+                    return returnStruct;
+                }
+
+                public struct ReturnStruct
+                {
+                    public Vector3 Position;
+                    public int TargetNetworkId;
+                    public AttackTypePacket Type;
+                }
+            }
+
+            #endregion
+
+            #region SurrenderState
+
+            /// <summary>
+            /// Received when surrender is available.
+            /// </summary>
+            public static class SurrenderState
+            {
+                public static byte SubHeader = (byte) MultiPacketType.SurrenderState;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    return new ReturnStruct(data[7] == 0x01);
+                }
+
+                public struct ReturnStruct
+                {
+                    public bool CanSurrender;
+
+                    public ReturnStruct(bool canSurrender)
+                    {
+                        CanSurrender = canSurrender;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region RefundAmount
+
+            /// <summary>
+            /// Refund token contains refund amount, when leaving base or casting spell/item it's set to 0.
+            /// </summary>
+            public static class RefundToken
+            {
+                public static byte SubHeader = (byte) MultiPacketType.RefundToken;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    return new ReturnStruct { RefundAmount = data[7] };
+                }
+
+                public struct ReturnStruct
+                {
+                    public int RefundAmount;
+                }
+            }
+
+            #endregion
+
+            #region DeathTimer
+
+            /// <summary>
+            /// Contains death timer for hero.
+            /// </summary>
+            public static class DeathTimer
+            {
+                public static byte SubHeader = (byte) MultiPacketType.DeathTimer;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var hero = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(packet.ReadInteger(1));
+                    return new ReturnStruct { Time = packet.ReadFloat(7), Hero = hero };
+                }
+
+                public struct ReturnStruct
+                {
+                    public Obj_AI_Hero Hero;
+                    public float Time;
+                }
+            }
+
+            #endregion
         }
 
         public static class S2C
