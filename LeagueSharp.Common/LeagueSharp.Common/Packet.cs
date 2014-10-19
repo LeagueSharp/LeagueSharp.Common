@@ -930,18 +930,14 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class Unknown101
             {
-                public static byte SubHeader = (byte)MultiPacketType.Unknown101;
+                public static byte SubHeader = (byte) MultiPacketType.Unknown101;
 
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
                     var unknownNetworkId = packet.ReadInteger(7);
                     var unknownByte = packet.ReadByte();
-                    return new ReturnStruct
-                    {
-                        UnknownNetworkId = unknownNetworkId,
-                        UnknownByte = unknownByte;
-                    };
+                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
                 }
 
                 public struct ReturnStruct
@@ -961,18 +957,41 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class Unknown102
             {
-                public static byte SubHeader = (byte)MultiPacketType.Unknown102;
+                public static byte SubHeader = (byte) MultiPacketType.Unknown102;
 
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
                     var unknownNetworkId = packet.ReadInteger(7);
                     var unknownByte = packet.ReadByte();
-                    return new ReturnStruct
-                    {
-                        UnknownNetworkId = unknownNetworkId,
-                        UnknownByte = unknownByte;
-                    };
+                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
+                }
+
+                public struct ReturnStruct
+                {
+                    public byte UnknownByte;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown104
+
+            /// <summary>
+            /// Unknown
+            /// Struct from ida, this packet is related to spell slots.
+            /// </summary>
+            public static class Unknown104
+            {
+                public static byte SubHeader = (byte) MultiPacketType.Unknown104;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7);
+                    var unknownByte = packet.ReadByte();
+                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
                 }
 
                 public struct ReturnStruct
@@ -1044,7 +1063,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class SpawnTurret
             {
-                public static byte SubHeader = (byte)MultiPacketType.SpawnTurret;
+                public static byte SubHeader = (byte) MultiPacketType.SpawnTurret;
 
                 public static void Decoded(byte[] data)
                 {
