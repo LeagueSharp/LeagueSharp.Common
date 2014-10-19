@@ -95,10 +95,11 @@ namespace LeagueSharp.Common
             Unknown102 = 0x02,
             Unknown104 = 0x04,
             Unknown109 = 0x09,
-            Unknown115 = 0x15,
+            Unknown115 = 0x15, // confirmed in ida
             Unknown116 = 0x16,
             Unknown11A = 0x1A,
             Unknown11E = 0x1E,
+            Unknown124 = 0x24, // confirmed in ida
             Unknown127 = 0x27, // ?? triggers on respawn
             InitSpell = 0x07,
             RefundToken = 0x0B,
@@ -108,6 +109,7 @@ namespace LeagueSharp.Common
             DeathTimer = 0x17,
             ItemSubsitution = 0x1C,
             ActionState = 0x21, // ?? triggers on recall
+            SpawnTurret = 0x23, // confirmed in ida
             Unknown = 0xFF, // Default, not real packet
         }
 
@@ -880,6 +882,190 @@ namespace LeagueSharp.Common
                     public float Time;
                 }
             }
+
+            #endregion
+
+            #region Unknown
+
+            #region Unknown100
+
+            /// <summary>
+            /// Unknown, ?? "Marker"
+            /// Struct from ida
+            /// </summary>
+            public static class Unknown100
+            {
+                public static byte SubHeader = (byte) MultiPacketType.Unknown100;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7);
+                    packet.Position = 12;
+                    // these floats are probably a position
+                    var unknownFloat1 = packet.ReadFloat();
+                    var unknownFloat2 = packet.ReadFloat();
+                    var unknownFloat3 = packet.ReadFloat();
+                    return new ReturnStruct
+                    {
+                        UnknownNetworkId = unknownNetworkId,
+                        UnknownFloats = new[] { unknownFloat1, unknownFloat2, unknownFloat3 }
+                    };
+                }
+
+                public struct ReturnStruct
+                {
+                    public float[] UnknownFloats;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown101
+
+            /// <summary>
+            /// Unknown
+            /// Struct from ida, this packet almost identical to 0xD7/0x102
+            /// </summary>
+            public static class Unknown101
+            {
+                public static byte SubHeader = (byte)MultiPacketType.Unknown101;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7);
+                    var unknownByte = packet.ReadByte();
+                    return new ReturnStruct
+                    {
+                        UnknownNetworkId = unknownNetworkId,
+                        UnknownByte = unknownByte;
+                    };
+                }
+
+                public struct ReturnStruct
+                {
+                    public byte UnknownByte;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown102
+
+            /// <summary>
+            /// Unknown
+            /// Struct from ida, this packet almost identical to 0xD7/0x101
+            /// </summary>
+            public static class Unknown102
+            {
+                public static byte SubHeader = (byte)MultiPacketType.Unknown102;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7);
+                    var unknownByte = packet.ReadByte();
+                    return new ReturnStruct
+                    {
+                        UnknownNetworkId = unknownNetworkId,
+                        UnknownByte = unknownByte;
+                    };
+                }
+
+                public struct ReturnStruct
+                {
+                    public byte UnknownByte;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown115
+
+            /// <summary>
+            /// Unknown
+            /// Struct from ida
+            /// </summary>
+            public static class Unknown115
+            {
+                public static byte SubHeader = (byte) MultiPacketType.Unknown115;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7);
+                    var unknownByte = packet.ReadByte();
+                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
+                }
+
+                public struct ReturnStruct
+                {
+                    public byte UnknownByte;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown124
+
+            /// <summary>
+            /// Unknown
+            /// Struct from ida
+            /// </summary>
+            public static class Unknown124
+            {
+                public static byte SubHeader = (byte) MultiPacketType.Unknown124;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7);
+                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId };
+                }
+
+                public struct ReturnStruct
+                {
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region SpawnTurret
+
+            /// <summary>
+            /// SpawnTurret
+            /// Struct from ida
+            /// </summary>
+            public static class SpawnTurret
+            {
+                public static byte SubHeader = (byte)MultiPacketType.SpawnTurret;
+
+                public static void Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownNetworkId = packet.ReadInteger(7); // Node ID??
+                    var unknownNetworkId2 = packet.ReadInteger(); // Object ID??
+                    var unknownByte = packet.ReadByte();
+                    var name = packet.ReadString();
+                    var skin = packet.ReadString(80);
+                    var skinID = packet.ReadInteger(144);
+                    var unknownShort = packet.ReadShort(165);
+                }
+
+                public struct ReturnStruct
+                {
+                    public float[] UnknownFloats;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
 
             #endregion
         }
