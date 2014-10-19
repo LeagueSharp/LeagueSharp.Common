@@ -11,6 +11,7 @@ namespace LeagueSharp.Common
     {
         private static readonly List<byte> NonSummonerByte = new List<byte>
         {
+            0xF3,
             0xE8,
             0xEE,
             0xEC,
