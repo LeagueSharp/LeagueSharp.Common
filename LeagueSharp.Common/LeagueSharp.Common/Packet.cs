@@ -90,26 +90,32 @@ namespace LeagueSharp.Common
 
         public enum MultiPacketType
         {
+            /* Confirmed in IDA */
             Unknown100 = 0x00,
             Unknown101 = 0x01,
             Unknown102 = 0x02,
             Unknown104 = 0x04,
-            Unknown109 = 0x09,
-            Unknown115 = 0x15, // confirmed in ida
+            Unknown115 = 0x15,
             Unknown116 = 0x16,
+            Unknown124 = 0x24,
             Unknown11A = 0x1A,
-            Unknown11E = 0x1E,
-            Unknown124 = 0x24, // confirmed in ida
-            Unknown127 = 0x27, // ?? triggers on respawn
-            InitSpell = 0x07,
-            RefundToken = 0x0B,
-            RefundConfirm = 0x0C,
+            Unknown11E = 0x1E, // currently empty
+            Unknown122 = 0x22,
+            Unknown126 = 0x26,
+            /* These others could be packets with a handler */
+            Unknown109 = 0x09,
+            Unknown127 = 0x27, // ?? triggers on respawn, has item struct?
+            SpawnTurret = 0x23, // confirmed in ida
+
+            InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc?
+            UndoToken = 0x0B,
+            UndoConfirm = 0x0C,
             OnAttack = 0x0F,
             SurrenderState = 0x0E,
             DeathTimer = 0x17,
-            ItemSubsitution = 0x1C,
+            ItemSubsitution = 0x1C, //like hpp=>biscuit
             ActionState = 0x21, // ?? triggers on recall
-            SpawnTurret = 0x23, // confirmed in ida
+
             Unknown = 0xFF, // Default, not real packet
         }
 
@@ -854,14 +860,14 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region RefundAmount
+            #region UndoToken
 
             /// <summary>
             /// Refund token contains refund amount, when leaving base or casting spell/item it's set to 0.
             /// </summary>
             public static class RefundToken
             {
-                public static byte SubHeader = (byte) MultiPacketType.RefundToken;
+                public static byte SubHeader = (byte) MultiPacketType.UndoToken;
 
                 public static ReturnStruct Decoded(byte[] data)
                 {
@@ -1040,6 +1046,35 @@ namespace LeagueSharp.Common
                 public struct ReturnStruct
                 {
                     public byte UnknownByte;
+                    public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown122
+
+            /// <summary>
+            /// Unknown
+            /// Struct from ida, "timers"
+            /// </summary>
+            public static class Unknown122
+            {
+                public static byte SubHeader = (byte) MultiPacketType.Unknown122;
+
+                public static void Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var unknownByte1 = packet.ReadByte(83); //camp id?
+                    var unknownByte2 = packet.ReadByte(85);
+                    var unknownByte3 = packet.ReadByte(84);
+                    var unknownInt = packet.ReadInteger(86);
+                    var unknownFloat = packet.ReadFloat(90);
+                    // return new ReturnStruct { UnknownNetworkId = unknownNetworkId };
+                }
+
+                public struct ReturnStruct
+                {
                     public int UnknownNetworkId;
                 }
             }
