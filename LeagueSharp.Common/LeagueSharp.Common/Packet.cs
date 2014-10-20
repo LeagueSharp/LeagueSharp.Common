@@ -298,8 +298,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte(GetSpellByte(packetStruct.Slot));
-                    result.WriteByte((byte) packetStruct.Slot);
+                    result.WriteShort(ShortFromSpellSlot(packetStruct.Slot));
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
                     result.WriteFloat(packetStruct.ToX);
@@ -323,6 +322,23 @@ namespace LeagueSharp.Common
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
                     return result;
+                }
+
+                private static short ShortFromSpellSlot(SpellSlot slot)
+                {
+                    var newSlot = (byte) slot;
+
+                    if ((byte) slot == 0x64)
+                    {
+                        newSlot = 0x0;
+                    }
+
+                    if ((byte) slot == 0x65)
+                    {
+                        newSlot = 0x1;
+                    }
+
+                    return BitConverter.ToInt16(new byte[2] { GetSpellByte(slot), newSlot }, 0);
                 }
 
                 private static SpellSlot GetSpellSlot(byte spellByte, SpellSlot spellSlot)
