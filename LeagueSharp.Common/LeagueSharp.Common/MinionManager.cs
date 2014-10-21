@@ -69,7 +69,7 @@ namespace LeagueSharp.Common
 
             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (minion.IsValidTarget(range, false))
+                if (minion.IsValidTarget(range, false, from))
                 {
                     if (team == MinionTeam.Neutral && minion.Team == GameObjectTeam.Neutral ||
                         team == MinionTeam.Ally &&
