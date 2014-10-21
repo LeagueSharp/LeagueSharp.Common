@@ -42,6 +42,8 @@ namespace LeagueSharp.Common
 
         public delegate void OnAttackEvenH(Obj_AI_Base unit, Obj_AI_Base target);
 
+        public delegate void OnNonKillableMinionH(Obj_AI_Base minion);
+
         public delegate void OnTargetChangeH(Obj_AI_Base oldTarget, Obj_AI_Base newTarget);
 
         public enum OrbwalkingMode
@@ -131,6 +133,11 @@ namespace LeagueSharp.Common
         /// </summary>
         public static event OnTargetChangeH OnTargetChange;
 
+        //  <summary>
+        //      Gets called if you can't kill a minion with auto attacks
+        //  </summary>
+        public static event OnNonKillableMinionH OnNonKillableMinion;
+
         private static void FireBeforeAttack(Obj_AI_Base target)
         {
             if (BeforeAttack != null)
@@ -167,6 +174,14 @@ namespace LeagueSharp.Common
             }
         }
 
+        private static void FireOnNonKillableMinion(Obj_AI_Base minion)
+        {
+            if (OnNonKillableMinion != null)
+            {
+                OnNonKillableMinion(minion);
+            }
+        }
+
         /// <summary>
         ///     Returns true if the spellname resets the attack timer.
         /// </summary>
@@ -176,7 +191,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if the unit is melee
+        ///     Returns true if the unit is melee
         /// </summary>
         public static bool IsMelee(this Obj_AI_Base unit)
         {
@@ -308,7 +323,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Resets the Auto-Attack timer.
+        ///     Resets the Auto-Attack timer.
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
@@ -371,7 +386,8 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     This class allows you to add an instance of "Orbwalker" to your assembly in order to control the orbwalking in an easy way.
+        ///     This class allows you to add an instance of "Orbwalker" to your assembly in order to control the orbwalking in an
+        ///     easy way.
         /// </summary>
         public class Orbwalker
         {
@@ -550,11 +566,17 @@ namespace LeagueSharp.Common
                                 1000 * (int) Player.Distance(minion) / (int) GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral && predHealth > 0 &&
-                            predHealth <= Player.GetAutoAttackDamage(minion, true))
+                        if (minion.Team != GameObjectTeam.Neutral)
                         {
-                            //Game.PrintChat("Current Health: " + minion.Health + " Predicted Health:" + (DamageLib.CalcPhysicalMinionDmg(Player.BaseAttackDamage + Player.FlatPhysicalDamageMod, minion, true) - 1 + Orbwalking.GetPassiveDamage(minion)));
-                            return minion;
+                            if (predHealth <= 0)
+                            {
+                                FireOnNonKillableMinion(minion);
+                            }
+
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
+                            {
+                                return minion;
+                            }
                         }
                     }
                 }
