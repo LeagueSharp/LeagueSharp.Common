@@ -344,7 +344,7 @@ namespace LeagueSharp.Common
                         newSlot = 0x1;
                     }
 
-                    return BitConverter.ToInt16(new byte[2] { newSlot, GetSpellByte(slot) }, 0);
+                    return BitConverter.ToInt16(new byte[2] { GetSpellByte(slot), newSlot }, 0);
                 }
 
                 private static SpellSlot GetSpellSlot(byte spellByte, SpellSlot spellSlot)
