@@ -2116,4 +2116,61 @@ namespace LeagueSharp.Common
             #endregion
         }
     }
+
+    #region SetCoodlown
+
+    /// <summary>
+    /// One packet that sets cooldown.
+    /// </summary>
+    public class SetCooldown
+    {
+        public static byte Header = 0x84;
+
+        public static Struct Decoded(byte[] data)
+        {
+            var packet = new GamePacket(data);
+            var result = new Struct();
+
+            result.NetworkId = packet.ReadInteger(1);
+            result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
+            result.Slot = (SpellSlot) packet.ReadByte();
+            packet.Position += 1;
+            result.TotalCooldown = packet.ReadFloat();
+            result.CurrentCooldown = packet.ReadFloat();
+
+            return result;
+        }
+
+        public static GamePacket Encoded(Struct packetStruct)
+        {
+            var packet = new GamePacket(Header);
+            packet.WriteInteger(packetStruct.NetworkId);
+            packet.WriteByte((byte) packetStruct.Slot);
+            packet.WriteByte(0xF8);
+            packet.WriteFloat(packetStruct.TotalCooldown);
+            packet.WriteFloat(packetStruct.CurrentCooldown);
+
+            return packet;
+        }
+
+        public struct Struct
+        {
+            public float CurrentCooldown;
+            public int NetworkId;
+            public SpellSlot Slot;
+            public float TotalCooldown;
+            public Obj_AI_Base Unit;
+
+            public Struct(int networkId, SpellSlot slot, float totalCd, float currentCd)
+            {
+                NetworkId = networkId;
+                Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(NetworkId);
+                Slot = slot;
+                TotalCooldown = totalCd;
+                CurrentCooldown = currentCd;
+            }
+        }
+    }
+
+    #endregion
 }
