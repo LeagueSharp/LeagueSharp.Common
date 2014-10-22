@@ -1003,6 +1003,12 @@ namespace LeagueSharp.Common
                 {
                     public float[] UnknownFloats;
                     public int UnknownNetworkId;
+
+                    public ReturnStruct(int networkId, float[] floats)
+                    {
+                        UnknownNetworkId = networkId;
+                        UnknownFloats = floats;
+                    }
                 }
             }
 
