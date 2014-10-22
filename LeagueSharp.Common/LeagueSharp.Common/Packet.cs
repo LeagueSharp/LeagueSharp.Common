@@ -756,6 +756,55 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region Heartbeat
+
+            /// <summary>
+            /// Packet sent frequently as heartbeat to servers.
+            /// </summary>
+            public static class HeartBeat
+            {
+                public static byte Header = 0x08;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct { RecvTime = packet.ReadFloat(1), AckTime = packet.ReadFloat(5) };
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public float AckTime;
+                    public float RecvTime;
+                }
+            }
+
+            #endregion
+
+            #region UpdateConfirm
+
+            /// <summary>
+            /// Packet sent to acknowledge received update packet.
+            /// </summary>
+            public static class UpdateConfirm
+            {
+                public static byte Header = 0xA8;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct { SequenceId = packet.ReadInteger(5) };
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int SequenceId;
+                }
+            }
+
+            #endregion
         }
 
         public static class MultiPacket
