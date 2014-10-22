@@ -968,6 +968,21 @@ namespace LeagueSharp.Common
             {
                 public static byte SubHeader = (byte) MultiPacketType.Unknown100;
 
+                public static GamePacket Encoded(ReturnStruct pStruct)
+                {
+                    var packet = new GamePacket(Header);
+                    packet.WriteInteger(0);
+                    packet.WriteByte(SubHeader);
+                    packet.WriteByte(0x01); // spacer
+                    packet.WriteInteger(pStruct.UnknownNetworkId);
+                    packet.WriteByte(0);
+                    packet.WriteFloat(pStruct.UnknownFloats[0]);
+                    packet.WriteFloat(pStruct.UnknownFloats[1]);
+                    packet.WriteFloat(pStruct.UnknownFloats[2]);
+
+                    return packet;
+                }
+
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
