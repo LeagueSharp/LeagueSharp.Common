@@ -743,7 +743,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var result = new Struct { NetworkId = new GamePacket(data).ReadInteger(5) };
+                    var result = new Struct { NetworkId = new GamePacket(data).ReadInteger(9) };
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
                     return result;
                 }
