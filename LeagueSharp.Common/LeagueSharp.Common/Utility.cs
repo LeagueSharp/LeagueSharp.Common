@@ -344,10 +344,18 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemysInRange(int range, Obj_AI_Base unit)
         {
+            return CountEnemysInRange(range, ObjectManager.Player.ServerPosition);
+        }
+
+        /// <summary>
+        /// Counts the enemies in range of point.
+        /// </summary>
+        public static int CountEnemysInRange(int range, Vector3 point)
+        {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
                     .Where(units => units.IsValidTarget())
-                    .Count(units => Vector2.Distance(unit.Position.To2D(), units.Position.To2D()) <= range);
+                    .Count(units => Vector2.Distance(point.To2D(), units.Position.To2D()) <= range);
         }
 
         /// <summary>
