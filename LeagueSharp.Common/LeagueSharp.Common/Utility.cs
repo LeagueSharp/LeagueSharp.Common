@@ -39,6 +39,33 @@ namespace LeagueSharp.Common
     public static class Utility
     {
         /// <summary>
+        /// Returns if the source is facing the target.
+        /// <summary>
+        public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
+        {
+            if (source == null || target == null)
+                return false;
+
+            return
+                target.Distance(Vector2.Add(new Vector2(source.Position.X, source.Position.Y),
+                    (Vector2
+                        .Subtract(
+                            new Vector2(source.ServerPosition.X, source.ServerPosition.Y),
+                            new Vector2(source.Position.X, source.Position.Y)).Normalized() * (target.Distance(source))))) <=
+                lineLength;
+        }
+
+        /// <summary>
+        /// Returns if both source and target are Facing Themselves.
+        /// </summary>
+        public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength)
+        {
+            return source.IsFacing(target, lineLength)
+                   && target.IsFacing
+                       (source, lineLength);
+        }
+
+        /// <summary>
         /// Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
         public static bool IsValidTarget(this Obj_AI_Base unit,
@@ -139,14 +166,14 @@ namespace LeagueSharp.Common
 
         public static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length * sizeof (char)];
+            var bytes = new byte[str.Length * sizeof(char)];
             Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
-            var chars = new char[bytes.Length / sizeof (char)];
+            var chars = new char[bytes.Length / sizeof(char)];
             Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
@@ -242,7 +269,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
                 }
             }
 
@@ -392,7 +419,7 @@ namespace LeagueSharp.Common
                 var angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
-                        center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
+                        center.X + radius * (float)Math.Cos(angle), center.Y + radius * (float)Math.Sin(angle),
                         center.Z));
             }
 
@@ -515,9 +542,9 @@ namespace LeagueSharp.Common
 
                     if (damage > unit.Health)
                     {
-                        Text.X = (int) barPos.X + XOffset;
-                        Text.Y = (int) barPos.Y + YOffset - 13;
-                        Text.text = ((int) (unit.Health - damage)).ToString();
+                        Text.X = (int)barPos.X + XOffset;
+                        Text.Y = (int)barPos.Y + YOffset - 13;
+                        Text.text = ((int)(unit.Health - damage)).ToString();
                         Text.OnEndScene();
                     }
 
