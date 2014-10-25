@@ -435,6 +435,14 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Casts the spell
+        /// </summary>
+        public void Cast(bool packetCast = false)
+        {
+            Cast(ObjectManager.Player.Position, packetCast);
+        }
+
+        /// <summary>
         ///     Casts the spell to the position.
         /// </summary>
         public void Cast(Vector2 position, bool packetCast = false)

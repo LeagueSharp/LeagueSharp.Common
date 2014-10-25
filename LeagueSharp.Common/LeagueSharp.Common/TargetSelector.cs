@@ -101,36 +101,26 @@ namespace LeagueSharp.Common
 
         private void Game_OnWndProc(WndEventArgs args)
         {
-            if (MenuGUI.IsChatOpen || ObjectManager.Player.Spellbook.SelectedSpellSlot != SpellSlot.Unknown)
+            if (MenuGUI.IsChatOpen || ObjectManager.Player.Spellbook.SelectedSpellSlot != SpellSlot.Unknown || ObjectManager.Player.IsDead)
             {
                 return;
             }
-
-            if (args.WParam == 1) // LMouse
+            if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
-                switch (args.Msg)
+                _maintarget = null;
+                foreach (var obj in ObjectManager.Get<Obj_AI_Hero>().Where(i => i.IsValidTarget() && i.Distance(Game.CursorPos) <= 130))
                 {
-                    case 257:
-                        foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
-                        {
-                            if (hero.IsValidTarget() &&
-                                SharpDX.Vector2.Distance(Game.CursorPos.To2D(), hero.ServerPosition.To2D()) < 300)
-                            {
-                                Target = hero;
-                                _maintarget = hero;
-                                Game.PrintChat("TargetSelector: New main target: " + _maintarget.ChampionName);
-                            }
-                        }
-                        break;
+                    Target = obj;
+                    _maintarget = obj;
                 }
             }
         }
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            if (!ObjectManager.Player.IsDead && _drawcircle && Target != null && Target.IsVisible && !Target.IsDead)
+            if (!ObjectManager.Player.IsDead && _drawcircle && Target.IsValidTarget())
             {
-                Drawing.DrawCircle(Target.Position, 125, System.Drawing.Color.White);
+                Drawing.DrawCircle(Target.Position, 130, System.Drawing.Color.Red);
             }
         }
 
@@ -391,7 +381,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg != (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
                 return;
             }
@@ -419,7 +409,7 @@ namespace LeagueSharp.Common
             if (packet.NetworkId != 0 && packet.Unit.IsValid && packet.Unit is Obj_AI_Hero &&
                 packet.Unit.IsValidTarget())
             {
-                _selectedTarget = (Obj_AI_Hero) packet.Unit;
+                _selectedTarget = (Obj_AI_Hero)packet.Unit;
             }
         }
 
@@ -574,7 +564,7 @@ namespace LeagueSharp.Common
         {
             return SelectedTarget;
         }
-        
+
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
         {
             Obj_AI_Hero bestTarget = null;
@@ -598,10 +588,10 @@ namespace LeagueSharp.Common
                 switch (damageType)
                 {
                     case DamageType.Magical:
-                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
+                        damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
                         break;
                     case DamageType.Physical:
-                        damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
+                        damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
                         break;
                     case DamageType.True:
                         damage = 100;
