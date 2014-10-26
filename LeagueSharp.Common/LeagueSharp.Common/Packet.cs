@@ -556,6 +556,7 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte(packetStruct.SlotByte);
+                    result.WriteByte(1);
                     return result;
                 }
 
