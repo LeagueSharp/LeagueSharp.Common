@@ -951,6 +951,67 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region UndoConfirm
+
+            /// <summary>
+            ///     Undo confirm comes after undoing.
+            /// </summary>
+            public static class UndoConfirm
+            {
+                public static byte SubHeader = (byte) MultiPacketType.UndoConfirm;
+
+                public static List<RefundItem> Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data) { Position = 7 };
+                    var itemList = new List<RefundItem>();
+
+                    for (var i = 0; i < 7; i++)
+                    {
+                        var itemId = packet.ReadShort();
+                        packet.Position += 2;
+                        var slot = (SpellSlot) (packet.ReadByte() + 4);
+                        var stack = packet.ReadByte();
+                        var charge = packet.ReadByte();
+                        var pos = packet.Position;
+
+                        if (itemId == 0)
+                        {
+                            continue;
+                        }
+
+                        var cd = packet.ReadFloat(packet.Position + 63);
+                        var totalCd = packet.ReadFloat(packet.Position + 40);
+                        packet.Position = pos;
+
+
+                        itemList.Add(new RefundItem(itemId, slot, stack, charge, cd, totalCd));
+                    }
+                    return itemList;
+                }
+
+                public class RefundItem
+                {
+                    public int Charge;
+                    public float CurrentCooldown;
+                    public int ItemId;
+                    public SpellSlot Slot;
+                    public int Stack;
+                    public float TotalCooldown;
+
+                    public RefundItem(short itemId, SpellSlot slot, int stack, int charge, float cd, float totalCd)
+                    {
+                        ItemId = itemId;
+                        Slot = slot;
+                        Stack = stack;
+                        Charge = charge;
+                        CurrentCooldown = cd;
+                        TotalCooldown = totalCd;
+                    }
+                }
+            }
+
+            #endregion
+
             #region DeathTimer
 
             /// <summary>
