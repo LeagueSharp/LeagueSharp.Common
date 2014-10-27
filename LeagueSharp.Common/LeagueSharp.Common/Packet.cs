@@ -126,14 +126,6 @@ namespace LeagueSharp.Common
             Danger = 2,
             OnMyWay = 4,
             AssistMe = 6,
-
-            //after 4.18 soundless pings are not posible.
-            NormalSound = 1,
-            DangerSound = 2,
-            EnemyMissingSound = 3,
-            OnMyWaySound = 4,
-            FallbackSound = 5,
-            AssistMeSound = 6,
         }
 
 
@@ -1338,7 +1330,8 @@ namespace LeagueSharp.Common
                     result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteInteger(packetStruct.SourceNetworkId);
                     result.WriteByte((byte) packetStruct.Type);
-                    result.WriteByte(0xFB);
+                    var bit = packetStruct.Silent ? (byte) 0 : (byte) 0xFB;
+                    result.WriteByte(bit);
 
                     return result;
                 }
@@ -1348,11 +1341,12 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data) { Position = 5 };
                     return new Struct(
                         packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), packet.ReadInteger(),
-                        (PingType) packet.ReadByte());
+                        (PingType) packet.ReadByte(), (packet.ReadByte() & 1) != 1);
                 }
 
                 public struct Struct
                 {
+                    public bool Silent;
                     public int SourceNetworkId;
                     public int TargetNetworkId;
                     public PingType Type;
@@ -1363,13 +1357,15 @@ namespace LeagueSharp.Common
                         float y = 0f,
                         int targetNetworkId = 0,
                         int sourceNetworkId = 0,
-                        PingType type = PingType.Normal)
+                        PingType type = PingType.Normal,
+                        bool silent = false)
                     {
                         X = x;
                         Y = y;
                         TargetNetworkId = targetNetworkId;
                         SourceNetworkId = sourceNetworkId;
                         Type = type;
+                        Silent = silent;
                     }
                 }
             }
