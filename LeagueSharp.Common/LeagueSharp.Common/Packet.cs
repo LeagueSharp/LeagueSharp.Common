@@ -567,7 +567,7 @@ namespace LeagueSharp.Common
                     packet.Position = 1;
                     result.NetworkId = packet.ReadInteger();
                     result.SlotByte = packet.ReadByte();
-                    result.SlotId = (SpellSlot) (result.SlotByte - 0x80 + (byte) SpellSlot.Item1);
+                    result.SlotId = (SpellSlot) (result.SlotByte + 4);
                     return result;
                 }
 
@@ -583,7 +583,7 @@ namespace LeagueSharp.Common
                         SlotByte = (byte) slotId;
                         if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Trinket)
                         {
-                            SlotByte = (byte) (0x80 + SlotByte - (byte) SpellSlot.Item1);
+                            SlotByte = (byte) (SlotByte - 4);
                         }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
@@ -592,10 +592,6 @@ namespace LeagueSharp.Common
                     {
                         SlotByte = slotByte;
                         SlotId = (SpellSlot) slotByte;
-                        if (slotByte >= 0x80 && slotByte <= 0x85)
-                        {
-                            SlotId = (SpellSlot) ((byte) SpellSlot.Item1 + slotByte - 0x80);
-                        }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
                 }
@@ -802,6 +798,27 @@ namespace LeagueSharp.Common
                 public struct Struct
                 {
                     public int SequenceId;
+                }
+            }
+
+            #endregion
+
+            #region Refund
+
+            /// <summary>
+            ///     Sent by client on refund.
+            /// </summary>
+            public static class Refund
+            {
+                public static byte Header = 0xFE;
+
+                public static GamePacket Encoded()
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteInteger(ObjectManager.Player.NetworkId);
+                    result.WriteByte(0xA);
+                    result.WriteByte(1);
+                    return result;
                 }
             }
 
@@ -2207,6 +2224,39 @@ namespace LeagueSharp.Common
                     public SpellSlot Slot;
                     public int Stack;
                     public Obj_AI_Hero Unit;
+                }
+            }
+
+            #endregion
+
+            #region SellItemAns
+
+            /// <summary>
+            /// Packet received on selling item.
+            /// </summary>
+            public class SellItemAns
+            {
+                public static byte Header = 0x0B;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.Slot = (SpellSlot) (packet.ReadByte() + 4);
+                    packet.Position += 1;
+                    result.UnknownByte = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int Charge;
+                    public int NetworkId;
+                    public SpellSlot Slot;
+                    public Obj_AI_Hero Unit;
+                    public byte UnknownByte;
                 }
             }
 
