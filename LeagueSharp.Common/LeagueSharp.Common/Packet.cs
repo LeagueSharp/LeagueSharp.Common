@@ -101,15 +101,14 @@ namespace LeagueSharp.Common
             Unknown11A = 0x1A,
             Unknown11E = 0x1E, // currently empty
             Unknown122 = 0x22,
-            Unknown126 = 0x26,
             /* These others could be packets with a handler */
             Unknown109 = 0x09,
-            Unknown127 = 0x27, // ?? triggers on respawn, has item struct?
             SpawnTurret = 0x23, // confirmed in ida
+            NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
 
             InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc?
             UndoToken = 0x0B,
-            UndoConfirm = 0x0C,
+            UndoConfirm = 0x27,
             OnAttack = 0x0F,
             SurrenderState = 0x0E,
             DeathTimer = 0x17,
@@ -200,7 +199,7 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte((byte) packetStruct.Slot);
-                    result.WriteByte(0x00);
+                    result.WriteByte(packetStruct.Evolution ? (byte) 0x01 : (byte) 0x0);
                     return result;
                 }
 
@@ -212,13 +211,15 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
+                    public bool Evolution;
                     public int NetworkId;
                     public SpellSlot Slot;
 
-                    public Struct(int networkId = -1, SpellSlot slot = SpellSlot.Q)
+                    public Struct(int networkId = -1, SpellSlot slot = SpellSlot.Q, bool evolve = false)
                     {
                         NetworkId = (networkId == -1) ? ObjectManager.Player.NetworkId : networkId;
                         Slot = slot;
+                        Evolution = evolve;
                     }
                 }
             }
@@ -803,12 +804,12 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Refund
+            #region Undo
 
             /// <summary>
-            ///     Sent by client on refund.
+            ///     Sent by client on undo.
             /// </summary>
-            public static class Refund
+            public static class Undo
             {
                 public static byte Header = 0xFE;
 
@@ -930,20 +931,20 @@ namespace LeagueSharp.Common
             #region UndoToken
 
             /// <summary>
-            ///     Refund token contains refund amount, when leaving base or casting spell/item it's set to 0.
+            ///     Undo token contains undo amount, when leaving base or casting spell/item it's set to 0.
             /// </summary>
-            public static class RefundToken
+            public static class UndoToken
             {
                 public static byte SubHeader = (byte) MultiPacketType.UndoToken;
 
                 public static ReturnStruct Decoded(byte[] data)
                 {
-                    return new ReturnStruct { RefundAmount = data[7] };
+                    return new ReturnStruct { UndoAmount = data[7] };
                 }
 
                 public struct ReturnStruct
                 {
-                    public int RefundAmount;
+                    public int UndoAmount;
                 }
             }
 
@@ -1220,6 +1221,33 @@ namespace LeagueSharp.Common
                 {
                     public float[] UnknownFloats;
                     public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region NPCDeath
+
+            /// <summary>
+            ///     NPCDeath
+            ///     Struct from intwars/ida
+            /// </summary>
+            public static class NPCDeath
+            {
+                public static byte SubHeader = (byte) MultiPacketType.NPCDeath;
+
+                public static void Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var KilledNetworkId = packet.ReadInteger(1);
+                    var KilledUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(KilledNetworkId);
+
+                    var KillerNetworkId = packet.ReadInteger(12);
+                    var KillerUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(KillerNetworkId);
+
+                    var unknownByte = packet.ReadByte();
+                    var unknownByte2 = packet.ReadByte();
+                    var unknownInt = packet.ReadInteger(); // intwars says flags
                 }
             }
 
@@ -2245,7 +2273,7 @@ namespace LeagueSharp.Common
 
                     result.NetworkId = packet.ReadInteger(1);
                     result.Slot = (SpellSlot) (packet.ReadByte() + 4);
-                    packet.Position += 1;
+                    result.Stack = packet.ReadByte();
                     result.UnknownByte = packet.ReadByte();
                     return result;
                 }
@@ -2254,6 +2282,7 @@ namespace LeagueSharp.Common
                 {
                     public int NetworkId;
                     public SpellSlot Slot;
+                    public int Stack;
                     public Obj_AI_Hero Unit;
                     public byte UnknownByte;
                 }
