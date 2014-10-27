@@ -44,12 +44,15 @@ namespace LeagueSharp.Common
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
         {
             if (source == null || target == null)
+            {
                 return false;
+            }
 
             return
-                target.Distance(Vector2.Add(new Vector2(source.Position.X, source.Position.Y),
-                    (Vector2
-                        .Subtract(
+                target.Distance(
+                    Vector2.Add(
+                        new Vector2(source.Position.X, source.Position.Y),
+                        (Vector2.Subtract(
                             new Vector2(source.ServerPosition.X, source.ServerPosition.Y),
                             new Vector2(source.Position.X, source.Position.Y)).Normalized() * (target.Distance(source))))) <=
                 lineLength;
@@ -60,9 +63,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength)
         {
-            return source.IsFacing(target, lineLength)
-                   && target.IsFacing
-                       (source, lineLength);
+            return source.IsFacing(target, lineLength) && target.IsFacing(source, lineLength);
         }
 
         /// <summary>
@@ -110,6 +111,16 @@ namespace LeagueSharp.Common
         public static void DebugMessage(string debugMessage)
         {
             Packet.S2C.DebugMessage.Encoded(debugMessage).Process();
+        }
+
+        public static void DumpPacket(byte[] data, bool printChat = false)
+        {
+            var p = new GamePacket(data).Dump();
+            Console.WriteLine(p);
+            if (printChat)
+            {
+                Game.PrintChat(p);
+            }
         }
 
         public static void PrintFloatText(GameObject obj, string text, Packet.FloatTextPacket type)
@@ -166,14 +177,14 @@ namespace LeagueSharp.Common
 
         public static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length * sizeof(char)];
+            var bytes = new byte[str.Length * sizeof (char)];
             Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
-            var chars = new char[bytes.Length / sizeof(char)];
+            var chars = new char[bytes.Length / sizeof (char)];
             Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
@@ -269,7 +280,7 @@ namespace LeagueSharp.Common
                 var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
-                    result = CutPath(path, (int)(unit.MoveSpeed * timePassed));
+                    result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
                 }
             }
 
@@ -419,7 +430,7 @@ namespace LeagueSharp.Common
                 var angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
-                        center.X + radius * (float)Math.Cos(angle), center.Y + radius * (float)Math.Sin(angle),
+                        center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
                         center.Z));
             }
 
@@ -542,9 +553,9 @@ namespace LeagueSharp.Common
 
                     if (damage > unit.Health)
                     {
-                        Text.X = (int)barPos.X + XOffset;
-                        Text.Y = (int)barPos.Y + YOffset - 13;
-                        Text.text = ((int)(unit.Health - damage)).ToString();
+                        Text.X = (int) barPos.X + XOffset;
+                        Text.Y = (int) barPos.Y + YOffset - 13;
+                        Text.text = ((int) (unit.Health - damage)).ToString();
                         Text.OnEndScene();
                     }
 
