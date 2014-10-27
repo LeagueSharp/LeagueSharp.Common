@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -38,6 +39,30 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Utility
     {
+        private const int STD_INPUT_HANDLE = -10;
+        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
+
+        [DllImport("kernel32.dll")]
+        private static extern bool SetConsoleMode(IntPtr hConsoleHandle, int mode);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int mode);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetStdHandle(int handle);
+
+        /// <summary>
+        /// Allows text in the console to be selected and copied.
+        /// <summary>
+        public static void EnableConsoleEditMode()
+        {
+            int mode;
+            var handle = GetStdHandle(STD_INPUT_HANDLE);
+            GetConsoleMode(handle, out mode);
+            mode |= ENABLE_QUICK_EDIT_MODE;
+            SetConsoleMode(handle, mode);
+        }
+
         /// <summary>
         /// Returns if the source is facing the target.
         /// <summary>
