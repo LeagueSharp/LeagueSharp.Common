@@ -2252,11 +2252,41 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public int Charge;
                     public int NetworkId;
                     public SpellSlot Slot;
                     public Obj_AI_Hero Unit;
                     public byte UnknownByte;
+                }
+            }
+
+            #endregion
+
+            #region SwapItemAns
+
+            /// <summary>
+            /// Packet received on swapping item.
+            /// </summary>
+            public class SwapItemAns
+            {
+                public static byte Header = 0x3E;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.FromSlot = (SpellSlot) (packet.ReadByte() + 4);
+                    result.FromSlot = (SpellSlot) (packet.ReadByte() + 4);
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public SpellSlot FromSlot;
+                    public int NetworkId;
+                    public SpellSlot ToSlot;
+                    public Obj_AI_Hero Unit;
                 }
             }
 
