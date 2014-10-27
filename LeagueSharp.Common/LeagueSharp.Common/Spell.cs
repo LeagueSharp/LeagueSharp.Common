@@ -59,7 +59,6 @@ namespace LeagueSharp.Common
         public bool IsSkillshot;
         public int LastCastAttemptT = 0;
         public HitChance MinHitChance = HitChance.High;
-        [Obsolete("Use MinHitChance")] public HitChance MinHitChange = HitChance.High;
         public SpellSlot Slot;
         public float Speed;
         public SkillshotType Type;
@@ -493,10 +492,8 @@ namespace LeagueSharp.Common
         {
             var currentHitchance = MinHitChance;
             MinHitChance = hitChance;
-            MinHitChange = MinHitChance;
             var castResult = _cast(unit, packetCast, false, false);
             MinHitChance = currentHitchance;
-            MinHitChange = MinHitChance;
             return castResult == CastStates.SuccessfullyCasted;
         }
 
