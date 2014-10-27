@@ -199,7 +199,8 @@ namespace LeagueSharp.Common
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte((byte) packetStruct.Slot);
-                    result.WriteByte(packetStruct.Evolution ? (byte) 0x01 : (byte) 0x0);
+                    var bit = packetStruct.Evolution ? (byte) 0x01 : (byte) 0x0;
+                    result.WriteByte(bit);
                     return result;
                 }
 
