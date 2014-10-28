@@ -971,13 +971,13 @@ namespace LeagueSharp.Common
                             continue;
                         }
 
-                        var cd = packet.ReadFloat(packet.Position + 63);
-                        var totalCd = packet.ReadFloat(packet.Position + 40);
+                        var cd = packet.ReadFloat(packet.Position + 63 - 3 * ((int) slot - 4));
+                        var totalCd = packet.ReadFloat(packet.Position + 36);
                         packet.Position = pos;
-
 
                         itemList.Add(new RefundItem(itemId, slot, stack, charge, cd, totalCd));
                     }
+
                     return itemList;
                 }
 
