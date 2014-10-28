@@ -36,6 +36,12 @@ namespace LeagueSharp.Common
 {
     public static class Packet
     {
+        public enum ActionStates
+        {
+            BeginRecall = 111207118,
+            FinishRecall = 97690254,
+        }
+
         public enum AttackTypePacket
         {
             Circular = 0,
