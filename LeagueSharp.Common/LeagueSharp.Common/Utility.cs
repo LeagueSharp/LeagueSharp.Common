@@ -121,7 +121,7 @@ namespace LeagueSharp.Common
             return true;
         }
 
-        public static void HighlightUnit(Obj_AI_Base unit, bool showHighlight = true)
+        public static void Highlight(this Obj_AI_Base unit, bool showHighlight = true)
         {
             if (showHighlight)
             {
@@ -138,9 +138,9 @@ namespace LeagueSharp.Common
             Packet.S2C.DebugMessage.Encoded(debugMessage).Process();
         }
 
-        public static void DumpPacket(byte[] data, bool printChat = false)
+        public static void DumpPacket(this GamePacket packet, bool printChat = false)
         {
-            var p = new GamePacket(data).Dump();
+            var p = packet.Dump();
             Console.WriteLine(p);
             if (printChat)
             {
@@ -148,7 +148,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static void PrintFloatText(GameObject obj, string text, Packet.FloatTextPacket type)
+        public static void PrintFloatText(this GameObject obj, string text, Packet.FloatTextPacket type)
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
@@ -399,21 +399,43 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemysInRange(int range)
         {
-            return CountEnemysInRange(range, ObjectManager.Player);
+            return ObjectManager.Player.CountEnemysInRange(range);
         }
 
         /// <summary>
         /// Counts the enemies in range of Unit.
         /// </summary>
+        [Obsolete("Use CountEnemysInRange(this Obj_AI_Base, int range)", false)]
         public static int CountEnemysInRange(int range, Obj_AI_Base unit)
         {
-            return CountEnemysInRange(range, ObjectManager.Player.ServerPosition);
+            return ObjectManager.Player.ServerPosition.CountEnemysInRange(range);
+        }
+
+        /// <summary>
+        /// Counts the enemies in range of Unit.
+        /// </summary>
+        public static int CountEnemysInRange(this Obj_AI_Base unit, int range)
+        {
+            return unit.ServerPosition.CountEnemysInRange(range);
         }
 
         /// <summary>
         /// Counts the enemies in range of point.
         /// </summary>
+        [Obsolete("Use CountEnemysInRange(this Vector3 point, int range)", false)]
         public static int CountEnemysInRange(int range, Vector3 point)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(units => units.IsValidTarget())
+                    .Count(units => Vector2.Distance(point.To2D(), units.Position.To2D()) <= range);
+        }
+
+
+        /// <summary>
+        /// Counts the enemies in range of point.
+        /// </summary>
+        public static int CountEnemysInRange(this Vector3 point, int range)
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()

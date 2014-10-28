@@ -128,7 +128,6 @@ namespace LeagueSharp.Common
             AssistMe = 6,
         }
 
-
         public static class C2S
         {
             #region Ping
