@@ -865,6 +865,36 @@ namespace LeagueSharp.Common
                 }
             }
 
+            #region ActionState
+
+            /// <summary>
+            ///     Not sure what this does, recv on recall.
+            /// </summary>
+            public static class ActionState
+            {
+                public static byte SubHeader = (byte) MultiPacketType.ActionState;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    return new ReturnStruct { Action = packet.ReadInteger(7) };
+                }
+
+                public static GamePacket Encoded(ReturnStruct pStruct)
+                {
+                    var packet = BasePacket(SubHeader);
+                    packet.WriteInteger(pStruct.Action);
+                    return packet;
+                }
+
+                public struct ReturnStruct
+                {
+                    public int Action;
+                }
+            }
+
+            #endregion
+
             #region ChangeItem
 
             /// <summary>
@@ -981,6 +1011,8 @@ namespace LeagueSharp.Common
                 {
                     var packet = BasePacket(SubHeader);
                     packet.WriteByte((byte) undoAmount);
+
+                    return packet;
                 }
 
                 public struct ReturnStruct
