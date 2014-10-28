@@ -112,7 +112,7 @@ namespace LeagueSharp.Common
             OnAttack = 0x0F,
             SurrenderState = 0x0E,
             DeathTimer = 0x17,
-            ItemSubsitution = 0x1C, //like hpp=>biscuit
+            ChangeItem = 0x1C, //like hpp=>biscuit
             ActionState = 0x21, // ?? triggers on recall
 
             Unknown = 0xFF, // Default, not real packet
@@ -804,15 +804,11 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class Undo
             {
-                public static byte Header = 0xFE;
+                public static byte Header = MultiPacket.Header;
 
                 public static GamePacket Encoded()
                 {
-                    var result = new GamePacket(Header);
-                    result.WriteInteger(ObjectManager.Player.NetworkId);
-                    result.WriteByte(0xA);
-                    result.WriteByte(1);
-                    return result;
+                    return MultiPacket.BasePacket(0xA);
                 }
             }
 
@@ -833,6 +829,15 @@ namespace LeagueSharp.Common
             #endregion
 
             public static byte Header = 0xFE;
+
+            public static GamePacket BasePacket(byte subHeader)
+            {
+                var p = new GamePacket(Header);
+                p.WriteInteger(ObjectManager.Player.NetworkId);
+                p.WriteByte(subHeader);
+                p.WriteByte(1);
+                return p;
+            }
 
             public static Struct DecodeHeader(byte[] data)
             {
@@ -859,6 +864,43 @@ namespace LeagueSharp.Common
                     SubHeader = subHeader == 0xFF ? (byte) type : subHeader;
                 }
             }
+
+            #region ChangeItem
+
+            /// <summary>
+            ///     Currently this packet only transforms HP pots to biscuits.
+            /// </summary>
+            public static class ChangeItem
+            {
+                public static byte SubHeader = (byte) MultiPacketType.ChangeItem;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    return new ReturnStruct
+                    {
+                        InitialItemId = packet.ReadInteger(7),
+                        FinalItemId = packet.ReadInteger()
+                    };
+                    //Utility.DumpPacket(data);
+                }
+
+                public static GamePacket Encoded(ReturnStruct pStruct)
+                {
+                    var packet = BasePacket(SubHeader);
+                    packet.WriteInteger(pStruct.InitialItemId);
+                    packet.WriteInteger(pStruct.FinalItemId);
+                    return packet;
+                }
+
+                public struct ReturnStruct
+                {
+                    public int FinalItemId;
+                    public int InitialItemId;
+                }
+            }
+
+            #endregion
 
             #region OnAttack
 
@@ -933,6 +975,12 @@ namespace LeagueSharp.Common
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     return new ReturnStruct { UndoAmount = data[7] };
+                }
+
+                public static GamePacket Encoded(int undoAmount)
+                {
+                    var packet = BasePacket(SubHeader);
+                    packet.WriteByte((byte) undoAmount);
                 }
 
                 public struct ReturnStruct
@@ -1043,10 +1091,7 @@ namespace LeagueSharp.Common
 
                 public static GamePacket Encoded(ReturnStruct pStruct)
                 {
-                    var packet = new GamePacket(Header);
-                    packet.WriteInteger(0);
-                    packet.WriteByte(SubHeader);
-                    packet.WriteByte(0x01); // spacer
+                    var packet = BasePacket(SubHeader);
                     packet.WriteInteger(pStruct.UnknownNetworkId);
                     packet.WriteByte(0);
                     packet.WriteFloat(pStruct.UnknownFloats[0]);
