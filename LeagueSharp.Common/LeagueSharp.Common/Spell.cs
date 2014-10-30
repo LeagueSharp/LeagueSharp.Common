@@ -434,11 +434,18 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Casts the spell
+        ///     Casts the spell (selfcast).
         /// </summary>
         public void Cast(bool packetCast = false)
         {
-            Cast(ObjectManager.Player.Position, packetCast);
+            if(!packetCast)
+            {
+                Cast();
+            }
+            else
+            {
+                Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, Slot)).Send();
+            }
         }
 
         /// <summary>
