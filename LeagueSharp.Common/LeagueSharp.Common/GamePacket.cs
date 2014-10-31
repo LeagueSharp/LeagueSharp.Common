@@ -137,22 +137,21 @@ namespace LeagueSharp.Common
         /// </summary>
         public string ReadString(long position = -1)
         {
-            var result = "";
             Position = position;
+            var sb = new StringBuilder();
 
-            for (var i = 1; i < (Size() - Position); i++)
+            for (var i = Position; i < Size(); i++)
             {
                 var num = ReadByte();
 
                 if (num == 0)
                 {
-                    return result;
+                    return sb.ToString();
                 }
-
-                result += num.ToString();
+                sb.Append(Convert.ToChar(num));
             }
 
-            return result;
+            return sb.ToString();
         }
 
 

@@ -2460,6 +2460,52 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region ChangeSpellSlot
+
+            /// <summary>
+            /// Packet received on spell slot changing.
+            /// </summary>
+            public class ChangeSpellSlot
+            {
+                public static byte Header = 0x17;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
+                    result.Slot = (SpellSlot)(packet.ReadByte());
+                    result.UnknownByte = packet.ReadByte();
+                    result.SpellString = packet.ReadString(11);
+                    return result;
+                }
+
+                public static GamePacket Encoded(Struct pStruct)
+                {
+                    var packet = new GamePacket(Header);
+                    packet.WriteInteger(pStruct.NetworkId);
+                    packet.WriteByte((byte)pStruct.Slot);
+                    packet.WriteByte(pStruct.UnknownByte);
+                    packet.WriteByte(2);
+                    packet.WriteByte(0, 3);
+                    packet.WriteString(pStruct.SpellString);
+                    return packet;
+                }
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public SpellSlot Slot;
+                    public string SpellString;
+                    public Obj_AI_Base Unit;
+                    public byte UnknownByte; // from slot?
+                }
+            }
+
+            #endregion
         }
     }
 }
