@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -24,7 +26,6 @@ using System;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-
 using SharpDX;
 
 #endregion
@@ -111,6 +112,29 @@ namespace LeagueSharp.Common
         }
 
 
+        /// <summary>
+        /// Returns true if the point is under the rectangle
+        /// </summary>
+        public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
+        {
+            return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
+        }
+
+        /// <summary>
+        /// Returns the directory where the assembly is located
+        /// </summary>
+        public static string GetLocation()
+        {
+            string FileLoc;
+            FileLoc = Assembly.GetExecutingAssembly().Location;
+            return FileLoc.Remove(FileLoc.LastIndexOf("\\", StringComparison.Ordinal));
+        }
+
+        public static string ToHexString(this byte bit)
+        {
+            return BitConverter.ToString(new[] { bit });
+        }
+
         internal static class CursorPosT
         {
             private static int _posX;
@@ -134,24 +158,6 @@ namespace LeagueSharp.Common
             {
                 return new Vector2(_posX, _posY);
             }
-        }
-
-        /// <summary>
-        /// Returns true if the point is under the rectangle
-        /// </summary>
-        public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
-        {
-            return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
-        }
-
-        /// <summary>
-        /// Returns the directory where the assembly is located
-        /// </summary>
-        public static string GetLocation()
-        {
-            string FileLoc;
-            FileLoc = Assembly.GetExecutingAssembly().Location;
-            return FileLoc.Remove(FileLoc.LastIndexOf("\\", StringComparison.Ordinal));
         }
     }
 }
