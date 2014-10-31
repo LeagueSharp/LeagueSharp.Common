@@ -56,6 +56,19 @@ namespace LeagueSharp.Common
             _header = data[0];
         }
 
+        public GamePacket(GamePacketEventArgs args)
+        {
+            Block = false;
+            Ms = new MemoryStream(args.PacketData);
+            Br = new BinaryReader(Ms);
+            Bw = new BinaryWriter(Ms);
+
+            Br.BaseStream.Position = 0;
+            Bw.BaseStream.Position = 0;
+            rawPacket = args.PacketData;
+            _header = args.PacketData[0];
+        }
+
         public GamePacket(byte header)
         {
             Block = false;
