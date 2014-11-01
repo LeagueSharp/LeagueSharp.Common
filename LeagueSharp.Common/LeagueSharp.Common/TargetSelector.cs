@@ -369,7 +369,7 @@ namespace LeagueSharp.Common
 
         static SimpleTs()
         {
-            Game.OnGameSendPacket += Game_OnGameSendPacket;
+            //Game.OnGameSendPacket += Game_OnGameSendPacket;
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += Drawing_OnDraw;
         }
