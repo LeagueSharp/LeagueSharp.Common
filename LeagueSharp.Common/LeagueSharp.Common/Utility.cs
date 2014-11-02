@@ -215,24 +215,7 @@ namespace LeagueSharp.Common
 
         public static int GetRecallTime(Obj_AI_Hero obj)
         {
-            var duration = 0;
-
-            switch (obj.Spellbook.GetSpell(SpellSlot.Recall).Name)
-            {
-                case "Recall":
-                    duration = 8000;
-                    break;
-                case "RecallImproved":
-                    duration = 7000;
-                    break;
-                case "OdinRecall":
-                    duration = 4500;
-                    break;
-                case "OdinRecallImproved":
-                    duration = 4000;
-                    break;
-            }
-            return duration;
+            return GetRecallTime(obj.Spellbook.GetSpell(SpellSlot.Recall).Name);
         }
 
         public static int GetRecallTime(string recallName)
