@@ -25,8 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -35,37 +33,13 @@ using Color = System.Drawing.Color;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    /// Game functions related utilities.
+    ///     Game functions related utilities.
     /// </summary>
     public static class Utility
     {
-        private const int STD_INPUT_HANDLE = -10;
-        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
-
-        [DllImport("kernel32.dll")]
-        private static extern bool SetConsoleMode(IntPtr hConsoleHandle, int mode);
-
-        [DllImport("kernel32.dll")]
-        private static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int mode);
-
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetStdHandle(int handle);
-
         /// <summary>
-        /// Allows text in the console to be selected and copied.
-        /// <summary>
-        public static void EnableConsoleEditMode()
-        {
-            int mode;
-            var handle = GetStdHandle(STD_INPUT_HANDLE);
-            GetConsoleMode(handle, out mode);
-            mode |= ENABLE_QUICK_EDIT_MODE;
-            SetConsoleMode(handle, mode);
-        }
-
-        /// <summary>
-        /// Returns if the source is facing the target.
-        /// <summary>
+        ///     Returns if the source is facing the target.
+        ///     <summary>
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
         {
             if (source == null || target == null)
@@ -84,7 +58,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns if both source and target are Facing Themselves.
+        ///     Returns if both source and target are Facing Themselves.
         /// </summary>
         public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength)
         {
@@ -92,7 +66,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns if the target is valid (not dead, targetable, visible...).
+        ///     Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
         public static bool IsValidTarget(this Obj_AI_Base unit,
             float range = float.MaxValue,
@@ -140,7 +114,7 @@ namespace LeagueSharp.Common
 
         public static void DumpPacket(this GamePacket packet, bool printChat = false)
         {
-            var p = packet.Dump();
+            string p = packet.Dump();
             Console.WriteLine(p);
             if (printChat)
             {
@@ -153,69 +127,15 @@ namespace LeagueSharp.Common
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
 
-        public static string GetAssemblyLocation()
-        {
-            var fileLoc = Assembly.GetExecutingAssembly().Location;
-            return fileLoc.Remove(fileLoc.LastIndexOf("\\System\\", StringComparison.Ordinal));
-        }
-
-        public static string FormatTime(float time)
-        {
-            var t = TimeSpan.FromSeconds(time);
-            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-        }
-
-        public static string FormatTime(double time)
-        {
-            var t = TimeSpan.FromSeconds(time);
-            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
-        }
-
-        /// <summary>
-        /// Searches in the haystack array for the given needle using the default equality operator and returns the index at which the needle starts.
-        /// </summary>
-        /// <typeparam name="T">Type of the arrays.</typeparam>
-        /// <param name="haystack">Sequence to operate on.</param>
-        /// <param name="needle">Sequence to search for.</param>
-        /// <returns>Index of the needle within the haystack or -1 if the needle isn't contained.</returns>
-        public static IEnumerable<int> IndexOf<T>(this T[] haystack, T[] needle)
-        {
-            if ((needle == null) || (haystack.Length < needle.Length))
-            {
-                yield break;
-            }
-
-            for (var l = 0; l < haystack.Length - needle.Length + 1; l++)
-            {
-                if (!needle.Where((data, index) => !haystack[l + index].Equals(data)).Any())
-                {
-                    yield return l;
-                }
-            }
-        }
 
         public static bool IsWall(Vector3 position)
         {
             return NavMesh.GetCollisionFlags(position).HasFlag(CollisionFlags.Wall);
         }
 
-        public static byte[] GetBytes(string str)
-        {
-            var bytes = new byte[str.Length * sizeof (char)];
-            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-
-        public static string GetString(byte[] bytes)
-        {
-            var chars = new char[bytes.Length / sizeof (char)];
-            Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
-
         public static int GetRecallTime(Obj_AI_Hero obj)
         {
-            var duration = 0;
+            int duration = 0;
 
             switch (obj.Spellbook.GetSpell(SpellSlot.Recall).Name)
             {
@@ -237,7 +157,7 @@ namespace LeagueSharp.Common
 
         public static int GetRecallTime(string recallName)
         {
-            var duration = 0;
+            int duration = 0;
 
             switch (recallName)
             {
@@ -257,24 +177,23 @@ namespace LeagueSharp.Common
             return duration;
         }
 
-        public static bool LevelUpSpell(this Spellbook book, SpellSlot slot)
+        public static void LevelUpSpell(this Spellbook book, SpellSlot slot)
         {
             Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot))
                 .Send();
-            return true;
         }
 
         public static List<Vector2> CutPath(this List<Vector2> path, float distance)
         {
             var result = new List<Vector2>();
-            var Distance = distance;
-            for (var i = 0; i < path.Count - 1; i++)
+            float Distance = distance;
+            for (int i = 0; i < path.Count - 1; i++)
             {
-                var dist = path[i].Distance(path[i + 1]);
+                float dist = path[i].Distance(path[i + 1]);
                 if (dist > Distance)
                 {
                     result.Add(path[i] + Distance * (path[i + 1] - path[i]).Normalized());
-                    for (var j = i + 1; j < path.Count; j++)
+                    for (int j = i + 1; j < path.Count; j++)
                     {
                         result.Add(path[j]);
                     }
@@ -287,7 +206,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the path of the unit appending the ServerPosition at the start, works even if the unit just entered fow.
+        ///     Returns the path of the unit appending the ServerPosition at the start, works even if the unit just entered fow.
         /// </summary>
         public static List<Vector2> GetWaypoints(this Obj_AI_Base unit)
         {
@@ -300,8 +219,8 @@ namespace LeagueSharp.Common
             }
             else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
             {
-                var path = WaypointTracker.StoredPaths[unit.NetworkId];
-                var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
+                List<Vector2> path = WaypointTracker.StoredPaths[unit.NetworkId];
+                float timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
                     result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
@@ -312,7 +231,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns if the unit has the buff and it is active
+        ///     Returns if the unit has the buff and it is active
         /// </summary>
         public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName = false)
         {
@@ -325,19 +244,20 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the spell slot with the name.
+        ///     Returns the spell slot with the name.
         /// </summary>
         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name, bool searchInSummoners = true)
         {
             name = name.ToLower();
-            foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
+            foreach (SpellDataInst spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
             {
                 return spell.Slot;
             }
 
             if (searchInSummoners)
             {
-                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
+                foreach (
+                    SpellDataInst spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
                 {
                     return spell.Slot;
                 }
@@ -347,7 +267,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if Player is under tower range.
+        ///     Returns true if Player is under tower range.
         /// </summary>
         public static bool UnderTurret()
         {
@@ -355,7 +275,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if the unit is under tower range.
+        ///     Returns true if the unit is under tower range.
         /// </summary>
         public static bool UnderTurret(Obj_AI_Base unit)
         {
@@ -363,38 +283,21 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if the unit is under turret range.
+        ///     Returns true if the unit is under turret range.
         /// </summary>
         public static bool UnderTurret(Obj_AI_Base unit, bool enemyTurretsOnly)
         {
-            foreach (var turret in ObjectManager.Get<Obj_AI_Turret>())
-            {
-                if (enemyTurretsOnly)
-                {
-                    if (turret != null && turret.IsValid && turret.IsEnemy && turret.Health > 0)
-                    {
-                        if (Vector2.Distance(unit.Position.To2D(), turret.Position.To2D()) < 950)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                else
-                {
-                    if (turret != null && turret.IsValid && turret.Health > 0)
-                    {
-                        if (Vector2.Distance(unit.Position.To2D(), turret.Position.To2D()) < 950)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
+            return
+                ObjectManager.Get<Obj_AI_Turret>()
+                    .Where(
+                        turret =>
+                            turret != null && turret.IsValid && turret.Health > 0 &&
+                            (turret.IsEnemy || !enemyTurretsOnly))
+                    .Any(turret => Vector2.Distance(unit.Position.To2D(), turret.Position.To2D()) < 950);
         }
 
         /// <summary>
-        /// Counts the enemies in range of Player.
+        ///     Counts the enemies in range of Player.
         /// </summary>
         public static int CountEnemysInRange(int range)
         {
@@ -402,7 +305,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Counts the enemies in range of Unit.
+        ///     Counts the enemies in range of Unit.
         /// </summary>
         [Obsolete("Use CountEnemysInRange(this Obj_AI_Base, int range)", false)]
         public static int CountEnemysInRange(int range, Obj_AI_Base unit)
@@ -411,7 +314,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Counts the enemies in range of Unit.
+        ///     Counts the enemies in range of Unit.
         /// </summary>
         public static int CountEnemysInRange(this Obj_AI_Base unit, int range)
         {
@@ -419,7 +322,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Counts the enemies in range of point.
+        ///     Counts the enemies in range of point.
         /// </summary>
         [Obsolete("Use CountEnemysInRange(this Vector3 point, int range)", false)]
         public static int CountEnemysInRange(int range, Vector3 point)
@@ -432,7 +335,7 @@ namespace LeagueSharp.Common
 
 
         /// <summary>
-        /// Counts the enemies in range of point.
+        ///     Counts the enemies in range of point.
         /// </summary>
         public static int CountEnemysInRange(this Vector3 point, int range)
         {
@@ -443,7 +346,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if Player is in shop range.
+        ///     Returns true if Player is in shop range.
         /// </summary>
         /// <returns></returns>
         public static bool InShopRange()
@@ -455,7 +358,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Draws a "lag-free" circle
+        ///     Draws a "lag-free" circle
         /// </summary>
         public static void DrawCircle(Vector3 center,
             float radius,
@@ -471,22 +374,22 @@ namespace LeagueSharp.Common
             }
 
             var pointList = new List<Vector3>();
-            for (var i = 0; i < quality; i++)
+            for (int i = 0; i < quality; i++)
             {
-                var angle = i * Math.PI * 2 / quality;
+                double angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
                         center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
                         center.Z));
             }
 
-            for (var i = 0; i < pointList.Count; i++)
+            for (int i = 0; i < pointList.Count; i++)
             {
-                var a = pointList[i];
-                var b = pointList[i == pointList.Count - 1 ? 0 : i + 1];
+                Vector3 a = pointList[i];
+                Vector3 b = pointList[i == pointList.Count - 1 ? 0 : i + 1];
 
-                var aonScreen = Drawing.WorldToMinimap(a);
-                var bonScreen = Drawing.WorldToMinimap(b);
+                Vector2 aonScreen = Drawing.WorldToMinimap(a);
+                Vector2 bonScreen = Drawing.WorldToMinimap(b);
 
                 Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
@@ -495,7 +398,7 @@ namespace LeagueSharp.Common
         public static bool InFountain()
         {
             float fountainRange = 750;
-            var map = Map.GetMap();
+            Map map = Map.GetMap();
             if (map != null && map._MapType == Map.MapType.SummonersRift)
             {
                 fountainRange = 1050;
@@ -522,7 +425,7 @@ namespace LeagueSharp.Common
 
             private static void GameOnOnGameUpdate(EventArgs args)
             {
-                for (var i = ActionList.Count - 1; i >= 0; i--)
+                for (int i = ActionList.Count - 1; i >= 0; i--)
                 {
                     if (ActionList[i].Time <= Environment.TickCount)
                     {
@@ -589,13 +492,13 @@ namespace LeagueSharp.Common
                 }
 
                 foreach (
-                    var unit in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy)
-                    )
+                    Obj_AI_Hero unit in
+                        ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy))
                 {
-                    var barPos = unit.HPBarPosition;
-                    var damage = _damageToUnit(unit);
-                    var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
-                    var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
+                    Vector2 barPos = unit.HPBarPosition;
+                    float damage = _damageToUnit(unit);
+                    float percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
+                    float xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
 
                     if (damage > unit.Health)
                     {
@@ -644,7 +547,7 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            /// Returns the current map.
+            ///     Returns the current map.
             /// </summary>
             public static Map GetMap()
             {
@@ -709,7 +612,7 @@ namespace LeagueSharp.Common
 
 
         /// <summary>
-        /// Internal class used to get the waypoints even when the enemy enters the fow of war.
+        ///     Internal class used to get the waypoints even when the enemy enters the fow of war.
         /// </summary>
         internal static class WaypointTracker
         {
@@ -725,8 +628,8 @@ namespace LeagueSharp.Common
             {
                 if (args.PacketData[0] == Packet.S2C.LoseVision.Header)
                 {
-                    var decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
-                    var networkId = decodedPacket.UnitNetworkId;
+                    Packet.S2C.LoseVision.Struct decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
+                    int networkId = decodedPacket.UnitNetworkId;
                     var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(networkId);
                     if (unit != null && unit.IsValid && unit.IsVisible)
                     {

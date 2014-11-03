@@ -253,7 +253,7 @@ namespace LeagueSharp.Common
 
         public int[] SearchString(string str)
         {
-            return rawPacket.IndexOf(Utility.GetBytes(str)).ToArray();
+            return rawPacket.IndexOf(Utils.GetBytes(str)).ToArray();
         }
 
         public int[] SearchHexString(string hex)

@@ -23,7 +23,10 @@
 #region
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using SharpDX;
@@ -120,6 +123,55 @@ namespace LeagueSharp.Common
             return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
         }
 
+        public static string FormatTime(float time)
+        {
+            var t = TimeSpan.FromSeconds(time);
+            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+        }
+
+        public static string FormatTime(double time)
+        {
+            var t = TimeSpan.FromSeconds(time);
+            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
+        }
+
+        public static byte[] GetBytes(string str)
+        {
+            var bytes = new byte[str.Length * sizeof(char)];
+            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        public static string GetString(byte[] bytes)
+        {
+            var chars = new char[bytes.Length / sizeof(char)];
+            Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
+        }
+
+        /// <summary>
+        /// Searches in the haystack array for the given needle using the default equality operator and returns the index at which the needle starts.
+        /// </summary>
+        /// <typeparam name="T">Type of the arrays.</typeparam>
+        /// <param name="haystack">Sequence to operate on.</param>
+        /// <param name="needle">Sequence to search for.</param>
+        /// <returns>Index of the needle within the haystack or -1 if the needle isn't contained.</returns>
+        public static IEnumerable<int> IndexOf<T>(this T[] haystack, T[] needle)
+        {
+            if ((needle == null) || (haystack.Length < needle.Length))
+            {
+                yield break;
+            }
+
+            for (var l = 0; l < haystack.Length - needle.Length + 1; l++)
+            {
+                if (!needle.Where((data, index) => !haystack[l + index].Equals(data)).Any())
+                {
+                    yield return l;
+                }
+            }
+        }
+
         /// <summary>
         /// Returns the directory where the assembly is located
         /// </summary>
@@ -133,6 +185,30 @@ namespace LeagueSharp.Common
         public static string ToHexString(this byte bit)
         {
             return BitConverter.ToString(new[] { bit });
+        }
+
+        private const int STD_INPUT_HANDLE = -10;
+        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
+
+        [DllImport("kernel32.dll")]
+        private static extern bool SetConsoleMode(IntPtr hConsoleHandle, int mode);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int mode);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetStdHandle(int handle);
+
+        /// <summary>
+        /// Allows text in the console to be selected and copied.
+        /// <summary>
+        public static void EnableConsoleEditMode()
+        {
+            int mode;
+            var handle = GetStdHandle(STD_INPUT_HANDLE);
+            GetConsoleMode(handle, out mode);
+            mode |= ENABLE_QUICK_EDIT_MODE;
+            SetConsoleMode(handle, mode);
         }
 
         internal static class CursorPosT
