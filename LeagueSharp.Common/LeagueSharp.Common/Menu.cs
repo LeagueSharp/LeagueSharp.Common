@@ -501,7 +501,22 @@ namespace LeagueSharp.Common
                 }
                 return IsRootMenu ? true : _visible;
             }
-            set { _visible = value; }
+            set 
+            { 
+                _visible = value;
+                //Hide all the children
+                if(!_visible) {
+                    foreach (var schild in Children)
+                    {
+                        schild.Visible = false;
+                    }
+
+                    foreach (var sitem in Items)
+                    {
+                        sitem.Visible = false;
+                    }
+                }
+            }
         }
 
         internal bool IsInside(Vector2 position)
@@ -787,7 +802,10 @@ namespace LeagueSharp.Common
                 }
                 return _visible;
             }
-            set { _visible = value; }
+            set
+            { 
+                _visible = value; 
+            }
         }
 
         internal int XLevel

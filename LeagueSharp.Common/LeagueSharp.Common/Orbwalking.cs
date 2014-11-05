@@ -98,6 +98,7 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Game.OnGameProcessPacket += OnProcessPacket;
+            Obj_AI_Base.OnPlayAnimation += OnAnimation;
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
@@ -334,6 +335,15 @@ namespace LeagueSharp.Common
         {
             if (args.PacketData[0] == 0x34 && args.PacketData[9] == 17 &&
                 new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
+            {
+                ResetAutoAttackTimer();
+            }
+        }
+
+
+        private static void OnAnimation(GameObject sender, GameObjectPlayAnimationEventArgs args)
+        {
+            if (sender.IsMe && (args.Animation == "Run" || args.Animation == "Idle") && CanMove(0) == false)
             {
                 ResetAutoAttackTimer();
             }
