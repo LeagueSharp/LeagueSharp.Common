@@ -76,7 +76,7 @@ namespace LeagueSharp.Common
             {
                 return false;
             }
-            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + 4);
+            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + 6);
             return inst != null && inst.State == SpellState.Ready;
         }
 
@@ -94,7 +94,7 @@ namespace LeagueSharp.Common
             {
                 return false;
             }
-            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + 4);
+            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + 6);
             return inst != null && inst.State == SpellState.Ready;
         }
 
