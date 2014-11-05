@@ -270,7 +270,7 @@ namespace LeagueSharp.Common
                 result = GetStandardPrediction(input);
             }
 
-            //Check if the unit position is in range
+            //Check if the unit position is in range.
             if (input.Range != float.MaxValue)
             {
                 if (result.Hitchance == HitChance.High &&
