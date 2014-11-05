@@ -333,8 +333,9 @@ namespace LeagueSharp.Common
 
                 private static byte GetSpellByte(SpellSlot spell)
                 {
-                    if(spell == ((SpellSlot) 4) || spell == ((SpellSlot) 5))
+                    if(Game.Version.Contains("4.19") && (spell == ((SpellSlot) 4) || spell == ((SpellSlot) 5)))
                       return 0xEF;
+                      
                     switch (spell)
                     {
                         case SpellSlot.Q:
