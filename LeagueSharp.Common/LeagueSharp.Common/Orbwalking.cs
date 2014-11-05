@@ -98,17 +98,18 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Game.OnGameProcessPacket += OnProcessPacket;
-            Obj_AI_Base.OnPlayAnimation += OnAnimation;
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
+                
                 var missile = (Obj_SpellMissile) sender;
                 if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid &&
                     IsAutoAttack(missile.SData.Name))
                 {
+                    
                     FireAfterAttack(missile.SpellCaster, _lastTarget);
                 }
             }
@@ -333,17 +334,22 @@ namespace LeagueSharp.Common
 
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == 0x34 && args.PacketData[9] == 17 &&
-                new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
+            if (args.PacketData[0] != 0x34)
             {
-                ResetAutoAttackTimer();
+                return;
             }
-        }
 
+            if (Game.Version.Contains("4.19") && (args.PacketData[5] != 0x11 && args.PacketData[5] != 0x91))
+            {
+                return;
+            }
 
-        private static void OnAnimation(GameObject sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (sender.IsMe && (args.Animation == "Run" || args.Animation == "Idle") && CanMove(0) == false)
+            if (Game.Version.Contains("4.18") && (args.PacketData[9] != 17))
+            {
+                return;
+            }
+
+            if (new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
             {
                 ResetAutoAttackTimer();
             }

@@ -62,13 +62,21 @@ namespace LeagueSharp.Common
             {
                 return;
             }
+
             var packet = new GamePacket(args.PacketData);
             packet.Position = 1;
             var networkId = packet.ReadInteger();
-            if (args.PacketData[9] != 17)
+
+            if (Game.Version.Contains("4.19") && (args.PacketData[5] == 0x11 && args.PacketData[5] == 0x91))
             {
                 return;
             }
+
+            if (!Game.Version.Contains("4.19") && (args.PacketData[9] != 17))
+            {
+                return;
+            }
+
             if (ActiveAttacks.ContainsKey(networkId))
             {
                 ActiveAttacks.Remove(networkId);
