@@ -373,7 +373,7 @@ namespace LeagueSharp.Common
                         _lastTarget = (Obj_AI_Base) Spell.Target;
                     }
 
-                    if (unit.IsMelee())
+                    if (unit.IsMelee() || Game.Version.Contains("4.19"))
                     {
                         Utility.DelayAction.Add(
                             (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
