@@ -1259,7 +1259,7 @@ namespace LeagueSharp.Common
             Spells.Add("Ryze", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 85, 110, 135, 160}[level] + 0.4 * source.FlatMagicDamageMod + 0.065 * source.MaxMana },
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{40, 60, 80, 100, 120}[level] + 0.4 * source.FlatMagicDamageMod + 0.065 * source.MaxMana },
                 //W
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 95, 130, 165, 200}[level] + 0.6 * source.FlatMagicDamageMod + 0.045 * source.MaxMana },
                 //E
