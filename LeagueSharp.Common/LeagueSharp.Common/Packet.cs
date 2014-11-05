@@ -543,7 +543,9 @@ namespace LeagueSharp.Common
                         SlotByte = (byte) slotId;
                         if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Trinket)
                         {
-                            SlotByte = (byte) (SlotByte - 4);
+
+                            var add = Game.Version.Contains("4.19") ? 6 : 4;
+                            SlotByte = (byte) (SlotByte - add);
                         }
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
