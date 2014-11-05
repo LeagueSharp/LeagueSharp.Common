@@ -333,6 +333,8 @@ namespace LeagueSharp.Common
 
                 private static byte GetSpellByte(SpellSlot spell)
                 {
+                    if(spell == ((SpellSlot) 4) || spell == ((SpellSlot) 5))
+                      return 0xEF;
                     switch (spell)
                     {
                         case SpellSlot.Q:
@@ -343,10 +345,6 @@ namespace LeagueSharp.Common
                             return 0xE8;
                         case SpellSlot.R:
                             return 0xE8;
-                        case SpellSlot.Summoner1:
-                            return 0xEF;
-                        case SpellSlot.Summoner2:
-                            return 0xEF;
                         case SpellSlot.Item1:
                             return 0;
                         case SpellSlot.Item2:
