@@ -100,7 +100,6 @@ namespace LeagueSharp.Common
             Unknown100 = 0x00,
             Unknown101 = 0x01,
             Unknown102 = 0x02,
-            Unknown104 = 0x04,
             Unknown115 = 0x15,
             Unknown116 = 0x16,
             Unknown124 = 0x24,
@@ -109,11 +108,14 @@ namespace LeagueSharp.Common
             Unknown122 = 0x22,
             /* These others could be packets with a handler */
             Unknown109 = 0x09,
+            Unknown120 = 0x20, // confirmed in game
             SpawnTurret = 0x23, // confirmed in ida
             NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
 
+            AddBuff = 0x04, // buff added by towers in new SR
             InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc?
             UndoToken = 0x0B,
+            ObjectCreation = 0x0D, // azir ult
             UndoConfirm = 0x27,
             OnAttack = 0x0F,
             SurrenderState = 0x0E,
@@ -333,9 +335,11 @@ namespace LeagueSharp.Common
 
                 private static byte GetSpellByte(SpellSlot spell)
                 {
-                    if(Game.Version.Contains("4.19") && (spell == ((SpellSlot) 4) || spell == ((SpellSlot) 5)))
-                      return 0xEF;
-                      
+                    if (Game.Version.Contains("4.19") && (spell == ((SpellSlot) 4) || spell == ((SpellSlot) 5)))
+                    {
+                        return 0xEF;
+                    }
+
                     switch (spell)
                     {
                         case SpellSlot.Q:
@@ -543,7 +547,6 @@ namespace LeagueSharp.Common
                         SlotByte = (byte) slotId;
                         if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Trinket)
                         {
-
                             var add = Game.Version.Contains("4.19") ? 6 : 4;
                             SlotByte = (byte) (SlotByte - add);
                         }
@@ -1072,6 +1075,39 @@ namespace LeagueSharp.Common
                 {
                     public Obj_AI_Hero Hero;
                     public float Time;
+                }
+            }
+
+            #endregion
+
+            #region ObjectCreation
+
+            /// <summary>
+            /// Object creation.
+            /// </summary>
+            public static class ObjectCreation
+            {
+                public static byte SubHeader = (byte) MultiPacketType.ObjectCreation;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var pStruct = new ReturnStruct();
+                    pStruct.NetworkId = packet.ReadInteger(1);
+
+                    pStruct.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(pStruct.NetworkId);
+                    pStruct.UnknownFloat = packet.ReadFloat(7);
+                    pStruct.UnknownFloat2 = packet.ReadFloat();
+
+                    return pStruct;
+                }
+
+                public struct ReturnStruct
+                {
+                    public int NetworkId;
+                    public Obj_AI_Base Unit;
+                    public float UnknownFloat;
+                    public float UnknownFloat2;
                 }
             }
 
