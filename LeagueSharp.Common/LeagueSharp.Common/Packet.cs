@@ -1222,15 +1222,15 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Unknown104
+            #region AddBuff
 
             /// <summary>
             ///     Unknown
             ///     Struct from ida, this packet is related to spell slots.
             /// </summary>
-            public static class Unknown104
+            public static class AddBuff
             {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown104;
+                public static byte SubHeader = (byte) MultiPacketType.AddBuff;
 
                 public static ReturnStruct Decoded(byte[] data)
                 {
