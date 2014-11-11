@@ -2400,6 +2400,21 @@ namespace LeagueSharp.Common
             {
                 public static byte Header = 0x6F;
 
+                public static GamePacket Encoded(Struct pStruct)
+                {
+                    var packet = new GamePacket(Header);
+                    packet.WriteInteger(pStruct.NetworkId);
+                    packet.WriteShort((short) pStruct.Item.Id);
+                    packet.WriteByte(0, 2);
+                    packet.WriteByte(pStruct.InventorySlot);
+                    packet.WriteByte((byte) pStruct.Stack);
+                    packet.WriteByte((byte) pStruct.Charge);
+                    var bit = pStruct.ReplaceItem ? (byte) 0x7B : (byte) 0;
+                    packet.WriteByte(bit);
+
+                    return packet;
+                }
+
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
@@ -2412,7 +2427,7 @@ namespace LeagueSharp.Common
                     result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
                     result.Stack = packet.ReadByte();
                     result.Charge = packet.ReadByte();
-                    result.ReplaceItem = packet.ReadByte() == 0x7B ? true : false;
+                    result.ReplaceItem = packet.ReadByte() == 0x7B;
 
                     return result;
                 }
@@ -2427,6 +2442,23 @@ namespace LeagueSharp.Common
                     public SpellSlot SpellSlot;
                     public int Stack;
                     public Obj_AI_Hero Unit;
+
+                    public Struct(int id,
+                        byte slot,
+                        bool replace = false,
+                        int stack = 1,
+                        int charge = 1,
+                        int networkId = -1)
+                    {
+                        Item = new Items.Item(id, 0);
+                        InventorySlot = slot;
+                        SpellSlot = (SpellSlot) (InventorySlot + (byte) SpellSlot.Item1);
+                        ReplaceItem = replace;
+                        Stack = stack;
+                        Charge = charge;
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                        Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(NetworkId);
+                    }
                 }
             }
 
