@@ -306,6 +306,20 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
+            
+            #region Lucian
+
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "Lucian",
+                    SpellName = "LucianR",
+                    DangerLevel = InterruptableDangerLevel.High,
+                    Slot = SpellSlot.R,
+                    BuffName = "LucianR"
+                });
+
+            #endregion
 
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
