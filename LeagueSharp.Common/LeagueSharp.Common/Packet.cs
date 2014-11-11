@@ -2447,7 +2447,7 @@ namespace LeagueSharp.Common
                         byte slot,
                         bool replace = false,
                         int stack = 1,
-                        int charge = 1,
+                        int charge = 0,
                         int networkId = -1)
                     {
                         Item = new Items.Item(id, 0);
