@@ -2409,8 +2409,7 @@ namespace LeagueSharp.Common
                     packet.WriteByte(pStruct.InventorySlot);
                     packet.WriteByte((byte) pStruct.Stack);
                     packet.WriteByte((byte) pStruct.Charge);
-                    var bit = pStruct.ReplaceItem ? (byte) 0x7B : (byte) 0;
-                    packet.WriteByte(bit);
+                    packet.WriteByte(pStruct.ReplaceItem);
 
                     return packet;
                 }
@@ -2427,7 +2426,7 @@ namespace LeagueSharp.Common
                     result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
                     result.Stack = packet.ReadByte();
                     result.Charge = packet.ReadByte();
-                    result.ReplaceItem = packet.ReadByte() == 0x7B;
+                    result.ReplaceItem = packet.ReadByte();
 
                     return result;
                 }
@@ -2438,14 +2437,14 @@ namespace LeagueSharp.Common
                     public byte InventorySlot;
                     public Items.Item Item;
                     public int NetworkId;
-                    public bool ReplaceItem;
+                    public byte ReplaceItem;
                     public SpellSlot SpellSlot;
                     public int Stack;
                     public Obj_AI_Hero Unit;
 
                     public Struct(int id,
                         byte slot,
-                        bool replace = false,
+                        byte replace = 0x7B,
                         int stack = 1,
                         int charge = 0,
                         int networkId = -1)
