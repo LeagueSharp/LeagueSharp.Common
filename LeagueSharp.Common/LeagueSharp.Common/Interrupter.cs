@@ -320,6 +320,20 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
+            
+            #region Caitlyn
+            
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "TwistedFate",
+                    SpellName = "Destiny",
+                    DangerLevel = InterruptableDangerLevel.Medium,
+                    Slot = SpellSlot.R,
+                    BuffName = "Destiny",
+                    ExtraDuration = 1000 // could be wrong about this. his R takes 1.5 seconds to cast the second part.
+                });
+            #endregion
 
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
