@@ -2590,5 +2590,3 @@ namespace LeagueSharp.Common
         }
     }
 }
-
-}
