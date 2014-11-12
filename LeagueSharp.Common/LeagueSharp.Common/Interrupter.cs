@@ -92,7 +92,7 @@ namespace LeagueSharp.Common
                 {
                     ChampionName = "Caitlyn",
                     SpellName = "CaitlynAceintheHole",
-                    DangerLevel = InterruptableDangerLevel.Medium,
+                    DangerLevel = InterruptableDangerLevel.High,
                     Slot = SpellSlot.R,
                     BuffName = "CaitlynAceintheHole",
                     ExtraDuration = 600
