@@ -565,16 +565,25 @@ namespace LeagueSharp.Common
             return false;
         }
 
-        public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
+
+        public static void SetTarget(Obj_AI_Hero hero)
         {
-            return GetTarget(ObjectManager.Player, range, damageType);
+            if (hero.IsValidTarget())
+            {
+                _selectedTarget = hero;
+            }
         }
 
         public static Obj_AI_Hero GetSelectedTarget()
         {
             return SelectedTarget;
         }
-        
+
+        public static Obj_AI_Hero GetTarget(float range, DamageType damageType)
+        {
+            return GetTarget(ObjectManager.Player, range, damageType);
+        }
+
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
         {
             Obj_AI_Hero bestTarget = null;
