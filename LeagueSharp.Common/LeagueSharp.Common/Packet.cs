@@ -2595,18 +2595,20 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
-                    result.Gold = (packet.ReadFloat(14));
+                    result.ReceivingNetworkId = packet.ReadInteger(5);
+                    result.ReceivingUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.ReceivingNetworkId);
+                    result.SourceNetworkId = packet.ReadInteger();
+                    result.SourceUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.SourceNetworkId);
+                    result.Gold = packet.ReadFloat();
                     return result;
                 }
 
                 public static GamePacket Encoded(Struct pStruct)
                 {
                     var packet = new GamePacket(Header);
-                    packet.WriteInteger(pStruct.NetworkId);
-                    packet.WriteInteger(pStruct.NetworkId);
-                    packet.WriteInteger(pStruct.NetworkId);
+                    packet.WriteInteger(pStruct.ReceivingNetworkId);
+                    packet.WriteInteger(pStruct.ReceivingNetworkId);
+                    packet.WriteInteger(pStruct.SourceNetworkId);
                     packet.WriteFloat(pStruct.Gold);
                     return packet;
                 }
@@ -2614,8 +2616,10 @@ namespace LeagueSharp.Common
                 public struct Struct
                 {
                     public float Gold;
-                    public int NetworkId;
-                    public Obj_AI_Base Unit;
+                    public int ReceivingNetworkId;
+                    public Obj_AI_Base ReceivingUnit;
+                    public int SourceNetworkId;
+                    public Obj_AI_Base SourceUnit;
                 }
             }
 
