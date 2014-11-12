@@ -108,11 +108,12 @@ namespace LeagueSharp.Common
             Unknown122 = 0x22,
             /* These others could be packets with a handler */
             Unknown109 = 0x09,
+            Unknown118 = 0x08, //sion ult
             Unknown120 = 0x20, // confirmed in game
             SpawnTurret = 0x23, // confirmed in ida
 
-            Unknown125 = 0x25,
-
+            Unknown125 = 0x25, // sion ult, other stuff
+            //FE 05 00 00 40 25 01 03 EC 06 00 00 00 01 <== sion
 //            FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
@@ -133,6 +134,7 @@ namespace LeagueSharp.Common
             DeathTimer = 0x17,
             ChangeItem = 0x1C, //like hpp=>biscuit
             ActionState = 0x21, // ?? triggers on recall
+            LockCamera = 0x2B, // Sion Ult
 
             Unknown = 0xFF, // Default, not real packet
         }
