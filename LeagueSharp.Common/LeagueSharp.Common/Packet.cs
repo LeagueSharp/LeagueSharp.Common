@@ -348,11 +348,6 @@ namespace LeagueSharp.Common
 
                 private static byte GetSpellByte(SpellSlot spell)
                 {
-                    if (Game.Version.Contains("4.19") && (spell == ((SpellSlot) 4) || spell == ((SpellSlot) 5)))
-                    {
-                        return 0xEF;
-                    }
-
                     switch (spell)
                     {
                         case SpellSlot.Q:
@@ -532,7 +527,7 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.NetworkId);
-                    result.WriteByte(packetStruct.SlotByte);
+                    result.WriteByte(packetStruct.InventorySlot);
                     result.WriteByte(1);
                     return result;
                 }
@@ -542,34 +537,30 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data);
                     var result = new Struct();
                     packet.Position = 1;
-                    result.NetworkId = packet.ReadInteger();
-                    result.SlotByte = packet.ReadByte();
-                    result.SlotId = (SpellSlot) (result.SlotByte + 4);
-                    return result;
+                    var networkId = packet.ReadInteger();
+                    var slot = packet.ReadByte();
+
+                    return new Struct(slot, networkId);
                 }
 
                 public struct Struct
                 {
+                    public byte InventorySlot;
                     public int NetworkId;
-                    public byte SlotByte;
-                    public SpellSlot SlotId;
+                    public SpellSlot SpellSlot;
 
-                    public Struct(SpellSlot slotId, int networkId = -1)
+                    public Struct(byte slot, int networkId = -1)
                     {
-                        SlotId = slotId;
-                        SlotByte = (byte) slotId;
-                        if (SlotByte >= (byte) SpellSlot.Item1 && SlotByte <= (byte) SpellSlot.Trinket)
-                        {
-                            var add = Game.Version.Contains("4.19") ? 6 : 4;
-                            SlotByte = (byte) (SlotByte - add);
-                        }
+                        InventorySlot = slot;
+                        SpellSlot = (SpellSlot) (InventorySlot + (byte) SpellSlot.Item1);
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
 
-                    public Struct(byte slotByte, int networkId = -1)
+
+                    public Struct(SpellSlot slot, int networkId = -1)
                     {
-                        SlotByte = slotByte;
-                        SlotId = (SpellSlot) slotByte;
+                        SpellSlot = slot;
+                        InventorySlot = (byte) ((byte) SpellSlot - (byte) SpellSlot.Item1);
                         NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
                 }
