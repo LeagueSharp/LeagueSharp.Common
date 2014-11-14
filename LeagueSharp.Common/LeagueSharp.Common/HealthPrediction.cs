@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -58,24 +60,13 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] != 0x34)
+            if (args.PacketData[0] != 0x34 || new GamePacket(args).ReadInteger(1) != ObjectManager.Player.NetworkId ||
+                (args.PacketData[5] != 0x11 && args.PacketData[5] != 0x91))
             {
                 return;
             }
 
-            var packet = new GamePacket(args.PacketData);
-            packet.Position = 1;
-            var networkId = packet.ReadInteger();
-
-            if (Game.Version.Contains("4.19") && (args.PacketData[5] == 0x11 && args.PacketData[5] == 0x91))
-            {
-                return;
-            }
-
-            if (!Game.Version.Contains("4.19") && (args.PacketData[9] != 17))
-            {
-                return;
-            }
+            var networkId = new GamePacket(args).ReadInteger(1);
 
             if (ActiveAttacks.ContainsKey(networkId))
             {
@@ -85,24 +76,21 @@ namespace LeagueSharp.Common
 
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsValidTarget(3000, false) && sender.Team == ObjectManager.Player.Team &&
-                !(sender is Obj_AI_Hero))
+            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero ||
+                !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
             {
-                if (Orbwalking.IsAutoAttack(args.SData.Name))
-                {
-                    if (args.Target is Obj_AI_Base)
-                    {
-                        var target = (Obj_AI_Base) args.Target;
-                        ActiveAttacks.Remove(sender.NetworkId);
-
-                        var attackData = new PredictedDamage(
-                            sender, target, Environment.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
-                            sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0), sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
-                            (float) sender.GetAutoAttackDamage(target, true));
-                        ActiveAttacks.Add(sender.NetworkId, attackData);
-                    }
-                }
+                return;
             }
+
+            var target = (Obj_AI_Base) args.Target;
+            ActiveAttacks.Remove(sender.NetworkId);
+
+            var attackData = new PredictedDamage(
+                sender, target, Environment.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
+                sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
+                sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
+                (float) sender.GetAutoAttackDamage(target, true));
+            ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
         /// <summary>

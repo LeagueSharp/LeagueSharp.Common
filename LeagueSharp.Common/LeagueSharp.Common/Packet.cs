@@ -2334,7 +2334,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public class SetCooldown
             {
-                public static byte Header = 0x84;
+                public static byte Header = 0x85;
 
                 public static Struct Decoded(byte[] data)
                 {

@@ -104,12 +104,10 @@ namespace LeagueSharp.Common
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
-                
                 var missile = (Obj_SpellMissile) sender;
                 if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid &&
                     IsAutoAttack(missile.SData.Name))
                 {
-                    
                     FireAfterAttack(missile.SpellCaster, _lastTarget);
                 }
             }
@@ -334,25 +332,13 @@ namespace LeagueSharp.Common
 
         private static void OnProcessPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] != 0x34)
+            if (args.PacketData[0] != 0x34 || new GamePacket(args).ReadInteger(1) != ObjectManager.Player.NetworkId ||
+                (args.PacketData[5] != 0x11 && args.PacketData[5] != 0x91))
             {
                 return;
             }
 
-            if (Game.Version.Contains("4.19") && (args.PacketData[5] != 0x11 && args.PacketData[5] != 0x91))
-            {
-                return;
-            }
-
-            if (Game.Version.Contains("4.18") && (args.PacketData[9] != 17))
-            {
-                return;
-            }
-
-            if (new GamePacket(args.PacketData).ReadInteger(1) == ObjectManager.Player.NetworkId)
-            {
-                ResetAutoAttackTimer();
-            }
+            ResetAutoAttackTimer();
         }
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
