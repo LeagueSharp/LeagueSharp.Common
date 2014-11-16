@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="Alerter.cs" />
     <Compile Include="AntiGapcloser.cs" />
+    <Compile Include="AutoLevel.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />
     <Compile Include="GamePacket.cs" />
