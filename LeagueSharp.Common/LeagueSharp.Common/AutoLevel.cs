@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
-    internal class AutoLevel
+    public class AutoLevel
     {
         private static int[] order = new int[18];
         private static int offset = 1;
