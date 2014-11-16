@@ -29,7 +29,7 @@ namespace LeagueSharp.Common
         static SpellHumanizer()
         {
             Enabled = false;
-            Game.OnGameSendPacket += Game_OnGameSendPacket;
+            //Game.OnGameSendPacket += Game_OnGameSendPacket;
         }
 
 
