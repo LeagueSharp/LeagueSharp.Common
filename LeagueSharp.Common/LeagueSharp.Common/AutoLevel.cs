@@ -10,19 +10,16 @@ namespace LeagueSharp.Common
     public class AutoLevel
     {
         private static int[] order = new int[18];
-        private static int offset = 1;
 
         public AutoLevel(int[] levels)
         {
             order = levels;
-            offset = HasLevelOneSpell(ObjectManager.Player.ChampionName) ? 2 : 1;
             CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
         }
 
         public AutoLevel(IEnumerable<SpellSlot> levels)
         {
             order = levels.Select(spell => (int) spell).ToArray();
-            offset = HasLevelOneSpell(ObjectManager.Player.ChampionName) ? 2 : 1;
             CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
         }
 
@@ -45,12 +42,17 @@ namespace LeagueSharp.Common
                 return;
             }
 
+            if (ObjectManager.Player.Level == 1 && HasLevelOneSpell())
+            {
+                return;
+            }
 
-            ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[args.NewLevel - offset]);
+            ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[args.NewLevel - 1]);
         }
 
-        private static bool HasLevelOneSpell(string name)
+        private static bool HasLevelOneSpell()
         {
+            var name = ObjectManager.Player.ChampionName;
             return name == "Elise" || name == "Jayce" || name == "Karma";
         }
     }
