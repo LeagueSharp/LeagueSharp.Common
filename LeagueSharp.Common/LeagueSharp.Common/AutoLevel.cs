@@ -26,6 +26,18 @@ namespace LeagueSharp.Common
             CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
         }
 
+        public static void Enabled(bool enabled)
+        {
+            if (enabled)
+            {
+                CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
+            }
+            else
+            {
+                CustomEvents.Unit.OnLevelUp -= Unit_OnLevelUp;
+            }
+        }
+
         private static void Unit_OnLevelUp(Obj_AI_Base sender, CustomEvents.Unit.OnLevelUpEventArgs args)
         {
             if (!sender.IsValid || !sender.IsMe)
