@@ -553,8 +553,8 @@ namespace LeagueSharp.Common
             {
                 Vector3[] sr =
                 {
-                    new Vector3(13360.61f, 14586.56f, 218.222f),
-                    new Vector3(-174.2087f, 1056.653f, 163.7132f)
+                    new Vector3(13767.23f, 14807.54f, 218.222f),
+                    new Vector3(232.4198f, 1277.637f, 163.7132f)
                 };
                 Vector3[] dom =
                 {
