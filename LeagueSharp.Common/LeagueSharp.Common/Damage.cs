@@ -391,7 +391,7 @@ namespace LeagueSharp.Common
                 //Q
                 new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 130, 180, 230, 280}[level] + 0.7 * source.FlatMagicDamageMod},
                 //W - per second
-                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{8, 12, 16, 20, 24}[level] + (new double[]{0.015, 0.018, 0.021, 0.024, 0.027}[level] + 0.01 * source.FlatMagicDamageMod / 100) * target.MaxHealth },
+                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{8, 12, 16, 20, 24}[level] + (new double[]{0.01, 0.015, 0.02, 0.025, 0.03}[level] + 0.01 * source.FlatMagicDamageMod / 100) * target.MaxHealth },
                 //E
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{75, 100, 125, 150, 175}[level] + 0.5 * source.FlatMagicDamageMod},
                 //R
@@ -433,9 +433,9 @@ namespace LeagueSharp.Common
             Spells.Add("Azir", new List<DamageSpell>
             {
                 //Q
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 90, 120, 150, 180}[level] + 0.5 * source.FlatMagicDamageMod},
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{75, 105, 135, 165, 195}[level] + 0.5 * source.FlatMagicDamageMod},
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 90, 120, 150, 180}[level] + 0.4 * source.FlatMagicDamageMod},
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 120, 160, 200, 240}[level] + 0.4 * source.FlatMagicDamageMod},
                 //R
                 new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{150, 225, 300}[level] + 0.6 * source.FlatMagicDamageMod},
             });
@@ -655,11 +655,11 @@ namespace LeagueSharp.Common
             Spells.Add("Gnar", new List<DamageSpell>
             {
                 //Q - mini
-                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{10, 45, 80, 115, 150}[level] + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{5, 35, 65, 95, 125}[level] + 1.15 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
                 //Q - big
-                new DamageSpell{Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{10, 50, 90, 130, 170}[level] + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
+                new DamageSpell{Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{5, 45, 85, 125, 165}[level] + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
                 //W - mini
-                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{25, 30, 35, 40, 45}[level] + 1 * source.FlatMagicDamageMod + new double[]{6, 8, 10, 12, 14}[level] / 100 * target.MaxHealth},
+                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{10, 20, 30, 40, 50}[level] + 1 * source.FlatMagicDamageMod + new double[]{6, 8, 10, 12, 14}[level] / 100 * target.MaxHealth},
                 //W - big
                 new DamageSpell{Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{25, 45, 65, 85, 105}[level] + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)},
                 //E - mini
@@ -837,7 +837,7 @@ namespace LeagueSharp.Common
                 //E
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 85, 110, 135, 160}[level] + 0.4 * source.FlatMagicDamageMod },
                 //R - per dagger
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => (new double[]{400, 575, 750}[level] + 3.75 * source.FlatPhysicalDamageMod + 2.5 * source.FlatMagicDamageMod) / 10 },
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => (new double[]{350, 550, 750}[level] + 3.75 * source.FlatPhysicalDamageMod + 2.5 * source.FlatMagicDamageMod) / 10 },
                 //R - max
                 new DamageSpell{Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{400, 575, 750}[level] + 3.75 * source.FlatPhysicalDamageMod + 2.5 * source.FlatMagicDamageMod },
             });
