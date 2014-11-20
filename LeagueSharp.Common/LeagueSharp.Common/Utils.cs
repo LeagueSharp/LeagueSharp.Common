@@ -46,7 +46,7 @@ namespace LeagueSharp.Common
         WM_LBUTTONDOWN = 0x201,
         WM_LBUTTONUP = 0x202,
         WM_RBUTTONDOWN = 0x204,
-        WM_RBUTTONUP = 0x202,
+        WM_RBUTTONUP = 0x205,
         WM_KEYDOWN = 0x0100,
         WM_KEYUP = 0x101,
     }
