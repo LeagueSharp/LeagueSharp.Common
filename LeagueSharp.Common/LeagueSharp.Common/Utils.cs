@@ -37,10 +37,15 @@ namespace LeagueSharp.Common
 {
     public enum WindowsMessages
     {
+        WM_LBUTTONDBLCLCK = 0x203,
+        WM_RBUTTONDBLCLCK = 0x206,
+        WM_MBUTTONDBLCLCK = 0x209,
+        WM_MBUTTONDOWN = 0x207,
+        WM_MBUTTONUP = 0x208,
         WM_MOUSEMOVE = 0x200,
         WM_LBUTTONDOWN = 0x201,
         WM_LBUTTONUP = 0x202,
-        WM_RBUTTONDOWN = 0x203,
+        WM_RBUTTONDOWN = 0x204,
         WM_RBUTTONUP = 0x202,
         WM_KEYDOWN = 0x0100,
         WM_KEYUP = 0x101,
@@ -51,6 +56,9 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Utils
     {
+        private const int STD_INPUT_HANDLE = -10;
+        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
+
         /// <summary>
         /// Returns the cursor position on the screen.
         /// </summary>
@@ -137,14 +145,14 @@ namespace LeagueSharp.Common
 
         public static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length * sizeof(char)];
+            var bytes = new byte[str.Length * sizeof (char)];
             Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
-            var chars = new char[bytes.Length / sizeof(char)];
+            var chars = new char[bytes.Length / sizeof (char)];
             Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
@@ -186,9 +194,6 @@ namespace LeagueSharp.Common
         {
             return BitConverter.ToString(new[] { bit });
         }
-
-        private const int STD_INPUT_HANDLE = -10;
-        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
         [DllImport("kernel32.dll")]
         private static extern bool SetConsoleMode(IntPtr hConsoleHandle, int mode);
