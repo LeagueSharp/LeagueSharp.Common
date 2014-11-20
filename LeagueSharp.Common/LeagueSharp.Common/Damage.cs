@@ -609,7 +609,7 @@ namespace LeagueSharp.Common
                 //W 
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 110, 160, 210, 260}[level] + 1 * source.FlatMagicDamageMod},
                 //R - Max damage
-                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{320, 660, 1000}[level] + 2.4 * source.FlatPhysicalDamageMod},
+                new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{325, 663, 1001}[level] + 2.34 * source.FlatPhysicalDamageMod},
             });
 
             Spells.Add("Fizz", new List<DamageSpell>
@@ -890,6 +890,13 @@ namespace LeagueSharp.Common
                 new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{60, 110, 160, 210, 260}[level] + 0.7 * source.FlatMagicDamageMod },
                 //R
                 new DamageSpell{Slot = SpellSlot.R, DamageType = DamageType.Magical, Damage = (source, target, level) => new double[]{80, 120, 160}[level]* 2 + 0.5 * source.FlatPhysicalDamageMod + 0.3 * source.FlatMagicDamageMod },
+            });
+
+            Spells.Add("Kalista", new List<DamageSpell>{
+                new DamageSpell{Slot = SpellSlot.Q, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{10,70,130,190,250}[level] + source.FlatPhysicalDamageMod},
+                new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => (new double[]{12,14,16,18,20}[level]/100) * target.MaxHealth},
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => (from buff in target.Buffs where buff.DisplayName.ToLower() == "kalistarend" select buff.Count).FirstOrDefault() * ((new double[]{15, 18, 21, 24, 27}[level]/100) * source.FlatPhysicalDamageMod) + new double[]{5, 9, 14, 20, 27}[level]},
+                new DamageSpell{Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Physical, Damage = (source, target, level) => new double[]{5, 9, 14, 20, 27}[level] + source.FlatPhysicalDamageMod * (new double[]{15, 18, 21, 24, 27}[level]/100)},
             });
 
             Spells.Add("LeBlanc", new List<DamageSpell>

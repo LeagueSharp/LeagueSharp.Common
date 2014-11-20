@@ -70,13 +70,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>..\..\..\LeagueSharpLoader\bin\Debug\System\LeagueSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\LeagueSharpLoader\bin\Debug\System\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\LeagueSharpLoader\bin\Debug\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
