@@ -77,8 +77,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            var add = Game.Version.Contains("4.19") ? 6 : 4;
-            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + add);
+            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => spell.Slot == islot.SpellSlot);
             return inst != null && inst.State == SpellState.Ready;
         }
 
@@ -96,8 +95,7 @@ namespace LeagueSharp.Common
             {
                 return false;
             }
-            var add = Game.Version.Contains("4.19") ? 6 : 4;
-            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + add);
+            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => spell.Slot == islot.SpellSlot);
             return inst != null && inst.State == SpellState.Ready;
         }
 
