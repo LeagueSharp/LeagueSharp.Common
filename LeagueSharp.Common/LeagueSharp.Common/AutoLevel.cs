@@ -14,41 +14,44 @@ namespace LeagueSharp.Common
         public AutoLevel(int[] levels)
         {
             order = levels;
-            CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
+            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
         }
 
         public AutoLevel(IEnumerable<SpellSlot> levels)
         {
             order = levels.Select(spell => (int) spell).ToArray();
-            CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
+            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
         }
 
         public static void Enabled(bool enabled)
         {
             if (enabled)
             {
-                CustomEvents.Unit.OnLevelUp += Unit_OnLevelUp;
+                Game.OnGameProcessPacket -= Game_OnGameProcessPacket;
             }
             else
             {
-                CustomEvents.Unit.OnLevelUp -= Unit_OnLevelUp;
+                Game.OnGameProcessPacket -= Game_OnGameProcessPacket;
             }
         }
 
-        private static void Unit_OnLevelUp(Obj_AI_Base sender, CustomEvents.Unit.OnLevelUpEventArgs args)
+        private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
         {
-            if (!sender.IsValid || !sender.IsMe)
+            if (args.PacketData[0] != Packet.S2C.LevelUp.Header)
             {
                 return;
             }
 
-            if (ObjectManager.Player.Level == 1 && HasLevelOneSpell())
+            var dp = Packet.S2C.LevelUp.Decoded(args.PacketData);
+
+            if (!dp.Unit.IsValid || !dp.Unit.IsMe || (ObjectManager.Player.Level == 1 && HasLevelOneSpell()))
             {
                 return;
             }
 
-            ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[args.NewLevel - 1]);
+            ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[dp.Level - 1]);
         }
+
 
         private static bool HasLevelOneSpell()
         {

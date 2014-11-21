@@ -120,7 +120,7 @@ namespace LeagueSharp.Common
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 56 05 00 40 FB 16 00 40
             NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
-
+            Unknown2E = 0x2E, //confirmed in ida
             AddBuff = 0x04, // buff added by towers in new SR
 
             //FE 19 00 00 40 07 01 00 01 00 00 00 02 00 00 00 FF FF FF FF 00 00 00 00 00 00 00 00
@@ -534,9 +534,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data);
-                    var result = new Struct();
-                    packet.Position = 1;
+                    var packet = new GamePacket(data) { Position = 1 };
                     var networkId = packet.ReadInteger();
                     var slot = packet.ReadByte();
 
@@ -2613,6 +2611,40 @@ namespace LeagueSharp.Common
                     public Obj_AI_Base SourceUnit;
                 }
             }
+
+            #endregion
+
+            #region LevelUp
+
+            /// <summary>
+            ///     Received on hero level up.
+            /// </summary>
+            public class LevelUp
+            {
+                public static byte Header = 0x3F;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.NetworkId);
+                    result.Level = packet.ReadByte();
+                    result.PointsLeft = packet.ReadByte();
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+
+                    public int NetworkId;
+                    public int Level;
+                    public int PointsLeft;
+                    public Obj_AI_Hero Unit;
+            }
+        }
 
             #endregion
         }

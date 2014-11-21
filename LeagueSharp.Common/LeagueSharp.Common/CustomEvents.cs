@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -106,16 +108,10 @@ namespace LeagueSharp.Common
                             unit, new OnLevelUpSpellEventArgs { SpellId = id, SpellLevel = lvl, Remainingpoints = pts });
                     }
                 }
-                if (OnLevelUp != null)
+                if (OnLevelUp != null && args.PacketData[0] == Packet.S2C.LevelUp.Header)
                 {
-                    if (args.PacketData[0] == 0x3F)
-                    {
-                        var unit =
-                            ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(BitConverter.ToInt32(args.PacketData, 1));
-                        int newlvl = args.PacketData[5];
-                        int pts = args.PacketData[6];
-                        OnLevelUp(unit, new OnLevelUpEventArgs { NewLevel = newlvl, RemainingPoints = pts });
-                    }
+                    var dp = Packet.S2C.LevelUp.Decoded(args.PacketData);
+                    OnLevelUp(dp.Unit, new OnLevelUpEventArgs { NewLevel = dp.Level, RemainingPoints = dp.PointsLeft });
                 }
             }
 
@@ -146,7 +142,7 @@ namespace LeagueSharp.Common
                 public int SpellId;
                 public int SpellLevel;
 
-                internal OnLevelUpSpellEventArgs() {}
+                internal OnLevelUpSpellEventArgs() { }
             }
         }
     }
