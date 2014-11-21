@@ -114,7 +114,7 @@ namespace LeagueSharp.Common
 
         public static void DumpPacket(this GamePacket packet, bool printChat = false)
         {
-            string p = packet.Dump();
+            var p = packet.Dump();
             Console.WriteLine(p);
             if (printChat)
             {
@@ -135,7 +135,7 @@ namespace LeagueSharp.Common
 
         public static int GetRecallTime(Obj_AI_Hero obj)
         {
-            int duration = 0;
+            var duration = 0;
 
             switch (obj.Spellbook.GetSpell(SpellSlot.Recall).Name)
             {
@@ -157,7 +157,7 @@ namespace LeagueSharp.Common
 
         public static int GetRecallTime(string recallName)
         {
-            int duration = 0;
+            var duration = 0;
 
             switch (recallName)
             {
@@ -186,14 +186,14 @@ namespace LeagueSharp.Common
         public static List<Vector2> CutPath(this List<Vector2> path, float distance)
         {
             var result = new List<Vector2>();
-            float Distance = distance;
-            for (int i = 0; i < path.Count - 1; i++)
+            var Distance = distance;
+            for (var i = 0; i < path.Count - 1; i++)
             {
-                float dist = path[i].Distance(path[i + 1]);
+                var dist = path[i].Distance(path[i + 1]);
                 if (dist > Distance)
                 {
                     result.Add(path[i] + Distance * (path[i + 1] - path[i]).Normalized());
-                    for (int j = i + 1; j < path.Count; j++)
+                    for (var j = i + 1; j < path.Count; j++)
                     {
                         result.Add(path[j]);
                     }
@@ -219,8 +219,8 @@ namespace LeagueSharp.Common
             }
             else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
             {
-                List<Vector2> path = WaypointTracker.StoredPaths[unit.NetworkId];
-                float timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
+                var path = WaypointTracker.StoredPaths[unit.NetworkId];
+                var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
                     result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
@@ -249,15 +249,14 @@ namespace LeagueSharp.Common
         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name, bool searchInSummoners = true)
         {
             name = name.ToLower();
-            foreach (SpellDataInst spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
+            foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
             {
                 return spell.Slot;
             }
 
             if (searchInSummoners)
             {
-                foreach (
-                    SpellDataInst spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
+                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
                 {
                     return spell.Slot;
                 }
@@ -374,22 +373,22 @@ namespace LeagueSharp.Common
             }
 
             var pointList = new List<Vector3>();
-            for (int i = 0; i < quality; i++)
+            for (var i = 0; i < quality; i++)
             {
-                double angle = i * Math.PI * 2 / quality;
+                var angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
                         center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
                         center.Z));
             }
 
-            for (int i = 0; i < pointList.Count; i++)
+            for (var i = 0; i < pointList.Count; i++)
             {
-                Vector3 a = pointList[i];
-                Vector3 b = pointList[i == pointList.Count - 1 ? 0 : i + 1];
+                var a = pointList[i];
+                var b = pointList[i == pointList.Count - 1 ? 0 : i + 1];
 
-                Vector2 aonScreen = Drawing.WorldToMinimap(a);
-                Vector2 bonScreen = Drawing.WorldToMinimap(b);
+                var aonScreen = Drawing.WorldToMinimap(a);
+                var bonScreen = Drawing.WorldToMinimap(b);
 
                 Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
@@ -398,7 +397,7 @@ namespace LeagueSharp.Common
         public static bool InFountain()
         {
             float fountainRange = 750;
-            Map map = Map.GetMap();
+            var map = Map.GetMap();
             if (map != null && map._MapType == Map.MapType.SummonersRift)
             {
                 fountainRange = 1050;
@@ -425,7 +424,7 @@ namespace LeagueSharp.Common
 
             private static void GameOnOnGameUpdate(EventArgs args)
             {
-                for (int i = ActionList.Count - 1; i >= 0; i--)
+                for (var i = ActionList.Count - 1; i >= 0; i--)
                 {
                     if (ActionList[i].Time <= Environment.TickCount)
                     {
@@ -491,14 +490,13 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                foreach (
-                    Obj_AI_Hero unit in
-                        ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy))
+                foreach (var unit in
+                    ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy))
                 {
-                    Vector2 barPos = unit.HPBarPosition;
-                    float damage = _damageToUnit(unit);
-                    float percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
-                    float xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
+                    var barPos = unit.HPBarPosition;
+                    var damage = _damageToUnit(unit);
+                    var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
+                    var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
 
                     if (damage > unit.Health)
                     {
@@ -628,8 +626,8 @@ namespace LeagueSharp.Common
             {
                 if (args.PacketData[0] == Packet.S2C.LoseVision.Header)
                 {
-                    Packet.S2C.LoseVision.Struct decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
-                    int networkId = decodedPacket.UnitNetworkId;
+                    var decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
+                    var networkId = decodedPacket.UnitNetworkId;
                     var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(networkId);
                     if (unit != null && unit.IsValid && unit.IsVisible)
                     {
@@ -646,6 +644,52 @@ namespace LeagueSharp.Common
                     }
                 }
             }
+        }
+    }
+
+    public static class Version
+    {
+        public static int MajorVersion;
+        public static int MinorVersion;
+        public static int Build;
+        public static int Revision;
+
+        private static readonly int[] VersionArray;
+
+        static Version()
+        {
+            var d = Game.Version.Split('.');
+            MajorVersion = Convert.ToInt32(d[0]);
+            MinorVersion = Convert.ToInt32(d[1]);
+            Build = Convert.ToInt32(d[2]);
+            Revision = Convert.ToInt32(d[3]);
+
+            VersionArray = new[] { MajorVersion, MinorVersion, Build, Revision };
+        }
+
+        public static bool IsOlder(string version)
+        {
+            var d = version.Split('.');
+            return MinorVersion < Convert.ToInt32(d[1]);
+        }
+
+        public static bool IsNewer(string version)
+        {
+            var d = version.Split('.');
+            return MinorVersion > Convert.ToInt32(d[1]);
+        }
+
+        public static bool IsEqual(string version)
+        {
+            var d = version.Split('.');
+            for (var i = 0; i <= d.Length; i++)
+            {
+                if (d[i] == null ||Convert.ToInt32(d[i]) != VersionArray[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
