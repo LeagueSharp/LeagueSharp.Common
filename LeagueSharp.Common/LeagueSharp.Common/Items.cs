@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,12 +17,12 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
 
 using System.Linq;
-
 using SharpDX;
 
 #endregion
@@ -77,8 +78,9 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            var add = Game.Version.Contains("4.19") ? 6 : 4;
-            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + add);
+            var inst =
+                ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                    spell => (int) spell.Slot == islot.Slot + (int) SpellSlot.Item1);
             return inst != null && inst.State == SpellState.Ready;
         }
 
@@ -96,8 +98,10 @@ namespace LeagueSharp.Common
             {
                 return false;
             }
-            var add = Game.Version.Contains("4.19") ? 6 : 4;
-            var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int) spell.Slot == islot.Slot + add);
+
+            var inst =
+                ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                    spell => (int) spell.Slot == islot.Slot + (int) SpellSlot.Item1);
             return inst != null && inst.State == SpellState.Ready;
         }
 
@@ -142,10 +146,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void UseItem(int id, Vector2 position)
         {
-            foreach (
-                var slot in
-                    ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
-                        .Where(slot => position != null))
+            foreach (var slot in
+                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
+                    .Where(slot => position != null))
             {
                 slot.UseItem(position.To3D());
             }
@@ -156,10 +159,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void UseItem(int id, Vector3 position)
         {
-            foreach (
-                var slot in
-                    ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
-                        .Where(slot => position != null))
+            foreach (var slot in
+                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
+                    .Where(slot => position != null))
             {
                 slot.UseItem(position);
             }
