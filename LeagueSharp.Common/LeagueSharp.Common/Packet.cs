@@ -2325,6 +2325,7 @@ namespace LeagueSharp.Common
 
             #endregion
 
+
             #region SetCoodlown
 
             /// <summary>
@@ -2377,6 +2378,39 @@ namespace LeagueSharp.Common
                         TotalCooldown = totalCd;
                         CurrentCooldown = currentCd;
                     }
+                }
+            }
+
+            #endregion
+
+            #region StartItemCooldown
+
+            /// <summary>
+            ///     One packet that starts cooldown (mostly for items).
+            /// </summary>
+            public class StartItemCooldown
+            {
+                public static byte Header = 0x9F;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(1);
+                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
+                    result.InventorySlot = packet.ReadByte();
+                    result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
+                    return result;
+                }
+
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public SpellSlot SpellSlot;
+                    public byte InventorySlot;
+                    public Obj_AI_Base Unit;
                 }
             }
 
