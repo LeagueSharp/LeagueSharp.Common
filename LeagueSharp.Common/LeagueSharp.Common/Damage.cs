@@ -1878,7 +1878,7 @@ namespace LeagueSharp.Common
 
                 if (spell != null)
                 {
-                    var rawDamage = spell.Damage(source, target, Math.Max(1, Math.Min(source.Spellbook.GetSpell(slot).Level - 1, 6)));
+                    var rawDamage = spell.Damage(source, target, Math.Max(0, Math.Min(source.Spellbook.GetSpell(slot).Level - 1, 5)));
                     spell.CalculatedDamage = CalcDamage(source, target, spell.DamageType, rawDamage);
                     return spell;
                 }
