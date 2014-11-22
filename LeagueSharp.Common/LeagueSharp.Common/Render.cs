@@ -1030,6 +1030,7 @@ namespace LeagueSharp.Common
                         return;
                     }
 
+                    Device.SetRenderState(RenderState.AlphaBlendEnable, true);
                     _sprite.Begin();
                     _sprite.Draw(_texture, _color, _crop, new Vector3(-X, -Y, 0));
                     _sprite.End();
