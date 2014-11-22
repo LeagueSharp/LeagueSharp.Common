@@ -141,7 +141,7 @@ namespace LeagueSharp.Common
 
         public enum PingType
         {
-            Normal = 1,
+            Normal = 0,
             Fallback = 5,
             EnemyMissing = 3,
             Danger = 2,
