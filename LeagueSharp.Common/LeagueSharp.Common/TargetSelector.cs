@@ -71,7 +71,7 @@ namespace LeagueSharp.Common
         {
             "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "KogMaw",
             "MissFortune", "Quinn", "Sivir", "Talon", "Tristana", "Twitch", "Urgot", "Varus", "Vayne", "Zed", "Jinx",
-            "Yasuo", "Lucian"
+            "Yasuo", "Lucian", "Kalista"
         };
 
         private static readonly string[] bruiser =
