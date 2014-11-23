@@ -188,7 +188,7 @@ namespace LeagueSharp.Common
         {
             if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
-                ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q);
+                ObjectManager.Player.Spellbook.CastSpell(Slot);
                 _chargedReqSentT = Environment.TickCount;
             }
         }
@@ -200,7 +200,7 @@ namespace LeagueSharp.Common
         {
             if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
-                ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q, position);
+                ObjectManager.Player.Spellbook.CastSpell(Slot, position);
                 _chargedReqSentT = Environment.TickCount;
             }
         }
