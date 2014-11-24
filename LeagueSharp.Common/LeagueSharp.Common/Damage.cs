@@ -898,7 +898,7 @@ namespace LeagueSharp.Common
                 //W
                 new DamageSpell{Slot = SpellSlot.W, DamageType = DamageType.Magical, Damage = (source, target, level) => (new double[]{12,14,16,18,20}[level]/100) * target.MaxHealth},
                 //E
-                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => target.HasBuff("KalistaExpungeMarker") ? ((10 + 10 * level) + 0.6 * source.FlatPhysicalDamageMod) + (target.Buffs.FirstOrDefault(b => b.DisplayName == "KalistaExpungeMarker").Count * (new double[] { 5, 9, 14, 20, 27 }[level] + (0.12 + 0.03 * level * source.FlatPhysicalDamageMod))) : 0},
+                new DamageSpell{Slot = SpellSlot.E, DamageType = DamageType.Physical, Damage = (source, target, level) => target.HasBuff("KalistaExpungeMarker") ? ((10 + 10 * level) + 0.6 * source.FlatPhysicalDamageMod) + (target.Buffs.FirstOrDefault(b => b.DisplayName == "KalistaExpungeMarker").Count * (new double[] { 5, 9, 14, 20, 27 }[level] + ((0.12 + 0.03 * level) * source.FlatPhysicalDamageMod))) : 0},
             });
 
             Spells.Add("LeBlanc", new List<DamageSpell>
