@@ -947,18 +947,47 @@ namespace LeagueSharp.Common
 
             if (!_valueSet && File.Exists(_saveFilePath))
             {
-                if (ValueType == MenuValueType.KeyBind)
+                switch (ValueType)
                 {
-                    var SavedVal = (KeyBind) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
-                    if (SavedVal.Type == KeyBindType.Press)
-                    {
-                        SavedVal.Active = false;
-                    }
-                    newValue = (T) (object) SavedVal;
-                }
-                else
-                {
-                    newValue = Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                    case MenuValueType.KeyBind:
+                        var savedKeyValue = (KeyBind) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                        if (savedKeyValue.Type == KeyBindType.Press)
+                        {
+                            savedKeyValue.Active = false;
+                        }
+                        newValue = (T) (object) savedKeyValue;
+                        break;
+
+                    case MenuValueType.Circle:
+                        var savedCircleValue = (Circle) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                        var newCircleValue = (Circle) (object) newValue;
+                        savedCircleValue.Radius = newCircleValue.Radius;
+                        newValue = (T) (object) savedCircleValue;
+                        break;
+
+                    case MenuValueType.Slider:
+                        var savedSliderValue = (Slider) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                        var newSliderValue = (Slider) (object) newValue;
+                        if (savedSliderValue.MinValue == newSliderValue.MinValue &&
+                            savedSliderValue.MaxValue == newSliderValue.MaxValue)
+                        {
+                            newValue = (T) (object) savedSliderValue;
+                        }
+                        break;
+
+                    case MenuValueType.StringList:
+                        var savedListValue =
+                            (StringList) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                        var newListValue = (StringList) (object) newValue;
+                        if (savedListValue.SList.SequenceEqual(newListValue.SList))
+                        {
+                            newValue = (T) (object) savedListValue;
+                        }
+                        break;
+
+                    default:
+                        newValue = Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
+                        break;
                 }
             }
 
