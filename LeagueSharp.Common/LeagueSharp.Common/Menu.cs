@@ -626,7 +626,7 @@ namespace LeagueSharp.Common
                     : MenuSettings.BackgroundColor, 1, Color.Black);
             Drawing.DrawText(
                 Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2, Color.White,
-                DisplayName);
+                MultiLanguage._(DisplayName));
 
             Drawing.DrawText(
                 Position.X + Width - 15, Position.Y + (Height - Drawing.GetTextExtent(DisplayName).Height) / 2,
@@ -1305,6 +1305,7 @@ namespace LeagueSharp.Common
                     break;
             }
 
+            s = MultiLanguage._(s);
             Drawing.DrawText(
                 Position.X + 5, Position.Y + (Height - Drawing.GetTextExtent(s).Height) / 2, Color.White, s);
         }
