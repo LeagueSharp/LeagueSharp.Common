@@ -589,12 +589,12 @@ namespace LeagueSharp.Common
 
         internal void Drawing_OnDraw(EventArgs args)
         {
-            
             if (!Visible)
             {
                 return;
             }
 
+            Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
             MenuDrawHelper.DrawBox(
                 Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
