@@ -196,10 +196,11 @@ namespace LeagueSharp.Common
                 Drawing.Direct3DDevice,
                 new FontDescription
                 {
-                    FaceName = "SansSerif",
+                    FaceName = "Tahoma",
                     Height = 14,
                     OutputPrecision = FontPrecision.Default,
                     Quality = FontQuality.Antialiased,
+                    //Weight = FontWeight.Bold,
                 });
             
             Drawing.OnPreReset += Drawing_OnPreReset;
