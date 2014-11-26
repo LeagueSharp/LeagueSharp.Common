@@ -1906,7 +1906,11 @@ namespace LeagueSharp.Common
 
             if (spell != null)
             {
-                return spell.CalculatedDamage;
+                if (source.ChampionName == "LeeSin" && slot == SpellSlot.Q && stage == 1)
+                {
+                    return (target.IsMinion && spell.CalculatedDamage > 400) ? 400 : spell.CalculatedDamage;
+                }
+                else return spell.CalculatedDamage;
             }
 
             return 0d;
