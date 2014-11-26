@@ -215,7 +215,7 @@ namespace LeagueSharp.Common
             var result = Player.AttackRange + Player.BoundingRadius;
             if (target != null)
             {
-                return result + target.BoundingRadius - (target is Obj_AI_Hero ? 50 : 0);
+                return result + target.BoundingRadius;
             }
             return result;
         }
@@ -228,7 +228,7 @@ namespace LeagueSharp.Common
             if (target != null)
             {
                 var myRange = GetRealAutoAttackRange(target);
-                return Vector2.DistanceSquared(target.ServerPosition.To2D(), Player.ServerPosition.To2D()) <=
+                return Vector2.DistanceSquared(target.ServerPosition.To2D(), Player.Position.To2D()) <=
                        myRange * myRange;
             }
             return false;
@@ -308,10 +308,13 @@ namespace LeagueSharp.Common
                 if (!DisableNextAttack)
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                    if (!(target is Obj_AI_Hero))
+
+                    if (_lastTarget.IsValid && target.IsValid && _lastTarget.NetworkId != target.NetworkId)
                     {
                         LastAATick = Environment.TickCount + Game.Ping / 2;
                     }
+
+                    _lastTarget = target;
                     return;
                 }
             }
