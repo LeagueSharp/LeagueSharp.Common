@@ -10,6 +10,11 @@ namespace LeagueSharp.Common
 {
     public static class MultiLanguage
     {
+        static MultiLanguage()
+        {
+            LoadLanguage(Config.SelectedLanguage);
+        }
+
         public class TranslatedEntry
         {
             [XmlAttribute]
@@ -24,6 +29,7 @@ namespace LeagueSharp.Common
         public static bool LoadLanguage(string name)
         {
             var filePath = Path.Combine(Config.LeagueSharpDirectory, "translations",  name + ".xml");
+
             if(File.Exists(filePath))
             {
                 try
