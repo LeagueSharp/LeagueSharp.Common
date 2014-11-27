@@ -241,6 +241,19 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
+            
+            #region Jayce
+
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Jayce",
+                    Slot = SpellSlot.Q,
+                    SpellName = "jaycetotheskies",
+                    SkillType = GapcloserType.Skillshot
+                });
+
+            #endregion
 
             #region JarvanIV
 
