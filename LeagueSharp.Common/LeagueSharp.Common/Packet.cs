@@ -2233,6 +2233,68 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+            
+            #region PlayerReconnect
+
+				    /// <summary>
+				    ///     Packet received when a player presses the "Reconnect" Button.
+				    /// </summary>
+				    public class PlayerReconnect
+				    {
+				        public static byte Header = 0x0;
+				
+				        public static Struct Decoded(byte[] data)
+				        {
+				            var packet = new GamePacket(data);
+				            var result = new Struct();
+				
+				
+				            packet.Position = 4;
+				            result.ClientId = packet.ReadInteger();
+				            result.Player = ObjectManager.Get<Obj_AI_Hero>().ElementAt(result.ClientId);
+				
+				            return result;
+				        }
+				
+				        public struct Struct
+				        {
+				            public int ClientId;
+				            public Obj_AI_Hero Player;
+				        }
+				    }
+				
+				    #endregion
+				
+				    #region PlayerReconnected
+				
+				    /// <summary>
+				    ///     Packet received when a player reconnected.
+				    /// </summary>
+				    public class PlayerReconnected
+				    {
+				        public static byte Header = 0xF;
+				
+				        public static Struct Decoded(byte[] data)
+				        {
+				            var packet = new GamePacket(data);
+				            var result = new Struct();
+				
+				
+				            packet.Position = 5;
+				            result.ClientId = packet.ReadInteger();
+				            result.Player = ObjectManager.Get<Obj_AI_Hero>().ElementAt(result.ClientId);
+				
+				            return result;
+				        }
+				
+				        public struct Struct
+				        {
+				            public int ClientId;
+				            public Obj_AI_Hero Player;
+				        }
+				    }
+
+    				#endregion
 
             #region GainBuff
 
