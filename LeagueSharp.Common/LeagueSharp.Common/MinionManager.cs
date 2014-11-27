@@ -71,22 +71,26 @@ namespace LeagueSharp.Common
             {
                 if (minion.IsValidTarget(range, false, from))
                 {
-                    if (team == MinionTeam.Neutral && minion.Team == GameObjectTeam.Neutral ||
+                    var minionTeam = minion.Team;
+                    if (team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
                         team == MinionTeam.Ally &&
-                        minion.Team ==
+                        minionTeam ==
                         (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
                         team == MinionTeam.Enemy &&
-                        minion.Team ==
+                        minionTeam ==
                         (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
-                        team == MinionTeam.NotAlly && minion.Team != ObjectManager.Player.Team ||
+                        team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
                         team == MinionTeam.NotAllyForEnemy &&
-                        (minion.Team == ObjectManager.Player.Team || minion.Team == GameObjectTeam.Neutral) ||
+                        (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
                         team == MinionTeam.All)
                     {
                         if (minion.IsMelee() && type == MinionTypes.Melee ||
                             !minion.IsMelee() && type == MinionTypes.Ranged || type == MinionTypes.All)
                         {
-                            result.Add(minion);
+                            if (IsMinion(minion) || minionTeam == GameObjectTeam.Neutral)
+                            {
+                                result.Add(minion);
+                            }
                         }
                     }
                 }
@@ -104,6 +108,10 @@ namespace LeagueSharp.Common
             return result;
         }
 
+        public static bool IsMinion(Obj_AI_Minion minion)
+        {
+            return minion.BaseSkinName.ToLower().Contains("minion");
+        }
 
         /// <summary>
         /// Returns the point where, when casted, the circular spell with hit the maximum amount of minions.

@@ -374,7 +374,7 @@ namespace LeagueSharp.Common
             Drawing.OnDraw += Drawing_OnDraw;
         }
 
-        internal static Obj_AI_Hero SelectedTarget
+        public static Obj_AI_Hero SelectedTarget
         {
             get { return (_config != null && _config.Item("FocusSelected").GetValue<bool>() ? _selectedTarget : null); }
         }
@@ -549,7 +549,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static bool IsInvulnerable(Obj_AI_Base target)
+        public static bool IsInvulnerable(Obj_AI_Base target)
         {
             //TODO: add yasuo wall, spellshields, etc.
             if (target.HasBuff("Undying Rage") && target.Health >= 2f)

@@ -865,6 +865,12 @@ namespace LeagueSharp.Common
                     extra += max;
                 }
 
+                if (ValueType == MenuValueType.KeyBind)
+                {
+                    var val = GetValue<KeyBind>();
+                    extra += MenuDrawHelper.Font.MeasureText(null, " (" + Utils.KeyToText(val.Key) + ")", FontDrawFlags.Left).Width;
+                }
+
                 return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width + Height * 2 + 10 + extra;
             }
         }
