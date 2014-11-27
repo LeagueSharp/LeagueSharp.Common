@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -29,6 +31,7 @@ using System.Linq;
 namespace LeagueSharp.Common
 {
     public delegate void OnPosibleToInterruptH(Obj_AI_Base unit, InterruptableSpell spell);
+
     public delegate void OnPossibleToInterruptH(Obj_AI_Base unit, InterruptableSpell spell);
 
     public enum InterruptableDangerLevel
@@ -49,7 +52,7 @@ namespace LeagueSharp.Common
     }
 
     /// <summary>
-    /// This class allows you to easily interrupt interruptable spells like Katarina's ult.
+    ///     This class allows you to easily interrupt interruptable spells like Katarina's ult.
     /// </summary>
     public static class Interrupter
     {
@@ -306,7 +309,7 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
-            
+
             #region Lucian
 
             Spells.Add(
@@ -321,11 +324,23 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region TwistedFate
+
+            Spells.Add(
+                new InterruptableSpell
+                {
+                    ChampionName = "TwistedFate",
+                    SpellName = "Destiny",
+                    DangerLevel = InterruptableDangerLevel.Medium,
+                    Slot = SpellSlot.R,
+                    BuffName = "Destiny",
+                    ExtraDuration = 1000 // could be wrong about this. his R takes 1.5 seconds to cast the second part.
+                });
+
+            #endregion
+
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
-
-        [Obsolete("OnPosibleToInterrupt is deprecated, please use OnPossibleToInterrupt instead.")]
-        public static event OnPosibleToInterruptH OnPosibleToInterrupt;
 
         public static event OnPossibleToInterruptH OnPossibleToInterrupt;
 
@@ -335,26 +350,23 @@ namespace LeagueSharp.Common
             {
                 OnPossibleToInterrupt(unit, spell);
             }
-
-            if (OnPosibleToInterrupt != null)
-            {           
-                OnPosibleToInterrupt(unit, spell);
-            }
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsValidTarget()))
             {
-                foreach (var spell in Spells)
+                foreach (var spell in
+                    Spells.Where(
+                        spell =>
+                            (enemy.LastCastedspell() != null &&
+                             String.Equals(
+                                 enemy.LastCastedspell().Name, spell.SpellName,
+                                 StringComparison.CurrentCultureIgnoreCase) &&
+                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                            (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true))))
                 {
-                    if ((enemy.LastCastedspell() != null &&
-                         enemy.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
-                         Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                        (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true)))
-                    {
-                        FireOnInterruptable(enemy, spell);
-                    }
+                    FireOnInterruptable(enemy, spell);
                 }
             }
         }
