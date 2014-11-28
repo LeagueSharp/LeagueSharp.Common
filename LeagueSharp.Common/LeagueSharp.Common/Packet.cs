@@ -101,14 +101,16 @@ namespace LeagueSharp.Common
             Unknown100 = 0x00,
             Unknown101 = 0x01,
             Unknown102 = 0x02,
+            Unknown10C = 0x0C,
             Unknown115 = 0x15,
             Unknown116 = 0x16,
             Unknown124 = 0x24,
             Unknown11A = 0x1A,
             Unknown11E = 0x1E, // currently empty
             Unknown122 = 0x22,
+            Unknown12C = 0x2C,
             /* These others could be packets with a handler */
-            Unknown109 = 0x09,
+            Unknown104 = 0x04, //confirmed in game/ida, related to spellslots
             Unknown118 = 0x08, //sion ult
             Unknown120 = 0x20, // confirmed in game
             SpawnTurret = 0x23, // confirmed in ida
@@ -122,19 +124,20 @@ namespace LeagueSharp.Common
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 56 05 00 40 FB 16 00 40
             NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
             Unknown2E = 0x2E, //confirmed in ida
-            AddBuff = 0x04, // buff added by towers in new SR
+
 
             //FE 19 00 00 40 07 01 00 01 00 00 00 02 00 00 00 FF FF FF FF 00 00 00 00 00 00 00 00
             InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc? 
 
+            AddBuff = 0x09, // buff added by towers in new SR
             UndoToken = 0x0B,
             ObjectCreation = 0x0D, // azir ult
-            UndoConfirm = 0x27,
-            OnAttack = 0x0F,
             SurrenderState = 0x0E,
+            OnAttack = 0x0F,
             DeathTimer = 0x17,
             ChangeItem = 0x1C, //like hpp=>biscuit
             ActionState = 0x21, // ?? triggers on recall
+            UndoConfirm = 0x27,
             LockCamera = 0x2B, // Sion Ult
 
             Unknown = 0xFF, // Default, not real packet
@@ -1095,12 +1098,12 @@ namespace LeagueSharp.Common
             #region ObjectCreation
 
             /// <summary>
-            /// Object creation.
-            /// FE 2E 17 00 40 0D 01 00 00 16 44 00 00 00 00
-            ///FE 6B 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            ///FE 6D 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            ///FE 6F 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            ///FE 71 17 00 40 0D 01 00 00 C8 43 00 00 00 00
+            ///     Object creation.
+            ///     FE 2E 17 00 40 0D 01 00 00 16 44 00 00 00 00
+            ///     FE 6B 17 00 40 0D 01 00 00 C8 43 00 00 00 00
+            ///     FE 6D 17 00 40 0D 01 00 00 C8 43 00 00 00 00
+            ///     FE 6F 17 00 40 0D 01 00 00 C8 43 00 00 00 00
+            ///     FE 71 17 00 40 0D 01 00 00 C8 43 00 00 00 00
             /// </summary>
             public static class ObjectCreation
             {
@@ -1125,6 +1128,39 @@ namespace LeagueSharp.Common
                     public Obj_AI_Base Unit;
                     public float UnknownFloat;
                     public float UnknownFloat2;
+                }
+            }
+
+            #endregion
+
+            #region AddBuff
+
+            /// <summary>
+            ///     Buff given by new turrets on SR.
+            /// </summary>
+            public static class AddBuff
+            {
+                public static byte SubHeader = (byte) MultiPacketType.AddBuff;
+
+                public static ReturnStruct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var pStruct = new ReturnStruct();
+                    pStruct.NetworkId = packet.ReadInteger(1);
+
+                    pStruct.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(pStruct.NetworkId);
+                    pStruct.BuffType = packet.ReadByte(7);
+                    pStruct.State = packet.ReadByte();
+
+                    return pStruct;
+                }
+
+                public struct ReturnStruct
+                {
+                    public byte BuffType; //or slot
+                    public int NetworkId;
+                    public byte State; //0,1,2,3
+                    public Obj_AI_Base Unit;
                 }
             }
 
@@ -1239,17 +1275,17 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region AddBuff
+            #region Unknown104
 
             /// <summary>
             ///     Unknown
             ///     Struct from ida, this packet is related to spell slots.
-            /// FE 05 00 00 40 04 01 01 03 00 00 00 00 00 16 C3
-            /// FE 05 00 00 40 04 01 01 03 00 00 00 00 00 00 00 
+            ///     FE 05 00 00 40 04 01 01 03 00 00 00 00 00 16 C3
+            ///     FE 05 00 00 40 04 01 01 03 00 00 00 00 00 00 00
             /// </summary>
-            public static class AddBuff
+            public static class Unknown104
             {
-                public static byte SubHeader = (byte) MultiPacketType.AddBuff;
+                public static byte SubHeader = (byte) MultiPacketType.Unknown104;
 
                 public static ReturnStruct Decoded(byte[] data)
                 {
@@ -1358,9 +1394,15 @@ namespace LeagueSharp.Common
             /// <summary>
             ///     SpawnTurret
             ///     Struct from ida
-            /// FE 00 00 00 00 22 01 6E F7 9C 45 00 00 70 42 28 12 F3 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 66 4A 00 00 00 00 00 00 00 00 00 
-            ///FE 00 00 00 00 22 01 97 6F 0A 46 00 00 70 42 DA 60 F3 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 67 4A 00 00 00 00 00 00 00 00 00 
-            ///FE 00 00 00 00 22 01 8C 95 D9 45 00 00 70 42 AE 97 7F 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 68 4A 00 00 00 00 00 00 00 00 00 
+            ///     FE 00 00 00 00 22 01 6E F7 9C 45 00 00 70 42 28 12 F3 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00
+            ///     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            ///     00 00 00 00 00 00 00 66 4A 00 00 00 00 00 00 00 00 00
+            ///     FE 00 00 00 00 22 01 97 6F 0A 46 00 00 70 42 DA 60 F3 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00
+            ///     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            ///     00 00 00 00 00 00 00 67 4A 00 00 00 00 00 00 00 00 00
+            ///     FE 00 00 00 00 22 01 8C 95 D9 45 00 00 70 42 AE 97 7F 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00
+            ///     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+            ///     00 00 00 00 00 00 00 68 4A 00 00 00 00 00 00 00 00 00
             /// </summary>
             public static class SpawnTurret
             {
@@ -2234,68 +2276,68 @@ namespace LeagueSharp.Common
             }
 
             #endregion
-            
+
             #region PlayerReconnect
 
-				    /// <summary>
-				    ///     Packet received when a player presses the "Reconnect" Button.
-				    /// </summary>
-				    public class PlayerReconnect
-				    {
-				        public static byte Header = 0x0;
-				
-				        public static Struct Decoded(byte[] data)
-				        {
-				            var packet = new GamePacket(data);
-				            var result = new Struct();
-				
-				
-				            packet.Position = 4;
-				            result.ClientId = packet.ReadInteger();
-				            result.Player = ObjectManager.Get<Obj_AI_Hero>().ElementAt(result.ClientId);
-				
-				            return result;
-				        }
-				
-				        public struct Struct
-				        {
-				            public int ClientId;
-				            public Obj_AI_Hero Player;
-				        }
-				    }
-				
-				    #endregion
-				
-		    #region PlayerReconnected
-				
-				    /// <summary>
-				    ///     Packet received when a player reconnected.
-				    /// </summary>
-				    public class PlayerReconnected
-				    {
-				        public static byte Header = 0xF;
-				
-				        public static Struct Decoded(byte[] data)
-				        {
-				            var packet = new GamePacket(data);
-				            var result = new Struct();
-				
-				
-				            packet.Position = 5;
-				            result.ClientId = packet.ReadInteger();
-				            result.Player = ObjectManager.Get<Obj_AI_Hero>().ElementAt(result.ClientId);
-				
-				            return result;
-				        }
-				
-				        public struct Struct
-				        {
-				            public int ClientId;
-				            public Obj_AI_Hero Player;
-				        }
-				    }
+            /// <summary>
+            ///     Packet received when a player presses the "Reconnect" Button.
+            /// </summary>
+            public class PlayerReconnect
+            {
+                public static byte Header = 0x0;
 
-    				#endregion
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+
+                    packet.Position = 4;
+                    result.ClientId = packet.ReadInteger();
+                    result.Player = ObjectManager.Get<Obj_AI_Hero>().ElementAt(result.ClientId);
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int ClientId;
+                    public Obj_AI_Hero Player;
+                }
+            }
+
+            #endregion
+
+            #region PlayerReconnected
+
+            /// <summary>
+            ///     Packet received when a player reconnected.
+            /// </summary>
+            public class PlayerReconnected
+            {
+                public static byte Header = 0xF;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+
+                    packet.Position = 5;
+                    result.ClientId = packet.ReadInteger();
+                    result.Player = ObjectManager.Get<Obj_AI_Hero>().ElementAt(result.ClientId);
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int ClientId;
+                    public Obj_AI_Hero Player;
+                }
+            }
+
+            #endregion
 
             #region GainBuff
 
@@ -2388,7 +2430,6 @@ namespace LeagueSharp.Common
 
             #endregion
 
-
             #region SetCoodlown
 
             /// <summary>
@@ -2470,9 +2511,9 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
+                    public byte InventorySlot;
                     public int NetworkId;
                     public SpellSlot SpellSlot;
-                    public byte InventorySlot;
                     public Obj_AI_Base Unit;
                 }
             }
@@ -2482,7 +2523,7 @@ namespace LeagueSharp.Common
             #region BuyItemAns
 
             /// <summary>
-            /// Packet received on buying item.
+            ///     Packet received on buying item.
             /// </summary>
             public class BuyItemAns
             {
@@ -2554,7 +2595,7 @@ namespace LeagueSharp.Common
             #region SellItemAns
 
             /// <summary>
-            /// Packet received on selling item.
+            ///     Packet received on selling item.
             /// </summary>
             public class SellItemAns
             {
@@ -2589,7 +2630,7 @@ namespace LeagueSharp.Common
             #region SwapItemAns
 
             /// <summary>
-            /// Packet received on swapping item.
+            ///     Packet received on swapping item.
             /// </summary>
             public class SwapItemAns
             {
@@ -2624,7 +2665,7 @@ namespace LeagueSharp.Common
             #region ChangeSpellSlot
 
             /// <summary>
-            /// Packet received on spell slot changing.
+            ///     Packet received on spell slot changing.
             /// </summary>
             public class ChangeSpellSlot
             {
@@ -2670,7 +2711,7 @@ namespace LeagueSharp.Common
             #region AddGold
 
             /// <summary>
-            /// Packet received on gold change.
+            ///     Packet received on gold change.
             /// </summary>
             public class AddGold
             {
@@ -2735,13 +2776,12 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-
-                    public int NetworkId;
                     public int Level;
+                    public int NetworkId;
                     public int PointsLeft;
                     public Obj_AI_Hero Unit;
+                }
             }
-        }
 
             #endregion
         }
