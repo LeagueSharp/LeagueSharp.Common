@@ -204,13 +204,13 @@ namespace LeagueSharp.Common
 
             #region Slider
 
-            public SubMenu AddSlider(string name, int value, int minValue, int maxValue)
+            public SubMenu AddSlider(string name, int value, int minValue = 0, int maxValue = 100)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Slider(value, minValue, maxValue)));
                 return this;
             }
 
-            public SliderLink AddLinkedSlider(string name, int value, int minValue, int maxValue)
+            public SliderLink AddLinkedSlider(string name, int value, int minValue = 0, int maxValue = 100)
             {
                 AddSlider(name, value, minValue, maxValue);
                 return CreateSliderLink(name);
