@@ -2307,7 +2307,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 10, 70, 130, 190, 250 }[level] + source.FlatPhysicalDamageMod
+                                new double[] { 10, 70, 130, 190, 250 }[level] + source.BaseAttackDamage + source.FlatPhysicalDamageMod
                     },
                     //W
                     new DamageSpell
@@ -2326,9 +2326,9 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 target.HasBuff("KalistaExpungeMarker")
-                                    ? ((10 + 10 * (level + 1)) + 0.6 * source.FlatPhysicalDamageMod) +
+                                    ? ((10 + 10 * (level + 1)) + 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
                                       (target.Buffs.FirstOrDefault(b => b.DisplayName == "KalistaExpungeMarker").Count *
-                                       ((10 + 10 * (level + 1)) + 0.6 * source.FlatPhysicalDamageMod) *
+                                       ((10 + 10 * (level + 1)) + 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) *
                                        new[] { 0.25, 0.30, 0.35, 0.40, 0.45 }[level])
                                     : 0
                     },
