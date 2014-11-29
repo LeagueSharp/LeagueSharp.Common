@@ -41,7 +41,7 @@ namespace LeagueSharp.Common
         public MenuWrapper(string menuName, bool addTargetSelector = true, bool addOrbwalker = true)
         {
             // Create menu
-            _menu = new Menu(menuName, Regex.Replace(menuName.ToLower(), @"\s+", ""));
+            _menu = new Menu(menuName, Regex.Replace(menuName.ToLower(), @"\s+", ""), true);
 
             if (addTargetSelector)
             {
