@@ -102,6 +102,7 @@
     <Compile Include="Interrupter.cs" />
     <Compile Include="LastCastedSpell.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="MenuWrapper.cs" />
     <Compile Include="Orbwalking.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
