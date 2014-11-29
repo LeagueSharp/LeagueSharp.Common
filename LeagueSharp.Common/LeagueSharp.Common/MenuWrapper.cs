@@ -23,6 +23,8 @@
 #region
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using Color = System.Drawing.Color;
@@ -239,7 +241,7 @@ namespace LeagueSharp.Common
 
         #region MenuItemLinks
 
-        private class BoolLink
+        public class BoolLink
         {
             private readonly SubMenu menu;
             private readonly string name;
@@ -263,7 +265,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private class KeyBindLink
+        public class KeyBindLink
         {
             private readonly SubMenu menu;
             private readonly string name;
@@ -287,7 +289,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private class SliderLink
+        public class SliderLink
         {
             private readonly SubMenu menu;
             private readonly string name;
@@ -311,7 +313,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private class StringListLink
+        public class StringListLink
         {
             private readonly SubMenu menu;
             private readonly string name;
@@ -335,7 +337,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        private class CircleLink
+        public class CircleLink
         {
             private readonly SubMenu menu;
             private readonly string name;
