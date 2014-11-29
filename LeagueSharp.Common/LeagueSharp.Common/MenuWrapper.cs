@@ -22,12 +22,8 @@
 
 #region
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Drawing;
 using System.Text.RegularExpressions;
-
-using Color = System.Drawing.Color;
 
 #endregion
 
@@ -35,33 +31,12 @@ namespace LeagueSharp.Common
 {
     public class MenuWrapper
     {
-        private SubMenu _mainMenu;
-        public SubMenu MainMenu
-        {
-            get { return _mainMenu; }
-        }
+        private readonly SubMenu _mainMenu;
 
-        private Menu _menu;
-        private Menu _targetSelectorMenu;
-        private Menu _orbwalkerMenu;
-        private Orbwalking.Orbwalker _orbwalker;
-
-        public Menu MenuHandle
-        {
-            get { return _menu; }
-        }
-        public Menu TargetSelectorMenu
-        {
-            get { return _targetSelectorMenu; }
-        }
-        public Menu OrbwalkerMenu
-        {
-            get { return _orbwalkerMenu; }
-        }
-        public Orbwalking.Orbwalker Orbwalker
-        {
-            get { return _orbwalker; }
-        }
+        private readonly Menu _menu;
+        private readonly Orbwalking.Orbwalker _orbwalker;
+        private readonly Menu _orbwalkerMenu;
+        private readonly Menu _targetSelectorMenu;
 
         public MenuWrapper(string menuName, bool addTargetSelector = true, bool addOrbwalker = true)
         {
@@ -91,13 +66,34 @@ namespace LeagueSharp.Common
             _menu.AddToMainMenu();
         }
 
+        public SubMenu MainMenu
+        {
+            get { return _mainMenu; }
+        }
+
+        public Menu MenuHandle
+        {
+            get { return _menu; }
+        }
+
+        public Menu TargetSelectorMenu
+        {
+            get { return _targetSelectorMenu; }
+        }
+
+        public Menu OrbwalkerMenu
+        {
+            get { return _orbwalkerMenu; }
+        }
+
+        public Orbwalking.Orbwalker Orbwalker
+        {
+            get { return _orbwalker; }
+        }
+
         public class SubMenu
         {
-            private Menu _subMenu;
-            public Menu MenuHandle
-            {
-                get { return _subMenu; }
-            }
+            private readonly Menu _subMenu;
 
             public SubMenu(Menu current)
             {
@@ -195,7 +191,8 @@ namespace LeagueSharp.Common
 
             public SubMenu AddStringList(string name, string[] sList, int defaultSelectedIndex = 0)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
+                _subMenu.AddItem(
+                    new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
 
                 return this;
             }
@@ -233,6 +230,11 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            public Menu MenuHandle
+            {
+                get { return _subMenu; }
+            }
+
             private string GetName(string name, bool fullName = true)
             {
                 return Regex.Replace((fullName ? _subMenu.Name : "") + name.ToLower(), @"\s+", "");
@@ -246,94 +248,16 @@ namespace LeagueSharp.Common
             private readonly SubMenu menu;
             private readonly string name;
 
-            public bool Value
-            {
-                get
-                {
-                    return menu.GetBool(name);
-                }
-                set
-                {
-                    menu.MenuHandle.Item(name).SetValue(value);
-                }
-            }
-
             public BoolLink(SubMenu menu, string name)
             {
                 this.menu = menu;
                 this.name = name;
             }
-        }
 
-        public class KeyBindLink
-        {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public KeyBind Value
+            public bool Value
             {
-                get
-                {
-                    return menu.GetKeyBind(name);
-                }
-                set
-                {
-                    menu.MenuHandle.Item(name).SetValue(value);
-                }
-            }
-
-            public KeyBindLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
-        }
-
-        public class SliderLink
-        {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public Slider Value
-            {
-                get
-                {
-                    return menu.GetSlider(name);
-                }
-                set
-                {
-                    menu.MenuHandle.Item(name).SetValue(value);
-                }
-            }
-
-            public SliderLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
-        }
-
-        public class StringListLink
-        {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public StringList Value
-            {
-                get
-                {
-                    return menu.GetStringList(name);
-                }
-                set
-                {
-                    menu.MenuHandle.Item(name).SetValue(value);
-                }
-            }
-
-            public StringListLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
+                get { return menu.GetBool(name); }
+                set { menu.MenuHandle.Item(name).SetValue(value); }
             }
         }
 
@@ -342,22 +266,70 @@ namespace LeagueSharp.Common
             private readonly SubMenu menu;
             private readonly string name;
 
-            public Circle Value
-            {
-                get
-                {
-                    return menu.GetCircle(name);
-                }
-                set
-                {
-                    menu.MenuHandle.Item(name).SetValue(value);
-                }
-            }
-
             public CircleLink(SubMenu menu, string name)
             {
                 this.menu = menu;
                 this.name = name;
+            }
+
+            public Circle Value
+            {
+                get { return menu.GetCircle(name); }
+                set { menu.MenuHandle.Item(name).SetValue(value); }
+            }
+        }
+
+        public class KeyBindLink
+        {
+            private readonly SubMenu menu;
+            private readonly string name;
+
+            public KeyBindLink(SubMenu menu, string name)
+            {
+                this.menu = menu;
+                this.name = name;
+            }
+
+            public KeyBind Value
+            {
+                get { return menu.GetKeyBind(name); }
+                set { menu.MenuHandle.Item(name).SetValue(value); }
+            }
+        }
+
+        public class SliderLink
+        {
+            private readonly SubMenu menu;
+            private readonly string name;
+
+            public SliderLink(SubMenu menu, string name)
+            {
+                this.menu = menu;
+                this.name = name;
+            }
+
+            public Slider Value
+            {
+                get { return menu.GetSlider(name); }
+                set { menu.MenuHandle.Item(name).SetValue(value); }
+            }
+        }
+
+        public class StringListLink
+        {
+            private readonly SubMenu menu;
+            private readonly string name;
+
+            public StringListLink(SubMenu menu, string name)
+            {
+                this.menu = menu;
+                this.name = name;
+            }
+
+            public StringList Value
+            {
+                get { return menu.GetStringList(name); }
+                set { menu.MenuHandle.Item(name).SetValue(value); }
             }
         }
 
