@@ -129,8 +129,13 @@ namespace LeagueSharp.Common
             public SubMenu AddBool(string name, bool defaultValue = true)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(defaultValue));
-
                 return this;
+            }
+
+            public BoolLink AddLinkedBool(string name, bool defaultValue = true)
+            {
+                AddBool(name, defaultValue);
+                return CreateBoolLink(name);
             }
 
             public bool GetBool(string name)
@@ -145,13 +150,44 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Circle
+
+            public SubMenu AddCircle(string name, bool enabled, Color color, float radius = 100)
+            {
+                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Circle(enabled, color, radius)));
+                return this;
+            }
+
+            public CircleLink AddLinkedCircle(string name, bool enabled, Color color, float radius = 100)
+            {
+                AddCircle(name, enabled, color, radius);
+                return CreateCircleLink(name);
+            }
+
+            public Circle GetCircle(string name)
+            {
+                return _subMenu.Item(GetName(name)).GetValue<Circle>();
+            }
+
+            public CircleLink CreateCircleLink(string name)
+            {
+                return new CircleLink(this, name);
+            }
+
+            #endregion
+
             #region KeyBind
 
             public SubMenu AddKeyBind(string name, uint key, KeyBindType type, bool defaultValue = false)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new KeyBind(key, type, defaultValue)));
-
                 return this;
+            }
+
+            public KeyBindLink AddLinkedKeyBind(string name, uint key, KeyBindType type, bool defaultValue = false)
+            {
+                AddKeyBind(name, key, type, defaultValue);
+                return CreateKeyBindLink(name);
             }
 
             public KeyBind GetKeyBind(string name)
@@ -171,8 +207,13 @@ namespace LeagueSharp.Common
             public SubMenu AddSlider(string name, int value, int minValue, int maxValue)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Slider(value, minValue, maxValue)));
-
                 return this;
+            }
+
+            public SliderLink AddLinkedSlider(string name, int value, int minValue, int maxValue)
+            {
+                AddSlider(name, value, minValue, maxValue);
+                return CreateSliderLink(name);
             }
 
             public Slider GetSlider(string name)
@@ -191,10 +232,14 @@ namespace LeagueSharp.Common
 
             public SubMenu AddStringList(string name, string[] sList, int defaultSelectedIndex = 0)
             {
-                _subMenu.AddItem(
-                    new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
-
+                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
                 return this;
+            }
+
+            public StringListLink AddLinkedStringList(string name, string[] sList, int defaultSelectedIndex = 0)
+            {
+                AddStringList(name, sList, defaultSelectedIndex);
+                return CreateStringListLink(name);
             }
 
             public StringList GetStringList(string name)
@@ -205,27 +250,6 @@ namespace LeagueSharp.Common
             public StringListLink CreateStringListLink(string name)
             {
                 return new StringListLink(this, name);
-            }
-
-            #endregion
-
-            #region Circle
-
-            public SubMenu AddCircle(string name, bool enabled, Color color, float radius = 100)
-            {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Circle(enabled, color, radius)));
-
-                return this;
-            }
-
-            public Circle GetCircle(string name)
-            {
-                return _subMenu.Item(GetName(name)).GetValue<Circle>();
-            }
-
-            public CircleLink CreateCircleLink(string name)
-            {
-                return new CircleLink(this, name);
             }
 
             #endregion
