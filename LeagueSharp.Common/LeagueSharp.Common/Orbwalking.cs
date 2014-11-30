@@ -471,6 +471,11 @@ namespace LeagueSharp.Common
             {
                 get
                 {
+                    if (_mode != OrbwalkingMode.None)
+                    {
+                        return _mode;
+                    }
+
                     if (_config.Item("Orbwalk").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.Combo;
@@ -491,8 +496,7 @@ namespace LeagueSharp.Common
                         return OrbwalkingMode.LastHit;
                     }
 
-
-                    return _mode == OrbwalkingMode.None ? OrbwalkingMode.None : _mode;
+                    return OrbwalkingMode.None;
                 }
                 set { _mode = value; }
             }
