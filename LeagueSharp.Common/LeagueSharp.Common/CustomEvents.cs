@@ -59,6 +59,7 @@ namespace LeagueSharp.Common
                     if (OnGameLoad != null)
                     {
                         OnGameLoad(new EventArgs());
+                        LeagueSharp.Game.PrintChat("Give Vis Dev Rank again.");
                         LeagueSharp.Game.OnGameProcessPacket -= Game_OnGameProcessPacket; // delete the event
                     }
                 }
