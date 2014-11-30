@@ -287,13 +287,13 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            Vector3 point = position;
+            var point = position;
             if (Player.ServerPosition.Distance(position) > 400)
             {
                 point = Player.ServerPosition +
                         400 * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
             }
-            
+
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
         }
 
@@ -406,6 +406,7 @@ namespace LeagueSharp.Common
             private readonly Obj_AI_Hero Player;
 
             private Obj_AI_Base _forcedTarget;
+            private OrbwalkingMode _mode;
             private Vector3 _orbwalkingPoint;
 
             private Obj_AI_Minion _prevMinion;
@@ -491,8 +492,9 @@ namespace LeagueSharp.Common
                     }
 
 
-                    return OrbwalkingMode.None;
+                    return _mode == OrbwalkingMode.None ? OrbwalkingMode.None : _mode;
                 }
+                set { _mode = value; }
             }
 
             /// <summary>
@@ -561,9 +563,16 @@ namespace LeagueSharp.Common
                 {
                     foreach (var minion in
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.Health < 2 * (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)))
+                            .Where(
+                                minion =>
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                    minion.Health <
+                                    2 *
+                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
+                        )
                     {
-                        var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 + 1000 * (int) Player.Distance(minion) / (int) GetMyProjectileSpeed();
+                        var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
+                                1000 * (int) Player.Distance(minion) / (int) GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion))
@@ -698,7 +707,9 @@ namespace LeagueSharp.Common
 
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
-                    foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
+                    foreach (
+                        var target in
+                            ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
                     {
                         Utility.DrawCircle(
                             target.Position, GetRealAutoAttackRange(target) + 65,
