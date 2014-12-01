@@ -27,7 +27,7 @@ namespace LeagueSharp.Common
         {
             if (Game.Time < 20)
             {
-                for (var i = 1; i < ObjectManager.Player.Level - 1; i++)
+                for (var i = 0; i < ObjectManager.Player.Level; i++)
                 {
                     if (ObjectManager.Player.Spellbook.GetSpell((SpellSlot) order[i]).Level < 1)
                     {
