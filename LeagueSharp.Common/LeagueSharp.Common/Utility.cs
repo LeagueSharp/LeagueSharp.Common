@@ -122,6 +122,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static Vector3 Randomize(this Vector3 position, int min, int max)
+        {
+            var ran = new Random();
+            return new Vector2(position.X + ran.Next(min, max), position.Y + ran.Next(min, max)).To3D();
+        }
+
         public static void PrintFloatText(this GameObject obj, string text, Packet.FloatTextPacket type)
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
@@ -684,7 +690,7 @@ namespace LeagueSharp.Common
             var d = version.Split('.');
             for (var i = 0; i <= d.Length; i++)
             {
-                if (d[i] == null ||Convert.ToInt32(d[i]) != VersionArray[i])
+                if (d[i] == null || Convert.ToInt32(d[i]) != VersionArray[i])
                 {
                     return false;
                 }
