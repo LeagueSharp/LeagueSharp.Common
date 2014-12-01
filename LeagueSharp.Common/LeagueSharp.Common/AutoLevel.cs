@@ -14,28 +14,13 @@ namespace LeagueSharp.Common
         public AutoLevel(int[] levels)
         {
             order = levels;
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game.OnGameProcessPacket += InitialLevelUp;
         }
 
         public AutoLevel(IEnumerable<SpellSlot> levels)
         {
             order = levels.Select(spell => (int) spell).ToArray();
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
-
-        private static void Game_OnGameLoad(System.EventArgs args)
-        {
-            if (Game.Time < 20)
-            {
-                for (var i = 0; i < ObjectManager.Player.Level; i++)
-                {
-                    if (ObjectManager.Player.Spellbook.GetSpell((SpellSlot) order[i]).Level < 1)
-                    {
-                        ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[i]);
-                    }
-                }
-            }
-            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+            Game.OnGameProcessPacket += InitialLevelUp;
         }
 
         public static void Enabled(bool enabled)
@@ -48,6 +33,22 @@ namespace LeagueSharp.Common
             {
                 Game.OnGameProcessPacket -= Game_OnGameProcessPacket;
             }
+        }
+
+        private static void InitialLevelUp(GamePacketEventArgs args)
+        {
+            if (Game.Time < 20)
+            {
+                for (var i = 0; i < ObjectManager.Player.Level; i++)
+                {
+                    if (ObjectManager.Player.Spellbook.GetSpell((SpellSlot) order[i]).Level < 1)
+                    {
+                        ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[i]);
+                    }
+                }
+            }
+            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+            Game.OnGameProcessPacket -= InitialLevelUp;
         }
 
         private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
