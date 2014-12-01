@@ -14,12 +14,27 @@ namespace LeagueSharp.Common
         public AutoLevel(int[] levels)
         {
             order = levels;
-            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         public AutoLevel(IEnumerable<SpellSlot> levels)
         {
             order = levels.Select(spell => (int) spell).ToArray();
+            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+        }
+
+        private static void Game_OnGameLoad(System.EventArgs args)
+        {
+            if (Game.Time < 20)
+            {
+                for (var i = 1; i < ObjectManager.Player.Level - 1; i++)
+                {
+                    if (ObjectManager.Player.Spellbook.GetSpell((SpellSlot) order[i]).Level < 1)
+                    {
+                        ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[i]);
+                    }
+                }
+            }
             Game.OnGameProcessPacket += Game_OnGameProcessPacket;
         }
 
