@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +28,7 @@ namespace LeagueSharp.Common
         {
             if (enabled)
             {
-                Game.OnGameProcessPacket -= Game_OnGameProcessPacket;
+                Game.OnGameProcessPacket += Game_OnGameProcessPacket;
             }
             else
             {
@@ -41,9 +42,11 @@ namespace LeagueSharp.Common
             {
                 for (var i = 0; i < ObjectManager.Player.Level; i++)
                 {
-                    if (ObjectManager.Player.Spellbook.GetSpell((SpellSlot) order[i]).Level < 1)
+                    var spell = (SpellSlot) (order[i] - 1);
+                    if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 1)
                     {
-                        ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[i]);
+                        Console.WriteLine("LEVEL: " + spell);
+                        ObjectManager.Player.Spellbook.LevelUpSpell(spell);
                     }
                 }
             }
@@ -64,8 +67,8 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-
-            ObjectManager.Player.Spellbook.LevelUpSpell((SpellSlot) order[dp.Level - 1]);
+            var spell = (SpellSlot) (order[dp.Level - 1] - 1);
+            ObjectManager.Player.Spellbook.LevelUpSpell(spell);
         }
 
 
