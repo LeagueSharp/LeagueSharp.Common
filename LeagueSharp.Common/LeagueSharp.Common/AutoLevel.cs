@@ -43,9 +43,8 @@ namespace LeagueSharp.Common
                 for (var i = 0; i < ObjectManager.Player.Level; i++)
                 {
                     var spell = (SpellSlot) (order[i] - 1);
-                    if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 1)
+                    if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 2)
                     {
-                        Console.WriteLine("LEVEL: " + spell);
                         ObjectManager.Player.Spellbook.LevelUpSpell(spell);
                     }
                 }
