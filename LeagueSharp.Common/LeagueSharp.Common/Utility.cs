@@ -122,6 +122,11 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static bool IsRecalling(this Obj_AI_Hero unit)
+        {
+            return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
+        }
+
         public static Vector3 Randomize(this Vector3 position, int min, int max)
         {
             var ran = new Random();
