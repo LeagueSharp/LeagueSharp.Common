@@ -685,6 +685,9 @@ namespace LeagueSharp.Common
         {
             private readonly SharpDX.Direct3D9.Line _line;
             public ColorBGRA Color;
+            private int _x;
+            private int _y;
+
 
             public Rectangle(int x, int y, int width, int height, ColorBGRA color)
             {
@@ -696,10 +699,36 @@ namespace LeagueSharp.Common
                 _line = new SharpDX.Direct3D9.Line(Device) { Width = height };
             }
 
-            public int X { get; set; }
-            public int Y { get; set; }
+            public int X
+            {
+                get
+                {
+                    if (PositionUpdate != null)
+                    {
+                        return (int)PositionUpdate().X;
+                    }
+                    return _x;
+                }
+                set { _x = value; }
+            }
+
+            public int Y
+            {
+                get
+                {
+                    if (PositionUpdate != null)
+                    {
+                        return (int)PositionUpdate().Y;
+                    }
+                    return _y;
+                }
+                set { _y = value; }
+            }
             public int Width { get; set; }
             public int Height { get; set; }
+
+            public delegate Vector2 PositionDelegate();
+            public PositionDelegate PositionUpdate { get; set; }
 
             public override void OnEndScene()
             {
@@ -873,18 +902,20 @@ namespace LeagueSharp.Common
                 {
                     _scale = value;
 
-                    var stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp);
-                    var original = Bitmap ?? new Bitmap(stream);
-                    var target = new Bitmap((int) (_scale.X * original.Width), (int) (_scale.Y * original.Height));
-
-                    using (var g = Graphics.FromImage(target))
+                    using (DataStream stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp))
+                    using (Bitmap original = new Bitmap(stream))
                     {
-                        g.SmoothingMode = SmoothingMode.HighQuality;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.DrawImage(original, 0, 0, target.Width, target.Height);
+                        var target = new Bitmap((int) (_scale.X*original.Width), (int) (_scale.Y*original.Height));
+
+                        using (var g = Graphics.FromImage(target))
+                        {
+                            g.SmoothingMode = SmoothingMode.HighQuality;
+                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                            g.DrawImage(original, 0, 0, target.Width, target.Height);
+                        }
+                        UpdateTextureBitmap(target);
                     }
-                    UpdateTextureBitmap(target);
                 }
 
                 get { return _scale; }
@@ -1012,7 +1043,10 @@ namespace LeagueSharp.Common
                     Position = position;
                 }
 
+                if (Bitmap != null)
+                    Bitmap.Dispose();
                 Bitmap = newBitmap;
+
                 _texture = Texture.FromMemory(
                     Device, (byte[]) new ImageConverter().ConvertTo(newBitmap, typeof(byte[])), Width, Height, 0,
                     Usage.None, Format.A1, Pool.Managed, Filter.Default, Filter.Default, 0);

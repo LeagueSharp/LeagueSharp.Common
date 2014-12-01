@@ -127,7 +127,8 @@ namespace LeagueSharp.Common
 
             public static void TriggerOnDash(Obj_AI_Base sender, Dash.DashItem args)
             {
-                OnDash(sender, args);
+                if (OnDash != null)
+                    OnDash(sender, args);
             }
 
             public class OnLevelUpEventArgs : EventArgs
