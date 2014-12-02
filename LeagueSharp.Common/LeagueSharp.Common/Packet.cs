@@ -1888,7 +1888,7 @@ namespace LeagueSharp.Common
                     var result = new Struct();
 
                     result.UnitNetworkId = packet.ReadInteger(5);
-                    var b = packet.ReadByte(184);
+                    var b = packet.ReadByte(75);
                     var b2 = packet.ReadByte(81);
                     result.Status = RecallStatus.Unknown;
 
@@ -1947,26 +1947,25 @@ namespace LeagueSharp.Common
                         }
                         else
                         {
-                            switch (b)
+                            if (b == 0)
                             {
-                                case 4:
-                                    if (RecallT.ContainsKey(result.UnitNetworkId))
+                                if (RecallT.ContainsKey(result.UnitNetworkId))
+                                {
+                                    if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
                                     {
-                                        if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
-                                        {
-                                            result.Status = RecallStatus.RecallAborted;
-                                        }
-                                        else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
-                                        {
-                                            result.Status = RecallStatus.RecallFinished;
-                                        }
-                                        RecallT[result.UnitNetworkId] = 0;
+                                        result.Status = RecallStatus.RecallAborted;
                                     }
-                                    break;
-                                case 6:
-                                    result.Status = RecallStatus.RecallStarted;
-                                    RecallT[result.UnitNetworkId] = Environment.TickCount;
-                                    break;
+                                    else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
+                                    {
+                                        result.Status = RecallStatus.RecallFinished;
+                                    }
+                                    RecallT[result.UnitNetworkId] = 0;
+                                }
+                            }
+                            else
+                            {
+                                result.Status = RecallStatus.RecallStarted;
+                                RecallT[result.UnitNetworkId] = Environment.TickCount;
                             }
                         }
                     }
