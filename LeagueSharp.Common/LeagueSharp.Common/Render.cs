@@ -903,7 +903,7 @@ namespace LeagueSharp.Common
                     _scale = value;
 
                     using (DataStream stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp))
-                    using (Bitmap original = new Bitmap(stream))
+                    using (Bitmap original = BitMap ?? new Bitmap(stream))
                     {
                         var target = new Bitmap((int) (_scale.X*original.Width), (int) (_scale.Y*original.Height));
 
