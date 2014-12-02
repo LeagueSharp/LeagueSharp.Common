@@ -95,6 +95,11 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        public static float HealthPercentage(this Obj_AI_Base unit)
+        {
+            return unit.Health / unit.MaxHealth * 100;
+        }
+
         public static void Highlight(this Obj_AI_Base unit, bool showHighlight = true)
         {
             if (showHighlight)
