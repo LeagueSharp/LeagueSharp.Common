@@ -1884,7 +1884,6 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    Game.PrintChat("TEST");
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
@@ -1933,7 +1932,7 @@ namespace LeagueSharp.Common
                             result.Status = RecallStatus.RecallStarted;
                             RecallT[result.UnitNetworkId] = Environment.TickCount;
                         }
-                        else
+                        else if (string.IsNullOrEmpty(type))
                         {
                             if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
                             {
