@@ -270,7 +270,7 @@ namespace LeagueSharp.Common
             return false;
         }
 
-        private static void SetMovementDelay(int delay)
+        public static void SetMovementDelay(int delay)
         {
             _delay = delay;
         }
