@@ -1884,12 +1884,12 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
+                    Game.PrintChat("TEST");
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
                     result.UnitNetworkId = packet.ReadInteger(5);
-                    var b = packet.ReadByte(75);
-                    var b2 = packet.ReadByte(81);
+                    var type = packet.ReadString(75);
                     result.Status = RecallStatus.Unknown;
 
                     var gObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
@@ -1923,55 +1923,45 @@ namespace LeagueSharp.Common
                             TPT.Add(result.UnitNetworkId, 0);
                         }
 
-
-                        if (b2 != 0 ||
-                            TPT.ContainsKey(result.UnitNetworkId) &&
-                            Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
+                        if (type == "Teleport")
                         {
-                            if (b2 != 0)
+                            TPT[result.UnitNetworkId] = Environment.TickCount;
+                            result.Status = RecallStatus.TeleportStart;
+                        }
+                        else if (type == "Recall")
+                        {
+                            result.Status = RecallStatus.RecallStarted;
+                            RecallT[result.UnitNetworkId] = Environment.TickCount;
+                        }
+                        else
+                        {
+                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
                             {
-                                TPT[result.UnitNetworkId] = Environment.TickCount;
-                                result.Status = RecallStatus.TeleportStart;
+                                result.Status = RecallStatus.RecallAborted;
                             }
+                            else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
+                            {
+                                result.Status = RecallStatus.RecallFinished;
+                            }
+                            RecallT[result.UnitNetworkId] = 0;
 
-                            else if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500)
+                            if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500)
                             {
                                 result.Status = RecallStatus.TeleportAbort;
-                                TPT[result.UnitNetworkId] = 0;
                             }
                             else if (Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
                             {
                                 result.Status = RecallStatus.TeleportEnd;
-                                TPT[result.UnitNetworkId] = 0;
                             }
+                            TPT[result.UnitNetworkId] = 0;
                         }
-                        
-                            if (b == 0)
-                            {
-                                if (RecallT.ContainsKey(result.UnitNetworkId))
-                                {
-                                    if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
-                                    {
-                                        result.Status = RecallStatus.RecallAborted;
-                                    }
-                                    else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
-                                    {
-                                        result.Status = RecallStatus.RecallFinished;
-                                    }
-                                    RecallT[result.UnitNetworkId] = 0;
-                                }
-                            }
-                            else
-                            {
-                                result.Status = RecallStatus.RecallStarted;
-                                RecallT[result.UnitNetworkId] = Environment.TickCount;
-                            }
-                        
                     }
                     else if (gObject is Obj_AI_Turret)
                     {
                         result.Type = ObjectType.Turret;
-                        result.Status = b2 != 0 ? RecallStatus.TeleportStart : RecallStatus.TeleportEnd;
+                        result.Status = string.IsNullOrEmpty(type)
+                            ? RecallStatus.TeleportEnd
+                            : RecallStatus.TeleportStart;
                     }
                     else if (gObject is Obj_AI_Minion)
                     {
@@ -1986,13 +1976,14 @@ namespace LeagueSharp.Common
                             result.Type = ObjectType.Ward;
                         }
 
-                        result.Status = b2 != 0 ? RecallStatus.TeleportStart : RecallStatus.TeleportEnd;
+                        result.Status = string.IsNullOrEmpty(type)
+                            ? RecallStatus.TeleportEnd
+                            : RecallStatus.TeleportStart;
                     }
                     else
                     {
                         result.Type = ObjectType.Object;
                     }
-
 
                     return result;
                 }
