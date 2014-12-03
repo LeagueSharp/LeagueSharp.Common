@@ -1945,8 +1945,7 @@ namespace LeagueSharp.Common
                                 TPT[result.UnitNetworkId] = 0;
                             }
                         }
-                        else
-                        {
+                        
                             if (b == 0)
                             {
                                 if (RecallT.ContainsKey(result.UnitNetworkId))
@@ -1967,7 +1966,7 @@ namespace LeagueSharp.Common
                                 result.Status = RecallStatus.RecallStarted;
                                 RecallT[result.UnitNetworkId] = Environment.TickCount;
                             }
-                        }
+                        
                     }
                     else if (gObject is Obj_AI_Turret)
                     {
