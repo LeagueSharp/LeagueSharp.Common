@@ -91,6 +91,7 @@ namespace LeagueSharp.Common
         public static int LastMoveCommandT = 0;
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
+        private static int _delay = 80;
 
         static Orbwalking()
         {
@@ -269,9 +270,14 @@ namespace LeagueSharp.Common
             return false;
         }
 
+        private static void SetMovementDelay(int delay)
+        {
+            _delay = delay;
+        }
+
         private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false)
         {
-            if (Environment.TickCount - LastMoveCommandT < 80 && !overrideTimer)
+            if (Environment.TickCount - LastMoveCommandT < _delay && !overrideTimer)
             {
                 return;
             }
@@ -711,9 +717,8 @@ namespace LeagueSharp.Common
 
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
-                    foreach (
-                        var target in
-                            ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
+                    foreach (var target in
+                        ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
                     {
                         Utility.DrawCircle(
                             target.Position, GetRealAutoAttackRange(target) + 65,
