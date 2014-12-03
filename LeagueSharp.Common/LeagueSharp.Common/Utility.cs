@@ -292,7 +292,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns true if the unit is under tower range.
         /// </summary>
-        public static bool UnderTurret(Obj_AI_Base unit)
+        public static bool UnderTurret(this Obj_AI_Base unit)
         {
             return UnderTurret(unit.Position, true);
         }
@@ -300,16 +300,15 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns true if the unit is under turret range.
         /// </summary>
-        public static bool UnderTurret(Obj_AI_Base unit, bool enemyTurretsOnly)
+        public static bool UnderTurret(this Obj_AI_Base unit, bool enemyTurretsOnly)
         {
             return UnderTurret(unit.Position, enemyTurretsOnly);
         }
 
-        public static bool UnderTurret(Vector3 position, bool enemyTurretsOnly)
+        public static bool UnderTurret(this Vector3 position, bool enemyTurretsOnly)
         {
             return
-                ObjectManager.Get<Obj_AI_Turret>()
-                    .Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
+                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
 
         /// <summary>
