@@ -286,7 +286,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UnderTurret()
         {
-            return UnderTurret(ObjectManager.Player, true);
+            return UnderTurret(ObjectManager.Player.Position, true);
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UnderTurret(Obj_AI_Base unit)
         {
-            return UnderTurret(unit, true);
+            return UnderTurret(unit.Position, true);
         }
 
         /// <summary>
@@ -302,13 +302,14 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UnderTurret(Obj_AI_Base unit, bool enemyTurretsOnly)
         {
+            return UnderTurret(unit.Position, enemyTurretsOnly);
+        }
+
+        public static bool UnderTurret(Vector3 position, bool enemyTurretsOnly)
+        {
             return
                 ObjectManager.Get<Obj_AI_Turret>()
-                    .Where(
-                        turret =>
-                            turret != null && turret.IsValid && turret.Health > 0 &&
-                            (turret.IsEnemy || !enemyTurretsOnly))
-                    .Any(turret => Vector2.Distance(unit.Position.To2D(), turret.Position.To2D()) < 950);
+                    .Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
 
         /// <summary>
