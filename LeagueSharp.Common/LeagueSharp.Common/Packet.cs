@@ -1936,15 +1936,14 @@ namespace LeagueSharp.Common
                         }
                         else if (string.IsNullOrEmpty(type))
                         {
-                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 1200)
+                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 200)
                             {
                                 result.Status = RecallStatus.RecallAborted;
                             }
-                            else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 1000)
+                            else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 200)
                             {
                                 result.Status = RecallStatus.RecallFinished;
                             }
-                            RecallT[result.UnitNetworkId] = 0;
 
                             if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500)
                             {
@@ -1954,7 +1953,6 @@ namespace LeagueSharp.Common
                             {
                                 result.Status = RecallStatus.TeleportEnd;
                             }
-                            TPT[result.UnitNetworkId] = 0;
                         }
                     }
                     else if (gObject is Obj_AI_Turret)
