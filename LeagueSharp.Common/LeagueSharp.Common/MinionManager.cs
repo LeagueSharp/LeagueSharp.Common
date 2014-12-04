@@ -108,9 +108,10 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        public static bool IsMinion(Obj_AI_Minion minion)
+        public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
         {
-            return minion.BaseSkinName.ToLower().Contains("minion");
+            var name = minion.BaseSkinName.ToLower();
+            return name.Contains("minion") || (includeWards && (name.Contains("ward") || name.Contains("trinket")));
         }
 
         /// <summary>
