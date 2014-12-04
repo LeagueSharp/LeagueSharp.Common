@@ -338,7 +338,9 @@ namespace LeagueSharp.Common
         public static void Orbwalk(Obj_AI_Base target,
             Vector3 position,
             float extraWindup = 90,
-            float holdAreaRadius = 0)
+            float holdAreaRadius = 0,
+            bool useFixedDistance = true,
+            bool randomizeMinDistance = true)
         {
             if (target != null && CanAttack())
             {
@@ -361,7 +363,7 @@ namespace LeagueSharp.Common
 
             if (CanMove(extraWindup))
             {
-                MoveTo(position, holdAreaRadius);
+                MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
             }
         }
 
