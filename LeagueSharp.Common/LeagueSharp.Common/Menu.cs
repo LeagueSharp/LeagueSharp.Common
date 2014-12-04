@@ -278,7 +278,7 @@ namespace LeagueSharp.Common
         {
             width = (width > 0 ? width : item.Width);
             var percentage = 100 * (value - min) / (max - min);
-            var x = position.X + (percentage * width) / 100;
+            var x = position.X + 3 + (percentage * (width - 3)) / 100;
             Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.Yellow);
 
             if (drawText)
