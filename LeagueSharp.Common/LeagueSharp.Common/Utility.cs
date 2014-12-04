@@ -536,14 +536,16 @@ namespace LeagueSharp.Common
 
             public string Name;
             public string ShortName;
+            public int StartingLevel;
             public MapType _MapType;
 
-            public Map(string name, string shortName, MapType map, Vector2 grid)
+            public Map(string name, string shortName, MapType map, Vector2 grid, int startLevel = 1)
             {
                 Name = name;
                 ShortName = shortName;
                 _MapType = map;
                 Grid = grid;
+                StartingLevel = startLevel;
             }
 
             private static bool SameVector(Vector3 v1, Vector3 v2)
@@ -593,7 +595,7 @@ namespace LeagueSharp.Common
                             ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
                     return new Map(
-                        "The Crystal Scar", "crystalScar", MapType.CrystalScar, new Vector2(13894 / 2, 13218 / 2));
+                        "The Crystal Scar", "crystalScar", MapType.CrystalScar, new Vector2(13894 / 2, 13218 / 2), 3);
                 }
                 if (
                     ttt.Any(
@@ -610,7 +612,7 @@ namespace LeagueSharp.Common
                             ObjectManager.Get<Obj_Shop>().ToList().Find(shop => SameVector(shop.Position, pos)) != null))
                 {
                     return new Map(
-                        "Howling Abyss", "howlingAbyss", MapType.HowlingAbyss, new Vector2(13120 / 2, 12618 / 2));
+                        "Howling Abyss", "howlingAbyss", MapType.HowlingAbyss, new Vector2(13120 / 2, 12618 / 2), 3);
                 }
 
                 return new Map("Unknown", "unknown", MapType.Unknown, new Vector2(0, 0));
