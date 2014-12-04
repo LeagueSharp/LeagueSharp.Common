@@ -89,6 +89,7 @@ namespace LeagueSharp.Common
         public static bool DisableNextAttack = false;
         public static bool Move = true;
         public static int LastMoveCommandT = 0;
+        public static Vector3 LastMoveCommandPosition = Vector3.Zero;
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
         private static int _delay = 80;
@@ -274,9 +275,14 @@ namespace LeagueSharp.Common
             _delay = delay;
         }
 
-        public static float GetLastMoveCommand()
+        public static float GetLastMoveTime()
         {
             return LastMoveCommandT;
+        }
+
+        public static Vector3 GetLastMovePosition()
+        {
+            return LastMoveCommandPosition;
         }
 
         private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false)
@@ -293,6 +299,7 @@ namespace LeagueSharp.Common
                 if (Player.Path.Count() > 1)
                 {
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
+                    LastMoveCommandPosition = Player.ServerPosition;
                 }
                 return;
             }
@@ -305,6 +312,7 @@ namespace LeagueSharp.Common
             }
 
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
+            LastMoveCommandPosition = point;
         }
 
         /// <summary>
