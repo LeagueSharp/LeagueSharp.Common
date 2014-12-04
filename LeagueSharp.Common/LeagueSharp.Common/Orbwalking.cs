@@ -94,6 +94,7 @@ namespace LeagueSharp.Common
         private static readonly Obj_AI_Hero Player;
         private static int _delay = 80;
         private static float _minDistance = 400;
+        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
 
         static Orbwalking()
         {
@@ -291,7 +292,7 @@ namespace LeagueSharp.Common
             return LastMoveCommandPosition;
         }
 
-        private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false, bool useFixedRange = true)
+        private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false, bool useFixedDistance = true, bool randomizeMinDistance = true)
         {
             if (Environment.TickCount - LastMoveCommandT < _delay && !overrideTimer)
             {
@@ -311,13 +312,20 @@ namespace LeagueSharp.Common
             }
 
             var point = position;
-            if (useFixedRange)
+            if (useFixedDistance)
             {
-                point = position + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                point = position + (randomizeMinDistance ? _random.NextFloat(_minDistance * 0.8f, _minDistance * 1.2f) : _minDistance) * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
             }
-            else if (Player.ServerPosition.Distance(position) > _minDistance)
+            else 
             {
-                point = Player.ServerPosition + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                if (randomizeMinDistance)
+                {
+                    point = position + _random.NextFloat(_minDistance * 0.8f, _minDistance * 1.2f) * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                }
+                else if (Player.ServerPosition.Distance(position) > _minDistance)
+                {
+                    point = Player.ServerPosition + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                }
             }
 
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
