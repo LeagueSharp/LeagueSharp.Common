@@ -291,7 +291,7 @@ namespace LeagueSharp.Common
             return LastMoveCommandPosition;
         }
 
-        private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false)
+        private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false, bool useFixedRange = true)
         {
             if (Environment.TickCount - LastMoveCommandT < _delay && !overrideTimer)
             {
@@ -310,7 +310,16 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            var point = position + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+            var point = position;
+            if (useFixedRange)
+            {
+                point = position + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+            }
+            else if (Player.ServerPosition.Distance(position) > _minDistance)
+            {
+                point = Player.ServerPosition + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+            }
+
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
             LastMoveCommandPosition = point;
         }
