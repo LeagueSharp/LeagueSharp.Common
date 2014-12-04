@@ -507,7 +507,7 @@ namespace LeagueSharp.Common
                     var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
                     var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
 
-                    if (damage > unit.Health)
+                    //if (damage > unit.Health)
                     {
                         Text.X = (int) barPos.X + XOffset;
                         Text.Y = (int) barPos.Y + YOffset - 13;
