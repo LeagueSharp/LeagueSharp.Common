@@ -154,7 +154,7 @@ namespace LeagueSharp.Common
         }
 
 
-        public static bool IsWall(Vector3 position)
+        public static bool IsWall(this Vector3 position)
         {
             return NavMesh.GetCollisionFlags(position).HasFlag(CollisionFlags.Wall);
         }
