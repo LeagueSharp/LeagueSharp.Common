@@ -95,9 +95,19 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        public static bool IsValid<T>(this GameObject obj)
+        {
+            return obj != null && obj.IsValid && obj is T;
+        }
+
         public static float HealthPercentage(this Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
+        }
+
+        public static float ManaPercentage(this Obj_AI_Base unit)
+        {
+            return unit.Mana / unit.MaxMana * 100;
         }
 
         public static void Highlight(this Obj_AI_Base unit, bool showHighlight = true)
