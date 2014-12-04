@@ -106,8 +106,7 @@ namespace LeagueSharp.Common
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
-                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() &&
-                    IsAutoAttack(missile.SData.Name))
+                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
                 {
                     FireAfterAttack(missile.SpellCaster, _lastTarget);
                 }
@@ -273,6 +272,11 @@ namespace LeagueSharp.Common
         public static void SetMovementDelay(int delay)
         {
             _delay = delay;
+        }
+
+        public static float GetLastMoveCommand()
+        {
+            return LastMoveCommandT;
         }
 
         private static void MoveTo(Vector3 position, float holdAreaRadius = 0, bool overrideTimer = false)
