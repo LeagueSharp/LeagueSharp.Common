@@ -93,6 +93,7 @@ namespace LeagueSharp.Common
         private static Obj_AI_Base _lastTarget;
         private static readonly Obj_AI_Hero Player;
         private static int _delay = 80;
+        private static float _minDistance = 400;
 
         static Orbwalking()
         {
@@ -275,6 +276,11 @@ namespace LeagueSharp.Common
             _delay = delay;
         }
 
+        public static void SetMinimumOrbwalkDistance(float d)
+        {
+            _minDistance = d;
+        }
+
         public static float GetLastMoveTime()
         {
             return LastMoveCommandT;
@@ -304,7 +310,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            var point = position + 400 * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+            var point = position + _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
             LastMoveCommandPosition = point;
         }
