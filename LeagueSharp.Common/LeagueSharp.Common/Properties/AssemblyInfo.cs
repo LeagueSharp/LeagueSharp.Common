@@ -22,6 +22,7 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 #endregion
 
@@ -30,12 +31,12 @@ using System.Runtime.InteropServices;
 // die mit einer Assembly verknüpft sind.
 
 [ assembly: AssemblyTitle("LeagueSharp.Common") ]
-[ assembly: AssemblyDescription("") ]
+[assembly: AssemblyDescription("LeagueSharp.Common")]
 [ assembly: AssemblyConfiguration("") ]
-[ assembly: AssemblyCompany("Microsoft") ]
+[assembly: AssemblyCompany("LeagueSharp")]
 [ assembly: AssemblyProduct("LeagueSharp.Common") ]
 [ assembly: AssemblyCopyright("Copyright © Microsoft 2014") ]
-[ assembly: AssemblyTrademark("") ]
+[assembly: AssemblyTrademark("LeagueSharp")]
 [ assembly: AssemblyCulture("") ]
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 
@@ -59,5 +60,6 @@ using System.Runtime.InteropServices;
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[ assembly: AssemblyVersion("1.0.0.9") ]
-[ assembly: AssemblyFileVersion("1.0.0.9") ]
+[assembly: AssemblyVersion("1.0.0.10")]
+[assembly: AssemblyFileVersion("1.0.0.10")]
+[assembly: NeutralResourcesLanguageAttribute("en")]

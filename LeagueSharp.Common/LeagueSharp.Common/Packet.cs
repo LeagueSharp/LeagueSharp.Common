@@ -276,7 +276,7 @@ namespace LeagueSharp.Common
                     result.X = packet.ReadFloat();
                     result.Y = packet.ReadFloat();
                     result.TargetNetworkId = packet.ReadInteger();
-                    packet.ReadByte();
+                    result.WaypointCount = packet.ReadByte() / 2;
                     result.UnitNetworkId = packet.ReadInteger();
                     return result;
                 }
@@ -287,6 +287,7 @@ namespace LeagueSharp.Common
                     public int SourceNetworkId;
                     public int TargetNetworkId;
                     public int UnitNetworkId;
+                    public int WaypointCount;
                     public float X;
                     public float Y;
 
@@ -303,6 +304,7 @@ namespace LeagueSharp.Common
                         Y = y;
                         TargetNetworkId = targetNetworkId;
                         UnitNetworkId = (unitNetworkId == -1) ? ObjectManager.Player.NetworkId : unitNetworkId;
+                        WaypointCount = 1;
                     }
                 }
             }
