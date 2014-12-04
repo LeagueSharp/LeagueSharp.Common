@@ -103,10 +103,10 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
-            if (sender is Obj_SpellMissile && sender.IsValid)
+            if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
-                if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid &&
+                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() &&
                     IsAutoAttack(missile.SData.Name))
                 {
                     FireAfterAttack(missile.SpellCaster, _lastTarget);

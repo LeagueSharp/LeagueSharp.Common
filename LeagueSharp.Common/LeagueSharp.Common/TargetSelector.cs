@@ -416,7 +416,7 @@ namespace LeagueSharp.Common
 
             var packet = Packet.C2S.SetTarget.Decoded(args.PacketData);
 
-            if (packet.NetworkId != 0 && packet.Unit.IsValid && packet.Unit is Obj_AI_Hero &&
+            if (packet.NetworkId != 0 && packet.Unit.IsValid<Obj_AI_Hero>() &&
                 packet.Unit.IsValidTarget())
             {
                 _selectedTarget = (Obj_AI_Hero) packet.Unit;
