@@ -304,13 +304,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            var point = position;
-            if (Player.ServerPosition.Distance(position) > 400)
-            {
-                point = Player.ServerPosition +
-                        400 * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
-            }
-
+            var point = position + 400 * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
             LastMoveCommandPosition = point;
         }
