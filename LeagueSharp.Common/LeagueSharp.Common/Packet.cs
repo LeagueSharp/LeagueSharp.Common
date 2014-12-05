@@ -1908,7 +1908,7 @@ namespace LeagueSharp.Common
                         }
 
                         result.Type = ObjectType.Player;
-                        var duration = Utility.GetRecallTime(unit);
+                        var duration = Utility.GetRecallTime(packet.ReadString(139));
 
                         result.Duration = duration;
 

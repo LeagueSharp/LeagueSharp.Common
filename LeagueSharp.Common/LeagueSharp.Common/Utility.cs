@@ -172,6 +172,9 @@ namespace LeagueSharp.Common
                 case "odinrecallimproved":
                     duration = 4000;
                     break;
+                case "superrecall":
+                    duration = 4000;
+                    break;
             }
             return duration;
         }
