@@ -5206,6 +5206,14 @@ namespace LeagueSharp.Common
             {
                 var sourceAsHero = source as Obj_AI_Hero;
 
+                //Spoils of War
+                if (source.IsMelee() && target is Obj_AI_Minion &&  target.IsEnemy && 
+                    target.Team != GameObjectTeam.Neutral && target.Health <= 200 &&
+                    source.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))
+                {
+                    return 200;
+                }
+
                 //Champions passive damages:
                 result +=
                     AttackPassives.Where(
