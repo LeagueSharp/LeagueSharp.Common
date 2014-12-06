@@ -119,7 +119,6 @@ namespace LeagueSharp.Common
             InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc? 
             Unknown10C = 0x0C, //this packet is like 0x127
 
-            Unknown10E = 0x0E, // FE 06 00 00 40 0E 01 01 
             Unknown122 = 0x22,
             Unknown125 = 0x25, // sion ult, other stuff
             //FE 05 00 00 40 25 01 03 EC 06 00 00 00 01 <== sion
@@ -131,8 +130,7 @@ namespace LeagueSharp.Common
             NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
             Unknown129 = 0x29, //related to spells (kalista ally unit), add?
             Unknown12A = 0x2A, //related to spells (kalist ally unit after 0x129), maybe delete?
-            //FE 06 00 00 40 2A 01 3C 00 00 00 
-            Unknown12B = 0x2B,
+            //FE 06 00 00 40 2A 01 3C 00 00 00
             Unknown12C = 0x2C,
             //FE 00 00 00 00 2C 01 81 00 00 00 00 FF FF FF FF 
 //FE 00 00 00 00 2C 01 80 00 00 00 00 FF FF FF FF 
