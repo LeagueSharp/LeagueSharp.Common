@@ -1977,15 +1977,32 @@ namespace LeagueSharp.Common
                     TeleportEnd,
                 }
 
-                public struct RecallData
+                internal enum Type
                 {
+                    Recall,
+                    Teleport,
+                    Unknown
+                }
+
+                internal struct RecallData
+                {
+                    public Type Type { get; set; }
                     public int Start { get; set; }
                     public int Duration { get; set; }
                 }
 
                 public static byte Header = 0xD8;
-                public static readonly Dictionary<int, RecallData> RecallT = new Dictionary<int, RecallData>();
-                public static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
+
+                private static readonly IDictionary<string, Type> TypeByString = new Dictionary<string, Type>
+                {
+                    {"Recall", Type.Recall},
+                    {"Teleport", Type.Teleport}
+                };
+
+                private static readonly Dictionary<int, RecallData> RecallDataByNetworkId =
+                    new Dictionary<int, RecallData>();
+
+                private const int ErrorGap = 100; //in ticks
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -1999,9 +2016,9 @@ namespace LeagueSharp.Common
                     var result = new Struct();
 
                     result.UnitNetworkId = packet.ReadInteger(5);
-                    var type = packet.ReadString(75);
                     result.Status = RecallStatus.Unknown;
 
+                    var typeAsString = packet.ReadString(75);
                     var gObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
 
                     if (gObject == null || !gObject.IsValid)
@@ -2019,55 +2036,74 @@ namespace LeagueSharp.Common
                         }
 
                         result.Type = ObjectType.Player;
-                        var duration = Utility.GetRecallTime(packet.ReadString(139));
 
-                        result.Duration = duration;
-
-                        if (!RecallT.ContainsKey(result.UnitNetworkId))
+                        if (!RecallDataByNetworkId.ContainsKey(result.UnitNetworkId))
                         {
-                            RecallT.Add(result.UnitNetworkId, new RecallData());
+                            RecallDataByNetworkId[result.UnitNetworkId] = new RecallData {Type = Type.Unknown};
                         }
 
-                        if (!TPT.ContainsKey(result.UnitNetworkId))
+                        if (string.IsNullOrEmpty(typeAsString))
                         {
-                            TPT.Add(result.UnitNetworkId, 0);
-                        }
-
-                        if (type == "Teleport")
-                        {
-                            TPT[result.UnitNetworkId] = Environment.TickCount;
-                            result.Status = RecallStatus.TeleportStart;
-                        }
-                        else if (type == "Recall")
-                        {
-                            result.Status = RecallStatus.RecallStarted;
-                            RecallT[result.UnitNetworkId] = new RecallData { Duration = duration, Start = Environment.TickCount };
-                        }
-                        else if (string.IsNullOrEmpty(type))
-                        {
-                            if (Environment.TickCount - RecallT[result.UnitNetworkId].Start < RecallT[result.UnitNetworkId].Duration - 50)
+                            switch (RecallDataByNetworkId[result.UnitNetworkId].Type)
                             {
-                                result.Status = RecallStatus.RecallAborted;
+                                case Type.Recall:
+                                    if (Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
+                                        RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap)
+                                    {
+                                        result.Status = RecallStatus.RecallAborted;
+                                    }
+                                    else 
+                                    {
+                                        result.Status = RecallStatus.RecallFinished;
+                                    }
+                                    break;
+                                case Type.Teleport:
+                                    if (Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
+                                        RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap)
+                                    {
+                                        result.Status = RecallStatus.TeleportAbort;
+                                    }
+                                    else 
+                                    {
+                                        result.Status = RecallStatus.TeleportEnd;
+                                    }
+                                    break;
                             }
-                            else if (Environment.TickCount - RecallT[result.UnitNetworkId].Start < RecallT[result.UnitNetworkId].Duration + 50)
+                        }
+                        else
+                        {
+                            if (TypeByString.ContainsKey(typeAsString))
                             {
-                                result.Status = RecallStatus.RecallFinished;
-                            }
-
-                            if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500)
-                            {
-                                result.Status = RecallStatus.TeleportAbort;
-                            }
-                            else if (Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
-                            {
-                                result.Status = RecallStatus.TeleportEnd;
+                                var type = TypeByString[typeAsString];
+                                if (type == Type.Recall)
+                                {
+                                    result.Status = RecallStatus.RecallStarted;
+                                    result.Duration = Utility.GetRecallTime(packet.ReadString(139));
+                                    RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
+                                    {
+                                        Type = Type.Recall,
+                                        Duration = result.Duration,
+                                        Start = Environment.TickCount
+                                    };
+                                }
+                                else if (type == Type.Teleport)
+                                {
+                                    result.Status = RecallStatus.TeleportStart;
+                                    result.Duration = 3500;
+                                    RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
+                                    {
+                                        Type = Type.Teleport,
+                                        Duration = result.Duration,
+                                        Start = Environment.TickCount
+                                    };
+                                }
                             }
                         }
                     }
                     else if (gObject is Obj_AI_Turret)
                     {
                         result.Type = ObjectType.Turret;
-                        result.Status = string.IsNullOrEmpty(type)
+                        result.Status = string.IsNullOrEmpty(typeAsString)
                             ? RecallStatus.TeleportEnd
                             : RecallStatus.TeleportStart;
                     }
@@ -2084,7 +2120,7 @@ namespace LeagueSharp.Common
                             result.Type = ObjectType.Ward;
                         }
 
-                        result.Status = string.IsNullOrEmpty(type)
+                        result.Status = string.IsNullOrEmpty(typeAsString)
                             ? RecallStatus.TeleportEnd
                             : RecallStatus.TeleportStart;
                     }
