@@ -2074,28 +2074,28 @@ namespace LeagueSharp.Common
                         {
                             if (TypeByString.ContainsKey(typeAsString))
                             {
-                                var type = TypeByString[typeAsString];
-                                if (type == Type.Recall)
+                                switch (TypeByString[typeAsString])
                                 {
-                                    result.Status = RecallStatus.RecallStarted;
-                                    result.Duration = Utility.GetRecallTime(packet.ReadString(139));
-                                    RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
-                                    {
-                                        Type = Type.Recall,
-                                        Duration = result.Duration,
-                                        Start = Environment.TickCount
-                                    };
-                                }
-                                else if (type == Type.Teleport)
-                                {
-                                    result.Status = RecallStatus.TeleportStart;
-                                    result.Duration = 3500;
-                                    RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
-                                    {
-                                        Type = Type.Teleport,
-                                        Duration = result.Duration,
-                                        Start = Environment.TickCount
-                                    };
+                                    case Type.Recall:
+                                        result.Status = RecallStatus.RecallStarted;
+                                        result.Duration = Utility.GetRecallTime(packet.ReadString(139));
+                                        RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
+                                        {
+                                            Type = Type.Recall,
+                                            Duration = result.Duration,
+                                            Start = Environment.TickCount
+                                        };
+                                        break;
+                                    case Type.Teleport:
+                                        result.Status = RecallStatus.TeleportStart;
+                                        result.Duration = 3500;
+                                        RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
+                                        {
+                                            Type = Type.Teleport,
+                                            Duration = result.Duration,
+                                            Start = Environment.TickCount
+                                        };
+                                        break;
                                 }
                             }
                         }
