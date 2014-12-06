@@ -1718,16 +1718,14 @@ namespace LeagueSharp.Common
 
                     packet.ReadInteger();
                     packet.ReadByte();
-                    var b = packet.ReadByte();
-                    Console.WriteLine("CAST: " + b);
-                    result.SpellSlot = (SpellSlot) b;
+
+                    result.SpellSlot = (SpellSlot) packet.ReadByte();
                     result.SpellFlag2 = packet.ReadByte();
                     result.ManaCost = packet.ReadFloat();
 
                     p = packet.Position + 8;
                     result.FromPosition = new Vector2(packet.ReadFloat(), packet.ReadFloat(p));
 
-                    Console.WriteLine("RETURN");
                     return result;
                 }
 
