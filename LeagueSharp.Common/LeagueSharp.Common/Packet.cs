@@ -101,7 +101,6 @@ namespace LeagueSharp.Common
             Unknown100 = 0x00,
             Unknown101 = 0x01,
             Unknown102 = 0x02,
-            Unknown10C = 0x0C,
 
             Unknown115 = 0x15,
             Unknown116 = 0x16,
@@ -118,6 +117,8 @@ namespace LeagueSharp.Common
             /* New List: Confirmed in Game */
             //FE 19 00 00 40 07 01 00 01 00 00 00 02 00 00 00 FF FF FF FF 00 00 00 00 00 00 00 00
             InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc? 
+            Unknown10C = 0x0C, //this packet is like 0x127
+
             Unknown10E = 0x0E, // FE 06 00 00 40 0E 01 01 
             Unknown122 = 0x22,
             Unknown125 = 0x25, // sion ult, other stuff
@@ -1312,6 +1313,76 @@ namespace LeagueSharp.Common
                     public SpellSlot Slot;
                     public byte UnknownByte;
                     public int UnknownNetworkId;
+                }
+            }
+
+            #endregion
+
+            #region Unknown10C
+
+            /// <summary>
+            ///     Like undo.
+            /// </summary>
+            public static class Unknown10C
+            {
+                public static byte SubHeader = (byte) MultiPacketType.Unknown10C;
+
+                public static List<RefundItem> Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data) { Position = 11 };
+                    var itemList = new List<RefundItem>();
+
+                    for (var i = 0; i <= 7; i++)
+                    {
+                        var inventorySlot = packet.ReadByte();
+                        var spellSlot = inventorySlot + SpellSlot.Item1;
+                        var stack = packet.ReadByte();
+                        var charge = packet.ReadByte();
+                        var itemId = packet.ReadShort();
+                        packet.Position += 2;
+                        var pos = packet.Position;
+
+                        if (itemId == 0)
+                        {
+                            continue;
+                        }
+
+                        var cd = packet.ReadFloat(packet.Position + 59); //this is prob wrong
+                        var totalCd = packet.ReadFloat(packet.Position + 29); //this is prob wrong
+                        packet.Position = pos;
+
+                        itemList.Add(new RefundItem(itemId, inventorySlot, spellSlot, stack, charge, cd, totalCd));
+                    }
+
+                    return itemList;
+                }
+
+                public class RefundItem
+                {
+                    public int Charge;
+                    public float CurrentCooldown;
+                    public byte InventorySlot;
+                    public int ItemId;
+                    public SpellSlot SpellSlot;
+                    public int Stack;
+                    public float TotalCooldown;
+
+                    public RefundItem(short itemId,
+                        byte inventorySlot,
+                        SpellSlot slot,
+                        int stack,
+                        int charge,
+                        float cd,
+                        float totalCd)
+                    {
+                        ItemId = itemId;
+                        InventorySlot = inventorySlot;
+                        SpellSlot = slot;
+                        Stack = stack;
+                        Charge = charge;
+                        CurrentCooldown = cd;
+                        TotalCooldown = totalCd;
+                    }
                 }
             }
 
