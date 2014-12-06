@@ -342,7 +342,7 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (target != null && CanAttack())
+            if (target.IsValidTarget() && CanAttack())
             {
                 DisableNextAttack = false;
                 FireBeforeAttack(target);
