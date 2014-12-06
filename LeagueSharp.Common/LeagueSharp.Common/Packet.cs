@@ -2025,12 +2025,12 @@ namespace LeagueSharp.Common
 
                         if (!RecallT.ContainsKey(result.UnitNetworkId))
                         {
-                            RecallT[result.UnitNetworkId] = new RecallData();
+                            RecallT.Add(result.UnitNetworkId, new RecallData());
                         }
 
                         if (!TPT.ContainsKey(result.UnitNetworkId))
                         {
-                            TPT[result.UnitNetworkId] = 0;
+                            TPT.Add(result.UnitNetworkId, 0);
                         }
 
                         if (type == "Teleport")
@@ -2045,20 +2045,20 @@ namespace LeagueSharp.Common
                         }
                         else if (string.IsNullOrEmpty(type))
                         {
-                            if (Environment.TickCount - RecallT[result.UnitNetworkId].Start > RecallT[result.UnitNetworkId].Duration - 50)
-                            {
-                                result.Status = RecallStatus.RecallFinished;
-                            }
-                            else
+                            if (Environment.TickCount - RecallT[result.UnitNetworkId].Start < RecallT[result.UnitNetworkId].Duration - 50)
                             {
                                 result.Status = RecallStatus.RecallAborted;
                             }
+                            else if (Environment.TickCount - RecallT[result.UnitNetworkId].Start < RecallT[result.UnitNetworkId].Duration + 50)
+                            {
+                                result.Status = RecallStatus.RecallFinished;
+                            }
 
-                            if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500 - 50)
+                            if (Environment.TickCount - TPT[result.UnitNetworkId] < 3500)
                             {
                                 result.Status = RecallStatus.TeleportAbort;
                             }
-                            else
+                            else if (Environment.TickCount - TPT[result.UnitNetworkId] < 4500)
                             {
                                 result.Status = RecallStatus.TeleportEnd;
                             }
