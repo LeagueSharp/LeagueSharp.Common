@@ -362,7 +362,7 @@ namespace LeagueSharp.Common
                     {
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
 
-                        if (_lastTarget.IsValid && _lastTarget != target)
+                        if (_lastTarget != null && _lastTarget.IsValid && _lastTarget != target)
                         {
                             LastAATick = Environment.TickCount + Game.Ping / 2;
                         }
