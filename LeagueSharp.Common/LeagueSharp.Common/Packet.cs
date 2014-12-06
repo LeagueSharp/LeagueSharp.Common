@@ -102,19 +102,24 @@ namespace LeagueSharp.Common
             Unknown101 = 0x01,
             Unknown102 = 0x02,
             Unknown10C = 0x0C,
+
             Unknown115 = 0x15,
             Unknown116 = 0x16,
             Unknown124 = 0x24,
             Unknown11A = 0x1A,
             Unknown11E = 0x1E, // currently empty
-            Unknown122 = 0x22,
-            Unknown12C = 0x2C,
+
             /* These others could be packets with a handler */
             Unknown104 = 0x04, //confirmed in game/ida, related to spellslots
             Unknown118 = 0x08, //sion ult
             Unknown120 = 0x20, // confirmed in game
             SpawnTurret = 0x23, // confirmed in ida
 
+            /* New List: Confirmed in Game */
+            //FE 19 00 00 40 07 01 00 01 00 00 00 02 00 00 00 FF FF FF FF 00 00 00 00 00 00 00 00
+            InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc? 
+            Unknown10E = 0x0E, // FE 06 00 00 40 0E 01 01 
+            Unknown122 = 0x22,
             Unknown125 = 0x25, // sion ult, other stuff
             //FE 05 00 00 40 25 01 03 EC 06 00 00 00 01 <== sion
 //            FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
@@ -123,11 +128,16 @@ namespace LeagueSharp.Common
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 56 05 00 40 FB 16 00 40
             NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
-            Unknown2E = 0x2E, //confirmed in ida
+            Unknown129 = 0x29, //related to spells (kalista ally unit), add?
+            Unknown12A = 0x2A, //related to spells (kalist ally unit after 0x129), maybe delete?
+            //FE 06 00 00 40 2A 01 3C 00 00 00 
+            Unknown12B = 0x2B,
+            Unknown12C = 0x2C,
+            //FE 00 00 00 00 2C 01 81 00 00 00 00 FF FF FF FF 
+//FE 00 00 00 00 2C 01 80 00 00 00 00 FF FF FF FF 
+            Unknown12E = 0x2E, //confirmed in ida
+            Unknown12F = 0x2F, //FE 05 00 00 40 2F 01 00
 
-
-            //FE 19 00 00 40 07 01 00 01 00 00 00 02 00 00 00 FF FF FF FF 00 00 00 00 00 00 00 00
-            InitSpell = 0x07, //also stack count for stackables, teemo shroom, akali, etc? 
 
             AddBuff = 0x09, // buff added by towers in new SR
             UndoToken = 0x0B,
@@ -1653,6 +1663,101 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region CastAns
+
+            /// <summary>
+            ///     Received when a unit casts a spell.
+            /// </summary>
+            public static class CastAns
+            {
+                public static byte Header = 0xB5;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    //TODO when the packet is fully decoded.
+                    return new GamePacket(Header);
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.SourceNetworkId = packet.ReadInteger(1);
+                    result.SourceUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.SourceNetworkId);
+
+
+                    result.SpellFlag = packet.ReadShort(10);
+                    result.SpellHash = packet.ReadInteger();
+                    result.SpellNetworkId = packet.ReadInteger();
+
+                    packet.ReadByte(); //this always used to be 0, maybe flag now
+                    packet.ReadFloat(); // always 1
+                    packet.ReadFloat(); // always player nID
+                    packet.ReadFloat(); // always player nID
+
+                    result.MissileHash = packet.ReadInteger();
+                    result.MissileNetworkId = packet.ReadInteger();
+
+                    var p = packet.Position + 8;
+                    result.ToPosition = new Vector2(packet.ReadFloat(), packet.ReadFloat(p));
+                    packet.Position += 4;
+
+                    var c = packet.ReadByte(65);
+                    if (c > 0) //hopefully c is 1 always
+                    {
+                        result.TargetNetworkId = packet.ReadInteger();
+                        result.TargetUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.TargetNetworkId);
+                        packet.ReadByte(); // for 0
+                    }
+                    result.ChannelTime = packet.ReadFloat();
+                    result.Delay = packet.ReadFloat();
+                    result.Visible = packet.ReadFloat();
+                    result.IsVisible = result.Visible > 0;
+                    result.Cooldown = packet.ReadFloat();
+
+                    packet.ReadInteger();
+                    packet.ReadByte();
+                    var b = packet.ReadByte();
+                    Console.WriteLine("CAST: " + b);
+                    result.SpellSlot = (SpellSlot) b;
+                    result.SpellFlag2 = packet.ReadByte();
+                    result.ManaCost = packet.ReadFloat();
+
+                    p = packet.Position + 8;
+                    result.FromPosition = new Vector2(packet.ReadFloat(), packet.ReadFloat(p));
+
+                    Console.WriteLine("RETURN");
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public float ChannelTime;
+                    public float Cooldown; // sometimes 0
+                    public float Delay;
+                    public Vector2 FromPosition;
+                    public bool IsVisible;
+                    public float ManaCost;
+                    public int MissileHash;
+                    public int MissileNetworkId;
+                    public int SourceNetworkId;
+                    public Obj_AI_Base SourceUnit;
+                    public float Speed;
+                    public short SpellFlag;
+                    public byte SpellFlag2;
+                    public int SpellHash;
+                    public int SpellNetworkId;
+                    public SpellSlot SpellSlot;
+                    public int TargetNetworkId;
+                    public Obj_AI_Base TargetUnit;
+                    public Vector2 ToPosition;
+                    public float Visible; // >0 visible
+                }
+            }
+
+            #endregion
+
             #region Dash
 
             /// <summary>
@@ -2667,7 +2772,8 @@ namespace LeagueSharp.Common
                     result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
                     result.Slot = (SpellSlot) (packet.ReadByte());
-                    result.UnknownByte = packet.ReadByte();
+                    result.UnknownByte = packet.ReadByte(); // 0, 1C, 48
+                    result.UnknownByte2 = packet.ReadByte(); //usually 2
                     result.SpellString = packet.ReadString(11);
                     return result;
                 }
@@ -2691,6 +2797,7 @@ namespace LeagueSharp.Common
                     public string SpellString;
                     public Obj_AI_Base Unit;
                     public byte UnknownByte; // from slot?
+                    public byte UnknownByte2;
                 }
             }
 
