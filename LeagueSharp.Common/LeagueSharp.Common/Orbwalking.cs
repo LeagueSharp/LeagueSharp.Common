@@ -342,28 +342,35 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (target.IsValidTarget() && CanAttack())
+            try
             {
-                DisableNextAttack = false;
-                FireBeforeAttack(target);
-
-                if (!DisableNextAttack)
+                if (target.IsValidTarget() && CanAttack())
                 {
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                    DisableNextAttack = false;
+                    FireBeforeAttack(target);
 
-                    if (_lastTarget.IsValid && target.IsValid && _lastTarget.NetworkId != target.NetworkId)
+                    if (!DisableNextAttack)
                     {
-                        LastAATick = Environment.TickCount + Game.Ping / 2;
-                    }
+                        Player.IssueOrder(GameObjectOrder.AttackUnit, target);
 
-                    _lastTarget = target;
-                    return;
+                        if (_lastTarget.IsValid && target.IsValid && _lastTarget.NetworkId != target.NetworkId)
+                        {
+                            LastAATick = Environment.TickCount + Game.Ping / 2;
+                        }
+
+                        _lastTarget = target;
+                        return;
+                    }
+                }
+
+                if (CanMove(extraWindup))
+                {
+                    MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }
             }
-
-            if (CanMove(extraWindup))
+            catch (Exception e)
             {
-                MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
+                Console.WriteLine(e.ToString());
             }
         }
 
