@@ -1354,47 +1354,28 @@ namespace LeagueSharp.Common
             {
                 public static byte SubHeader = (byte) MultiPacketType.Unknown122;
 
-                public static void Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var Int = packet.ReadInteger(7); // this is either a hash or two shorts
-                    var Float = packet.ReadFloat(); // usually 60
-
-                    var unknownByte1 = packet.ReadByte(83); //camp id?
-                    var unknownByte2 = packet.ReadByte(85);
-                    var unknownByte3 = packet.ReadByte(84);
-                    var unknownInt = packet.ReadInteger(86);
-                    var unknownFloat = packet.ReadFloat(90);
-                    // return new ReturnStruct { UnknownNetworkId = unknownNetworkId };
-                }
-
-                public struct ReturnStruct
-                {
-                    public int UnknownNetworkId;
-                }
-            }
-
-            #endregion
-
-            #region Unknown124
-
-            /// <summary>
-            ///     Unknown
-            ///     Struct from ida
-            /// </summary>
-            public static class Unknown124
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown124;
-
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var unknownNetworkId = packet.ReadInteger(7);
-                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId };
+                    var result = new ReturnStruct();
+
+                    var Int = packet.ReadInteger(7); // this is either a hash or two shorts
+                    var Float = packet.ReadFloat(); // usually 60
+                    result.Name = packet.ReadString(19);
+                    var unknownByte1 = packet.ReadByte(83); //camp id?
+                    var unknownByte2 = packet.ReadByte(84);
+                    result.CampId = packet.ReadByte(85);
+                    result.UnknownNetworkId = packet.ReadInteger(86);
+                    result.UnknownFloat = packet.ReadFloat(90);
+
+                    return result;
                 }
 
                 public struct ReturnStruct
                 {
+                    public byte CampId;
+                    public string Name;
+                    public float UnknownFloat;
                     public int UnknownNetworkId;
                 }
             }
@@ -1977,32 +1958,18 @@ namespace LeagueSharp.Common
                     TeleportEnd,
                 }
 
-                internal enum Type
-                {
-                    Recall,
-                    Teleport,
-                    Unknown
-                }
-
-                internal struct RecallData
-                {
-                    public Type Type { get; set; }
-                    public int Start { get; set; }
-                    public int Duration { get; set; }
-                }
+                private const int ErrorGap = 100; //in ticks
 
                 public static byte Header = 0xD8;
 
                 private static readonly IDictionary<string, Type> TypeByString = new Dictionary<string, Type>
                 {
-                    {"Recall", Type.Recall},
-                    {"Teleport", Type.Teleport}
+                    { "Recall", Type.Recall },
+                    { "Teleport", Type.Teleport }
                 };
 
                 private static readonly Dictionary<int, RecallData> RecallDataByNetworkId =
                     new Dictionary<int, RecallData>();
-
-                private const int ErrorGap = 100; //in ticks
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -2039,7 +2006,7 @@ namespace LeagueSharp.Common
 
                         if (!RecallDataByNetworkId.ContainsKey(result.UnitNetworkId))
                         {
-                            RecallDataByNetworkId[result.UnitNetworkId] = new RecallData {Type = Type.Unknown};
+                            RecallDataByNetworkId[result.UnitNetworkId] = new RecallData { Type = Type.Unknown };
                         }
 
                         if (string.IsNullOrEmpty(typeAsString))
@@ -2052,7 +2019,7 @@ namespace LeagueSharp.Common
                                     {
                                         result.Status = RecallStatus.RecallAborted;
                                     }
-                                    else 
+                                    else
                                     {
                                         result.Status = RecallStatus.RecallFinished;
                                     }
@@ -2063,7 +2030,7 @@ namespace LeagueSharp.Common
                                     {
                                         result.Status = RecallStatus.TeleportAbort;
                                     }
-                                    else 
+                                    else
                                     {
                                         result.Status = RecallStatus.TeleportEnd;
                                     }
@@ -2132,6 +2099,13 @@ namespace LeagueSharp.Common
                     return result;
                 }
 
+                internal struct RecallData
+                {
+                    public Type Type { get; set; }
+                    public int Start { get; set; }
+                    public int Duration { get; set; }
+                }
+
                 public struct Struct
                 {
                     public int Duration;
@@ -2146,6 +2120,13 @@ namespace LeagueSharp.Common
                         Type = type;
                         Duration = duration;
                     }
+                }
+
+                internal enum Type
+                {
+                    Recall,
+                    Teleport,
+                    Unknown
                 }
             }
 
