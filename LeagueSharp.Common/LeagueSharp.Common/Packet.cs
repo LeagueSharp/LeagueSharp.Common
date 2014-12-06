@@ -1977,8 +1977,14 @@ namespace LeagueSharp.Common
                     TeleportEnd,
                 }
 
+                public struct RecallData
+                {
+                    public int Start { get; set; }
+                    public int Duration { get; set; }
+                }
+
                 public static byte Header = 0xD8;
-                public static readonly Dictionary<int, int> RecallT = new Dictionary<int, int>();
+                public static readonly Dictionary<int, RecallData> RecallT = new Dictionary<int, RecallData>();
                 public static readonly Dictionary<int, int> TPT = new Dictionary<int, int>();
 
                 public static GamePacket Encoded(Struct packetStruct)
@@ -2013,13 +2019,13 @@ namespace LeagueSharp.Common
                         }
 
                         result.Type = ObjectType.Player;
-                        var duration = Utility.GetRecallTime(unit);
+                        var duration = Utility.GetRecallTime(packet.ReadString(139));
 
                         result.Duration = duration;
 
                         if (!RecallT.ContainsKey(result.UnitNetworkId))
                         {
-                            RecallT.Add(result.UnitNetworkId, 0);
+                            RecallT.Add(result.UnitNetworkId, new RecallData());
                         }
 
                         if (!TPT.ContainsKey(result.UnitNetworkId))
@@ -2035,15 +2041,15 @@ namespace LeagueSharp.Common
                         else if (type == "Recall")
                         {
                             result.Status = RecallStatus.RecallStarted;
-                            RecallT[result.UnitNetworkId] = Environment.TickCount;
+                            RecallT[result.UnitNetworkId] = new RecallData { Duration = duration, Start = Environment.TickCount };
                         }
                         else if (string.IsNullOrEmpty(type))
                         {
-                            if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration - 200)
+                            if (Environment.TickCount - RecallT[result.UnitNetworkId].Start < RecallT[result.UnitNetworkId].Duration - 50)
                             {
                                 result.Status = RecallStatus.RecallAborted;
                             }
-                            else if (Environment.TickCount - RecallT[result.UnitNetworkId] < duration + 200)
+                            else if (Environment.TickCount - RecallT[result.UnitNetworkId].Start < RecallT[result.UnitNetworkId].Duration + 50)
                             {
                                 result.Status = RecallStatus.RecallFinished;
                             }
