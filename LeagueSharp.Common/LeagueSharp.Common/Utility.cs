@@ -175,6 +175,9 @@ namespace LeagueSharp.Common
                 case "superrecall":
                     duration = 4000;
                     break;
+                case "superrecallimproved":
+                    duration = 4000;
+                    break;
             }
             return duration;
         }
