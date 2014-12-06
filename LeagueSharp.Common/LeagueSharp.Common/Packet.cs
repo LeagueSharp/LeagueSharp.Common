@@ -333,7 +333,8 @@ namespace LeagueSharp.Common
                 {
                     var result = new GamePacket(Header);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte(GetSpellByte(packetStruct.Slot));
+                    result.WriteByte(
+                        packetStruct.SpellFlag == 0xFF ? GetSpellByte(packetStruct.Slot) : packetStruct.SpellFlag);
                     result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
@@ -352,7 +353,7 @@ namespace LeagueSharp.Common
                     var result = new Struct();
                     packet.Position = 1;
                     result.SourceNetworkId = packet.ReadInteger();
-                    packet.Position++;
+                    result.SpellFlag = packet.ReadByte();
                     result.Slot = (SpellSlot) packet.ReadByte();
                     result.FromX = packet.ReadFloat();
                     result.FromY = packet.ReadFloat();
@@ -402,6 +403,7 @@ namespace LeagueSharp.Common
                     public float FromY;
                     public SpellSlot Slot;
                     public int SourceNetworkId;
+                    public byte SpellFlag;
                     public int TargetNetworkId;
                     public float ToX;
                     public float ToY;
@@ -412,7 +414,8 @@ namespace LeagueSharp.Common
                         float fromX = 0f,
                         float fromY = 0f,
                         float toX = 0f,
-                        float toY = 0f)
+                        float toY = 0f,
+                        byte spellFlag = 0xFF)
                     {
                         SourceNetworkId = (sourceNetworkId == -1) ? ObjectManager.Player.NetworkId : sourceNetworkId;
                         Slot = slot;
@@ -421,6 +424,7 @@ namespace LeagueSharp.Common
                         ToX = toX;
                         ToY = toY;
                         TargetNetworkId = targetNetworkId;
+                        SpellFlag = spellFlag;
                     }
                 }
             }
