@@ -2329,7 +2329,7 @@ namespace LeagueSharp.Common
                                 target.HasBuff("KalistaExpungeMarker")
                                     ? ((10 + 10 * (level + 1)) +
                                        0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
-                                      (target.Buffs.FirstOrDefault(b => b.DisplayName == "KalistaExpungeMarker").Count *
+                                      ((target.Buffs.FirstOrDefault(b => b.DisplayName == "KalistaExpungeMarker").Count - 1) *
                                        ((10 + 10 * (level + 1)) +
                                         0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) *
                                        new[] { 0.25, 0.30, 0.35, 0.40, 0.45 }[level])
