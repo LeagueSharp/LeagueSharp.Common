@@ -2209,42 +2209,102 @@ namespace LeagueSharp.Common
             #region Teleport
 
             /// <summary>
-            ///     Gets received when a unit teleports, or starts, aborts or finishes recalling.
+            ///     Gets received when a unit starts, aborts or finishes a teleport (such as recall, teleport, twisted fate ulti, shen
+            ///     ulti,...)
             /// </summary>
             public static class Teleport
             {
-                public enum ObjectType
+                public enum Status
                 {
-                    Player,
-                    Turret,
-                    Minion,
-                    Ward,
-                    Object
+                    Start,
+                    Abort,
+                    Finish,
+                    Unknown
                 }
 
-                public enum RecallStatus
+                public enum Type
                 {
-                    RecallStarted,
-                    RecallAborted,
-                    RecallFinished,
-                    Unknown,
-                    TeleportStart,
-                    TeleportAbort,
-                    TeleportEnd,
+                    Recall,
+                    Teleport,
+                    TwistedFate,
+                    Shen,
+                    Unknown
                 }
 
-                private const int ErrorGap = 100; //in ticks
+                internal interface ITeleport
+                {
+                    Type Type { get; }
+                    int GetDuration(byte[] packetData);
+                }
+
+                internal class RecallTeleport : ITeleport
+                {
+                    public Type Type
+                    {
+                        get { return Type.Recall; }
+                    }
+
+                    public int GetDuration(byte[] packetData)
+                    {
+                        var p = new GamePacket(packetData);
+                        return Utility.GetRecallTime(p.ReadString(139));
+                    }
+                }
+
+                internal class TeleportTeleport : ITeleport
+                {
+                    public Type Type
+                    {
+                        get { return Type.Teleport; }
+                    }
+
+                    public int GetDuration(byte[] packetData)
+                    {
+                        return 3500;
+                    }
+                }
+
+                internal class TwistedFateTeleport : ITeleport
+                {
+                    public Type Type
+                    {
+                        get { return Type.TwistedFate; }
+                    }
+
+                    public int GetDuration(byte[] packetData)
+                    {
+                        return 1500;
+                    }
+                }
+
+                internal class ShenTeleport : ITeleport
+                {
+                    public Type Type
+                    {
+                        get { return Type.TwistedFate; }
+                    }
+
+                    public int GetDuration(byte[] packetData)
+                    {
+                        return 3000;
+                    }
+                }
+
 
                 public static byte Header = 0xD8;
 
-                private static readonly IDictionary<string, Type> TypeByString = new Dictionary<string, Type>
+                private const int ErrorGap = 100; //in ticks
+
+                private static readonly IDictionary<string, ITeleport> TypeByString = new Dictionary<string, ITeleport>
                 {
-                    { "Recall", Type.Recall },
-                    { "Teleport", Type.Teleport }
+                    {"Recall", new RecallTeleport()},
+                    {"Teleport", new TeleportTeleport()},
+                    {"Gate", new TwistedFateTeleport()},
+                    {"Shen", new ShenTeleport()},
                 };
 
-                private static readonly Dictionary<int, RecallData> RecallDataByNetworkId =
-                    new Dictionary<int, RecallData>();
+                private static readonly IDictionary<int, TeleportData> RecallDataByNetworkId =
+                    new Dictionary<int, TeleportData>();
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -2255,117 +2315,66 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct
+                    {
+                        UnitNetworkId = packet.ReadInteger(5),
+                        Status = Status.Unknown,
+                        Type = Type.Unknown
+                    };
 
-                    result.UnitNetworkId = packet.ReadInteger(5);
-                    result.Status = RecallStatus.Unknown;
+                    string typeAsString = packet.ReadString(75);
+                    var gameObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
 
-                    var typeAsString = packet.ReadString(75);
-                    var gObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
-
-                    if (gObject == null || !gObject.IsValid)
+                    if (gameObject == null)
                     {
                         return result;
                     }
 
-                    if (gObject is Obj_AI_Hero)
+                    var hero = gameObject as Obj_AI_Hero;
+                    if (hero == null || !hero.IsValid)
                     {
-                        var unit = (Obj_AI_Hero) gObject;
-
-                        if (!unit.IsValid || unit.Spellbook.GetSpell(SpellSlot.Recall) == null)
-                        {
-                            return result;
-                        }
-
-                        result.Type = ObjectType.Player;
-
-                        if (!RecallDataByNetworkId.ContainsKey(result.UnitNetworkId))
-                        {
-                            RecallDataByNetworkId[result.UnitNetworkId] = new RecallData { Type = Type.Unknown };
-                        }
-
-                        if (string.IsNullOrEmpty(typeAsString))
-                        {
-                            bool check;
-                            switch (RecallDataByNetworkId[result.UnitNetworkId].Type)
-                            {
-                                case Type.Recall:
-                                    check = Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
-                                            RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap;
-                                    result.Status = check ? RecallStatus.RecallAborted : RecallStatus.RecallFinished;
-                                    break;
-                                case Type.Teleport:
-                                    check = Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
-                                            RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap;
-                                    result.Status = check ? RecallStatus.TeleportAbort : RecallStatus.TeleportEnd;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            if (!TypeByString.ContainsKey(typeAsString))
-                            {
-                                return result;
-                            }
-
-                            switch (TypeByString[typeAsString])
-                            {
-                                case Type.Recall:
-                                    result.Status = RecallStatus.RecallStarted;
-                                    result.Duration = Utility.GetRecallTime(packet.ReadString(139));
-                                    RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
-                                    {
-                                        Type = Type.Recall,
-                                        Duration = result.Duration,
-                                        Start = Environment.TickCount
-                                    };
-                                    break;
-                                case Type.Teleport:
-                                    result.Status = RecallStatus.TeleportStart;
-                                    result.Duration = 3500;
-                                    RecallDataByNetworkId[result.UnitNetworkId] = new RecallData
-                                    {
-                                        Type = Type.Teleport,
-                                        Duration = result.Duration,
-                                        Start = Environment.TickCount
-                                    };
-                                    break;
-                            }
-                        }
+                        return result;
                     }
-                    else if (gObject is Obj_AI_Turret)
+
+                    if (!RecallDataByNetworkId.ContainsKey(result.UnitNetworkId))
                     {
-                        result.Type = ObjectType.Turret;
-                        result.Status = string.IsNullOrEmpty(typeAsString)
-                            ? RecallStatus.TeleportEnd
-                            : RecallStatus.TeleportStart;
+                        RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData {Type = Type.Unknown};
                     }
-                    else if (gObject is Obj_AI_Minion)
+
+
+                    if (!string.IsNullOrEmpty(typeAsString))
                     {
-                        result.Type = ObjectType.Object;
-
-                        if (gObject.Name.Contains("Minion"))
+                        if (TypeByString.ContainsKey(typeAsString))
                         {
-                            result.Type = ObjectType.Minion;
-                        }
-                        if (gObject.Name.Contains("Ward"))
-                        {
-                            result.Type = ObjectType.Ward;
-                        }
+                            ITeleport teleportMethod = TypeByString[typeAsString];
 
-                        result.Status = string.IsNullOrEmpty(typeAsString)
-                            ? RecallStatus.TeleportEnd
-                            : RecallStatus.TeleportStart;
+                            int duration = teleportMethod.GetDuration(data);
+                            Type type = teleportMethod.Type;
+
+                            RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData
+                            {
+                                Duration = duration,
+                                Type = type,
+                                Start = Environment.TickCount
+                            };
+
+                            result.Status = Status.Start;
+                            result.Duration = duration;
+                            result.Type = type;
+                        }
                     }
                     else
                     {
-                        result.Type = ObjectType.Object;
+                        bool shorter = Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
+                                       RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap;
+                        result.Status = shorter ? Status.Abort : Status.Finish;
+                        result.Type = RecallDataByNetworkId[result.UnitNetworkId].Type;
+                        result.Duration = 0;
                     }
-
                     return result;
                 }
 
-                internal struct RecallData
+                internal struct TeleportData
                 {
                     public Type Type { get; set; }
                     public int Start { get; set; }
@@ -2375,24 +2384,17 @@ namespace LeagueSharp.Common
                 public struct Struct
                 {
                     public int Duration;
-                    public RecallStatus Status;
-                    public ObjectType Type;
+                    public Status Status;
+                    public Type Type;
                     public int UnitNetworkId;
 
-                    public Struct(int unitNetworkId, RecallStatus status, ObjectType type, int duration)
+                    public Struct(int unitNetworkId, Status status, Type type, int duration)
                     {
                         UnitNetworkId = unitNetworkId;
                         Status = status;
                         Type = type;
                         Duration = duration;
                     }
-                }
-
-                internal enum Type
-                {
-                    Recall,
-                    Teleport,
-                    Unknown
                 }
             }
 
