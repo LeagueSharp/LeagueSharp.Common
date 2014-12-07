@@ -3168,6 +3168,78 @@ namespace LeagueSharp.Common
             }
 
             #endregion
+
+            #region Surrender
+
+            /// <summary>
+            ///     Received when someone casts a surrender vote.
+            /// </summary>
+            public class Surrender
+            {
+                public static byte Header = 0xC9;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct
+                    {
+                        NetworkId = packet.ReadInteger(6),
+                        YesVotes = packet.ReadByte(10),
+                        NoVotes = packet.ReadByte(11),
+                        MaxVotes = packet.ReadByte(12),
+                        Team = (GameObjectTeam) packet.ReadByte(13)
+                    };
+
+                    //byte unknown = packet.ReadByte(5); //Not sure what this is
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int NetworkId;
+                    public int YesVotes;
+                    public int NoVotes;
+                    public int MaxVotes;
+                    public GameObjectTeam Team;
+                }
+            }
+
+            #endregion
+
+            #region SurrenderResult
+
+            /// <summary>
+            ///     Received when surrender voting is over.
+            /// </summary>
+            public class SurrenderResult
+            {
+                public static byte Header = 0xA5;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct
+                    {
+                        Failed = Convert.ToBoolean(packet.ReadByte(5)),
+                        YesVotes = packet.ReadByte(9),
+                        NoVotes = packet.ReadByte(10),
+                        Team = (GameObjectTeam) packet.ReadByte(11)
+                    };
+
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public bool Failed;
+                    public int YesVotes;
+                    public int NoVotes;
+                    public GameObjectTeam Team;
+                }
+            }
+
+            #endregion
         }
     }
 }
