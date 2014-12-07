@@ -3221,7 +3221,7 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data);
                     var result = new Struct
                     {
-                        Failed = Convert.ToBoolean(packet.ReadByte(5)),
+                        TooEarly = Convert.ToBoolean(packet.ReadByte(5)),
                         YesVotes = packet.ReadByte(9),
                         NoVotes = packet.ReadByte(10),
                         Team = (GameObjectTeam) packet.ReadByte(11)
@@ -3232,7 +3232,7 @@ namespace LeagueSharp.Common
 
                 public struct Struct
                 {
-                    public bool Failed;
+                    public bool TooEarly;
                     public int YesVotes;
                     public int NoVotes;
                     public GameObjectTeam Team;
