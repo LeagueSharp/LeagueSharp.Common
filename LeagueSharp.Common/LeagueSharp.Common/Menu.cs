@@ -1489,8 +1489,8 @@ namespace LeagueSharp.Common
 
                 if (Utils.IsUnderRectangle(pos, ColorPickerX, ColorPickerY, ColorPickerW, ColorPickerH))
                 {
-                    UpdateColor();
                     _selecting = true;
+                    UpdateColor();
                 }
             }
             else if (args.Msg == (uint) WindowsMessages.WM_LBUTTONUP)
