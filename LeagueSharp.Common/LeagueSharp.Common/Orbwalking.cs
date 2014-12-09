@@ -52,6 +52,7 @@ namespace LeagueSharp.Common
             Mixed,
             LaneClear,
             Combo,
+			Flee,
             None,
         }
 
@@ -510,6 +511,10 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                     new MenuItem("LaneClear", "LaneClear").SetShared()
                         .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press, false)));
+						
+                _config.AddItem(
+                    new MenuItem("Flee", "Flee").SetShared()
+                        .SetValue(new KeyBind("S".ToCharArray()[0], KeyBindType.Press, false)));
 
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
@@ -533,25 +538,25 @@ namespace LeagueSharp.Common
                     {
                         return _mode;
                     }
-
-                    if (_config.Item("Orbwalk").GetValue<KeyBind>().Active)
+					else if (_config.Item("Orbwalk").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.Combo;
                     }
-
-                    if (_config.Item("LaneClear").GetValue<KeyBind>().Active)
+					else if (_config.Item("LaneClear").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.LaneClear;
                     }
-
-                    if (_config.Item("Farm").GetValue<KeyBind>().Active)
+					else if (_config.Item("Farm").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.Mixed;
                     }
-
-                    if (_config.Item("LastHit").GetValue<KeyBind>().Active)
+					else if (_config.Item("LastHit").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.LastHit;
+                    }
+					else if (_config.Item("Flee").GetValue<KeyBind>().Active)
+                    {
+                        return OrbwalkingMode.Flee;
                     }
 
                     return OrbwalkingMode.None;
