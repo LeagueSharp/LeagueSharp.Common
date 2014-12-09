@@ -2392,7 +2392,7 @@ namespace LeagueSharp.Common
                     public int Start;
                     public int UnitNetworkId;
 
-                    public Struct(int unitNetworkId, Status status, Type type, int duration, int start)
+                    public Struct(int unitNetworkId, Status status, Type type, int duration, int start = 0)
                     {
                         UnitNetworkId = unitNetworkId;
                         Status = status;
