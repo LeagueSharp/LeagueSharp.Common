@@ -2350,17 +2350,19 @@ namespace LeagueSharp.Common
 
                             int duration = teleportMethod.GetDuration(data);
                             Type type = teleportMethod.Type;
+                            int time = Environment.TickCount;
 
                             RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData
                             {
                                 Duration = duration,
                                 Type = type,
-                                Start = Environment.TickCount
+                                Start = time
                             };
 
                             result.Status = Status.Start;
                             result.Duration = duration;
                             result.Type = type;
+                            result.Start = time;
                         }
                     }
                     else
@@ -2370,6 +2372,7 @@ namespace LeagueSharp.Common
                         result.Status = shorter ? Status.Abort : Status.Finish;
                         result.Type = RecallDataByNetworkId[result.UnitNetworkId].Type;
                         result.Duration = 0;
+                        result.Start = 0;
                     }
                     return result;
                 }
@@ -2386,6 +2389,7 @@ namespace LeagueSharp.Common
                     public int Duration;
                     public Status Status;
                     public Type Type;
+                    public int Start;
                     public int UnitNetworkId;
 
                     public Struct(int unitNetworkId, Status status, Type type, int duration)
