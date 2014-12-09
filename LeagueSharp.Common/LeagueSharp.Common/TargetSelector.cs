@@ -528,9 +528,15 @@ namespace LeagueSharp.Common
             {
                 Config.AddItem(
                     new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
-                        .SetValue(
+                        .SetValue<Slider>(
                             new Slider(
                                 autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
+                if(autoPriorityItem.GetValue<bool>())
+                {
+                    Config.Item("SimpleTS" + enemy.ChampionName + "Priority")
+                        .SetValue<Slider>(new Slider(
+                            autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
+                }
             }
             Config.AddItem(autoPriorityItem);
             Config.AddItem(new MenuItem("TargetingMode", "Target Mode").SetShared().SetValue<StringList>(new StringList(new[] { "Low HP", "Most AD", "Most AP", "Closest", "Near Mouse", "Priority", "Less Attack", "Less Cast" }, 5)));
