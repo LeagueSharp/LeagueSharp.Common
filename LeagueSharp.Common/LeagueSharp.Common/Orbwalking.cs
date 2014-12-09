@@ -52,6 +52,7 @@ namespace LeagueSharp.Common
             Mixed,
             LaneClear,
             Combo,
+            Flee,
             None,
         }
 
@@ -512,6 +513,10 @@ namespace LeagueSharp.Common
                         .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press, false)));
 
                 _config.AddItem(
+                    new MenuItem("Flee", "Flee").SetShared()
+                        .SetValue(new KeyBind("S".ToCharArray()[0], KeyBindType.Press, false)));
+
+                _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
 
 
@@ -552,6 +557,11 @@ namespace LeagueSharp.Common
                     if (_config.Item("LastHit").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.LastHit;
+                    }
+
+                    if (_config.Item("Flee").GetValue<KeyBind>().Active)
+                    {
+                        return OrbwalkingMode.Flee;
                     }
 
                     return OrbwalkingMode.None;
@@ -608,6 +618,9 @@ namespace LeagueSharp.Common
             {
                 Obj_AI_Base result = null;
                 var r = float.MaxValue;
+
+                if (ActiveMode == OrbwalkingMode.Flee)
+                    return null;
 
                 if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
