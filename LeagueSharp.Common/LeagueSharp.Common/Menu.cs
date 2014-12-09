@@ -665,8 +665,11 @@ namespace LeagueSharp.Common
             return subMenu;
         }
 
-        public MenuItem Item(string name)
+        public MenuItem Item(string name, bool makeChampionUniq = false)
         {
+            if (makeChampionUniq)
+                name = ObjectManager.Player.ChampionName + name;
+
             //Search in our own items
             foreach (var item in Items)
             {
@@ -756,8 +759,11 @@ namespace LeagueSharp.Common
         private bool _valueSet;
         private bool _visible;
 
-        public MenuItem(string name, string displayName)
+        public MenuItem(string name, string displayName, bool makeChampionUniq = false)
         {
+            if (makeChampionUniq)
+                name = ObjectManager.Player.ChampionName + name;
+
             Name = name;
             DisplayName = displayName;
             _assemblyPath = System.Reflection.Assembly.GetCallingAssembly().Location;
