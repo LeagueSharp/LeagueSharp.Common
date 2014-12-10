@@ -137,6 +137,15 @@ namespace LeagueSharp.Common
                     SpellName = "elisespiderqcast",
                     SkillType = GapcloserType.Skillshot
                 });
+                
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Elise",
+                    Slot = SpellSlot.E,
+                    SpellName = "elisespideredescent",
+                    SkillType = GapcloserType.Targeted
+                });
 
             #endregion
 
