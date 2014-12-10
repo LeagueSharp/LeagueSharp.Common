@@ -24,6 +24,8 @@
 
 using System;
 using System.Linq;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -40,7 +42,7 @@ namespace LeagueSharp.Common
             NearMouse,
             AutoPriority,
             LessAttack,
-            LessCast,
+            LessCast
         }
 
         private static double _lasttick;
@@ -114,7 +116,7 @@ namespace LeagueSharp.Common
                         foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                         {
                             if (hero.IsValidTarget() &&
-                                SharpDX.Vector2.Distance(Game.CursorPos.To2D(), hero.ServerPosition.To2D()) < 300)
+                                Vector2.Distance(Game.CursorPos.To2D(), hero.ServerPosition.To2D()) < 300)
                             {
                                 Target = hero;
                                 _maintarget = hero;
@@ -130,7 +132,7 @@ namespace LeagueSharp.Common
         {
             if (!ObjectManager.Player.IsDead && _drawcircle && Target != null && Target.IsVisible && !Target.IsDead)
             {
-                Drawing.DrawCircle(Target.Position, 125, System.Drawing.Color.White);
+                Drawing.DrawCircle(Target.Position, 125, Color.White);
             }
         }
 
@@ -211,8 +213,8 @@ namespace LeagueSharp.Common
                                 }
                                 break;
                             case TargetingMode.NearMouse:
-                                if (SharpDX.Vector2.Distance(Game.CursorPos.To2D(), target.Position.To2D()) + 50 <
-                                    SharpDX.Vector2.Distance(Game.CursorPos.To2D(), newtarget.Position.To2D()))
+                                if (Vector2.Distance(Game.CursorPos.To2D(), target.Position.To2D()) + 50 <
+                                    Vector2.Distance(Game.CursorPos.To2D(), newtarget.Position.To2D()))
                                 {
                                     newtarget = target;
                                 }
@@ -353,7 +355,7 @@ namespace LeagueSharp.Common
     }
 
     /// <summary>
-    /// Simple target selector that selects the hero that will die faster.
+    ///     Simple target selector that selects the hero that will die faster.
     /// </summary>
     public static class SimpleTs
     {
@@ -361,7 +363,7 @@ namespace LeagueSharp.Common
         {
             Magical,
             Physical,
-            True,
+            True
         }
 
         private static Menu _config;
@@ -391,7 +393,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if (args.Msg != (uint)WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
             {
                 return;
             }
@@ -406,7 +408,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         private static void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
             if (args.PacketData[0] != Packet.C2S.SetTarget.Header)
@@ -419,13 +420,12 @@ namespace LeagueSharp.Common
             if (packet.NetworkId != 0 && packet.Unit.IsValid<Obj_AI_Hero>() &&
                 packet.Unit.IsValidTarget())
             {
-                _selectedTarget = (Obj_AI_Hero)packet.Unit;
+                _selectedTarget = (Obj_AI_Hero) packet.Unit;
             }
         }
 
-
         /// <summary>
-        /// Sets the priority of the hero
+        ///     Sets the priority of the hero
         /// </summary>
         public static void SetPriority(Obj_AI_Hero hero, int newPriority)
         {
@@ -439,7 +439,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the priority of the hero
+        ///     Returns the priority of the hero
         /// </summary>
         public static float GetPriority(Obj_AI_Hero hero)
         {
@@ -518,7 +518,7 @@ namespace LeagueSharp.Common
             Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
             Config.AddItem(
                 new MenuItem("SelTColor", "Selected target color").SetShared()
-                    .SetValue(new Circle(true, System.Drawing.Color.Red)));
+                    .SetValue(new Circle(true, Color.Red)));
             Config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
@@ -528,18 +528,26 @@ namespace LeagueSharp.Common
             {
                 Config.AddItem(
                     new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
-                        .SetValue<Slider>(
+                        .SetValue(
                             new Slider(
                                 autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
-                if(autoPriorityItem.GetValue<bool>())
+                if (autoPriorityItem.GetValue<bool>())
                 {
                     Config.Item("SimpleTS" + enemy.ChampionName + "Priority")
-                        .SetValue<Slider>(new Slider(
+                        .SetValue(new Slider(
                             autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
                 }
             }
             Config.AddItem(autoPriorityItem);
-            Config.AddItem(new MenuItem("TargetingMode", "Target Mode").SetShared().SetValue<StringList>(new StringList(new[] { "Low HP", "Most AD", "Most AP", "Closest", "Near Mouse", "Priority", "Less Attack", "Less Cast" }, 5)));
+            Config.AddItem(
+                new MenuItem("TargetingMode", "Target Mode").SetShared()
+                    .SetValue(
+                        new StringList(
+                            new[]
+                            {
+                                "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack",
+                                "LessCast"
+                            }, 5)));
         }
 
         private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
@@ -595,17 +603,25 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Hero bestTarget = null;
 
-            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget) && (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
+            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget) &&
+                (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
             }
 
             var bestRatio = 0f;
-            var targetingMode = _config.Item("TargetingMode").GetValue<StringList>().SelectedIndex;
+
+            var targetingMode = TargetSelector.TargetingMode.AutoPriority;
+            if (_config != null && _config.Item("TargetingMode") != null)
+            {
+                var menuItem = _config.Item("TargetingMode").GetValue<StringList>();
+                Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out targetingMode);
+            }
 
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
-                if (!hero.IsValidTarget() || IsInvulnerable(hero) || ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) && !(champion.Distance(hero) < range)))
+                if (!hero.IsValidTarget() || IsInvulnerable(hero) ||
+                    ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) && !(champion.Distance(hero) < range)))
                 {
                     continue;
                 }
@@ -618,88 +634,87 @@ namespace LeagueSharp.Common
 
                 switch (targetingMode)
                 {
-                    case (int)TargetSelector.TargetingMode.LowHP:
+                    case TargetSelector.TargetingMode.LowHP:
+                        if (hero.Health < bestTarget.Health)
                         {
-                            if (hero.Health < bestTarget.Health)
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
+                            bestTarget = hero;
                         }
-                    case (int)TargetSelector.TargetingMode.MostAD:
-                        {
-                            if (hero.BaseAttackDamage + hero.FlatPhysicalDamageMod > bestTarget.BaseAttackDamage + bestTarget.FlatPhysicalDamageMod)
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
-                        }
-                    case (int)TargetSelector.TargetingMode.MostAP:
-                        {
-                            if (hero.BaseAbilityDamage + hero.FlatMagicDamageMod > bestTarget.BaseAbilityDamage + bestTarget.FlatMagicDamageMod)
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
-                        }
-                    case (int)TargetSelector.TargetingMode.Closest:
-                        {
-                            if (Geometry.Distance(hero) < Geometry.Distance(bestTarget))
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
-                        }
-                    case (int)TargetSelector.TargetingMode.NearMouse:
-                        {
-                            if (SharpDX.Vector2.Distance(Game.CursorPos.To2D(), hero.Position.To2D()) + 50 < SharpDX.Vector2.Distance(Game.CursorPos.To2D(), bestTarget.Position.To2D()))
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
-                        }
-                    case (int)TargetSelector.TargetingMode.AutoPriority:
-                        {
-                            var damage = 0f;
+                        break;
 
-                            switch (damageType)
-                            {
-                                case DamageType.Magical:
-                                    damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
-                                    break;
-                                case DamageType.Physical:
-                                    damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
-                                    break;
-                                case DamageType.True:
-                                    damage = 100;
-                                    break;
-                            }
-
-                            var ratio = damage / (1 + hero.Health) * GetPriority(hero);
-
-                            if (ratio > bestRatio)
-                            {
-                                bestRatio = ratio;
-                                bestTarget = hero;
-                            }
-                            break;
-                        }
-                    case (int)TargetSelector.TargetingMode.LessAttack:
+                    case TargetSelector.TargetingMode.MostAD:
+                        if (hero.BaseAttackDamage + hero.FlatPhysicalDamageMod >
+                            bestTarget.BaseAttackDamage + bestTarget.FlatPhysicalDamageMod)
                         {
-                            if ((hero.Health - ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, hero.Health) < (bestTarget.Health - ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Physical, bestTarget.Health))))
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
+                            bestTarget = hero;
                         }
-                    case (int)TargetSelector.TargetingMode.LessCast:
+                        break;
+
+                    case TargetSelector.TargetingMode.MostAP:
+                        if (hero.BaseAbilityDamage + hero.FlatMagicDamageMod >
+                            bestTarget.BaseAbilityDamage + bestTarget.FlatMagicDamageMod)
                         {
-                            if ((hero.Health - ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, hero.Health) < (bestTarget.Health - ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, bestTarget.Health))))
-                            {
-                                bestTarget = hero;
-                            }
-                            break;
+                            bestTarget = hero;
                         }
+                        break;
+
+                    case TargetSelector.TargetingMode.Closest:
+                        if (Geometry.Distance(hero) < Geometry.Distance(bestTarget))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+
+                    case TargetSelector.TargetingMode.NearMouse:
+                        if (Vector2.Distance(Game.CursorPos.To2D(), hero.Position.To2D()) + 50 <
+                            Vector2.Distance(Game.CursorPos.To2D(), bestTarget.Position.To2D()))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+
+                    case TargetSelector.TargetingMode.AutoPriority:
+                        var damage = 0f;
+
+                        switch (damageType)
+                        {
+                            case DamageType.Magical:
+                                damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
+                                break;
+                            case DamageType.Physical:
+                                damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
+                                break;
+                            case DamageType.True:
+                                damage = 100;
+                                break;
+                        }
+
+                        var ratio = damage/(1 + hero.Health)*GetPriority(hero);
+
+                        if (ratio > bestRatio)
+                        {
+                            bestRatio = ratio;
+                            bestTarget = hero;
+                        }
+                        break;
+
+                    case TargetSelector.TargetingMode.LessAttack:
+                        if ((hero.Health -
+                             ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, hero.Health) <
+                             (bestTarget.Health -
+                              ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Physical, bestTarget.Health))))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
+
+                    case TargetSelector.TargetingMode.LessCast:
+                        if ((hero.Health - ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, hero.Health) <
+                             (bestTarget.Health -
+                              ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, bestTarget.Health))))
+                        {
+                            bestTarget = hero;
+                        }
+                        break;
                 }
             }
 
