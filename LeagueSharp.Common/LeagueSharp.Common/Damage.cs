@@ -92,6 +92,25 @@ namespace LeagueSharp.Common
             };
 
             #endregion
+            
+            #region Alistar
+            
+            p = new PassiveDamage
+            {
+               ChampionName = "Alistar",
+               IsActive = (source, target) => (source.HasBuff("Trample")),
+               GetDamage = 
+                   (source, target) =>
+                       ((float)
+                           source.CalcDamage(
+                               target, DamageType.Magical,
+                               6d + source.Level + (0.1d * source.FlatMagicDamageMod))),
+               
+            };
+            AttackPassive.Add(p);
+            
+            #endregion
+            
 
             #region Caitlyn
 
@@ -504,8 +523,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 105, 150, 195, 240 }[level] +
-                                0.8 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) +
-                                0.2 * source.FlatMagicDamageMod
+                                0.5 * source.FlatMagicDamageMod
                     },
                     //W
                     new DamageSpell
