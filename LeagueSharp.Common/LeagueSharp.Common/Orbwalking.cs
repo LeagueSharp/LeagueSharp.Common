@@ -317,7 +317,7 @@ namespace LeagueSharp.Common
             var point = position;
             if (useFixedDistance)
             {
-                point = position +
+                point = Player.ServerPosition +
                         (randomizeMinDistance
                             ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance
                             : _minDistance) * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
@@ -326,7 +326,7 @@ namespace LeagueSharp.Common
             {
                 if (randomizeMinDistance)
                 {
-                    point = position +
+                    point = Player.ServerPosition +
                             (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance *
                             (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
                 }
