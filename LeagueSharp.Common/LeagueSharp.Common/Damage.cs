@@ -523,8 +523,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 new double[] { 60, 105, 150, 195, 240 }[level] +
-                                0.8 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) +
-                                0.2 * source.FlatMagicDamageMod
+                                0.5 * source.FlatMagicDamageMod
                     },
                     //W
                     new DamageSpell
