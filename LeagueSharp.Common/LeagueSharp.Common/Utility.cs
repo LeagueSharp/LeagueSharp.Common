@@ -310,6 +310,12 @@ namespace LeagueSharp.Common
                 ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
 
+        public static NavMeshCell ToNavMeshCell(this Vector3 position)
+        {
+            var nav = NavMesh.WorldToGrid(position.X, position.Y);
+            return NavMesh.GetCell((short) nav.X, (short) nav.Y);
+        }
+
         /// <summary>
         ///     Counts the enemies in range of Player.
         /// </summary>
