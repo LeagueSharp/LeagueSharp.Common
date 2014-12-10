@@ -357,7 +357,7 @@ namespace LeagueSharp.Common
                 new Gapcloser
                 {
                     ChampionName = "Leona",
-                    Slot = SpellSlot.Q,
+                    Slot = SpellSlot.E,
                     SpellName = "leonazenithblade",
                     SkillType = GapcloserType.Skillshot
                 });
@@ -553,7 +553,7 @@ namespace LeagueSharp.Common
                 new Gapcloser
                 {
                     ChampionName = "Tryndamere",
-                    Slot = SpellSlot.Q,
+                    Slot = SpellSlot.E,
                     SpellName = "slashcast",
                     SkillType = GapcloserType.Skillshot
                 });
