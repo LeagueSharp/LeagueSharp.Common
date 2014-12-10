@@ -111,7 +111,6 @@ namespace LeagueSharp.Common
             
             #endregion
             
-            #region Aatrox
 
             #region Caitlyn
 
