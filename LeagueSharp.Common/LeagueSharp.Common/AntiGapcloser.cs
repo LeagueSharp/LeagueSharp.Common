@@ -94,7 +94,7 @@ namespace LeagueSharp.Common
                 new Gapcloser
                 {
                     ChampionName = "Alistar",
-                    Slot = SpellSlot.E,
+                    Slot = SpellSlot.W,
                     SpellName = "headbutt",
                     SkillType = GapcloserType.Targeted
                 });
