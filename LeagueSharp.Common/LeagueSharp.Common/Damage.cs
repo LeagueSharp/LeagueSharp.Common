@@ -107,7 +107,7 @@ namespace LeagueSharp.Common
                                6d + source.Level + (0.1d * source.FlatMagicDamageMod))),
                
             };
-            AttackPassive.Add(p);
+            AttackPassives.Add(p);
             
             #endregion
             
