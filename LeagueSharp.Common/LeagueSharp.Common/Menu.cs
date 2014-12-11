@@ -513,7 +513,6 @@ namespace LeagueSharp.Common
                 child.OnReceiveMessage(message, cursorPos, key);
             }
 
-
             foreach (var item in Items)
             {
                 item.OnReceiveMessage(message, cursorPos, key);
@@ -545,11 +544,12 @@ namespace LeagueSharp.Common
                 }
             }
 
-            if (!IsInside(cursorPos))
+            if (!Visible)
             {
                 return;
             }
-            if (!Visible)
+
+            if (!IsInside(cursorPos))
             {
                 return;
             }
@@ -1034,15 +1034,17 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-                    if (!IsInside(cursorPos))
-                    {
-                        return;
-                    }
+
                     if (!Visible)
                     {
                         return;
                     }
 
+                    if (!IsInside(cursorPos))
+                    {
+                        return;
+                    }
+                    
                     if (cursorPos.X > Position.X + Width - Height)
                     {
                         SetValue(!GetValue<bool>());
@@ -1051,6 +1053,7 @@ namespace LeagueSharp.Common
                     break;
 
                 case MenuValueType.Slider:
+
                     if (!Visible)
                     {
                         Interacting = false;
@@ -1084,11 +1087,13 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-                    if (!IsInside(cursorPos))
+
+                    if (!Visible)
                     {
                         return;
                     }
-                    if (!Visible)
+
+                    if (!IsInside(cursorPos))
                     {
                         return;
                     }
@@ -1106,10 +1111,12 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
+
                     if (!Visible)
                     {
                         return;
                     }
+
                     if (!IsInside(cursorPos))
                     {
                         return;
