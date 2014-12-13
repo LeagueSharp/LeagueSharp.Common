@@ -25,15 +25,22 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D9;
+using Bitmap = System.Drawing.Bitmap;
 using Color = System.Drawing.Color;
+using Device = SharpDX.Direct3D9.Device;
+using Effect = SharpDX.Direct3D9.Effect;
 using Font = SharpDX.Direct3D9.Font;
+using Format = SharpDX.Direct3D9.Format;
+using Image = System.Drawing.Image;
 using Matrix = SharpDX.Matrix;
+using PrimitiveType = SharpDX.Direct3D9.PrimitiveType;
+using Texture = SharpDX.Direct3D9.Texture;
+using Usage = SharpDX.Direct3D9.Usage;
 
 #endregion
 
@@ -808,6 +815,7 @@ namespace LeagueSharp.Common
             private Texture _texture;
             private int _x;
             private int _y;
+            private float _rotation;
 
             public Sprite(Bitmap bitmap, Vector2 position)
             {
@@ -898,27 +906,14 @@ namespace LeagueSharp.Common
 
             public Vector2 Scale
             {
-                set
-                {
-                    _scale = value;
-
-                    using (DataStream stream = BaseTexture.ToStream(_texture, ImageFileFormat.Bmp))
-                    using (Bitmap original = Bitmap ?? new Bitmap(stream))
-                    {
-                        var target = new Bitmap((int) (_scale.X*original.Width), (int) (_scale.Y*original.Height));
-
-                        using (var g = Graphics.FromImage(target))
-                        {
-                            g.SmoothingMode = SmoothingMode.HighQuality;
-                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                            g.DrawImage(original, 0, 0, target.Width, target.Height);
-                        }
-                        UpdateTextureBitmap(target);
-                    }
-                }
-
+                set { _scale = value; }
                 get { return _scale; }
+            }
+
+            public float Rotation
+            {
+                set { _rotation = value; }
+                get { return _rotation; }
             }
 
             public ColorBGRA Color
@@ -1067,7 +1062,12 @@ namespace LeagueSharp.Common
                     }
 
                     _sprite.Begin();
-                    _sprite.Draw(_texture, _color, _crop, new Vector3(-X, -Y, 0));
+                    Matrix matrix = _sprite.Transform;
+                    Matrix nMatrix = (Scale != null ? Matrix.Scaling(Scale.X, Scale.Y, 0) : Matrix.Scaling(1)) * 
+                        Matrix.RotationZ(Rotation) * Matrix.Translation(Position.X, Position.Y, 0);
+                    _sprite.Transform = nMatrix;
+                    _sprite.Draw(_texture, _color);
+                    _sprite.Transform = matrix;
                     _sprite.End();
                 }
                 catch (Exception e)
