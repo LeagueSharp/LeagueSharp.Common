@@ -269,6 +269,18 @@ namespace LeagueSharp.Common
                 return true;
             }
 
+            Obj_AI_Hero objAiHero = null;
+            float[] health = {float.MaxValue};
+            foreach (var a in ObjectManager.Get<Obj_AI_Hero>().Where(a => a.IsAlly).Where(a => a.Health < health[0]))
+            {
+                health[0] = a.Health;
+                objAiHero = a;
+            }
+            if (objAiHero != null)
+            {
+                Console.WriteLine(@"Selected ally: {0}", objAiHero.Name);
+            }
+
             // Kayle's Intervention (R)
             if (target.HasBuff("JudicatorIntervention"))
             {

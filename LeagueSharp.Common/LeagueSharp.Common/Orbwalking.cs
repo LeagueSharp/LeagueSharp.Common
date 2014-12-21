@@ -51,6 +51,7 @@ namespace LeagueSharp.Common
             LastHit,
             Mixed,
             LaneClear,
+            Flee,
             Combo,
             None
         }
@@ -505,6 +506,10 @@ namespace LeagueSharp.Common
                         .SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
 
                 _config.AddItem(
+                    new MenuItem("Flee", "Flee").SetShared()
+                        .SetValue(new KeyBind("A".ToCharArray()[0], KeyBindType.Press)));
+
+                _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
 
@@ -540,6 +545,11 @@ namespace LeagueSharp.Common
                     if (_config.Item("Farm").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.Mixed;
+                    }
+
+                    if (_config.Item("Flee").GetValue<KeyBind>().Active)
+                    {
+                        return OrbwalkingMode.Flee;
                     }
 
                     return _config.Item("LastHit").GetValue<KeyBind>().Active
@@ -753,7 +763,8 @@ namespace LeagueSharp.Common
 
                 var target = GetTarget();
                 Orbwalk(
-                    target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                    (ActiveMode == OrbwalkingMode.Flee) ? null : target,
+                    (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
                     _config.Item("ExtraWindup").GetValue<Slider>().Value,
                     _config.Item("HoldPosRadius").GetValue<Slider>().Value);
             }
