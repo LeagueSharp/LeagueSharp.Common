@@ -258,22 +258,14 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType)
+        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreInvulnerablility)
         {
-            if ((damageType.Equals(DamageType.Magical) || damageType.Equals(DamageType.True)) &&
-                target.HasBuff("Undying Rage") && target.Health >= 2f)
-            {
-                return true;
-            }
+            if (ignoreInvulnerablility) return false;
 
-            if (target.HasBuff("JudicatorIntervention"))
-            {
-                return true;
-            }
-
-            // TODO: Add Yasuo Windshield, spellshields and etc.
-
-            return false;
+            // TODO: Add Sivir's Shield, Nocturne's Shroud of Darkness, Banshee's Veil. (Yasuo's windwall?)
+            return (((damageType.Equals(DamageType.Magical) || damageType.Equals(DamageType.True)) &&
+                     target.HasBuff("Undying Rage") && target.Health >= 2f) || target.HasBuff("JudicatorIntervention") ||
+                    (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield")));
         }
 
 
@@ -295,11 +287,11 @@ namespace LeagueSharp.Common
             return GetTarget(ObjectManager.Player, range, damageType);
         }
 
-        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType)
+        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType, bool ignoreInvulnerablility = false)
         {
             Obj_AI_Hero bestTarget = null;
 
-            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget, damageType) &&
+            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget, damageType, ignoreInvulnerablility) &&
                 (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
@@ -319,7 +311,7 @@ namespace LeagueSharp.Common
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(
                             hero =>
-                                hero.IsValidTarget() && !IsInvulnerable(hero, damageType) &&
+                                hero.IsValidTarget() && !IsInvulnerable(hero, damageType, ignoreInvulnerablility) &&
                                 ((range < 0 && Orbwalking.InAutoAttackRange(hero)) || champion.Distance(hero) < range)))
             {
                 if (bestTarget == null)
