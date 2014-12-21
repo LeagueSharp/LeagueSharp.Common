@@ -33,332 +33,18 @@ namespace LeagueSharp.Common
 {
     public class TargetSelector
     {
-        public enum TargetingMode
+        #region Main
+
+        static TargetSelector()
         {
-            LowHP,
-            MostAD,
-            MostAP,
-            Closest,
-            NearMouse,
-            AutoPriority,
-            LessAttack,
-            LessCast
+            Game.OnWndProc += GameOnOnWndProc;
+            Drawing.OnDraw += DrawingOnOnDraw;
         }
 
-        private static double _lasttick;
+        #endregion
 
-        private static readonly string[] ap =
-        {
-            "Ahri", "Akali", "Anivia", "Annie", "Brand", "Cassiopeia", "Diana",
-            "FiddleSticks", "Fizz", "Gragas", "Heimerdinger", "Karthus", "Kassadin", "Katarina", "Kayle", "Kennen",
-            "Leblanc", "Lissandra", "Lux", "Malzahar", "Mordekaiser", "Morgana", "Nidalee", "Orianna", "Ryze", "Sion",
-            "Swain", "Syndra", "Teemo", "TwistedFate", "Veigar", "Viktor", "Vladimir", "Xerath", "Ziggs", "Zyra",
-            "Velkoz"
-        };
+        #region Enum
 
-        private static readonly string[] sup =
-        {
-            "Blitzcrank", "Janna", "Karma", "Leona", "Lulu", "Nami", "Sona",
-            "Soraka", "Thresh", "Zilean"
-        };
-
-        private static readonly string[] tank =
-        {
-            "Amumu", "Chogath", "DrMundo", "Galio", "Hecarim", "Malphite",
-            "Maokai", "Nasus", "Rammus", "Sejuani", "Shen", "Singed", "Skarner", "Volibear", "Warwick", "Yorick", "Zac",
-            "Nunu", "Taric", "Alistar", "Garen", "Nautilus", "Braum"
-        };
-
-        private static readonly string[] ad =
-        {
-            "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "KogMaw",
-            "MissFortune", "Quinn", "Sivir", "Talon", "Tristana", "Twitch", "Urgot", "Varus", "Vayne", "Zed", "Jinx",
-            "Yasuo", "Lucian", "Kalista"
-        };
-
-        private static readonly string[] bruiser =
-        {
-            "Darius", "Elise", "Evelynn", "Fiora", "Gangplank", "Gnar", "Jayce",
-            "Pantheon", "Irelia", "JarvanIV", "Jax", "Khazix", "LeeSin", "Nocturne", "Olaf", "Poppy", "Renekton",
-            "Rengar", "Riven", "Shyvana", "Trundle", "Tryndamere", "Udyr", "Vi", "MonkeyKing", "XinZhao", "Aatrox",
-            "Rumble", "Shaco", "MasterYi"
-        };
-
-        public Obj_AI_Hero Target;
-        private bool _drawcircle;
-        private Obj_AI_Hero _maintarget;
-        private TargetingMode _mode;
-        private float _range;
-        private bool _update = true;
-
-        public TargetSelector(float range, TargetingMode mode)
-        {
-            _range = range;
-            _mode = mode;
-
-            Game.OnGameUpdate += Game_OnGameUpdate;
-            Drawing.OnDraw += Drawing_OnDraw;
-            Game.OnWndProc += Game_OnWndProc;
-        }
-
-        private void Game_OnWndProc(WndEventArgs args)
-        {
-            if (MenuGUI.IsChatOpen || ObjectManager.Player.Spellbook.SelectedSpellSlot != SpellSlot.Unknown)
-            {
-                return;
-            }
-
-            if (args.WParam == 1) // LMouse
-            {
-                switch (args.Msg)
-                {
-                    case 257:
-                        foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
-                        {
-                            if (hero.IsValidTarget() &&
-                                Vector2.Distance(Game.CursorPos.To2D(), hero.ServerPosition.To2D()) < 300)
-                            {
-                                Target = hero;
-                                _maintarget = hero;
-                                Game.PrintChat("TargetSelector: New main target: " + _maintarget.ChampionName);
-                            }
-                        }
-                        break;
-                }
-            }
-        }
-
-        private void Drawing_OnDraw(EventArgs args)
-        {
-            if (!ObjectManager.Player.IsDead && _drawcircle && Target != null && Target.IsVisible && !Target.IsDead)
-            {
-                Drawing.DrawCircle(Target.Position, 125, Color.White);
-            }
-        }
-
-        private void Game_OnGameUpdate(EventArgs args)
-        {
-            if (Environment.TickCount > _lasttick + 100)
-            {
-                _lasttick = Environment.TickCount;
-                if (!_update)
-                {
-                    return;
-                }
-                if (_maintarget == null)
-                {
-                    GetNormalTarget();
-                }
-                else
-                {
-                    if (Geometry.Distance(_maintarget) > _range)
-                    {
-                        GetNormalTarget();
-                    }
-                    else
-                    {
-                        if (_maintarget.IsValidTarget())
-                        {
-                            Target = _maintarget;
-                        }
-                        else
-                        {
-                            GetNormalTarget();
-                        }
-                    }
-                }
-            }
-        }
-
-        private void GetNormalTarget()
-        {
-            Obj_AI_Hero newtarget = null;
-            if (_mode != TargetingMode.AutoPriority)
-            {
-                foreach (var target in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(target => target.IsValidTarget() && Geometry.Distance(target) <= _range))
-                {
-                    if (newtarget == null)
-                    {
-                        newtarget = target;
-                    }
-                    else
-                    {
-                        switch (_mode)
-                        {
-                            case TargetingMode.LowHP:
-                                if (target.Health < newtarget.Health)
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-                            case TargetingMode.MostAD:
-                                if (target.BaseAttackDamage + target.FlatPhysicalDamageMod <
-                                    newtarget.BaseAttackDamage + newtarget.FlatPhysicalDamageMod)
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-                            case TargetingMode.MostAP:
-                                if (target.FlatMagicDamageMod < newtarget.FlatMagicDamageMod)
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-                            case TargetingMode.Closest:
-                                if (Geometry.Distance(target) < Geometry.Distance(newtarget))
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-                            case TargetingMode.NearMouse:
-                                if (Vector2.Distance(Game.CursorPos.To2D(), target.Position.To2D()) + 50 <
-                                    Vector2.Distance(Game.CursorPos.To2D(), newtarget.Position.To2D()))
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-
-                            case TargetingMode.LessAttack:
-                                if ((target.Health -
-                                     ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, target.Health) <
-                                     (newtarget.Health -
-                                      ObjectManager.Player.CalcDamage(
-                                          newtarget, Damage.DamageType.Physical, newtarget.Health))))
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-                            case TargetingMode.LessCast:
-                                if ((target.Health -
-                                     ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, target.Health) <
-                                     (newtarget.Health -
-                                      ObjectManager.Player.CalcDamage(
-                                          newtarget, Damage.DamageType.Magical, newtarget.Health))))
-                                {
-                                    newtarget = target;
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                newtarget = AutoPriority();
-            }
-            Target = newtarget;
-        }
-
-
-        private Obj_AI_Hero AutoPriority()
-        {
-            Obj_AI_Hero autopriority = null;
-            var prio = 5;
-            foreach (var target in
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(target => target != null && target.IsValidTarget() && Geometry.Distance(target) <= _range))
-            {
-                var priority = FindPrioForTarget(target.ChampionName);
-                if (autopriority == null)
-                {
-                    autopriority = target;
-                    prio = priority;
-                }
-                else
-                {
-                    if (priority < prio)
-                    {
-                        autopriority = target;
-                        prio = FindPrioForTarget(target.ChampionName);
-                    }
-                    else if (priority == prio)
-                    {
-                        if (!(target.Health < autopriority.Health))
-                        {
-                            continue;
-                        }
-                        autopriority = target;
-                        prio = priority;
-                    }
-                }
-            }
-            return autopriority;
-        }
-
-        private static int FindPrioForTarget(string ChampionName)
-        {
-            if (ap.Contains(ChampionName))
-            {
-                return 2;
-            }
-            if (ad.Contains(ChampionName))
-            {
-                return 1;
-            }
-            if (sup.Contains(ChampionName))
-            {
-                return 3;
-            }
-            if (bruiser.Contains(ChampionName))
-            {
-                return 4;
-            }
-            if (tank.Contains(ChampionName))
-            {
-                return 5;
-            }
-            return 5;
-        }
-
-        public void SetDrawCircleOfTarget(bool draw)
-        {
-            _drawcircle = draw;
-        }
-
-        public void OverrideTarget(Obj_AI_Hero newtarget)
-        {
-            Target = newtarget;
-            _update = false;
-        }
-
-        public void DisableTargetOverride()
-        {
-            _update = true;
-        }
-
-        public float GetRange()
-        {
-            return _range;
-        }
-
-        public void SetRange(float range)
-        {
-            _range = range;
-        }
-
-        public TargetingMode GetTargetingMode()
-        {
-            return _mode;
-        }
-
-        public void SetTargetingMode(TargetingMode mode)
-        {
-            _mode = mode;
-        }
-
-        public override string ToString()
-        {
-            return "Target: " + Target.ChampionName + "Range: " + _range + "Mode: " + _mode;
-        }
-    }
-
-    /// <summary>
-    ///     Simple target selector that selects the hero that will die faster.
-    /// </summary>
-    public static class SimpleTs
-    {
         public enum DamageType
         {
             Magical,
@@ -366,61 +52,69 @@ namespace LeagueSharp.Common
             True
         }
 
-        private static Menu _config;
-        private static Obj_AI_Hero _selectedTarget;
-
-        static SimpleTs()
+        public enum TargetingMode
         {
-            //Game.OnGameSendPacket += Game_OnGameSendPacket;
-            Game.OnWndProc += Game_OnWndProc;
-            Drawing.OnDraw += Drawing_OnDraw;
+            LowHp,
+            MostAd,
+            MostAp,
+            Closest,
+            NearMouse,
+            AutoPriority,
+            LessAttack,
+            LessCast
         }
 
-        public static Obj_AI_Hero SelectedTarget
-        {
-            get { return (_config != null && _config.Item("FocusSelected").GetValue<bool>() ? _selectedTarget : null); }
-        }
+        #endregion
 
-        private static void Drawing_OnDraw(EventArgs args)
+        #region Vars
+
+        private static Menu _configMenu;
+        private static Obj_AI_Hero _selectedTargetObjAiHero;
+
+        #endregion
+
+        #region EventArgs
+
+        private static void DrawingOnOnDraw(EventArgs args)
         {
-            if (_selectedTarget.IsValidTarget() && _config != null && _config.Item("FocusSelected").GetValue<bool>() &&
-                _config.Item("SelTColor").GetValue<Circle>().Active)
+            if (_selectedTargetObjAiHero.IsValidTarget() && _configMenu != null &&
+                _configMenu.Item("FocusSelected").GetValue<bool>() &&
+                _configMenu.Item("SelTColor").GetValue<Circle>().Active)
             {
                 Render.Circle.DrawCircle(
-                    _selectedTarget.Position, 150, _config.Item("SelTColor").GetValue<Circle>().Color, 7, true);
+                    _selectedTargetObjAiHero.Position, 150, _configMenu.Item("SelTColor").GetValue<Circle>().Color, 7,
+                    true);
             }
         }
 
-        private static void Game_OnWndProc(WndEventArgs args)
+        private static void GameOnOnWndProc(WndEventArgs args)
         {
             if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
             {
                 return;
             }
-            _selectedTarget = null;
+            _selectedTargetObjAiHero = null;
             foreach (var enemy in
                 ObjectManager.Get<Obj_AI_Hero>()
                     .Where(hero => hero.IsValidTarget())
                     .OrderByDescending(h => h.Distance(Game.CursorPos))
                     .Where(enemy => enemy.Distance(Game.CursorPos) < 200))
             {
-                _selectedTarget = enemy;
+                _selectedTargetObjAiHero = enemy;
             }
         }
 
-        private static void Game_OnGameSendPacket(GamePacketEventArgs args)
+        #endregion
+
+        #region Functions
+
+        public static Obj_AI_Hero SelectedTarget
         {
-            if (args.PacketData[0] != Packet.C2S.SetTarget.Header)
+            get
             {
-                return;
-            }
-
-            var packet = Packet.C2S.SetTarget.Decoded(args.PacketData);
-
-            if (packet.NetworkId != 0 && packet.Unit.IsValid<Obj_AI_Hero>() &&
-                packet.Unit.IsValidTarget())
-            {
-                _selectedTarget = (Obj_AI_Hero) packet.Unit;
+                return (_configMenu != null && _configMenu.Item("FocusSelected").GetValue<bool>()
+                    ? _selectedTargetObjAiHero
+                    : null);
             }
         }
 
@@ -429,13 +123,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void SetPriority(Obj_AI_Hero hero, int newPriority)
         {
-            if (_config == null || _config.Item("SimpleTS" + hero.ChampionName + "Priority") == null)
+            if (_configMenu == null || _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") == null)
             {
                 return;
             }
-            var p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>();
+            var p = _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").GetValue<Slider>();
             p.Value = Math.Max(1, Math.Min(5, newPriority));
-            _config.Item("SimpleTS" + hero.ChampionName + "Priority").SetValue(p);
+            _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").SetValue(p);
         }
 
         /// <summary>
@@ -444,9 +138,9 @@ namespace LeagueSharp.Common
         public static float GetPriority(Obj_AI_Hero hero)
         {
             var p = 1;
-            if (_config != null && _config.Item("SimpleTS" + hero.ChampionName + "Priority") != null)
+            if (_configMenu != null && _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") != null)
             {
-                p = _config.Item("SimpleTS" + hero.ChampionName + "Priority").GetValue<Slider>().Value;
+                p = _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").GetValue<Slider>().Value;
             }
 
             switch (p)
@@ -512,34 +206,34 @@ namespace LeagueSharp.Common
             return p4.Contains(championName) ? 4 : 1;
         }
 
-        public static void AddToMenu(Menu Config)
+        public static void AddToMenu(Menu config)
         {
-            _config = Config;
-            Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
-            Config.AddItem(
+            _configMenu = config;
+            config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            config.AddItem(
                 new MenuItem("SelTColor", "Selected target color").SetShared()
                     .SetValue(new Circle(true, Color.Red)));
-            Config.AddItem(new MenuItem("Sep", "").SetShared());
+            config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
 
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
                 )
             {
-                Config.AddItem(
-                    new MenuItem("SimpleTS" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
+                config.AddItem(
+                    new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
                         .SetValue(
                             new Slider(
                                 autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
                 if (autoPriorityItem.GetValue<bool>())
                 {
-                    Config.Item("SimpleTS" + enemy.ChampionName + "Priority")
+                    config.Item("TargetSelector" + enemy.ChampionName + "Priority")
                         .SetValue(new Slider(
                             autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
                 }
             }
-            Config.AddItem(autoPriorityItem);
-            Config.AddItem(
+            config.AddItem(autoPriorityItem);
+            config.AddItem(
                 new MenuItem("TargetingMode", "Target Mode").SetShared()
                     .SetValue(
                         new StringList(
@@ -559,15 +253,15 @@ namespace LeagueSharp.Common
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
                 )
             {
-                _config.Item("SimpleTS" + enemy.ChampionName + "Priority")
+                _configMenu.Item("TargetSelector" + enemy.ChampionName + "Priority")
                     .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
             }
         }
 
-        public static bool IsInvulnerable(Obj_AI_Base target)
+        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType)
         {
-            //TODO: add yasuo wall, spellshields, etc.
-            if (target.HasBuff("Undying Rage") && target.Health >= 2f)
+            if ((damageType.Equals(DamageType.Magical) || damageType.Equals(DamageType.True)) &&
+                target.HasBuff("Undying Rage") && target.Health >= 2f)
             {
                 return true;
             }
@@ -577,6 +271,8 @@ namespace LeagueSharp.Common
                 return true;
             }
 
+            // TODO: Add Yasuo Windshield, spellsheilds and etc.
+
             return false;
         }
 
@@ -585,7 +281,7 @@ namespace LeagueSharp.Common
         {
             if (hero.IsValidTarget())
             {
-                _selectedTarget = hero;
+                _selectedTargetObjAiHero = hero;
             }
         }
 
@@ -603,7 +299,7 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Hero bestTarget = null;
 
-            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget) &&
+            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget, damageType) &&
                 (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
@@ -611,21 +307,21 @@ namespace LeagueSharp.Common
 
             var bestRatio = 0f;
 
-            var targetingMode = TargetSelector.TargetingMode.AutoPriority;
-            if (_config != null && _config.Item("TargetingMode") != null)
+            var targetingMode = TargetingMode.AutoPriority;
+            if (_configMenu != null && _configMenu.Item("TargetingMode") != null)
             {
-                var menuItem = _config.Item("TargetingMode").GetValue<StringList>();
+                var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
                 Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out targetingMode);
             }
 
-            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
+            foreach (
+                var hero in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(
+                            hero =>
+                                hero.IsValidTarget() && !IsInvulnerable(hero, damageType) &&
+                                ((range < 0 && Orbwalking.InAutoAttackRange(hero)) || champion.Distance(hero) < range)))
             {
-                if (!hero.IsValidTarget() || IsInvulnerable(hero) ||
-                    ((!(range < 0) || !Orbwalking.InAutoAttackRange(hero)) && !(champion.Distance(hero) < range)))
-                {
-                    continue;
-                }
-
                 if (bestTarget == null)
                 {
                     bestTarget = hero;
@@ -634,14 +330,14 @@ namespace LeagueSharp.Common
 
                 switch (targetingMode)
                 {
-                    case TargetSelector.TargetingMode.LowHP:
+                    case TargetingMode.LowHp:
                         if (hero.Health < bestTarget.Health)
                         {
                             bestTarget = hero;
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.MostAD:
+                    case TargetingMode.MostAd:
                         if (hero.BaseAttackDamage + hero.FlatPhysicalDamageMod >
                             bestTarget.BaseAttackDamage + bestTarget.FlatPhysicalDamageMod)
                         {
@@ -649,7 +345,7 @@ namespace LeagueSharp.Common
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.MostAP:
+                    case TargetingMode.MostAp:
                         if (hero.BaseAbilityDamage + hero.FlatMagicDamageMod >
                             bestTarget.BaseAbilityDamage + bestTarget.FlatMagicDamageMod)
                         {
@@ -657,14 +353,14 @@ namespace LeagueSharp.Common
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.Closest:
+                    case TargetingMode.Closest:
                         if (Geometry.Distance(hero) < Geometry.Distance(bestTarget))
                         {
                             bestTarget = hero;
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.NearMouse:
+                    case TargetingMode.NearMouse:
                         if (Vector2.Distance(Game.CursorPos.To2D(), hero.Position.To2D()) + 50 <
                             Vector2.Distance(Game.CursorPos.To2D(), bestTarget.Position.To2D()))
                         {
@@ -672,7 +368,7 @@ namespace LeagueSharp.Common
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.AutoPriority:
+                    case TargetingMode.AutoPriority:
                         var damage = 0f;
 
                         switch (damageType)
@@ -697,7 +393,7 @@ namespace LeagueSharp.Common
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.LessAttack:
+                    case TargetingMode.LessAttack:
                         if ((hero.Health -
                              ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, hero.Health) <
                              (bestTarget.Health -
@@ -707,7 +403,7 @@ namespace LeagueSharp.Common
                         }
                         break;
 
-                    case TargetSelector.TargetingMode.LessCast:
+                    case TargetingMode.LessCast:
                         if ((hero.Health - ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, hero.Health) <
                              (bestTarget.Health -
                               ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, bestTarget.Health))))
@@ -720,5 +416,7 @@ namespace LeagueSharp.Common
 
             return bestTarget;
         }
+
+        #endregion
     }
 }
