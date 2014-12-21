@@ -271,7 +271,7 @@ namespace LeagueSharp.Common
                 return true;
             }
 
-            // TODO: Add Yasuo Windshield, spellsheilds and etc.
+            // TODO: Add Yasuo Windshield, spellshields and etc.
 
             return false;
         }
