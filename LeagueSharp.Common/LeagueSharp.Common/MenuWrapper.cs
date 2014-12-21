@@ -47,7 +47,7 @@ namespace LeagueSharp.Common
             {
                 // Target selector
                 _targetSelectorMenu = new Menu("Target Selector", "ts");
-                SimpleTs.AddToMenu(_targetSelectorMenu);
+                TargetSelector.AddToMenu(_targetSelectorMenu);
                 _menu.AddSubMenu(_targetSelectorMenu);
             }
 
