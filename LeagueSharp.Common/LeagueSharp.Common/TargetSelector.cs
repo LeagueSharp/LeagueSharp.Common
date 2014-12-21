@@ -262,10 +262,44 @@ namespace LeagueSharp.Common
         {
             if (ignoreInvulnerablility) return false;
 
-            // TODO: Add Sivir's Shield, Nocturne's Shroud of Darkness, Banshee's Veil. (Yasuo's windwall?)
-            return (((damageType.Equals(DamageType.Magical) || damageType.Equals(DamageType.True)) &&
-                     target.HasBuff("Undying Rage") && target.Health >= 2f) || target.HasBuff("JudicatorIntervention") ||
-                    (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield")));
+            // Tryndamere's Undying Rage (R)
+            if (damageType.Equals(DamageType.Magical) ||
+                damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health >= 2f)
+            {
+                return true;
+            }
+
+            // Kayle's Intervention (R)
+            if (target.HasBuff("JudicatorIntervention"))
+            {
+                return true;
+            }
+
+            // Morgana's Black Shield (E)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
+            {
+                return true;
+            }
+
+            // Banshee's Veil (PASSIVE)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BansheesVeil"))
+            { // TODO: Get exact Banshee's Veil buff name.
+                return true;
+            }
+
+            // Sivir's Spell Shield (E)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
+            { // TODO: Get exact Sivir's Spell Shield buff name
+                return true;
+            }
+
+            // Nocturne's Shroud of Darkness (W)
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
+            { // TODO: Get exact Nocturne's Shourd of Darkness buff name
+                return true;
+            }
+
+            return false;
         }
 
 
@@ -287,7 +321,8 @@ namespace LeagueSharp.Common
             return GetTarget(ObjectManager.Player, range, damageType, ignoreInvulnerablility);
         }
 
-        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType, bool ignoreInvulnerablility = false)
+        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType,
+            bool ignoreInvulnerablility = false)
         {
             Obj_AI_Hero bestTarget = null;
 
