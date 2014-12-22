@@ -628,7 +628,7 @@ namespace LeagueSharp.Common
                 if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
-                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
+                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical, false, true);
                     if (target != null)
                     {
                         return target;
@@ -677,7 +677,7 @@ namespace LeagueSharp.Common
                 /*Champions*/
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
-                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
+                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical, false, true);
                     if (target.IsValidTarget())
                     {
                         return target;

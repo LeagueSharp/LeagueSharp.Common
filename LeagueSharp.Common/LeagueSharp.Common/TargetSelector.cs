@@ -318,13 +318,13 @@ namespace LeagueSharp.Common
             return SelectedTarget;
         }
 
-        public static Obj_AI_Hero GetTarget(float range, DamageType damageType, bool ignoreInvulnerablility = false)
+        public static Obj_AI_Hero GetTarget(float range, DamageType damageType, bool ignoreInvulnerablility = false, bool ignoreShield = false)
         {
             return GetTarget(ObjectManager.Player, range, damageType, ignoreInvulnerablility);
         }
 
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType,
-            bool ignoreInvulnerablility = false)
+            bool ignoreInvulnerablility = false, bool ignoreShield = false)
         {
             Obj_AI_Hero bestTarget = null;
 
