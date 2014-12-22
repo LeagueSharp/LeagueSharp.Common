@@ -258,7 +258,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreInvulnerablility)
+        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreInvulnerablility, bool ignoreShields = false)
         {
             if (ignoreInvulnerablility) return false;
 
@@ -274,6 +274,8 @@ namespace LeagueSharp.Common
             {
                 return true;
             }
+
+            if (ignoreShields) return false;
 
             // Morgana's Black Shield (E)
             if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
