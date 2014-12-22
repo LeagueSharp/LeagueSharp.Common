@@ -318,17 +318,19 @@ namespace LeagueSharp.Common
             return SelectedTarget;
         }
 
-        public static Obj_AI_Hero GetTarget(float range, DamageType damageType, bool ignoreInvulnerablility = false)
+        public static Obj_AI_Hero GetTarget(float range, DamageType damageType, bool ignoreInvulnerablility = false, bool ignoreShield = false)
         {
-            return GetTarget(ObjectManager.Player, range, damageType, ignoreInvulnerablility);
+            return GetTarget(ObjectManager.Player, range, damageType, ignoreInvulnerablility, ignoreShield);
         }
 
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType,
-            bool ignoreInvulnerablility = false)
+            bool ignoreInvulnerablility = false, bool ignoreShieldSpells = false)
         {
             Obj_AI_Hero bestTarget = null;
 
-            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget, damageType, ignoreInvulnerablility) &&
+            var ignoreShield = ignoreShieldSpells;
+
+            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget, damageType, ignoreInvulnerablility, ignoreShield) &&
                 (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
@@ -348,7 +350,7 @@ namespace LeagueSharp.Common
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(
                             hero =>
-                                hero.IsValidTarget() && !IsInvulnerable(hero, damageType, ignoreInvulnerablility) &&
+                                hero.IsValidTarget() && !IsInvulnerable(hero, damageType, ignoreInvulnerablility, ignoreShield) &&
                                 ((range < 0 && Orbwalking.InAutoAttackRange(hero)) || champion.Distance(hero) < range)))
             {
                 if (bestTarget == null)
