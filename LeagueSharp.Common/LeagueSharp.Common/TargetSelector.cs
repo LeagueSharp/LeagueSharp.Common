@@ -211,8 +211,7 @@ namespace LeagueSharp.Common
             _configMenu = config;
             config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
             config.AddItem(
-                new MenuItem("SelTColor", "Selected target color").SetShared()
-                    .SetValue(new Circle(true, Color.Red)));
+                new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
             config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
@@ -228,8 +227,9 @@ namespace LeagueSharp.Common
                 if (autoPriorityItem.GetValue<bool>())
                 {
                     config.Item("TargetSelector" + enemy.ChampionName + "Priority")
-                        .SetValue(new Slider(
-                            autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
+                        .SetValue(
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
                 }
             }
             config.AddItem(autoPriorityItem);
@@ -239,8 +239,7 @@ namespace LeagueSharp.Common
                         new StringList(
                             new[]
                             {
-                                "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack",
-                                "LessCast"
+                                "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack", "LessCast"
                             }, 5)));
         }
 
@@ -258,9 +257,15 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreInvulnerablility, bool ignoreShields = false)
+        public static bool IsInvulnerable(Obj_AI_Base target,
+            DamageType damageType,
+            bool ignoreInvulnerablility,
+            bool ignoreShields = false)
         {
-            if (ignoreInvulnerablility) return false;
+            if (ignoreInvulnerablility)
+            {
+                return false;
+            }
 
             // Tryndamere's Undying Rage (R)
             if (damageType.Equals(DamageType.Magical) ||
@@ -275,7 +280,10 @@ namespace LeagueSharp.Common
                 return true;
             }
 
-            if (ignoreShields) return false;
+            if (ignoreShields)
+            {
+                return false;
+            }
 
             // Morgana's Black Shield (E)
             if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
@@ -285,19 +293,22 @@ namespace LeagueSharp.Common
 
             // Banshee's Veil (PASSIVE)
             if (damageType.Equals(DamageType.Magical) && target.HasBuff("BansheesVeil"))
-            { // TODO: Get exact Banshee's Veil buff name.
+            {
+                // TODO: Get exact Banshee's Veil buff name.
                 return true;
             }
 
             // Sivir's Spell Shield (E)
             if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
-            { // TODO: Get exact Sivir's Spell Shield buff name
+            {
+                // TODO: Get exact Sivir's Spell Shield buff name
                 return true;
             }
 
             // Nocturne's Shroud of Darkness (W)
             if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
-            { // TODO: Get exact Nocturne's Shourd of Darkness buff name
+            {
+                // TODO: Get exact Nocturne's Shourd of Darkness buff name
                 return true;
             }
 
@@ -318,19 +329,26 @@ namespace LeagueSharp.Common
             return SelectedTarget;
         }
 
-        public static Obj_AI_Hero GetTarget(float range, DamageType damageType, bool ignoreInvulnerablility = false, bool ignoreShield = false)
+        public static Obj_AI_Hero GetTarget(float range,
+            DamageType damageType,
+            bool ignoreInvulnerablility = false,
+            bool ignoreShield = false)
         {
             return GetTarget(ObjectManager.Player, range, damageType, ignoreInvulnerablility, ignoreShield);
         }
 
-        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion, float range, DamageType damageType,
-            bool ignoreInvulnerablility = false, bool ignoreShieldSpells = false)
+        public static Obj_AI_Hero GetTarget(Obj_AI_Base champion,
+            float range,
+            DamageType damageType,
+            bool ignoreInvulnerablility = false,
+            bool ignoreShieldSpells = false)
         {
             Obj_AI_Hero bestTarget = null;
 
             var ignoreShield = ignoreShieldSpells;
 
-            if (SelectedTarget.IsValidTarget() && !IsInvulnerable(SelectedTarget, damageType, ignoreInvulnerablility, ignoreShield) &&
+            if (SelectedTarget.IsValidTarget() &&
+                !IsInvulnerable(SelectedTarget, damageType, ignoreInvulnerablility, ignoreShield) &&
                 (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
             {
                 return SelectedTarget;
@@ -345,13 +363,13 @@ namespace LeagueSharp.Common
                 Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out targetingMode);
             }
 
-            foreach (
-                var hero in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            hero =>
-                                hero.IsValidTarget() && !IsInvulnerable(hero, damageType, ignoreInvulnerablility, ignoreShield) &&
-                                ((range < 0 && Orbwalking.InAutoAttackRange(hero)) || champion.Distance(hero) < range)))
+            foreach (var hero in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(
+                        hero =>
+                            hero.IsValidTarget() &&
+                            !IsInvulnerable(hero, damageType, ignoreInvulnerablility, ignoreShield) &&
+                            ((range < 0 && Orbwalking.InAutoAttackRange(hero)) || champion.Distance(hero) < range)))
             {
                 if (bestTarget == null)
                 {
@@ -415,7 +433,7 @@ namespace LeagueSharp.Common
                                 break;
                         }
 
-                        var ratio = damage/(1 + hero.Health)*GetPriority(hero);
+                        var ratio = damage / (1 + hero.Health) * GetPriority(hero);
 
                         if (ratio > bestRatio)
                         {

@@ -39,10 +39,10 @@ namespace LeagueSharp.Common
     {
         /// <summary>
         ///     Returns if the source is facing the target.
-        ///     <summary>
+        /// </summary>
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
         {
-            if (source == null || target == null)
+            if (!source.IsValid || !target.IsValid)
             {
                 return false;
             }
@@ -73,8 +73,7 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable)
+            if (!unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable || unit.IsInvulnerable)
             {
                 return false;
             }
@@ -152,7 +151,6 @@ namespace LeagueSharp.Common
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
-
 
         public static bool IsWall(this Vector3 position)
         {
@@ -248,14 +246,10 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
-        public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName = false)
+        public static bool HasBuff(this Obj_AI_Base unit, string buffName)
         {
             return
-                unit.Buffs.Any(
-                    buff =>
-                        ((!dontUseDisplayName && buff.DisplayName == buffName) ||
-                         (dontUseDisplayName && buff.Name == buffName)) && buff.IsActive &&
-                        buff.EndTime - Game.Time >= 0);
+                unit.Buffs.Any(buff => (buff.DisplayName == buffName && buff.IsActive && buff.EndTime - Game.Time >= 0));
         }
 
         /// <summary>
@@ -460,7 +454,6 @@ namespace LeagueSharp.Common
             private const int YOffset = 20;
             private const int Width = 103;
             private const int Height = 8;
-
             public static Color Color = Color.Lime;
             public static bool Enabled = true;
             private static DamageToUnitDelegate _damageToUnit;
@@ -510,7 +503,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         public class Map
         {
             public enum MapType
@@ -522,12 +514,11 @@ namespace LeagueSharp.Common
                 HowlingAbyss
             }
 
+            public MapType _MapType;
             public Vector2 Grid;
-
             public string Name;
             public string ShortName;
             public int StartingLevel;
-            public MapType _MapType;
 
             public Map(string name, string shortName, MapType map, Vector2 grid, int startLevel = 1)
             {
@@ -609,7 +600,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         /// <summary>
         ///     Internal class used to get the waypoints even when the enemy enters the fow of war.
         /// </summary>
@@ -654,38 +644,35 @@ namespace LeagueSharp.Common
         public static int MinorVersion;
         public static int Build;
         public static int Revision;
-
         private static readonly int[] VersionArray;
+        private static readonly string[] VersionString;
 
         static Version()
         {
-            var d = Game.Version.Split('.');
-            MajorVersion = Convert.ToInt32(d[0]);
-            MinorVersion = Convert.ToInt32(d[1]);
-            Build = Convert.ToInt32(d[2]);
-            Revision = Convert.ToInt32(d[3]);
+            VersionString = Game.Version.Split('.');
+            MajorVersion = Convert.ToInt32(VersionString[0]);
+            MinorVersion = Convert.ToInt32(VersionString[1]);
+            Build = Convert.ToInt32(VersionString[2]);
+            Revision = Convert.ToInt32(VersionString[3]);
 
             VersionArray = new[] { MajorVersion, MinorVersion, Build, Revision };
         }
 
         public static bool IsOlder(string version)
         {
-            var d = version.Split('.');
-            return MinorVersion < Convert.ToInt32(d[1]);
+            return MinorVersion < Convert.ToInt32(version);
         }
 
         public static bool IsNewer(string version)
         {
-            var d = version.Split('.');
-            return MinorVersion > Convert.ToInt32(d[1]);
+            return MinorVersion > Convert.ToInt32(version);
         }
 
         public static bool IsEqual(string version)
         {
-            var d = version.Split('.');
-            for (var i = 0; i <= d.Length; i++)
+            for (var i = 0; i <= VersionString.Length; i++)
             {
-                if (d[i] == null || Convert.ToInt32(d[i]) != VersionArray[i])
+                if (VersionString[i] == null || Convert.ToInt32(VersionString[i]) != VersionArray[i])
                 {
                     return false;
                 }
