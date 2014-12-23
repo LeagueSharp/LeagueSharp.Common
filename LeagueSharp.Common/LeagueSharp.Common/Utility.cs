@@ -252,6 +252,17 @@ namespace LeagueSharp.Common
                 unit.Buffs.Any(buff => (buff.DisplayName == buffName && buff.IsActive && buff.EndTime - Game.Time >= 0));
         }
 
+        [Obsolete("Display Name is deprecated, please use HasBuff(this Obj_AI_Base unit, string buffName)", false)]
+        public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName)
+        {
+            return
+                unit.Buffs.Any(
+                    buff =>
+                        ((!dontUseDisplayName && buff.DisplayName == buffName) ||
+                         (dontUseDisplayName && buff.Name == buffName)) && buff.IsActive &&
+                        buff.EndTime - Game.Time >= 0);
+        }
+
         /// <summary>
         ///     Returns the spell slot with the name.
         /// </summary>
