@@ -84,7 +84,7 @@ namespace LeagueSharp.Common
             "xenzhaothrust3"
         };
 
-        public static int LastAaTick;
+        public static int LastAATick;
         public static bool Attack = true;
         public static bool DisableNextAttack;
         public static bool Move = true;
@@ -247,9 +247,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanAttack()
         {
-            if (LastAaTick <= Environment.TickCount)
+            if (LastAATick <= Environment.TickCount)
             {
-                return Environment.TickCount + Game.Ping/2 + 25 >= LastAaTick + Player.AttackDelay*1000 && Attack;
+                return Environment.TickCount + Game.Ping/2 + 25 >= LastAATick + Player.AttackDelay*1000 && Attack;
             }
 
             return false;
@@ -260,10 +260,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            if (LastAaTick <= Environment.TickCount)
+            if (LastAATick <= Environment.TickCount)
             {
                 return (Environment.TickCount + Game.Ping/2 >=
-                        LastAaTick + Player.AttackCastDelay*1000 + extraWindup) && Move;
+                        LastAATick + Player.AttackCastDelay*1000 + extraWindup) && Move;
             }
 
             return false;
@@ -360,7 +360,7 @@ namespace LeagueSharp.Common
 
                         if (_lastTarget != null && _lastTarget.IsValid && _lastTarget != target)
                         {
-                            LastAaTick = Environment.TickCount + Game.Ping/2;
+                            LastAATick = Environment.TickCount + Game.Ping/2;
                         }
 
                         _lastTarget = target;
@@ -384,7 +384,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
-            LastAaTick = 0;
+            LastAATick = 0;
         }
 
         private static void OnProcessPacket(GamePacketEventArgs args)
@@ -415,7 +415,7 @@ namespace LeagueSharp.Common
 
             if (unit.IsMe)
             {
-                LastAaTick = Environment.TickCount - Game.Ping/2;
+                LastAATick = Environment.TickCount - Game.Ping/2;
                 if (target != null && target.IsValid)
                 {
                     FireOnTargetSwitch(target);
