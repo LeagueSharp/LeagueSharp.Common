@@ -1,7 +1,4 @@
-﻿#region LICENSE
-
-// Copyright 2014 - 2014 LeagueSharp
-// AssemblyInfo.cs is part of LeagueSharp.Common.
+﻿// This file is part of LeagueSharp.Common.
 // 
 // LeagueSharp.Common is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -10,13 +7,11 @@
 // 
 // LeagueSharp.Common is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 // 
 // You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
+// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
 
 #region
 
@@ -30,24 +25,24 @@ using System.Resources;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 
-[ assembly: AssemblyTitle("LeagueSharp.Common") ]
+[assembly: AssemblyTitle("LeagueSharp.Common")]
 [assembly: AssemblyDescription("LeagueSharp.Common")]
-[ assembly: AssemblyConfiguration("") ]
+[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LeagueSharp")]
-[ assembly: AssemblyProduct("LeagueSharp.Common") ]
-[ assembly: AssemblyCopyright("Copyright © Microsoft 2014") ]
+[assembly: AssemblyProduct("LeagueSharp.Common")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
 [assembly: AssemblyTrademark("LeagueSharp")]
-[ assembly: AssemblyCulture("") ]
+[assembly: AssemblyCulture("")]
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 
 // für COM-Komponenten.  Wenn Sie auf einen Typ in dieser Assembly von 
 // COM zugreifen müssen, legen Sie das ComVisible-Attribut für diesen Typ auf "true" fest.
 
-[ assembly: ComVisible(false) ]
+[assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
 
-[ assembly: Guid("e6f3b6a3-5cd7-442a-98e3-bde65c1dcd25") ]
+[assembly: Guid("e6f3b6a3-5cd7-442a-98e3-bde65c1dcd25")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

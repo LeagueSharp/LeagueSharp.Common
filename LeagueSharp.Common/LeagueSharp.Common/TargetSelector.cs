@@ -1,24 +1,17 @@
-﻿#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
+﻿// This file is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
 
 #region
 
@@ -511,7 +504,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if (args.Msg != (uint)WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
             {
                 return;
             }
@@ -535,10 +528,9 @@ namespace LeagueSharp.Common
 
             var packet = Packet.C2S.SetTarget.Decoded(args.PacketData);
 
-            if (packet.NetworkId != 0 && packet.Unit.IsValid<Obj_AI_Hero>() &&
-                packet.Unit.IsValidTarget())
+            if (packet.NetworkId != 0 && packet.Unit.IsValid<Obj_AI_Hero>() && packet.Unit.IsValidTarget())
             {
-                _selectedTarget = (Obj_AI_Hero)packet.Unit;
+                _selectedTarget = (Obj_AI_Hero) packet.Unit;
             }
         }
 
@@ -635,8 +627,7 @@ namespace LeagueSharp.Common
             _config = Config;
             Config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
             Config.AddItem(
-                new MenuItem("SelTColor", "Selected target color").SetShared()
-                    .SetValue(new Circle(true, Color.Red)));
+                new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
             Config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
@@ -652,8 +643,9 @@ namespace LeagueSharp.Common
                 if (autoPriorityItem.GetValue<bool>())
                 {
                     Config.Item("SimpleTS" + enemy.ChampionName + "Priority")
-                        .SetValue(new Slider(
-                            autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
+                        .SetValue(
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
                 }
             }
             Config.AddItem(autoPriorityItem);
@@ -663,8 +655,7 @@ namespace LeagueSharp.Common
                         new StringList(
                             new[]
                             {
-                                "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack",
-                                "LessCast"
+                                "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack", "LessCast"
                             }, 5)));
         }
 
@@ -796,10 +787,10 @@ namespace LeagueSharp.Common
                         switch (damageType)
                         {
                             case DamageType.Magical:
-                                damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
+                                damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
                                 break;
                             case DamageType.Physical:
-                                damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
+                                damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
                                 break;
                             case DamageType.True:
                                 damage = 100;

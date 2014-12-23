@@ -1,29 +1,22 @@
-﻿#region LICENSE
-/*
- Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-#endregion
-
+﻿// This file is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
 
 #region
 
 using System;
 using System.Collections.Generic;
-
 using SharpDX;
 
 #endregion
@@ -67,7 +60,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float Distance3D(this Obj_AI_Base unit, Obj_AI_Base anotherUnit, bool squared = false)
         {
-            return squared ? Vector3.DistanceSquared(unit.Position, anotherUnit.Position) :  Vector3.Distance(unit.Position, anotherUnit.Position);
+            return squared
+                ? Vector3.DistanceSquared(unit.Position, anotherUnit.Position)
+                : Vector3.Distance(unit.Position, anotherUnit.Position);
         }
 
         //Vector3 class extended methods:
@@ -438,10 +433,14 @@ namespace LeagueSharp.Common
 
                             if (!float.IsNaN(t2) && !float.IsNaN(t1))
                             {
-                                if(t1 >= delay && t2 >= delay)
+                                if (t1 >= delay && t2 >= delay)
+                                {
                                     t1 = Math.Min(t1, t2);
+                                }
                                 else if (t2 >= delay)
+                                {
                                     t1 = t2;
+                                }
                             }
                         }
                     }
