@@ -635,6 +635,11 @@ namespace LeagueSharp.Common
                 AttackableUnit result = null;
                 float[] r = { float.MaxValue };
 
+                if (ActiveMode == OrbwalkingMode.Flee)
+                {
+                    return null;
+                }
+
                 if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
@@ -788,8 +793,7 @@ namespace LeagueSharp.Common
                 }
 
                 var target = GetTarget();
-                Orbwalk(
-                    (ActiveMode == OrbwalkingMode.Flee) ? null : target,
+                Orbwalk(target,
                     (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
                     _config.Item("ExtraWindup").GetValue<Slider>().Value,
                     _config.Item("HoldPosRadius").GetValue<Slider>().Value);
