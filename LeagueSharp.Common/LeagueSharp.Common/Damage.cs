@@ -1,24 +1,17 @@
-#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
+// This file is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
 
 #region
 
@@ -92,25 +85,22 @@ namespace LeagueSharp.Common
             };
 
             #endregion
-            
+
             #region Alistar
-            
+
             p = new PassiveDamage
             {
-               ChampionName = "Alistar",
-               IsActive = (source, target) => (source.HasBuff("Trample")),
-               GetDamage = 
-                   (source, target) =>
-                       ((float)
-                           source.CalcDamage(
-                               target, DamageType.Magical,
-                               6d + source.Level + (0.1d * source.FlatMagicDamageMod))),
-               
+                ChampionName = "Alistar",
+                IsActive = (source, target) => (source.HasBuff("Trample")),
+                GetDamage =
+                    (source, target) =>
+                        ((float)
+                            source.CalcDamage(
+                                target, DamageType.Magical, 6d + source.Level + (0.1d * source.FlatMagicDamageMod))),
             };
             AttackPassives.Add(p);
-            
+
             #endregion
-            
 
             #region Caitlyn
 
@@ -522,8 +512,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 105, 150, 195, 240 }[level] +
-                                0.5 * source.FlatMagicDamageMod
+                                new double[] { 60, 105, 150, 195, 240 }[level] + 0.5 * source.FlatMagicDamageMod
                     },
                     //W
                     new DamageSpell
@@ -883,8 +872,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 55, 80, 105, 130, 155 }[level] +
-                                0.55 * source.FlatMagicDamageMod
+                                new double[] { 55, 80, 105, 130, 155 }[level] + 0.55 * source.FlatMagicDamageMod
                     },
                     //R
                     new DamageSpell
@@ -2345,9 +2333,12 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 target.HasBuff("KalistaExpungeMarker")
-                                    ? (new double[] { 20, 30, 40, 50 ,60 }[level] + 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
+                                    ? (new double[] { 20, 30, 40, 50, 60 }[level] +
+                                       0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
                                       ((target.Buffs.First(b => b.DisplayName == "KalistaExpungeMarker").Count - 1) *
-                                      (new double[] { 10, 14, 19, 25, 32 }[level] + new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))
+                                       (new double[] { 10, 14, 19, 25, 32 }[level] +
+                                        new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] *
+                                        (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))
                                     : 0
                     },
                 });
@@ -3681,9 +3672,7 @@ namespace LeagueSharp.Common
                     {
                         Slot = SpellSlot.Q,
                         DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 80, 125, 170, 215, 260 }[level]
+                        Damage = (source, target, level) => new double[] { 80, 125, 170, 215, 260 }[level]
                     },
                     //W - AA  damage
                     new DamageSpell
@@ -3692,7 +3681,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 4, 6, 8, 10, 12 }[level] + (source.FlatMagicDamageMod / 100)) / 100 * target.MaxHealth
+                                (new double[] { 4, 6, 8, 10, 12 }[level] + (source.FlatMagicDamageMod / 100)) / 100 *
+                                target.MaxHealth
                     },
                     //W - Aoe per second
                     new DamageSpell
@@ -3702,7 +3692,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new[] { 10, 17.5, 25, 32.5, 40 }[level] + 
+                                new[] { 10, 17.5, 25, 32.5, 40 }[level] +
                                 (new double[] { 4, 6, 8, 10, 12 }[level] / 100) * source.MaxHealth +
                                 0.15 * source.FlatMagicDamageMod
                     },

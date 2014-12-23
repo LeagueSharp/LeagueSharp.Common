@@ -1,22 +1,17 @@
-﻿#region LICENSE
-/*
- Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-#endregion
+﻿// This file is part of LeagueSharp.Common.
+// 
+// LeagueSharp.Common is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// LeagueSharp.Common is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
 
 #region
 
@@ -35,7 +30,7 @@ using System.Diagnostics;
 
 namespace LeagueSharp.Common
 {
-    public static class Global 
+    public static class Global
     {
         internal static MemoryMappedFile MMFile;
         internal static int MemoryCapacity = 75200;
@@ -284,7 +279,6 @@ namespace LeagueSharp.Common
         {
             try
             {
-
                 using (new CustomMutex(700))
                 {
                     using (var strm = MMFile.CreateViewAccessor())
@@ -304,24 +298,25 @@ namespace LeagueSharp.Common
                         {
                             // also store the sizeof the serialized object as what's ref'd by ptr
                             serialized = Serialize(val);
-                            requiredCapacity = serialized.Length + sizeof(int);
+                            requiredCapacity = serialized.Length + sizeof (int);
                         }
                         else
                         {
-                            throw new Exception(String.Format("Type {0} is not serializable!  Cannot write.", typeof(T)));
+                            throw new Exception(
+                                String.Format("Type {0} is not serializable!  Cannot write.", typeof(T)));
                         }
 
                         var signature = strm.ReadInt32(0);
-                        var startingOffset = 2 * sizeof(int);
+                        var startingOffset = 2 * sizeof (int);
                         int currentOffset;
                         if (signature == 0x34CFABC0)
                         {
-                            currentOffset = strm.ReadInt32(sizeof(int));
+                            currentOffset = strm.ReadInt32(sizeof (int));
                         }
                         else
                         {
                             strm.Write(0, 0x34CFABC0);
-                            strm.Write(sizeof(int), startingOffset);
+                            strm.Write(sizeof (int), startingOffset);
                             currentOffset = startingOffset;
                         }
                         var thisOffset = startingOffset;
@@ -345,10 +340,11 @@ namespace LeagueSharp.Common
                                     else if (typeof(T) != typeof(string))
                                     {
                                         strm.WriteArray(
-                                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof(int)), 0,
-                                            sizeof(int));
+                                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)),
+                                            0, sizeof (int));
                                         strm.WriteArray(
-                                            thisOffset + OffsetEntrySize + sizeof(int), serialized, 0, serialized.Length);
+                                            thisOffset + OffsetEntrySize + sizeof (int), serialized, 0,
+                                            serialized.Length);
                                     }
                                     else
                                     {
@@ -380,8 +376,10 @@ namespace LeagueSharp.Common
                         else if (typeof(T) != typeof(string))
                         {
                             strm.WriteArray(
-                                thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof(int)), 0, sizeof(int));
-                            strm.WriteArray(thisOffset + OffsetEntrySize + sizeof(int), serialized, 0, serialized.Length);
+                                thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0,
+                                sizeof (int));
+                            strm.WriteArray(
+                                thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
                         }
                         else
                         {
@@ -389,11 +387,11 @@ namespace LeagueSharp.Common
                             strm.WriteArray(currentOffset + OffsetEntrySize, arr, 0, arr.Length);
                         }
                         // write new currentoffset
-                        strm.Write(sizeof(int), currentOffset + OffsetEntrySize + newEntry.Capacity);
+                        strm.Write(sizeof (int), currentOffset + OffsetEntrySize + newEntry.Capacity);
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
