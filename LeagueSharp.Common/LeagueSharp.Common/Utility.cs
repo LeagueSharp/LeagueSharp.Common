@@ -66,6 +66,26 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Returns if the spell is ready to use.
+        /// </summary>
+        public static bool IsReady(this SpellDataInst spell, int t = 0)
+        {
+            return t == 0
+                ? spell.State == SpellState.Ready
+                : (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f);
+        }
+
+        public static bool IsReady(this Spell spell, int t = 0)
+        {
+            return IsReady(spell.Instance, t);
+        }
+
+        public static bool IsReady(this SpellSlot slot, int t = 0)
+        {
+            return IsReady(ObjectManager.Player.Spellbook.GetSpell(slot), t);
+        }
+
+        /// <summary>
         ///     Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
         public static bool IsValidTarget(this Obj_AI_Base unit,
