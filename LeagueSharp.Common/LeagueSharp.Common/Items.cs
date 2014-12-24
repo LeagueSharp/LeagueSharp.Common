@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Items.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ namespace LeagueSharp.Common
     public static class Items
     {
         /// <summary>
-        /// Returns if the Player has an item.
+        ///     Returns if the Player has an item.
         /// </summary>
         public static bool HasItem(int id)
         {
@@ -40,7 +40,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns if the Player has an item.
+        ///     Returns if the Player has an item.
         /// </summary>
         public static bool HasItem(string name)
         {
@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if the hero has the item.
+        ///     Returns true if the hero has the item.
         /// </summary>
         public static bool HasItem(string name, Obj_AI_Hero hero)
         {
@@ -56,7 +56,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if the hero has the item.
+        ///     Returns true if the hero has the item.
         /// </summary>
         public static bool HasItem(int id, Obj_AI_Hero hero)
         {
@@ -64,15 +64,11 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Retruns true if the player has the item and its not on cooldown.
+        ///     Retruns true if the player has the item and its not on cooldown.
         /// </summary>
         public static bool CanUseItem(string name)
         {
-            InventorySlot islot = null;
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
-            {
-                islot = slot;
-            }
+            var islot = ObjectManager.Player.InventoryItems.First(slot => slot.Name == name);
             if (islot == null)
             {
                 return false;
@@ -85,15 +81,11 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Retruns true if the player has the item and its not on cooldown.
+        ///     Retruns true if the player has the item and its not on cooldown.
         /// </summary>
         public static bool CanUseItem(int id)
         {
-            InventorySlot islot = null;
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
-            {
-                islot = slot;
-            }
+            var islot = ObjectManager.Player.InventoryItems.First(slot => slot.Id == (ItemId) id);
             if (islot == null)
             {
                 return false;
@@ -106,69 +98,73 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Casts the item on the target.
+        ///     Casts the item on the target.
         /// </summary>
         public static void UseItem(string name, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
+            var slot = ObjectManager.Player.InventoryItems.First(s => s.Name == name);
+            if (slot == null)
             {
-                if (target != null)
-                {
-                    slot.UseItem(target);
-                }
-                else
-                {
-                    slot.UseItem();
-                }
+                return;
+            }
+
+            if (target != null)
+            {
+                slot.UseItem(target);
+            }
+            else
+            {
+                slot.UseItem();
             }
         }
 
         /// <summary>
-        /// Casts the item on the target.
+        ///     Casts the item on the target.
         /// </summary>
         public static void UseItem(int id, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
+            var slot = ObjectManager.Player.InventoryItems.First(s => s.Id == (ItemId) id);
+            if (slot == null)
             {
-                if (target != null)
-                {
-                    slot.UseItem(target);
-                }
-                else
-                {
-                    slot.UseItem();
-                }
+                return;
+            }
+
+            if (target != null)
+            {
+                slot.UseItem(target);
+            }
+            else
+            {
+                slot.UseItem();
             }
         }
 
         /// <summary>
-        /// Casts the item on a Vector2 position.
+        ///     Casts the item on a Vector2 position.
         /// </summary>
         public static void UseItem(int id, Vector2 position)
         {
-            foreach (var slot in
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
-                    .Where(slot => position != null))
+            var slot = ObjectManager.Player.InventoryItems.First(s => s.Id == (ItemId) id);
+            if (position.IsValid())
             {
                 slot.UseItem(position.To3D());
             }
         }
 
         /// <summary>
-        /// Casts the item on a Vector3 position.
+        ///     Casts the item on a Vector3 position.
         /// </summary>
         public static void UseItem(int id, Vector3 position)
         {
-            foreach (var slot in
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
-                    .Where(slot => position != null))
+            var slot = ObjectManager.Player.InventoryItems.First(s => s.Id == (ItemId) id);
+            if (position.IsValid())
             {
                 slot.UseItem(position);
             }
         }
 
         /// <summary>
-        /// Returns the ward slot.
+        ///     Returns the ward slot.
         /// </summary>
         public static InventorySlot GetWardSlot()
         {
@@ -181,8 +177,8 @@ namespace LeagueSharp.Common
 
         public class Item
         {
-            public int Id;
-            public float Range;
+            public readonly int Id;
+            public readonly float Range;
 
             public Item(int id, float range)
             {

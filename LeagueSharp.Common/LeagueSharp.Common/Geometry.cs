@@ -1,7 +1,8 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Geometry.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,14 +17,14 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
-#endregion
 
+#endregion
 
 #region
 
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -67,7 +68,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float Distance3D(this Obj_AI_Base unit, Obj_AI_Base anotherUnit, bool squared = false)
         {
-            return squared ? Vector3.DistanceSquared(unit.Position, anotherUnit.Position) :  Vector3.Distance(unit.Position, anotherUnit.Position);
+            return squared
+                ? Vector3.DistanceSquared(unit.Position, anotherUnit.Position)
+                : Vector3.Distance(unit.Position, anotherUnit.Position);
         }
 
         //Vector3 class extended methods:
@@ -88,10 +91,18 @@ namespace LeagueSharp.Common
             return v.To2D().Distance(other, squared);
         }
 
+        // <summary>
+        // Returns true if the Vector3 is valid.
+        // </summary>
+        public static bool IsValid(this Vector3 v)
+        {
+            return IsValid(v.To2D());
+        }
+
         //Vector2 class extended methods:
 
         /// <summary>
-        /// Returns true if the Vector2 is valid.
+        ///     Returns true if the Vector2 is valid.
         /// </summary>
         public static bool IsValid(this Vector2 v)
         {
@@ -131,7 +142,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Retursn the distance to the line segment.
+        ///     Retursn the distance to the line segment.
         /// </summary>
         public static float Distance(this Vector2 point,
             Vector2 segmentStart,
@@ -190,10 +201,8 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Vector2 Rotated(this Vector2 v, float angle)
         {
-            double c;
-            double s;
-            c = Math.Cos(angle);
-            s = Math.Sin(angle);
+            var c = Math.Cos(angle);
+            var s = Math.Sin(angle);
 
             return new Vector2((float) (v.X * c - v.Y * s), (float) (v.Y * c + v.X * s));
         }
@@ -265,7 +274,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the closest vector from a list.
+        ///     Returns the closest vector from a list.
         /// </summary>
         public static Vector2 Closest(this Vector2 v, List<Vector2> vList)
         {
@@ -286,7 +295,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the projection of the Vector2 on the segment.
+        ///     Returns the projection of the Vector2 on the segment.
         /// </summary>
         public static ProjectionInfo ProjectOn(this Vector2 point, Vector2 segmentStart, Vector2 segmentEnd)
         {
@@ -314,15 +323,13 @@ namespace LeagueSharp.Common
             }
 
             var isOnSegment = rS.CompareTo(rL) == 0;
-            var pointSegment = new Vector2();
-            pointSegment = isOnSegment ? pointLine : new Vector2(ax + rS * (bx - ax), ay + rS * (@by - ay));
+            var pointSegment = isOnSegment ? pointLine : new Vector2(ax + rS * (bx - ax), ay + rS * (@by - ay));
             return new ProjectionInfo(isOnSegment, pointSegment, pointLine);
         }
 
-
         //From: http://social.msdn.microsoft.com/Forums/vstudio/en-US/e5993847-c7a9-46ec-8edc-bfb86bd689e3/help-on-line-segment-intersection-algorithm
         /// <summary>
-        /// Intersects two line segments.
+        ///     Intersects two line segments.
         /// </summary>
         public static IntersectionResult Intersection(this Vector2 lineSegment1Start,
             Vector2 lineSegment1End,
@@ -391,7 +398,7 @@ namespace LeagueSharp.Common
                 sP2y = startPoint2.Y;
 
             float d = eP1x - sP1x, e = eP1y - sP1y;
-            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN, t2 = float.NaN;
+            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN;
             float S = dist != 0f ? v1 * d / dist : 0, K = (dist != 0) ? v1 * e / dist : 0f;
 
             float r = sP2x - sP1x, j = sP2y - sP1y;
@@ -434,14 +441,18 @@ namespace LeagueSharp.Common
                             var t = (-nom - b) / a;
                             t1 = v2 * t >= 0f ? t : float.NaN;
                             t = (nom - b) / a;
-                            t2 = (v2 * t >= 0f) ? t : float.NaN;
+                            var t2 = (v2 * t >= 0f) ? t : float.NaN;
 
                             if (!float.IsNaN(t2) && !float.IsNaN(t1))
                             {
-                                if(t1 >= delay && t2 >= delay)
+                                if (t1 >= delay && t2 >= delay)
+                                {
                                     t1 = Math.Min(t1, t2);
+                                }
                                 else if (t2 >= delay)
+                                {
                                     t1 = t2;
+                                }
                             }
                         }
                     }
@@ -452,11 +463,11 @@ namespace LeagueSharp.Common
                 t1 = 0f;
             }
 
-            return new Object[2] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
+            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
         }
 
         /// <summary>
-        /// Returns the total distance of a path.
+        ///     Returns the total distance of a path.
         /// </summary>
         public static float PathLength(this List<Vector2> path)
         {
@@ -469,21 +480,15 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Converts a 3D path to 2D
+        ///     Converts a 3D path to 2D
         /// </summary>
         public static List<Vector2> To2D(this List<Vector3> path)
         {
-            var result = new List<Vector2>();
-            foreach (var point in path)
-            {
-                result.Add(point.To2D());
-            }
-            return result;
+            return path.Select(point => point.To2D()).ToList();
         }
 
-
         /// <summary>
-        /// Returns the two intersection points between two circles.
+        ///     Returns the two intersection points between two circles.
         /// </summary>
         public static Vector2[] CircleCircleIntersection(Vector2 center1, Vector2 center2, float radius1, float radius2)
         {
