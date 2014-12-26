@@ -259,17 +259,10 @@ namespace LeagueSharp.Common
 
         public static bool IsInvulnerable(Obj_AI_Base target,
             DamageType damageType,
-            bool ignoreInvulnerablility,
             bool ignoreShields = false)
         {
-            if (ignoreInvulnerablility)
-            {
-                return false;
-            }
-
             // Tryndamere's Undying Rage (R)
-            if (damageType.Equals(DamageType.Magical) ||
-                damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health >= 2f)
+            if (target.HasBuff("Undying Rage") && target.Health <= 2f)
             {
                 return true;
             }
@@ -331,143 +324,96 @@ namespace LeagueSharp.Common
 
         public static Obj_AI_Hero GetTarget(float range,
             DamageType damageType,
-            bool ignoreInvulnerablility = false,
             bool ignoreShield = false)
         {
-            return GetTarget(ObjectManager.Player, range, damageType, ignoreInvulnerablility, ignoreShield);
+            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield);
+        }
+
+        private static bool IsValidTarget(Obj_AI_Base caster,
+            Obj_AI_Base hero,
+            float range,
+            DamageType damageType,
+            bool ignoreShieldSpells = false)
+        {
+            return hero.IsValidTarget(range < 0 ? caster.GetRealAutoAttackRange() : range) &&
+                !IsInvulnerable(hero, damageType, ignoreShieldSpells);
         }
 
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion,
             float range,
-            DamageType damageType,
-            bool ignoreInvulnerablility = true,
+            DamageType type,
             bool ignoreShieldSpells = true)
         {
-            Obj_AI_Hero bestTarget = null;
-
-            var ignoreShield = ignoreShieldSpells;
-
-            if (SelectedTarget.IsValidTarget() &&
-                !IsInvulnerable(SelectedTarget, damageType, ignoreInvulnerablility, ignoreShield) &&
-                (range < 0 && Orbwalking.InAutoAttackRange(SelectedTarget) || champion.Distance(SelectedTarget) < range))
+            try
             {
-                return SelectedTarget;
-            }
+                var targetingMode = TargetingMode.AutoPriority;
+                var damageType = (Damage.DamageType)Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
-            var bestRatio = 0f;
-
-            var targetingMode = TargetingMode.AutoPriority;
-            if (_configMenu != null && _configMenu.Item("TargetingMode") != null)
-            {
-                var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
-                Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out targetingMode);
-            }
-
-            foreach (var hero in
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(
-                        hero =>
-                            hero.IsValidTarget() &&
-                            !IsInvulnerable(hero, damageType, ignoreInvulnerablility, ignoreShield) &&
-                            ((range < 0 && Orbwalking.InAutoAttackRange(hero)) || champion.Distance(hero) < range)))
-            {
-                if (bestTarget == null)
+                if (IsValidTarget(champion, SelectedTarget, range, type))
                 {
-                    bestTarget = hero;
-                    continue;
+                    return SelectedTarget;
                 }
+
+                if (_configMenu != null && _configMenu.Item("TargetingMode") != null)
+                {
+                    var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
+                    Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out targetingMode);
+                }
+
+                var targets =
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(hero => IsValidTarget(champion, hero, range, type))
+                        .OrderBy(h => champion.Distance(h));
 
                 switch (targetingMode)
                 {
                     case TargetingMode.LowHP:
-                        if (hero.Health < bestTarget.Health)
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return targets.OrderBy(hero => hero.Health).FirstOrDefault();
 
                     case TargetingMode.MostAD:
-                        if (hero.BaseAttackDamage + hero.FlatPhysicalDamageMod >
-                            bestTarget.BaseAttackDamage + bestTarget.FlatPhysicalDamageMod)
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return
+                            targets.OrderByDescending(hero => hero.BaseAttackDamage + hero.FlatPhysicalDamageMod)
+                                .FirstOrDefault();
 
                     case TargetingMode.MostAP:
-                        if (hero.BaseAbilityDamage + hero.FlatMagicDamageMod >
-                            bestTarget.BaseAbilityDamage + bestTarget.FlatMagicDamageMod)
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return
+                            targets.OrderByDescending(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod)
+                                .FirstOrDefault();
 
                     case TargetingMode.Closest:
-                        if (Geometry.Distance(hero) < Geometry.Distance(bestTarget))
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return targets.FirstOrDefault();
 
                     case TargetingMode.NearMouse:
-                        if (Vector2.Distance(Game.CursorPos.To2D(), hero.Position.To2D()) + 50 <
-                            Vector2.Distance(Game.CursorPos.To2D(), bestTarget.Position.To2D()))
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos) < 50);
 
                     case TargetingMode.AutoPriority:
-                        var damage = 0f;
-
-                        switch (damageType)
-                        {
-                            case DamageType.Magical:
-                                damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
-                                break;
-                            case DamageType.Physical:
-                                damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
-                                break;
-                            case DamageType.True:
-                                damage = 100;
-                                break;
-                        }
-
-                        var ratio = damage / (1 + hero.Health) * GetPriority(hero);
-
-                        if (ratio > bestRatio)
-                        {
-                            bestRatio = ratio;
-                            bestTarget = hero;
-                        }
-                        break;
+                        return
+                            targets.OrderByDescending(
+                                hero =>
+                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero))
+                                .FirstOrDefault();
 
                     case TargetingMode.LessAttack:
-                        if ((hero.Health -
-                             ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, hero.Health) <
-                             (bestTarget.Health -
-                              ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Physical, bestTarget.Health))))
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return
+                            targets.OrderBy(
+                                hero => hero.Health - champion.CalcDamage(hero, Damage.DamageType.Physical, hero.Health))
+                                .FirstOrDefault();
 
                     case TargetingMode.LessCast:
-                        if ((hero.Health - ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, hero.Health) <
-                             (bestTarget.Health -
-                              ObjectManager.Player.CalcDamage(bestTarget, Damage.DamageType.Magical, bestTarget.Health))))
-                        {
-                            bestTarget = hero;
-                        }
-                        break;
+                        return
+                            targets.OrderBy(
+                                hero => hero.Health - champion.CalcDamage(hero, Damage.DamageType.Magical, hero.Health))
+                                .FirstOrDefault();
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
-            return bestTarget;
+            return null;
         }
 
         #endregion
     }
-
-
 }

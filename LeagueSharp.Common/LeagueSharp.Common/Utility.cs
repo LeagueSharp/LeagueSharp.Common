@@ -634,33 +634,34 @@ namespace LeagueSharp.Common
             public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
             public static readonly Dictionary<int, int> StoredTick = new Dictionary<int, int>();
 
-            static WaypointTracker()
-            {
-                Game.OnGameProcessPacket += Game_OnGameProcessPacket;
-            }
+            // TODO: update for 4.21
+            //static WaypointTracker()
+            //{
+            //    Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+            //}
 
-            private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
-            {
-                if (args.PacketData[0] == Packet.S2C.LoseVision.Header)
-                {
-                    var decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
-                    var networkId = decodedPacket.UnitNetworkId;
-                    var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(networkId);
-                    if (unit != null && unit.IsValid && unit.IsVisible)
-                    {
-                        if (!StoredPaths.ContainsKey(networkId))
-                        {
-                            StoredPaths.Add(networkId, GetWaypoints(unit));
-                            StoredTick.Add(networkId, Environment.TickCount);
-                        }
-                        else
-                        {
-                            StoredPaths[networkId] = GetWaypoints(unit);
-                            StoredTick[networkId] = Environment.TickCount;
-                        }
-                    }
-                }
-            }
+            //private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+            //{
+            //    if (args.PacketData[0] == Packet.S2C.LoseVision.Header)
+            //    {
+            //        var decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
+            //        var networkId = decodedPacket.UnitNetworkId;
+            //        var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(networkId);
+            //        if (unit != null && unit.IsValid && unit.IsVisible)
+            //        {
+            //            if (!StoredPaths.ContainsKey(networkId))
+            //            {
+            //                StoredPaths.Add(networkId, GetWaypoints(unit));
+            //                StoredTick.Add(networkId, Environment.TickCount);
+            //            }
+            //            else
+            //            {
+            //                StoredPaths[networkId] = GetWaypoints(unit);
+            //                StoredTick[networkId] = Environment.TickCount;
+            //            }
+            //        }
+            //    }
+            //}
         }
     }
 
