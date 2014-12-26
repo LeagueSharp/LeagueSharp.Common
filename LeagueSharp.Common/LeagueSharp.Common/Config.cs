@@ -1,8 +1,34 @@
-﻿using System;
+#region LICENSE
+
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Config.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#endregion
+
+#region
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
@@ -16,23 +42,25 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (_leagueSharpDirectory == null)
+                if (_leagueSharpDirectory != null)
                 {
-                    try
-                    {
-                        _leagueSharpDirectory =
-                            Process.GetCurrentProcess()
-                                .Modules.Cast<ProcessModule>()
-                                .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                .FileName;
-                        _leagueSharpDirectory =
-                            Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
-                    }
-                    catch (Exception ee)
-                    {
-                        Console.WriteLine("Could not resolve LeagueSharp directory: " + ee);
-                        _leagueSharpDirectory = Directory.GetCurrentDirectory();
-                    }
+                    return _leagueSharpDirectory;
+                }
+
+                try
+                {
+                    _leagueSharpDirectory =
+                        Process.GetCurrentProcess()
+                            .Modules.Cast<ProcessModule>()
+                            .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
+                            .FileName;
+                    _leagueSharpDirectory =
+                        Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
+                }
+                catch (Exception ee)
+                {
+                    Console.WriteLine(@"Could not resolve LeagueSharp directory: " + ee);
+                    _leagueSharpDirectory = Directory.GetCurrentDirectory();
                 }
 
                 return _leagueSharpDirectory;
@@ -51,9 +79,14 @@ namespace LeagueSharp.Common
                         var config = new XmlDocument();
                         config.Load(configFile);
 
-                        if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
+                        if (config.DocumentElement != null &&
+                            config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
-                            return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
+                            var selectSingleNode = config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage");
+                            if (selectSingleNode != null)
+                            {
+                                return selectSingleNode.InnerText;
+                            }
                         }
                     }
                 }
@@ -62,7 +95,7 @@ namespace LeagueSharp.Common
                     Console.WriteLine(ee.ToString());
                 }
 
-                return "";
+                return string.Empty;
             }
         }
 
@@ -94,22 +127,30 @@ namespace LeagueSharp.Common
 
         public static byte GetHotkey(string name, byte defaultValue)
         {
-            string configFile = Path.Combine(LeagueSharpDirectory, "config.xml");
+            var configFile = Path.Combine(LeagueSharpDirectory, "config.xml");
             try
             {
                 if (File.Exists(configFile))
                 {
                     var config = new XmlDocument();
                     config.Load(configFile);
-                    XmlNode node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
-                    foreach (XmlElement b in from XmlElement element in node.ChildNodes
-                        where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
-                        select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
-                        into b
-                        where b != null
-                        select b)
+                    if (config.DocumentElement != null)
                     {
-                        return byte.Parse(b.InnerText);
+                        var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
+                        if (node != null)
+                        {
+                            foreach (var b in from XmlElement element in node.ChildNodes
+                                where
+                                    element.ChildNodes.Cast<XmlElement>()
+                                        .Any(e => e.Name == "Name" && e.InnerText == name)
+                                select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
+                                into b
+                                where b != null
+                                select b)
+                            {
+                                return byte.Parse(b.InnerText);
+                            }
+                        }
                     }
                 }
             }
