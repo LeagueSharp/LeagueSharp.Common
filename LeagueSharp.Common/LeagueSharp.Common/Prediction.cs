@@ -82,7 +82,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// The skillshot delay in seconds.
         /// </summary>
-        public float Delay = 0f;
+        public float Delay;
 
         /// <summary>
         /// The skillshot width's radius or the angle in case of the cone skillshots.
@@ -400,16 +400,13 @@ namespace LeagueSharp.Common
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
-            var result = 0d;
-            foreach (var buff in unit.Buffs)
-            {
-                if (buff.IsActive && Game.Time <= buff.EndTime &&
-                    (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
-                     buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
-                {
-                    result = Math.Max(result, buff.EndTime);
-                }
-            }
+            var result =
+                unit.Buffs.Where(
+                    buff =>
+                        buff.IsActive && Game.Time <= buff.EndTime &&
+                        (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                    .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
             return (result - Game.Time);
         }
 
@@ -612,19 +609,13 @@ namespace LeagueSharp.Common
         {
             internal static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
             {
-                var result = 0;
-                foreach (var point in points)
-                {
-                    var edge1 = end.Rotated(-angle / 2);
-                    var edge2 = edge1.Rotated(angle);
-                    if (point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
-                        point.CrossProduct(edge2) > 0)
-                    {
-                        result++;
-                    }
-                }
-
-                return result;
+                return (from point in points
+                    let edge1 = end.Rotated(-angle / 2)
+                    let edge2 = edge1.Rotated(angle)
+                    where
+                        point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
+                        point.CrossProduct(edge2) > 0
+                    select point).Count();
             }
 
             public static PredictionOutput GetPrediction(PredictionInput input)
@@ -733,10 +724,12 @@ namespace LeagueSharp.Common
                 if (posibleTargets.Count > 1)
                 {
                     var candidates = new List<Vector2>();
-                    foreach (var target in posibleTargets)
+                    foreach (
+                        var targetCandidates in
+                            posibleTargets.Select(
+                                target => GetCandidates(input.From.To2D(), target.Position, (input.Radius), input.Range))
+                        )
                     {
-                        var targetCandidates = GetCandidates(
-                            input.From.To2D(), target.Position, (input.Radius), input.Range);
                         candidates.AddRange(targetCandidates);
                     }
 
@@ -847,36 +840,44 @@ namespace LeagueSharp.Common
                     switch (objectType)
                     {
                         case CollisionableObjects.Minions:
-                            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
+                            foreach (
+                                var minion in
+                                    ObjectManager.Get<Obj_AI_Minion>()
+                                        .Where(
+                                            minion =>
+                                                minion.IsValidTarget(
+                                                    Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                                    input.RangeCheckFrom)))
                             {
-                                if (minion.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
+                                input.Unit = minion;
+                                var minionPrediction = Prediction.GetPrediction(input, false, false);
+                                if (
+                                    minionPrediction.UnitPosition.To2D()
+                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                    Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
                                 {
-                                    input.Unit = minion;
-                                    var minionPrediction = Prediction.GetPrediction(input, false, false);
-                                    if (
-                                        minionPrediction.UnitPosition.To2D()
-                                            .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                        Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
-                                    {
-                                        result.Add(minion);
-                                    }
+                                    result.Add(minion);
                                 }
                             }
                             break;
                         case CollisionableObjects.Heroes:
-                            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
+                            foreach (
+                                var hero in
+                                    ObjectManager.Get<Obj_AI_Hero>()
+                                        .Where(
+                                            hero =>
+                                                hero.IsValidTarget(
+                                                    Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                                    input.RangeCheckFrom)))
                             {
-                                if (hero.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
+                                input.Unit = hero;
+                                var prediction = Prediction.GetPrediction(input, false, false);
+                                if (
+                                    prediction.UnitPosition.To2D()
+                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
                                 {
-                                    input.Unit = hero;
-                                    var prediction = Prediction.GetPrediction(input, false, false);
-                                    if (
-                                        prediction.UnitPosition.To2D()
-                                            .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                        Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
-                                    {
-                                        result.Add(hero);
-                                    }
+                                    result.Add(hero);
                                 }
                             }
                             break;
@@ -898,17 +899,19 @@ namespace LeagueSharp.Common
                         if (Environment.TickCount - WallCastT > 4000) break;
 
                         GameObject wall = null;
-                        foreach (var gameObject in ObjectManager.Get<GameObject>())
-                        {
-                            if (gameObject.IsValid &&
-                                System.Text.RegularExpressions.Regex.IsMatch(
-                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
-                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                            foreach (
+                                var gameObject in
+                                    ObjectManager.Get<GameObject>()
+                                        .Where(
+                                            gameObject =>
+                                                gameObject.IsValid &&
+                                                System.Text.RegularExpressions.Regex.IsMatch(
+                                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
+                                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)))
                             {
                                 wall = gameObject;
                             }
-                        }
-                        if (wall == null)
+                            if (wall == null)
                         {
                             break;
                         }
@@ -941,7 +944,7 @@ namespace LeagueSharp.Common
     internal class StoredPath
     {
         public List<Vector2> Path;
-        public int Tick = 0;
+        public int Tick;
 
         public double Time
         {

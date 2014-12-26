@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Utility.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ namespace LeagueSharp.Common
     {
         /// <summary>
         ///     Returns if the source is facing the target.
-        ///     <summary>
+        /// </summary>
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
         {
             if (source == null || target == null)
@@ -84,15 +84,10 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            if (range < float.MaxValue &&
-                Vector2.DistanceSquared(
-                    (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(),
-                    unit.ServerPosition.To2D()) > range * range)
-            {
-                return false;
-            }
-
-            return true;
+            return !(range < float.MaxValue) ||
+                   !(Vector2.DistanceSquared(
+                       (@from.To2D().IsValid() ? @from : ObjectManager.Player.ServerPosition).To2D(),
+                       unit.ServerPosition.To2D()) > range * range);
         }
 
         /// <summary>
@@ -446,7 +441,10 @@ namespace LeagueSharp.Common
                                     //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
                             }
                         }
-                        catch (Exception e) {}
+                        catch (Exception e)
+                        {
+                            // ignored
+                        }
 
                         ActionList.RemoveAt(i);
                     }
@@ -485,7 +483,7 @@ namespace LeagueSharp.Common
             private static DamageToUnitDelegate _damageToUnit;
 
             private static readonly Render.Text Text = new Render.Text(
-                0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
+                0, 0, string.Empty, 11, new ColorBGRA(255, 0, 0, 255), "monospace");
 
             public static DamageToUnitDelegate DamageToUnit
             {

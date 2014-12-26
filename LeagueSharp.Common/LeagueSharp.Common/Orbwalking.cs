@@ -713,22 +713,23 @@ namespace LeagueSharp.Common
                             }
                         }
 
-                        foreach (var minion in
-                            ObjectManager.Get<Obj_AI_Minion>()
-                                .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion)))
+                        foreach (
+                            var minion in
+                                from minion in
+                                    ObjectManager.Get<Obj_AI_Minion>()
+                                        .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                                let predHealth =
+                                    HealthPrediction.LaneClearHealthPrediction(
+                                        minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                where
+                                    predHealth >= 2 * Player.GetAutoAttackDamage(minion, false) ||
+                                    Math.Abs(predHealth - minion.Health) < float.Epsilon
+                                where minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon
+                                select minion)
                         {
-                            var predHealth = HealthPrediction.LaneClearHealthPrediction(
-                                minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.GetAutoAttackDamage(minion, false) ||
-                                Math.Abs(predHealth - minion.Health) < float.Epsilon)
-                            {
-                                if (minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon)
-                                {
-                                    result = minion;
-                                    r = minion.Health;
-                                    _prevMinion = minion;
-                                }
-                            }
+                            result = minion;
+                            r = minion.Health;
+                            _prevMinion = minion;
                         }
                     }
                 }
