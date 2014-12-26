@@ -262,14 +262,14 @@ namespace LeagueSharp.Common
             bool ignoreInvulnerablility,
             bool ignoreShields = false)
         {
+           
             if (ignoreInvulnerablility)
             {
                 return false;
             }
 
             // Tryndamere's Undying Rage (R)
-            if (damageType.Equals(DamageType.Magical) ||
-                damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health >= 2f)
+            if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
             {
                 return true;
             }
