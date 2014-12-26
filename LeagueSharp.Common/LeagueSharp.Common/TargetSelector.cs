@@ -89,7 +89,7 @@ namespace LeagueSharp.Common
 
         private static void GameOnOnWndProc(WndEventArgs args)
         {
-            if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg != (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
                 return;
             }
@@ -423,10 +423,10 @@ namespace LeagueSharp.Common
                         switch (damageType)
                         {
                             case DamageType.Magical:
-                                damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
+                                damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Magical, 100);
                                 break;
                             case DamageType.Physical:
-                                damage = (float) ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
+                                damage = (float)ObjectManager.Player.CalcDamage(hero, Damage.DamageType.Physical, 100);
                                 break;
                             case DamageType.True:
                                 damage = 100;

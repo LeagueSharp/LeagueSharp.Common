@@ -22,7 +22,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -35,57 +35,35 @@ namespace LeagueSharp.Common
 
         static Dash()
         {
-            Game.OnGameUpdate += GameOnOnGameUpdate;
-            Game.OnGameProcessPacket += GameOnOnGameProcessPacket;
+            Obj_AI_Hero.OnNewPath += ObjAiHeroOnOnNewPath;
         }
 
-        private static void GameOnOnGameProcessPacket(GamePacketEventArgs args)
+        private static void ObjAiHeroOnOnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
-            if (args.PacketData[0] == Packet.S2C.Dash.Header)
+            if (sender.IsValid<Obj_AI_Hero>() && args.IsDash)
             {
-                var decodedPacket = Packet.S2C.Dash.Decoded(args.PacketData);
-
-                var networkId = decodedPacket.UnitNetworkId;
-                var speed = decodedPacket.Speed;
-                var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(networkId);
-
-                if (unit.IsValid<Obj_AI_Hero>())
+                if (!DetectedDashes.ContainsKey(sender.NetworkId))
                 {
-                    if (!DetectedDashes.ContainsKey(unit.NetworkId))
-                    {
-                        DetectedDashes.Add(unit.NetworkId, new DashItem());
-                    }
-
-                    DetectedDashes[unit.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
-                    DetectedDashes[unit.NetworkId].Speed = speed;
-                    DetectedDashes[unit.NetworkId].StartPos = unit.ServerPosition.To2D();
-                    DetectedDashes[unit.NetworkId].Processed = false;
-                    DetectedDashes[unit.NetworkId].Unit = unit;
+                    DetectedDashes.Add(sender.NetworkId, new DashItem());
                 }
-            }
-        }
+                var path = new List<Vector2>();
+                path.Add(sender.ServerPosition.To2D());
+                path.AddRange(args.Path.ToList().To2D());
 
-        private static void GameOnOnGameUpdate(EventArgs args)
-        {
-            foreach (var dashItem in DetectedDashes)
-            {
-                if (!dashItem.Value.Processed)
-                {
-                    if (dashItem.Value.Unit.IsValid)
-                    {
-                        DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
-                        DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
-                        DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
-                                                               (int)
-                                                                   (1000 *
-                                                                    (dashItem.Value.EndPos.Distance(
-                                                                        dashItem.Value.StartPos) / dashItem.Value.Speed));
-                        DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
-                        DetectedDashes[dashItem.Key].Processed = true;
+                DetectedDashes[sender.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
+                DetectedDashes[sender.NetworkId].Speed = args.Speed; //TODO
+                DetectedDashes[sender.NetworkId].StartPos = sender.ServerPosition.To2D();
+                DetectedDashes[sender.NetworkId].Unit = sender;
+                DetectedDashes[sender.NetworkId].Path = path;
+                DetectedDashes[sender.NetworkId].EndPos = DetectedDashes[sender.NetworkId].Path.Last();
+                DetectedDashes[sender.NetworkId].EndTick = DetectedDashes[sender.NetworkId].StartTick +
+                                                       (int)
+                                                           (1000 *
+                                                            (DetectedDashes[sender.NetworkId].EndPos.Distance(
+                                                                DetectedDashes[sender.NetworkId].StartPos) / DetectedDashes[sender.NetworkId].Speed));
+                DetectedDashes[sender.NetworkId].Duration = DetectedDashes[sender.NetworkId].EndTick - DetectedDashes[sender.NetworkId].StartTick;
 
-                        CustomEvents.Unit.TriggerOnDash(dashItem.Value.Unit, DetectedDashes[dashItem.Key]);
-                    }
-                }
+                CustomEvents.Unit.TriggerOnDash(DetectedDashes[sender.NetworkId].Unit, DetectedDashes[sender.NetworkId]);
             }
         }
 
@@ -115,7 +93,6 @@ namespace LeagueSharp.Common
             public Vector2 EndPos;
             public int EndTick;
             public List<Vector2> Path;
-            public bool Processed = false;
             public float Speed;
             public Vector2 StartPos;
             public int StartTick;

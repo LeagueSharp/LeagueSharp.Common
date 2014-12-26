@@ -164,29 +164,32 @@ namespace LeagueSharp.Common
 
         public static class C2S
         {
-            #region Ping
+            #region Ping - 4.21
 
             /// <summary>
             ///     Ping Packet. Sent by the client when pings are sent.
             /// </summary>
             public static class Ping
             {
-                public static byte Header = 0x57;
-
+                public static byte Header = 0x1D;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
+             
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(1);
                     result.WriteInteger(0);
+                    result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteFloat(packetStruct.X);
                     result.WriteFloat(packetStruct.Y);
-                    result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteByte((byte) packetStruct.Type);
                     return result;
                 }
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data) { Position = 5 };
+                    var packet = new GamePacket(data) { Position = 10 };
                     return new Struct(
                         packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), (PingType) packet.ReadByte());
                 }
@@ -210,28 +213,41 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region LevelUpSpell
+            #region LevelUpSpell - 4.21
 
             /// <summary>
             ///     Packet sent when leveling up a spell.
             /// </summary>
             public static class LevelUpSpell
             {
-                public static byte Header = 0x39;
+                public static byte Header = 0xEC;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteInteger(0);
                     result.WriteByte((byte) packetStruct.Slot);
                     var bit = packetStruct.Evolution ? (byte) 0x01 : (byte) 0x0;
                     result.WriteByte(bit);
+                    result.WriteInteger(0);
+                    result.WriteInteger(0);
                     return result;
                 }
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data) { Position = 1 };
+                    var packet = new GamePacket(data) { Position = 2 };
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger();
+                    packet.Position += 4;
+                    result.Slot = (SpellSlot) packet.ReadByte();
+                    result.Evolution = packet.ReadByte() == 0x01 ? true : false;
+
                     return new Struct(packet.ReadInteger(), (SpellSlot) packet.ReadByte());
                 }
 
@@ -259,19 +275,24 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class Move
             {
-                public static byte Header = 0x72;
+                public static byte Header = 0x13;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte(packetStruct.MoveType);
+
+                    //random data :S
+                    result.WriteInteger(0);
+                    result.WriteInteger(0);
+                    result.WriteInteger(0);
+                    result.WriteInteger(0);
+
                     result.WriteFloat(packetStruct.X);
                     result.WriteFloat(packetStruct.Y);
+                    result.WriteByte(packetStruct.MoveType);
                     result.WriteInteger(packetStruct.TargetNetworkId);
-                    result.WriteByte(0);
-                    result.WriteInteger(packetStruct.UnitNetworkId);
-                    result.WriteByte(0);
                     return result;
                 }
 
@@ -279,14 +300,19 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.SourceNetworkId = packet.ReadInteger();
-                    result.MoveType = packet.ReadByte();
+                    result.UnitNetworkId = result.SourceNetworkId;
+
+                    packet.ReadInteger();
+                    packet.ReadInteger();
+                    packet.ReadInteger();
+                    packet.ReadInteger();
+
                     result.X = packet.ReadFloat();
                     result.Y = packet.ReadFloat();
+                    result.MoveType = packet.ReadByte();
                     result.TargetNetworkId = packet.ReadInteger();
-                    result.WaypointCount = packet.ReadByte() / 2;
-                    result.UnitNetworkId = packet.ReadInteger();
                     return result;
                 }
 
@@ -320,30 +346,30 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Cast
+            #region Cast - 4.21
 
             /// <summary>
             ///     Packet sent when casting spells.
             /// </summary>
             public static class Cast
             {
-                public static byte Header = 0x9A;
+                public static byte Header = 0xDE;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte(
-                        packetStruct.SpellFlag == 0xFF ? GetSpellByte(packetStruct.Slot) : packetStruct.SpellFlag);
-                    result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.FromX);
                     result.WriteFloat(packetStruct.FromY);
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
                     result.WriteInteger(packetStruct.TargetNetworkId);
-
+                    result.WriteByte((byte)packetStruct.Slot);
+                    result.WriteByte(0); //packetStruct.SpellFlag == 0xFF ? GetSpellByte(packetStruct.Slot) : packetStruct.SpellFlag
                     result.Block = !SpellHumanizer.Check(result);
-
                     return result;
                 }
 
@@ -351,14 +377,14 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.SourceNetworkId = packet.ReadInteger();
-                    result.SpellFlag = packet.ReadByte();
-                    result.Slot = (SpellSlot) packet.ReadByte();
                     result.FromX = packet.ReadFloat();
                     result.FromY = packet.ReadFloat();
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
+                    result.Slot = (SpellSlot)packet.ReadByte();
+                    result.SpellFlag = packet.ReadByte();
                     return result;
                 }
 
@@ -431,24 +457,28 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region ChargedCast
+            #region ChargedCast - 4.21
 
             /// <summary>
             ///     Packet sent when casting charged spells second cast.
             /// </summary>
+
             public static class ChargedCast
             {
-                public static byte Header = 0xE6;
-
+                public static byte Header = 0x03;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
+             
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(1);
                     result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte) (packetStruct.Slot == SpellSlot.Q ? 0xEA : 0x9C));
                     result.WriteByte((byte) packetStruct.Slot);
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
                     result.WriteFloat(packetStruct.ToZ);
+                    result.WriteByte(2);
                     return result;
                 }
 
@@ -456,9 +486,8 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.SourceNetworkId = packet.ReadInteger();
-                    packet.Position += 1;
                     result.Slot = (SpellSlot) packet.ReadByte();
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
@@ -491,18 +520,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region BuyItem
+            #region BuyItem - 4.21
 
             /// <summary>
             ///     Packet sent when buying items.
             /// </summary>
             public static class BuyItem
             {
-                public static byte Header = 0x82;
+                public static byte Header = 0xC6;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteInteger(packetStruct.ItemId);
                     return result;
@@ -512,7 +544,7 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.NetworkId = packet.ReadInteger();
                     result.ItemId = packet.ReadInteger();
                     return result;
@@ -533,18 +565,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region SellItem
+            #region SellItem - 4.21
 
             /// <summary>
             ///     Packet sent when selling items.
             /// </summary>
             public static class SellItem
             {
-                public static byte Header = 0x09;
+                public static byte Header = 0x72;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte(packetStruct.InventorySlot);
                     result.WriteByte(1);
@@ -553,7 +588,7 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data) { Position = 1 };
+                    var packet = new GamePacket(data) { Position = 2 };
                     var networkId = packet.ReadInteger();
                     var slot = packet.ReadByte();
 
@@ -585,18 +620,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region SwapItem
+            #region SwapItem - 4.21
 
             /// <summary>
             ///     Packet sent when swapping items.
             /// </summary>
             public static class SwapItem
             {
-                public static byte Header = 0x20;
+                public static byte Header = 0x55;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte(packetStruct.FromSlotByte);
                     result.WriteByte(packetStruct.ToSlotByte);
@@ -607,7 +645,7 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.NetworkId = packet.ReadInteger();
                     result.FromSlotByte = packet.ReadByte();
                     result.ToSlotByte = packet.ReadByte();
@@ -631,18 +669,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Emote
+            #region Emote - 4.21
 
             /// <summary>
             ///     Packet sent when sending emotes.
             /// </summary>
             public static class Emote
             {
-                public static byte Header = 0x48;
+                public static byte Header = 0x14;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(1);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte(packetStruct.EmoteId);
                     return result;
@@ -652,7 +693,7 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.NetworkId = packet.ReadInteger();
                     result.EmoteId = packet.ReadByte();
                     return result;
@@ -673,18 +714,20 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region InteractObject
+            #region InteractObject - 4.21
 
             /// <summary>
             ///     Packet sent when interacting with Thresh Lantern and Dominion capturing.
             /// </summary>
             public static class InteractObject
             {
-                public static byte Header = 0x3A;
+                public static byte Header = 0x86;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
                     result.WriteInteger(packetStruct.SourceNetworkId);
                     result.WriteInteger(packetStruct.ObjectNetworkId);
                     return result;
@@ -715,18 +758,20 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region SetTarget
+            #region SetTarget - 4.21
 
             /// <summary>
             ///     Packet sent when left clicking a target.
             /// </summary>
             public static class SetTarget
             {
-                public static byte Header = 0xAF;
+                public static byte Header = 0x04;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var result = new Struct { NetworkId = new GamePacket(data).ReadInteger(9) };
+                    var result = new Struct { NetworkId = new GamePacket(data).ReadInteger(6) };
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
                     return result;
                 }
@@ -740,14 +785,15 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Heartbeat
+            #region HeartBeat - 4.21
 
             /// <summary>
             ///     Packet sent frequently as heartbeat to servers.
+            /// Related to 0x29 (Recv)
             /// </summary>
             public static class HeartBeat
             {
-                public static byte Header = 0x08;
+                public static byte Header = 0x4C;
 
                 public static Struct Decoded(byte[] data)
                 {
@@ -789,774 +835,203 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Undo
+            #region Refund - 4.21
 
             /// <summary>
-            ///     Sent by client on undo.
+            ///     Sent by client on refund.
             /// </summary>
-            public static class Undo
+            public static class Refund
             {
-                public static byte Header = MultiPacket.Header;
+                public static byte Header = 0x54;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
-                public static GamePacket Encoded()
+                public static GamePacket Encoded(Struct packetStruct)
                 {
-                    return MultiPacket.BasePacket(0xA);
-                }
-            }
-
-            #endregion
-        }
-
-        public static class MultiPacket
-        {
-            #region INFO
-
-            /*
-             * This is the MultiPacket packet. 
-             * Packets in LoL are restricted to one byte i.e. (0-254) or (0 - 0xFE). 
-             * Riot needed to add more packets, but couldn't add anymore headers.
-             * The new packets are being added to 0xFE with a sub-header in order to be identified. 
-             */
-
-            #endregion
-
-            public static byte Header = 0xFE;
-
-            public static GamePacket BasePacket(byte subHeader)
-            {
-                var p = new GamePacket(Header);
-                p.WriteInteger(ObjectManager.Player.NetworkId);
-                p.WriteByte(subHeader);
-                p.WriteByte(1);
-                return p;
-            }
-
-            public static Struct DecodeHeader(byte[] data)
-            {
-                var packet = new GamePacket(data);
-
-                var networkId = packet.ReadInteger(1);
-                var subHeader = packet.ReadByte(5);
-
-                return Enum.GetName(typeof(MultiPacketType), subHeader) == null
-                    ? new Struct(networkId, MultiPacketType.Unknown, subHeader)
-                    : new Struct(networkId, (MultiPacketType) subHeader);
-            }
-
-            public struct Struct
-            {
-                public int NetworkId;
-                public byte SubHeader;
-                public MultiPacketType Type;
-
-                public Struct(int networkId, MultiPacketType type, byte subHeader = 0xFF)
-                {
-                    NetworkId = networkId;
-                    Type = type;
-                    SubHeader = subHeader == 0xFF ? (byte) type : subHeader;
-                }
-            }
-
-            #region ActionState
-
-            /// <summary>
-            ///     Not sure what this does, recv on recall.
-            /// </summary>
-            public static class ActionState
-            {
-                public static byte SubHeader = (byte) MultiPacketType.ActionState;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    return new ReturnStruct { Action = packet.ReadInteger(7) };
-                }
-
-                public static GamePacket Encoded(ReturnStruct pStruct)
-                {
-                    var packet = BasePacket(SubHeader);
-                    packet.WriteInteger(pStruct.Action);
-                    return packet;
-                }
-
-                public struct ReturnStruct
-                {
-                    public int Action;
-                }
-            }
-
-            #endregion
-
-            #region ChangeItem
-
-            /// <summary>
-            ///     Currently this packet only transforms HP pots to biscuits.
-            /// </summary>
-            public static class ChangeItem
-            {
-                public static byte SubHeader = (byte) MultiPacketType.ChangeItem;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    return new ReturnStruct
-                    {
-                        InitialItemId = packet.ReadInteger(7),
-                        FinalItemId = packet.ReadInteger()
-                    };
-                    //Utility.DumpPacket(data);
-                }
-
-                public static GamePacket Encoded(ReturnStruct pStruct)
-                {
-                    var packet = BasePacket(SubHeader);
-                    packet.WriteInteger(pStruct.InitialItemId);
-                    packet.WriteInteger(pStruct.FinalItemId);
-                    return packet;
-                }
-
-                public struct ReturnStruct
-                {
-                    public int FinalItemId;
-                    public int InitialItemId;
-                }
-            }
-
-            #endregion
-
-            #region OnAttack
-
-            /// <summary>
-            ///     Received when attacking or casting a spell on a unit.'
-            ///     This packet comes before 0xB5 (S2C.Cast)
-            ///     The attack can be cancelled and the packet will still be received.
-            /// </summary>
-            public static class OnAttack
-            {
-                public static byte SubHeader = (byte) MultiPacketType.OnAttack;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var returnStruct = new ReturnStruct
-                    {
-                        Type = (AttackTypePacket) packet.ReadByte(7),
-                        Position = new Vector3(packet.ReadFloat(), packet.ReadFloat(16), packet.ReadFloat(12)),
-                        TargetNetworkId = packet.ReadInteger(20)
-                    };
-
-                    return returnStruct;
-                }
-
-                public struct ReturnStruct
-                {
-                    public Vector3 Position;
-                    public int TargetNetworkId;
-                    public AttackTypePacket Type;
-                }
-            }
-
-            #endregion
-
-            #region SurrenderState
-
-            /// <summary>
-            ///     Received when surrender is available.
-            /// </summary>
-            public static class SurrenderState
-            {
-                public static byte SubHeader = (byte) MultiPacketType.SurrenderState;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    return new ReturnStruct(data[7] == 0x01);
-                }
-
-                public struct ReturnStruct
-                {
-                    public bool CanSurrender;
-
-                    public ReturnStruct(bool canSurrender)
-                    {
-                        CanSurrender = canSurrender;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region UndoToken
-
-            /// <summary>
-            ///     Undo token contains undo amount, when leaving base or casting spell/item it's set to 0.
-            /// </summary>
-            public static class UndoToken
-            {
-                public static byte SubHeader = (byte) MultiPacketType.UndoToken;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    return new ReturnStruct { UndoAmount = data[7] };
-                }
-
-                public static GamePacket Encoded(int undoAmount)
-                {
-                    var packet = BasePacket(SubHeader);
-                    packet.WriteByte((byte) undoAmount);
-
-                    return packet;
-                }
-
-                public struct ReturnStruct
-                {
-                    public int UndoAmount;
-                }
-            }
-
-            #endregion
-
-            #region UndoConfirm
-
-            /// <summary>
-            ///     Undo confirm comes after undoing.
-            /// </summary>
-            public static class UndoConfirm
-            {
-                public static byte SubHeader = (byte) MultiPacketType.UndoConfirm;
-
-                public static List<RefundItem> Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data) { Position = 7 };
-                    var itemList = new List<RefundItem>();
-
-                    for (var i = 0; i < 7; i++)
-                    {
-                        var itemId = packet.ReadShort();
-                        packet.Position += 2;
-                        var inventorySlot = packet.ReadByte();
-                        var spellSlot = inventorySlot + SpellSlot.Item1;
-                        var stack = packet.ReadByte();
-                        var charge = packet.ReadByte();
-                        var pos = packet.Position;
-
-                        if (itemId == 0)
-                        {
-                            continue;
-                        }
-
-                        var cd = packet.ReadFloat(packet.Position + 63 - 3 * inventorySlot);
-                        var totalCd = packet.ReadFloat(packet.Position + 36);
-                        packet.Position = pos;
-
-                        itemList.Add(new RefundItem(itemId, inventorySlot, spellSlot, stack, charge, cd, totalCd));
-                    }
-
-                    return itemList;
-                }
-
-                public class RefundItem
-                {
-                    public int Charge;
-                    public float CurrentCooldown;
-                    public byte InventorySlot;
-                    public int ItemId;
-                    public SpellSlot SpellSlot;
-                    public int Stack;
-                    public float TotalCooldown;
-
-                    public RefundItem(short itemId,
-                        byte inventorySlot,
-                        SpellSlot slot,
-                        int stack,
-                        int charge,
-                        float cd,
-                        float totalCd)
-                    {
-                        ItemId = itemId;
-                        InventorySlot = inventorySlot;
-                        SpellSlot = slot;
-                        Stack = stack;
-                        Charge = charge;
-                        CurrentCooldown = cd;
-                        TotalCooldown = totalCd;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region DeathTimer
-
-            /// <summary>
-            ///     Contains death timer for hero.
-            /// </summary>
-            public static class DeathTimer
-            {
-                public static byte SubHeader = (byte) MultiPacketType.DeathTimer;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var hero = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(packet.ReadInteger(1));
-                    return new ReturnStruct { Time = packet.ReadFloat(7), Hero = hero };
-                }
-
-                public struct ReturnStruct
-                {
-                    public Obj_AI_Hero Hero;
-                    public float Time;
-                }
-            }
-
-            #endregion
-
-            #region ObjectCreation
-
-            /// <summary>
-            ///     Object creation.
-            ///     FE 2E 17 00 40 0D 01 00 00 16 44 00 00 00 00
-            ///     FE 6B 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            ///     FE 6D 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            ///     FE 6F 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            ///     FE 71 17 00 40 0D 01 00 00 C8 43 00 00 00 00
-            /// </summary>
-            public static class ObjectCreation
-            {
-                public static byte SubHeader = (byte) MultiPacketType.ObjectCreation;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var pStruct = new ReturnStruct();
-                    pStruct.NetworkId = packet.ReadInteger(1);
-
-                    pStruct.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(pStruct.NetworkId);
-                    pStruct.UnknownFloat = packet.ReadFloat(7);
-                    pStruct.UnknownFloat2 = packet.ReadFloat();
-
-                    return pStruct;
-                }
-
-                public struct ReturnStruct
-                {
-                    public int NetworkId;
-                    public Obj_AI_Base Unit;
-                    public float UnknownFloat;
-                    public float UnknownFloat2;
-                }
-            }
-
-            #endregion
-
-            #region AddBuff
-
-            /// <summary>
-            ///     Buff given by new turrets on SR.
-            /// </summary>
-            public static class AddBuff
-            {
-                public static byte SubHeader = (byte) MultiPacketType.AddBuff;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var pStruct = new ReturnStruct();
-                    pStruct.NetworkId = packet.ReadInteger(1);
-
-                    pStruct.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(pStruct.NetworkId);
-                    pStruct.BuffType = packet.ReadByte(7);
-                    pStruct.State = packet.ReadByte();
-
-                    return pStruct;
-                }
-
-                public struct ReturnStruct
-                {
-                    public byte BuffType; //or slot
-                    public int NetworkId;
-                    public byte State; //0,1,2,3
-                    public Obj_AI_Base Unit;
-                }
-            }
-
-            #endregion
-
-            #region Unknown
-
-            #region Unknown100
-
-            /// <summary>
-            ///     Unknown, ?? "Marker"
-            ///     Struct from ida
-            /// </summary>
-            public static class Unknown100
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown100;
-
-                public static GamePacket Encoded(ReturnStruct pStruct)
-                {
-                    var packet = BasePacket(SubHeader);
-                    packet.WriteInteger(pStruct.UnknownNetworkId);
-                    packet.WriteByte(0);
-                    packet.WriteFloat(pStruct.UnknownFloats[0]);
-                    packet.WriteFloat(pStruct.UnknownFloats[1]);
-                    packet.WriteFloat(pStruct.UnknownFloats[2]);
-
-                    return packet;
-                }
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var unknownNetworkId = packet.ReadInteger(7);
-                    packet.Position = 12;
-                    // these floats are probably a position
-                    var unknownFloat1 = packet.ReadFloat();
-                    var unknownFloat2 = packet.ReadFloat();
-                    var unknownFloat3 = packet.ReadFloat();
-                    return new ReturnStruct
-                    {
-                        UnknownNetworkId = unknownNetworkId,
-                        UnknownFloats = new[] { unknownFloat1, unknownFloat2, unknownFloat3 }
-                    };
-                }
-
-                public struct ReturnStruct
-                {
-                    public float[] UnknownFloats;
-                    public int UnknownNetworkId;
-
-                    public ReturnStruct(int networkId, float[] floats)
-                    {
-                        UnknownNetworkId = networkId;
-                        UnknownFloats = floats;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region Unknown101
-
-            /// <summary>
-            ///     Unknown
-            ///     Struct from ida, this packet almost identical to 0xD7/0x102
-            /// </summary>
-            public static class Unknown101
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown101;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var unknownNetworkId = packet.ReadInteger(7);
-                    var unknownByte = packet.ReadByte();
-                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
-                }
-
-                public struct ReturnStruct
-                {
-                    public byte UnknownByte;
-                    public int UnknownNetworkId;
-                }
-            }
-
-            #endregion
-
-            #region Unknown102
-
-            /// <summary>
-            ///     Unknown
-            ///     Struct from ida, this packet almost identical to 0xD7/0x101
-            /// </summary>
-            public static class Unknown102
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown102;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var unknownNetworkId = packet.ReadInteger(7);
-                    var unknownByte = packet.ReadByte();
-                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
-                }
-
-                public struct ReturnStruct
-                {
-                    public byte UnknownByte;
-                    public int UnknownNetworkId;
-                }
-            }
-
-            #endregion
-
-            #region Unknown104
-
-            /// <summary>
-            ///     Unknown
-            ///     Struct from ida, this packet is related to spell slots.
-            ///     FE 05 00 00 40 04 01 01 03 00 00 00 00 00 16 C3
-            ///     FE 05 00 00 40 04 01 01 03 00 00 00 00 00 00 00
-            /// </summary>
-            public static class Unknown104
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown104;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var unknownByte = packet.ReadByte(7);
-                    var slot = packet.ReadByte(8);
-                    return new ReturnStruct { UnknownByte = unknownByte, Slot = (SpellSlot) slot };
-                }
-
-                public struct ReturnStruct
-                {
-                    public SpellSlot Slot;
-                    public byte UnknownByte;
-                    public int UnknownNetworkId;
-                }
-            }
-
-            #endregion
-
-            #region Unknown10C
-
-            /// <summary>
-            ///     Like undo.
-            /// </summary>
-            public static class Unknown10C
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown10C;
-
-                public static List<RefundItem> Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data) { Position = 11 };
-                    var itemList = new List<RefundItem>();
-
-                    for (var i = 0; i <= 7; i++)
-                    {
-                        var inventorySlot = packet.ReadByte();
-                        var spellSlot = inventorySlot + SpellSlot.Item1;
-                        var stack = packet.ReadByte();
-                        var charge = packet.ReadByte();
-                        var itemId = packet.ReadShort();
-                        packet.Position += 2;
-                        var pos = packet.Position;
-
-                        if (itemId == 0)
-                        {
-                            continue;
-                        }
-
-                        var cd = packet.ReadFloat(packet.Position + 59); //this is prob wrong
-                        var totalCd = packet.ReadFloat(packet.Position + 29); //this is prob wrong
-                        packet.Position = pos;
-
-                        itemList.Add(new RefundItem(itemId, inventorySlot, spellSlot, stack, charge, cd, totalCd));
-                    }
-
-                    return itemList;
-                }
-
-                public class RefundItem
-                {
-                    public int Charge;
-                    public float CurrentCooldown;
-                    public byte InventorySlot;
-                    public int ItemId;
-                    public SpellSlot SpellSlot;
-                    public int Stack;
-                    public float TotalCooldown;
-
-                    public RefundItem(short itemId,
-                        byte inventorySlot,
-                        SpellSlot slot,
-                        int stack,
-                        int charge,
-                        float cd,
-                        float totalCd)
-                    {
-                        ItemId = itemId;
-                        InventorySlot = inventorySlot;
-                        SpellSlot = slot;
-                        Stack = stack;
-                        Charge = charge;
-                        CurrentCooldown = cd;
-                        TotalCooldown = totalCd;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region Unknown115
-
-            /// <summary>
-            ///     Unknown
-            ///     Struct from ida
-            /// </summary>
-            public static class Unknown115
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown115;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var unknownNetworkId = packet.ReadInteger(7);
-                    var unknownByte = packet.ReadByte();
-                    return new ReturnStruct { UnknownNetworkId = unknownNetworkId, UnknownByte = unknownByte };
-                }
-
-                public struct ReturnStruct
-                {
-                    public byte UnknownByte;
-                    public int UnknownNetworkId;
-                }
-            }
-
-            #endregion
-
-            #region Unknown122
-
-            /// <summary>
-            ///     Unknown
-            ///     Struct from ida, "timers"
-            /// </summary>
-            public static class Unknown122
-            {
-                public static byte SubHeader = (byte) MultiPacketType.Unknown122;
-
-                public static ReturnStruct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var result = new ReturnStruct();
-
-                    var Int = packet.ReadInteger(7); // this is either a hash or two shorts
-                    var Float = packet.ReadFloat(); // usually 60
-                    result.Name = packet.ReadString(19);
-                    var unknownByte1 = packet.ReadByte(83); //camp id?
-                    var unknownByte2 = packet.ReadByte(84);
-                    result.CampId = packet.ReadByte(85);
-                    result.UnknownNetworkId = packet.ReadInteger(86);
-                    result.UnknownFloat = packet.ReadFloat(90);
-
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(0);
+                    result.WriteInteger(packetStruct.NetworkId);
                     return result;
                 }
 
-                public struct ReturnStruct
-                {
-                    public byte CampId;
-                    public string Name;
-                    public float UnknownFloat;
-                    public int UnknownNetworkId;
-                }
-            }
-
-            #endregion
-
-            #region SpawnTurret
-
-            /// <summary>
-            ///     SpawnTurret
-            ///     Struct from ida
-            ///     FE 00 00 00 00 22 01 6E F7 9C 45 00 00 70 42 28 12 F3 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00
-            ///     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-            ///     00 00 00 00 00 00 00 66 4A 00 00 00 00 00 00 00 00 00
-            ///     FE 00 00 00 00 22 01 97 6F 0A 46 00 00 70 42 DA 60 F3 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00
-            ///     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-            ///     00 00 00 00 00 00 00 67 4A 00 00 00 00 00 00 00 00 00
-            ///     FE 00 00 00 00 22 01 8C 95 D9 45 00 00 70 42 AE 97 7F 45 53 68 72 69 6E 65 00 00 00 00 00 00 00 00 00 00 00 00 00
-            ///     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-            ///     00 00 00 00 00 00 00 68 4A 00 00 00 00 00 00 00 00 00
-            /// </summary>
-            public static class SpawnTurret
-            {
-                public static byte SubHeader = (byte) MultiPacketType.SpawnTurret;
-
-                public static void Decoded(byte[] data)
+                public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var unknownNetworkId = packet.ReadInteger(7); // Node ID??
-                    var unknownNetworkId2 = packet.ReadInteger(); // Object ID??
-                    var unknownByte = packet.ReadByte();
-                    var name = packet.ReadString();
-                    var skin = packet.ReadString(80);
-                    var skinID = packet.ReadInteger(144);
-                    var unknownShort = packet.ReadShort(165);
+                    var result = new Struct();
+                    packet.Position = 2;
+                    result.NetworkId = packet.ReadInteger();
+                    return result;
                 }
 
-                public struct ReturnStruct
+                public struct Struct
                 {
-                    public float[] UnknownFloats;
-                    public int UnknownNetworkId;
+                    public int NetworkId;
+
+                    public Struct(int networkId = -1)
+                    {
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
                 }
             }
 
             #endregion
 
-            #region NPCDeath
+            #region ScoreScreen - 4.21 (NO STRUCT)
 
             /// <summary>
-            ///     NPCDeath
-            ///     Struct from intwars/ida
+            ///     Sent by client on opening score screen.
             /// </summary>
-            public static class NPCDeath
+            public static class ScoreScreen
             {
-                public static byte SubHeader = (byte) MultiPacketType.NPCDeath;
-
-                public static void Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var KilledNetworkId = packet.ReadInteger(1);
-                    var KilledUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(KilledNetworkId);
-
-                    var KillerNetworkId = packet.ReadInteger(12);
-                    var KillerUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(KillerNetworkId);
-
-                    var unknownByte = packet.ReadByte();
-                    var unknownByte2 = packet.ReadByte();
-                    var unknownInt = packet.ReadInteger(); // intwars says flags
-                }
+                public static byte Header = 0x15;
             }
 
             #endregion
+
+            #region Camera - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client on center/lock camera.
+            /// </summary>
+            public static class Camera
+            {
+                public static byte Header = 0x64;
+            }
+
+            #endregion
+
+            #region Zoom - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client on zoom level change or move camera.
+            /// </summary>
+            public static class Zoom
+            {
+                public static byte Header = 0xDC;
+            }
+
+            #endregion
+
+            #region LeaveGame - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client on exiting the game.
+            /// </summary>
+            public static class LeaveGame
+            {
+                //75 00 00 00 00 00 5A
+                public static byte Header = 0x75;
+            }
+
+            #endregion
+
+            #region Surrender - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client on surrendering.
+            /// </summary>
+            public static class Surrender
+            {
+                //A2 00 00 00 00 00 AB
+                public static byte Header = 0xA2;
+            }
+
+            #endregion
+
+            #region EndGame - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client when the game is over.
+            /// </summary>
+            public static class EndGame
+            {
+                //1E 00 00 00 00 00
+                public static byte Header = 0x1E;
+            }
+
+            #endregion
+
+            #region WaypointConfirm 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client to confirm receiving waypoints.
+            /// </summary>
+            public static class WaypointConfirm
+            {
+                //36 00 00 00 00 00 83 7F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+                public static byte Header = 0x36;
+            }
+
+            #endregion
+
+            #region Pause 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client on pause.
+            /// </summary>
+            public static class Pause
+            {
+                //00 01 00 00 00 00 00 00 00 00 00 00 00 00 90 
+                public static byte Header = 0x00;
+            }
+
+            #endregion
+
+
+            #region Resume 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Sent by client on resume.
+            /// </summary>
+            public static class Resume
+            {
+                //19 00 00 00 00 00 00 00 00 00 90  
+                public static byte Header = 0x19;
+            }
 
             #endregion
         }
 
         public static class S2C
         {
-            #region Ping
+            #region Ping - 4.21
 
             /// <summary>
             ///     RPing Packet. Received when ally team players send a SPing packet.
             /// </summary>
             public static class Ping
             {
-                public static byte Header = 0x40;
+                public static byte Header = 0x60;
+                public static PacketChannel Channel = PacketChannel.C2S;
+                public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
-                    var result = new GamePacket(Header);
+                    var result = new GamePacket(Header, Channel, Flags);
+                    result.WriteByte(0);
                     result.WriteInteger(0);
+                    result.WriteInteger(packetStruct.TargetNetworkId);
+                    result.WriteByte((byte)packetStruct.Type);
+                    result.WriteInteger(packetStruct.SourceNetworkId);
                     result.WriteFloat(packetStruct.X);
                     result.WriteFloat(packetStruct.Y);
-                    result.WriteInteger(packetStruct.TargetNetworkId);
-                    result.WriteInteger(packetStruct.SourceNetworkId);
-                    result.WriteByte((byte) packetStruct.Type);
-                    var bit = packetStruct.Silent ? (byte) 0 : (byte) 0xFB;
+                    var bit = packetStruct.Silent ? (byte) 0x14 : (byte) 0x1B;
                     result.WriteByte(bit);
-
                     return result;
                 }
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data) { Position = 5 };
+                    var packet = new GamePacket(data) { Position = 6 };
+                    var targetNetworkId = packet.ReadInteger();
+                    var type = packet.ReadByte();
+                    var sourceNetworkId = packet.ReadInteger();
+                    var x = packet.ReadFloat();
+                    var y = packet.ReadFloat();
+                    var silent = (packet.ReadByte() & 1) != 1;
                     return new Struct(
-                        packet.ReadFloat(), packet.ReadFloat(), packet.ReadInteger(), packet.ReadInteger(),
-                        (PingType) packet.ReadByte(), (packet.ReadByte() & 1) != 1);
+                        x, y, targetNetworkId, sourceNetworkId,
+                        (PingType)type, silent);
                 }
 
                 public struct Struct
@@ -1587,22 +1062,22 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region GainVision
+            #region GainVision - 4.21
 
             /// <summary>
             ///     Gets received when a unit leaves FOW.
             /// </summary>
             public static class GainVision
             {
-                public static byte Header = 0xAD;
+                public static byte Header = 0xFC;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
+                    //Not fully encoded
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.UnitNetworkId);
                     result.WriteShort(0);
-                    result.WriteFloat(packetStruct.MaxHealth);
-                    result.WriteFloat(packetStruct.CurrentHealth);
                     return result;
                 }
 
@@ -1610,50 +1085,43 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-
-                    result.UnitNetworkId = packet.ReadInteger(1);
-                    packet.ReadShort();
-                    result.MaxHealth = packet.ReadFloat();
-                    result.CurrentHealth = packet.ReadFloat();
+                    result.UnitNetworkId = packet.ReadInteger(2);
                     return result;
                 }
 
                 public struct Struct
                 {
-                    public float CurrentHealth;
-                    public float MaxHealth;
                     public int UnitNetworkId;
 
-                    public Struct(int unitNetworkId = 0, float maxHealth = 0, float currentHealth = 0)
+                    public Struct(int unitNetworkId = 0)
                     {
                         UnitNetworkId = unitNetworkId;
-                        MaxHealth = maxHealth;
-                        CurrentHealth = currentHealth;
                     }
                 }
             }
 
             #endregion
 
-            #region LoseVision
+            #region LoseVision - 4.21
 
             /// <summary>
             ///     Gets received when a unit enters FOW.
             /// </summary>
             public static class LoseVision
             {
-                public static byte Header = 0x51;
+                public static byte Header = 0xCD;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.UnitNetworkId);
                     return result;
                 }
 
                 public static Struct Decoded(byte[] data)
                 {
-                    var packet = new GamePacket(data) { Position = 1 };
+                    var packet = new GamePacket(data) { Position = 2 };
                     return new Struct(packet.ReadInteger());
                 }
 
@@ -1670,21 +1138,23 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region EmptyJungleCamp
-
+            #region EmptyJungleCamp - 4.21 partially
             /// <summary>
             ///     Gets received when gaining vision of an empty jungle camp.
             /// </summary>
             public static class EmptyJungleCamp
             {
-                public static byte Header = 0xC3;
+                public static byte Header = 0x93;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(0);
-                    result.WriteInteger(packetStruct.UnitNetworkId);
                     result.WriteInteger(packetStruct.CampId);
+                    result.WriteInteger(packetStruct.UnitNetworkId);
+
+                    //No idea where this is now or if it still exists :^)
                     result.WriteByte(packetStruct.EmptyType);
                     return result;
                 }
@@ -1693,9 +1163,9 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-
-                    result.UnitNetworkId = packet.ReadInteger(5);
-                    result.CampId = packet.ReadInteger();
+                    result.CampId = packet.ReadInteger(6);
+                    result.UnitNetworkId = packet.ReadInteger();
+                    //No idea where this is now or if it still exists :^)
                     result.EmptyType = packet.ReadByte();
                     return result;
                 }
@@ -1810,14 +1280,14 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Dash
+            #region Dash - 4.12 only header updated
 
             /// <summary>
             ///     Gets received when a unit dashes.
             /// </summary>
             public static class Dash
             {
-                public static byte Header = 0x64;
+                public static byte Header = 0xD7;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -1831,7 +1301,7 @@ namespace LeagueSharp.Common
                     var result = new Struct();
 
                     result.UnitNetworkId = packet.ReadInteger(12);
-                    result.Speed = packet.ReadFloat();
+                    result.Speed = 900;//packet.ReadFloat();
 
                     return result;
                 }
@@ -1851,14 +1321,14 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region GameEnd
+            #region GameEnd - 4.21
 
             /// <summary>
             ///     Gets received when the game ends.
             /// </summary>
             public static class GameEnd
             {
-                public static byte Header = 0xC6;
+                public static byte Header = 0xED;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
@@ -1946,11 +1416,12 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class UpdateModel
             {
-                public static byte Header = 0x97;
+                public static byte Header = 0x1A;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteInteger(packetStruct.NetworkId & ~0x40000000);
                     result.WriteByte((byte) (packetStruct.BOk ? 1 : 0));
@@ -1975,7 +1446,7 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
-                    result.NetworkId = packet.ReadInteger(1);
+                    result.NetworkId = packet.ReadInteger(2);
                     result.Id = packet.ReadInteger();
                     result.BOk = packet.ReadByte() == 0x01;
                     result.SkinId = packet.ReadInteger();
@@ -2004,7 +1475,7 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Teleport
+            #region Teleport - 4.21
 
             /// <summary>
             ///     Gets received when a unit starts, aborts or finishes a teleport (such as recall, teleport, twisted fate ulti, shen
@@ -2045,7 +1516,7 @@ namespace LeagueSharp.Common
                     public int GetDuration(byte[] packetData)
                     {
                         var p = new GamePacket(packetData);
-                        return Utility.GetRecallTime(p.ReadString(139));
+                        return Utility.GetRecallTime(p.ReadString(30));
                     }
                 }
 
@@ -2089,7 +1560,7 @@ namespace LeagueSharp.Common
                 }
 
 
-                public static byte Header = 0xD8;
+                public static byte Header = 0x44;
 
                 private const int ErrorGap = 100; //in ticks
 
@@ -2115,12 +1586,12 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data);
                     var result = new Struct
                     {
-                        UnitNetworkId = packet.ReadInteger(5),
+                        UnitNetworkId = packet.ReadInteger(54),
                         Status = Status.Unknown,
                         Type = Type.Unknown
                     };
 
-                    string typeAsString = packet.ReadString(75);
+                    string typeAsString = packet.ReadString(6);
                     var gameObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
 
                     if (gameObject == null)
@@ -2203,18 +1674,19 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region PlayEmote
+            #region PlayEmote - 4.21
 
             /// <summary>
             ///     Gets received when an unit uses an emote.
             /// </summary>
             public static class PlayEmote
             {
-                public static byte Header = 0x42;
+                public static byte Header = 0xAA;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
+                    result.WriteByte(0);
                     result.WriteInteger(packetStruct.NetworkId);
                     result.WriteByte(packetStruct.EmoteId);
                     return result;
@@ -2224,7 +1696,7 @@ namespace LeagueSharp.Common
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-                    result.NetworkId = packet.ReadInteger(1);
+                    result.NetworkId = packet.ReadInteger(2);
                     result.EmoteId = packet.ReadByte();
                     return result;
                 }
@@ -2244,19 +1716,20 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Damage
+            #region Damage - 4.21 partially
 
             /// <summary>
             ///     Packet received when a unit deals damage.
             /// </summary>
             public class Damage
             {
-                public static byte Header = 0x65;
+                public static byte Header = 0x23;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
+                    //23 00 05 00 00 40 05 00 00 40 06 00 00 40 04 F7 33 B4 3F 01 66
                     var packet = new GamePacket(Header);
-
+                    packet.WriteByte(0);
                     packet.WriteInteger(packetStruct.TargetNetworkId);
                     packet.WriteByte((byte) packetStruct.Type);
                     packet.WriteShort(packetStruct.Unknown); // Unknown value
@@ -2273,14 +1746,14 @@ namespace LeagueSharp.Common
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
-                    packet.Position = 1;
+                    packet.Position = 2;
                     result.TargetNetworkId = packet.ReadInteger();
+                    result.TargetNetworkIdCopy = packet.ReadInteger();
+                    result.SourceNetworkId = packet.ReadInteger();
+                    //wrong:
                     result.Type = (DamageTypePacket) packet.ReadByte();
                     result.Unknown = packet.ReadShort();
                     result.DamageAmount = packet.ReadFloat();
-                    result.TargetNetworkIdCopy = packet.ReadInteger();
-                    result.SourceNetworkId = packet.ReadInteger();
-
                     return result;
                 }
 
@@ -2431,14 +1904,14 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region PlayerDisconnect
+            #region PlayerDisconnect - 4.21
 
             /// <summary>
             ///     Packet received on player disconnect.
             /// </summary>
             public class PlayerDisconnect
             {
-                public static byte Header = 0x98;
+                public static byte Header = 0xFE;
 
                 public static Struct Decoded(byte[] data)
                 {
@@ -2446,7 +1919,7 @@ namespace LeagueSharp.Common
                     var result = new Struct();
 
 
-                    packet.Position = 5;
+                    packet.Position = 6;
                     result.NetworkId = packet.ReadInteger();
                     result.Player = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.NetworkId);
 
@@ -2615,7 +2088,7 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region SetCoodlown
+            #region SetCooldown
 
             /// <summary>
             ///     One packet that sets cooldown.
@@ -2777,21 +2250,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region SellItemAns
+            #region SellItemAns - 4.21
 
             /// <summary>
             ///     Packet received on selling item.
             /// </summary>
             public class SellItemAns
             {
-                public static byte Header = 0x0B;
+                public static byte Header = 0xD3;
 
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
-                    result.NetworkId = packet.ReadInteger(1);
+                    result.NetworkId = packet.ReadInteger(2);
                     result.InventorySlot = packet.ReadByte();
                     result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
                     result.Stack = packet.ReadByte();
@@ -2812,21 +2285,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region SwapItemAns
+            #region SwapItemAns - 4.21
 
             /// <summary>
             ///     Packet received on swapping item.
             /// </summary>
             public class SwapItemAns
             {
-                public static byte Header = 0x3E;
+                public static byte Header = 0x09;
 
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
-
-                    result.NetworkId = packet.ReadInteger(1);
+                    
+                    result.NetworkId = packet.ReadInteger(2);
                     result.FromInventorySlot = packet.ReadByte();
                     result.FromSpellSlot = (SpellSlot) (result.FromInventorySlot + (byte) SpellSlot.Item1);
                     result.ToInventorySlot = packet.ReadByte();
@@ -2847,7 +2320,7 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region ChangeSpellSlot
+            #region ChangeSpellSlot - This packet doesnt seem to exits in 4.21 with this struct
 
             /// <summary>
             ///     Packet received on spell slot changing.
@@ -2939,21 +2412,21 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region LevelUp
+            #region LevelUp - 4.21
 
             /// <summary>
             ///     Received on hero level up.
             /// </summary>
             public class LevelUp
             {
-                public static byte Header = 0x3F;
+                public static byte Header = 0xCB;
 
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
                     var result = new Struct();
 
-                    result.NetworkId = packet.ReadInteger(1);
+                    result.NetworkId = packet.ReadInteger(2);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.NetworkId);
                     result.Level = packet.ReadByte();
                     result.PointsLeft = packet.ReadByte();
@@ -2967,6 +2440,40 @@ namespace LeagueSharp.Common
                     public int NetworkId;
                     public int PointsLeft;
                     public Obj_AI_Hero Unit;
+                }
+            }
+
+            #endregion
+
+            #region LevelUpSpell - 4.2.1
+
+            /// <summary>
+            ///     Received on hero level up spell.
+            /// </summary>
+            public class LevelUpSpell
+            {
+                public static byte Header = 0xA9;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+
+                    result.NetworkId = packet.ReadInteger(2);
+                    result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.NetworkId);
+                    result.Slot = (SpellSlot) packet.ReadByte();
+                    result.PointsLeft = packet.ReadByte();
+                    result.Level = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public int Level;
+                    public int NetworkId;
+                    public int PointsLeft;
+                    public Obj_AI_Hero Unit;
+                    public SpellSlot Slot;
                 }
             }
 
@@ -3040,6 +2547,63 @@ namespace LeagueSharp.Common
                     public int NoVotes;
                     public GameObjectTeam Team;
                 }
+            }
+
+            #endregion
+
+            #region RefundToken - 4.21
+
+            /// <summary>
+            ///     Refund token contains refund amount, when leaving base or casting spell/item it's set to 0.
+            /// </summary>
+            public static class RefundToken
+            {
+                public static byte Header = 0xE9;
+
+                public static Struct Decoded(byte[] data)
+                {
+                    return new Struct { RefundCount = data[6] };
+                }
+
+                public static GamePacket Encoded(int undoAmount)
+                {
+                    var packet = new GamePacket(Header);
+                    packet.WriteByte(0);
+                    packet.WriteInteger(ObjectManager.Player.NetworkId);
+                    packet.WriteInteger(undoAmount);
+                    return packet;
+                }
+
+                public struct Struct
+                {
+                    public int RefundCount;
+                }
+            }
+
+            #endregion
+
+            #region Camera - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Received by the server when Camera or Zoom is sent.
+            /// </summary>
+            public static class Camera
+            {
+                //94 00 00 00 00 00 27 
+                //last byte is probably times camera packet has been sent
+                public static byte Header = 0x94;
+            }
+
+            #endregion
+
+            #region RefundConfirm - 4.21 (NO STRUCT)
+
+            /// <summary>
+            ///     Received by the server when refund is sent.
+            /// </summary>
+            public static class RefundConfirm
+            {
+                public static byte Header = 0x49;
             }
 
             #endregion

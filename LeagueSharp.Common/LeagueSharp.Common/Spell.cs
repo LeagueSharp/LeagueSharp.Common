@@ -85,21 +85,21 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (IsChargedSpell)
+                if (!IsChargedSpell)
                 {
-                    if (IsCharging)
-                    {
-                        return ChargedMinRange +
-                               Math.Min(
-                                   ChargedMaxRange - ChargedMinRange,
-                                   (Environment.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
-                                   ChargeDuration - 150);
-                    }
-
-                    return ChargedMaxRange;
+                    return _range;
                 }
 
-                return _range;
+                if (IsCharging)
+                {
+                    return ChargedMinRange +
+                           Math.Min(
+                               ChargedMaxRange - ChargedMinRange,
+                               (Environment.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
+                               ChargeDuration - 150);
+                }
+
+                return ChargedMaxRange;
             }
             set { _range = value; }
         }
@@ -122,11 +122,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (!_from.To2D().IsValid())
-                {
-                    return ObjectManager.Player.ServerPosition;
-                }
-                return _from;
+                return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from;
             }
             set { _from = value; }
         }
@@ -296,7 +292,7 @@ namespace LeagueSharp.Common
             int minTargets = -1)
         {
             //Spell not ready.
-            if (!Slot.IsReady())
+            if (!IsReady())
             {
                 return CastStates.NotReady;
             }
@@ -400,7 +396,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            return Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
+            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
         }
 
         /// <summary>
@@ -408,7 +404,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (!Slot.IsReady() || From.Distance(unit.ServerPosition) > Range)
+            if (!IsReady() || From.Distance(unit.ServerPosition) > Range)
             {
                 return;
             }
@@ -448,6 +444,16 @@ namespace LeagueSharp.Common
             }
         }
 
+        public void Cast(Vector2 fromPosition, Vector2 toPosition)
+        {
+            ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition.To3D(), toPosition.To3D());
+        }
+
+        public void Cast(Vector3 fromPosition, Vector3 toPosition)
+        {
+            ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
+        }
+
         /// <summary>
         ///     Casts the spell to the position.
         /// </summary>
@@ -461,7 +467,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Cast(Vector3 position, bool packetCast = false)
         {
-            if (!Slot.IsReady())
+            if (!IsReady())
             {
                 return;
             }
@@ -511,6 +517,21 @@ namespace LeagueSharp.Common
         {
             var castResult = _cast(unit, packetCast, true, false, minTargets);
             return castResult == CastStates.SuccessfullyCasted;
+        }
+
+        /// <summary>
+        ///     Returns if the spell is ready to use.
+        /// </summary>
+        public bool IsReady(int t = 0)
+        {
+            if (t == 0 && ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready)
+            {
+                return false;
+            }
+
+            return t == 0 ||
+                   (ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
+                    (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= t / 1000f);
         }
 
         /// <summary>
@@ -638,6 +659,11 @@ namespace LeagueSharp.Common
         public bool InRange(Vector3 point)
         {
             return RangeCheckFrom.Distance(point, true) < Range * Range;
+        }
+
+        public bool InRange(Obj_AI_Base unit)
+        {
+            return RangeCheckFrom.Distance(unit.ServerPosition, true) < Range * Range;
         }
     }
 }

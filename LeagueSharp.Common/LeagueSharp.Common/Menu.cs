@@ -107,6 +107,67 @@ namespace LeagueSharp.Common
         }
     }
 
+    [Serializable]
+    internal static class SavedSettings
+    {
+        public static Dictionary<string, Dictionary<string, byte[]>> LoadedFiles = new Dictionary<string, Dictionary<string, byte[]>>();
+
+        public static byte[] GetSavedData(string name, string key)
+        {
+            Dictionary<string, byte[]> dic = null;
+
+            if (LoadedFiles.ContainsKey(name))
+            {
+                dic = LoadedFiles[name];
+            }
+            else
+            {
+                dic = Load(name);
+            }
+
+            if (dic != null)
+            {
+                if (dic.ContainsKey(key))
+                {
+                    return dic[key];
+                }
+            }
+
+            return null;
+        }
+
+        public static Dictionary<string, byte[]> Load(string name)
+        {
+            try
+            {
+                var fileName = Path.Combine(MenuSettings.MenuConfigPath, name + ".bin");
+                if (File.Exists(fileName))
+                {
+                    return Global.Deserialize<Dictionary<string, byte[]>>(File.ReadAllBytes(fileName));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return null;
+        }
+
+        public static void Save(string name,  Dictionary<string, byte[]> entries)
+        {
+            try
+            {
+                Directory.CreateDirectory(MenuSettings.MenuConfigPath);
+                var fileName = Path.Combine(MenuSettings.MenuConfigPath, name + ".bin");
+                File.WriteAllBytes(fileName, Global.Serialize(entries));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+    }
 
     internal static class MenuSettings
     {
@@ -200,7 +261,6 @@ namespace LeagueSharp.Common
                     Height = 14,
                     OutputPrecision = FontPrecision.Default,
                     Quality = FontQuality.Antialiased,
-                    //Weight = FontWeight.Bold,
                 });
             
             Drawing.OnPreReset += Drawing_OnPreReset;
@@ -326,6 +386,7 @@ namespace LeagueSharp.Common
                 };
                 AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
             }
+
         }
 
         internal int XLevel
@@ -624,17 +685,47 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal void SaveAll()
+        internal void RecursiveSaveAll(ref Dictionary<string, Dictionary<string, byte[]>> dics)
         {
             foreach (var child in Children)
             {
-                child.SaveAll();
+                child.RecursiveSaveAll(ref dics);
             }
 
             foreach (var item in Items)
             {
-                item.SaveToFile();
+                item.SaveToFile(ref dics);
             }
+        }
+
+        internal void SaveAll()
+        {
+            var dic = new Dictionary<string, Dictionary<string, byte[]>>();
+            RecursiveSaveAll(ref dic);
+            
+
+                foreach (var dictionary in dic)
+                {
+                    var dicToSave = SavedSettings.Load(dictionary.Key);
+                    if (dicToSave == null)
+                    {
+                        dicToSave = new Dictionary<string, byte[]>();
+                    }
+
+                    foreach (var entry in dictionary.Value)
+                    {
+                        if (!dicToSave.ContainsKey(entry.Key))
+                        {
+                            dicToSave.Add(entry.Key, entry.Value);
+                        }
+                        else
+                        {
+                            dicToSave[entry.Key] = entry.Value;
+                        }
+                    }
+
+                    SavedSettings.Save(dictionary.Key, dicToSave);
+                }
         }
 
         public void AddToMainMenu()
@@ -741,7 +832,6 @@ namespace LeagueSharp.Common
 
     public class MenuItem
     {
-        private readonly string _assemblyPath;
         public string DisplayName;
         internal bool Interacting;
         public string Name;
@@ -752,12 +842,20 @@ namespace LeagueSharp.Common
         private bool _dontSave;
         private bool _isShared;
 
-        private string _saveFilePath;
-        private bool _saved;
         private byte[] _serialized;
         private object _value;
         private bool _valueSet;
         private bool _visible;
+
+        internal string SaveFileName
+        {
+            get { return (_isShared ? "SharedConfig" : AppDomain.CurrentDomain.FriendlyName.Substring(8)); }
+        }
+
+        internal string SaveKey
+        {
+            get { return Utils.Md5Hash("v3" + DisplayName + Name); }
+        }
 
         public MenuItem(string name, string displayName, bool makeChampionUniq = false)
         {
@@ -766,7 +864,6 @@ namespace LeagueSharp.Common
 
             Name = name;
             DisplayName = displayName;
-            _assemblyPath = System.Reflection.Assembly.GetCallingAssembly().Location;
         }
 
         internal bool Visible
@@ -941,59 +1038,63 @@ namespace LeagueSharp.Common
                 Game.PrintChat("CommonLibMenu: Data type not supported");
             }
 
-            var dname = (_isShared ? "SharedConfig" : Path.GetFileName(_assemblyPath));
-            Directory.CreateDirectory(MenuSettings.MenuConfigPath);
-            Directory.CreateDirectory(MenuSettings.MenuConfigPath + dname);
+            var readBytes = SavedSettings.GetSavedData(SaveFileName, SaveKey);
 
-            _saveFilePath = MenuSettings.MenuConfigPath + dname + "\\" +
-                            Utils.Md5Hash("v2" + DisplayName + Name + newValue.GetType());
-
-            if (!_valueSet && File.Exists(_saveFilePath))
+            var v = newValue;
+            try
             {
-                switch (ValueType)
+                if (!_valueSet && readBytes != null)
                 {
-                    case MenuValueType.KeyBind:
-                        var savedKeyValue = (KeyBind) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
-                        if (savedKeyValue.Type == KeyBindType.Press)
-                        {
-                            savedKeyValue.Active = false;
-                        }
-                        newValue = (T) (object) savedKeyValue;
-                        break;
+                    switch (ValueType)
+                    {
+                        case MenuValueType.KeyBind:
+                            var savedKeyValue = (KeyBind)(object)Global.Deserialize<T>(readBytes);
+                            if (savedKeyValue.Type == KeyBindType.Press)
+                            {
+                                savedKeyValue.Active = false;
+                            }
+                            newValue = (T)(object)savedKeyValue;
+                            break;
 
-                    case MenuValueType.Circle:
-                        var savedCircleValue = (Circle) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
-                        var newCircleValue = (Circle) (object) newValue;
-                        savedCircleValue.Radius = newCircleValue.Radius;
-                        newValue = (T) (object) savedCircleValue;
-                        break;
+                        case MenuValueType.Circle:
+                            var savedCircleValue = (Circle)(object)Global.Deserialize<T>(readBytes);
+                            var newCircleValue = (Circle)(object)newValue;
+                            savedCircleValue.Radius = newCircleValue.Radius;
+                            newValue = (T)(object)savedCircleValue;
+                            break;
 
-                    case MenuValueType.Slider:
-                        var savedSliderValue = (Slider) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
-                        var newSliderValue = (Slider) (object) newValue;
-                        if (savedSliderValue.MinValue == newSliderValue.MinValue &&
-                            savedSliderValue.MaxValue == newSliderValue.MaxValue)
-                        {
-                            newValue = (T) (object) savedSliderValue;
-                        }
-                        break;
+                        case MenuValueType.Slider:
+                            var savedSliderValue = (Slider)(object)Global.Deserialize<T>(readBytes);
+                            var newSliderValue = (Slider)(object)newValue;
+                            if (savedSliderValue.MinValue == newSliderValue.MinValue &&
+                                savedSliderValue.MaxValue == newSliderValue.MaxValue)
+                            {
+                                newValue = (T)(object)savedSliderValue;
+                            }
+                            break;
 
-                    case MenuValueType.StringList:
-                        var savedListValue =
-                            (StringList) (object) Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
-                        var newListValue = (StringList) (object) newValue;
-                        if (savedListValue.SList.SequenceEqual(newListValue.SList))
-                        {
-                            newValue = (T) (object) savedListValue;
-                        }
-                        break;
+                        case MenuValueType.StringList:
+                            var savedListValue =
+                                (StringList)(object)Global.Deserialize<T>(readBytes);
+                            var newListValue = (StringList)(object)newValue;
+                            if (savedListValue.SList.SequenceEqual(newListValue.SList))
+                            {
+                                newValue = (T)(object)savedListValue;
+                            }
+                            break;
 
-                    default:
-                        newValue = Global.Deserialize<T>(File.ReadAllBytes(_saveFilePath));
-                        break;
+                        default:
+                            newValue = Global.Deserialize<T>(readBytes);
+                            break;
+                    }
                 }
             }
-
+            catch (Exception e)
+            {
+                newValue = v;
+                Console.WriteLine(e);
+            }
+            
             if (_valueSet)
             {
                 var handler = ValueChanged;
@@ -1004,18 +1105,21 @@ namespace LeagueSharp.Common
             }
 
             _valueSet = true;
-
             _value = newValue;
             _serialized = Global.Serialize(_value);
             return this;
         }
 
-        internal void SaveToFile()
+        internal void SaveToFile(ref Dictionary<string, Dictionary<string, byte[]>> dics)
         {
-            if (!_saved && _saveFilePath != null && !_dontSave)
+            if (!_dontSave)
             {
-                File.WriteAllBytes(_saveFilePath, _serialized);
-                _saved = true;
+                if (!dics.ContainsKey(SaveFileName))
+                {
+                    dics.Add(SaveFileName, new Dictionary<string, byte[]>());
+                }
+
+                dics[SaveFileName].Add(SaveKey, _serialized);
             }
         }
 

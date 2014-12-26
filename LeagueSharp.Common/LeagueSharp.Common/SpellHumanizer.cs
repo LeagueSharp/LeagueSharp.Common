@@ -33,7 +33,19 @@ namespace LeagueSharp.Common
 
         private static bool CanCast(GamePacket p)
         {
-            return ObjectManager.Player.Spellbook.CanUseSpell((SpellSlot) p.ReadByte(6)) == SpellState.Ready;
+            var slot = (SpellSlot) p.ReadByte(6);
+            SpellState state;
+
+            if (slot == SpellSlot.Summoner1 || slot == SpellSlot.Summoner2)
+            {
+                state = ObjectManager.Player.Spellbook.CanUseSpell(slot);
+            }
+            else
+            {
+                state = ObjectManager.Player.Spellbook.CanUseSpell(slot);
+            }
+
+            return state == SpellState.Ready;
         }
     }
 }

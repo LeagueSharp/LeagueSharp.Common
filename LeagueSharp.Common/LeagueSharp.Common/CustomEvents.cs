@@ -39,6 +39,15 @@ namespace LeagueSharp.Common
             static Game()
             {
                 LeagueSharp.Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+
+                if (LeagueSharp.Game.Mode == GameMode.Running)
+                {
+                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs())); //Otherwise the .ctor didn't return yet and no callback will occur
+                }
+                else
+                {
+                    LeagueSharp.Game.OnGameStart += Game_OnGameStart;
+                }
             }
 
             /// <summary>
@@ -50,19 +59,17 @@ namespace LeagueSharp.Common
             /// OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
             /// </summary>
             public static event OnGameEnded OnGameEnd;
+            
+            private static void Game_OnGameStart(EventArgs args)
+            {
+                if (OnGameLoad != null)
+                {
+                    OnGameLoad(new EventArgs());
+                }
+            }
 
             private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
-                // Use Packets as they come exactly when a game starts GG
             {
-                if (LeagueSharp.Game.Mode == GameMode.Running)
-                {
-                    if (OnGameLoad != null)
-                    {
-                        OnGameLoad(new EventArgs());
-                        LeagueSharp.Game.OnGameProcessPacket -= Game_OnGameProcessPacket; // delete the event
-                    }
-                }
-
                 //Game end packet
                 if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                 {
@@ -95,6 +102,7 @@ namespace LeagueSharp.Common
 
             private static void PacketHandler(GamePacketEventArgs args)
             {
+                return;//BROKEN on 4.21
                 if (OnLevelUpSpell != null)
                 {
                     if (args.PacketData[0] == 0x15)

@@ -73,7 +73,7 @@ namespace LeagueSharp.Common
             Flags = args.ProtocolFlag;
         }
 
-        public GamePacket(byte header)
+        public GamePacket(byte header, PacketChannel channel = PacketChannel.C2S, PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             Block = false;
             Ms = new MemoryStream();
@@ -84,6 +84,8 @@ namespace LeagueSharp.Common
             Bw.BaseStream.Position = 0;
             WriteByte(header);
             _header = header;
+            Channel = channel;
+            Flags = flags;
         }
 
         public byte Header
@@ -356,9 +358,10 @@ namespace LeagueSharp.Common
         public void Send(PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
+            return;//Blocked for now 4.21
             if (!Block)
             {
-                Game.SendPacket(Ms.ToArray(), channel, flags);
+                Game.SendPacket(Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel, Flags == PacketProtocolFlags.Reliable ? flags : Flags);
             }
         }
 
@@ -367,18 +370,23 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Process(PacketChannel channel = PacketChannel.S2C)
         {
+            return;//Blocked for now 4.21
             if (!Block)
             {
                 Game.ProcessPacket(Ms.ToArray(), channel);
             }
         }
-
         /// <summary>
         /// Dumps the packet.
         /// </summary>
-        public string Dump()
+        public string Dump(bool additionalInfo = false)
         {
-            return string.Concat(Ms.ToArray().Select(b => b.ToString("X2") + " "));
+            var s = string.Concat(Ms.ToArray().Select(b => b.ToString("X2") + " "));
+            if (additionalInfo)
+            {
+                s = "Channel: " + Channel + " Flags: " + Flags + " Data: " + s;
+            }
+            return s;
         }
 
         /// <summary>
@@ -388,7 +396,7 @@ namespace LeagueSharp.Common
         {
             var w = File.AppendText(filePath);
 
-            w.WriteLine(Dump());
+            w.WriteLine(Dump(true));
             w.Close();
         }
     }

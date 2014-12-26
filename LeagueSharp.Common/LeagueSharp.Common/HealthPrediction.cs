@@ -41,8 +41,8 @@ namespace LeagueSharp.Common
         static HealthPrediction()
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
-            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
             Game.OnGameUpdate += Game_OnGameUpdate;
+            Obj_AI_Base.OnInstantStopAttack += ObjAiHeroOnOnInstantStopAttack;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -58,19 +58,14 @@ namespace LeagueSharp.Common
             LastTick = Environment.TickCount;
         }
 
-        private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+        private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
         {
-            if (args.PacketData[0] != 0x34 || new GamePacket(args).ReadInteger(1) != ObjectManager.Player.NetworkId ||
-                (args.PacketData[5] != 0x11 && args.PacketData[5] != 0x91))
+            if (sender.IsValid && args.BitData != 33) 
             {
-                return;
-            }
-
-            var networkId = new GamePacket(args).ReadInteger(1);
-
-            if (ActiveAttacks.ContainsKey(networkId))
-            {
-                ActiveAttacks.Remove(networkId);
+                if (ActiveAttacks.ContainsKey(sender.NetworkId))
+                {
+                    ActiveAttacks.Remove(sender.NetworkId);
+                }
             }
         }
 

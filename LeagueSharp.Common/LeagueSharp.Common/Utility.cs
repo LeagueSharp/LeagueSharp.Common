@@ -39,10 +39,10 @@ namespace LeagueSharp.Common
     {
         /// <summary>
         ///     Returns if the source is facing the target.
-        /// </summary>
+        ///     <summary>
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
         {
-            if (!source.IsValid || !target.IsValid)
+            if (source == null || target == null)
             {
                 return false;
             }
@@ -66,34 +66,15 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns if the spell is ready to use.
-        /// </summary>
-        public static bool IsReady(this SpellDataInst spell, int t = 0)
-        {
-            return t == 0
-                ? spell.State == SpellState.Ready
-                : (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f);
-        }
-
-        public static bool IsReady(this Spell spell, int t = 0)
-        {
-            return IsReady(spell.Instance, t);
-        }
-
-        public static bool IsReady(this SpellSlot slot, int t = 0)
-        {
-            return IsReady(ObjectManager.Player.Spellbook.GetSpell(slot), t);
-        }
-
-        /// <summary>
         ///     Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
-        public static bool IsValidTarget(this AttackableUnit unit,
+        public static bool IsValidTarget(this Obj_AI_Base unit,
             float range = float.MaxValue,
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            if (!unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable || unit.IsInvulnerable)
+            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
+                unit.IsInvulnerable)
             {
                 return false;
             }
@@ -103,12 +84,10 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            var unitPosition = unit is Obj_AI_Base ? ((Obj_AI_Base) unit).ServerPosition : unit.Position;
-
             if (range < float.MaxValue &&
                 Vector2.DistanceSquared(
-                    (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(), unitPosition.To2D()) >
-                range * range)
+                    (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(),
+                    unit.ServerPosition.To2D()) > range * range)
             {
                 return false;
             }
@@ -173,6 +152,7 @@ namespace LeagueSharp.Common
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
+
 
         public static bool IsWall(this Vector3 position)
         {
@@ -268,14 +248,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
-        public static bool HasBuff(this Obj_AI_Base unit, string buffName)
-        {
-            return
-                unit.Buffs.Any(buff => (buff.DisplayName == buffName && buff.IsActive && buff.EndTime - Game.Time >= 0));
-        }
-
-        [Obsolete("Display Name is deprecated, please use HasBuff(this Obj_AI_Base unit, string buffName)", false)]
-        public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName)
+        public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName = false)
         {
             return
                 unit.Buffs.Any(
@@ -294,14 +267,6 @@ namespace LeagueSharp.Common
             foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
             {
                 return spell.Slot;
-            }
-
-            if (searchInSummoners)
-            {
-                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
-                {
-                    return spell.Slot;
-                }
             }
 
             return SpellSlot.Unknown;
@@ -454,7 +419,15 @@ namespace LeagueSharp.Common
                 {
                     if (ActionList[i].Time <= Environment.TickCount)
                     {
-                        ActionList[i].CallbackObject();
+                        try
+                        {
+                            if(ActionList[i].CallbackObject != null)
+                            {
+                                ActionList[i].CallbackObject(); //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
+                            }
+                        }
+                        catch(Exception e){}
+
                         ActionList.RemoveAt(i);
                     }
                 }
@@ -487,6 +460,7 @@ namespace LeagueSharp.Common
             private const int YOffset = 20;
             private const int Width = 103;
             private const int Height = 8;
+
             public static Color Color = Color.Lime;
             public static bool Enabled = true;
             private static DamageToUnitDelegate _damageToUnit;
@@ -536,6 +510,7 @@ namespace LeagueSharp.Common
             }
         }
 
+
         public class Map
         {
             public enum MapType
@@ -547,11 +522,12 @@ namespace LeagueSharp.Common
                 HowlingAbyss
             }
 
-            public MapType _MapType;
             public Vector2 Grid;
+
             public string Name;
             public string ShortName;
             public int StartingLevel;
+            public MapType _MapType;
 
             public Map(string name, string shortName, MapType map, Vector2 grid, int startLevel = 1)
             {
@@ -633,6 +609,7 @@ namespace LeagueSharp.Common
             }
         }
 
+
         /// <summary>
         ///     Internal class used to get the waypoints even when the enemy enters the fow of war.
         /// </summary>
@@ -677,35 +654,38 @@ namespace LeagueSharp.Common
         public static int MinorVersion;
         public static int Build;
         public static int Revision;
+
         private static readonly int[] VersionArray;
-        private static readonly string[] VersionString;
 
         static Version()
         {
-            VersionString = Game.Version.Split('.');
-            MajorVersion = Convert.ToInt32(VersionString[0]);
-            MinorVersion = Convert.ToInt32(VersionString[1]);
-            Build = Convert.ToInt32(VersionString[2]);
-            Revision = Convert.ToInt32(VersionString[3]);
+            var d = Game.Version.Split('.');
+            MajorVersion = Convert.ToInt32(d[0]);
+            MinorVersion = Convert.ToInt32(d[1]);
+            Build = Convert.ToInt32(d[2]);
+            Revision = Convert.ToInt32(d[3]);
 
             VersionArray = new[] { MajorVersion, MinorVersion, Build, Revision };
         }
 
         public static bool IsOlder(string version)
         {
-            return MinorVersion < Convert.ToInt32(version);
+            var d = version.Split('.');
+            return MinorVersion < Convert.ToInt32(d[1]);
         }
 
         public static bool IsNewer(string version)
         {
-            return MinorVersion > Convert.ToInt32(version);
+            var d = version.Split('.');
+            return MinorVersion > Convert.ToInt32(d[1]);
         }
 
         public static bool IsEqual(string version)
         {
-            for (var i = 0; i <= VersionString.Length; i++)
+            var d = version.Split('.');
+            for (var i = 0; i <= d.Length; i++)
             {
-                if (VersionString[i] == null || Convert.ToInt32(VersionString[i]) != VersionArray[i])
+                if (d[i] == null || Convert.ToInt32(d[i]) != VersionArray[i])
                 {
                     return false;
                 }

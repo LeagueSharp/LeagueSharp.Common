@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
@@ -16,13 +17,13 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
 
 using System.Collections.Generic;
 using System.Linq;
-
 using SharpDX;
 
 #endregion
@@ -33,7 +34,7 @@ namespace LeagueSharp.Common
     {
         None,
         Health,
-        MaxHealth,
+        MaxHealth
     }
 
     public enum MinionTeam
@@ -43,7 +44,7 @@ namespace LeagueSharp.Common
         Enemy,
         NotAlly,
         NotAllyForEnemy,
-        All,
+        All
     }
 
     public enum MinionTypes
@@ -51,13 +52,13 @@ namespace LeagueSharp.Common
         Ranged,
         Melee,
         All,
-        Wards, //TODO
+        Wards //TODO
     }
 
     public static class MinionManager
     {
         /// <summary>
-        /// Returns the minions in range from From.
+        ///     Returns the minions in range from From.
         /// </summary>
         public static List<Obj_AI_Base> GetMinions(Vector3 from,
             float range,
@@ -65,47 +66,45 @@ namespace LeagueSharp.Common
             MinionTeam team = MinionTeam.Enemy,
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
-            var result = new List<Obj_AI_Base>();
+            var result = (from minion in ObjectManager.Get<Obj_AI_Minion>()
+                where minion.IsValidTarget(range, false, @from)
+                let minionTeam = minion.Team
+                where
+                    team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
+                    team == MinionTeam.Ally &&
+                    minionTeam ==
+                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
+                    team == MinionTeam.Enemy &&
+                    minionTeam ==
+                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
+                    team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
+                    team == MinionTeam.NotAllyForEnemy &&
+                    (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
+                    team == MinionTeam.All
+                where
+                    minion.IsMelee() && type == MinionTypes.Melee || !minion.IsMelee() && type == MinionTypes.Ranged ||
+                    type == MinionTypes.All
+                where IsMinion(minion) || minionTeam == GameObjectTeam.Neutral
+                select minion).Cast<Obj_AI_Base>().ToList();
 
-            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
+            switch (order)
             {
-                if (minion.IsValidTarget(range, false, from))
-                {
-                    var minionTeam = minion.Team;
-                    if (team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
-                        team == MinionTeam.Ally &&
-                        minionTeam ==
-                        (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
-                        team == MinionTeam.Enemy &&
-                        minionTeam ==
-                        (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
-                        team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
-                        team == MinionTeam.NotAllyForEnemy &&
-                        (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
-                        team == MinionTeam.All)
-                    {
-                        if (minion.IsMelee() && type == MinionTypes.Melee ||
-                            !minion.IsMelee() && type == MinionTypes.Ranged || type == MinionTypes.All)
-                        {
-                            if (IsMinion(minion) || minionTeam == GameObjectTeam.Neutral)
-                            {
-                                result.Add(minion);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (order == MinionOrderTypes.Health)
-            {
-                result = result.OrderBy(o => o.Health).ToList();
-            }
-            else if (order == MinionOrderTypes.MaxHealth)
-            {
-                result = result.OrderBy(o => o.MaxHealth).Reverse().ToList();
+                case MinionOrderTypes.Health:
+                    result = result.OrderBy(o => o.Health).ToList();
+                    break;
+                case MinionOrderTypes.MaxHealth:
+                    result = result.OrderBy(o => o.MaxHealth).Reverse().ToList();
+                    break;
             }
 
             return result;
+        }
+
+        public static List<Obj_AI_Base> GetMinions(float range, MinionTypes type = MinionTypes.All,
+            MinionTeam team = MinionTeam.Enemy,
+            MinionOrderTypes order = MinionOrderTypes.Health)
+        {
+            return GetMinions(ObjectManager.Player.ServerPosition, range, type, team, order);
         }
 
         public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
@@ -115,7 +114,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the point where, when casted, the circular spell with hit the maximum amount of minions.
+        ///     Returns the point where, when casted, the circular spell with hit the maximum amount of minions.
         /// </summary>
         public static FarmLocation GetBestCircularFarmLocation(List<Vector2> minionPositions,
             float width,
@@ -125,7 +124,7 @@ namespace LeagueSharp.Common
             var result = new Vector2();
             var minionCount = 0;
 
-            range = range * range;
+            range = range*range;
 
             if (minionPositions.Count == 0)
             {
@@ -157,7 +156,7 @@ namespace LeagueSharp.Common
                         var count = 0;
                         foreach (var pos2 in minionPositions)
                         {
-                            if (Vector2.DistanceSquared(pos, pos2) <= width * width)
+                            if (Vector2.DistanceSquared(pos, pos2) <= width*width)
                             {
                                 count++;
                             }
@@ -175,7 +174,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the point where, when casted, the lineal spell with hit the maximum amount of minions.
+        ///     Returns the point where, when casted, the lineal spell with hit the maximum amount of minions.
         /// </summary>
         public static FarmLocation GetBestLineFarmLocation(List<Vector2> minionPositions, float width, float range)
         {
@@ -190,21 +189,21 @@ namespace LeagueSharp.Common
                 {
                     if (minionPositions[j] != minionPositions[i])
                     {
-                        minionPositions.Add((minionPositions[j] + minionPositions[i]) / 2);
+                        minionPositions.Add((minionPositions[j] + minionPositions[i])/2);
                     }
                 }
             }
 
             foreach (var pos in minionPositions)
             {
-                if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range * range)
+                if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range*range)
                 {
                     var count = 0;
-                    var endPos = startPos + range * (pos - startPos).Normalized();
+                    var endPos = startPos + range*(pos - startPos).Normalized();
 
                     foreach (var pos2 in minionPositions)
                     {
-                        if (pos2.Distance(startPos, endPos, true, true) <= width * width)
+                        if (pos2.Distance(startPos, endPos, true, true) <= width*width)
                         {
                             count++;
                         }
@@ -247,7 +246,7 @@ namespace LeagueSharp.Common
                     Type = stype,
                     RangeCheckFrom = rangeCheckFrom
                 });
-                 
+
                 if (pos.Hitchance >= HitChance.High)
                 {
                     result.Add(pos.UnitPosition.To2D());
@@ -262,7 +261,7 @@ namespace LeagueSharp.Common
          */
 
         /// <summary>
-        /// Returns all the subgroup combinations that can be made from a group
+        ///     Returns all the subgroup combinations that can be made from a group
         /// </summary>
         private static List<List<Vector2>> GetCombinations(List<Vector2> allValues)
         {
