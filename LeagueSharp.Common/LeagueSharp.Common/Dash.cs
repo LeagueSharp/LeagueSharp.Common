@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Dash.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using SharpDX;
 
 #endregion
@@ -67,25 +67,22 @@ namespace LeagueSharp.Common
 
         private static void GameOnOnGameUpdate(EventArgs args)
         {
-            foreach (var dashItem in DetectedDashes)
+            foreach (
+                var dashItem in
+                    DetectedDashes.Where(dashItem => !dashItem.Value.Processed)
+                        .Where(dashItem => dashItem.Value.Unit.IsValid))
             {
-                if (!dashItem.Value.Processed)
-                {
-                    if (dashItem.Value.Unit.IsValid)
-                    {
-                        DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
-                        DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
-                        DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
-                                                               (int)
-                                                                   (1000 *
-                                                                    (dashItem.Value.EndPos.Distance(
-                                                                        dashItem.Value.StartPos) / dashItem.Value.Speed));
-                        DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
-                        DetectedDashes[dashItem.Key].Processed = true;
+                DetectedDashes[dashItem.Key].Path = dashItem.Value.Unit.GetWaypoints();
+                DetectedDashes[dashItem.Key].EndPos = dashItem.Value.Path[dashItem.Value.Path.Count - 1];
+                DetectedDashes[dashItem.Key].EndTick = dashItem.Value.StartTick +
+                                                       (int)
+                                                           (1000 *
+                                                            (dashItem.Value.EndPos.Distance(dashItem.Value.StartPos) /
+                                                             dashItem.Value.Speed));
+                DetectedDashes[dashItem.Key].Duration = dashItem.Value.EndTick - dashItem.Value.StartTick;
+                DetectedDashes[dashItem.Key].Processed = true;
 
-                        CustomEvents.Unit.TriggerOnDash(dashItem.Value.Unit, DetectedDashes[dashItem.Key]);
-                    }
-                }
+                CustomEvents.Unit.TriggerOnDash(dashItem.Value.Unit, DetectedDashes[dashItem.Key]);
             }
         }
 

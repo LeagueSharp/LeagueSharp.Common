@@ -236,12 +236,7 @@ namespace LeagueSharp.Common
                 {
                     return 90;
                 }
-                if (v1.Y < 0)
-                {
-                    return 270;
-                }
-
-                return 0;
+                return v1.Y < 0 ? 270 : 0;
             }
 
             var theta = RadianToDegree(Math.Atan((v1.Y) / v1.X));

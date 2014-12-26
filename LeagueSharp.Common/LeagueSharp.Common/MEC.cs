@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ MEC.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -96,11 +96,10 @@ namespace LeagueSharp.Common
             GetMinMaxCorners(points, ref ul, ref ur, ref ll, ref lr);
 
             // Get the coordinates of a box that lies inside this quadrilateral.
-            float xmin, xmax, ymin, ymax;
-            xmin = ul.X;
-            ymin = ul.Y;
+            var xmin = ul.X;
+            var ymin = ul.Y;
 
-            xmax = ur.X;
+            var xmax = ur.X;
             if (ymin < ur.Y)
             {
                 ymin = ur.Y;
@@ -110,7 +109,7 @@ namespace LeagueSharp.Common
             {
                 xmax = lr.X;
             }
-            ymax = lr.Y;
+            var ymax = lr.Y;
 
             if (xmin < ll.X)
             {
@@ -156,19 +155,14 @@ namespace LeagueSharp.Common
 
             // Find the remaining point with the smallest Y value.
             // if (there's a tie, take the one with the smaller X value.
-            var best_pt = points[0];
-            foreach (var pt in points)
-            {
-                if ((pt.Y < best_pt.Y) || ((pt.Y == best_pt.Y) && (pt.X < best_pt.X)))
-                {
-                    best_pt = pt;
-                }
+            Vector2[] best_pt = { points[0] };
+            foreach (var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))) {
+                best_pt[0] = pt;
             }
 
             // Move this point to the convex hull.
-            var hull = new List<Vector2>();
-            hull.Add(best_pt);
-            points.Remove(best_pt);
+            var hull = new List<Vector2> { best_pt[0] };
+            points.Remove(best_pt[0]);
 
             // Start wrapping up the other points.
             float sweep_angle = 0;
@@ -184,7 +178,7 @@ namespace LeagueSharp.Common
                 // from the last point.
                 var X = hull[hull.Count - 1].X;
                 var Y = hull[hull.Count - 1].Y;
-                best_pt = points[0];
+                best_pt[0] = points[0];
                 float best_angle = 3600;
 
                 // Search the rest of the points.
@@ -194,7 +188,7 @@ namespace LeagueSharp.Common
                     if ((test_angle >= sweep_angle) && (best_angle > test_angle))
                     {
                         best_angle = test_angle;
-                        best_pt = pt;
+                        best_pt[0] = pt;
                     }
                 }
 
@@ -208,8 +202,8 @@ namespace LeagueSharp.Common
                 }
 
                 // Add the best point to the convex hull.
-                hull.Add(best_pt);
-                points.Remove(best_pt);
+                hull.Add(best_pt[0]);
+                points.Remove(best_pt[0]);
 
                 sweep_angle = best_angle;
             }
@@ -230,12 +224,12 @@ namespace LeagueSharp.Common
         // This function is dy / (dy + dx).
         private static float AngleValue(float x1, float y1, float x2, float y2)
         {
-            float dx, dy, ax, ay, t;
+            float t;
 
-            dx = x2 - x1;
-            ax = Math.Abs(dx);
-            dy = y2 - y1;
-            ay = Math.Abs(dy);
+            var dx = x2 - x1;
+            var ax = Math.Abs(dx);
+            var dy = y2 - y1;
+            var ay = Math.Abs(dy);
             if (ax + ay == 0)
             {
                 // if (the two points are the same, return 360.
@@ -337,21 +331,10 @@ namespace LeagueSharp.Common
             int skip2,
             int skip3)
         {
-            for (var i = 0; i < points.Count; i++)
-            {
-                if ((i != skip1) && (i != skip2) && (i != skip3))
-                {
-                    var point = points[i];
-                    var dx = center.X - point.X;
-                    var dy = center.Y - point.Y;
-                    var test_radius2 = dx * dx + dy * dy;
-                    if (test_radius2 > radius2)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return (from point in points.Where((t, i) => (i != skip1) && (i != skip2) && (i != skip3))
+                let dx = center.X - point.X
+                let dy = center.Y - point.Y
+                select dx * dx + dy * dy).All(test_radius2 => !(test_radius2 > radius2));
         }
 
         // Find a circle through the three points.

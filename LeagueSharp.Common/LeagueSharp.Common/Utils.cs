@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Utils.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -48,11 +48,11 @@ namespace LeagueSharp.Common
         WM_RBUTTONDOWN = 0x204,
         WM_RBUTTONUP = 0x205,
         WM_KEYDOWN = 0x0100,
-        WM_KEYUP = 0x101,
+        WM_KEYUP = 0x101
     }
 
     /// <summary>
-    /// Non game related utilities.
+    ///     Non game related utilities.
     /// </summary>
     public static class Utils
     {
@@ -60,20 +60,19 @@ namespace LeagueSharp.Common
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
         /// <summary>
-        /// Returns the cursor position on the screen.
+        ///     Returns the cursor position on the screen.
         /// </summary>
         public static Vector2 GetCursorPos()
         {
             return CursorPosT.GetCursorPos();
         }
 
-
         public static string KeyToText(uint vKey)
         {
             /*A-Z */
             if (vKey >= 65 && vKey <= 90)
             {
-                return ("" + (char) vKey);
+                return ((char) vKey).ToString();
             }
 
             /*F1-F12*/
@@ -106,7 +105,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the md5 hash from a string.
+        ///     Returns the md5 hash from a string.
         /// </summary>
         public static string Md5Hash(string s)
         {
@@ -122,19 +121,12 @@ namespace LeagueSharp.Common
             return sb.ToString();
         }
 
-
         /// <summary>
-        /// Returns true if the point is under the rectangle
+        ///     Returns true if the point is under the rectangle
         /// </summary>
         public static bool IsUnderRectangle(Vector2 point, float x, float y, float width, float height)
         {
             return (point.X > x && point.X < x + width && point.Y > y && point.Y < y + height);
-        }
-
-        public static string FormatTime(float time)
-        {
-            var t = TimeSpan.FromSeconds(time);
-            return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
         }
 
         public static string FormatTime(double time)
@@ -158,7 +150,8 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Searches in the haystack array for the given needle using the default equality operator and returns the index at which the needle starts.
+        ///     Searches in the haystack array for the given needle using the default equality operator and returns the index at
+        ///     which the needle starts.
         /// </summary>
         /// <typeparam name="T">Type of the arrays.</typeparam>
         /// <param name="haystack">Sequence to operate on.</param>
@@ -181,12 +174,11 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the directory where the assembly is located
+        ///     Returns the directory where the assembly is located
         /// </summary>
         public static string GetLocation()
         {
-            string FileLoc;
-            FileLoc = Assembly.GetExecutingAssembly().Location;
+            var FileLoc = Assembly.GetExecutingAssembly().Location;
             return FileLoc.Remove(FileLoc.LastIndexOf("\\", StringComparison.Ordinal));
         }
 
@@ -205,8 +197,8 @@ namespace LeagueSharp.Common
         private static extern IntPtr GetStdHandle(int handle);
 
         /// <summary>
-        /// Allows text in the console to be selected and copied.
-        /// <summary>
+        ///     Allows text in the console to be selected and copied.
+        /// </summary>
         public static void EnableConsoleEditMode()
         {
             int mode;

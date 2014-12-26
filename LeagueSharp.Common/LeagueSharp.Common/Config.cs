@@ -1,8 +1,34 @@
-﻿using System;
+﻿#region LICENSE
+
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Config.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#endregion
+
+#region
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
@@ -30,7 +56,7 @@ namespace LeagueSharp.Common
                     }
                     catch (Exception ee)
                     {
-                        Console.WriteLine("Could not resolve LeagueSharp directory: " + ee);
+                        Console.WriteLine(@"Could not resolve LeagueSharp directory: " + ee);
                         _leagueSharpDirectory = Directory.GetCurrentDirectory();
                     }
                 }
@@ -51,7 +77,8 @@ namespace LeagueSharp.Common
                         var config = new XmlDocument();
                         config.Load(configFile);
 
-                        if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
+                        if (config.DocumentElement != null &&
+                            config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
                             return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
                         }
@@ -94,15 +121,15 @@ namespace LeagueSharp.Common
 
         public static byte GetHotkey(string name, byte defaultValue)
         {
-            string configFile = Path.Combine(LeagueSharpDirectory, "config.xml");
+            var configFile = Path.Combine(LeagueSharpDirectory, "config.xml");
             try
             {
                 if (File.Exists(configFile))
                 {
                     var config = new XmlDocument();
                     config.Load(configFile);
-                    XmlNode node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
-                    foreach (XmlElement b in from XmlElement element in node.ChildNodes
+                    var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
+                    foreach (var b in from XmlElement element in node.ChildNodes
                         where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
                         select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
                         into b

@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Damage.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -90,6 +90,7 @@ namespace LeagueSharp.Common
                 IsActive = (source, target) => (source.HasBuff("aatroxwpower") && source.HasBuff("aatroxwonhpowerbuff")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
             };
+            AttackPassives.Add(p);
 
             #endregion
             
@@ -109,8 +110,7 @@ namespace LeagueSharp.Common
             };
             AttackPassives.Add(p);
             
-            #endregion
-            
+            #endregion    
 
             #region Caitlyn
 
@@ -5220,14 +5220,15 @@ namespace LeagueSharp.Common
             }
 
             //Passive damages
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null)
             {
-                var sourceAsHero = source as Obj_AI_Hero;
+                var sourceAsHero = hero;
 
                 //Spoils of War
-                if (source.IsMelee() && target is Obj_AI_Minion && target.IsEnemy &&
+                if (hero.IsMelee() && target is Obj_AI_Minion && target.IsEnemy &&
                     target.Team != GameObjectTeam.Neutral && target.Health <= 200 &&
-                    source.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))
+                    hero.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))
                 {
                     return 200;
                 }
@@ -5253,7 +5254,7 @@ namespace LeagueSharp.Common
                 //Arcane blade
                 if (sourceAsHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 132 && m.Points == 1))
                 {
-                    reduction -= CalcMagicDamage(source, target, 0.05 * source.FlatMagicDamageMod);
+                    reduction -= CalcMagicDamage(hero, target, 0.05 * hero.FlatMagicDamageMod);
                 }
             }
 
@@ -5262,7 +5263,7 @@ namespace LeagueSharp.Common
                 return CalcPhysicalDamage(source, target, result) * k - reduction;
             }
 
-            var targetAsHero = target as Obj_AI_Hero;
+            var targetAsHero = (Obj_AI_Hero) target;
 
             //Ninja tabi
             if (Items.HasItem(3047, targetAsHero))
@@ -5332,11 +5333,12 @@ namespace LeagueSharp.Common
                 };
             }
 
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null)
             {
-                return (from spell in source.Spellbook.Spells
+                return (from spell in hero.Spellbook.Spells
                     where String.Equals(spell.Name, spellName, StringComparison.InvariantCultureIgnoreCase)
-                    select GetDamageSpell((Obj_AI_Hero) source, target, spell.Slot)).FirstOrDefault();
+                    select GetDamageSpell(hero, target, spell.Slot)).FirstOrDefault();
             }
 
             return null;
@@ -5491,9 +5493,10 @@ namespace LeagueSharp.Common
             //Masteries:
 
             //Offensive masteries:
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null)
             {
-                var sourceAsHero = source as Obj_AI_Hero;
+                var sourceAsHero = hero;
 
                 //Double edge sword:
                 //  Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
@@ -5537,7 +5540,7 @@ namespace LeagueSharp.Common
                 return k;
             }
 
-            var targetAsHero = target as Obj_AI_Hero;
+            var targetAsHero = (Obj_AI_Hero) target;
 
             //Defensive masteries:
 

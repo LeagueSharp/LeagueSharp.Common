@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Menu.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -298,7 +298,7 @@ namespace LeagueSharp.Common
         public string Name;
         public Menu Parent;
         internal int _cachedMenuCount = -1;
-        internal int _cachedMenuCountT = 0;
+        internal int _cachedMenuCountT;
 
         private bool _visible;
 
@@ -352,18 +352,8 @@ namespace LeagueSharp.Common
                 {
                     return 0;
                 }
-                var result = Parent.YLevel;
 
-                foreach (var test in Parent.Children)
-                {
-                    if (test.Name == Name)
-                    {
-                        break;
-                    }
-                    result++;
-                }
-
-                return result;
+                return Parent.YLevel + Parent.Children.TakeWhile(test => test.Name != Name).Count();
             }
         }
 
@@ -376,15 +366,7 @@ namespace LeagueSharp.Common
                     return _cachedMenuCount;
                 }
                 var l = Global.Read<List<string>>("CommonMenuList");
-                var result = 0;
-                foreach (var s in l)
-                {
-                    if (s == DisplayName + Name)
-                    {
-                        break;
-                    }
-                    result++;
-                }
+                var result = l.TakeWhile(s => s != DisplayName + Name).Count();
 
                 _cachedMenuCount = result;
                 _cachedMenuCountT = Environment.TickCount;
@@ -409,7 +391,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                var xOffset = 0;
+                int xOffset;
 
                 if (Parent != null)
                 {
@@ -429,18 +411,9 @@ namespace LeagueSharp.Common
         {
             get
             {
-                var result = 0;
-                foreach (var item in Children)
-                {
-                    result = Math.Max(result, item.NeededWidth);
-                }
+                var result = Children.Select(item => item.NeededWidth).Concat(new[] { 0 }).Max();
 
-                foreach (var item in Items)
-                {
-                    result = Math.Max(result, item.NeededWidth);
-                }
-
-                return result;
+                return Items.Select(item => item.NeededWidth).Concat(new[] { result }).Max();
             }
         }
 
@@ -448,12 +421,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Parent != null)
-                {
-                    return Parent.ChildrenMenuWidth;
-                }
-
-                return MenuSettings.MenuItemWidth;
+                return Parent != null ? Parent.ChildrenMenuWidth : MenuSettings.MenuItemWidth;
             }
         }
 
@@ -475,7 +443,7 @@ namespace LeagueSharp.Common
                 {
                     return false;
                 }
-                return IsRootMenu ? true : _visible;
+                return IsRootMenu || _visible;
             }
             set 
             { 
@@ -557,19 +525,16 @@ namespace LeagueSharp.Common
             if (!IsRootMenu && Parent != null)
             {
                 //Close all the submenus in the level 
-                foreach (var child in Parent.Children)
+                foreach (var child in Parent.Children.Where(child => child.Name != Name))
                 {
-                    if (child.Name != Name)
+                    foreach (var schild in child.Children)
                     {
-                        foreach (var schild in child.Children)
-                        {
-                            schild.Visible = false;
-                        }
+                        schild.Visible = false;
+                    }
 
-                        foreach (var sitem in child.Items)
-                        {
-                            sitem.Visible = false;
-                        }
+                    foreach (var sitem in child.Items)
+                    {
+                        sitem.Visible = false;
                     }
                 }
             }
@@ -605,12 +570,9 @@ namespace LeagueSharp.Common
             MenuDrawHelper.Font.DrawText(null, ">", new SharpDX.Rectangle((int)Position.X - 5, (int)Position.Y, Width, Height), FontDrawFlags.Right | FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
 
             //Draw the menu submenus
-            foreach (var child in Children)
+            foreach (var child in Children.Where(child => child.Visible))
             {
-                if (child.Visible)
-                {
-                    child.Drawing_OnDraw(args);
-                }
+                child.Drawing_OnDraw(args);
             }
 
             //Draw the items
@@ -671,37 +633,20 @@ namespace LeagueSharp.Common
                 name = ObjectManager.Player.ChampionName + name;
 
             //Search in our own items
-            foreach (var item in Items)
+            foreach (var item in Items.Where(item => item.Name == name))
             {
-                if (item.Name == name)
-                {
-                    return item;
-                }
+                return item;
             }
 
             //Search in submenus
-            foreach (var subMenu in Children)
-            {
-                if (subMenu.Item(name) != null)
-                {
-                    return subMenu.Item(name);
-                }
-            }
-
-            return null;
+            return
+                (from subMenu in Children where subMenu.Item(name) != null select subMenu.Item(name)).FirstOrDefault();
         }
 
         public Menu SubMenu(string name)
         {
             //Search in submenus
-            foreach (var subMenu in Children)
-            {
-                if (subMenu.Name == name)
-                {
-                    return subMenu;
-                }
-            }
-            return null;
+            return Children.FirstOrDefault(subMenu => subMenu.Name == name);
         }
     }
 
@@ -771,18 +716,8 @@ namespace LeagueSharp.Common
 
         internal bool Visible
         {
-            get
-            {
-                if (!MenuSettings.DrawMenu)
-                {
-                    return false;
-                }
-                return _visible;
-            }
-            set
-            { 
-                _visible = value; 
-            }
+            get { return MenuSettings.DrawMenu && _visible; }
+            set { _visible = value; }
         }
 
         internal int YLevel
@@ -793,31 +728,14 @@ namespace LeagueSharp.Common
                 {
                     return 0;
                 }
-                var result = Parent.YLevel + Parent.Children.Count;
 
-                foreach (var test in Parent.Items)
-                {
-                    if (test.Name == Name)
-                    {
-                        break;
-                    }
-                    result++;
-                }
-                return result;
+                return Parent.YLevel + Parent.Children.Count + Parent.Items.TakeWhile(test => test.Name != Name).Count();
             }
         }
 
         internal Vector2 MyBasePosition
         {
-            get
-            {
-                if (Parent == null)
-                {
-                    return MenuSettings.BasePosition;
-                }
-
-                return Parent.MyBasePosition;
-            }
+            get { return Parent == null ? MenuSettings.BasePosition : Parent.MyBasePosition; }
         }
 
 
@@ -839,15 +757,7 @@ namespace LeagueSharp.Common
 
         internal int Width
         {
-            get
-            {
-                if(Parent != null)
-                {
-                    return Parent.ChildrenMenuWidth;
-                }
-                
-                return MenuSettings.MenuItemWidth;
-            }
+            get { return Parent != null ? Parent.ChildrenMenuWidth : MenuSettings.MenuItemWidth; }
         }
 
         internal int NeededWidth
@@ -859,14 +769,10 @@ namespace LeagueSharp.Common
                 if (ValueType == MenuValueType.StringList)
                 {
                     var slVal = GetValue<StringList>();
-                    var max = 0;
-                    foreach (var v in slVal.SList)
-                    {
-                        max = Math.Max(
-                            max,
-                            MenuDrawHelper.Font.MeasureText(null, v, FontDrawFlags.Left)
-                                .Width + 25);
-                    }
+                    var max =
+                        slVal.SList.Select(v => MenuDrawHelper.Font.MeasureText(null, v, FontDrawFlags.Left).Width + 25)
+                            .Concat(new[] { 0 })
+                            .Max();
 
                     extra += max;
                 }
@@ -1874,10 +1780,13 @@ namespace LeagueSharp.Common
 
             public static implicit operator HSLColor(Color color)
             {
-                var hslColor = new HSLColor();
-                hslColor.hue = color.GetHue() / 360.0; // we store hue as 0-1 as opposed to 0-360 
-                hslColor.luminosity = color.GetBrightness();
-                hslColor.saturation = color.GetSaturation();
+                var hslColor = new HSLColor
+                {
+                    hue = color.GetHue() / 360.0,
+                    luminosity = color.GetBrightness(),
+                    saturation = color.GetSaturation()
+                };
+                // we store hue as 0-1 as opposed to 0-360 
                 return hslColor;
             }
 

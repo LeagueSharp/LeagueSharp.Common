@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Packet.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,6 @@
  
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
- Hi there BoL devs - looking for an update again? :^ ) 
 */
 
 #endregion
@@ -1127,8 +1123,7 @@ namespace LeagueSharp.Common
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var pStruct = new ReturnStruct();
-                    pStruct.NetworkId = packet.ReadInteger(1);
+                    var pStruct = new ReturnStruct { NetworkId = packet.ReadInteger(1) };
 
                     pStruct.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(pStruct.NetworkId);
                     pStruct.UnknownFloat = packet.ReadFloat(7);
@@ -1160,8 +1155,7 @@ namespace LeagueSharp.Common
                 public static ReturnStruct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var pStruct = new ReturnStruct();
-                    pStruct.NetworkId = packet.ReadInteger(1);
+                    var pStruct = new ReturnStruct { NetworkId = packet.ReadInteger(1) };
 
                     pStruct.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(pStruct.NetworkId);
                     pStruct.BuffType = packet.ReadByte(7);
@@ -1609,9 +1603,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { UnitNetworkId = packet.ReadInteger(1) };
 
-                    result.UnitNetworkId = packet.ReadInteger(1);
                     packet.ReadShort();
                     result.MaxHealth = packet.ReadFloat();
                     result.CurrentHealth = packet.ReadFloat();
@@ -1692,11 +1685,13 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct
+                    {
+                        UnitNetworkId = packet.ReadInteger(5),
+                        CampId = packet.ReadInteger(),
+                        EmptyType = packet.ReadByte()
+                    };
 
-                    result.UnitNetworkId = packet.ReadInteger(5);
-                    result.CampId = packet.ReadInteger();
-                    result.EmptyType = packet.ReadByte();
                     return result;
                 }
 
@@ -1735,9 +1730,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { SourceNetworkId = packet.ReadInteger(1) };
 
-                    result.SourceNetworkId = packet.ReadInteger(1);
                     result.SourceUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.SourceNetworkId);
 
 
@@ -1828,10 +1822,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { UnitNetworkId = packet.ReadInteger(12), Speed = packet.ReadFloat() };
 
-                    result.UnitNetworkId = packet.ReadInteger(12);
-                    result.Speed = packet.ReadFloat();
 
                     return result;
                 }
@@ -1871,9 +1863,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { Winner = packet.ReadByte(5) };
 
-                    result.Winner = packet.ReadByte(5);
                     return result;
                 }
 
@@ -1911,10 +1902,12 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct
+                    {
+                        TurretNetworkId = packet.ReadInteger(1),
+                        TargetNetworkId = packet.ReadInteger()
+                    };
 
-                    result.TurretNetworkId = packet.ReadInteger(1);
-                    result.TargetNetworkId = packet.ReadInteger();
 
                     if (result.TurretNetworkId != 0)
                     {
@@ -1973,12 +1966,14 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct
+                    {
+                        NetworkId = packet.ReadInteger(1),
+                        Id = packet.ReadInteger(),
+                        BOk = packet.ReadByte() == 0x01,
+                        SkinId = packet.ReadInteger()
+                    };
 
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.Id = packet.ReadInteger();
-                    result.BOk = packet.ReadByte() == 0x01;
-                    result.SkinId = packet.ReadInteger();
 
                     return result;
                 }
@@ -2223,9 +2218,7 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.EmoteId = packet.ReadByte();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1), EmoteId = packet.ReadByte() };
                     return result;
                 }
 
@@ -2338,10 +2331,12 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct
+                    {
+                        NetworkId = packet.ReadInteger(1),
+                        Type = (FloatTextPacket) packet.ReadByte()
+                    };
 
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.Type = (FloatTextPacket) packet.ReadByte();
                     //result.Text = packet.ReadString();
 
                     return result;
@@ -2536,9 +2531,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1) };
 
-                    result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
 
                     result.BuffSlot = packet.ReadByte();
@@ -2591,9 +2585,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1) };
 
-                    result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
 
                     result.BuffSlot = packet.ReadByte();
@@ -2627,9 +2620,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1) };
 
-                    result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
                     result.Slot = (SpellSlot) packet.ReadByte();
                     packet.Position += 1;
@@ -2684,9 +2676,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1) };
 
-                    result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
                     result.InventorySlot = packet.ReadByte();
                     result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
@@ -2731,10 +2722,12 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct
+                    {
+                        NetworkId = packet.ReadInteger(1),
+                        Item = new Items.Item(packet.ReadShort(), 0)
+                    };
 
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.Item = new Items.Item(packet.ReadShort(), 0);
                     packet.Position += 2;
                     result.InventorySlot = packet.ReadByte();
                     result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
@@ -2789,10 +2782,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1), InventorySlot = packet.ReadByte() };
 
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.InventorySlot = packet.ReadByte();
                     result.SpellSlot = (SpellSlot) (result.InventorySlot + (byte) SpellSlot.Item1);
                     result.Stack = packet.ReadByte();
                     result.UnknownByte = packet.ReadByte();
@@ -2824,10 +2815,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1), FromInventorySlot = packet.ReadByte() };
 
-                    result.NetworkId = packet.ReadInteger(1);
-                    result.FromInventorySlot = packet.ReadByte();
                     result.FromSpellSlot = (SpellSlot) (result.FromInventorySlot + (byte) SpellSlot.Item1);
                     result.ToInventorySlot = packet.ReadByte();
                     result.ToSpellSlot = (SpellSlot) (result.ToInventorySlot + (byte) SpellSlot.Item1);
@@ -2859,9 +2848,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1) };
 
-                    result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
                     result.Slot = (SpellSlot) (packet.ReadByte());
                     result.UnknownByte = packet.ReadByte(); // 0, 1C, 48
@@ -2907,9 +2895,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { ReceivingNetworkId = packet.ReadInteger(5) };
 
-                    result.ReceivingNetworkId = packet.ReadInteger(5);
                     result.ReceivingUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.ReceivingNetworkId);
                     result.SourceNetworkId = packet.ReadInteger();
                     result.SourceUnit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.SourceNetworkId);
@@ -2951,9 +2938,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct();
+                    var result = new Struct { NetworkId = packet.ReadInteger(1) };
 
-                    result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(result.NetworkId);
                     result.Level = packet.ReadByte();
                     result.PointsLeft = packet.ReadByte();
