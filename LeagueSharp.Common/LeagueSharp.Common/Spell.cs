@@ -313,10 +313,9 @@ namespace LeagueSharp.Common
 
                 LastCastAttemptT = Environment.TickCount;
 
-                //if (packetCast)
-                if (false)
+                if (packetCast)
                 {
-                    Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
+                    ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false);
                 }
                 else
                 {
