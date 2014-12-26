@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ LastCastedSpell.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -96,38 +96,22 @@ namespace LeagueSharp.Common
 
         public static int LastCastedSpellT(this Obj_AI_Hero unit)
         {
-            if (CastedSpells.ContainsKey(unit.NetworkId))
-            {
-                return CastedSpells[unit.NetworkId].Tick;
-            }
-            return 0;
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Tick : 0;
         }
 
         public static string LastCastedSpellName(this Obj_AI_Hero unit)
         {
-            if (CastedSpells.ContainsKey(unit.NetworkId))
-            {
-                return CastedSpells[unit.NetworkId].Name;
-            }
-            return "";
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Name : "";
         }
 
         public static Obj_AI_Base LastCastedSpellTarget(this Obj_AI_Hero unit)
         {
-            if (CastedSpells.ContainsKey(unit.NetworkId))
-            {
-                return CastedSpells[unit.NetworkId].Target;
-            }
-            return null;
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Target : null;
         }
 
         public static LastCastedSpellEntry LastCastedspell(this Obj_AI_Hero unit)
         {
-            if (CastedSpells.ContainsKey(unit.NetworkId))
-            {
-                return CastedSpells[unit.NetworkId];
-            }
-            return null;
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId] : null;
         }
     }
 }

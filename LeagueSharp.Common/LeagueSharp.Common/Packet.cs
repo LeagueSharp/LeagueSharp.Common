@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Packet.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -976,7 +976,6 @@ namespace LeagueSharp.Common
             }
 
             #endregion
-
 
             #region Resume 4.21 (NO STRUCT)
 
