@@ -393,7 +393,7 @@ namespace LeagueSharp.Common
 
         private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
         {
-            if (sender.IsValid && sender.IsMe && args.BitData != 33) 
+             if (sender.IsValid && sender.IsMe && (args.BitData & 4) == 4) 
              {
                  ResetAutoAttackTimer();
              }
@@ -402,36 +402,46 @@ namespace LeagueSharp.Common
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
-            var spellName = Spell.SData.Name;
-
-            if (IsAutoAttackReset(spellName) && unit.IsMe)
+            try
             {
-                Utility.DelayAction.Add(250, ResetAutoAttackTimer);
-            }
+                var spellName = Spell.SData.Name;
 
-            if (!IsAutoAttack(spellName))
-            {
-                return;
-            }
-
-            if (unit.IsMe && Spell.Target is Obj_AI_Base)
-            {
-                LastAATick = Environment.TickCount - Game.Ping / 2;
-                var target = Spell.Target as Obj_AI_Base;
-                if (target.IsValid)
+                if (IsAutoAttackReset(spellName) && unit.IsMe)
                 {
-                    FireOnTargetSwitch(target);
-                    _lastTarget = target;
+                    Utility.DelayAction.Add(250, ResetAutoAttackTimer);
                 }
 
-                if (unit.IsMelee())
+                if (!IsAutoAttack(spellName))
                 {
-                    Utility.DelayAction.Add(
-                        (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                    return;
                 }
-            }
 
-            FireOnAttack(unit, _lastTarget);
+                if (unit.IsMe && Spell.Target is Obj_AI_Base)
+                {
+                    LastAATick = Environment.TickCount - Game.Ping / 2;
+                    var target = (Obj_AI_Base)Spell.Target;
+                    if (target.IsValid)
+                    {
+                        Console.WriteLine("just attacked " + target.BaseSkinName);
+                        FireOnTargetSwitch(target);
+                        _lastTarget = target;
+                    }
+
+                    if (unit.IsMelee())
+                    {
+                        Utility.DelayAction.Add(
+                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                    }
+                }
+
+                FireOnAttack(unit, _lastTarget);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
         }
 
         public class BeforeAttackEventArgs
@@ -738,22 +748,29 @@ namespace LeagueSharp.Common
 
             private void GameOnOnGameUpdate(EventArgs args)
             {
-                if (ActiveMode == OrbwalkingMode.None)
+                try
                 {
-                    return;
-                }
+                    if (ActiveMode == OrbwalkingMode.None)
+                    {
+                        return;
+                    }
 
-                //Prevent canceling important channeled spells like Miss Fortunes R.
-                if (Player.IsChannelingImportantSpell())
+                    //Prevent canceling important channeled spells like Miss Fortunes R.
+                    if (Player.IsChannelingImportantSpell())
+                    {
+                        return;
+                    }
+
+                    var target = GetTarget();
+                    Orbwalk(target
+                        , (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                        _config.Item("ExtraWindup").GetValue<Slider>().Value,
+                        _config.Item("HoldPosRadius").GetValue<Slider>().Value);
+                }
+                catch (Exception e)
                 {
-                    return;
+                    Console.WriteLine(e);
                 }
-
-                var target = GetTarget();
-                Orbwalk(target
-                    , (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
-                    _config.Item("ExtraWindup").GetValue<Slider>().Value,
-                    _config.Item("HoldPosRadius").GetValue<Slider>().Value);
             }
 
             private void DrawingOnOnDraw(EventArgs args)

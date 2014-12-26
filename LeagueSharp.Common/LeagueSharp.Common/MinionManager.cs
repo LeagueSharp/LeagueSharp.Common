@@ -22,6 +22,7 @@
 
 #region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
@@ -137,13 +138,16 @@ namespace LeagueSharp.Common
                 var subGroups = GetCombinations(minionPositions);
                 foreach (var subGroup in subGroups)
                 {
-                    var circle = MEC.GetMec(subGroup);
-
-                    if (circle.Radius <= width &&
-                        Vector2.DistanceSquared(circle.Center, ObjectManager.Player.ServerPosition.To2D()) <= range)
+                    if (subGroup.Count > 0)
                     {
-                        minionCount = subGroup.Count;
-                        return new FarmLocation(circle.Center, minionCount);
+                        var circle = MEC.GetMec(subGroup);
+
+                        if (circle.Radius <= width &&
+                            Vector2.DistanceSquared(circle.Center, ObjectManager.Player.ServerPosition.To2D()) <= range)
+                        {
+                            minionCount = subGroup.Count;
+                            return new FarmLocation(circle.Center, minionCount);
+                        }
                     }
                 }
             }
