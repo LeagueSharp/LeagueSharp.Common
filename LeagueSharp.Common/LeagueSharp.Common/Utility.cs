@@ -95,6 +95,26 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        /// <summary>
+        ///     Returns if the spell is ready to use.
+        /// </summary>
+        public static bool IsReady(this SpellDataInst spell, int t = 0)
+        {
+            return t == 0
+                ? spell.State == SpellState.Ready
+                : (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f);
+        }
+
+        public static bool IsReady(this Spell spell, int t = 0)
+        {
+            return IsReady(spell.Instance, t);
+        }
+
+        public static bool IsReady(this SpellSlot slot, int t = 0)
+        {
+            return IsReady(ObjectManager.Player.Spellbook.GetSpell(slot), t);
+        }
+
         public static bool IsValid<T>(this GameObject obj)
         {
             return obj.IsValid && obj is T;
@@ -152,7 +172,6 @@ namespace LeagueSharp.Common
         {
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
-
 
         public static bool IsWall(this Vector3 position)
         {
@@ -421,12 +440,13 @@ namespace LeagueSharp.Common
                     {
                         try
                         {
-                            if(ActionList[i].CallbackObject != null)
+                            if (ActionList[i].CallbackObject != null)
                             {
-                                ActionList[i].CallbackObject(); //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
+                                ActionList[i].CallbackObject();
+                                    //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
                             }
                         }
-                        catch(Exception e){}
+                        catch (Exception e) {}
 
                         ActionList.RemoveAt(i);
                     }
@@ -460,7 +480,6 @@ namespace LeagueSharp.Common
             private const int YOffset = 20;
             private const int Width = 103;
             private const int Height = 8;
-
             public static Color Color = Color.Lime;
             public static bool Enabled = true;
             private static DamageToUnitDelegate _damageToUnit;
@@ -510,7 +529,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         public class Map
         {
             public enum MapType
@@ -522,12 +540,11 @@ namespace LeagueSharp.Common
                 HowlingAbyss
             }
 
+            public MapType _MapType;
             public Vector2 Grid;
-
             public string Name;
             public string ShortName;
             public int StartingLevel;
-            public MapType _MapType;
 
             public Map(string name, string shortName, MapType map, Vector2 grid, int startLevel = 1)
             {
@@ -609,7 +626,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         /// <summary>
         ///     Internal class used to get the waypoints even when the enemy enters the fow of war.
         /// </summary>
@@ -654,7 +670,6 @@ namespace LeagueSharp.Common
         public static int MinorVersion;
         public static int Build;
         public static int Revision;
-
         private static readonly int[] VersionArray;
 
         static Version()

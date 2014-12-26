@@ -292,7 +292,7 @@ namespace LeagueSharp.Common
             int minTargets = -1)
         {
             //Spell not ready.
-            if (!IsReady())
+            if (!Slot.IsReady())
             {
                 return CastStates.NotReady;
             }
@@ -396,7 +396,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast()
         {
-            return IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
+            return Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
         }
 
         /// <summary>
@@ -404,7 +404,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (!IsReady() || From.Distance(unit.ServerPosition) > Range)
+            if (!Slot.IsReady() || From.Distance(unit.ServerPosition) > Range)
             {
                 return;
             }
@@ -467,7 +467,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Cast(Vector3 position, bool packetCast = false)
         {
-            if (!IsReady())
+            if (!Slot.IsReady())
             {
                 return;
             }
@@ -517,21 +517,6 @@ namespace LeagueSharp.Common
         {
             var castResult = _cast(unit, packetCast, true, false, minTargets);
             return castResult == CastStates.SuccessfullyCasted;
-        }
-
-        /// <summary>
-        ///     Returns if the spell is ready to use.
-        /// </summary>
-        public bool IsReady(int t = 0)
-        {
-            if (t == 0 && ObjectManager.Player.Spellbook.CanUseSpell(Slot) != SpellState.Ready)
-            {
-                return false;
-            }
-
-            return t == 0 ||
-                   (ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Cooldown &&
-                    (ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires - Game.Time) <= t / 1000f);
         }
 
         /// <summary>
