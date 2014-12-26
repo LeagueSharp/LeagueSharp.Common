@@ -422,7 +422,6 @@ namespace LeagueSharp.Common
                     var target = (Obj_AI_Base)Spell.Target;
                     if (target.IsValid)
                     {
-                        Console.WriteLine("just attacked " + target.BaseSkinName);
                         FireOnTargetSwitch(target);
                         _lastTarget = target;
                     }
