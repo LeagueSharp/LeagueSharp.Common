@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Interrupter.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -355,15 +355,16 @@ namespace LeagueSharp.Common
         {
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsValidTarget()))
             {
+                var enemy1 = enemy;
                 foreach (var spell in
                     Spells.Where(
                         spell =>
-                            (enemy.LastCastedspell() != null &&
+                            (enemy1.LastCastedspell() != null &&
                              String.Equals(
-                                 enemy.LastCastedspell().Name, spell.SpellName,
+                                 enemy1.LastCastedspell().Name, spell.SpellName,
                                  StringComparison.CurrentCultureIgnoreCase) &&
-                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true))))
+                             Environment.TickCount - enemy1.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                            (spell.BuffName != null && enemy1.HasBuff(spell.BuffName))))
                 {
                     FireOnInterruptable(enemy, spell);
                 }
@@ -377,9 +378,10 @@ namespace LeagueSharp.Common
                     .Any(
                         spell =>
                             (unit.LastCastedspell() != null &&
-                             unit.LastCastedspell().Name.ToLower() == spell.SpellName.ToLower() &&
+                             String.Equals(
+                                 unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
                              Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
+                            (spell.BuffName != null && unit.HasBuff(spell.BuffName)) ||
                             (ObjectManager.Player.NetworkId == unit.NetworkId &&
                              LastCastedSpell.LastCastPacketSent != null &&
                              LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&

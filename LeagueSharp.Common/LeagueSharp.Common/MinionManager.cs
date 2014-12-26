@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ MinionManager.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -65,44 +65,35 @@ namespace LeagueSharp.Common
             MinionTeam team = MinionTeam.Enemy,
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
-            var result = new List<Obj_AI_Base>();
+            var result = (from minion in ObjectManager.Get<Obj_AI_Minion>()
+                where minion.IsValidTarget(range, false, @from)
+                let minionTeam = minion.Team
+                where
+                    team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
+                    team == MinionTeam.Ally &&
+                    minionTeam ==
+                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
+                    team == MinionTeam.Enemy &&
+                    minionTeam ==
+                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
+                    team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
+                    team == MinionTeam.NotAllyForEnemy &&
+                    (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
+                    team == MinionTeam.All
+                where
+                    minion.IsMelee() && type == MinionTypes.Melee ||
+                    !minion.IsMelee() && type == MinionTypes.Ranged || type == MinionTypes.All
+                where IsMinion(minion) || minionTeam == GameObjectTeam.Neutral
+                select minion).Cast<Obj_AI_Base>().ToList();
 
-            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
+            switch (order)
             {
-                if (minion.IsValidTarget(range, false, from))
-                {
-                    var minionTeam = minion.Team;
-                    if (team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
-                        team == MinionTeam.Ally &&
-                        minionTeam ==
-                        (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
-                        team == MinionTeam.Enemy &&
-                        minionTeam ==
-                        (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
-                        team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
-                        team == MinionTeam.NotAllyForEnemy &&
-                        (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
-                        team == MinionTeam.All)
-                    {
-                        if (minion.IsMelee() && type == MinionTypes.Melee ||
-                            !minion.IsMelee() && type == MinionTypes.Ranged || type == MinionTypes.All)
-                        {
-                            if (IsMinion(minion) || minionTeam == GameObjectTeam.Neutral)
-                            {
-                                result.Add(minion);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (order == MinionOrderTypes.Health)
-            {
-                result = result.OrderBy(o => o.Health).ToList();
-            }
-            else if (order == MinionOrderTypes.MaxHealth)
-            {
-                result = result.OrderBy(o => o.MaxHealth).Reverse().ToList();
+                case MinionOrderTypes.Health:
+                    result = result.OrderBy(o => o.Health).ToList();
+                    break;
+                case MinionOrderTypes.MaxHealth:
+                    result = result.OrderBy(o => o.MaxHealth).Reverse().ToList();
+                    break;
             }
 
             return result;
@@ -154,14 +145,7 @@ namespace LeagueSharp.Common
                 {
                     if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range)
                     {
-                        var count = 0;
-                        foreach (var pos2 in minionPositions)
-                        {
-                            if (Vector2.DistanceSquared(pos, pos2) <= width * width)
-                            {
-                                count++;
-                            }
-                        }
+                        var count = minionPositions.Count(pos2 => Vector2.DistanceSquared(pos, pos2) <= width * width);
                         if (count >= minionCount)
                         {
                             result = pos;
@@ -199,16 +183,10 @@ namespace LeagueSharp.Common
             {
                 if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range * range)
                 {
-                    var count = 0;
                     var endPos = startPos + range * (pos - startPos).Normalized();
 
-                    foreach (var pos2 in minionPositions)
-                    {
-                        if (pos2.Distance(startPos, endPos, true, true) <= width * width)
-                        {
-                            count++;
-                        }
-                    }
+                    var count =
+                        minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
 
                     if (count >= minionCount)
                     {
@@ -231,30 +209,26 @@ namespace LeagueSharp.Common
             SkillshotType stype,
             Vector3 rangeCheckFrom = new Vector3())
         {
-            var result = new List<Vector2>();
             from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
-            foreach (var minion in minions)
-            {
-                var pos = Prediction.GetPrediction(new PredictionInput
-                {
-                    Unit = minion,
-                    Delay = delay,
-                    Radius = width,
-                    Speed = speed,
-                    From = from,
-                    Range = range,
-                    Collision = collision,
-                    Type = stype,
-                    RangeCheckFrom = rangeCheckFrom
-                });
-                 
-                if (pos.Hitchance >= HitChance.High)
-                {
-                    result.Add(pos.UnitPosition.To2D());
-                }
-            }
 
-            return result;
+            return (from minion in minions
+                select
+                    Prediction.GetPrediction(
+                        new PredictionInput
+                        {
+                            Unit = minion,
+                            Delay = delay,
+                            Radius = width,
+                            Speed = speed,
+                            From = @from,
+                            Range = range,
+                            Collision = collision,
+                            Type = stype,
+                            RangeCheckFrom = rangeCheckFrom
+                        })
+                into pos
+                where pos.Hitchance >= HitChance.High
+                select pos.UnitPosition.To2D()).ToList();
         }
 
         /*
@@ -269,14 +243,7 @@ namespace LeagueSharp.Common
             var collection = new List<List<Vector2>>();
             for (var counter = 0; counter < (1 << allValues.Count); ++counter)
             {
-                var combination = new List<Vector2>();
-                for (var i = 0; i < allValues.Count; ++i)
-                {
-                    if ((counter & (1 << i)) == 0)
-                    {
-                        combination.Add(allValues[i]);
-                    }
-                }
+                var combination = allValues.Where((t, i) => (counter & (1 << i)) == 0).ToList();
 
                 collection.Add(combination);
             }

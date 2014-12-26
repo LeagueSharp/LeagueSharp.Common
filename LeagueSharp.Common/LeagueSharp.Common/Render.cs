@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Render.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -574,7 +574,7 @@ namespace LeagueSharp.Common
                 catch (Exception e)
                 {
                     _vertices = null;
-                    Console.WriteLine("DrawCircle: " + e);
+                    Console.WriteLine(@"DrawCircle: " + e);
                 }
             }
         }
@@ -600,27 +600,13 @@ namespace LeagueSharp.Common
 
             public Vector2 Start
             {
-                get
-                {
-                    if (StartPositionUpdate != null)
-                    {
-                        return StartPositionUpdate();
-                    }
-                    return _start;
-                }
+                get { return StartPositionUpdate != null ? StartPositionUpdate() : _start; }
                 set { _start = value; }
             }
 
             public Vector2 End
             {
-                get
-                {
-                    if (EndPositionUpdate != null)
-                    {
-                        return EndPositionUpdate();
-                    }
-                    return _end;
-                }
+                get { return EndPositionUpdate != null ? EndPositionUpdate() : _end; }
                 set { _end = value; }
             }
 
@@ -966,11 +952,11 @@ namespace LeagueSharp.Common
                 UpdateTextureBitmap(SaturateBitmap(Bitmap, saturiation));
             }
 
-            private Bitmap SaturateBitmap(Bitmap original, float saturation)
+            private Bitmap SaturateBitmap(Image original, float saturation)
             {
-                var rWeight = 0.3086f;
-                var gWeight = 0.6094f;
-                var bWeight = 0.0820f;
+                const float rWeight = 0.3086f;
+                const float gWeight = 0.6094f;
+                const float bWeight = 0.0820f;
 
                 var a = (1.0f - saturation) * rWeight + saturation;
                 var b = (1.0f - saturation) * rWeight;
@@ -1238,14 +1224,7 @@ namespace LeagueSharp.Common
 
             public string text
             {
-                get
-                {
-                    if (TextUpdate != null)
-                    {
-                        return TextUpdate();
-                    }
-                    return _text;
-                }
+                get { return TextUpdate != null ? TextUpdate() : _text; }
                 set { _text = value; }
             }
 

@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ CustomEvents.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -42,12 +42,13 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            /// OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already running) and when reloading an assembly
+            ///     OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already
+            ///     running) and when reloading an assembly
             /// </summary>
             public static event OnGameLoaded OnGameLoad;
 
             /// <summary>
-            /// OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
+            ///     OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
             /// </summary>
             public static event OnGameEnded OnGameEnd;
 
@@ -66,7 +67,10 @@ namespace LeagueSharp.Common
                 //Game end packet
                 if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                 {
-                    OnGameEnd(new EventArgs());
+                    if (OnGameEnd != null)
+                    {
+                        OnGameEnd(new EventArgs());
+                    }
                 }
             }
         }
@@ -79,7 +83,6 @@ namespace LeagueSharp.Common
 
             public delegate void OnLeveledUpSpell(Obj_AI_Base sender, OnLevelUpSpellEventArgs args);
 
-
             static Unit()
             {
                 LeagueSharp.Game.OnGameProcessPacket += PacketHandler;
@@ -89,7 +92,7 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            /// OnLevelUpSpell gets called after you leveled a spell
+            ///     OnLevelUpSpell gets called after you leveled a spell
             /// </summary>
             public static event OnLeveledUpSpell OnLevelUpSpell;
 
@@ -116,12 +119,12 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            /// Gets called when a unit gets a level up
+            ///     Gets called when a unit gets a level up
             /// </summary>
             public static event OnLeveledUp OnLevelUp;
 
             /// <summary>
-            /// OnDash is getting called when a unit dashes.
+            ///     OnDash is getting called when a unit dashes.
             /// </summary>
             public static event OnDashed OnDash;
 
@@ -130,7 +133,7 @@ namespace LeagueSharp.Common
                 var dashHandler = OnDash;
                 if (dashHandler != null)
                 {
-                   dashHandler(sender, args);
+                    dashHandler(sender, args);
                 }
             }
 
@@ -145,8 +148,7 @@ namespace LeagueSharp.Common
                 public int Remainingpoints;
                 public int SpellId;
                 public int SpellLevel;
-
-                internal OnLevelUpSpellEventArgs() { }
+                internal OnLevelUpSpellEventArgs() {}
             }
         }
     }

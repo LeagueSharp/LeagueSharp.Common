@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Utility.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -103,17 +103,13 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            var unitPosition = unit is Obj_AI_Base ? ((Obj_AI_Base) unit).ServerPosition : unit.Position;
+            var @base = unit as Obj_AI_Base;
+            var unitPosition = @base != null ? @base.ServerPosition : unit.Position;
 
-            if (range < float.MaxValue &&
-                Vector2.DistanceSquared(
-                    (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(), unitPosition.To2D()) >
-                range * range)
-            {
-                return false;
-            }
-
-            return true;
+            return !(range < float.MaxValue) ||
+                   !(Vector2.DistanceSquared(
+                       (@from.To2D().IsValid() ? @from : ObjectManager.Player.ServerPosition).To2D(),
+                       unitPosition.To2D()) > range * range);
         }
 
         public static bool IsValid<T>(this GameObject obj)
@@ -296,15 +292,8 @@ namespace LeagueSharp.Common
                 return spell.Slot;
             }
 
-            if (searchInSummoners)
-            {
-                foreach (var spell in unit.SummonerSpellbook.Spells.Where(spell => spell.Name.ToLower() == name))
-                {
-                    return spell.Slot;
-                }
-            }
-
-            return SpellSlot.Unknown;
+            var firstOrDefault = unit.SummonerSpellbook.Spells.FirstOrDefault(spell => spell.Name.ToLower() == name);
+            return searchInSummoners ? (firstOrDefault == null ? SpellSlot.Unknown : firstOrDefault.Slot) : SpellSlot.Unknown;
         }
 
         /// <summary>

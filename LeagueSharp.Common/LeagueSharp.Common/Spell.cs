@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Spell.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
+                return ObjectManager.Player.HasBuff(ChargedBuffName) ||
                        Environment.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
         }
@@ -120,14 +120,7 @@ namespace LeagueSharp.Common
 
         public Vector3 From
         {
-            get
-            {
-                if (!_from.To2D().IsValid())
-                {
-                    return ObjectManager.Player.ServerPosition;
-                }
-                return _from;
-            }
+            get { return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from; }
             set { _from = value; }
         }
 
@@ -499,7 +492,7 @@ namespace LeagueSharp.Common
         {
             var currentHitchance = MinHitChance;
             MinHitChance = hitChance;
-            var castResult = _cast(unit, packetCast, false, false);
+            var castResult = _cast(unit, packetCast);
             MinHitChance = currentHitchance;
             return castResult == CastStates.SuccessfullyCasted;
         }
@@ -590,12 +583,8 @@ namespace LeagueSharp.Common
             HitChance minHitChance = HitChance.High)
         {
             var unitPosition = GetPrediction(unit);
-            if (unitPosition.Hitchance >= minHitChance)
-            {
-                return WillHit(unitPosition.UnitPosition, castPosition, extraWidth);
-            }
-
-            return false;
+            return unitPosition.Hitchance >= minHitChance &&
+                   WillHit(unitPosition.UnitPosition, castPosition, extraWidth);
         }
 
         /// <summary>
