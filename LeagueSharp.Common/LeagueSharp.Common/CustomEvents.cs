@@ -1,8 +1,8 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ CustomEvents.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,8 @@ namespace LeagueSharp.Common
 
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
-                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs())); //Otherwise the .ctor didn't return yet and no callback will occur
+                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs()));
+                        //Otherwise the .ctor didn't return yet and no callback will occur
                 }
                 else
                 {
@@ -51,15 +52,16 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            /// OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already running) and when reloading an assembly
+            ///     OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already
+            ///     running) and when reloading an assembly
             /// </summary>
             public static event OnGameLoaded OnGameLoad;
 
             /// <summary>
-            /// OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
+            ///     OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
             /// </summary>
             public static event OnGameEnded OnGameEnd;
-            
+
             private static void Game_OnGameStart(EventArgs args)
             {
                 if (OnGameLoad != null)
@@ -71,7 +73,12 @@ namespace LeagueSharp.Common
             private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
             {
                 //Game end packet
-                if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
+                if (args.PacketData[0] != Packet.S2C.GameEnd.Header)
+                {
+                    return;
+                }
+
+                if (OnGameEnd != null)
                 {
                     OnGameEnd(new EventArgs());
                 }
@@ -86,7 +93,6 @@ namespace LeagueSharp.Common
 
             public delegate void OnLeveledUpSpell(Obj_AI_Base sender, OnLevelUpSpellEventArgs args);
 
-
             static Unit()
             {
                 LeagueSharp.Game.OnGameProcessPacket += PacketHandler;
@@ -96,13 +102,13 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            /// OnLevelUpSpell gets called after you leveled a spell
+            ///     OnLevelUpSpell gets called after you leveled a spell
             /// </summary>
             public static event OnLeveledUpSpell OnLevelUpSpell;
 
             private static void PacketHandler(GamePacketEventArgs args)
             {
-                return;//BROKEN on 4.21
+                return; //BROKEN on 4.21
                 if (OnLevelUpSpell != null)
                 {
                     if (args.PacketData[0] == 0x15)
@@ -113,23 +119,25 @@ namespace LeagueSharp.Common
                         int lvl = args.PacketData[6];
                         int pts = args.PacketData[7];
                         OnLevelUpSpell(
-                            unit, new OnLevelUpSpellEventArgs { SpellId = id, SpellLevel = lvl, Remainingpoints = pts });
+                            unit, new OnLevelUpSpellEventArgs {SpellId = id, SpellLevel = lvl, Remainingpoints = pts});
                     }
                 }
-                if (OnLevelUp != null && args.PacketData[0] == Packet.S2C.LevelUp.Header)
+                if (OnLevelUp == null || args.PacketData[0] != Packet.S2C.LevelUp.Header)
                 {
-                    var dp = Packet.S2C.LevelUp.Decoded(args.PacketData);
-                    OnLevelUp(dp.Unit, new OnLevelUpEventArgs { NewLevel = dp.Level, RemainingPoints = dp.PointsLeft });
+                    return;
                 }
+
+                var dp = Packet.S2C.LevelUp.Decoded(args.PacketData);
+                OnLevelUp(dp.Unit, new OnLevelUpEventArgs {NewLevel = dp.Level, RemainingPoints = dp.PointsLeft});
             }
 
             /// <summary>
-            /// Gets called when a unit gets a level up
+            ///     Gets called when a unit gets a level up
             /// </summary>
             public static event OnLeveledUp OnLevelUp;
 
             /// <summary>
-            /// OnDash is getting called when a unit dashes.
+            ///     OnDash is getting called when a unit dashes.
             /// </summary>
             public static event OnDashed OnDash;
 
@@ -138,7 +146,7 @@ namespace LeagueSharp.Common
                 var dashHandler = OnDash;
                 if (dashHandler != null)
                 {
-                   dashHandler(sender, args);
+                    dashHandler(sender, args);
                 }
             }
 
@@ -154,7 +162,9 @@ namespace LeagueSharp.Common
                 public int SpellId;
                 public int SpellLevel;
 
-                internal OnLevelUpSpellEventArgs() { }
+                internal OnLevelUpSpellEventArgs()
+                {
+                }
             }
         }
     }
