@@ -393,7 +393,7 @@ namespace LeagueSharp.Common
 
         private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
         {
-             if (sender.IsValid && sender.IsMe && (args.BitData & 4) == 4) 
+             if (sender.IsValid && sender.IsMe && args.MissileNetworkId != 0)
              {
                  ResetAutoAttackTimer();
              }
