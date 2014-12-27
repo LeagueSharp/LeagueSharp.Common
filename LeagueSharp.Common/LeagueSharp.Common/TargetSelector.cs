@@ -262,7 +262,7 @@ namespace LeagueSharp.Common
             bool ignoreShields = false)
         {
             // Tryndamere's Undying Rage (R)
-            if (target.HasBuff("Undying Rage") && target.Health <= 2f)
+            if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
             {
                 return true;
             }
