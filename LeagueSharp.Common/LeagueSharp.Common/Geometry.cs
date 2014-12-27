@@ -47,6 +47,14 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Calculates the 2D distance to the unit.
+        /// </summary>
+        public static float Distance(this Obj_AI_Base unit, AttackableUnit anotherUnit, bool squared = false)
+        {
+            return unit.ServerPosition.To2D().Distance(anotherUnit.Position.To2D(), squared);
+        }
+
+        /// <summary>
         ///     Calculates the 2D distance to the point.
         /// </summary>
         public static float Distance(this Obj_AI_Base unit, Vector3 point, bool squared = false)
