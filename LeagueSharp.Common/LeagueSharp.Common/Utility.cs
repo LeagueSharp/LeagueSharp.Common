@@ -68,7 +68,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the target is valid (not dead, targetable, visible...).
         /// </summary>
-        public static bool IsValidTarget(this Obj_AI_Base unit,
+        public static bool IsValidTarget(this AttackableUnit unit,
             float range = float.MaxValue,
             bool checkTeam = true,
             Vector3 from = new Vector3())
@@ -84,10 +84,10 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            if (range < float.MaxValue &&
-                Vector2.DistanceSquared(
-                    (from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition).To2D(),
-                    unit.ServerPosition.To2D()) > range * range)
+            var unitPosition = unit is Obj_AI_Base ? ((Obj_AI_Base)unit).ServerPosition : unit.Position;
+
+            if (range < float.MaxValue && Vector2.DistanceSquared((from.To2D().IsValid() ? 
+                from : ObjectManager.Player.ServerPosition).To2D(), unitPosition.To2D()) > range * range)
             {
                 return false;
             }
