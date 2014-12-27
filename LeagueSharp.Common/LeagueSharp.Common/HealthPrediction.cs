@@ -60,6 +60,7 @@ namespace LeagueSharp.Common
 
         private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
         {
+            return;
             if (sender.IsValid && !new byte[] { 33, 97, 1, 225, 161, 0 }.Contains(args.BitData))
             {
                 if (ActiveAttacks.ContainsKey(sender.NetworkId))
