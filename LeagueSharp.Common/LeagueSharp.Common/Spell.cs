@@ -375,10 +375,7 @@ namespace LeagueSharp.Common
             }
             else if (packetCast)
             {
-                Packet.C2S.Cast.Encoded(
-                    new Packet.C2S.Cast.Struct(
-                        0, Slot, -1, prediction.CastPosition.X, prediction.CastPosition.Y, prediction.CastPosition.X,
-                        prediction.CastPosition.Y)).Send();
+                ObjectManager.Player.Spellbook.CastSpell(Slot, prediction.CastPosition, false);
             }
             else
             {
@@ -414,7 +411,7 @@ namespace LeagueSharp.Common
 
             if (packetCast)
             {
-                Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
+                ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false);
             }
             else
             {
@@ -441,7 +438,7 @@ namespace LeagueSharp.Common
             }
             else
             {
-                Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, Slot)).Send();
+                ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
             }
         }
 
@@ -490,8 +487,7 @@ namespace LeagueSharp.Common
             }
             else if (packetCast)
             {
-                Packet.C2S.Cast.Encoded(
-                    new Packet.C2S.Cast.Struct(0, Slot, -1, position.X, position.Y, position.X, position.Y)).Send();
+                ObjectManager.Player.Spellbook.CastSpell(Slot, position, false);
             }
             else
             {
