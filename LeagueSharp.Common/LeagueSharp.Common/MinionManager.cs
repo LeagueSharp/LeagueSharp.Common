@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ MinionManager.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -101,7 +101,8 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        public static List<Obj_AI_Base> GetMinions(float range, MinionTypes type = MinionTypes.All,
+        public static List<Obj_AI_Base> GetMinions(float range,
+            MinionTypes type = MinionTypes.All,
             MinionTeam team = MinionTeam.Enemy,
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
@@ -125,7 +126,7 @@ namespace LeagueSharp.Common
             var result = new Vector2();
             var minionCount = 0;
 
-            range = range*range;
+            range = range * range;
 
             if (minionPositions.Count == 0)
             {
@@ -157,14 +158,7 @@ namespace LeagueSharp.Common
                 {
                     if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range)
                     {
-                        var count = 0;
-                        foreach (var pos2 in minionPositions)
-                        {
-                            if (Vector2.DistanceSquared(pos, pos2) <= width*width)
-                            {
-                                count++;
-                            }
-                        }
+                        var count = minionPositions.Count(pos2 => Vector2.DistanceSquared(pos, pos2) <= width * width);
                         if (count >= minionCount)
                         {
                             result = pos;
@@ -193,25 +187,19 @@ namespace LeagueSharp.Common
                 {
                     if (minionPositions[j] != minionPositions[i])
                     {
-                        minionPositions.Add((minionPositions[j] + minionPositions[i])/2);
+                        minionPositions.Add((minionPositions[j] + minionPositions[i]) / 2);
                     }
                 }
             }
 
             foreach (var pos in minionPositions)
             {
-                if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range*range)
+                if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range * range)
                 {
-                    var count = 0;
-                    var endPos = startPos + range*(pos - startPos).Normalized();
+                    var endPos = startPos + range * (pos - startPos).Normalized();
 
-                    foreach (var pos2 in minionPositions)
-                    {
-                        if (pos2.Distance(startPos, endPos, true, true) <= width*width)
-                        {
-                            count++;
-                        }
-                    }
+                    var count =
+                        minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
 
                     if (count >= minionCount)
                     {
@@ -234,30 +222,26 @@ namespace LeagueSharp.Common
             SkillshotType stype,
             Vector3 rangeCheckFrom = new Vector3())
         {
-            var result = new List<Vector2>();
             from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
-            foreach (var minion in minions)
-            {
-                var pos = Prediction.GetPrediction(new PredictionInput
-                {
-                    Unit = minion,
-                    Delay = delay,
-                    Radius = width,
-                    Speed = speed,
-                    From = from,
-                    Range = range,
-                    Collision = collision,
-                    Type = stype,
-                    RangeCheckFrom = rangeCheckFrom
-                });
 
-                if (pos.Hitchance >= HitChance.High)
-                {
-                    result.Add(pos.UnitPosition.To2D());
-                }
-            }
-
-            return result;
+            return (from minion in minions
+                select
+                    Prediction.GetPrediction(
+                        new PredictionInput
+                        {
+                            Unit = minion,
+                            Delay = delay,
+                            Radius = width,
+                            Speed = speed,
+                            From = @from,
+                            Range = range,
+                            Collision = collision,
+                            Type = stype,
+                            RangeCheckFrom = rangeCheckFrom
+                        })
+                into pos
+                where pos.Hitchance >= HitChance.High
+                select pos.UnitPosition.To2D()).ToList();
         }
 
         /*
@@ -272,14 +256,7 @@ namespace LeagueSharp.Common
             var collection = new List<List<Vector2>>();
             for (var counter = 0; counter < (1 << allValues.Count); ++counter)
             {
-                var combination = new List<Vector2>();
-                for (var i = 0; i < allValues.Count; ++i)
-                {
-                    if ((counter & (1 << i)) == 0)
-                    {
-                        combination.Add(allValues[i]);
-                    }
-                }
+                var combination = allValues.Where((t, i) => (counter & (1 << i)) == 0).ToList();
 
                 collection.Add(combination);
             }

@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Dash.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -46,8 +46,7 @@ namespace LeagueSharp.Common
                 {
                     DetectedDashes.Add(sender.NetworkId, new DashItem());
                 }
-                var path = new List<Vector2>();
-                path.Add(sender.ServerPosition.To2D());
+                var path = new List<Vector2> { sender.ServerPosition.To2D() };
                 path.AddRange(args.Path.ToList().To2D());
 
                 DetectedDashes[sender.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;

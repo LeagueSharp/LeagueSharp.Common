@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Render.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -587,7 +587,7 @@ namespace LeagueSharp.Common
                 catch (Exception e)
                 {
                     _vertices = null;
-                    Console.WriteLine("DrawCircle: " + e);
+                    Console.WriteLine(@"DrawCircle: " + e);
                 }
             }
         }
@@ -613,27 +613,13 @@ namespace LeagueSharp.Common
 
             public Vector2 Start
             {
-                get
-                {
-                    if (StartPositionUpdate != null)
-                    {
-                        return StartPositionUpdate();
-                    }
-                    return _start;
-                }
+                get { return StartPositionUpdate != null ? StartPositionUpdate() : _start; }
                 set { _start = value; }
             }
 
             public Vector2 End
             {
-                get
-                {
-                    if (EndPositionUpdate != null)
-                    {
-                        return EndPositionUpdate();
-                    }
-                    return _end;
-                }
+                get { return EndPositionUpdate != null ? EndPositionUpdate() : _end; }
                 set { _end = value; }
             }
 
@@ -712,7 +698,7 @@ namespace LeagueSharp.Common
                 {
                     if (PositionUpdate != null)
                     {
-                        return (int)PositionUpdate().X;
+                        return (int) PositionUpdate().X;
                     }
                     return _x;
                 }
@@ -725,16 +711,18 @@ namespace LeagueSharp.Common
                 {
                     if (PositionUpdate != null)
                     {
-                        return (int)PositionUpdate().Y;
+                        return (int) PositionUpdate().Y;
                     }
                     return _y;
                 }
                 set { _y = value; }
             }
+
             public int Width { get; set; }
             public int Height { get; set; }
 
             public delegate Vector2 PositionDelegate();
+
             public PositionDelegate PositionUpdate { get; set; }
 
             public override void OnEndScene()
@@ -779,7 +767,7 @@ namespace LeagueSharp.Common
         {
             public delegate bool VisibleConditionDelegate(RenderObject sender);
 
-            public int Layer = 0;
+            public int Layer;
             public VisibleConditionDelegate VisibleCondition;
             private bool _visible = true;
 
@@ -789,15 +777,15 @@ namespace LeagueSharp.Common
                 set { _visible = value; }
             }
 
-            public virtual void OnDraw() { }
+            public virtual void OnDraw() {}
 
-            public virtual void OnEndScene() { }
+            public virtual void OnEndScene() {}
 
-            public virtual void OnPreReset() { }
+            public virtual void OnPreReset() {}
 
-            public virtual void OnPostReset() { }
+            public virtual void OnPostReset() {}
 
-            public virtual void Dispose() { }
+            public virtual void Dispose() {}
         }
 
         public class Sprite : RenderObject
@@ -878,12 +866,12 @@ namespace LeagueSharp.Common
 
             public int Width
             {
-                get { return Bitmap.Width; }
+                get { return (int) (Bitmap.Width * _scale.X); }
             }
 
             public int Height
             {
-                get { return Bitmap.Height; }
+                get { return (int) (Bitmap.Height * _scale.Y); }
             }
 
             public Vector2 Size
@@ -989,11 +977,11 @@ namespace LeagueSharp.Common
                 UpdateTextureBitmap(SaturateBitmap(Bitmap, saturiation));
             }
 
-            private Bitmap SaturateBitmap(Bitmap original, float saturation)
+            private static Bitmap SaturateBitmap(Image original, float saturation)
             {
-                var rWeight = 0.3086f;
-                var gWeight = 0.6094f;
-                var bWeight = 0.0820f;
+                const float rWeight = 0.3086f;
+                const float gWeight = 0.6094f;
+                const float bWeight = 0.0820f;
 
                 var a = (1.0f - saturation) * rWeight + saturation;
                 var b = (1.0f - saturation) * rWeight;
@@ -1062,9 +1050,9 @@ namespace LeagueSharp.Common
                     }
 
                     _sprite.Begin();
-                    Matrix matrix = _sprite.Transform;
-                    Matrix nMatrix = (Scale != null ? Matrix.Scaling(Scale.X, Scale.Y, 0) : Matrix.Scaling(1)) * 
-                        Matrix.RotationZ(Rotation) * Matrix.Translation(Position.X, Position.Y, 0);
+                    var matrix = _sprite.Transform;
+                    var nMatrix = (Matrix.Scaling(Scale.X, Scale.Y, 0)) * Matrix.RotationZ(Rotation) *
+                                  Matrix.Translation(Position.X, Position.Y, 0);
                     _sprite.Transform = nMatrix;
                     _sprite.Draw(_texture, _color);
                     _sprite.Transform = matrix;

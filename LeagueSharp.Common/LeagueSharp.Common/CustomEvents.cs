@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ CustomEvents.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -73,7 +73,10 @@ namespace LeagueSharp.Common
                 //Game end packet
                 if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                 {
-                    OnGameEnd(new EventArgs());
+                    if (OnGameEnd != null)
+                    {
+                        OnGameEnd(new EventArgs());
+                    }
                 }
             }
         }
