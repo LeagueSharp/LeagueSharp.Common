@@ -115,7 +115,7 @@ namespace LeagueSharp.Common
 
         public static bool IsValid<T>(this GameObject obj)
         {
-            return obj.IsValid && obj is T;
+            return obj != null && obj.IsValid && obj is T;
         }
 
         public static float HealthPercentage(this Obj_AI_Base unit)
