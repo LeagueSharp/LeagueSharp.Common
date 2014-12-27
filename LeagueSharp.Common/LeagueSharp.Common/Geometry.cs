@@ -101,11 +101,16 @@ namespace LeagueSharp.Common
         //Vector2 class extended methods:
 
         /// <summary>
-        /// Returns true if the Vector2 is valid.
+        /// Returns true if the vector is valid.
         /// </summary>
         public static bool IsValid(this Vector2 v)
         {
-            return (v.X != 0 && v.Y != 0);
+            return v != Vector2.Zero;
+        }
+
+        public static bool IsValid(this Vector3 v)
+        {
+            return v != Vector3.Zero;
         }
 
         /// <summary>
@@ -169,7 +174,18 @@ namespace LeagueSharp.Common
             return v;
         }
 
+        public static Vector3 Normalized(this Vector3 v)
+        {
+            v.Normalize();
+            return v;
+        }
+
         public static Vector2 Extend(this Vector2 v, Vector2 to, float distance)
+        {
+            return v + distance * (to - v).Normalized();
+        }
+
+        public static Vector3 Extend(this Vector3 v, Vector3 to, float distance)
         {
             return v + distance * (to - v).Normalized();
         }
