@@ -1503,7 +1503,7 @@ namespace LeagueSharp.Common
                 internal interface ITeleport
                 {
                     Type Type { get; }
-                    int GetDuration(byte[] packetData);
+                    int GetDuration(GameObjectTeleportEventArgs packetData);
                 }
 
                 internal class RecallTeleport : ITeleport
@@ -1513,10 +1513,9 @@ namespace LeagueSharp.Common
                         get { return Type.Recall; }
                     }
 
-                    public int GetDuration(byte[] packetData)
+                    public int GetDuration(GameObjectTeleportEventArgs args)
                     {
-                        var p = new GamePacket(packetData);
-                        return Utility.GetRecallTime(p.ReadString(30));
+                        return Utility.GetRecallTime(args.RecallName);
                     }
                 }
 
@@ -1527,7 +1526,7 @@ namespace LeagueSharp.Common
                         get { return Type.Teleport; }
                     }
 
-                    public int GetDuration(byte[] packetData)
+                    public int GetDuration(GameObjectTeleportEventArgs args)
                     {
                         return 3500;
                     }
@@ -1540,7 +1539,7 @@ namespace LeagueSharp.Common
                         get { return Type.TwistedFate; }
                     }
 
-                    public int GetDuration(byte[] packetData)
+                    public int GetDuration(GameObjectTeleportEventArgs args)
                     {
                         return 1500;
                     }
@@ -1553,7 +1552,7 @@ namespace LeagueSharp.Common
                         get { return Type.TwistedFate; }
                     }
 
-                    public int GetDuration(byte[] packetData)
+                    public int GetDuration(GameObjectTeleportEventArgs args)
                     {
                         return 3000;
                     }
@@ -1581,17 +1580,16 @@ namespace LeagueSharp.Common
                     return new GamePacket(Header);
                 }
 
-                public static Struct Decoded(byte[] data)
+                public static Struct Decoded(GameObject sender, GameObjectTeleportEventArgs args) //
                 {
-                    var packet = new GamePacket(data);
                     var result = new Struct
                     {
-                        UnitNetworkId = packet.ReadInteger(54),
+                        UnitNetworkId = sender.NetworkId,
                         Status = Status.Unknown,
                         Type = Type.Unknown
                     };
 
-                    string typeAsString = packet.ReadString(6);
+                    string typeAsString = args.RecallType;
                     var gameObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
 
                     if (gameObject == null)
@@ -1617,7 +1615,7 @@ namespace LeagueSharp.Common
                         {
                             ITeleport teleportMethod = TypeByString[typeAsString];
 
-                            int duration = teleportMethod.GetDuration(data);
+                            int duration = teleportMethod.GetDuration(args);
                             Type type = teleportMethod.Type;
                             int time = Environment.TickCount;
 
