@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -68,7 +68,7 @@ namespace LeagueSharp.Common
         public void Remove()
         {
             Visible = false;
-            base.Dispose();
+            Dispose();
         }
 
         private void Game_OnGameUpdate(EventArgs args)
@@ -79,7 +79,7 @@ namespace LeagueSharp.Common
             }
 
             Visible = false;
-            base.Dispose();
+            Dispose();
         }
     }
 }
