@@ -1665,6 +1665,48 @@ namespace LeagueSharp.Common
 
             #endregion
 
+           #region PlayEmote - 4.21
+
+            /// <summary>
+            ///     Gets received when an unit uses an emote.
+            /// </summary>
+            public static class PlayEmote
+            {
+                public static byte Header = 0xAA;
+
+                public static GamePacket Encoded(Struct packetStruct)
+                {
+                    var result = new GamePacket(Header);
+                    result.WriteByte(0);
+                    result.WriteInteger(packetStruct.NetworkId);
+                    result.WriteByte(packetStruct.EmoteId);
+                    return result;
+                }
+
+                public static Struct Decoded(byte[] data)
+                {
+                    var packet = new GamePacket(data);
+                    var result = new Struct();
+                    result.NetworkId = packet.ReadInteger(2);
+                    result.EmoteId = packet.ReadByte();
+                    return result;
+                }
+
+                public struct Struct
+                {
+                    public byte EmoteId;
+                    public int NetworkId;
+
+                    public Struct(byte emoteId, int networkId = -1)
+                    {
+                        EmoteId = emoteId;
+                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
+                    }
+                }
+            }
+
+            #endregion
+
             #region Damage - 4.21 partially
 
             /// <summary>
