@@ -694,7 +694,7 @@ namespace LeagueSharp.Common
                 }
 
                 /*turrets*/
-                if (ActiveMode != OrbwalkingMode.LaneClear)
+                if (ActiveMode != OrbwalkingMode.Combo)
                 {
                     foreach (var turret in
                         ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
@@ -704,7 +704,7 @@ namespace LeagueSharp.Common
                 }
 
                 /*inhibitor*/
-                if (ActiveMode != OrbwalkingMode.LaneClear)
+                if (ActiveMode != OrbwalkingMode.Combo)
                 {
                     foreach (var turret in
                         ObjectManager.Get<Obj_BarracksDampener>()
@@ -715,7 +715,7 @@ namespace LeagueSharp.Common
                 }
 
                 /*nexus*/
-                if (ActiveMode != OrbwalkingMode.LaneClear)
+                if (ActiveMode != OrbwalkingMode.Combo)
                 {
                     foreach (var nexus in
                         ObjectManager.Get<Obj_HQ>()
