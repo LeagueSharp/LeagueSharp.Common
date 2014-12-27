@@ -49,6 +49,18 @@ namespace LeagueSharp.Common
                 MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
+		
+        public static bool Evade
+        {
+            get { return Read<bool>("Evade"); }
+            set { Write("Evade", value); }
+        }
+
+        public static bool IsEvading
+        {
+            get { return Read<bool>("IsEvading"); }
+            set { Write("IsEvading", value); }
+        }
 
         // Convert an object to a byte array
         internal static byte[] Serialize(Object obj)
