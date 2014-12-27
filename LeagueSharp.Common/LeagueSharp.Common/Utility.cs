@@ -176,6 +176,11 @@ namespace LeagueSharp.Common
             return NavMesh.GetCollisionFlags(position).HasFlag(CollisionFlags.Wall);
         }
 
+        public static bool IsWall(this Vector2 position)
+        {
+            return position.To3D().IsWall();
+        }
+
         public static int GetRecallTime(Obj_AI_Hero obj)
         {
             return GetRecallTime(obj.Spellbook.GetSpell(SpellSlot.Recall).Name);
