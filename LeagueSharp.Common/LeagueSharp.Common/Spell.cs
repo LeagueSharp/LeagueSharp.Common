@@ -25,9 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.Common.MinionManager;
-using LeagueSharp.Common.Packet.C2S;
-using LeagueSharp.Common.Packet.C2S.Cast;
 using SharpDX;
 
 #endregion
@@ -47,29 +44,31 @@ namespace LeagueSharp.Common
             OutOfRange,
             Collision,
             NotEnoughTargets,
-            LowHitChance
+            LowHitChance,
         }
+
+        public int ChargeDuration;
+        public string ChargedBuffName;
+        public int ChargedMaxRange;
+        public int ChargedMinRange;
+        public string ChargedSpellName;
+
+        public bool Collision;
+        public float Delay;
+        public bool IsChargedSpell;
+        public bool IsSkillshot;
+        public int LastCastAttemptT = 0;
+        public HitChance MinHitChance = HitChance.High;
+        public SpellSlot Slot;
+        public float Speed;
+        public SkillshotType Type;
+        public float Width;
 
         private int _chargedCastedT;
         private int _chargedReqSentT;
         private Vector3 _from;
         private float _range;
         private Vector3 _rangeCheckFrom;
-        public string ChargedBuffName;
-        public int ChargedMaxRange;
-        public int ChargedMinRange;
-        public string ChargedSpellName;
-        public int ChargeDuration;
-        public bool Collision;
-        public float Delay;
-        public bool IsChargedSpell;
-        public bool IsSkillshot;
-        public int LastCastAttemptT;
-        public HitChance MinHitChance = HitChance.High;
-        public SpellSlot Slot;
-        public float Speed;
-        public SkillshotType Type;
-        public float Width;
 
         public Spell(SpellSlot slot, float range = float.MaxValue)
         {
@@ -121,7 +120,10 @@ namespace LeagueSharp.Common
 
         public Vector3 From
         {
-            get { return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from; }
+            get
+            {
+                return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from;
+            }
             set { _from = value; }
         }
 
@@ -201,9 +203,9 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == ChargedCast.Header && Environment.TickCount - _chargedReqSentT < 3000)
+            if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && Environment.TickCount - _chargedReqSentT < 3000)
             {
-                var decoded = ChargedCast.Decoded(args.PacketData);
+                var decoded = Packet.C2S.ChargedCast.Decoded(args.PacketData);
                 if (decoded.SourceNetworkId != ObjectManager.Player.NetworkId)
                 {
                     return;
@@ -212,9 +214,9 @@ namespace LeagueSharp.Common
                 args.Process = false;
             }
 
-            if (args.PacketData[0] == Header)
+            if (args.PacketData[0] == Packet.C2S.Cast.Header)
             {
-                var decoded = Decoded(args.PacketData);
+                var decoded = Packet.C2S.Cast.Decoded(args.PacketData);
                 if (decoded.Slot != Slot)
                 {
                     return;
@@ -258,7 +260,7 @@ namespace LeagueSharp.Common
                         Collision = Collision,
                         Type = Type,
                         RangeCheckFrom = RangeCheckFrom,
-                        Aoe = aoe
+                        Aoe = aoe,
                     });
         }
 
@@ -272,7 +274,7 @@ namespace LeagueSharp.Common
                     Type = Type,
                     Radius = Width,
                     Delay = delayOverride > 0 ? delayOverride : Delay,
-                    Speed = Speed
+                    Speed = Speed,
                 });
         }
 
@@ -314,12 +316,15 @@ namespace LeagueSharp.Common
                 //if (packetCast)
                 if (false)
                 {
-                    Encoded(new Struct(unit.NetworkId, Slot)).Send();
+                    Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
                 }
-                //Cant cast the Spell.
-                if (!ObjectManager.Player.Spellbook.CastSpell(Slot, unit))
+                else
                 {
-                    return CastStates.NotCasted;
+                    //Cant cast the Spell.
+                    if (!ObjectManager.Player.Spellbook.CastSpell(Slot, unit))
+                    {
+                        return CastStates.NotCasted;
+                    }
                 }
 
 
@@ -358,8 +363,8 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    ChargedCast.Encoded(
-                        new ChargedCast.Struct(
+                    Packet.C2S.ChargedCast.Encoded(
+                        new Packet.C2S.ChargedCast.Struct(
                             (SpellSlot) ((byte) Slot), prediction.CastPosition.X, ObjectManager.Player.ServerPosition.Z,
                             prediction.CastPosition.Y)).Send();
                 }
@@ -427,7 +432,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Cast(bool packetCast = false)
         {
-            if (!packetCast)
+            if(!packetCast)
             {
                 Cast();
             }
@@ -471,8 +476,9 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    ChargedCast.Encoded(
-                        new ChargedCast.Struct((SpellSlot) ((byte) Slot), position.X, position.Z, position.Y)).Send();
+                    Packet.C2S.ChargedCast.Encoded(
+                        new Packet.C2S.ChargedCast.Struct((SpellSlot) ((byte) Slot), position.X, position.Z, position.Y))
+                        .Send();
                 }
                 else
                 {
@@ -519,31 +525,35 @@ namespace LeagueSharp.Common
             return HealthPrediction.GetHealthPrediction(unit, time);
         }
 
-        public FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minionPositions,
+        public MinionManager.FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minionPositions,
             float overrideWidth = float.MaxValue)
         {
-            var positions = GetMinionsPredictedPositions(
+            var positions = MinionManager.GetMinionsPredictedPositions(
                 minionPositions, Delay, Width, Speed, From, Range, false, SkillshotType.SkillshotCircle);
 
             return GetCircularFarmLocation(positions, overrideWidth);
         }
 
-        public FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
+        public MinionManager.FarmLocation GetCircularFarmLocation(List<Vector2> minionPositions,
+            float overrideWidth = -1)
         {
-            return GetBestCircularFarmLocation(minionPositions, overrideWidth >= 0 ? overrideWidth : Width, Range);
+            return MinionManager.GetBestCircularFarmLocation(
+                minionPositions, overrideWidth >= 0 ? overrideWidth : Width, Range);
         }
 
-        public FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions, float overrideWidth = -1)
+        public MinionManager.FarmLocation GetLineFarmLocation(List<Obj_AI_Base> minionPositions,
+            float overrideWidth = -1)
         {
-            var positions = GetMinionsPredictedPositions(
+            var positions = MinionManager.GetMinionsPredictedPositions(
                 minionPositions, Delay, Width, Speed, From, Range, false, SkillshotType.SkillshotLine);
 
             return GetLineFarmLocation(positions, overrideWidth >= 0 ? overrideWidth : Width);
         }
 
-        public FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
+        public MinionManager.FarmLocation GetLineFarmLocation(List<Vector2> minionPositions, float overrideWidth = -1)
         {
-            return GetBestLineFarmLocation(minionPositions, overrideWidth >= 0 ? overrideWidth : Width, Range);
+            return MinionManager.GetBestLineFarmLocation(
+                minionPositions, overrideWidth >= 0 ? overrideWidth : Width, Range);
         }
 
         public int CountHits(List<Obj_AI_Base> units, Vector3 castPosition)
@@ -624,16 +634,14 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the point is in range of the spell.
         /// </summary>
-        public bool InRange(Vector3 point, int r = -1)
+        public bool InRange(Vector3 point)
         {
-            var range = r == -1 ? Range : r;
-            return RangeCheckFrom.Distance(point, true) < range * range;
+            return RangeCheckFrom.Distance(point, true) < Range * Range;
         }
 
-        public bool InRange(Obj_AI_Base unit, int r = -1)
+        public bool InRange(Obj_AI_Base unit)
         {
-            var range = r == -1 ? Range : r;
-            return RangeCheckFrom.Distance(unit.ServerPosition, true) < range * range;
+            return RangeCheckFrom.Distance(unit.ServerPosition, true) < Range * Range;
         }
     }
 }
