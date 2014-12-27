@@ -1054,7 +1054,7 @@ namespace LeagueSharp.Common
                     var nMatrix = (Matrix.Scaling(Scale.X, Scale.Y, 0)) * Matrix.RotationZ(Rotation) *
                                   Matrix.Translation(Position.X, Position.Y, 0);
                     _sprite.Transform = nMatrix;
-                    _sprite.Draw(_texture, _color);
+                    _sprite.Draw(_texture, _color, _crop);
                     _sprite.Transform = matrix;
                     _sprite.End();
                 }
