@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ AntiGapcloser.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -659,17 +659,16 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            foreach (var gapcloser in ActiveGapclosers)
+            foreach (
+                var gapcloser in
+                    ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
+                        .Where(
+                            gapcloser =>
+                                gapcloser.SkillType == GapcloserType.Targeted ||
+                                (gapcloser.SkillType == GapcloserType.Skillshot &&
+                                 ObjectManager.Player.Distance(gapcloser.Sender) < 500)))
             {
-                if (gapcloser.Sender.IsValidTarget())
-                {
-                    if (gapcloser.SkillType == GapcloserType.Targeted ||
-                        (gapcloser.SkillType == GapcloserType.Skillshot &&
-                         ObjectManager.Player.Distance(gapcloser.Sender) < 500))
-                    {
-                        OnEnemyGapcloser(gapcloser);
-                    }
-                }
+                OnEnemyGapcloser(gapcloser);
             }
         }
 

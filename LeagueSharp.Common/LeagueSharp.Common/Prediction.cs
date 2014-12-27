@@ -263,7 +263,7 @@ namespace LeagueSharp.Common
                     result = GetImmobilePrediction(input, remainingImmobileT);
                 }
             }
-            
+
             //Normal prediction
             if (result == null)
             {
@@ -274,7 +274,8 @@ namespace LeagueSharp.Common
             if (input.Range != float.MaxValue)
             {
                 if (result.Hitchance == HitChance.High &&
-                    input.RangeCheckFrom.Distance(input.Unit.Position, true) > Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
+                    input.RangeCheckFrom.Distance(input.Unit.Position, true) >
+                    Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
                 {
                     result.Hitchance = HitChance.Medium;
                 }
@@ -393,23 +394,20 @@ namespace LeagueSharp.Common
 
             var result = GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
 
-            if (result.Hitchance >= HitChance.High && input.Unit is Obj_AI_Hero) { }
+            if (result.Hitchance >= HitChance.High && input.Unit is Obj_AI_Hero) {}
 
             return result;
         }
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
-            var result = 0d;
-            foreach (var buff in unit.Buffs)
-            {
-                if (buff.IsActive && Game.Time <= buff.EndTime &&
-                    (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
-                     buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
-                {
-                    result = Math.Max(result, buff.EndTime);
-                }
-            }
+            var result =
+                unit.Buffs.Where(
+                    buff =>
+                        buff.IsActive && Game.Time <= buff.EndTime &&
+                        (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                    .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
             return (result - Game.Time);
         }
 
@@ -447,14 +445,19 @@ namespace LeagueSharp.Common
                         var direction = (b - a).Normalized();
 
                         var cp = a + direction * tDistance;
-                        var p = a + direction * ((i == path.Count - 2) ? Math.Min(tDistance + input.RealRadius, d) : (tDistance + input.RealRadius));
+                        var p = a +
+                                direction *
+                                ((i == path.Count - 2)
+                                    ? Math.Min(tDistance + input.RealRadius, d)
+                                    : (tDistance + input.RealRadius));
 
                         return new PredictionOutput
                         {
                             Input = input,
                             CastPosition = cp.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
+                            Hitchance =
+                                PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
 
@@ -475,8 +478,8 @@ namespace LeagueSharp.Common
                     var direction = (b - a).Normalized();
                     a = a - speed * tT * direction;
                     var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
-                    var t = (float)sol[0];
-                    var pos = (Vector2)sol[1];
+                    var t = (float) sol[0];
+                    var pos = (Vector2) sol[1];
 
                     if (pos.IsValid() && t >= tT && t <= tT + tB)
                     {
@@ -487,7 +490,7 @@ namespace LeagueSharp.Common
                             var alpha = (input.From.To2D() - p).AngleBetween(a - b);
                             if (alpha > 30 && alpha < 180 - 30)
                             {
-                                var beta = (float)Math.Asin(input.RealRadius / p.Distance(input.From));
+                                var beta = (float) Math.Asin(input.RealRadius / p.Distance(input.From));
                                 var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
                                 var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
 
@@ -500,7 +503,8 @@ namespace LeagueSharp.Common
                             Input = input,
                             CastPosition = pos.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
+                            Hitchance =
+                                PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
                     tT += tB;
@@ -537,13 +541,12 @@ namespace LeagueSharp.Common
         internal static List<PosibleTarget> GetPosibleTargets(PredictionInput input)
         {
             var result = new List<PosibleTarget>();
-            foreach (
-                var enemy in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            h =>
-                                h.NetworkId != input.Unit.NetworkId &&
-                                h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
+            foreach (var enemy in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(
+                        h =>
+                            h.NetworkId != input.Unit.NetworkId &&
+                            h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
             {
                 input.Unit = enemy;
                 var prediction = Prediction.GetPrediction(input, false, false);
@@ -581,7 +584,7 @@ namespace LeagueSharp.Common
                     {
                         return new PredictionOutput
                         {
-                            AoeTargetsHit = posibleTargets.Select(h => (Obj_AI_Hero)h.Unit).ToList(),
+                            AoeTargetsHit = posibleTargets.Select(h => (Obj_AI_Hero) h.Unit).ToList(),
                             CastPosition = mecCircle.Center.To3D(),
                             UnitPosition = mainTargetPrediction.UnitPosition,
                             Hitchance = mainTargetPrediction.Hitchance,
@@ -612,19 +615,13 @@ namespace LeagueSharp.Common
         {
             internal static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
             {
-                var result = 0;
-                foreach (var point in points)
-                {
-                    var edge1 = end.Rotated(-angle / 2);
-                    var edge2 = edge1.Rotated(angle);
-                    if (point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
-                        point.CrossProduct(edge2) > 0)
-                    {
-                        result++;
-                    }
-                }
-
-                return result;
+                return (from point in points
+                    let edge1 = end.Rotated(-angle / 2)
+                    let edge2 = edge1.Rotated(angle)
+                    where
+                        point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
+                        point.CrossProduct(edge2) > 0
+                    select point).Count();
             }
 
             public static PredictionOutput GetPrediction(PredictionInput input)
@@ -747,14 +744,12 @@ namespace LeagueSharp.Common
 
                     foreach (var candidate in candidates)
                     {
-                        if (GetHits(
+                        if (
+                            GetHits(
                                 input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3 - 10),
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
-                            var hits =
-                                GetHits(
-                                    input.From.To2D(), candidate, input.Radius,
-                                    positionsList).ToList();
+                            var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
                             var hitsCount = hits.Count;
                             if (hitsCount >= bestCandidateHits)
                             {
@@ -847,36 +842,44 @@ namespace LeagueSharp.Common
                     switch (objectType)
                     {
                         case CollisionableObjects.Minions:
-                            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
+                            foreach (
+                                var minion in
+                                    ObjectManager.Get<Obj_AI_Minion>()
+                                        .Where(
+                                            minion =>
+                                                minion.IsValidTarget(
+                                                    Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                                    input.RangeCheckFrom)))
                             {
-                                if (minion.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
+                                input.Unit = minion;
+                                var minionPrediction = Prediction.GetPrediction(input, false, false);
+                                if (
+                                    minionPrediction.UnitPosition.To2D()
+                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                    Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
                                 {
-                                    input.Unit = minion;
-                                    var minionPrediction = Prediction.GetPrediction(input, false, false);
-                                    if (
-                                        minionPrediction.UnitPosition.To2D()
-                                            .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                        Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
-                                    {
-                                        result.Add(minion);
-                                    }
+                                    result.Add(minion);
                                 }
                             }
                             break;
                         case CollisionableObjects.Heroes:
-                            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
+                            foreach (
+                                var hero in
+                                    ObjectManager.Get<Obj_AI_Hero>()
+                                        .Where(
+                                            hero =>
+                                                hero.IsValidTarget(
+                                                    Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                                    input.RangeCheckFrom)))
                             {
-                                if (hero.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
+                                input.Unit = hero;
+                                var prediction = Prediction.GetPrediction(input, false, false);
+                                if (
+                                    prediction.UnitPosition.To2D()
+                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
                                 {
-                                    input.Unit = hero;
-                                    var prediction = Prediction.GetPrediction(input, false, false);
-                                    if (
-                                        prediction.UnitPosition.To2D()
-                                            .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                        Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
-                                    {
-                                        result.Add(hero);
-                                    }
+                                    result.Add(hero);
                                 }
                             }
                             break;
@@ -895,41 +898,45 @@ namespace LeagueSharp.Common
 
                         case CollisionableObjects.YasuoWall:
 
-                        if (Environment.TickCount - WallCastT > 4000) break;
+                            if (Environment.TickCount - WallCastT > 4000)
+                                break;
 
-                        GameObject wall = null;
-                        foreach (var gameObject in ObjectManager.Get<GameObject>())
-                        {
-                            if (gameObject.IsValid &&
-                                System.Text.RegularExpressions.Regex.IsMatch(
-                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
-                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                            GameObject wall = null;
+                            foreach (
+                                var gameObject in
+                                    ObjectManager.Get<GameObject>()
+                                        .Where(
+                                            gameObject =>
+                                                gameObject.IsValid &&
+                                                System.Text.RegularExpressions.Regex.IsMatch(
+                                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
+                                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)))
                             {
                                 wall = gameObject;
                             }
-                        }
-                        if (wall == null)
-                        {
-                            break;
-                        }
-                        var level = wall.Name.Substring(wall.Name.Length - 6, 1);
-                        var wallWidth = (300 + 50 * Convert.ToInt32(level));
-
-                        var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
-                        var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
-                        var wallEnd = wallStart - wallWidth * wallDirection;
-                       
-                        if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
-                        {
-                            var t = Environment.TickCount + (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
-                                    .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
-                            if (t < WallCastT + 4000)
+                            if (wall == null)
                             {
-                                result.Add(ObjectManager.Player);
+                                break;
                             }
-                        }
-                                
-                        break;
+                            var level = wall.Name.Substring(wall.Name.Length - 6, 1);
+                            var wallWidth = (300 + 50 * Convert.ToInt32(level));
+
+                            var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
+                            var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
+                            var wallEnd = wallStart - wallWidth * wallDirection;
+
+                            if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
+                            {
+                                var t = Environment.TickCount +
+                                        (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
+                                            .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
+                                if (t < WallCastT + 4000)
+                                {
+                                    result.Add(ObjectManager.Player);
+                                }
+                            }
+
+                            break;
                     }
                 }
             }

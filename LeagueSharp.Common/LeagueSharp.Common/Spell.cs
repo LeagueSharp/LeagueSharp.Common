@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Spell.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -593,12 +593,8 @@ namespace LeagueSharp.Common
             HitChance minHitChance = HitChance.High)
         {
             var unitPosition = GetPrediction(unit);
-            if (unitPosition.Hitchance >= minHitChance)
-            {
-                return WillHit(unitPosition.UnitPosition, castPosition, extraWidth);
-            }
-
-            return false;
+            return unitPosition.Hitchance >= minHitChance &&
+                   WillHit(unitPosition.UnitPosition, castPosition, extraWidth);
         }
 
         /// <summary>

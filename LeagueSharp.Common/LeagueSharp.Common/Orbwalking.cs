@@ -693,38 +693,6 @@ namespace LeagueSharp.Common
                     }
                 }
 
-                /*turrets*/
-                if (ActiveMode != OrbwalkingMode.LaneClear)
-                {
-                    foreach (var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-                    {
-                        return turret;
-                    }
-                }
-
-                /*inhibitor*/
-                if (ActiveMode != OrbwalkingMode.LaneClear)
-                {
-                    foreach (var turret in
-                        ObjectManager.Get<Obj_BarracksDampener>()
-                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-                    {
-                        return turret;
-                    }
-                }
-
-                /*nexus*/
-                if (ActiveMode != OrbwalkingMode.LaneClear)
-                {
-                    foreach (var nexus in
-                        ObjectManager.Get<Obj_HQ>()
-                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-                    {
-                        return nexus;
-                    }
-                }
-
                 /*Lane Clear minions*/
                 r = float.MaxValue;
                 if (ActiveMode == OrbwalkingMode.LaneClear)
@@ -748,7 +716,7 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.GetAutoAttackDamage(minion, false) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon)
                             {
                                 if (minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon)
@@ -759,6 +727,33 @@ namespace LeagueSharp.Common
                                 }
                             }
                         }
+                    }
+                }
+
+                /* turrets / inhibitors / nexus */
+                if (ActiveMode == OrbwalkingMode.LaneClear)
+                {
+                    /* turrets */
+                    foreach (var turret in
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
+                        return turret;
+                    }
+
+                    /* inhibitor */
+                    foreach (var turret in
+                        ObjectManager.Get<Obj_BarracksDampener>()
+                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
+                        return turret;
+                    }
+
+                    /* nexus */
+                    foreach (var nexus in
+                        ObjectManager.Get<Obj_HQ>()
+                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
+                        return nexus;
                     }
                 }
 
