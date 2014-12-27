@@ -347,7 +347,7 @@ namespace LeagueSharp.Common
 
         private int _cachedMenuCount = -1;
         private int _cachedMenuCountT;
-        private FileInfo _menuStateFileInfo;
+        private FileStream _menuStateFileStream;
 
         private bool _visible;
 
@@ -361,9 +361,13 @@ namespace LeagueSharp.Common
             {
                 CustomEvents.Game.OnGameEnd += delegate { SaveAll(); };
                 Game.OnGameEnd += delegate { SaveAll(); };
-                AppDomain.CurrentDomain.DomainUnload += delegate { SaveAll(); };
+                AppDomain.CurrentDomain.DomainUnload += delegate
+                {
+                    SaveAll();
+                };
                 AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
             }
+
         }
 
         internal int XLevel
@@ -406,18 +410,14 @@ namespace LeagueSharp.Common
 
                 int result = 0;
                 int i = 0;
-                if (_menuStateFileInfo.Directory != null)
+                foreach (FileInfo info in Directory.GetParent(_menuStateFileStream.Name).EnumerateFiles().OrderBy(filename => filename.Name))
                 {
-                    foreach (FileInfo info in
-                        _menuStateFileInfo.Directory.EnumerateFiles().OrderBy(filename => filename.Name))
+                    if (info.FullName == _menuStateFileStream.Name)
                     {
-                        if (info.FullName == _menuStateFileInfo.FullName)
-                        {
-                            result = i;
-                            break;
-                        }
-                        i++;
+                        result = i;
+                        break;
                     }
+                    i++;
                 }
 
                 _cachedMenuCount = result;
@@ -696,42 +696,32 @@ namespace LeagueSharp.Common
 
         private void InitMenuState(string assemblyName)
         {
-            try
-            {
-                string menuState = Path.Combine(
+            string menuState = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuState");
-                if (!Directory.Exists(menuState))
-                {
-                    Directory.CreateDirectory(menuState);
-                }
-                string menuStateProcess = Path.Combine(
-                    menuState, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture));
-                if (!Directory.Exists(menuStateProcess))
-                {
-                    Directory.CreateDirectory(menuStateProcess);
-                }
-                string menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName);
-                _menuStateFileInfo = new FileInfo(menuStateProcessFile);
-                _menuStateFileInfo.Create();
-            }
-            catch (Exception e)
+            if (!Directory.Exists(menuState))
             {
-                Console.WriteLine(e);
+                Directory.CreateDirectory(menuState);
             }
+            string menuStateProcess = Path.Combine(
+                menuState, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture));
+            if (!Directory.Exists(menuStateProcess))
+            {
+                Directory.CreateDirectory(menuStateProcess);
+            }
+            string menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName);
+            _menuStateFileStream = File.Open(menuStateProcessFile, FileMode.OpenOrCreate);
+            _menuStateFileStream.Close();
         }
 
         private void UnloadMenuState()
         {
-            if (_menuStateFileInfo != null)
+            if (_menuStateFileStream != null)
             {
-                try
+                if (File.Exists(_menuStateFileStream.Name))
                 {
-                    _menuStateFileInfo.Delete();
+                    File.Delete(_menuStateFileStream.Name);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                _menuStateFileStream.Dispose();
             }
         }
 
@@ -753,9 +743,7 @@ namespace LeagueSharp.Common
         public MenuItem Item(string name, bool makeChampionUniq = false)
         {
             if (makeChampionUniq)
-            {
                 name = ObjectManager.Player.ChampionName + name;
-            }
 
             //Search in our own items
             foreach (var item in Items.Where(item => item.Name == name))
@@ -839,9 +827,7 @@ namespace LeagueSharp.Common
         public MenuItem(string name, string displayName, bool makeChampionUniq = false)
         {
             if (makeChampionUniq)
-            {
                 name = ObjectManager.Player.ChampionName + name;
-            }
 
             Name = name;
             DisplayName = displayName;
