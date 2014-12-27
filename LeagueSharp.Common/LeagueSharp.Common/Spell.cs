@@ -632,16 +632,26 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns if the point is in range of the spell.
+        ///     Returns if a spell can be cast and the target is in range.
         /// </summary>
-        public bool InRange(Vector3 point)
+        public bool CanCast(Obj_AI_Base unit)
         {
-            return RangeCheckFrom.Distance(point, true) < Range * Range;
+            return Slot.IsReady() && InRange(unit);
         }
 
-        public bool InRange(Obj_AI_Base unit)
+        /// <summary>
+        ///     Returns if the point is in range of the spell.
+        /// </summary>
+        public bool InRange(Vector3 point, int r = -1)
         {
-            return RangeCheckFrom.Distance(unit.ServerPosition, true) < Range * Range;
+            var range = r == -1 ? Range : r;
+            return RangeCheckFrom.Distance(point, true) < range * range;
+        }
+
+        public bool InRange(Obj_AI_Base unit, int r = -1)
+        {
+            var range = r == -1 ? Range : r;
+            return RangeCheckFrom.Distance(unit.ServerPosition, true) < range * range;
         }
     }
 }
