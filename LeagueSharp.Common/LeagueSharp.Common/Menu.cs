@@ -24,9 +24,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -341,8 +344,10 @@ namespace LeagueSharp.Common
         public List<MenuItem> Items = new List<MenuItem>();
         public string Name;
         public Menu Parent;
-        internal int _cachedMenuCount = -1;
-        internal int _cachedMenuCountT = 0;
+
+        private int _cachedMenuCount = -1;
+        private int _cachedMenuCountT;
+        private FileStream _menuStateFileStream;
 
         private bool _visible;
 
@@ -358,14 +363,6 @@ namespace LeagueSharp.Common
                 Game.OnGameEnd += delegate { SaveAll(); };
                 AppDomain.CurrentDomain.DomainUnload += delegate
                 {
-                    var m = Global.Read<List<string>>("CommonMenuList", true);
-                    if (m == default(List<string>))
-                    {
-                        m = new List<string>();
-                    }
-                    m.Remove(DisplayName + Name);
-                    Global.Write("CommonMenuList", m);
-
                     SaveAll();
                 };
                 AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
@@ -410,8 +407,17 @@ namespace LeagueSharp.Common
                 {
                     return _cachedMenuCount;
                 }
-                var l = Global.Read<List<string>>("CommonMenuList");
-                var result = l.TakeWhile(s => s != DisplayName + Name).Count();
+
+                int result = 0;
+                int i = 0;
+                foreach (FileInfo info in Directory.GetParent(_menuStateFileStream.Name).EnumerateFiles().OrderBy(filename => filename.Name))
+                {
+                    if (info.FullName == _menuStateFileStream.Name)
+                    {
+                        result = i;
+                    }
+                    i++;
+                }
 
                 _cachedMenuCount = result;
                 _cachedMenuCountT = Environment.TickCount;
@@ -543,7 +549,7 @@ namespace LeagueSharp.Common
                 if (cursorPos.X - MenuSettings.BasePosition.X < MenuSettings.MenuItemWidth)
                 {
                     var n = (int) (cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
-                    if (MenuCount != n && n < Global.Read<List<string>>("CommonMenuList").Count)
+                    if (MenuCount != n)
                     {
                         foreach (var schild in Children)
                         {
@@ -678,15 +684,44 @@ namespace LeagueSharp.Common
 
         public void AddToMainMenu()
         {
+            InitMenuState(Assembly.GetCallingAssembly().GetName().Name);
+
+            AppDomain.CurrentDomain.DomainUnload += (sender, args) => UnloadMenuState();
+            AppDomain.CurrentDomain.ProcessExit += (sender, args) => UnloadMenuState();
+
             Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
-            var m = Global.Read<List<string>>("CommonMenuList", true);
-            if (m == default(List<string>))
+        }
+
+        private void InitMenuState(string assemblyName)
+        {
+            string menuState = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuState");
+            if (!Directory.Exists(menuState))
             {
-                m = new List<string>();
+                Directory.CreateDirectory(menuState);
             }
-            m.Add(DisplayName + Name);
-            Global.Write("CommonMenuList", m);
+            string menuStateProcess = Path.Combine(
+                menuState, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture));
+            if (!Directory.Exists(menuStateProcess))
+            {
+                Directory.CreateDirectory(menuStateProcess);
+            }
+            string menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName);
+            _menuStateFileStream = File.Open(menuStateProcessFile, FileMode.OpenOrCreate);
+            _menuStateFileStream.Close();
+        }
+
+        private void UnloadMenuState()
+        {
+            if (_menuStateFileStream != null)
+            {
+                if (File.Exists(_menuStateFileStream.Name))
+                {
+                    File.Delete(_menuStateFileStream.Name);
+                }
+                _menuStateFileStream.Dispose();
+            }
         }
 
         public MenuItem AddItem(MenuItem item)
