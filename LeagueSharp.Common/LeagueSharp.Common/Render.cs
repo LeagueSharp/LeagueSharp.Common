@@ -866,12 +866,12 @@ namespace LeagueSharp.Common
 
             public int Width
             {
-                get { return Bitmap.Width; }
+                get { return (int) (Bitmap.Width * _scale.X); }
             }
 
             public int Height
             {
-                get { return Bitmap.Height; }
+                get { return (int) (Bitmap.Height * _scale.Y); }
             }
 
             public Vector2 Size
