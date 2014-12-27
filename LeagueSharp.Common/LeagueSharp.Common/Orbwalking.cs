@@ -668,6 +668,33 @@ namespace LeagueSharp.Common
                     return _forcedTarget;
                 }
 
+                /* turrets / inhibitors / nexus */
+                if (ActiveMode == OrbwalkingMode.LaneClear)
+                {
+                    /* turrets */
+                    foreach (var turret in
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
+                        return turret;
+                    }
+
+                    /* inhibitor */
+                    foreach (var turret in
+                        ObjectManager.Get<Obj_BarracksDampener>()
+                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
+                        return turret;
+                    }
+
+                    /* nexus */
+                    foreach (var nexus in
+                        ObjectManager.Get<Obj_HQ>()
+                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                    {
+                        return nexus;
+                    }
+                }
+
                 /*Champions*/
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
@@ -727,33 +754,6 @@ namespace LeagueSharp.Common
                                 }
                             }
                         }
-                    }
-                }
-
-                /* turrets / inhibitors / nexus */
-                if (ActiveMode == OrbwalkingMode.LaneClear)
-                {
-                    /* turrets */
-                    foreach (var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-                    {
-                        return turret;
-                    }
-
-                    /* inhibitor */
-                    foreach (var turret in
-                        ObjectManager.Get<Obj_BarracksDampener>()
-                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-                    {
-                        return turret;
-                    }
-
-                    /* nexus */
-                    foreach (var nexus in
-                        ObjectManager.Get<Obj_HQ>()
-                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
-                    {
-                        return nexus;
                     }
                 }
 
