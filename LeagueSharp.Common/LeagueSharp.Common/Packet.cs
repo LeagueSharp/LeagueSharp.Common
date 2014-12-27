@@ -1584,36 +1584,29 @@ namespace LeagueSharp.Common
                 {
                     var result = new Struct
                     {
-                        UnitNetworkId = sender.NetworkId,
                         Status = Status.Unknown,
                         Type = Type.Unknown
                     };
 
-                    string typeAsString = args.RecallType;
-                    var gameObject = ObjectManager.GetUnitByNetworkId<GameObject>(result.UnitNetworkId);
-
-                    if (gameObject == null)
+                    if(sender == null || !sender.IsValid || !(sender is Obj_AI_Hero))
                     {
                         return result;
                     }
 
-                    var hero = gameObject as Obj_AI_Hero;
-                    if (hero == null || !hero.IsValid)
-                    {
-                        return result;
-                    }
+                    result.UnitNetworkId = sender.NetworkId;
+
+                    var hero = sender as Obj_AI_Hero;
 
                     if (!RecallDataByNetworkId.ContainsKey(result.UnitNetworkId))
                     {
                         RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData {Type = Type.Unknown};
                     }
 
-
-                    if (!string.IsNullOrEmpty(typeAsString))
+                    if (!string.IsNullOrEmpty(args.RecallType))
                     {
-                        if (TypeByString.ContainsKey(typeAsString))
+                        if (TypeByString.ContainsKey(args.RecallType))
                         {
-                            ITeleport teleportMethod = TypeByString[typeAsString];
+                            ITeleport teleportMethod = TypeByString[args.RecallType];
 
                             int duration = teleportMethod.GetDuration(args);
                             Type type = teleportMethod.Type;
@@ -1666,48 +1659,6 @@ namespace LeagueSharp.Common
                         Type = type;
                         Duration = duration;
                         Start = start;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region PlayEmote - 4.21
-
-            /// <summary>
-            ///     Gets received when an unit uses an emote.
-            /// </summary>
-            public static class PlayEmote
-            {
-                public static byte Header = 0xAA;
-
-                public static GamePacket Encoded(Struct packetStruct)
-                {
-                    var result = new GamePacket(Header);
-                    result.WriteByte(0);
-                    result.WriteInteger(packetStruct.NetworkId);
-                    result.WriteByte(packetStruct.EmoteId);
-                    return result;
-                }
-
-                public static Struct Decoded(byte[] data)
-                {
-                    var packet = new GamePacket(data);
-                    var result = new Struct();
-                    result.NetworkId = packet.ReadInteger(2);
-                    result.EmoteId = packet.ReadByte();
-                    return result;
-                }
-
-                public struct Struct
-                {
-                    public byte EmoteId;
-                    public int NetworkId;
-
-                    public Struct(byte emoteId, int networkId = -1)
-                    {
-                        EmoteId = emoteId;
-                        NetworkId = networkId == -1 ? ObjectManager.Player.NetworkId : networkId;
                     }
                 }
             }
