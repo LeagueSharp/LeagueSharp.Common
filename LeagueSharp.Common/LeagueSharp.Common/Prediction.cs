@@ -248,6 +248,12 @@ namespace LeagueSharp.Common
             {
                 return new PredictionOutput { Input = input };
             }
+            //Unit is in stasis.
+            if (input.Unit.hasBuff(zhonyasringshield))
+            {
+             result = GetZhonyaPrediction(input, remainingImmobileT);
+            }
+
 
             //Unit is dashing.
             if (input.Unit.IsDashing())
@@ -357,6 +363,30 @@ namespace LeagueSharp.Common
 
             return result;
         }
+        
+        internal static PredictionOutput GetZhonyaPrediction(PredictionInput input, double remainingImmobileT)
+        {
+            var timeToReachTargetPosition = (input.Delay + input.Unit.Distance(input.From) / input.Speed);
+            if (timeToReachTargetPosition = remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed)
+            {
+                return new PredictionOutput
+                {
+                    CastPosition = input.Unit.ServerPosition,
+                    UnitPosition = input.Unit.Position,
+                    Hitchance = HitChance.High,
+                };
+            }
+
+            return new PredictionOutput
+            {
+                Input = input,
+                CastPosition = input.Unit.ServerPosition,
+                UnitPosition = input.Unit.ServerPosition,
+                Hitchance = HitChance.High
+                /*timeToReachTargetPosition - remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed < 0.4d ? HitChance.High : HitChance.Medium*/,
+            };
+        }
+
 
         internal static PredictionOutput GetImmobilePrediction(PredictionInput input, double remainingImmobileT)
         {
@@ -406,7 +436,7 @@ namespace LeagueSharp.Common
                     buff =>
                         buff.IsActive && Game.Time <= buff.EndTime &&
                         (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
-                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare || buff.Name == "zhonyasringshield"))
                     .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
             return (result - Game.Time);
         }
