@@ -415,6 +415,7 @@ namespace LeagueSharp.Common
                     if (info.FullName == _menuStateFileStream.Name)
                     {
                         result = i;
+                        break;
                     }
                     i++;
                 }
