@@ -710,7 +710,7 @@ namespace LeagueSharp.Common
                 {
                     Directory.CreateDirectory(menuStateProcess);
                 }
-                string menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName);
+                string menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName + "." + Name);
                 _menuStateFileInfo = new FileInfo(menuStateProcessFile);
                 _menuStateFileInfo.Create();
             }
