@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Global.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -30,12 +30,13 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Diagnostics;
+using System.Linq;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
-    public static class Global 
+    public static class Global
     {
         internal static MemoryMappedFile MMFile;
         internal static int MemoryCapacity = 1024 * 1024;
@@ -83,7 +84,7 @@ namespace LeagueSharp.Common
                         var hash = CalculateHash(key);
 
                         var signature = strm.ReadInt32(0);
-                        var startingOffset = 2 * sizeof (int);
+                        const int startingOffset = 2 * sizeof (int);
                         int currentOffset;
                         if (signature == 0x34CFABC0)
                         {
@@ -96,12 +97,11 @@ namespace LeagueSharp.Common
                             currentOffset = startingOffset;
                         }
                         var thisOffset = startingOffset;
-                        OffsetEntry entry;
                         while (thisOffset != currentOffset)
                         {
                             var buff = new byte[OffsetEntrySize];
                             strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
-                            entry = FromByteArray<OffsetEntry>(buff);
+                            var entry = FromByteArray<OffsetEntry>(buff);
                             if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
                             {
                                 if (typeof(T).IsValueType)
@@ -174,7 +174,7 @@ namespace LeagueSharp.Common
                 using (var strm = MMFile.CreateViewAccessor())
                 {
                     var signature = strm.ReadInt32(0);
-                    var startingOffset = 2 * sizeof (int);
+                    const int startingOffset = 2 * sizeof (int);
                     int currentOffset;
                     if (signature == 0x34CFABC0)
                     {
@@ -187,12 +187,11 @@ namespace LeagueSharp.Common
                         currentOffset = startingOffset;
                     }
                     var thisOffset = startingOffset;
-                    OffsetEntry entry;
                     while (thisOffset != currentOffset)
                     {
                         var buff = new byte[OffsetEntrySize];
                         strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
-                        entry = FromByteArray<OffsetEntry>(buff);
+                        var entry = FromByteArray<OffsetEntry>(buff);
                         if (entry.Type != EntryType.Invalid && LoadedEntries.ContainsKey(entry.KeyHash))
                         {
                             if (LoadedEntries[entry.KeyHash].Length <= entry.Capacity)
@@ -239,7 +238,7 @@ namespace LeagueSharp.Common
                     using (var fl = new System.IO.BinaryWriter(System.IO.File.Create(path)))
                     {
                         var signature = strm.ReadInt32(0);
-                        var startingOffset = 2 * sizeof (int);
+                        const int startingOffset = 2 * sizeof (int);
                         int currentOffset;
                         if (signature == 0x34CFABC0)
                         {
@@ -252,24 +251,22 @@ namespace LeagueSharp.Common
                             currentOffset = startingOffset;
                         }
                         var thisOffset = startingOffset;
-                        OffsetEntry entry;
                         var count = 0;
                         while (thisOffset != currentOffset)
                         {
                             var buff = new byte[OffsetEntrySize];
                             strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
-                            entry = FromByteArray<OffsetEntry>(buff);
-                            foreach (var key in keys)
+                            var entry = FromByteArray<OffsetEntry>(buff);
+                            foreach (
+                                var hash in
+                                    keys.Select(CalculateHash)
+                                        .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
                             {
-                                var hash = CalculateHash(key);
-                                if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
-                                {
-                                    fl.Write(buff);
-                                    var buff2 = new byte[entry.Capacity];
-                                    strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, entry.Capacity);
-                                    fl.Write(buff2);
-                                    count++;
-                                }
+                                fl.Write(buff);
+                                var buff2 = new byte[entry.Capacity];
+                                strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, entry.Capacity);
+                                fl.Write(buff2);
+                                count++;
                             }
                             thisOffset += OffsetEntrySize + entry.Capacity;
                         }
@@ -290,7 +287,7 @@ namespace LeagueSharp.Common
                     using (var strm = MMFile.CreateViewAccessor())
                     {
                         var hash = CalculateHash(key);
-                        var requiredCapacity = 8;
+                        int requiredCapacity;
                         byte[] serialized = null;
                         if (typeof(T).IsValueType)
                         {
@@ -304,33 +301,33 @@ namespace LeagueSharp.Common
                         {
                             // also store the sizeof the serialized object as what's ref'd by ptr
                             serialized = Serialize(val);
-                            requiredCapacity = serialized.Length + sizeof(int);
+                            requiredCapacity = serialized.Length + sizeof (int);
                         }
                         else
                         {
-                            throw new Exception(String.Format("Type {0} is not serializable!  Cannot write.", typeof(T)));
+                            throw new Exception(
+                                String.Format("Type {0} is not serializable!  Cannot write.", typeof(T)));
                         }
 
                         var signature = strm.ReadInt32(0);
-                        var startingOffset = 2 * sizeof(int);
+                        const int startingOffset = 2 * sizeof (int);
                         int currentOffset;
                         if (signature == 0x34CFABC0)
                         {
-                            currentOffset = strm.ReadInt32(sizeof(int));
+                            currentOffset = strm.ReadInt32(sizeof (int));
                         }
                         else
                         {
                             strm.Write(0, 0x34CFABC0);
-                            strm.Write(sizeof(int), startingOffset);
+                            strm.Write(sizeof (int), startingOffset);
                             currentOffset = startingOffset;
                         }
                         var thisOffset = startingOffset;
-                        OffsetEntry entry;
                         while (thisOffset != currentOffset)
                         {
                             var buff = new byte[OffsetEntrySize];
                             strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
-                            entry = FromByteArray<OffsetEntry>(buff);
+                            var entry = FromByteArray<OffsetEntry>(buff);
                             if (entry.Type != EntryType.Invalid && entry.KeyHash == hash)
                             {
                                 if (requiredCapacity <= entry.Capacity)
@@ -345,10 +342,11 @@ namespace LeagueSharp.Common
                                     else if (typeof(T) != typeof(string))
                                     {
                                         strm.WriteArray(
-                                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof(int)), 0,
-                                            sizeof(int));
+                                            thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)),
+                                            0, sizeof (int));
                                         strm.WriteArray(
-                                            thisOffset + OffsetEntrySize + sizeof(int), serialized, 0, serialized.Length);
+                                            thisOffset + OffsetEntrySize + sizeof (int), serialized, 0,
+                                            serialized.Length);
                                     }
                                     else
                                     {
@@ -380,8 +378,10 @@ namespace LeagueSharp.Common
                         else if (typeof(T) != typeof(string))
                         {
                             strm.WriteArray(
-                                thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof(int)), 0, sizeof(int));
-                            strm.WriteArray(thisOffset + OffsetEntrySize + sizeof(int), serialized, 0, serialized.Length);
+                                thisOffset + OffsetEntrySize, ToByteArray(serialized.Length, sizeof (int)), 0,
+                                sizeof (int));
+                            strm.WriteArray(
+                                thisOffset + OffsetEntrySize + sizeof (int), serialized, 0, serialized.Length);
                         }
                         else
                         {
@@ -389,11 +389,11 @@ namespace LeagueSharp.Common
                             strm.WriteArray(currentOffset + OffsetEntrySize, arr, 0, arr.Length);
                         }
                         // write new currentoffset
-                        strm.Write(sizeof(int), currentOffset + OffsetEntrySize + newEntry.Capacity);
+                        strm.Write(sizeof (int), currentOffset + OffsetEntrySize + newEntry.Capacity);
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
@@ -426,12 +426,7 @@ namespace LeagueSharp.Common
 
         internal static ulong CalculateHash(string s)
         {
-            ulong hash = 5381;
-            foreach (var c in s)
-            {
-                hash = ((hash << 5) + hash) + c;
-            }
-            return hash;
+            return s.Aggregate<char, ulong>(5381, (current, c) => ((current << 5) + current) + c);
         }
 
         internal enum EntryType

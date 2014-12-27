@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Damage.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -90,27 +90,26 @@ namespace LeagueSharp.Common
                 IsActive = (source, target) => (source.HasBuff("aatroxwpower") && source.HasBuff("aatroxwonhpowerbuff")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
             };
+            AttackPassives.Add(p);
 
             #endregion
-            
+
             #region Alistar
-            
+
             p = new PassiveDamage
             {
-               ChampionName = "Alistar",
-               IsActive = (source, target) => (source.HasBuff("Trample")),
-               GetDamage = 
-                   (source, target) =>
-                       ((float)
-                           source.CalcDamage(
-                               target, DamageType.Magical,
-                               6d + source.Level + (0.1d * source.FlatMagicDamageMod))),
-               
+                ChampionName = "Alistar",
+                IsActive = (source, target) => (source.HasBuff("Trample")),
+                GetDamage =
+                    (source, target) =>
+                        ((float)
+                            source.CalcDamage(
+                                target, DamageType.Magical, 6d + source.Level + (0.1d * source.FlatMagicDamageMod))),
             };
             AttackPassives.Add(p);
-            
+
             #endregion
-            
+
 
             #region Caitlyn
 
@@ -522,8 +521,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 105, 150, 195, 240 }[level] +
-                                0.5 * source.FlatMagicDamageMod
+                                new double[] { 60, 105, 150, 195, 240 }[level] + 0.5 * source.FlatMagicDamageMod
                     },
                     //W
                     new DamageSpell
@@ -883,8 +881,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 55, 80, 105, 130, 155 }[level] +
-                                0.55 * source.FlatMagicDamageMod
+                                new double[] { 55, 80, 105, 130, 155 }[level] + 0.55 * source.FlatMagicDamageMod
                     },
                     //R
                     new DamageSpell
@@ -2345,9 +2342,12 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 target.HasBuff("KalistaExpungeMarker")
-                                    ? (new double[] { 20, 30, 40, 50 ,60 }[level] + 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
+                                    ? (new double[] { 20, 30, 40, 50, 60 }[level] +
+                                       0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
                                       ((target.Buffs.First(b => b.DisplayName == "KalistaExpungeMarker").Count - 1) *
-                                      (new double[] { 10, 14, 19, 25, 32 }[level] + new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))
+                                       (new double[] { 10, 14, 19, 25, 32 }[level] +
+                                        new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] *
+                                        (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))
                                     : 0
                     },
                 });
@@ -3681,9 +3681,7 @@ namespace LeagueSharp.Common
                     {
                         Slot = SpellSlot.Q,
                         DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 80, 125, 170, 215, 260 }[level]
+                        Damage = (source, target, level) => new double[] { 80, 125, 170, 215, 260 }[level]
                     },
                     //W - AA  damage
                     new DamageSpell
@@ -3692,7 +3690,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 4, 6, 8, 10, 12 }[level] + (source.FlatMagicDamageMod / 100)) / 100 * target.MaxHealth
+                                (new double[] { 4, 6, 8, 10, 12 }[level] + (source.FlatMagicDamageMod / 100)) / 100 *
+                                target.MaxHealth
                     },
                     //W - Aoe per second
                     new DamageSpell
@@ -3702,7 +3701,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new[] { 10, 17.5, 25, 32.5, 40 }[level] + 
+                                new[] { 10, 17.5, 25, 32.5, 40 }[level] +
                                 (new double[] { 4, 6, 8, 10, 12 }[level] / 100) * source.MaxHealth +
                                 0.15 * source.FlatMagicDamageMod
                     },
@@ -4501,7 +4500,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 new double[] { 15, 70, 125, 180, 235 }[level] +
-                                + 1.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                +1.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                     //W - on hit
                     new DamageSpell
@@ -5220,14 +5219,14 @@ namespace LeagueSharp.Common
             }
 
             //Passive damages
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null)
             {
-                var sourceAsHero = source as Obj_AI_Hero;
+                var sourceAsHero = hero;
 
                 //Spoils of War
-                if (source.IsMelee() && target is Obj_AI_Minion && target.IsEnemy &&
-                    target.Team != GameObjectTeam.Neutral && target.Health <= 200 &&
-                    source.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))
+                if (hero.IsMelee() && target is Obj_AI_Minion && target.IsEnemy && target.Team != GameObjectTeam.Neutral &&
+                    target.Health <= 200 && hero.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))
                 {
                     return 200;
                 }
@@ -5253,7 +5252,7 @@ namespace LeagueSharp.Common
                 //Arcane blade
                 if (sourceAsHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 132 && m.Points == 1))
                 {
-                    reduction -= CalcMagicDamage(source, target, 0.05 * source.FlatMagicDamageMod);
+                    reduction -= CalcMagicDamage(hero, target, 0.05 * hero.FlatMagicDamageMod);
                 }
             }
 
@@ -5262,7 +5261,7 @@ namespace LeagueSharp.Common
                 return CalcPhysicalDamage(source, target, result) * k - reduction;
             }
 
-            var targetAsHero = target as Obj_AI_Hero;
+            var targetAsHero = (Obj_AI_Hero) target;
 
             //Ninja tabi
             if (Items.HasItem(3047, targetAsHero))
@@ -5332,11 +5331,12 @@ namespace LeagueSharp.Common
                 };
             }
 
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null)
             {
-                return (from spell in source.Spellbook.Spells
+                return (from spell in hero.Spellbook.Spells
                     where String.Equals(spell.Name, spellName, StringComparison.InvariantCultureIgnoreCase)
-                    select GetDamageSpell((Obj_AI_Hero) source, target, spell.Slot)).FirstOrDefault();
+                    select GetDamageSpell(hero, target, spell.Slot)).FirstOrDefault();
             }
 
             return null;
@@ -5475,13 +5475,13 @@ namespace LeagueSharp.Common
                     k = 0.7d * k;
                 }
 
-                    //Normal minions take 114% more damage from towers.
+                //Normal minions take 114% more damage from towers.
                 else if (NormalMinionList.Contains(target.BaseSkinName))
                 {
                     k = (1 / 0.875) * k;
                 }
 
-                    // Turrets deal 105% damage to champions for the first attack.
+                // Turrets deal 105% damage to champions for the first attack.
                 else if (target is Obj_AI_Hero)
                 {
                     k = 1.05 * k;
@@ -5491,9 +5491,10 @@ namespace LeagueSharp.Common
             //Masteries:
 
             //Offensive masteries:
-            if (source is Obj_AI_Hero)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null)
             {
-                var sourceAsHero = source as Obj_AI_Hero;
+                var sourceAsHero = hero;
 
                 //Double edge sword:
                 //  Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
@@ -5537,7 +5538,7 @@ namespace LeagueSharp.Common
                 return k;
             }
 
-            var targetAsHero = target as Obj_AI_Hero;
+            var targetAsHero = (Obj_AI_Hero) target;
 
             //Defensive masteries:
 
