@@ -259,13 +259,21 @@ namespace LeagueSharp.Common
 
         public static bool IsInvulnerable(Obj_AI_Base target,
             DamageType damageType,
-            bool ignoreShields = false)
+            bool ignoreShields = false,
+            bool ignoreZileanUlt = false)
         {
             // Tryndamere's Undying Rage (R)
             if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
             {
                 return true;
             }
+            
+            // Zilean's ChronoShift (R)
+            if (target.HasBuff("chronoshift") && !ignoreZileanUlt)
+            {
+                return true;
+            }
+
 
             // Kayle's Intervention (R)
             if (target.HasBuff("JudicatorIntervention"))
