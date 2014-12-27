@@ -396,7 +396,7 @@ namespace LeagueSharp.Common
 
         private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
         {
-             if (sender.IsValid && sender.IsMe && args.MissileNetworkId != 0)
+            if (sender.IsValid && sender.IsMe && (args.BitData & 1) != 0 == false)
              {
                  ResetAutoAttackTimer();
              }
@@ -425,7 +425,6 @@ namespace LeagueSharp.Common
                     var target = (Obj_AI_Base)Spell.Target;
                     if (target.IsValid)
                     {
-                        Console.WriteLine("just attacked " + target.BaseSkinName);
                         FireOnTargetSwitch(target);
                         _lastTarget = target;
                     }
