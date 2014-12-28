@@ -22,6 +22,7 @@
 
 #region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,70 +33,86 @@ namespace LeagueSharp.Common
     public class AutoLevel
     {
         private static int[] order = new int[18];
+        private static bool newGame;
+        private static int offset;
+        private static int lastLeveled;
+        private static readonly Obj_AI_Hero Player = ObjectManager.Player;
 
         public AutoLevel(int[] levels)
         {
             order = levels;
-            Game.OnGameProcessPacket += InitialLevelUp;
+            Utility.DelayAction.Add(500, Initialize);
         }
 
         public AutoLevel(IEnumerable<SpellSlot> levels)
         {
             order = levels.Select(spell => (int) spell).ToArray();
-            Game.OnGameProcessPacket += InitialLevelUp;
+            Utility.DelayAction.Add(500, Initialize);
+        }
+
+        private static void Initialize()
+        {
+            var spellbook = Player.Spellbook;
+            var spells = new List<SpellSlot> { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
+            offset = HasLevelOneSpell() ? 1 : 0;
+
+            if (HasLevelOneSpell())
+            {
+                spells.Remove(SpellSlot.R);
+            }
+
+            //not beginning of game
+            if (spells.Any(spell => spellbook.GetSpell(spell).Level != 0))
+            {
+                lastLeveled = Player.Level;
+                Game.OnGameUpdate += Game_OnGameUpdate;
+                return;
+            }
+
+            for (var i = 0; i < ObjectManager.Player.Level; i++)
+            {
+                var spell = (SpellSlot) (order[i + offset] - 1);
+                Utility.DelayAction.Add(250, () => { spellbook.LevelSpell(spell); });
+            }
+
+
+            lastLeveled = ObjectManager.Player.Level;
+            Game.OnGameUpdate += Game_OnGameUpdate;
+        }
+
+        private static void Game_OnGameUpdate(EventArgs args)
+        {
+            if (Player.Level <= lastLeveled)
+            {
+                return;
+            }
+
+            Utility.DelayAction.Add(
+                250, () =>
+                {
+                    var spell = (SpellSlot) (order[Player.Level + offset - 1] - 1);
+                    Player.Spellbook.LevelSpell(spell);
+                });
+            lastLeveled = Player.Level;
         }
 
         public static void Enabled(bool enabled)
         {
             if (enabled)
             {
-                Game.OnGameProcessPacket += Game_OnGameProcessPacket;
+                Game.OnGameUpdate += Game_OnGameUpdate;
             }
             else
             {
-                Game.OnGameProcessPacket -= Game_OnGameProcessPacket;
+                Game.OnGameUpdate -= Game_OnGameUpdate;
             }
         }
-
-        private static void InitialLevelUp(GamePacketEventArgs args)
-        {
-            if (Game.Time < 20)
-            {
-                for (var i = 0; i < ObjectManager.Player.Level; i++)
-                {
-                    var spell = (SpellSlot) (order[i] - 1);
-                    if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 2)
-                    {
-                        ObjectManager.Player.Spellbook.LevelUpSpell(spell);
-                    }
-                }
-            }
-            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
-            Game.OnGameProcessPacket -= InitialLevelUp;
-        }
-
-        private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
-        {
-            if (args.PacketData[0] != Packet.S2C.LevelUp.Header)
-            {
-                return;
-            }
-
-            var dp = Packet.S2C.LevelUp.Decoded(args.PacketData);
-
-            if (!dp.Unit.IsValid || !dp.Unit.IsMe || (ObjectManager.Player.Level == 1 && HasLevelOneSpell()))
-            {
-                return;
-            }
-            var spell = (SpellSlot) (order[dp.Level - 1] - 1);
-            ObjectManager.Player.Spellbook.LevelUpSpell(spell);
-        }
-
 
         private static bool HasLevelOneSpell()
         {
-            var name = ObjectManager.Player.ChampionName;
-            return name == "Elise" || name == "Jayce" || name == "Karma" || name == "Nidalee";
+            var name = Player.ChampionName;
+            var list = new List<string> { "Elise", "Jayce", "Karma", "Nidalee" };
+            return list.Contains(name);
         }
     }
 }
