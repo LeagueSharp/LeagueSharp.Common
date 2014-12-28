@@ -353,7 +353,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsValidTarget()))
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(e => e.IsValidTarget()))
             {
                 var enemy1 = enemy;
                 foreach (var spell in
@@ -364,7 +364,7 @@ namespace LeagueSharp.Common
                                  enemy1.LastCastedspell().Name, spell.SpellName,
                                  StringComparison.CurrentCultureIgnoreCase) &&
                              Environment.TickCount - enemy1.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && enemy1.HasBuff(spell.BuffName))))
+                            (spell.BuffName != null && enemy1.HasBuff(spell.BuffName, true))))
                 {
                     FireOnInterruptable(enemy, spell);
                 }
@@ -381,7 +381,7 @@ namespace LeagueSharp.Common
                              String.Equals(
                                  unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
                              Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && unit.HasBuff(spell.BuffName)) ||
+                            (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
                             (ObjectManager.Player.NetworkId == unit.NetworkId &&
                              LastCastedSpell.LastCastPacketSent != null &&
                              LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
