@@ -259,7 +259,7 @@ namespace LeagueSharp.Common
 
         public static bool IsInvulnerable(Obj_AI_Base target,
             DamageType damageType,
-            bool ignoreShields = false)
+            bool ignoreShields = true)
         {
             // Tryndamere's Undying Rage (R)
             if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
@@ -324,19 +324,18 @@ namespace LeagueSharp.Common
 
         public static Obj_AI_Hero GetTarget(float range,
             DamageType damageType,
-            bool ignoreShield = false)
+            bool ignoreShield = true)
         {
             return GetTarget(ObjectManager.Player, range, damageType, ignoreShield);
         }
 
-        private static bool IsValidTarget(Obj_AI_Base caster,
-            Obj_AI_Base hero,
+        private static bool IsValidTarget(Obj_AI_Base target,
             float range,
             DamageType damageType,
-            bool ignoreShieldSpells = false)
+            bool ignoreShieldSpells = true)
         {
-            return hero.IsValidTarget(range < 0 ? caster.GetRealAutoAttackRange() : range) &&
-                !IsInvulnerable(hero, damageType, ignoreShieldSpells);
+            return target.IsValidTarget(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range) &&
+                !IsInvulnerable(target, damageType, ignoreShieldSpells);
         }
 
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion,
@@ -349,7 +348,7 @@ namespace LeagueSharp.Common
                 var targetingMode = TargetingMode.AutoPriority;
                 var damageType = (Damage.DamageType)Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
-                if (IsValidTarget(champion, SelectedTarget, range, type))
+                if (IsValidTarget(SelectedTarget, range, type, ignoreShieldSpells))
                 {
                     return SelectedTarget;
                 }
@@ -362,8 +361,7 @@ namespace LeagueSharp.Common
 
                 var targets =
                     ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => IsValidTarget(champion, hero, range, type))
-                        .OrderBy(h => champion.Distance(h));
+                        .Where(hero => IsValidTarget(hero, range, type, ignoreShieldSpells));
 
                 switch (targetingMode)
                 {
@@ -381,10 +379,10 @@ namespace LeagueSharp.Common
                                 .FirstOrDefault();
 
                     case TargetingMode.Closest:
-                        return targets.FirstOrDefault();
+                        return targets.OrderBy(hero => champion.Distance(hero, true)).FirstOrDefault();
 
                     case TargetingMode.NearMouse:
-                        return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos) < 50);
+                        return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos) < 150);
 
                     case TargetingMode.AutoPriority:
                         return

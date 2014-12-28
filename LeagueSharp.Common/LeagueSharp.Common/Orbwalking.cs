@@ -213,7 +213,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the auto-attack range.
         /// </summary>
-        public static float GetRealAutoAttackRange(this AttackableUnit target)
+        public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
             if (target.IsValidTarget())
