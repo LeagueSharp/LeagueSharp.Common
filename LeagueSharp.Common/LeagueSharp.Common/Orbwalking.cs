@@ -398,7 +398,7 @@ namespace LeagueSharp.Common
         {
             if (sender.IsValid && sender.IsMe && (args.BitData & 1) == 0 && ((args.BitData >> 4) & 1) == 1)
             {
-                Game.PrintChat("RESET!!!" + Environment.TickCount);
+                //Game.PrintChat("RESET!!!" + Environment.TickCount);
                 ResetAutoAttackTimer();
             }
         }
