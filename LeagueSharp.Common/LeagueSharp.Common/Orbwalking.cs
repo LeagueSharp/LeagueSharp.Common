@@ -697,7 +697,7 @@ namespace LeagueSharp.Common
                 }
 
                 /*Champions*/
-                if (ActiveMode != OrbwalkingMode.LastHit)
+                if ((ActiveMode != OrbwalkingMode.LastHit) || ((ActiveMode == OrbwalkingMode.LaneClear) && ShouldWait()))
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
                     if (target.IsValidTarget())
