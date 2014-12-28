@@ -669,14 +669,7 @@ namespace LeagueSharp.Common
 
                 foreach (var entry in dictionary.Value)
                 {
-                    if (!dicToSave.ContainsKey(entry.Key))
-                    {
-                        dicToSave.Add(entry.Key, entry.Value);
-                    }
-                    else
-                    {
-                        dicToSave[entry.Key] = entry.Value;
-                    }
+                    dicToSave[entry.Key] = entry.Value;
                 }
 
                 SavedSettings.Save(dictionary.Key, dicToSave);
@@ -1070,10 +1063,10 @@ namespace LeagueSharp.Common
             {
                 if (!dics.ContainsKey(SaveFileName))
                 {
-                    dics.Add(SaveFileName, new Dictionary<string, byte[]>());
+                    dics[SaveFileName] = new Dictionary<string, byte[]>();
                 }
 
-                dics[SaveFileName].Add(SaveKey, _serialized);
+                dics[SaveFileName][SaveKey] = _serialized;
             }
         }
 
