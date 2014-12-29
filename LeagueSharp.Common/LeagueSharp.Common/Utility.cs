@@ -429,6 +429,23 @@ namespace LeagueSharp.Common
                             fountainRange);
         }
 
+        public static bool InFountain(Obj_AI_Hero hero)
+        {
+            float fountainRange = 750;
+            var map = Map.GetMap();
+            if (map != null && map._MapType == Map.MapType.SummonersRift)
+            {
+                fountainRange = 1050;
+            }
+            return
+                ObjectManager.Get<GameObject>()
+                    .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.Team == hero.Team)
+                    .Any(
+                        spawnPoint =>
+                            Vector2.Distance(hero.Position.To2D(), spawnPoint.Position.To2D()) <
+                            fountainRange);
+        }
+
         public static class DelayAction
         {
             public delegate void Callback();
