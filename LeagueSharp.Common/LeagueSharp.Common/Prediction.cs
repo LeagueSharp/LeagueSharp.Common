@@ -983,6 +983,11 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
+            if (!(sender is Obj_AI_Hero))
+            {
+                return;
+            }
+
             if (!StoredPaths.ContainsKey(sender.NetworkId))
             {
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());
@@ -990,6 +995,11 @@ namespace LeagueSharp.Common
 
             var newPath = new StoredPath { Tick = Environment.TickCount, Path = args.Path.ToList().To2D() };
             StoredPaths[sender.NetworkId].Add(newPath);
+
+            if (StoredPaths[sender.NetworkId].Count > 50)
+            {
+                StoredPaths[sender.NetworkId].RemoveRange(0, 40);
+            }
         }
 
         public static List<StoredPath> GetStoredPaths(Obj_AI_Base unit, double maxT)
