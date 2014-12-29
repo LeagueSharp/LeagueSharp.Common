@@ -437,7 +437,7 @@ namespace LeagueSharp.Common
             {
                 fountainRange = 1050;
             }
-            return
+            return hero.IsVisible && 
                 ObjectManager.Get<GameObject>()
                     .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.Team == hero.Team)
                     .Any(
