@@ -429,7 +429,7 @@ namespace LeagueSharp.Common
                             fountainRange);
         }
 
-        public static bool InFountain(Obj_AI_Hero hero)
+        public static bool InFountain(this Obj_AI_Hero hero)
         {
             float fountainRange = 750;
             var map = Map.GetMap();
