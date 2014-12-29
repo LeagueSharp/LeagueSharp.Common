@@ -786,11 +786,13 @@ namespace LeagueSharp.Common
     {
         private readonly object _newValue;
         private readonly object _oldValue;
+        private bool _process;
 
         public OnValueChangeEventArgs(object oldValue, object newValue)
         {
             _oldValue = oldValue;
             _newValue = newValue;
+            _process = true;
         }
 
         public T GetOldValue<T>()
@@ -801,6 +803,15 @@ namespace LeagueSharp.Common
         public T GetNewValue<T>()
         {
             return (T) _newValue;
+        }
+
+        public bool Process
+        {
+            get
+            {
+                return _process;
+            }
+            set { _process = value; }
         }
     }
 
@@ -1042,17 +1053,30 @@ namespace LeagueSharp.Common
                 Console.WriteLine(e);
             }
 
+            OnValueChangeEventArgs valueChangedEvent = null;
+
             if (_valueSet)
             {
                 var handler = ValueChanged;
                 if (handler != null)
                 {
-                    handler(this, new OnValueChangeEventArgs(_value, newValue));
+                    valueChangedEvent = new OnValueChangeEventArgs(_value, newValue);
+                    handler(this, valueChangedEvent);
                 }
             }
 
+            if (valueChangedEvent != null)
+            {
+                if (valueChangedEvent.Process)
+                {
+                    _value = newValue;
+                }
+            }
+            else
+            {
+                _value = newValue;
+            }
             _valueSet = true;
-            _value = newValue;
             _serialized = Global.Serialize(_value);
             return this;
         }

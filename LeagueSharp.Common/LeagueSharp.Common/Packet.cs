@@ -1549,7 +1549,7 @@ namespace LeagueSharp.Common
                 {
                     public Type Type
                     {
-                        get { return Type.TwistedFate; }
+                        get { return Type.Shen; }
                     }
 
                     public int GetDuration(GameObjectTeleportEventArgs args)
