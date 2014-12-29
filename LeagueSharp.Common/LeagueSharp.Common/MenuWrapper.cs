@@ -283,6 +283,11 @@ namespace LeagueSharp.Common
                 get { return menu.GetBool(name); }
                 set { menu.MenuHandle.Item(name).SetValue(value); }
             }
+
+            public SubMenu SubMenu
+            {
+                get { return menu; }
+            }
         }
 
         public class CircleLink
@@ -300,6 +305,11 @@ namespace LeagueSharp.Common
             {
                 get { return menu.GetCircle(name); }
                 set { menu.MenuHandle.Item(name).SetValue(value); }
+            }
+
+            public SubMenu SubMenu
+            {
+                get { return menu; }
             }
         }
 
@@ -319,6 +329,11 @@ namespace LeagueSharp.Common
                 get { return menu.GetKeyBind(name); }
                 set { menu.MenuHandle.Item(name).SetValue(value); }
             }
+
+            public SubMenu SubMenu
+            {
+                get { return menu; }
+            }
         }
 
         public class SliderLink
@@ -337,6 +352,11 @@ namespace LeagueSharp.Common
                 get { return menu.GetSlider(name); }
                 set { menu.MenuHandle.Item(name).SetValue(value); }
             }
+
+            public SubMenu SubMenu
+            {
+                get { return menu; }
+            }
         }
 
         public class StringListLink
@@ -354,6 +374,11 @@ namespace LeagueSharp.Common
             {
                 get { return menu.GetStringList(name); }
                 set { menu.MenuHandle.Item(name).SetValue(value); }
+            }
+
+            public SubMenu SubMenu
+            {
+                get { return menu; }
             }
         }
 

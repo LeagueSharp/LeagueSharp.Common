@@ -687,6 +687,8 @@ namespace LeagueSharp.Common
         {
             InitMenuState(Assembly.GetCallingAssembly().GetName().Name);
 
+            CustomEvents.Game.OnGameEnd += delegate { UnloadMenuState(); };
+            Game.OnGameEnd += delegate { UnloadMenuState(); };
             AppDomain.CurrentDomain.DomainUnload += (sender, args) => UnloadMenuState();
             AppDomain.CurrentDomain.ProcessExit += (sender, args) => UnloadMenuState();
 

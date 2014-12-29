@@ -213,7 +213,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the auto-attack range.
         /// </summary>
-        public static float GetRealAutoAttackRange(this AttackableUnit target)
+        public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
             if (target.IsValidTarget())
@@ -396,9 +396,9 @@ namespace LeagueSharp.Common
 
         private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
         {
-            return;
-            if (sender.IsValid && sender.IsMe && !new byte[] { 33, 97, 1, 225, 161, 0 }.Contains(args.BitData))
+            if (sender.IsValid && sender.IsMe && (args.BitData & 1) == 0 && ((args.BitData >> 4) & 1) == 1)
             {
+                //Game.PrintChat("RESET!!!" + Environment.TickCount);
                 ResetAutoAttackTimer();
             }
         }
