@@ -389,7 +389,7 @@ namespace LeagueSharp.Common
             if (input.Unit.Distance(input.From, true) < 300 * 300)
             {
                 input.Delay /= 2;
-                speed *= 2;
+                speed /= 2;
             }
 
             var result = GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
