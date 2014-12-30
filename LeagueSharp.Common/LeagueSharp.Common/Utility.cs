@@ -371,8 +371,7 @@ namespace LeagueSharp.Common
         {
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_Shop>()
-                       .Where(shop => shop.Team == hero.Team)
-                       .Any(shop => hero.Distance(shop.Position, true) < 1562500); // 1250²
+                       .Any(s => s.Team == hero.Team && hero.Distance(s.Position, true) < 1562500); // 1250²
         }
 
         /// <summary>
@@ -423,8 +422,7 @@ namespace LeagueSharp.Common
             }
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_SpawnPoint>()
-                       .Where(spawnPoint => spawnPoint.Team == hero.Team)
-                       .Any(spawnPoint => hero.Distance(spawnPoint.Position, true) < fountainRange);
+                       .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < fountainRange);
         }
 
         public static class DelayAction
