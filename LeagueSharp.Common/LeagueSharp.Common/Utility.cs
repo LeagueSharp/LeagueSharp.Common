@@ -105,7 +105,8 @@ namespace LeagueSharp.Common
         {
             return t == 0
                 ? spell.State == SpellState.Ready
-                : (spell.State == SpellState.Ready || (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
+                : (spell.State == SpellState.Ready ||
+                   (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
         }
 
         public static bool IsReady(this Spell spell, int t = 0)
@@ -371,7 +372,7 @@ namespace LeagueSharp.Common
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_Shop>()
                        .Where(shop => shop.Team == hero.Team)
-                       .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1250);
+                       .Any(shop => hero.Distance(shop.Position, true) < 1562500); // 1250²
         }
 
         /// <summary>
@@ -414,18 +415,16 @@ namespace LeagueSharp.Common
 
         public static bool InFountain(this Obj_AI_Hero hero)
         {
-            float fountainRange = 562500;
+            float fountainRange = 562500; //750²
             var map = Map.GetMap();
             if (map != null && map.Type == Map.MapType.SummonersRift)
             {
-                fountainRange = 1102500;
+                fountainRange = 1102500; //1050²
             }
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_SpawnPoint>()
                        .Where(spawnPoint => spawnPoint.Team == hero.Team)
-                       .Any(
-                           spawnPoint =>
-                               hero.Distance(spawnPoint.Position, true) < fountainRange);
+                       .Any(spawnPoint => hero.Distance(spawnPoint.Position, true) < fountainRange);
         }
 
         public static class DelayAction
