@@ -765,8 +765,9 @@ namespace LeagueSharp.Common
 
         public Menu SubMenu(string name)
         {
-            //Search in submenus
-            return Children.FirstOrDefault(subMenu => subMenu.Name == name);
+            //Search in submenus and if it doesn't exist add it.
+            var subMenu = Children.FirstOrDefault(sm => sm.Name == name);
+            return subMenu ?? AddSubMenu(new Menu(name, name));
         }
     }
 
