@@ -414,18 +414,18 @@ namespace LeagueSharp.Common
 
         public static bool InFountain(this Obj_AI_Hero hero)
         {
-            float fountainRange = 750;
+            float fountainRange = 562500;
             var map = Map.GetMap();
             if (map != null && map.Type == Map.MapType.SummonersRift)
             {
-                fountainRange = 1050;
+                fountainRange = 1102500;
             }
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_SpawnPoint>()
                        .Where(spawnPoint => spawnPoint.Team == hero.Team)
                        .Any(
                            spawnPoint =>
-                               hero.Distance(spawnPoint.Position) < fountainRange);
+                               hero.Distance(spawnPoint.Position, true) < fountainRange);
         }
 
         public static class DelayAction
