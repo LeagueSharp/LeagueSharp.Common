@@ -452,11 +452,11 @@ namespace LeagueSharp.Common
                 fountainRange = 1050;
             }
             return hero.IsVisible &&
-                   ObjectManager.Get<GameObject>()
-                       .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.Team == hero.Team)
+                   ObjectManager.Get<Obj_SpawnPoint>()
+                       .Where(spawnPoint => spawnPoint.Team == hero.Team)
                        .Any(
                            spawnPoint =>
-                               Vector2.Distance(hero.Position.To2D(), spawnPoint.Position.To2D()) < fountainRange);
+                               hero.Distance(spawnPoint.Position) < fountainRange);
         }
 
         public static class DelayAction
