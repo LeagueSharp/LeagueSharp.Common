@@ -227,7 +227,7 @@ namespace LeagueSharp.Common
 
             public void Buy()
             {
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(Id, ObjectManager.Player.NetworkId)).Send();
+                ObjectManager.Player.BuyItem((ItemId)Id);
             }
         }
     }
