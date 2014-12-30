@@ -177,6 +177,15 @@ namespace LeagueSharp.Common
             Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
 
+        public static bool IsAutoAttack(this SpellData spellData)
+        {
+            return Orbwalking.IsAutoAttack(spellData.Name);
+        }
+        public static bool IsAutoAttack(this SpellDataInst spellData)
+        {
+            return Orbwalking.IsAutoAttack(spellData.Name);
+        }
+
         public static bool IsWall(this Vector3 position)
         {
             return NavMesh.GetCollisionFlags(position).HasFlag(CollisionFlags.Wall);
