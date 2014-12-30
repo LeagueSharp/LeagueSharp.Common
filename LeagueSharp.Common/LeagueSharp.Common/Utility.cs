@@ -544,12 +544,6 @@ namespace LeagueSharp.Common
                 HowlingAbyss
             }
 
-            public MapType Type { get; private set; }
-            public Vector2 Grid { get; private set; }
-            public string Name { get; private set; }
-            public string ShortName { get; private set; }
-            public int StartingLevel { get; private set; }
-
             private static readonly IDictionary<int, Map> MapById = new Dictionary<int, Map>
             {
                 {
@@ -559,6 +553,7 @@ namespace LeagueSharp.Common
                         Name = "The Crystal Scar",
                         ShortName = "crystalScar",
                         Type = MapType.CrystalScar,
+                        _MapType = MapType.CrystalScar,
                         Grid = new Vector2(13894 / 2, 13218 / 2),
                         StartingLevel = 3
                     }
@@ -570,6 +565,7 @@ namespace LeagueSharp.Common
                         Name = "The Twisted Treeline",
                         ShortName = "twistedTreeline",
                         Type = MapType.TwistedTreeline,
+                        _MapType = MapType.TwistedTreeline,
                         Grid = new Vector2(15436 / 2, 14474 / 2),
                         StartingLevel = 1
                     }
@@ -581,6 +577,7 @@ namespace LeagueSharp.Common
                         Name = "Summoner's Rift",
                         ShortName = "summonerRift",
                         Type = MapType.SummonersRift,
+                        _MapType = MapType.SummonersRift,
                         Grid = new Vector2(13982 / 2, 14446 / 2),
                         StartingLevel = 1
                     }
@@ -592,11 +589,22 @@ namespace LeagueSharp.Common
                         Name = "Howling Abyss",
                         ShortName = "howlingAbyss",
                         Type = MapType.HowlingAbyss,
+                        _MapType = MapType.HowlingAbyss,
                         Grid = new Vector2(13120 / 2, 12618 / 2),
                         StartingLevel = 3
                     }
                 }
             };
+
+            public MapType Type { get; private set; }
+
+            [Obsolete("Use Map.Type", false)]
+            public MapType _MapType { get; private set; }
+
+            public Vector2 Grid { get; private set; }
+            public string Name { get; private set; }
+            public string ShortName { get; private set; }
+            public int StartingLevel { get; private set; }
 
             /// <summary>
             ///     Returns the current map.
@@ -613,6 +621,7 @@ namespace LeagueSharp.Common
                     Name = "Unknown",
                     ShortName = "unknown",
                     Type = MapType.Unknown,
+                    _MapType = MapType.Unknown,
                     Grid = new Vector2(0, 0),
                     StartingLevel = 1
                 };
@@ -626,35 +635,6 @@ namespace LeagueSharp.Common
         {
             public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
             public static readonly Dictionary<int, int> StoredTick = new Dictionary<int, int>();
-
-            // TODO: update for 4.21
-            //static WaypointTracker()
-            //{
-            //    Game.OnGameProcessPacket += Game_OnGameProcessPacket;
-            //}
-
-            //private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
-            //{
-            //    if (args.PacketData[0] == Packet.S2C.LoseVision.Header)
-            //    {
-            //        var decodedPacket = Packet.S2C.LoseVision.Decoded(args.PacketData);
-            //        var networkId = decodedPacket.UnitNetworkId;
-            //        var unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Hero>(networkId);
-            //        if (unit != null && unit.IsValid && unit.IsVisible)
-            //        {
-            //            if (!StoredPaths.ContainsKey(networkId))
-            //            {
-            //                StoredPaths.Add(networkId, GetWaypoints(unit));
-            //                StoredTick.Add(networkId, Environment.TickCount);
-            //            }
-            //            else
-            //            {
-            //                StoredPaths[networkId] = GetWaypoints(unit);
-            //                StoredTick[networkId] = Environment.TickCount;
-            //            }
-            //        }
-            //    }
-            //}
         }
     }
 
