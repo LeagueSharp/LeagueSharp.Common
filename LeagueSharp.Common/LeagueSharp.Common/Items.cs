@@ -52,18 +52,19 @@ namespace LeagueSharp.Common
             Armor = 1 << 11
         }
 
+        [Flags]
         public enum ItemTier
         {
-            None,
-            Basic,
-            Advanced,
-            Legendary,
-            Mythical,
-            Enchantment,
-            Consumable,
-            RengarsTrinket,
-            BasicTrinket,
-            AdvancedTrinket
+            None = 0,
+            Basic = 1 << 0,
+            Advanced = 1 << 1,
+            Legendary = 1 << 2,
+            Mythical = 1 << 3,
+            Enchantment = 1 << 4,
+            Consumable = 1 << 5,
+            RengarsTrinket = 1 << 6,
+            BasicTrinket = 1 << 7,
+            AdvancedTrinket = 1 << 8
         }
 
         /// <summary>
@@ -381,7 +382,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1001, 325),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -400,9 +401,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 25f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -423,7 +424,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1004, 180),
             //
             ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -444,7 +445,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -465,7 +466,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1005, 390),
             //
             ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -486,7 +487,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -507,7 +508,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1006, 180),
             //
             ItemCategory = ItemCategory.HealthRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -528,7 +529,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -549,7 +550,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1007, 435),
             //
             ItemCategory = ItemCategory.HealthRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -566,11 +567,11 @@ namespace LeagueSharp.Common
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
+            FlatHPRegenMod = 3f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -591,7 +592,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1011, 1000),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -607,12 +608,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 380f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -633,7 +634,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1018, 730),
             //
             ItemCategory = ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -654,7 +655,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -675,7 +676,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1026, 860),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -693,10 +694,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 40f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -717,7 +718,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1027, 400),
             //
             ItemCategory = ItemCategory.Mana,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -738,7 +739,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -759,7 +760,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1028, 400),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -775,12 +776,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 150f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -801,7 +802,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1029, 300),
             //
             ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -814,7 +815,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 15f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -822,7 +823,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -843,7 +844,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1031, 750),
             //
             ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -856,7 +857,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 40f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -864,7 +865,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -885,7 +886,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1033, 500),
             //
             ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -906,7 +907,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -927,7 +928,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1036, 360),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -947,8 +948,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 10f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -969,7 +970,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1037, 875),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -989,15 +990,15 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region B. F. Sword
 
-        public static Item B__F__Sword = new Item
+        public static Item B_F_Sword = new Item
         {
             Id = 1038,
             Name = "B. F. Sword",
@@ -1011,7 +1012,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1038, 1550),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1031,8 +1032,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 50f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1053,7 +1054,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1039, 400),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1074,7 +1075,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1095,7 +1096,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1042, 450),
             //
             ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1116,7 +1117,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1137,7 +1138,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1043, 900),
             //
             ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1158,7 +1159,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1179,7 +1180,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1051, 400),
             //
             ItemCategory = ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1200,7 +1201,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1221,7 +1222,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1052, 435),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1239,10 +1240,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 20f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1263,7 +1264,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1053, 800),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1283,8 +1284,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 10f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1305,7 +1306,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1054, 440),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1321,12 +1322,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 80f,
             FlatHPRegenMod = 1.2f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1347,7 +1348,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1055, 440),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1363,12 +1364,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 70f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 7f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1389,7 +1390,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1056, 400),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1405,12 +1406,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 60f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 15f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1431,7 +1432,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1057, 850),
             //
             ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1452,7 +1453,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 45f
         };
 
         #endregion
@@ -1473,7 +1474,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1058, 1600),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1491,10 +1492,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1515,7 +1516,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1062, 950),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1535,8 +1536,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 16f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1557,7 +1558,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1063, 950),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1575,17 +1576,17 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 35f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Doran's Shield (Showdown)
 
-        public static Item Dorans_Shield_Showdown = new Item
+        public static Item Dorans_Shield_ = new Item
         {
             Id = 1074,
             Name = "Doran's Shield (Showdown)",
@@ -1599,7 +1600,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1074, 440),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1615,19 +1616,19 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
+            FlatHPPoolMod = 100f,
+            FlatHPRegenMod = 2f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Doran's Blade (Showdown)
 
-        public static Item Dorans_Blade_Showdown = new Item
+        public static Item Dorans_Blade_ = new Item
         {
             Id = 1075,
             Name = "Doran's Blade (Showdown)",
@@ -1641,7 +1642,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1075, 440),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1657,19 +1658,19 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 70f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 7f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Doran's Ring (Showdown)
 
-        public static Item Dorans_Ring_Showdown = new Item
+        public static Item Dorans_Ring_ = new Item
         {
             Id = 1076,
             Name = "Doran's Ring (Showdown)",
@@ -1683,7 +1684,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1076, 400),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1699,12 +1700,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 60f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 15f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1725,7 +1726,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1080, 775),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1746,7 +1747,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1767,7 +1768,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1500, 0),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1788,7 +1789,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1809,7 +1810,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1501, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1830,7 +1831,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1851,7 +1852,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1502, 0),
             //
             ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1872,7 +1873,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1893,7 +1894,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1503, 0),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1914,7 +1915,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1935,7 +1936,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1504, 0),
             //
             ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1956,7 +1957,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1977,7 +1978,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(1505, 0),
             //
             ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -1998,49 +1999,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
-        };
-
-        #endregion
-
-        #region ???
-
-        public static Item Unkown = new Item
-        {
-            Id = 1506,
-            Name = "???",
-            Range = 0f,
-            MaxStacks = 1,
-            //
-            IsRecipe = true,
-            //
-            Price = 0,
-            RecipeItems = null,
-            SellPrice = GetReducedPrice(1506, 0),
-            //
-            ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2061,7 +2020,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2003, 35),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2082,7 +2041,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2103,7 +2062,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2004, 35),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2124,7 +2083,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2145,7 +2104,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2009, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2166,7 +2125,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2187,7 +2146,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2010, 35),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2208,7 +2167,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2229,7 +2188,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2037, 350),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.Consumable & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2250,7 +2209,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2271,7 +2230,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2038, 250),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2292,7 +2251,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2313,7 +2272,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2039, 250),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2334,7 +2293,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2355,7 +2314,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2040, 500),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2376,7 +2335,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2397,7 +2356,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2041, 345),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2418,7 +2377,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2439,7 +2398,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2042, 400),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2460,7 +2419,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2481,7 +2440,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2043, 100),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2502,7 +2461,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2523,7 +2482,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2044, 75),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2544,7 +2503,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2565,7 +2524,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2045, 1200),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable & ItemTier.Legendary,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2581,12 +2540,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 400f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2607,7 +2566,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2047, 250),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2628,7 +2587,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2649,7 +2608,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2048, 500),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2670,7 +2629,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2691,7 +2650,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2049, 800),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable & ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2707,12 +2666,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 150f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2733,7 +2692,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2050, 0),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2754,7 +2713,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2775,7 +2734,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2051, 1025),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2791,12 +2750,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 180f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2817,7 +2776,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2052, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2838,7 +2797,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2859,7 +2818,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2053, 1000),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2872,7 +2831,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 30f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -2880,7 +2839,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2901,7 +2860,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2054, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2922,7 +2881,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2943,7 +2902,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2137, 400),
             //
             ItemCategory = ItemCategory.Consumable & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -2964,7 +2923,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2985,7 +2944,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2138, 400),
             //
             ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3006,7 +2965,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3027,7 +2986,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2139, 400),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3048,7 +3007,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3069,7 +3028,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(2140, 400),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Consumable,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3090,7 +3049,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3111,7 +3070,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3001, 1940),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3129,10 +3088,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 70f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 50f
         };
 
         #endregion
@@ -3153,7 +3112,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3003, 2120),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3171,10 +3130,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3195,7 +3154,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3004, 1620),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.Damage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3215,8 +3174,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3237,7 +3196,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3005, 1550),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.Armor & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3250,7 +3209,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 45f,
             FlatCritChanceMod = 0.15f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -3258,7 +3217,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3279,7 +3238,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3006, 1000),
             //
             ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3298,16 +3257,16 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Archangel's Staff (Crystal Scar)
 
-        public static Item Archangels_Staff_Crystal_Scar = new Item
+        public static Item Archangels_Staff_ = new Item
         {
             Id = 3007,
             Name = "Archangel's Staff (Crystal Scar)",
@@ -3321,7 +3280,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3007, 2120),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3339,17 +3298,17 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Manamune (Crystal Scar)
 
-        public static Item Manamune_Crystal_Scar = new Item
+        public static Item Manamune_ = new Item
         {
             Id = 3008,
             Name = "Manamune (Crystal Scar)",
@@ -3363,7 +3322,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3008, 1620),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.Damage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3383,8 +3342,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3405,7 +3364,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3009, 1000),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3424,9 +3383,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 60f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3447,7 +3406,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3010, 1200),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.HealthRegen & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3463,12 +3422,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3489,7 +3448,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3020, 1100),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3508,9 +3467,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3531,7 +3490,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3022, 3300),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3547,12 +3506,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 700f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3573,7 +3532,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3023, 1530),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3591,10 +3550,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3615,7 +3574,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3024, 950),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3628,7 +3587,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 20f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -3636,7 +3595,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3657,7 +3616,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3025, 1365),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3670,15 +3629,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 60f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 30f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3699,7 +3658,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3026, 2050),
             //
             ItemCategory = ItemCategory.Armor & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3712,7 +3671,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 50f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -3720,7 +3679,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 50f
         };
 
         #endregion
@@ -3743,7 +3702,7 @@ namespace LeagueSharp.Common
             ItemCategory =
                 ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.ManaRegen &
                 ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3759,12 +3718,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 450f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3785,7 +3744,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3028, 820),
             //
             ItemCategory = ItemCategory.SpellBlock & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3806,14 +3765,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
 
         #region Rod of Ages (Crystal Scar)
 
-        public static Item Rod_of_Ages_Crystal_Scar = new Item
+        public static Item Rod_of_Ages_ = new Item
         {
             Id = 3029,
             Name = "Rod of Ages (Crystal Scar)",
@@ -3829,7 +3788,7 @@ namespace LeagueSharp.Common
             ItemCategory =
                 ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.ManaRegen &
                 ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3845,12 +3804,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 450f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3871,7 +3830,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3031, 3800),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3891,8 +3850,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 80f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3913,7 +3872,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3035, 2300),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3933,8 +3892,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 40f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3955,7 +3914,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3040, 2700),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -3973,10 +3932,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3997,7 +3956,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3041, 1400),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4015,10 +3974,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 20f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4039,7 +3998,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3042, 2200),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4059,8 +4018,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4081,7 +4040,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3043, 2200),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4101,8 +4060,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4123,7 +4082,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3044, 1325),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4139,12 +4098,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 20f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4165,7 +4124,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3046, 1950),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4186,7 +4145,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4207,7 +4166,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3047, 1000),
             //
             ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4220,15 +4179,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4249,7 +4208,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3048, 2700),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4267,10 +4226,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4291,7 +4250,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3050, 1690),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4307,12 +4266,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 250f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4333,7 +4292,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3056, 1720),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4346,15 +4305,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 50f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 300f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4375,7 +4334,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3057, 1200),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4393,10 +4352,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 25f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4418,7 +4377,7 @@ namespace LeagueSharp.Common
             //
             ItemCategory =
                 ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4434,12 +4393,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 20f
         };
 
         #endregion
@@ -4460,7 +4419,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3065, 1450),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4476,12 +4435,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 400f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 55f
         };
 
         #endregion
@@ -4502,7 +4461,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3067, 850),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4518,12 +4477,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4544,7 +4503,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3068, 2300),
             //
             ItemCategory = ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4557,15 +4516,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 45f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 450f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4586,7 +4545,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3069, 1375),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4607,7 +4566,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4628,7 +4587,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3070, 720),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4649,7 +4608,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4670,7 +4629,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3071, 2280),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4686,12 +4645,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 50f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4712,7 +4671,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3072, 3140),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4732,15 +4691,15 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 80f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Tear of the Goddess (Crystal Scar)
 
-        public static Item Tear_of_the_Goddess_Crystal_Scar = new Item
+        public static Item Tear_of_the_Goddess_ = new Item
         {
             Id = 3073,
             Name = "Tear of the Goddess (Crystal Scar)",
@@ -4754,7 +4713,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3073, 720),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4775,14 +4734,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Ravenous Hydra (Melee Only)
 
-        public static Item Ravenous_Hydra_Melee_Only = new Item
+        public static Item Ravenous_Hydra_ = new Item
         {
             Id = 3074,
             Name = "Ravenous Hydra (Melee Only)",
@@ -4796,7 +4755,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3074, 1345),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4816,8 +4775,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 75f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4838,7 +4797,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3075, 1800),
             //
             ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4851,7 +4810,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 100f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -4859,14 +4818,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Tiamat (Melee Only)
 
-        public static Item Tiamat_Melee_Only = new Item
+        public static Item Tiamat_ = new Item
         {
             Id = 3077,
             Name = "Tiamat (Melee Only)",
@@ -4880,7 +4839,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3077, 1720),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4900,8 +4859,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 40f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4924,7 +4883,7 @@ namespace LeagueSharp.Common
             ItemCategory =
                 ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.AttackSpeed &
                 ItemCategory.CriticalStrike & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4940,12 +4899,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0.1f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 250f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 30f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4966,7 +4925,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3082, 750),
             //
             ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -4979,7 +4938,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 45f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -4987,7 +4946,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5008,7 +4967,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3083, 1320),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5024,12 +4983,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 800f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5050,7 +5009,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3084, 2455),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5066,19 +5025,19 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 850f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Runaan's Hurricane (Ranged Only)
 
-        public static Item Runaans_Hurricane_Ranged_Only = new Item
+        public static Item Runaans_Hurricane_ = new Item
         {
             Id = 3085,
             Name = "Runaan's Hurricane (Ranged Only)",
@@ -5092,7 +5051,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3085, 1950),
             //
             ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5113,7 +5072,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5134,7 +5093,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3086, 1100),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5155,7 +5114,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5176,7 +5135,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3087, 1250),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5197,7 +5156,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5218,7 +5177,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3089, 3300),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5236,10 +5195,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 120f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5260,7 +5219,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3090, 2805),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5273,15 +5232,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 45f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 100f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5302,7 +5261,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3091, 2600),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5323,7 +5282,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 30f
         };
 
         #endregion
@@ -5344,7 +5303,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3092, 1400),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5362,10 +5321,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 50f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5386,7 +5345,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3093, 800),
             //
             ItemCategory = ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5407,7 +5366,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5428,7 +5387,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3096, 865),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5449,7 +5408,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5470,7 +5429,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3097, 865),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5486,12 +5445,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 175f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5512,7 +5471,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3098, 865),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5530,10 +5489,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 10f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5544,7 +5503,7 @@ namespace LeagueSharp.Common
         {
             Id = 3099,
             Name = "Soul Shroud",
-            Range = 1200f,
+            Range = 0f,
             MaxStacks = 1,
             //
             IsRecipe = true,
@@ -5554,7 +5513,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3099, 1335),
             //
             ItemCategory = ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5570,12 +5529,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 520f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5596,7 +5555,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3100, 1730),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5614,10 +5573,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5638,7 +5597,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3101, 800),
             //
             ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5659,7 +5618,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5680,7 +5639,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3102, 1850),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5696,12 +5655,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 450f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 55f
         };
 
         #endregion
@@ -5722,7 +5681,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3104, 3040),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5742,8 +5701,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 80f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5764,7 +5723,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3105, 1900),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5780,12 +5739,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 20f
         };
 
         #endregion
@@ -5806,7 +5765,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3106, 750),
             //
             ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5827,7 +5786,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5848,7 +5807,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3107, 400),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5861,15 +5820,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 20f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 300f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 30f
         };
 
         #endregion
@@ -5890,7 +5849,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3108, 820),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5908,10 +5867,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 30f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5932,7 +5891,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3109, 1530),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5949,11 +5908,11 @@ namespace LeagueSharp.Common
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
+            FlatHPRegenMod = 4f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 76f
         };
 
         #endregion
@@ -5974,7 +5933,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3110, 1150),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -5987,7 +5946,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 100f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -5995,7 +5954,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6016,7 +5975,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3111, 1200),
             //
             ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6035,9 +5994,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -6058,7 +6017,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3112, 1530),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6079,7 +6038,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 70f
         };
 
         #endregion
@@ -6100,7 +6059,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3113, 950),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6118,10 +6077,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 30f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6142,7 +6101,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3114, 420),
             //
             ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6163,7 +6122,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6184,7 +6143,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3115, 1585),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Legendary,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6202,10 +6161,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6226,7 +6185,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3116, 2900),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Legendary,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6242,12 +6201,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 400f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 100f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6268,7 +6227,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3117, 800),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6287,9 +6246,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 105f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6310,7 +6269,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3122, 1200),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6330,8 +6289,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 20f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6352,7 +6311,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3123, 1500),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6372,8 +6331,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6395,7 +6354,7 @@ namespace LeagueSharp.Common
             //
             ItemCategory =
                 ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6413,10 +6372,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 40f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6437,7 +6396,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3126, 2850),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6450,15 +6409,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 40f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6479,7 +6438,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3128, 2665),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6497,10 +6456,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 120f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6521,7 +6480,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3131, 2150),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6542,7 +6501,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6563,7 +6522,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3132, 750),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6579,12 +6538,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 325f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6605,7 +6564,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3134, 977),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6625,8 +6584,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6647,7 +6606,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3135, 2295),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6665,10 +6624,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 70f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6689,7 +6648,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3136, 1485),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6705,12 +6664,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 25f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6731,7 +6690,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3137, 1300),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6752,7 +6711,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 45f
         };
 
         #endregion
@@ -6773,7 +6732,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3138, 1200),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6789,12 +6748,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 180f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6815,7 +6774,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3139, 3200),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6835,8 +6794,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 80f,
+            FlatSpellBlockMod = 35f
         };
 
         #endregion
@@ -6857,7 +6816,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3140, 1250),
             //
             ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6878,7 +6837,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 30f
         };
 
         #endregion
@@ -6899,7 +6858,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3141, 1400),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6919,8 +6878,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 10f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6941,7 +6900,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3142, 1580),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6961,8 +6920,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6983,7 +6942,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3143, 2250),
             //
             ItemCategory = ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -6996,15 +6955,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 70f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 500f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7025,7 +6984,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3144, 1040),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7045,8 +7004,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7067,7 +7026,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3145, 765),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7085,10 +7044,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 40f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7109,7 +7068,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3146, 1370),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7127,10 +7086,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 65f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 45f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7151,7 +7110,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3151, 2065),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7167,12 +7126,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 300f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 50f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7193,7 +7152,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3152, 1195),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7211,10 +7170,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7235,7 +7194,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3153, 1590),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7255,8 +7214,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7277,7 +7236,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3154, 1325),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7297,8 +7256,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 12f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7319,7 +7278,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3155, 1450),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7339,8 +7298,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 30f
         };
 
         #endregion
@@ -7361,7 +7320,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3156, 2340),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7381,8 +7340,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 60f,
+            FlatSpellBlockMod = 40f
         };
 
         #endregion
@@ -7403,7 +7362,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3157, 2565),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7416,15 +7375,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 50f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 120f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7445,7 +7404,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3158, 1000),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7464,9 +7423,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7487,7 +7446,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3159, 1290),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7507,8 +7466,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 15f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7529,7 +7488,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3160, 1800),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7549,8 +7508,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 12f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7571,7 +7530,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3165, 1305),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7589,10 +7548,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7603,7 +7562,7 @@ namespace LeagueSharp.Common
         {
             Id = 3166,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -7613,7 +7572,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3166, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7634,7 +7593,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7645,7 +7604,7 @@ namespace LeagueSharp.Common
         {
             Id = 3167,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -7655,7 +7614,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3167, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7676,7 +7635,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7687,7 +7646,7 @@ namespace LeagueSharp.Common
         {
             Id = 3168,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -7697,7 +7656,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3168, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7718,7 +7677,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7729,7 +7688,7 @@ namespace LeagueSharp.Common
         {
             Id = 3169,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -7739,7 +7698,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3169, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7760,7 +7719,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7781,7 +7740,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3170, 1885),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7794,26 +7753,26 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 50f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 50f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 50f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace30 = new Item
+        public static Item Bonetooth_Necklace5 = new Item
         {
             Id = 3171,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -7823,7 +7782,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3171, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7844,7 +7803,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7865,7 +7824,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3172, 1950),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7885,8 +7844,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 25f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7907,7 +7866,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3174, 1405),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.SpellBlock & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7925,10 +7884,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -7939,7 +7898,7 @@ namespace LeagueSharp.Common
         {
             Id = 3175,
             Name = "Head of Kha'Zix",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -7949,7 +7908,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3175, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -7970,7 +7929,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7991,7 +7950,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3176, 1300),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8007,12 +7966,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 400f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8023,7 +7982,7 @@ namespace LeagueSharp.Common
         {
             Id = 3178,
             Name = "Ionic Spark",
-            Range = 400f,
+            Range = 0f,
             MaxStacks = 1,
             //
             IsRecipe = true,
@@ -8033,7 +7992,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3178, 1875),
             //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8049,12 +8008,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 250f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8065,7 +8024,7 @@ namespace LeagueSharp.Common
         {
             Id = 3180,
             Name = "Odyn's Veil",
-            Range = 525f,
+            Range = 0f,
             MaxStacks = 1,
             //
             IsRecipe = true,
@@ -8075,7 +8034,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3180, 1700),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8091,12 +8050,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 350f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 50f
         };
 
         #endregion
@@ -8117,7 +8076,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3181, 1915),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8137,8 +8096,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 45f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8159,7 +8118,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3183, 10000179),
             //
             ItemCategory = ItemCategory.HealthRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8176,11 +8135,11 @@ namespace LeagueSharp.Common
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
+            FlatHPRegenMod = 5f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8201,7 +8160,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3184, 1940),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8217,12 +8176,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 275f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 55f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8233,7 +8192,7 @@ namespace LeagueSharp.Common
         {
             Id = 3185,
             Name = "The Lightbringer",
-            Range = 800f,
+            Range = 0f,
             MaxStacks = 1,
             //
             IsRecipe = true,
@@ -8243,7 +8202,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3185, 1520),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8263,8 +8222,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8285,7 +8244,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3186, 2475),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8305,8 +8264,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8327,7 +8286,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3187, 1030),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8340,15 +8299,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 225f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8369,7 +8328,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3188, 2215),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8387,10 +8346,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8411,7 +8370,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3190, 1320),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8427,12 +8386,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 400f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 20f
         };
 
         #endregion
@@ -8453,7 +8412,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3191, 1200),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8466,15 +8425,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 30f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 25f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8495,7 +8454,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3196, 1000),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8513,10 +8472,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 20f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8537,7 +8496,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3197, 2000),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8555,10 +8514,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 40f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8579,7 +8538,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3198, 2000),
             //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8597,10 +8556,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 60f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8621,7 +8580,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3200, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8642,7 +8601,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8663,7 +8622,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3204, 775),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8676,7 +8635,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 20f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -8684,7 +8643,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8705,7 +8664,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3205, 775),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8718,7 +8677,7 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 20f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
@@ -8726,7 +8685,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8747,7 +8706,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3206, 880),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8765,10 +8724,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 50f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8789,7 +8748,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3207, 975),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8802,15 +8761,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 20f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8831,7 +8790,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3208, 975),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8844,22 +8803,22 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 20f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Spirit of the Elder Lizard
 
-        public static Item Spirit_of_the_Elder_Lizard2 = new Item
+        public static Item Spirit_of_the_Elder_Lizard = new Item
         {
             Id = 3209,
             Name = "Spirit of the Elder Lizard",
@@ -8873,7 +8832,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3209, 955),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8893,8 +8852,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 30f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8915,7 +8874,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3210, 1640),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8935,8 +8894,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 40f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -8957,7 +8916,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3211, 1200),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -8973,12 +8932,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 35f
         };
 
         #endregion
@@ -8999,7 +8958,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3222, 1230),
             //
             ItemCategory = ItemCategory.SpellBlock & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9020,7 +8979,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 40f
         };
 
         #endregion
@@ -9041,7 +9000,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3250, 700),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9060,9 +9019,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9083,7 +9042,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3251, 825),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9102,9 +9061,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9125,7 +9084,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3252, 700),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9144,9 +9103,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9167,7 +9126,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3253, 700),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9186,9 +9145,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9209,7 +9168,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3254, 700),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9228,9 +9187,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9251,7 +9210,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3255, 1250),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9270,9 +9229,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9293,7 +9252,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3256, 1375),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9312,9 +9271,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9335,7 +9294,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3257, 1250),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9354,9 +9313,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9377,7 +9336,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3258, 1250),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9396,9 +9355,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9419,7 +9378,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3259, 1250),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9438,9 +9397,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9461,7 +9420,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3260, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9474,15 +9433,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9503,7 +9462,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3261, 975),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9516,15 +9475,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9545,7 +9504,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3262, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9558,15 +9517,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9587,7 +9546,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3263, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9600,15 +9559,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9629,7 +9588,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3264, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9642,15 +9601,15 @@ namespace LeagueSharp.Common
             PercentSpellBlockMod = 0f,
             PercentAttackSpeedMod = 0f,
             //
-            FlatArmorMod = 0f,
+            FlatArmorMod = 25f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9671,7 +9630,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3265, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9690,9 +9649,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -9713,7 +9672,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3266, 975),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9732,9 +9691,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -9755,7 +9714,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3267, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9774,9 +9733,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -9797,7 +9756,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3268, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9816,9 +9775,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -9839,7 +9798,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3269, 850),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9858,9 +9817,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 25f
         };
 
         #endregion
@@ -9881,7 +9840,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3270, 950),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9900,9 +9859,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 105f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9923,7 +9882,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3271, 1075),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9942,9 +9901,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 105f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9965,7 +9924,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3272, 950),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -9984,9 +9943,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 105f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10007,7 +9966,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3273, 950),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10026,9 +9985,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 105f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10049,7 +10008,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3274, 950),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10068,9 +10027,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 105f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10091,7 +10050,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3275, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10110,9 +10069,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10133,7 +10092,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3276, 1275),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10152,9 +10111,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10175,7 +10134,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3277, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10194,9 +10153,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10217,7 +10176,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3278, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10236,9 +10195,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10259,7 +10218,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3279, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10278,9 +10237,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 45f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10301,7 +10260,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3280, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10320,9 +10279,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 60f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10343,7 +10302,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3281, 1275),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10362,9 +10321,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 60f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10385,7 +10344,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3282, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10404,9 +10363,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 60f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10427,7 +10386,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3283, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10446,9 +10405,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 60f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10469,7 +10428,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3284, 1150),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10488,9 +10447,9 @@ namespace LeagueSharp.Common
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
+            FlatMovementSpeedMod = 60f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10511,7 +10470,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3290, 1530),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10529,10 +10488,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 80f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10553,7 +10512,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3301, 365),
             //
             ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10574,7 +10533,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10595,7 +10554,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3302, 365),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10611,12 +10570,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 75f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10637,7 +10596,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3303, 365),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10655,17 +10614,17 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 5f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Warding Totem (Trinket)
 
-        public static Item Warding_Totem_Trinket = new Item
+        public static Item Warding_Totem_ = new Item
         {
             Id = 3340,
             Name = "Warding Totem (Trinket)",
@@ -10679,7 +10638,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3340, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.BasicTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10700,14 +10659,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Sweeping Lens (Trinket)
 
-        public static Item Sweeping_Lens_Trinket = new Item
+        public static Item Sweeping_Lens_ = new Item
         {
             Id = 3341,
             Name = "Sweeping Lens (Trinket)",
@@ -10721,7 +10680,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3341, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.BasicTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10742,18 +10701,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Scrying Orb (Trinket)
 
-        public static Item Scrying_Orb_Trinket = new Item
+        public static Item Scrying_Orb_ = new Item
         {
             Id = 3342,
             Name = "Scrying Orb (Trinket)",
-            Range = 600f,
+            Range = 2500f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -10763,7 +10722,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3342, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.BasicTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10784,14 +10743,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Soul Anchor (Trinket)
 
-        public static Item Soul_Anchor_Trinket = new Item
+        public static Item Soul_Anchor_ = new Item
         {
             Id = 3345,
             Name = "Soul Anchor (Trinket)",
@@ -10805,7 +10764,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3345, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.BasicTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10826,14 +10785,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Greater Totem (Trinket)
 
-        public static Item Greater_Totem_Trinket = new Item
+        public static Item Greater_Totem_ = new Item
         {
             Id = 3350,
             Name = "Greater Totem (Trinket)",
@@ -10847,7 +10806,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3350, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.AdvancedTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10868,18 +10827,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Greater Lens (Trinket)
 
-        public static Item Greater_Lens_Trinket = new Item
+        public static Item Greater_Lens_ = new Item
         {
             Id = 3351,
             Name = "Greater Lens (Trinket)",
-            Range = 400f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = true,
@@ -10889,7 +10848,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3351, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.AdvancedTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10910,18 +10869,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Greater Orb (Trinket)
 
-        public static Item Greater_Orb_Trinket = new Item
+        public static Item Greater_Orb_ = new Item
         {
             Id = 3352,
             Name = "Greater Orb (Trinket)",
-            Range = 2500f,
+            Range = 3500f,
             MaxStacks = 1,
             //
             IsRecipe = true,
@@ -10931,7 +10890,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3352, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.AdvancedTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10952,14 +10911,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Greater Stealth Totem (Trinket)
 
-        public static Item Greater_Stealth_Totem_Trinket = new Item
+        public static Item Greater_Stealth_Totem_ = new Item
         {
             Id = 3361,
             Name = "Greater Stealth Totem (Trinket)",
@@ -10973,7 +10932,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3361, 475),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.AdvancedTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -10994,14 +10953,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Greater Vision Totem (Trinket)
 
-        public static Item Greater_Vision_Totem_Trinket = new Item
+        public static Item Greater_Vision_Totem_ = new Item
         {
             Id = 3362,
             Name = "Greater Vision Totem (Trinket)",
@@ -11015,7 +10974,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3362, 475),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.AdvancedTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11036,14 +10995,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Farsight Orb (Trinket)
 
-        public static Item Farsight_Orb_Trinket = new Item
+        public static Item Farsight_Orb_ = new Item
         {
             Id = 3363,
             Name = "Farsight Orb (Trinket)",
@@ -11057,7 +11016,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3363, 475),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.AdvancedTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11078,14 +11037,14 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Oracle's Lens (Trinket)
 
-        public static Item Oracles_Lens_Trinket = new Item
+        public static Item Oracles_Lens_ = new Item
         {
             Id = 3364,
             Name = "Oracle's Lens (Trinket)",
@@ -11099,7 +11058,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3364, 475),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.BasicTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11120,7 +11079,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11141,7 +11100,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3401, 1435),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11157,23 +11116,23 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 500f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace5 = new Item
+        public static Item Bonetooth_Necklace6 = new Item
         {
             Id = 3405,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11183,7 +11142,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3405, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11204,18 +11163,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace6 = new Item
+        public static Item Bonetooth_Necklace7 = new Item
         {
             Id = 3406,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11225,7 +11184,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3406, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11246,18 +11205,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace7 = new Item
+        public static Item Bonetooth_Necklace8 = new Item
         {
             Id = 3407,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11267,7 +11226,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3407, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11288,18 +11247,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace8 = new Item
+        public static Item Bonetooth_Necklace9 = new Item
         {
             Id = 3408,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11309,7 +11268,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3408, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11330,18 +11289,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace9 = new Item
+        public static Item Bonetooth_Necklace10 = new Item
         {
             Id = 3409,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11351,7 +11310,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3409, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11372,7 +11331,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11383,7 +11342,7 @@ namespace LeagueSharp.Common
         {
             Id = 3410,
             Name = "Head of Kha'Zix",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11393,7 +11352,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3410, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11414,18 +11373,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace10 = new Item
+        public static Item Bonetooth_Necklace11 = new Item
         {
             Id = 3411,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11435,7 +11394,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3411, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11456,18 +11415,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace11 = new Item
+        public static Item Bonetooth_Necklace12 = new Item
         {
             Id = 3412,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11477,7 +11436,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3412, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11498,18 +11457,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace12 = new Item
+        public static Item Bonetooth_Necklace13 = new Item
         {
             Id = 3413,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11519,7 +11478,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3413, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11540,18 +11499,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace13 = new Item
+        public static Item Bonetooth_Necklace14 = new Item
         {
             Id = 3414,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11561,7 +11520,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3414, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11582,18 +11541,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace14 = new Item
+        public static Item Bonetooth_Necklace15 = new Item
         {
             Id = 3415,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11603,7 +11562,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3415, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11624,7 +11583,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11635,7 +11594,7 @@ namespace LeagueSharp.Common
         {
             Id = 3416,
             Name = "Head of Kha'Zix",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11645,7 +11604,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3416, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11666,18 +11625,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace15 = new Item
+        public static Item Bonetooth_Necklace16 = new Item
         {
             Id = 3417,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11687,7 +11646,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3417, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11708,18 +11667,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace16 = new Item
+        public static Item Bonetooth_Necklace17 = new Item
         {
             Id = 3418,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11729,7 +11688,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3418, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11750,18 +11709,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace17 = new Item
+        public static Item Bonetooth_Necklace18 = new Item
         {
             Id = 3419,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11771,7 +11730,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3419, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11792,18 +11751,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace18 = new Item
+        public static Item Bonetooth_Necklace19 = new Item
         {
             Id = 3420,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11813,7 +11772,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3420, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11834,18 +11793,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace19 = new Item
+        public static Item Bonetooth_Necklace20 = new Item
         {
             Id = 3421,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11855,7 +11814,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3421, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11876,7 +11835,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11887,7 +11846,7 @@ namespace LeagueSharp.Common
         {
             Id = 3422,
             Name = "Head of Kha'Zix",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11897,7 +11856,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3422, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11918,18 +11877,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace20 = new Item
+        public static Item Bonetooth_Necklace21 = new Item
         {
             Id = 3450,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11939,7 +11898,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3450, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -11960,18 +11919,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace21 = new Item
+        public static Item Bonetooth_Necklace22 = new Item
         {
             Id = 3451,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -11981,7 +11940,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3451, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12002,18 +11961,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace22 = new Item
+        public static Item Bonetooth_Necklace23 = new Item
         {
             Id = 3452,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -12023,7 +11982,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3452, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12044,18 +12003,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace23 = new Item
+        public static Item Bonetooth_Necklace24 = new Item
         {
             Id = 3453,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -12065,7 +12024,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3453, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12086,18 +12045,18 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace24 = new Item
+        public static Item Bonetooth_Necklace25 = new Item
         {
             Id = 3454,
             Name = "Bonetooth Necklace",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -12107,7 +12066,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3454, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.RengarsTrinket,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12128,7 +12087,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12139,7 +12098,7 @@ namespace LeagueSharp.Common
         {
             Id = 3455,
             Name = "Head of Kha'Zix",
-            Range = 0f,
+            Range = 600f,
             MaxStacks = 1,
             //
             IsRecipe = false,
@@ -12149,7 +12108,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3455, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12170,7 +12129,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12191,7 +12150,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3460, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Consumable,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12212,7 +12171,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12233,7 +12192,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3504, 1305),
             //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12251,10 +12210,10 @@ namespace LeagueSharp.Common
             FlatCritDamageMod = 0f,
             FlatHPPoolMod = 0f,
             FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
+            FlatMagicDamageMod = 40f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12275,7 +12234,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3508, 2840),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.ManaRegen & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12295,8 +12254,8 @@ namespace LeagueSharp.Common
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatPhysicalDamageMod = 80f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12317,7 +12276,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3599, 0),
             //
             ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12338,7 +12297,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12359,7 +12318,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3706, 750),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12380,7 +12339,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12401,7 +12360,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3707, 1130),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12422,7 +12381,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12443,7 +12402,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3708, 1415),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12464,7 +12423,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12485,7 +12444,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3709, 1450),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12506,7 +12465,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12527,7 +12486,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3710, 1400),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12548,7 +12507,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12569,7 +12528,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3711, 750),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12590,7 +12549,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12611,7 +12570,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3712, 750),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12632,7 +12591,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12653,7 +12612,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3713, 750),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12674,7 +12633,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12695,7 +12654,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3714, 1130),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12716,7 +12675,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12737,7 +12696,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3715, 750),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12758,7 +12717,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12779,7 +12738,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3716, 1415),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12800,7 +12759,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12821,7 +12780,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3717, 1450),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12842,7 +12801,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12863,7 +12822,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3718, 1400),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12884,7 +12843,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12905,7 +12864,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3719, 1130),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12926,7 +12885,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12947,7 +12906,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3720, 1415),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -12968,7 +12927,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12989,7 +12948,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3721, 1450),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13010,7 +12969,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13031,7 +12990,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3722, 1400),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13052,7 +13011,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13073,7 +13032,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3723, 1130),
             //
             ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13094,7 +13053,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13115,7 +13074,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3724, 1415),
             //
             ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13136,7 +13095,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13157,7 +13116,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3725, 1450),
             //
             ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13178,7 +13137,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13199,7 +13158,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3726, 1400),
             //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Advanced,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13220,7 +13179,7 @@ namespace LeagueSharp.Common
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13257,12 +13216,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 500f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13283,7 +13242,7 @@ namespace LeagueSharp.Common
             SellPrice = GetReducedPrice(3801, 600),
             //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            ItemTier = ItemTier.Basic,
             //
             PercentArmorMod = 0f,
             PercentCritDamageMod = 0f,
@@ -13299,12 +13258,12 @@ namespace LeagueSharp.Common
             FlatArmorMod = 0f,
             FlatCritChanceMod = 0f,
             FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
+            FlatHPPoolMod = 200f,
             FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f,
+            FlatSpellBlockMod = 0f
         };
 
         #endregion
