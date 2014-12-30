@@ -364,6 +364,19 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Returns true if Player is in shop range.
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("Use ObjectManager.Player.InShop()", false)]
+        public static bool InShopRange()
+        {
+            return
+                ObjectManager.Get<Obj_Shop>()
+                    .Where(shop => shop.IsAlly)
+                    .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1250);
+        }
+
+        /// <summary>
         ///     Returns true if hero is in shop range.
         /// </summary>
         /// <returns></returns>
@@ -410,6 +423,24 @@ namespace LeagueSharp.Common
 
                 Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
+        }
+
+        [Obsolete("Use ObjectManager.Player.InFounta()", false)]
+        public static bool InFountain()
+        {
+            float fountainRange = 750;
+            var map = Map.GetMap();
+            if (map != null && map.Type == Map.MapType.SummonersRift)
+            {
+                fountainRange = 1050;
+            }
+            return
+                ObjectManager.Get<GameObject>()
+                    .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
+                    .Any(
+                        spawnPoint =>
+                            Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) <
+                            fountainRange);
         }
 
         public static bool InFountain(this Obj_AI_Hero hero)
