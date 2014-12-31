@@ -57,7 +57,7 @@ namespace LeagueSharp.Common
             args.Process = false;
         }
 
-        private static bool CanCast(GamePacket p)
+        public static bool CanCast(GamePacket p)
         {
             var slot = (SpellSlot) p.ReadByte(6);
             return ObjectManager.Player.Spellbook.CanUseSpell(slot) == SpellState.Ready;
