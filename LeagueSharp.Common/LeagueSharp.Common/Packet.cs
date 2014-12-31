@@ -369,7 +369,6 @@ namespace LeagueSharp.Common
                     result.WriteInteger(packetStruct.TargetNetworkId);
                     result.WriteByte((byte)packetStruct.Slot);
                     result.WriteByte(0); //packetStruct.SpellFlag == 0xFF ? GetSpellByte(packetStruct.Slot) : packetStruct.SpellFlag
-                    result.Block = !SpellHumanizer.CanCast(result);
                     return result;
                 }
 

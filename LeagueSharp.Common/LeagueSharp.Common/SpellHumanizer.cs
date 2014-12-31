@@ -36,7 +36,7 @@ namespace LeagueSharp.Common
 
         private static void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
         {
-            if (!Enabled || sender == null || !sender.IsValid || sender.IsMe)
+            if (!Enabled || sender == null || !sender.IsValid || !sender.IsMe)
             {
                 return;
             }
@@ -57,7 +57,7 @@ namespace LeagueSharp.Common
             args.Process = false;
         }
 
-        public static bool CanCast(GamePacket p)
+        private static bool CanCast(GamePacket p)
         {
             var slot = (SpellSlot) p.ReadByte(6);
             return ObjectManager.Player.Spellbook.CanUseSpell(slot) == SpellState.Ready;
