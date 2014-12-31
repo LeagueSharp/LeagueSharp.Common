@@ -106,8 +106,9 @@ namespace LeagueSharp.Common
 
             for (var i = -5; i < 5; i++)
             {
+                var currentLayer = i;
                 foreach (var renderObject in
-                    RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
+                    RenderObjects.Where(renderObject => renderObject.Layer == currentLayer && renderObject.Visible))
                 {
                     renderObject.OnDraw();
                 }
@@ -125,8 +126,9 @@ namespace LeagueSharp.Common
 
             for (var i = -5; i < 5; i++)
             {
+                var currentLayer = i;
                 foreach (var renderObject in
-                    RenderObjects.Where(renderObject => renderObject.Layer == i && renderObject.Visible))
+                    RenderObjects.Where(renderObject => renderObject.Layer == currentLayer && renderObject.Visible))
                 {
                     renderObject.OnEndScene();
                 }
@@ -175,7 +177,6 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
                 Offset = offset;
             }
-
 
             public Circle(Vector3 position, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
             {
@@ -763,7 +764,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public class RenderObject
+        public class RenderObject : IDisposable
         {
             public delegate bool VisibleConditionDelegate(RenderObject sender);
 
