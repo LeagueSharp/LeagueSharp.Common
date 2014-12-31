@@ -27,16 +27,24 @@ namespace LeagueSharp.Common
         static SpellHumanizer()
         {
             Enabled = false;
-            Game.OnGameSendPacket += Game_OnGameSendPacket;
+            //Game.OnGameSendPacket += Game_OnGameSendPacket;
+            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
-
 
         public static bool Enabled { get; set; }
         public static bool Debug { get; set; }
 
-        public static bool Check(GamePacket p)
+        private static void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
         {
-            return !Enabled || CanCast(p);
+            if (!Enabled || sender == null || !sender.IsValid || sender.IsMe)
+            {
+                return;
+            }
+
+            if (ObjectManager.Player.Spellbook.GetSpell(args.Slot).State == SpellState.Cooldown)
+            {
+                args.Process = false;
+            }
         }
 
         private static void Game_OnGameSendPacket(GamePacketEventArgs args)
@@ -52,18 +60,7 @@ namespace LeagueSharp.Common
         private static bool CanCast(GamePacket p)
         {
             var slot = (SpellSlot) p.ReadByte(6);
-            SpellState state;
-
-            if (slot == SpellSlot.Summoner1 || slot == SpellSlot.Summoner2)
-            {
-                state = ObjectManager.Player.Spellbook.CanUseSpell(slot);
-            }
-            else
-            {
-                state = ObjectManager.Player.Spellbook.CanUseSpell(slot);
-            }
-
-            return state == SpellState.Ready;
+            return ObjectManager.Player.Spellbook.CanUseSpell(slot) == SpellState.Ready;
         }
     }
 }
