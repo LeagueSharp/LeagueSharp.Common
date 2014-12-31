@@ -3545,15 +3545,15 @@ namespace LeagueSharp.Common
                 "Riven", new List<DamageSpell>
                 {
                     //Q
-                    new DamageSpell
+                     new DamageSpell
                     {
-                        Slot = SpellSlot.Q,
-                        DamageType = DamageType.Physical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 10, 30, 50, 70, 90 }[level] +
-                                new double[] { 40, 45, 50, 55, 60 }[level] *
-                                (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                    Slot = SpellSlot.Q,
+                    DamageType = DamageType.Physical,
+                    Damage =
+                    (source, target, level) =>
+                    new double[] { 30, 90, 150, 210, 270}[level] +
+                    (new double[] { 120, 135, 150, 165, 160 }[level] / 100) *
+                    (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                     //W
                     new DamageSpell
