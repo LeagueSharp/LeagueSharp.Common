@@ -132,7 +132,7 @@ namespace LeagueSharp.Common
 
             public Items.Item GetItem()
             {
-                return new Items.Item(Id);
+                return new Items.Item(Id, Range);
             }
         }
 
