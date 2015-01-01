@@ -191,11 +191,6 @@ namespace LeagueSharp.Common
                 Range = range;
             }
 
-            public bool Have()
-            {
-                return HasItem(Id);
-            }
-
             public bool IsReady()
             {
                 return CanUseItem(Id);
