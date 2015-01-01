@@ -195,8 +195,7 @@ namespace LeagueSharp.Common
             {
                 if (IsReady())
                 {
-                    UseItem(Id);
-                    return true;
+                    return UseItem(Id);
                 }
 
                 return false;
@@ -216,8 +215,7 @@ namespace LeagueSharp.Common
             {
                 if (IsReady() && IsInRange(position))
                 {
-                    UseItem(Id, position);
-                    return true;
+                    return UseItem(Id, position);
                 }
 
                 return false;
