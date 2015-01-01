@@ -132,7 +132,7 @@ namespace LeagueSharp.Common
 
             public Items.Item GetItem()
             {
-                return new Items.Item(Id, Range);
+                return new Items.Item(Id);
             }
         }
 
@@ -144,7 +144,6 @@ namespace LeagueSharp.Common
         {
             Id = 1001,
             Name = "Boots of Speed",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 325,
@@ -163,7 +162,6 @@ namespace LeagueSharp.Common
         {
             Id = 1004,
             Name = "Faerie Charm",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 180,
@@ -181,7 +179,6 @@ namespace LeagueSharp.Common
         {
             Id = 1005,
             Name = "Meki Pendant",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 390,
@@ -199,7 +196,6 @@ namespace LeagueSharp.Common
         {
             Id = 1006,
             Name = "Rejuvenation Bead",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 180,
@@ -217,7 +213,6 @@ namespace LeagueSharp.Common
         {
             Id = 1007,
             Name = "Regrowth Pendant",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 435,
@@ -236,7 +231,6 @@ namespace LeagueSharp.Common
         {
             Id = 1011,
             Name = "Giant's Belt",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 1000,
@@ -255,7 +249,6 @@ namespace LeagueSharp.Common
         {
             Id = 1018,
             Name = "Cloak of Agility",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 730,
@@ -274,7 +267,6 @@ namespace LeagueSharp.Common
         {
             Id = 1026,
             Name = "Blasting Wand",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 860,
@@ -293,7 +285,6 @@ namespace LeagueSharp.Common
         {
             Id = 1027,
             Name = "Sapphire Crystal",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -311,7 +302,6 @@ namespace LeagueSharp.Common
         {
             Id = 1028,
             Name = "Ruby Crystal",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -330,7 +320,6 @@ namespace LeagueSharp.Common
         {
             Id = 1029,
             Name = "Cloth Armor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 300,
@@ -349,7 +338,6 @@ namespace LeagueSharp.Common
         {
             Id = 1031,
             Name = "Chain Vest",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 450,
@@ -368,7 +356,6 @@ namespace LeagueSharp.Common
         {
             Id = 1033,
             Name = "Null-Magic Mantle",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 500,
@@ -387,7 +374,6 @@ namespace LeagueSharp.Common
         {
             Id = 1036,
             Name = "Long Sword",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 360,
@@ -406,7 +392,6 @@ namespace LeagueSharp.Common
         {
             Id = 1037,
             Name = "Pickaxe",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 875,
@@ -425,7 +410,6 @@ namespace LeagueSharp.Common
         {
             Id = 1038,
             Name = "B. F. Sword",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 1550,
@@ -444,7 +428,6 @@ namespace LeagueSharp.Common
         {
             Id = 1039,
             Name = "Hunter's Machete",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -462,7 +445,6 @@ namespace LeagueSharp.Common
         {
             Id = 1042,
             Name = "Dagger",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 450,
@@ -480,7 +462,6 @@ namespace LeagueSharp.Common
         {
             Id = 1043,
             Name = "Recurve Bow",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 900,
@@ -498,7 +479,6 @@ namespace LeagueSharp.Common
         {
             Id = 1051,
             Name = "Brawler's Gloves",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -517,7 +497,6 @@ namespace LeagueSharp.Common
         {
             Id = 1052,
             Name = "Amplifying Tome",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 435,
@@ -536,7 +515,6 @@ namespace LeagueSharp.Common
         {
             Id = 1053,
             Name = "Vampiric Scepter",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 440,
@@ -555,7 +533,6 @@ namespace LeagueSharp.Common
         {
             Id = 1054,
             Name = "Doran's Shield",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 440,
@@ -575,7 +552,6 @@ namespace LeagueSharp.Common
         {
             Id = 1055,
             Name = "Doran's Blade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 440,
@@ -595,7 +571,6 @@ namespace LeagueSharp.Common
         {
             Id = 1056,
             Name = "Doran's Ring",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -615,7 +590,6 @@ namespace LeagueSharp.Common
         {
             Id = 1057,
             Name = "Negatron Cloak",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -634,7 +608,6 @@ namespace LeagueSharp.Common
         {
             Id = 1058,
             Name = "Needlessly Large Rod",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 1600,
@@ -653,7 +626,6 @@ namespace LeagueSharp.Common
         {
             Id = 1062,
             Name = "Prospector's Blade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 950,
@@ -672,7 +644,6 @@ namespace LeagueSharp.Common
         {
             Id = 1063,
             Name = "Prospector's Ring",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 950,
@@ -691,7 +662,6 @@ namespace LeagueSharp.Common
         {
             Id = 1074,
             Name = "Doran's Shield (Showdown)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 440,
@@ -711,7 +681,6 @@ namespace LeagueSharp.Common
         {
             Id = 1075,
             Name = "Doran's Blade (Showdown)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 440,
@@ -731,7 +700,6 @@ namespace LeagueSharp.Common
         {
             Id = 1076,
             Name = "Doran's Ring (Showdown)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -751,7 +719,6 @@ namespace LeagueSharp.Common
         {
             Id = 1080,
             Name = "Spirit Stone",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 15,
@@ -769,7 +736,6 @@ namespace LeagueSharp.Common
         {
             Id = 1500,
             Name = "Penetrating Bullets",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -787,7 +753,6 @@ namespace LeagueSharp.Common
         {
             Id = 1501,
             Name = "Fortification",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -805,7 +770,6 @@ namespace LeagueSharp.Common
         {
             Id = 1502,
             Name = "Reinforced Armor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -823,7 +787,6 @@ namespace LeagueSharp.Common
         {
             Id = 1503,
             Name = "Warden's Eye",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -841,7 +804,6 @@ namespace LeagueSharp.Common
         {
             Id = 1504,
             Name = "Vanguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -859,7 +821,6 @@ namespace LeagueSharp.Common
         {
             Id = 1505,
             Name = "Lightning Rod",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -877,7 +838,6 @@ namespace LeagueSharp.Common
         {
             Id = 2003,
             Name = "Health Potion",
-            Range = 0f,
             MaxStacks = 5,
             IsRecipe = false,
             Price = 35,
@@ -895,7 +855,6 @@ namespace LeagueSharp.Common
         {
             Id = 2004,
             Name = "Mana Potion",
-            Range = 0f,
             MaxStacks = 5,
             IsRecipe = false,
             Price = 35,
@@ -913,7 +872,6 @@ namespace LeagueSharp.Common
         {
             Id = 2009,
             Name = "Total Biscuit of Rejuvenation",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 0,
@@ -931,7 +889,6 @@ namespace LeagueSharp.Common
         {
             Id = 2010,
             Name = "Total Biscuit of Rejuvenation",
-            Range = 0f,
             MaxStacks = 5,
             IsRecipe = false,
             Price = 35,
@@ -949,7 +906,6 @@ namespace LeagueSharp.Common
         {
             Id = 2037,
             Name = "Elixir of Fortitude",
-            Range = 0f,
             MaxStacks = 3,
             IsRecipe = false,
             Price = 350,
@@ -967,7 +923,6 @@ namespace LeagueSharp.Common
         {
             Id = 2038,
             Name = "Elixir of Agility",
-            Range = 0f,
             MaxStacks = 3,
             IsRecipe = false,
             Price = 250,
@@ -985,7 +940,6 @@ namespace LeagueSharp.Common
         {
             Id = 2039,
             Name = "Elixir of Brilliance",
-            Range = 0f,
             MaxStacks = 3,
             IsRecipe = false,
             Price = 250,
@@ -1003,7 +957,6 @@ namespace LeagueSharp.Common
         {
             Id = 2040,
             Name = "Ichor of Rage",
-            Range = 0f,
             MaxStacks = 3,
             IsRecipe = false,
             Price = 500,
@@ -1021,7 +974,6 @@ namespace LeagueSharp.Common
         {
             Id = 2041,
             Name = "Crystalline Flask",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 345,
@@ -1039,7 +991,6 @@ namespace LeagueSharp.Common
         {
             Id = 2042,
             Name = "Oracle's Elixir",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -1112,7 +1063,6 @@ namespace LeagueSharp.Common
         {
             Id = 2047,
             Name = "Oracle's Extract",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 250,
@@ -1130,7 +1080,6 @@ namespace LeagueSharp.Common
         {
             Id = 2048,
             Name = "Ichor of Illumination",
-            Range = 0f,
             MaxStacks = 3,
             IsRecipe = false,
             Price = 500,
@@ -1185,7 +1134,6 @@ namespace LeagueSharp.Common
         {
             Id = 2051,
             Name = "Guardian's Horn",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 445,
@@ -1204,7 +1152,6 @@ namespace LeagueSharp.Common
         {
             Id = 2052,
             Name = "Poro-Snax",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 0,
@@ -1222,7 +1169,6 @@ namespace LeagueSharp.Common
         {
             Id = 2053,
             Name = "Raptor Cloak",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 520,
@@ -1241,7 +1187,6 @@ namespace LeagueSharp.Common
         {
             Id = 2054,
             Name = "Diet Poro-Snax",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 0,
@@ -1259,7 +1204,6 @@ namespace LeagueSharp.Common
         {
             Id = 2137,
             Name = "Elixir of Ruin",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -1277,7 +1221,6 @@ namespace LeagueSharp.Common
         {
             Id = 2138,
             Name = "Elixir of Iron",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -1295,7 +1238,6 @@ namespace LeagueSharp.Common
         {
             Id = 2139,
             Name = "Elixir of Sorcery",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -1313,7 +1255,6 @@ namespace LeagueSharp.Common
         {
             Id = 2140,
             Name = "Elixir of Wrath",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 400,
@@ -1351,7 +1292,6 @@ namespace LeagueSharp.Common
         {
             Id = 3003,
             Name = "Archangel's Staff",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1120,
@@ -1370,7 +1310,6 @@ namespace LeagueSharp.Common
         {
             Id = 3004,
             Name = "Manamune",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 605,
@@ -1389,7 +1328,6 @@ namespace LeagueSharp.Common
         {
             Id = 3005,
             Name = "Atma's Impaler",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 700,
@@ -1409,7 +1347,6 @@ namespace LeagueSharp.Common
         {
             Id = 3006,
             Name = "Berserker's Greaves",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 225,
@@ -1428,7 +1365,6 @@ namespace LeagueSharp.Common
         {
             Id = 3007,
             Name = "Archangel's Staff (Crystal Scar)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1120,
@@ -1447,7 +1383,6 @@ namespace LeagueSharp.Common
         {
             Id = 3008,
             Name = "Manamune (Crystal Scar)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 605,
@@ -1466,7 +1401,6 @@ namespace LeagueSharp.Common
         {
             Id = 3009,
             Name = "Boots of Swiftness",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 675,
@@ -1485,7 +1419,6 @@ namespace LeagueSharp.Common
         {
             Id = 3010,
             Name = "Catalyst the Protector",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 400,
@@ -1504,7 +1437,6 @@ namespace LeagueSharp.Common
         {
             Id = 3020,
             Name = "Sorcerer's Shoes",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 775,
@@ -1523,7 +1455,6 @@ namespace LeagueSharp.Common
         {
             Id = 3022,
             Name = "Frozen Mallet",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1025,
@@ -1543,7 +1474,6 @@ namespace LeagueSharp.Common
         {
             Id = 3023,
             Name = "Twin Shadows",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 630,
@@ -1563,7 +1493,6 @@ namespace LeagueSharp.Common
         {
             Id = 3024,
             Name = "Glacial Shroud",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 250,
@@ -1582,7 +1511,6 @@ namespace LeagueSharp.Common
         {
             Id = 3025,
             Name = "Iceborn Gauntlet",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 750,
@@ -1602,7 +1530,6 @@ namespace LeagueSharp.Common
         {
             Id = 3026,
             Name = "Guardian Angel",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1250,
@@ -1622,7 +1549,6 @@ namespace LeagueSharp.Common
         {
             Id = 3027,
             Name = "Rod of Ages",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 740,
@@ -1644,7 +1570,6 @@ namespace LeagueSharp.Common
         {
             Id = 3028,
             Name = "Chalice of Harmony",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 140,
@@ -1663,7 +1588,6 @@ namespace LeagueSharp.Common
         {
             Id = 3029,
             Name = "Rod of Ages (Crystal Scar)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 740,
@@ -1685,7 +1609,6 @@ namespace LeagueSharp.Common
         {
             Id = 3031,
             Name = "Infinity Edge",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 645,
@@ -1705,7 +1628,6 @@ namespace LeagueSharp.Common
         {
             Id = 3035,
             Name = "Last Whisper",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1065,
@@ -1724,7 +1646,6 @@ namespace LeagueSharp.Common
         {
             Id = 3040,
             Name = "Seraph's Embrace",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 2700,
@@ -1743,7 +1664,6 @@ namespace LeagueSharp.Common
         {
             Id = 3041,
             Name = "Mejai's Soulstealer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 965,
@@ -1762,7 +1682,6 @@ namespace LeagueSharp.Common
         {
             Id = 3042,
             Name = "Muramana",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 2200,
@@ -1781,7 +1700,6 @@ namespace LeagueSharp.Common
         {
             Id = 3043,
             Name = "Muramana",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 2200,
@@ -1800,7 +1718,6 @@ namespace LeagueSharp.Common
         {
             Id = 3044,
             Name = "Phage",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 565,
@@ -1820,7 +1737,6 @@ namespace LeagueSharp.Common
         {
             Id = 3046,
             Name = "Phantom Dancer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 520,
@@ -1840,7 +1756,6 @@ namespace LeagueSharp.Common
         {
             Id = 3047,
             Name = "Ninja Tabi",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 375,
@@ -1860,7 +1775,6 @@ namespace LeagueSharp.Common
         {
             Id = 3048,
             Name = "Seraph's Embrace",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 2700,
@@ -1879,7 +1793,6 @@ namespace LeagueSharp.Common
         {
             Id = 3050,
             Name = "Zeke's Herald",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 800,
@@ -1898,7 +1811,6 @@ namespace LeagueSharp.Common
         {
             Id = 3056,
             Name = "Ohmwrecker",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 750,
@@ -1918,7 +1830,6 @@ namespace LeagueSharp.Common
         {
             Id = 3057,
             Name = "Sheen",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 365,
@@ -1937,7 +1848,6 @@ namespace LeagueSharp.Common
         {
             Id = 3060,
             Name = "Banner of Command",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 280,
@@ -1959,7 +1869,6 @@ namespace LeagueSharp.Common
         {
             Id = 3065,
             Name = "Spirit Visage",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 700,
@@ -1979,7 +1888,6 @@ namespace LeagueSharp.Common
         {
             Id = 3067,
             Name = "Kindlegem",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 450,
@@ -2036,7 +1944,6 @@ namespace LeagueSharp.Common
         {
             Id = 3070,
             Name = "Tear of the Goddess",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 140,
@@ -2054,7 +1961,6 @@ namespace LeagueSharp.Common
         {
             Id = 3071,
             Name = "The Black Cleaver",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1263,
@@ -2074,7 +1980,6 @@ namespace LeagueSharp.Common
         {
             Id = 3072,
             Name = "The Bloodthirster",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1150,
@@ -2093,7 +1998,6 @@ namespace LeagueSharp.Common
         {
             Id = 3073,
             Name = "Tear of the Goddess (Crystal Scar)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 140,
@@ -2130,7 +2034,6 @@ namespace LeagueSharp.Common
         {
             Id = 3075,
             Name = "Thornmail",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1050,
@@ -2168,7 +2071,6 @@ namespace LeagueSharp.Common
         {
             Id = 3078,
             Name = "Trinity Force",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 78,
@@ -2193,7 +2095,6 @@ namespace LeagueSharp.Common
         {
             Id = 3082,
             Name = "Warden's Mail",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 450,
@@ -2212,7 +2113,6 @@ namespace LeagueSharp.Common
         {
             Id = 3083,
             Name = "Warmog's Armor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 300,
@@ -2231,7 +2131,6 @@ namespace LeagueSharp.Common
         {
             Id = 3084,
             Name = "Overlord's Bloodmail",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1055,
@@ -2250,7 +2149,6 @@ namespace LeagueSharp.Common
         {
             Id = 3085,
             Name = "Runaan's Hurricane (Ranged Only)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -2268,7 +2166,6 @@ namespace LeagueSharp.Common
         {
             Id = 3086,
             Name = "Zeal",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 250,
@@ -2288,7 +2185,6 @@ namespace LeagueSharp.Common
         {
             Id = 3087,
             Name = "Statikk Shiv",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -2308,7 +2204,6 @@ namespace LeagueSharp.Common
         {
             Id = 3089,
             Name = "Rabadon's Deathcap",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 840,
@@ -2327,7 +2222,6 @@ namespace LeagueSharp.Common
         {
             Id = 3090,
             Name = "Wooglet's Witchcap",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1045,
@@ -2347,7 +2241,6 @@ namespace LeagueSharp.Common
         {
             Id = 3091,
             Name = "Wit's End",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 750,
@@ -2385,7 +2278,6 @@ namespace LeagueSharp.Common
         {
             Id = 3093,
             Name = "Avarice Blade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 400,
@@ -2404,7 +2296,6 @@ namespace LeagueSharp.Common
         {
             Id = 3096,
             Name = "Nomad's Medallion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 500,
@@ -2422,7 +2313,6 @@ namespace LeagueSharp.Common
         {
             Id = 3097,
             Name = "Targon's Brace",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 500,
@@ -2441,7 +2331,6 @@ namespace LeagueSharp.Common
         {
             Id = 3098,
             Name = "Frostfang",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 500,
@@ -2460,7 +2349,6 @@ namespace LeagueSharp.Common
         {
             Id = 3099,
             Name = "Soul Shroud",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 485,
@@ -2479,7 +2367,6 @@ namespace LeagueSharp.Common
         {
             Id = 3100,
             Name = "Lich Bane",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 850,
@@ -2499,7 +2386,6 @@ namespace LeagueSharp.Common
         {
             Id = 3101,
             Name = "Stinger",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -2517,7 +2403,6 @@ namespace LeagueSharp.Common
         {
             Id = 3102,
             Name = "Banshee's Veil",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1150,
@@ -2537,7 +2422,6 @@ namespace LeagueSharp.Common
         {
             Id = 3104,
             Name = "Lord Van Damm's Pillager",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 995,
@@ -2577,7 +2461,6 @@ namespace LeagueSharp.Common
         {
             Id = 3106,
             Name = "Madred's Razors",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 300,
@@ -2595,7 +2478,6 @@ namespace LeagueSharp.Common
         {
             Id = 3107,
             Name = "Runic Bulwark",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 400,
@@ -2616,7 +2498,6 @@ namespace LeagueSharp.Common
         {
             Id = 3108,
             Name = "Fiendish Codex",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 385,
@@ -2635,7 +2516,6 @@ namespace LeagueSharp.Common
         {
             Id = 3109,
             Name = "Force of Nature",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1000,
@@ -2675,7 +2555,6 @@ namespace LeagueSharp.Common
         {
             Id = 3111,
             Name = "Mercury's Treads",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 375,
@@ -2695,7 +2574,6 @@ namespace LeagueSharp.Common
         {
             Id = 3112,
             Name = "Orb of Winter",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 850,
@@ -2714,7 +2592,6 @@ namespace LeagueSharp.Common
         {
             Id = 3113,
             Name = "Aether Wisp",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 515,
@@ -2733,7 +2610,6 @@ namespace LeagueSharp.Common
         {
             Id = 3114,
             Name = "Forbidden Idol",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 240,
@@ -2751,7 +2627,6 @@ namespace LeagueSharp.Common
         {
             Id = 3115,
             Name = "Nashor's Tooth",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 850,
@@ -2770,7 +2645,6 @@ namespace LeagueSharp.Common
         {
             Id = 3116,
             Name = "Rylai's Crystal Scepter",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 605,
@@ -2790,7 +2664,6 @@ namespace LeagueSharp.Common
         {
             Id = 3117,
             Name = "Boots of Mobility",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -2809,7 +2682,6 @@ namespace LeagueSharp.Common
         {
             Id = 3122,
             Name = "Wicked Hatchet",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 440,
@@ -2829,7 +2701,6 @@ namespace LeagueSharp.Common
         {
             Id = 3123,
             Name = "Executioner's Calling",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 740,
@@ -2849,7 +2720,6 @@ namespace LeagueSharp.Common
         {
             Id = 3124,
             Name = "Guinsoo's Rageblade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 865,
@@ -2870,7 +2740,6 @@ namespace LeagueSharp.Common
         {
             Id = 3126,
             Name = "Madred's Bloodrazor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 775,
@@ -2909,7 +2778,6 @@ namespace LeagueSharp.Common
         {
             Id = 3131,
             Name = "Sword of the Divine",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 800,
@@ -2927,7 +2795,6 @@ namespace LeagueSharp.Common
         {
             Id = 3132,
             Name = "Heart of Gold",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -2946,7 +2813,6 @@ namespace LeagueSharp.Common
         {
             Id = 3134,
             Name = "The Brutalizer",
-            Range = 0f,
             MaxStacks = 0,
             IsRecipe = true,
             Price = 617,
@@ -2965,7 +2831,6 @@ namespace LeagueSharp.Common
         {
             Id = 3135,
             Name = "Void Staff",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1000,
@@ -2984,7 +2849,6 @@ namespace LeagueSharp.Common
         {
             Id = 3136,
             Name = "Haunting Guise",
-            Range = 0f,
             MaxStacks = 0,
             IsRecipe = true,
             Price = 650,
@@ -3004,7 +2868,6 @@ namespace LeagueSharp.Common
         {
             Id = 3137,
             Name = "Dervish Blade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 200,
@@ -3023,7 +2886,6 @@ namespace LeagueSharp.Common
         {
             Id = 3138,
             Name = "Leviathan",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 800,
@@ -3042,7 +2904,6 @@ namespace LeagueSharp.Common
         {
             Id = 3139,
             Name = "Mercurial Scimitar",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 900,
@@ -3062,7 +2923,6 @@ namespace LeagueSharp.Common
         {
             Id = 3140,
             Name = "Quicksilver Sash",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 750,
@@ -3081,7 +2941,6 @@ namespace LeagueSharp.Common
         {
             Id = 3141,
             Name = "Sword of the Occult",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1040,
@@ -3100,7 +2959,6 @@ namespace LeagueSharp.Common
         {
             Id = 3142,
             Name = "Youmuu's Ghostblade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 563,
@@ -3159,7 +3017,6 @@ namespace LeagueSharp.Common
         {
             Id = 3145,
             Name = "Hextech Revolver",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 330,
@@ -3198,7 +3055,6 @@ namespace LeagueSharp.Common
         {
             Id = 3151,
             Name = "Liandry's Torment",
-            Range = 0f,
             MaxStacks = 0,
             IsRecipe = true,
             Price = 980,
@@ -3218,7 +3074,6 @@ namespace LeagueSharp.Common
         {
             Id = 3152,
             Name = "Will of the Ancients",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 480,
@@ -3275,7 +3130,6 @@ namespace LeagueSharp.Common
         {
             Id = 3155,
             Name = "Hexdrinker",
-            Range = 0f,
             MaxStacks = 0,
             IsRecipe = true,
             Price = 590,
@@ -3295,7 +3149,6 @@ namespace LeagueSharp.Common
         {
             Id = 3156,
             Name = "Maw of Malmortius",
-            Range = 0f,
             MaxStacks = 0,
             IsRecipe = true,
             Price = 875,
@@ -3315,7 +3168,6 @@ namespace LeagueSharp.Common
         {
             Id = 3157,
             Name = "Zhonya's Hourglass",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 500,
@@ -3335,7 +3187,6 @@ namespace LeagueSharp.Common
         {
             Id = 3158,
             Name = "Ionian Boots of Lucidity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 675,
@@ -3354,7 +3205,6 @@ namespace LeagueSharp.Common
         {
             Id = 3159,
             Name = "Grez's Spectral Lantern",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 180,
@@ -3392,7 +3242,6 @@ namespace LeagueSharp.Common
         {
             Id = 3165,
             Name = "Morellonomicon",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 680,
@@ -3483,7 +3332,6 @@ namespace LeagueSharp.Common
         {
             Id = 3170,
             Name = "Moonflair Spellblade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 920,
@@ -3522,7 +3370,6 @@ namespace LeagueSharp.Common
         {
             Id = 3172,
             Name = "Zephyr",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 725,
@@ -3542,7 +3389,6 @@ namespace LeagueSharp.Common
         {
             Id = 3174,
             Name = "Athene's Unholy Grail",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 880,
@@ -3580,7 +3426,6 @@ namespace LeagueSharp.Common
         {
             Id = 3176,
             Name = "Arcane Helix",
-            Range = 0f,
             MaxStacks = 0,
             IsRecipe = true,
             Price = 500,
@@ -3599,7 +3444,6 @@ namespace LeagueSharp.Common
         {
             Id = 3178,
             Name = "Ionic Spark",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 575,
@@ -3618,7 +3462,6 @@ namespace LeagueSharp.Common
         {
             Id = 3180,
             Name = "Odyn's Veil",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 800,
@@ -3638,7 +3481,6 @@ namespace LeagueSharp.Common
         {
             Id = 3181,
             Name = "Sanguine Blade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -3657,7 +3499,6 @@ namespace LeagueSharp.Common
         {
             Id = 3183,
             Name = "Priscilla's Blessing",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 9999999,
@@ -3676,7 +3517,6 @@ namespace LeagueSharp.Common
         {
             Id = 3184,
             Name = "Entropy",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 500,
@@ -3696,7 +3536,6 @@ namespace LeagueSharp.Common
         {
             Id = 3185,
             Name = "The Lightbringer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -3716,7 +3555,6 @@ namespace LeagueSharp.Common
         {
             Id = 3186,
             Name = "Kitae's Bloodrazor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 700,
@@ -3755,7 +3593,6 @@ namespace LeagueSharp.Common
         {
             Id = 3188,
             Name = "Blackfire Torch",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 970,
@@ -3794,7 +3631,6 @@ namespace LeagueSharp.Common
         {
             Id = 3191,
             Name = "Seeker's Armguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 465,
@@ -3814,7 +3650,6 @@ namespace LeagueSharp.Common
         {
             Id = 3196,
             Name = "The Hex Core mk-1",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1000,
@@ -3833,7 +3668,6 @@ namespace LeagueSharp.Common
         {
             Id = 3197,
             Name = "The Hex Core mk-2",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1000,
@@ -3852,7 +3686,6 @@ namespace LeagueSharp.Common
         {
             Id = 3198,
             Name = "Perfect Hex Core",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 1000,
@@ -3871,7 +3704,6 @@ namespace LeagueSharp.Common
         {
             Id = 3200,
             Name = "Prototype Hex Core",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 0,
@@ -3927,7 +3759,6 @@ namespace LeagueSharp.Common
         {
             Id = 3206,
             Name = "Spirit of the Spectral Wraith",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 480,
@@ -3946,7 +3777,6 @@ namespace LeagueSharp.Common
         {
             Id = 3207,
             Name = "Spirit of the Ancient Golem",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 450,
@@ -3966,7 +3796,6 @@ namespace LeagueSharp.Common
         {
             Id = 3208,
             Name = "Spirit of the Ancient Golem",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 450,
@@ -3986,7 +3815,6 @@ namespace LeagueSharp.Common
         {
             Id = 3209,
             Name = "Spirit of the Elder Lizard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 580,
@@ -4005,7 +3833,6 @@ namespace LeagueSharp.Common
         {
             Id = 3210,
             Name = "Spellbreaker (Melee Only)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 650,
@@ -4026,7 +3853,6 @@ namespace LeagueSharp.Common
         {
             Id = 3211,
             Name = "Spectre's Cowl",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 300,
@@ -4046,7 +3872,6 @@ namespace LeagueSharp.Common
         {
             Id = 3222,
             Name = "Mikael's Crucible",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 850,
@@ -4065,7 +3890,6 @@ namespace LeagueSharp.Common
         {
             Id = 3250,
             Name = "Berserker's Greaves - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4084,7 +3908,6 @@ namespace LeagueSharp.Common
         {
             Id = 3251,
             Name = "Berserker's Greaves - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4103,7 +3926,6 @@ namespace LeagueSharp.Common
         {
             Id = 3252,
             Name = "Berserker's Greaves - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4122,7 +3944,6 @@ namespace LeagueSharp.Common
         {
             Id = 3253,
             Name = "Berserker's Greaves - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4141,7 +3962,6 @@ namespace LeagueSharp.Common
         {
             Id = 3254,
             Name = "Berserker's Greaves - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4160,7 +3980,6 @@ namespace LeagueSharp.Common
         {
             Id = 3255,
             Name = "Sorcerer's Shoes - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4179,7 +3998,6 @@ namespace LeagueSharp.Common
         {
             Id = 3256,
             Name = "Sorcerer's Shoes - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4198,7 +4016,6 @@ namespace LeagueSharp.Common
         {
             Id = 3257,
             Name = "Sorcerer's Shoes - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4217,7 +4034,6 @@ namespace LeagueSharp.Common
         {
             Id = 3258,
             Name = "Sorcerer's Shoes - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4236,7 +4052,6 @@ namespace LeagueSharp.Common
         {
             Id = 3259,
             Name = "Sorcerer's Shoes - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4255,7 +4070,6 @@ namespace LeagueSharp.Common
         {
             Id = 3260,
             Name = "Ninja Tabi - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4275,7 +4089,6 @@ namespace LeagueSharp.Common
         {
             Id = 3261,
             Name = "Ninja Tabi - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4295,7 +4108,6 @@ namespace LeagueSharp.Common
         {
             Id = 3262,
             Name = "Ninja Tabi - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4315,7 +4127,6 @@ namespace LeagueSharp.Common
         {
             Id = 3263,
             Name = "Ninja Tabi - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4335,7 +4146,6 @@ namespace LeagueSharp.Common
         {
             Id = 3264,
             Name = "Ninja Tabi - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4355,7 +4165,6 @@ namespace LeagueSharp.Common
         {
             Id = 3265,
             Name = "Mercury's Treads - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4375,7 +4184,6 @@ namespace LeagueSharp.Common
         {
             Id = 3266,
             Name = "Mercury's Treads - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4395,7 +4203,6 @@ namespace LeagueSharp.Common
         {
             Id = 3267,
             Name = "Mercury's Treads - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4415,7 +4222,6 @@ namespace LeagueSharp.Common
         {
             Id = 3268,
             Name = "Mercury's Treads - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4435,7 +4241,6 @@ namespace LeagueSharp.Common
         {
             Id = 3269,
             Name = "Mercury's Treads - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4455,7 +4260,6 @@ namespace LeagueSharp.Common
         {
             Id = 3270,
             Name = "Boots of Mobility - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4474,7 +4278,6 @@ namespace LeagueSharp.Common
         {
             Id = 3271,
             Name = "Boots of Mobility - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4493,7 +4296,6 @@ namespace LeagueSharp.Common
         {
             Id = 3272,
             Name = "Boots of Mobility - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4512,7 +4314,6 @@ namespace LeagueSharp.Common
         {
             Id = 3273,
             Name = "Boots of Mobility - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4531,7 +4332,6 @@ namespace LeagueSharp.Common
         {
             Id = 3274,
             Name = "Boots of Mobility - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4550,7 +4350,6 @@ namespace LeagueSharp.Common
         {
             Id = 3275,
             Name = "Ionian Boots of Lucidity - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4569,7 +4368,6 @@ namespace LeagueSharp.Common
         {
             Id = 3276,
             Name = "Ionian Boots of Lucidity - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4588,7 +4386,6 @@ namespace LeagueSharp.Common
         {
             Id = 3277,
             Name = "Ionian Boots of Lucidity - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4607,7 +4404,6 @@ namespace LeagueSharp.Common
         {
             Id = 3278,
             Name = "Ionian Boots of Lucidity - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4626,7 +4422,6 @@ namespace LeagueSharp.Common
         {
             Id = 3279,
             Name = "Ionian Boots of Lucidity - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4645,7 +4440,6 @@ namespace LeagueSharp.Common
         {
             Id = 3280,
             Name = "Boots of Swiftness - Homeguard",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4664,7 +4458,6 @@ namespace LeagueSharp.Common
         {
             Id = 3281,
             Name = "Boots of Swiftness - Captain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -4683,7 +4476,6 @@ namespace LeagueSharp.Common
         {
             Id = 3282,
             Name = "Boots of Swiftness - Furor",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4702,7 +4494,6 @@ namespace LeagueSharp.Common
         {
             Id = 3283,
             Name = "Boots of Swiftness - Distortion",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4721,7 +4512,6 @@ namespace LeagueSharp.Common
         {
             Id = 3284,
             Name = "Boots of Swiftness - Alacrity",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 475,
@@ -4740,7 +4530,6 @@ namespace LeagueSharp.Common
         {
             Id = 3290,
             Name = "Twin Shadows",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 630,
@@ -4760,7 +4549,6 @@ namespace LeagueSharp.Common
         {
             Id = 3301,
             Name = "Ancient Coin",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 365,
@@ -4778,7 +4566,6 @@ namespace LeagueSharp.Common
         {
             Id = 3302,
             Name = "Relic Shield",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 365,
@@ -4797,7 +4584,6 @@ namespace LeagueSharp.Common
         {
             Id = 3303,
             Name = "Spellthief's Edge",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 365,
@@ -4870,7 +4656,6 @@ namespace LeagueSharp.Common
         {
             Id = 3345,
             Name = "Soul Anchor (Trinket)",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 0,
@@ -5014,7 +4799,6 @@ namespace LeagueSharp.Common
         {
             Id = 3401,
             Name = "Face of the Mountain",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 485,
@@ -5465,7 +5249,6 @@ namespace LeagueSharp.Common
         {
             Id = 3460,
             Name = "Golden Transcendence",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 0,
@@ -5483,7 +5266,6 @@ namespace LeagueSharp.Common
         {
             Id = 3504,
             Name = "Ardent Censer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 550,
@@ -5502,7 +5284,6 @@ namespace LeagueSharp.Common
         {
             Id = 3508,
             Name = "Essence Reaver",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 850,
@@ -5521,7 +5302,6 @@ namespace LeagueSharp.Common
         {
             Id = 3599,
             Name = "The Black Spear",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = false,
             Price = 0,
@@ -5539,7 +5319,6 @@ namespace LeagueSharp.Common
         {
             Id = 3706,
             Name = "Stalker's Blade",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -5557,7 +5336,6 @@ namespace LeagueSharp.Common
         {
             Id = 3707,
             Name = "Stalker's Blade - Warrior",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 163,
@@ -5575,7 +5353,6 @@ namespace LeagueSharp.Common
         {
             Id = 3708,
             Name = "Stalker's Blade - Magus",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 680,
@@ -5593,7 +5370,6 @@ namespace LeagueSharp.Common
         {
             Id = 3709,
             Name = "Stalker's Blade - Juggernaut",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 250,
@@ -5611,7 +5387,6 @@ namespace LeagueSharp.Common
         {
             Id = 3710,
             Name = "Stalker's Blade - Devourer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -5629,7 +5404,6 @@ namespace LeagueSharp.Common
         {
             Id = 3711,
             Name = "Poacher's Knife",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -5647,7 +5421,6 @@ namespace LeagueSharp.Common
         {
             Id = 3712,
             Name = "Cultivator's Staff",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -5665,7 +5438,6 @@ namespace LeagueSharp.Common
         {
             Id = 3713,
             Name = "Ranger's Trailblazer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -5683,7 +5455,6 @@ namespace LeagueSharp.Common
         {
             Id = 3714,
             Name = "Skirmisher's Sabre - Warrior",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 163,
@@ -5701,7 +5472,6 @@ namespace LeagueSharp.Common
         {
             Id = 3715,
             Name = "Skirmisher's Sabre",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 350,
@@ -5719,7 +5489,6 @@ namespace LeagueSharp.Common
         {
             Id = 3716,
             Name = "Skirmisher's Sabre - Magus",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 680,
@@ -5737,7 +5506,6 @@ namespace LeagueSharp.Common
         {
             Id = 3717,
             Name = "Skirmisher's Sabre - Juggernaut",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 250,
@@ -5755,7 +5523,6 @@ namespace LeagueSharp.Common
         {
             Id = 3718,
             Name = "Skirmisher's Sabre - Devourer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -5773,7 +5540,6 @@ namespace LeagueSharp.Common
         {
             Id = 3719,
             Name = "Poacher's Knife - Warrior",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 163,
@@ -5791,7 +5557,6 @@ namespace LeagueSharp.Common
         {
             Id = 3720,
             Name = "Poacher's Knife - Magus",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 680,
@@ -5809,7 +5574,6 @@ namespace LeagueSharp.Common
         {
             Id = 3721,
             Name = "Poacher's Knife - Juggernaut",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 250,
@@ -5827,7 +5591,6 @@ namespace LeagueSharp.Common
         {
             Id = 3722,
             Name = "Poacher's Knife - Devourer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -5845,7 +5608,6 @@ namespace LeagueSharp.Common
         {
             Id = 3723,
             Name = "Ranger's Trailblazer - Warrior",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 163,
@@ -5863,7 +5625,6 @@ namespace LeagueSharp.Common
         {
             Id = 3724,
             Name = "Ranger's Trailblazer - Magus",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 680,
@@ -5881,7 +5642,6 @@ namespace LeagueSharp.Common
         {
             Id = 3725,
             Name = "Ranger's Trailblazer - Juggernaut",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 250,
@@ -5899,7 +5659,6 @@ namespace LeagueSharp.Common
         {
             Id = 3726,
             Name = "Ranger's Trailblazer - Devourer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 600,
@@ -5917,7 +5676,6 @@ namespace LeagueSharp.Common
         {
             Id = 3800,
             Name = "Righteous Glory",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 700,
@@ -5936,7 +5694,6 @@ namespace LeagueSharp.Common
         {
             Id = 3801,
             Name = "Crystalline Bracer",
-            Range = 0f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 20,
