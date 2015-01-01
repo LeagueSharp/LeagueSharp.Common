@@ -212,7 +212,12 @@ namespace LeagueSharp.Common
 
             public bool Cast(Obj_AI_Base target)
             {
-                return Cast(target.ServerPosition);
+                if (IsReady() && IsInRange(target))
+                {
+                    return UseItem(Id, target);
+                }
+
+                return false;
             }
 
             public bool Cast(Vector2 position)
