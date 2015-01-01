@@ -15,7 +15,7 @@
  GNU General Public License for more details.
  
  You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+ along with LeagueSharp.Common. If not, see <http:www.gnu.org/licenses/>.
 */
 
 #endregion
@@ -66,10 +66,10 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns if item should have reduced sell price.
+        ///     Returns if item should have a reduced price
         /// </summary>
         /// <param name="itemId">Item Id</param>
-        /// <returns></returns>
+        /// <returns>True/False</returns>
         private static bool IsReducedSellItem(int itemId)
         {
             switch (itemId)
@@ -146,36 +146,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Speed",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 325,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1001, 325),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 25f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -188,36 +165,12 @@ namespace LeagueSharp.Common
             Name = "Faerie Charm",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 180,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1004, 180),
-            //
             ItemCategory = ItemCategory.ManaRegen,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -230,36 +183,12 @@ namespace LeagueSharp.Common
             Name = "Meki Pendant",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 390,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1005, 390),
-            //
             ItemCategory = ItemCategory.ManaRegen,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -272,36 +201,12 @@ namespace LeagueSharp.Common
             Name = "Rejuvenation Bead",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 180,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1006, 180),
-            //
             ItemCategory = ItemCategory.HealthRegen,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -314,36 +219,13 @@ namespace LeagueSharp.Common
             Name = "Regrowth Pendant",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 435,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1007, 435),
-            //
             ItemCategory = ItemCategory.HealthRegen,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
             FlatHPRegenMod = 3f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -356,36 +238,13 @@ namespace LeagueSharp.Common
             Name = "Giant's Belt",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 1000,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1011, 1000),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 380f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -398,36 +257,13 @@ namespace LeagueSharp.Common
             Name = "Cloak of Agility",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 730,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1018, 730),
-            //
             ItemCategory = ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.15f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -440,36 +276,13 @@ namespace LeagueSharp.Common
             Name = "Blasting Wand",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 860,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1026, 860),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 40f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -482,36 +295,12 @@ namespace LeagueSharp.Common
             Name = "Sapphire Crystal",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1027, 400),
-            //
             ItemCategory = ItemCategory.Mana,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -524,36 +313,13 @@ namespace LeagueSharp.Common
             Name = "Ruby Crystal",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1028, 400),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 150f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -566,36 +332,13 @@ namespace LeagueSharp.Common
             Name = "Cloth Armor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 300,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1029, 300),
-            //
             ItemCategory = ItemCategory.Armor,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 15f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -608,36 +351,13 @@ namespace LeagueSharp.Common
             Name = "Chain Vest",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 450,
             RecipeItems = new[] { 1029 },
             SellPrice = GetReducedPrice(1031, 750),
-            //
             ItemCategory = ItemCategory.Armor,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 40f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -650,35 +370,12 @@ namespace LeagueSharp.Common
             Name = "Null-Magic Mantle",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 500,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1033, 500),
-            //
             ItemCategory = ItemCategory.SpellBlock,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -692,36 +389,13 @@ namespace LeagueSharp.Common
             Name = "Long Sword",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 360,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1036, 360),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 10f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -734,36 +408,13 @@ namespace LeagueSharp.Common
             Name = "Pickaxe",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 875,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1037, 875),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -776,36 +427,13 @@ namespace LeagueSharp.Common
             Name = "B. F. Sword",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 1550,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1038, 1550),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 50f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -818,36 +446,12 @@ namespace LeagueSharp.Common
             Name = "Hunter's Machete",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1039, 400),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -860,36 +464,12 @@ namespace LeagueSharp.Common
             Name = "Dagger",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 450,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1042, 450),
-            //
             ItemCategory = ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -902,36 +482,12 @@ namespace LeagueSharp.Common
             Name = "Recurve Bow",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 900,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1043, 900),
-            //
             ItemCategory = ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -944,36 +500,13 @@ namespace LeagueSharp.Common
             Name = "Brawler's Gloves",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1051, 400),
-            //
             ItemCategory = ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.08f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -986,36 +519,13 @@ namespace LeagueSharp.Common
             Name = "Amplifying Tome",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 435,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1052, 435),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 20f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1028,36 +538,13 @@ namespace LeagueSharp.Common
             Name = "Vampiric Scepter",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 440,
             RecipeItems = new[] { 1036 },
             SellPrice = GetReducedPrice(1053, 800),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 10f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1070,36 +557,14 @@ namespace LeagueSharp.Common
             Name = "Doran's Shield",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 440,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1054, 440),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 80f,
             FlatHPRegenMod = 1.2f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1112,36 +577,14 @@ namespace LeagueSharp.Common
             Name = "Doran's Blade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 440,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1055, 440),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 70f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 7f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1154,36 +597,14 @@ namespace LeagueSharp.Common
             Name = "Doran's Ring",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1056, 400),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 60f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 15f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1196,35 +617,12 @@ namespace LeagueSharp.Common
             Name = "Negatron Cloak",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1033 },
             SellPrice = GetReducedPrice(1057, 850),
-            //
             ItemCategory = ItemCategory.SpellBlock,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 45f
         };
 
@@ -1238,36 +636,13 @@ namespace LeagueSharp.Common
             Name = "Needlessly Large Rod",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 1600,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1058, 1600),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1280,36 +655,13 @@ namespace LeagueSharp.Common
             Name = "Prospector's Blade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 950,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1062, 950),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 16f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1322,36 +674,13 @@ namespace LeagueSharp.Common
             Name = "Prospector's Ring",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 950,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1063, 950),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 35f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1364,36 +693,14 @@ namespace LeagueSharp.Common
             Name = "Doran's Shield (Showdown)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 440,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1074, 440),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 100f,
             FlatHPRegenMod = 2f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1406,36 +713,14 @@ namespace LeagueSharp.Common
             Name = "Doran's Blade (Showdown)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 440,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1075, 440),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 70f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 7f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1448,36 +733,14 @@ namespace LeagueSharp.Common
             Name = "Doran's Ring (Showdown)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1076, 400),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 60f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 15f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1490,36 +753,12 @@ namespace LeagueSharp.Common
             Name = "Spirit Stone",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 15,
             RecipeItems = new[] { 1004, 1006, 1039 },
             SellPrice = GetReducedPrice(1080, 775),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1532,36 +771,12 @@ namespace LeagueSharp.Common
             Name = "Penetrating Bullets",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1500, 0),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1574,36 +789,12 @@ namespace LeagueSharp.Common
             Name = "Fortification",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1501, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1616,36 +807,12 @@ namespace LeagueSharp.Common
             Name = "Reinforced Armor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1502, 0),
-            //
             ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1658,36 +825,12 @@ namespace LeagueSharp.Common
             Name = "Warden's Eye",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1503, 0),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1700,36 +843,12 @@ namespace LeagueSharp.Common
             Name = "Vanguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1504, 0),
-            //
             ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1742,36 +861,12 @@ namespace LeagueSharp.Common
             Name = "Lightning Rod",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(1505, 0),
-            //
             ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1784,36 +879,12 @@ namespace LeagueSharp.Common
             Name = "Health Potion",
             Range = 0f,
             MaxStacks = 5,
-            //
             IsRecipe = false,
-            //
             Price = 35,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2003, 35),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1826,36 +897,12 @@ namespace LeagueSharp.Common
             Name = "Mana Potion",
             Range = 0f,
             MaxStacks = 5,
-            //
             IsRecipe = false,
-            //
             Price = 35,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2004, 35),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1868,36 +915,12 @@ namespace LeagueSharp.Common
             Name = "Total Biscuit of Rejuvenation",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2009, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1910,36 +933,12 @@ namespace LeagueSharp.Common
             Name = "Total Biscuit of Rejuvenation",
             Range = 0f,
             MaxStacks = 5,
-            //
             IsRecipe = false,
-            //
             Price = 35,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2010, 35),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1952,36 +951,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Fortitude",
             Range = 0f,
             MaxStacks = 3,
-            //
             IsRecipe = false,
-            //
             Price = 350,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2037, 350),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.Consumable & ItemCategory.Health,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -1994,36 +969,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Agility",
             Range = 0f,
             MaxStacks = 3,
-            //
             IsRecipe = false,
-            //
             Price = 250,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2038, 250),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2036,36 +987,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Brilliance",
             Range = 0f,
             MaxStacks = 3,
-            //
             IsRecipe = false,
-            //
             Price = 250,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2039, 250),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2078,36 +1005,12 @@ namespace LeagueSharp.Common
             Name = "Ichor of Rage",
             Range = 0f,
             MaxStacks = 3,
-            //
             IsRecipe = false,
-            //
             Price = 500,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2040, 500),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2120,36 +1023,12 @@ namespace LeagueSharp.Common
             Name = "Crystalline Flask",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 345,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2041, 345),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2162,36 +1041,12 @@ namespace LeagueSharp.Common
             Name = "Oracle's Elixir",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2042, 400),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2204,36 +1059,12 @@ namespace LeagueSharp.Common
             Name = "Vision Ward",
             Range = 600f,
             MaxStacks = 2,
-            //
             IsRecipe = false,
-            //
             Price = 100,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2043, 100),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2246,36 +1077,12 @@ namespace LeagueSharp.Common
             Name = "Stealth Ward",
             Range = 600f,
             MaxStacks = 3,
-            //
             IsRecipe = false,
-            //
             Price = 75,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2044, 75),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2288,36 +1095,13 @@ namespace LeagueSharp.Common
             Name = "Ruby Sightstone",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 400,
             RecipeItems = new[] { 2049, 1028 },
             SellPrice = GetReducedPrice(2045, 1200),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Consumable & ItemTier.Legendary,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 400f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2330,36 +1114,12 @@ namespace LeagueSharp.Common
             Name = "Oracle's Extract",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 250,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2047, 250),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2372,36 +1132,12 @@ namespace LeagueSharp.Common
             Name = "Ichor of Illumination",
             Range = 0f,
             MaxStacks = 3,
-            //
             IsRecipe = false,
-            //
             Price = 500,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2048, 500),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2414,36 +1150,13 @@ namespace LeagueSharp.Common
             Name = "Sightstone",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 400,
             RecipeItems = new[] { 1028 },
             SellPrice = GetReducedPrice(2049, 800),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Consumable & ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 150f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2456,36 +1169,12 @@ namespace LeagueSharp.Common
             Name = "Explorer's Ward",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2050, 0),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2498,36 +1187,13 @@ namespace LeagueSharp.Common
             Name = "Guardian's Horn",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 445,
             RecipeItems = new[] { 1006, 1028 },
             SellPrice = GetReducedPrice(2051, 1025),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 180f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2540,36 +1206,12 @@ namespace LeagueSharp.Common
             Name = "Poro-Snax",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2052, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2582,36 +1224,13 @@ namespace LeagueSharp.Common
             Name = "Raptor Cloak",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 520,
             RecipeItems = new[] { 1006, 1029 },
             SellPrice = GetReducedPrice(2053, 1000),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 30f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2624,36 +1243,12 @@ namespace LeagueSharp.Common
             Name = "Diet Poro-Snax",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2054, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2666,36 +1261,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Ruin",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2137, 400),
-            //
             ItemCategory = ItemCategory.Consumable & ItemCategory.Health,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2708,36 +1279,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Iron",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2138, 400),
-            //
             ItemCategory = ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2750,36 +1297,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Sorcery",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2139, 400),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2792,36 +1315,12 @@ namespace LeagueSharp.Common
             Name = "Elixir of Wrath",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(2140, 400),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Consumable,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2834,35 +1333,13 @@ namespace LeagueSharp.Common
             Name = "Abyssal Scepter",
             Range = 700f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 730,
             RecipeItems = new[] { 1026, 1057 },
             SellPrice = GetReducedPrice(3001, 1940),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 70f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 50f
         };
 
@@ -2876,36 +1353,13 @@ namespace LeagueSharp.Common
             Name = "Archangel's Staff",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1120,
             RecipeItems = new[] { 3070, 1026 },
             SellPrice = GetReducedPrice(3003, 2120),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2918,36 +1372,13 @@ namespace LeagueSharp.Common
             Name = "Manamune",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 605,
             RecipeItems = new[] { 1037, 3070 },
             SellPrice = GetReducedPrice(3004, 1620),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.Damage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -2960,36 +1391,14 @@ namespace LeagueSharp.Common
             Name = "Atma's Impaler",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 700,
             RecipeItems = new[] { 3093, 1031 },
             SellPrice = GetReducedPrice(3005, 1550),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.Armor & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 45f,
             FlatCritChanceMod = 0.15f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3002,36 +1411,13 @@ namespace LeagueSharp.Common
             Name = "Berserker's Greaves",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 225,
             RecipeItems = new[] { 1001, 1042 },
             SellPrice = GetReducedPrice(3006, 1000),
-            //
             ItemCategory = ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3044,36 +1430,13 @@ namespace LeagueSharp.Common
             Name = "Archangel's Staff (Crystal Scar)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1120,
             RecipeItems = new[] { 3073, 1026 },
             SellPrice = GetReducedPrice(3007, 2120),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3086,36 +1449,13 @@ namespace LeagueSharp.Common
             Name = "Manamune (Crystal Scar)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 605,
             RecipeItems = new[] { 1037, 3073 },
             SellPrice = GetReducedPrice(3008, 1620),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.Damage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3128,36 +1468,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Swiftness",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 675,
             RecipeItems = new[] { 1001 },
             SellPrice = GetReducedPrice(3009, 1000),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 60f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3170,36 +1487,13 @@ namespace LeagueSharp.Common
             Name = "Catalyst the Protector",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 400,
             RecipeItems = new[] { 1027, 1028 },
             SellPrice = GetReducedPrice(3010, 1200),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.HealthRegen & ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3212,36 +1506,13 @@ namespace LeagueSharp.Common
             Name = "Sorcerer's Shoes",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 775,
             RecipeItems = new[] { 1001 },
             SellPrice = GetReducedPrice(3020, 1100),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3254,36 +1525,14 @@ namespace LeagueSharp.Common
             Name = "Frozen Mallet",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1025,
             RecipeItems = new[] { 1037, 1011, 1028 },
             SellPrice = GetReducedPrice(3022, 3300),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 700f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3296,36 +1545,14 @@ namespace LeagueSharp.Common
             Name = "Twin Shadows",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 630,
             RecipeItems = new[] { 3113, 3108 },
             SellPrice = GetReducedPrice(3023, 1530),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.06f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3338,36 +1565,13 @@ namespace LeagueSharp.Common
             Name = "Glacial Shroud",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 250,
             RecipeItems = new[] { 1027, 1029 },
             SellPrice = GetReducedPrice(3024, 950),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 20f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3380,36 +1584,14 @@ namespace LeagueSharp.Common
             Name = "Iceborn Gauntlet",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 750,
             RecipeItems = new[] { 3057, 3024 },
             SellPrice = GetReducedPrice(3025, 1365),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 60f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 30f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3422,35 +1604,13 @@ namespace LeagueSharp.Common
             Name = "Guardian Angel",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1250,
             RecipeItems = new[] { 1057, 1031 },
             SellPrice = GetReducedPrice(3026, 2050),
-            //
             ItemCategory = ItemCategory.Armor & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 50f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 50f
         };
 
@@ -3464,38 +1624,16 @@ namespace LeagueSharp.Common
             Name = "Rod of Ages",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 740,
             RecipeItems = new[] { 3010, 1026 },
             SellPrice = GetReducedPrice(3027, 2000),
-            //
             ItemCategory =
                 ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.ManaRegen &
                 ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 450f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3508,35 +1646,12 @@ namespace LeagueSharp.Common
             Name = "Chalice of Harmony",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 140,
             RecipeItems = new[] { 1033, 1004 },
             SellPrice = GetReducedPrice(3028, 820),
-            //
             ItemCategory = ItemCategory.SpellBlock & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -3550,38 +1665,16 @@ namespace LeagueSharp.Common
             Name = "Rod of Ages (Crystal Scar)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 740,
             RecipeItems = new[] { 3010, 1026 },
             SellPrice = GetReducedPrice(3029, 2000),
-            //
             ItemCategory =
                 ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.ManaRegen &
                 ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 450f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3594,36 +1687,14 @@ namespace LeagueSharp.Common
             Name = "Infinity Edge",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 645,
             RecipeItems = new[] { 1018, 1037, 1038 },
             SellPrice = GetReducedPrice(3031, 3800),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.25f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 80f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3636,36 +1707,13 @@ namespace LeagueSharp.Common
             Name = "Last Whisper",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1065,
             RecipeItems = new[] { 1036, 1037 },
             SellPrice = GetReducedPrice(3035, 2300),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 40f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3678,36 +1726,13 @@ namespace LeagueSharp.Common
             Name = "Seraph's Embrace",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 2700,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3040, 2700),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3720,36 +1745,13 @@ namespace LeagueSharp.Common
             Name = "Mejai's Soulstealer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 965,
             RecipeItems = new[] { 1052 },
             SellPrice = GetReducedPrice(3041, 1400),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 20f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3762,36 +1764,13 @@ namespace LeagueSharp.Common
             Name = "Muramana",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 2200,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3042, 2200),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3804,36 +1783,13 @@ namespace LeagueSharp.Common
             Name = "Muramana",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 2200,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3043, 2200),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3846,36 +1802,14 @@ namespace LeagueSharp.Common
             Name = "Phage",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 565,
             RecipeItems = new[] { 1036, 1028 },
             SellPrice = GetReducedPrice(3044, 1325),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 20f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3888,36 +1822,14 @@ namespace LeagueSharp.Common
             Name = "Phantom Dancer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 520,
             RecipeItems = new[] { 1018, 3086, 1042 },
             SellPrice = GetReducedPrice(3046, 1950),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.05f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.3f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3930,36 +1842,14 @@ namespace LeagueSharp.Common
             Name = "Ninja Tabi",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 375,
             RecipeItems = new[] { 1001, 1029 },
             SellPrice = GetReducedPrice(3047, 1000),
-            //
             ItemCategory = ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -3972,36 +1862,13 @@ namespace LeagueSharp.Common
             Name = "Seraph's Embrace",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 2700,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3048, 2700),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4014,36 +1881,13 @@ namespace LeagueSharp.Common
             Name = "Zeke's Herald",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 800,
             RecipeItems = new[] { 3067, 1053 },
             SellPrice = GetReducedPrice(3050, 1690),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 250f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4056,36 +1900,14 @@ namespace LeagueSharp.Common
             Name = "Ohmwrecker",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 750,
             RecipeItems = new[] { 3067, 2053 },
             SellPrice = GetReducedPrice(3056, 1720),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 50f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 300f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4098,36 +1920,13 @@ namespace LeagueSharp.Common
             Name = "Sheen",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 365,
             RecipeItems = new[] { 1052, 1027 },
             SellPrice = GetReducedPrice(3057, 1200),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 25f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4140,36 +1939,15 @@ namespace LeagueSharp.Common
             Name = "Banner of Command",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 280,
             RecipeItems = new[] { 3105, 3108 },
             SellPrice = GetReducedPrice(3060, 1485),
-            //
             ItemCategory =
                 ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 20f
         };
 
@@ -4183,35 +1961,13 @@ namespace LeagueSharp.Common
             Name = "Spirit Visage",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 700,
             RecipeItems = new[] { 3067, 3211 },
             SellPrice = GetReducedPrice(3065, 1450),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 400f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 55f
         };
 
@@ -4225,36 +1981,13 @@ namespace LeagueSharp.Common
             Name = "Kindlegem",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 450,
             RecipeItems = new[] { 1028 },
             SellPrice = GetReducedPrice(3067, 850),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4267,36 +2000,14 @@ namespace LeagueSharp.Common
             Name = "Sunfire Cape",
             Range = 400f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 850,
             RecipeItems = new[] { 1011, 1031 },
             SellPrice = GetReducedPrice(3068, 2300),
-            //
             ItemCategory = ItemCategory.Armor & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 45f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 450f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4309,36 +2020,12 @@ namespace LeagueSharp.Common
             Name = "Talisman of Ascension",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 635,
             RecipeItems = new[] { 3114, 3096 },
             SellPrice = GetReducedPrice(3069, 1375),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4351,36 +2038,12 @@ namespace LeagueSharp.Common
             Name = "Tear of the Goddess",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 140,
             RecipeItems = new[] { 1004, 1027 },
             SellPrice = GetReducedPrice(3070, 720),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4393,36 +2056,14 @@ namespace LeagueSharp.Common
             Name = "The Black Cleaver",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1263,
             RecipeItems = new[] { 3134, 1028 },
             SellPrice = GetReducedPrice(3071, 2280),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 50f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4435,36 +2076,13 @@ namespace LeagueSharp.Common
             Name = "The Bloodthirster",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1150,
             RecipeItems = new[] { 1053, 1038 },
             SellPrice = GetReducedPrice(3072, 3140),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 80f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4477,36 +2095,12 @@ namespace LeagueSharp.Common
             Name = "Tear of the Goddess (Crystal Scar)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 140,
             RecipeItems = new[] { 1004, 1027 },
             SellPrice = GetReducedPrice(3073, 720),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4519,36 +2113,13 @@ namespace LeagueSharp.Common
             Name = "Ravenous Hydra (Melee Only)",
             Range = 400f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 1053, 3077 },
             SellPrice = GetReducedPrice(3074, 1345),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 75f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4561,36 +2132,13 @@ namespace LeagueSharp.Common
             Name = "Thornmail",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1050,
             RecipeItems = new[] { 1029, 1031 },
             SellPrice = GetReducedPrice(3075, 1800),
-            //
             ItemCategory = ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 100f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4603,36 +2151,13 @@ namespace LeagueSharp.Common
             Name = "Tiamat (Melee Only)",
             Range = 400f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 305,
             RecipeItems = new[] { 1036, 1037, 1006 },
             SellPrice = GetReducedPrice(3077, 1720),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 40f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4645,38 +2170,19 @@ namespace LeagueSharp.Common
             Name = "Trinity Force",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 78,
             RecipeItems = new[] { 3086, 3057, 3044 },
             SellPrice = GetReducedPrice(3078, 1258),
-            //
             ItemCategory =
                 ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.AttackSpeed &
                 ItemCategory.CriticalStrike & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.08f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.1f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 250f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 30f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4689,36 +2195,13 @@ namespace LeagueSharp.Common
             Name = "Warden's Mail",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 450,
             RecipeItems = new[] { 1029 },
             SellPrice = GetReducedPrice(3082, 750),
-            //
             ItemCategory = ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 45f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4731,36 +2214,13 @@ namespace LeagueSharp.Common
             Name = "Warmog's Armor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 300,
             RecipeItems = new[] { 3801, 1011 },
             SellPrice = GetReducedPrice(3083, 1320),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 800f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4773,36 +2233,13 @@ namespace LeagueSharp.Common
             Name = "Overlord's Bloodmail",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1055,
             RecipeItems = new[] { 1011, 1028 },
             SellPrice = GetReducedPrice(3084, 2455),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 850f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4815,36 +2252,12 @@ namespace LeagueSharp.Common
             Name = "Runaan's Hurricane (Ranged Only)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 1043, 1042 },
             SellPrice = GetReducedPrice(3085, 1950),
-            //
             ItemCategory = ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4857,36 +2270,14 @@ namespace LeagueSharp.Common
             Name = "Zeal",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 250,
             RecipeItems = new[] { 1051, 1042 },
             SellPrice = GetReducedPrice(3086, 1100),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.05f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.1f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4899,36 +2290,14 @@ namespace LeagueSharp.Common
             Name = "Statikk Shiv",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3086, 3093 },
             SellPrice = GetReducedPrice(3087, 1250),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.06f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.2f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4941,36 +2310,13 @@ namespace LeagueSharp.Common
             Name = "Rabadon's Deathcap",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 840,
             RecipeItems = new[] { 1058, 1026 },
             SellPrice = GetReducedPrice(3089, 3300),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 120f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -4983,36 +2329,14 @@ namespace LeagueSharp.Common
             Name = "Wooglet's Witchcap",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1045,
             RecipeItems = new[] { 1052, 3191, 1026 },
             SellPrice = GetReducedPrice(3090, 2805),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 45f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 100f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5025,35 +2349,12 @@ namespace LeagueSharp.Common
             Name = "Wit's End",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 750,
             RecipeItems = new[] { 1033, 1043, 1042 },
             SellPrice = GetReducedPrice(3091, 2600),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 30f
         };
 
@@ -5067,36 +2368,13 @@ namespace LeagueSharp.Common
             Name = "Frost Queen's Claim",
             Range = 850f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 515,
             RecipeItems = new[] { 3098, 3108 },
             SellPrice = GetReducedPrice(3092, 1400),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 50f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5109,36 +2387,13 @@ namespace LeagueSharp.Common
             Name = "Avarice Blade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 400,
             RecipeItems = new[] { 1051 },
             SellPrice = GetReducedPrice(3093, 800),
-            //
             ItemCategory = ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.1f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5151,36 +2406,12 @@ namespace LeagueSharp.Common
             Name = "Nomad's Medallion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 500,
             RecipeItems = new[] { 3301 },
             SellPrice = GetReducedPrice(3096, 865),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5193,36 +2424,13 @@ namespace LeagueSharp.Common
             Name = "Targon's Brace",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 500,
             RecipeItems = new[] { 3302 },
             SellPrice = GetReducedPrice(3097, 865),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 175f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5235,36 +2443,13 @@ namespace LeagueSharp.Common
             Name = "Frostfang",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 500,
             RecipeItems = new[] { 3303 },
             SellPrice = GetReducedPrice(3098, 865),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 10f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5277,36 +2462,13 @@ namespace LeagueSharp.Common
             Name = "Soul Shroud",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 485,
             RecipeItems = new[] { 3067, 1028 },
             SellPrice = GetReducedPrice(3099, 1335),
-            //
             ItemCategory = ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 520f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5319,36 +2481,14 @@ namespace LeagueSharp.Common
             Name = "Lich Bane",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 850,
             RecipeItems = new[] { 3113, 3057 },
             SellPrice = GetReducedPrice(3100, 1730),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.05f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5361,36 +2501,12 @@ namespace LeagueSharp.Common
             Name = "Stinger",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1042 },
             SellPrice = GetReducedPrice(3101, 800),
-            //
             ItemCategory = ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5403,35 +2519,13 @@ namespace LeagueSharp.Common
             Name = "Banshee's Veil",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1150,
             RecipeItems = new[] { 3211, 1028 },
             SellPrice = GetReducedPrice(3102, 1850),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 450f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 55f
         };
 
@@ -5445,36 +2539,14 @@ namespace LeagueSharp.Common
             Name = "Lord Van Damm's Pillager",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 995,
             RecipeItems = new[] { 1018, 1037, 3122 },
             SellPrice = GetReducedPrice(3104, 3040),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.25f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 80f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5487,35 +2559,13 @@ namespace LeagueSharp.Common
             Name = "Aegis of the Legion",
             Range = 1100f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 820,
             RecipeItems = new[] { 1033, 1006, 1028 },
             SellPrice = GetReducedPrice(3105, 1900),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 20f
         };
 
@@ -5529,36 +2579,12 @@ namespace LeagueSharp.Common
             Name = "Madred's Razors",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 300,
             RecipeItems = new[] { 1042 },
             SellPrice = GetReducedPrice(3106, 750),
-            //
             ItemCategory = ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5571,35 +2597,14 @@ namespace LeagueSharp.Common
             Name = "Runic Bulwark",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 400,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3107, 400),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 20f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 300f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 30f
         };
 
@@ -5613,36 +2618,13 @@ namespace LeagueSharp.Common
             Name = "Fiendish Codex",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 385,
             RecipeItems = new[] { 1052 },
             SellPrice = GetReducedPrice(3108, 820),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 30f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5655,35 +2637,14 @@ namespace LeagueSharp.Common
             Name = "Force of Nature",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1000,
             RecipeItems = new[] { 1006, 1057 },
             SellPrice = GetReducedPrice(3109, 1530),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.08f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
             FlatHPRegenMod = 4f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 76f
         };
 
@@ -5697,36 +2658,13 @@ namespace LeagueSharp.Common
             Name = "Frozen Heart",
             Range = 700f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 450,
             RecipeItems = new[] { 3082, 3024 },
             SellPrice = GetReducedPrice(3110, 1150),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 100f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5739,35 +2677,13 @@ namespace LeagueSharp.Common
             Name = "Mercury's Treads",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 375,
             RecipeItems = new[] { 1001, 1033 },
             SellPrice = GetReducedPrice(3111, 1200),
-            //
             ItemCategory = ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -5781,35 +2697,12 @@ namespace LeagueSharp.Common
             Name = "Orb of Winter",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 850,
             RecipeItems = new[] { 1033, 1006 },
             SellPrice = GetReducedPrice(3112, 1530),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 70f
         };
 
@@ -5823,36 +2716,13 @@ namespace LeagueSharp.Common
             Name = "Aether Wisp",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 515,
             RecipeItems = new[] { 1052 },
             SellPrice = GetReducedPrice(3113, 950),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 30f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5865,36 +2735,12 @@ namespace LeagueSharp.Common
             Name = "Forbidden Idol",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 240,
             RecipeItems = new[] { 1004 },
             SellPrice = GetReducedPrice(3114, 420),
-            //
             ItemCategory = ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5907,36 +2753,13 @@ namespace LeagueSharp.Common
             Name = "Nashor's Tooth",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 850,
             RecipeItems = new[] { 3101, 3108 },
             SellPrice = GetReducedPrice(3115, 1585),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Legendary,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5949,36 +2772,14 @@ namespace LeagueSharp.Common
             Name = "Rylai's Crystal Scepter",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 605,
             RecipeItems = new[] { 1052, 1026, 1011 },
             SellPrice = GetReducedPrice(3116, 2900),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
             ItemTier = ItemTier.Legendary,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 400f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 100f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -5991,36 +2792,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Mobility",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 1001 },
             SellPrice = GetReducedPrice(3117, 800),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 105f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6033,36 +2811,14 @@ namespace LeagueSharp.Common
             Name = "Wicked Hatchet",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 440,
             RecipeItems = new[] { 1051, 1036 },
             SellPrice = GetReducedPrice(3122, 1200),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.1f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 20f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6075,36 +2831,14 @@ namespace LeagueSharp.Common
             Name = "Executioner's Calling",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 740,
             RecipeItems = new[] { 1036, 3093 },
             SellPrice = GetReducedPrice(3123, 1500),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.2f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6117,37 +2851,15 @@ namespace LeagueSharp.Common
             Name = "Guinsoo's Rageblade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 865,
             RecipeItems = new[] { 1037, 1026 },
             SellPrice = GetReducedPrice(3124, 2600),
-            //
             ItemCategory =
                 ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 40f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6160,36 +2872,14 @@ namespace LeagueSharp.Common
             Name = "Madred's Bloodrazor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 775,
             RecipeItems = new[] { 1037, 3106, 1043 },
             SellPrice = GetReducedPrice(3126, 2850),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 40f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6202,36 +2892,13 @@ namespace LeagueSharp.Common
             Name = "Deathfire Grasp",
             Range = 750f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 680,
             RecipeItems = new[] { 1058, 3108 },
             SellPrice = GetReducedPrice(3128, 2665),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 120f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6244,36 +2911,12 @@ namespace LeagueSharp.Common
             Name = "Sword of the Divine",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 800,
             RecipeItems = new[] { 1043, 1042 },
             SellPrice = GetReducedPrice(3131, 2150),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6286,36 +2929,13 @@ namespace LeagueSharp.Common
             Name = "Heart of Gold",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1028 },
             SellPrice = GetReducedPrice(3132, 750),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 325f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6328,36 +2948,13 @@ namespace LeagueSharp.Common
             Name = "The Brutalizer",
             Range = 0f,
             MaxStacks = 0,
-            //
             IsRecipe = true,
-            //
             Price = 617,
             RecipeItems = new[] { 1036 },
             SellPrice = GetReducedPrice(3134, 977),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6370,36 +2967,13 @@ namespace LeagueSharp.Common
             Name = "Void Staff",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1000,
             RecipeItems = new[] { 1052, 1026 },
             SellPrice = GetReducedPrice(3135, 2295),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 70f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6412,36 +2986,14 @@ namespace LeagueSharp.Common
             Name = "Haunting Guise",
             Range = 0f,
             MaxStacks = 0,
-            //
             IsRecipe = true,
-            //
             Price = 650,
             RecipeItems = new[] { 1052, 1028 },
             SellPrice = GetReducedPrice(3136, 1485),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 25f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6454,35 +3006,12 @@ namespace LeagueSharp.Common
             Name = "Dervish Blade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 200,
             RecipeItems = new[] { 3101, 3140 },
             SellPrice = GetReducedPrice(3137, 1300),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 45f
         };
 
@@ -6496,36 +3025,13 @@ namespace LeagueSharp.Common
             Name = "Leviathan",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 800,
             RecipeItems = new[] { 1028 },
             SellPrice = GetReducedPrice(3138, 1200),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 180f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6538,34 +3044,12 @@ namespace LeagueSharp.Common
             Name = "Mercurial Scimitar",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 900,
             RecipeItems = new[] { 1038, 3140 },
             SellPrice = GetReducedPrice(3139, 3200),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 80f,
             FlatSpellBlockMod = 35f
         };
@@ -6580,35 +3064,12 @@ namespace LeagueSharp.Common
             Name = "Quicksilver Sash",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 750,
             RecipeItems = new[] { 1033 },
             SellPrice = GetReducedPrice(3140, 1250),
-            //
             ItemCategory = ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 30f
         };
 
@@ -6622,36 +3083,13 @@ namespace LeagueSharp.Common
             Name = "Sword of the Occult",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1040,
             RecipeItems = new[] { 1036 },
             SellPrice = GetReducedPrice(3141, 1400),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 10f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6664,36 +3102,14 @@ namespace LeagueSharp.Common
             Name = "Youmuu's Ghostblade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 563,
             RecipeItems = new[] { 3134, 3093 },
             SellPrice = GetReducedPrice(3142, 1580),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.15f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6706,36 +3122,14 @@ namespace LeagueSharp.Common
             Name = "Randuin's Omen",
             Range = 500f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 800,
             RecipeItems = new[] { 3082, 1011 },
             SellPrice = GetReducedPrice(3143, 2250),
-            //
             ItemCategory = ItemCategory.Armor & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 70f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 500f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6748,36 +3142,13 @@ namespace LeagueSharp.Common
             Name = "Bilgewater Cutlass",
             Range = 450f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 240,
             RecipeItems = new[] { 1053, 1036 },
             SellPrice = GetReducedPrice(3144, 1040),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6790,36 +3161,13 @@ namespace LeagueSharp.Common
             Name = "Hextech Revolver",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 330,
             RecipeItems = new[] { 1052 },
             SellPrice = GetReducedPrice(3145, 765),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 40f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6832,36 +3180,14 @@ namespace LeagueSharp.Common
             Name = "Hextech Gunblade",
             Range = 700f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 800,
             RecipeItems = new[] { 3144, 3145 },
             SellPrice = GetReducedPrice(3146, 1370),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 65f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 45f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6874,36 +3200,14 @@ namespace LeagueSharp.Common
             Name = "Liandry's Torment",
             Range = 0f,
             MaxStacks = 0,
-            //
             IsRecipe = true,
-            //
             Price = 980,
             RecipeItems = new[] { 1052, 3136 },
             SellPrice = GetReducedPrice(3151, 2065),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 300f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 50f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6916,36 +3220,13 @@ namespace LeagueSharp.Common
             Name = "Will of the Ancients",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 480,
             RecipeItems = new[] { 3145, 3108 },
             SellPrice = GetReducedPrice(3152, 1195),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -6958,36 +3239,13 @@ namespace LeagueSharp.Common
             Name = "Blade of the Ruined King",
             Range = 450f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 900,
             RecipeItems = new[] { 3144, 1042 },
             SellPrice = GetReducedPrice(3153, 1590),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7000,36 +3258,13 @@ namespace LeagueSharp.Common
             Name = "Wriggle's Lantern",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 215,
             RecipeItems = new[] { 1036, 3106, 1042 },
             SellPrice = GetReducedPrice(3154, 1325),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 12f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7042,34 +3277,12 @@ namespace LeagueSharp.Common
             Name = "Hexdrinker",
             Range = 0f,
             MaxStacks = 0,
-            //
             IsRecipe = true,
-            //
             Price = 590,
             RecipeItems = new[] { 1033, 1036 },
             SellPrice = GetReducedPrice(3155, 1450),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
             FlatSpellBlockMod = 30f
         };
@@ -7084,34 +3297,12 @@ namespace LeagueSharp.Common
             Name = "Maw of Malmortius",
             Range = 0f,
             MaxStacks = 0,
-            //
             IsRecipe = true,
-            //
             Price = 875,
             RecipeItems = new[] { 1037, 3155 },
             SellPrice = GetReducedPrice(3156, 2340),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 60f,
             FlatSpellBlockMod = 40f
         };
@@ -7126,36 +3317,14 @@ namespace LeagueSharp.Common
             Name = "Zhonya's Hourglass",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 500,
             RecipeItems = new[] { 1058, 3191 },
             SellPrice = GetReducedPrice(3157, 2565),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 50f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 120f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7168,36 +3337,13 @@ namespace LeagueSharp.Common
             Name = "Ionian Boots of Lucidity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 675,
             RecipeItems = new[] { 1001 },
             SellPrice = GetReducedPrice(3158, 1000),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7210,36 +3356,13 @@ namespace LeagueSharp.Common
             Name = "Grez's Spectral Lantern",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 180,
             RecipeItems = new[] { 1036, 3106, 1042 },
             SellPrice = GetReducedPrice(3159, 1290),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 15f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7252,36 +3375,13 @@ namespace LeagueSharp.Common
             Name = "Feral Flare",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1800,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3160, 1800),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 12f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7294,36 +3394,13 @@ namespace LeagueSharp.Common
             Name = "Morellonomicon",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 680,
             RecipeItems = new[] { 3114, 3108 },
             SellPrice = GetReducedPrice(3165, 1305),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7336,36 +3413,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3166, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7378,36 +3431,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3167, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7420,36 +3449,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3168, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7462,36 +3467,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3169, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7504,35 +3485,14 @@ namespace LeagueSharp.Common
             Name = "Moonflair Spellblade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 920,
             RecipeItems = new[] { 1033, 3191 },
             SellPrice = GetReducedPrice(3170, 1885),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor & ItemCategory.SpellBlock,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 50f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 50f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 50f
         };
 
@@ -7546,36 +3506,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3171, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7588,36 +3524,14 @@ namespace LeagueSharp.Common
             Name = "Zephyr",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 725,
             RecipeItems = new[] { 3101, 1037 },
             SellPrice = GetReducedPrice(3172, 1950),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.1f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7630,35 +3544,13 @@ namespace LeagueSharp.Common
             Name = "Athene's Unholy Grail",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 880,
             RecipeItems = new[] { 3028, 3108 },
             SellPrice = GetReducedPrice(3174, 1405),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.SpellBlock & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -7672,36 +3564,12 @@ namespace LeagueSharp.Common
             Name = "Head of Kha'Zix",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3175, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7714,36 +3582,13 @@ namespace LeagueSharp.Common
             Name = "Arcane Helix",
             Range = 0f,
             MaxStacks = 0,
-            //
             IsRecipe = true,
-            //
             Price = 500,
             RecipeItems = new[] { 3010, 1028 },
             SellPrice = GetReducedPrice(3176, 1300),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 400f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7756,36 +3601,13 @@ namespace LeagueSharp.Common
             Name = "Ionic Spark",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 575,
             RecipeItems = new[] { 1043, 1028 },
             SellPrice = GetReducedPrice(3178, 1875),
-            //
             ItemCategory = ItemCategory.AttackSpeed & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 250f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7798,35 +3620,13 @@ namespace LeagueSharp.Common
             Name = "Odyn's Veil",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 800,
             RecipeItems = new[] { 1033, 3010 },
             SellPrice = GetReducedPrice(3180, 1700),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 350f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 50f
         };
 
@@ -7840,36 +3640,13 @@ namespace LeagueSharp.Common
             Name = "Sanguine Blade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 1053, 1037 },
             SellPrice = GetReducedPrice(3181, 1915),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 45f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7882,36 +3659,13 @@ namespace LeagueSharp.Common
             Name = "Priscilla's Blessing",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 9999999,
             RecipeItems = new[] { 1006 },
             SellPrice = GetReducedPrice(3183, 10000179),
-            //
             ItemCategory = ItemCategory.HealthRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
             FlatHPRegenMod = 5f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7924,36 +3678,14 @@ namespace LeagueSharp.Common
             Name = "Entropy",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 500,
             RecipeItems = new[] { 1037, 3044 },
             SellPrice = GetReducedPrice(3184, 1940),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 275f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 55f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -7966,36 +3698,14 @@ namespace LeagueSharp.Common
             Name = "The Lightbringer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1018, 3122 },
             SellPrice = GetReducedPrice(3185, 1520),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.3f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8008,36 +3718,13 @@ namespace LeagueSharp.Common
             Name = "Kitae's Bloodrazor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 700,
             RecipeItems = new[] { 1037, 1043 },
             SellPrice = GetReducedPrice(3186, 2475),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8050,36 +3737,14 @@ namespace LeagueSharp.Common
             Name = "Hextech Sweeper",
             Range = 800f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 330,
             RecipeItems = new[] { 3067, 3024 },
             SellPrice = GetReducedPrice(3187, 1030),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.Armor & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 225f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8092,36 +3757,13 @@ namespace LeagueSharp.Common
             Name = "Blackfire Torch",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 970,
             RecipeItems = new[] { 1026, 3108 },
             SellPrice = GetReducedPrice(3188, 2215),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8134,35 +3776,13 @@ namespace LeagueSharp.Common
             Name = "Locket of the Iron Solari",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 50,
             RecipeItems = new[] { 3067, 3105 },
             SellPrice = GetReducedPrice(3190, 1320),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 400f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 20f
         };
 
@@ -8176,36 +3796,14 @@ namespace LeagueSharp.Common
             Name = "Seeker's Armguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 465,
             RecipeItems = new[] { 1052, 1029 },
             SellPrice = GetReducedPrice(3191, 1200),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 30f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 25f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8218,36 +3816,13 @@ namespace LeagueSharp.Common
             Name = "The Hex Core mk-1",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1000,
             RecipeItems = new[] { 3200 },
             SellPrice = GetReducedPrice(3196, 1000),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 20f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8260,36 +3835,13 @@ namespace LeagueSharp.Common
             Name = "The Hex Core mk-2",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1000,
             RecipeItems = new[] { 3196 },
             SellPrice = GetReducedPrice(3197, 2000),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 40f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8302,36 +3854,13 @@ namespace LeagueSharp.Common
             Name = "Perfect Hex Core",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 1000,
             RecipeItems = new[] { 3197 },
             SellPrice = GetReducedPrice(3198, 2000),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 60f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8344,36 +3873,12 @@ namespace LeagueSharp.Common
             Name = "Prototype Hex Core",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3200, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8386,36 +3891,13 @@ namespace LeagueSharp.Common
             Name = "Quill Coat",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 75,
             RecipeItems = new[] { 1039, 1029 },
             SellPrice = GetReducedPrice(3204, 775),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 20f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8428,36 +3910,13 @@ namespace LeagueSharp.Common
             Name = "Quill Coat",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 75,
             RecipeItems = new[] { 1039, 1029 },
             SellPrice = GetReducedPrice(3205, 775),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 20f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8470,36 +3929,13 @@ namespace LeagueSharp.Common
             Name = "Spirit of the Spectral Wraith",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 480,
             RecipeItems = new[] { 1080, 3108 },
             SellPrice = GetReducedPrice(3206, 880),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 50f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8512,36 +3948,14 @@ namespace LeagueSharp.Common
             Name = "Spirit of the Ancient Golem",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 450,
             RecipeItems = new[] { 3067, 3205 },
             SellPrice = GetReducedPrice(3207, 975),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 20f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8554,36 +3968,14 @@ namespace LeagueSharp.Common
             Name = "Spirit of the Ancient Golem",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 450,
             RecipeItems = new[] { 3067, 3204 },
             SellPrice = GetReducedPrice(3208, 975),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 20f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8596,36 +3988,13 @@ namespace LeagueSharp.Common
             Name = "Spirit of the Elder Lizard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 580,
             RecipeItems = new[] { 1080, 1036 },
             SellPrice = GetReducedPrice(3209, 955),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 30f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8638,34 +4007,13 @@ namespace LeagueSharp.Common
             Name = "Spellbreaker (Melee Only)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 650,
             RecipeItems = new[] { 3093, 3155 },
             SellPrice = GetReducedPrice(3210, 1640),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock & ItemCategory.CriticalStrike,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
             FlatCritChanceMod = 0.2f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 40f,
             FlatSpellBlockMod = 25f
         };
@@ -8680,35 +4028,13 @@ namespace LeagueSharp.Common
             Name = "Spectre's Cowl",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 300,
             RecipeItems = new[] { 1033, 1028 },
             SellPrice = GetReducedPrice(3211, 1200),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 35f
         };
 
@@ -8722,35 +4048,12 @@ namespace LeagueSharp.Common
             Name = "Mikael's Crucible",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 850,
             RecipeItems = new[] { 3114, 3028 },
             SellPrice = GetReducedPrice(3222, 1230),
-            //
             ItemCategory = ItemCategory.SpellBlock & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 40f
         };
 
@@ -8764,36 +4067,13 @@ namespace LeagueSharp.Common
             Name = "Berserker's Greaves - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3006 },
             SellPrice = GetReducedPrice(3250, 700),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8806,36 +4086,13 @@ namespace LeagueSharp.Common
             Name = "Berserker's Greaves - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3006 },
             SellPrice = GetReducedPrice(3251, 825),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8848,36 +4105,13 @@ namespace LeagueSharp.Common
             Name = "Berserker's Greaves - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3006 },
             SellPrice = GetReducedPrice(3252, 700),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8890,36 +4124,13 @@ namespace LeagueSharp.Common
             Name = "Berserker's Greaves - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3006 },
             SellPrice = GetReducedPrice(3253, 700),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8932,36 +4143,13 @@ namespace LeagueSharp.Common
             Name = "Berserker's Greaves - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3006 },
             SellPrice = GetReducedPrice(3254, 700),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -8974,36 +4162,13 @@ namespace LeagueSharp.Common
             Name = "Sorcerer's Shoes - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3020 },
             SellPrice = GetReducedPrice(3255, 1250),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9016,36 +4181,13 @@ namespace LeagueSharp.Common
             Name = "Sorcerer's Shoes - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3020 },
             SellPrice = GetReducedPrice(3256, 1375),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9058,36 +4200,13 @@ namespace LeagueSharp.Common
             Name = "Sorcerer's Shoes - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3020 },
             SellPrice = GetReducedPrice(3257, 1250),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9100,36 +4219,13 @@ namespace LeagueSharp.Common
             Name = "Sorcerer's Shoes - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3020 },
             SellPrice = GetReducedPrice(3258, 1250),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9142,36 +4238,13 @@ namespace LeagueSharp.Common
             Name = "Sorcerer's Shoes - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3020 },
             SellPrice = GetReducedPrice(3259, 1250),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9184,36 +4257,14 @@ namespace LeagueSharp.Common
             Name = "Ninja Tabi - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3047 },
             SellPrice = GetReducedPrice(3260, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9226,36 +4277,14 @@ namespace LeagueSharp.Common
             Name = "Ninja Tabi - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3047 },
             SellPrice = GetReducedPrice(3261, 975),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9268,36 +4297,14 @@ namespace LeagueSharp.Common
             Name = "Ninja Tabi - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3047 },
             SellPrice = GetReducedPrice(3262, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9310,36 +4317,14 @@ namespace LeagueSharp.Common
             Name = "Ninja Tabi - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3047 },
             SellPrice = GetReducedPrice(3263, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9352,36 +4337,14 @@ namespace LeagueSharp.Common
             Name = "Ninja Tabi - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3047 },
             SellPrice = GetReducedPrice(3264, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
             FlatArmorMod = 25f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9394,35 +4357,13 @@ namespace LeagueSharp.Common
             Name = "Mercury's Treads - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3111 },
             SellPrice = GetReducedPrice(3265, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -9436,35 +4377,13 @@ namespace LeagueSharp.Common
             Name = "Mercury's Treads - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3111 },
             SellPrice = GetReducedPrice(3266, 975),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -9478,35 +4397,13 @@ namespace LeagueSharp.Common
             Name = "Mercury's Treads - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3111 },
             SellPrice = GetReducedPrice(3267, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -9520,35 +4417,13 @@ namespace LeagueSharp.Common
             Name = "Mercury's Treads - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3111 },
             SellPrice = GetReducedPrice(3268, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -9562,35 +4437,13 @@ namespace LeagueSharp.Common
             Name = "Mercury's Treads - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3111 },
             SellPrice = GetReducedPrice(3269, 850),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
             FlatSpellBlockMod = 25f
         };
 
@@ -9604,36 +4457,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Mobility - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3117 },
             SellPrice = GetReducedPrice(3270, 950),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 105f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9646,36 +4476,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Mobility - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3117 },
             SellPrice = GetReducedPrice(3271, 1075),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 105f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9688,36 +4495,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Mobility - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3117 },
             SellPrice = GetReducedPrice(3272, 950),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 105f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9730,36 +4514,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Mobility - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3117 },
             SellPrice = GetReducedPrice(3273, 950),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 105f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9772,36 +4533,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Mobility - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3117 },
             SellPrice = GetReducedPrice(3274, 950),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 105f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9814,36 +4552,13 @@ namespace LeagueSharp.Common
             Name = "Ionian Boots of Lucidity - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3158 },
             SellPrice = GetReducedPrice(3275, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9856,36 +4571,13 @@ namespace LeagueSharp.Common
             Name = "Ionian Boots of Lucidity - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3158 },
             SellPrice = GetReducedPrice(3276, 1275),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9898,36 +4590,13 @@ namespace LeagueSharp.Common
             Name = "Ionian Boots of Lucidity - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3158 },
             SellPrice = GetReducedPrice(3277, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9940,36 +4609,13 @@ namespace LeagueSharp.Common
             Name = "Ionian Boots of Lucidity - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3158 },
             SellPrice = GetReducedPrice(3278, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -9982,36 +4628,13 @@ namespace LeagueSharp.Common
             Name = "Ionian Boots of Lucidity - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3158 },
             SellPrice = GetReducedPrice(3279, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 45f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10024,36 +4647,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Swiftness - Homeguard",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3009 },
             SellPrice = GetReducedPrice(3280, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 60f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10066,36 +4666,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Swiftness - Captain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3009 },
             SellPrice = GetReducedPrice(3281, 1275),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 60f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10108,36 +4685,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Swiftness - Furor",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3009 },
             SellPrice = GetReducedPrice(3282, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 60f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10150,36 +4704,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Swiftness - Distortion",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3009 },
             SellPrice = GetReducedPrice(3283, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 60f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10192,36 +4723,13 @@ namespace LeagueSharp.Common
             Name = "Boots of Swiftness - Alacrity",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3009 },
             SellPrice = GetReducedPrice(3284, 1150),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
             FlatMovementSpeedMod = 60f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10234,36 +4742,14 @@ namespace LeagueSharp.Common
             Name = "Twin Shadows",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 630,
             RecipeItems = new[] { 3113, 3108 },
             SellPrice = GetReducedPrice(3290, 1530),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
             PercentMovementSpeedMod = 0.06f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 80f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10276,36 +4762,12 @@ namespace LeagueSharp.Common
             Name = "Ancient Coin",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 365,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3301, 365),
-            //
             ItemCategory = ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10318,36 +4780,13 @@ namespace LeagueSharp.Common
             Name = "Relic Shield",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 365,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3302, 365),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 75f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10360,36 +4799,13 @@ namespace LeagueSharp.Common
             Name = "Spellthief's Edge",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 365,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3303, 365),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 5f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10402,36 +4818,12 @@ namespace LeagueSharp.Common
             Name = "Warding Totem (Trinket)",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3340, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.BasicTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10444,36 +4836,12 @@ namespace LeagueSharp.Common
             Name = "Sweeping Lens (Trinket)",
             Range = 400f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3341, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.BasicTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10486,36 +4854,12 @@ namespace LeagueSharp.Common
             Name = "Scrying Orb (Trinket)",
             Range = 2500f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3342, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.BasicTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10528,36 +4872,12 @@ namespace LeagueSharp.Common
             Name = "Soul Anchor (Trinket)",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3345, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.BasicTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10570,36 +4890,12 @@ namespace LeagueSharp.Common
             Name = "Greater Totem (Trinket)",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3350, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.AdvancedTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10612,36 +4908,12 @@ namespace LeagueSharp.Common
             Name = "Greater Lens (Trinket)",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3351, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.AdvancedTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10654,36 +4926,12 @@ namespace LeagueSharp.Common
             Name = "Greater Orb (Trinket)",
             Range = 3500f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3352, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.AdvancedTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10696,36 +4944,12 @@ namespace LeagueSharp.Common
             Name = "Greater Stealth Totem (Trinket)",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3340 },
             SellPrice = GetReducedPrice(3361, 475),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.AdvancedTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10738,36 +4962,12 @@ namespace LeagueSharp.Common
             Name = "Greater Vision Totem (Trinket)",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3340 },
             SellPrice = GetReducedPrice(3362, 475),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.AdvancedTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10780,36 +4980,12 @@ namespace LeagueSharp.Common
             Name = "Farsight Orb (Trinket)",
             Range = 4000f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3342 },
             SellPrice = GetReducedPrice(3363, 475),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.AdvancedTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10822,36 +4998,12 @@ namespace LeagueSharp.Common
             Name = "Oracle's Lens (Trinket)",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 475,
             RecipeItems = new[] { 3341 },
             SellPrice = GetReducedPrice(3364, 475),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.BasicTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10864,36 +5016,13 @@ namespace LeagueSharp.Common
             Name = "Face of the Mountain",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 485,
             RecipeItems = new[] { 3097, 3067 },
             SellPrice = GetReducedPrice(3401, 1435),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 500f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10906,36 +5035,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3405, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10948,36 +5053,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3406, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -10990,36 +5071,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3407, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11032,36 +5089,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3408, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11074,36 +5107,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3409, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11116,36 +5125,12 @@ namespace LeagueSharp.Common
             Name = "Head of Kha'Zix",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3410, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11158,36 +5143,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3411, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11200,36 +5161,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3412, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11242,36 +5179,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3413, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11284,36 +5197,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3414, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11326,36 +5215,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3415, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11368,36 +5233,12 @@ namespace LeagueSharp.Common
             Name = "Head of Kha'Zix",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3416, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11410,36 +5251,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3417, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11452,36 +5269,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3418, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11494,36 +5287,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3419, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11536,36 +5305,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3420, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11578,36 +5323,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3421, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11620,36 +5341,12 @@ namespace LeagueSharp.Common
             Name = "Head of Kha'Zix",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3422, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11662,36 +5359,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3450, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11704,36 +5377,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3451, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11746,36 +5395,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3452, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11788,36 +5413,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3453, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11830,36 +5431,12 @@ namespace LeagueSharp.Common
             Name = "Bonetooth Necklace",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3454, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.RengarsTrinket,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11872,36 +5449,12 @@ namespace LeagueSharp.Common
             Name = "Head of Kha'Zix",
             Range = 600f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3455, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11914,36 +5467,12 @@ namespace LeagueSharp.Common
             Name = "Golden Transcendence",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3460, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Consumable,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11956,36 +5485,13 @@ namespace LeagueSharp.Common
             Name = "Ardent Censer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 550,
             RecipeItems = new[] { 3114, 3113 },
             SellPrice = GetReducedPrice(3504, 1305),
-            //
             ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
             FlatMagicDamageMod = 40f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -11998,36 +5504,13 @@ namespace LeagueSharp.Common
             Name = "Essence Reaver",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 850,
             RecipeItems = new[] { 1053, 1038 },
             SellPrice = GetReducedPrice(3508, 2840),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.ManaRegen & ItemCategory.LifeSteal,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
             FlatPhysicalDamageMod = 80f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12040,36 +5523,12 @@ namespace LeagueSharp.Common
             Name = "The Black Spear",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = false,
-            //
             Price = 0,
             RecipeItems = null,
             SellPrice = GetReducedPrice(3599, 0),
-            //
             ItemCategory = ItemCategory.None,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12082,36 +5541,12 @@ namespace LeagueSharp.Common
             Name = "Stalker's Blade",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1039 },
             SellPrice = GetReducedPrice(3706, 750),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12124,36 +5559,12 @@ namespace LeagueSharp.Common
             Name = "Stalker's Blade - Warrior",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 163,
             RecipeItems = new[] { 3706, 3134 },
             SellPrice = GetReducedPrice(3707, 1130),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12166,36 +5577,12 @@ namespace LeagueSharp.Common
             Name = "Stalker's Blade - Magus",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 680,
             RecipeItems = new[] { 3706, 3108 },
             SellPrice = GetReducedPrice(3708, 1415),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12208,36 +5595,12 @@ namespace LeagueSharp.Common
             Name = "Stalker's Blade - Juggernaut",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 250,
             RecipeItems = new[] { 3706, 3067, 1028 },
             SellPrice = GetReducedPrice(3709, 1450),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12250,36 +5613,12 @@ namespace LeagueSharp.Common
             Name = "Stalker's Blade - Devourer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3706, 1042 },
             SellPrice = GetReducedPrice(3710, 1400),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12292,36 +5631,12 @@ namespace LeagueSharp.Common
             Name = "Poacher's Knife",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1039 },
             SellPrice = GetReducedPrice(3711, 750),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12334,36 +5649,12 @@ namespace LeagueSharp.Common
             Name = "Cultivator's Staff",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1039 },
             SellPrice = GetReducedPrice(3712, 750),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12376,36 +5667,12 @@ namespace LeagueSharp.Common
             Name = "Ranger's Trailblazer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1039 },
             SellPrice = GetReducedPrice(3713, 750),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12418,36 +5685,12 @@ namespace LeagueSharp.Common
             Name = "Skirmisher's Sabre - Warrior",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 163,
             RecipeItems = new[] { 3134, 3715 },
             SellPrice = GetReducedPrice(3714, 1130),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12460,36 +5703,12 @@ namespace LeagueSharp.Common
             Name = "Skirmisher's Sabre",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 350,
             RecipeItems = new[] { 1039 },
             SellPrice = GetReducedPrice(3715, 750),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
             ItemTier = ItemTier.Advanced,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12502,36 +5721,12 @@ namespace LeagueSharp.Common
             Name = "Skirmisher's Sabre - Magus",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 680,
             RecipeItems = new[] { 3715, 3108 },
             SellPrice = GetReducedPrice(3716, 1415),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12544,36 +5739,12 @@ namespace LeagueSharp.Common
             Name = "Skirmisher's Sabre - Juggernaut",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 250,
             RecipeItems = new[] { 3067, 3715, 1028 },
             SellPrice = GetReducedPrice(3717, 1450),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12586,36 +5757,12 @@ namespace LeagueSharp.Common
             Name = "Skirmisher's Sabre - Devourer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3715, 1042 },
             SellPrice = GetReducedPrice(3718, 1400),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12628,36 +5775,12 @@ namespace LeagueSharp.Common
             Name = "Poacher's Knife - Warrior",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 163,
             RecipeItems = new[] { 3711, 3134 },
             SellPrice = GetReducedPrice(3719, 1130),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12670,36 +5793,12 @@ namespace LeagueSharp.Common
             Name = "Poacher's Knife - Magus",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 680,
             RecipeItems = new[] { 3711, 3108 },
             SellPrice = GetReducedPrice(3720, 1415),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12712,36 +5811,12 @@ namespace LeagueSharp.Common
             Name = "Poacher's Knife - Juggernaut",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 250,
             RecipeItems = new[] { 3067, 3711, 1028 },
             SellPrice = GetReducedPrice(3721, 1450),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12754,36 +5829,12 @@ namespace LeagueSharp.Common
             Name = "Poacher's Knife - Devourer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3711, 1042 },
             SellPrice = GetReducedPrice(3722, 1400),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12796,36 +5847,12 @@ namespace LeagueSharp.Common
             Name = "Ranger's Trailblazer - Warrior",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 163,
             RecipeItems = new[] { 3713, 3134 },
             SellPrice = GetReducedPrice(3723, 1130),
-            //
             ItemCategory = ItemCategory.Damage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12838,36 +5865,12 @@ namespace LeagueSharp.Common
             Name = "Ranger's Trailblazer - Magus",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 680,
             RecipeItems = new[] { 3713, 3108 },
             SellPrice = GetReducedPrice(3724, 1415),
-            //
             ItemCategory = ItemCategory.SpellDamage,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12880,36 +5883,12 @@ namespace LeagueSharp.Common
             Name = "Ranger's Trailblazer - Juggernaut",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 250,
             RecipeItems = new[] { 3067, 3713, 1028 },
             SellPrice = GetReducedPrice(3725, 1450),
-            //
             ItemCategory = ItemCategory.Health,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12922,36 +5901,12 @@ namespace LeagueSharp.Common
             Name = "Ranger's Trailblazer - Devourer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 600,
             RecipeItems = new[] { 3713, 1042 },
             SellPrice = GetReducedPrice(3726, 1400),
-            //
             ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
             ItemTier = ItemTier.Enchantment,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
-            FlatHPPoolMod = 0f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -12964,36 +5919,13 @@ namespace LeagueSharp.Common
             Name = "Righteous Glory",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 700,
             RecipeItems = new[] { 3801, 3010 },
             SellPrice = GetReducedPrice(3800, 1120),
-            //
             ItemCategory = ItemCategory.Mana & ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.None,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 500f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
@@ -13006,36 +5938,13 @@ namespace LeagueSharp.Common
             Name = "Crystalline Bracer",
             Range = 0f,
             MaxStacks = 1,
-            //
             IsRecipe = true,
-            //
             Price = 20,
             RecipeItems = new[] { 1006, 1028 },
             SellPrice = GetReducedPrice(3801, 600),
-            //
             ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
             ItemTier = ItemTier.Basic,
-            //
-            PercentArmorMod = 0f,
-            PercentCritDamageMod = 0f,
-            PercentEXPBonus = 0f,
-            PercentHPPoolMod = 0f,
-            PercentHPRegenMod = 0f,
-            PercentMagicDamageMod = 0f,
-            PercentMovementSpeedMod = 0f,
-            PercentPhysicalDamageMod = 0f,
-            PercentSpellBlockMod = 0f,
-            PercentAttackSpeedMod = 0f,
-            //
-            FlatArmorMod = 0f,
-            FlatCritChanceMod = 0f,
-            FlatCritDamageMod = 0f,
             FlatHPPoolMod = 200f,
-            FlatHPRegenMod = 0f,
-            FlatMagicDamageMod = 0f,
-            FlatMovementSpeedMod = 0f,
-            FlatPhysicalDamageMod = 0f,
-            FlatSpellBlockMod = 0f
         };
 
         #endregion
