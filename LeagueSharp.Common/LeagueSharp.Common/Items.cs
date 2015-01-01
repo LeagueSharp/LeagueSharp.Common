@@ -32,35 +32,19 @@ namespace LeagueSharp.Common
     public static class Items
     {
         /// <summary>
-        /// Returns if the Player has an item.
+        /// Returns true if the hero has the item.
         /// </summary>
-        public static bool HasItem(int id)
+        public static bool HasItem(string name, Obj_AI_Hero hero = null)
         {
-            return HasItem(id, ObjectManager.Player);
-        }
-
-        /// <summary>
-        /// Returns if the Player has an item.
-        /// </summary>
-        public static bool HasItem(string name)
-        {
-            return HasItem(name, ObjectManager.Player);
+            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Name == name);
         }
 
         /// <summary>
         /// Returns true if the hero has the item.
         /// </summary>
-        public static bool HasItem(string name, Obj_AI_Hero hero)
+        public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
-            return hero.InventoryItems.Any(slot => slot.Name == name);
-        }
-
-        /// <summary>
-        /// Returns true if the hero has the item.
-        /// </summary>
-        public static bool HasItem(int id, Obj_AI_Hero hero)
-        {
-            return hero.InventoryItems.Any(slot => slot.Id == (ItemId)id);
+            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
         }
 
         /// <summary>
@@ -68,20 +52,14 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanUseItem(string name)
         {
-            InventorySlot islot = null;
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                islot = slot;
-            }
-            if (islot == null)
-            {
-                return false;
+                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
+                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
+                return inst != null && inst.State == SpellState.Ready;
             }
 
-            var inst =
-                ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
-                    spell => (int)spell.Slot == islot.Slot + (int)SpellSlot.Item1);
-            return inst != null && inst.State == SpellState.Ready;
+            return false;
         }
 
         /// <summary>
@@ -89,83 +67,78 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanUseItem(int id)
         {
-            InventorySlot islot = null;
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
-                islot = slot;
-            }
-            if (islot == null)
-            {
-                return false;
+                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
+                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
+                return inst != null && inst.State == SpellState.Ready;
             }
 
-            var inst =
-                ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
-                    spell => (int)spell.Slot == islot.Slot + (int)SpellSlot.Item1);
-            return inst != null && inst.State == SpellState.Ready;
+            return false;
         }
 
         /// <summary>
         /// Casts the item on the target.
         /// </summary>
-        public static void UseItem(string name, Obj_AI_Base target = null)
+        public static bool UseItem(string name, Obj_AI_Base target = null)
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
                 if (target != null)
                 {
-                    ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
+                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
                 }
                 else
                 {
-                    ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
+                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
                 }
             }
+
+            return false;
         }
 
         /// <summary>
         /// Casts the item on the target.
         /// </summary>
-        public static void UseItem(int id, Obj_AI_Base target = null)
+        public static bool UseItem(int id, Obj_AI_Base target = null)
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
                 if (target != null)
                 {
-                    ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
+                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
                 }
                 else
                 {
-                    ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
+                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
                 }
             }
+
+            return false;
         }
 
         /// <summary>
         /// Casts the item on a Vector2 position.
         /// </summary>
-        public static void UseItem(int id, Vector2 position)
+        public static bool UseItem(int id, Vector2 position)
         {
-            foreach (var slot in
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
-                    .Where(slot => position != Vector2.Zero))
-            {
-
-                ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position.To3D());
-            }
+            return UseItem(id, position.To3D());
         }
 
         /// <summary>
         /// Casts the item on a Vector3 position.
         /// </summary>
-        public static void UseItem(int id, Vector3 position)
+        public static bool UseItem(int id, Vector3 position)
         {
-            foreach (var slot in
-                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id)
-                    .Where(slot => position != Vector3.Zero))
+            if (position != Vector3.Zero)
             {
-                ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
+                foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+                {
+                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
+                }
             }
+
+            return false;
         }
 
         /// <summary>
@@ -182,13 +155,35 @@ namespace LeagueSharp.Common
 
         public class Item
         {
-            public int Id;
-            public float Range;
+            public int Id { get; private set; }
+            public float Range { get; private set; }
+            public float RangeSqr { get; private set; }
 
-            public Item(int id, float range)
+            public Item(int id, float range = 0)
             {
                 Id = id;
                 Range = range;
+                RangeSqr = range * range;
+            }
+
+            public bool IsInRange(Obj_AI_Base target)
+            {
+                return IsInRange(target.ServerPosition);
+            }
+
+            public bool IsInRange(Vector2 target)
+            {
+                return IsInRange(target.To3D());
+            }
+
+            public bool IsInRange(Vector3 target)
+            {
+                return ObjectManager.Player.ServerPosition.Distance(target, true) < RangeSqr;
+            }
+
+            public bool IsOwned()
+            {
+                return HasItem(Id);
             }
 
             public bool IsReady()
@@ -196,33 +191,36 @@ namespace LeagueSharp.Common
                 return CanUseItem(Id);
             }
 
-            public void Cast()
+            public bool Cast()
             {
-                UseItem(Id);
-            }
-
-            public void Cast(Obj_AI_Base target)
-            {
-                if (ObjectManager.Player.Distance(target) < Range)
+                if (IsReady())
                 {
-                    UseItem(Id, target);
+                    UseItem(Id);
+                    return true;
                 }
+
+                return false;
             }
 
-            public void Cast(Vector2 position)
+            public bool Cast(Obj_AI_Base target)
             {
-                if (ObjectManager.Player.Distance(position) < Range)
-                {
-                    UseItem(Id, position.To3D());
-                }
+                return Cast(target.ServerPosition);
             }
 
-            public void Cast(Vector3 position)
+            public bool Cast(Vector2 position)
             {
-                if (ObjectManager.Player.Distance(position) < Range)
+                return Cast(position.To3D());
+            }
+
+            public bool Cast(Vector3 position)
+            {
+                if (IsReady() && IsInRange(position))
                 {
                     UseItem(Id, position);
+                    return true;
                 }
+
+                return false;
             }
 
             public void Buy()
