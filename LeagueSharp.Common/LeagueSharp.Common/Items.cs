@@ -22,6 +22,7 @@
 
 #region
 
+using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 
@@ -158,6 +159,14 @@ namespace LeagueSharp.Common
             public int Id { get; private set; }
             public float Range { get; private set; }
             public float RangeSqr { get; private set; }
+            public List<SpellSlot> Slots
+            {
+                get
+                {
+                    return ObjectManager.Player.InventoryItems.Where(slot =>
+                        slot.Id == (ItemId)Id).Select(slot => slot.SpellSlot).ToList();
+                }
+            }
 
             public Item(int id, float range = 0)
             {
