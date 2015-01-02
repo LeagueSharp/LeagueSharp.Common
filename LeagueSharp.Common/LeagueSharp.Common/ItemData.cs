@@ -3593,6 +3593,7 @@ namespace LeagueSharp.Common
         {
             Id = 3188,
             Name = "Blackfire Torch",
+            Range = 750f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 970,
@@ -4799,6 +4800,7 @@ namespace LeagueSharp.Common
         {
             Id = 3401,
             Name = "Face of the Mountain",
+            Range = 750f,
             MaxStacks = 1,
             IsRecipe = true,
             Price = 485,
