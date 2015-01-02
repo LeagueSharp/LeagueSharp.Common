@@ -157,8 +157,21 @@ namespace LeagueSharp.Common
         public class Item
         {
             public int Id { get; private set; }
-            public float Range { get; private set; }
-            public float RangeSqr { get; private set; }
+            private float _range;
+            public float Range
+            {
+                get { return _range; }
+                set
+                {
+                    _range = value;
+                    _rangeSqr = value * value;
+                }
+            }
+            private float _rangeSqr;
+            public float RangeSqr
+            {
+                get { return _rangeSqr; }
+            }
             public List<SpellSlot> Slots
             {
                 get
@@ -172,7 +185,6 @@ namespace LeagueSharp.Common
             {
                 Id = id;
                 Range = range;
-                RangeSqr = range * range;
             }
 
             public bool IsInRange(Obj_AI_Base target)
