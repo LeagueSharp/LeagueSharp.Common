@@ -325,9 +325,10 @@ namespace LeagueSharp.Common
 
         public static Obj_AI_Hero GetTarget(float range,
             DamageType damageType,
-            bool ignoreShield = true)
+            bool ignoreShield = true,
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null)
         {
-            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield);
+            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps);
         }
 
         private static bool IsValidTarget(Obj_AI_Base target,
