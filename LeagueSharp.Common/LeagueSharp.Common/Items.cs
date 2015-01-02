@@ -202,37 +202,22 @@ namespace LeagueSharp.Common
 
             public bool Cast()
             {
-                if (IsReady())
-                {
-                    return UseItem(Id);
-                }
-
-                return false;
+                return UseItem(Id);
             }
 
             public bool Cast(Obj_AI_Base target)
             {
-                if (IsReady() && IsInRange(target))
-                {
-                    return UseItem(Id, target);
-                }
-
-                return false;
+                return UseItem(Id, target);
             }
 
             public bool Cast(Vector2 position)
             {
-                return Cast(position.To3D());
+                return UseItem(Id, position);
             }
 
             public bool Cast(Vector3 position)
             {
-                if (IsReady() && IsInRange(position))
-                {
-                    return UseItem(Id, position);
-                }
-
-                return false;
+                return UseItem(Id, position);
             }
 
             public void Buy()
