@@ -81,6 +81,7 @@ namespace LeagueSharp.Common
     {
         public string[] SList;
         public int SelectedIndex;
+        public string SelectedValue { get { return SList[SelectedIndex]; } }
 
         public StringList(string[] sList, int defaultSelectedIndex = 0)
         {
