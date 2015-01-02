@@ -32,19 +32,21 @@ using System.Xml.Serialization;
 
 namespace LeagueSharp.Common
 {
-    public static class MultiLanguage
+    public class MultiLanguage
     {
-        public static Dictionary<string, string> Translations = new Dictionary<string, string>();
+        public Dictionary<string, string> Translations = new Dictionary<string, string>();
 
-        public static XmlSerializer Serializer = new XmlSerializer(
+        public readonly XmlSerializer Serializer = new XmlSerializer(
             typeof(TranslatedEntry[]), new XmlRootAttribute { ElementName = "entries" });
 
-        static MultiLanguage()
+        public static MultiLanguage Instance = new MultiLanguage();
+
+        public MultiLanguage()
         {
             LoadLanguage(Config.SelectedLanguage);
         }
 
-        public static bool LoadLanguage(string name)
+        public bool LoadLanguage(string name)
         {
             var filePath = Path.Combine(Config.LeagueSharpDirectory, "translations", name + ".xml");
 
@@ -67,7 +69,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static string _(string textToTranslate)
+        public string _(string textToTranslate)
         {
             return Translations.ContainsKey(textToTranslate) ? Translations[textToTranslate] : textToTranslate;
         }

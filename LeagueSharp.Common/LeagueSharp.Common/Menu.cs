@@ -479,7 +479,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width + 25;
+                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage.Instance._(DisplayName), FontDrawFlags.Left).Width + 25;
             }
         }
 
@@ -621,7 +621,7 @@ namespace LeagueSharp.Common
                     : MenuSettings.BackgroundColor, 1, Color.Black);
 
             MenuDrawHelper.Font.DrawText(
-                null, MultiLanguage._(DisplayName),
+                null, MultiLanguage.Instance._(DisplayName),
                 new SharpDX.Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
                 FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
             MenuDrawHelper.Font.DrawText(
@@ -934,7 +934,7 @@ namespace LeagueSharp.Common
                             .Width;
                 }
 
-                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width +
+                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage.Instance._(DisplayName), FontDrawFlags.Left).Width +
                        Height * 2 + 10 + extra;
             }
         }
@@ -1328,7 +1328,7 @@ namespace LeagueSharp.Common
         internal void Drawing_OnDraw()
         {
             MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
-            var s = MultiLanguage._(DisplayName);
+            var s = MultiLanguage.Instance._(DisplayName);
 
             switch (ValueType)
             {
@@ -1347,7 +1347,7 @@ namespace LeagueSharp.Common
 
                     if (Interacting)
                     {
-                        s = MultiLanguage._("Press new key");
+                        s = MultiLanguage.Instance._("Press new key");
                     }
 
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
@@ -1385,7 +1385,7 @@ namespace LeagueSharp.Common
                     MenuDrawHelper.DrawArrow(">", Position + new Vector2(Width - Height, 0), this, Color.Black);
 
                     MenuDrawHelper.Font.DrawText(
-                        null, MultiLanguage._(t),
+                        null, MultiLanguage.Instance._(t),
                         new SharpDX.Rectangle((int) Position.X - 5 - 2 * Height, (int) Position.Y, Width, Height),
                         FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
                     break;
