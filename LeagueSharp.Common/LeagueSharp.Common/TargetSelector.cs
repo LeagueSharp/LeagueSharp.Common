@@ -23,6 +23,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -332,7 +333,8 @@ namespace LeagueSharp.Common
         private static bool IsValidTarget(Obj_AI_Base target,
             float range,
             DamageType damageType,
-            bool ignoreShieldSpells = true)
+            bool ignoreShieldSpells = true,
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null)
         {
             return target.IsValidTarget(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range) &&
                 !IsInvulnerable(target, damageType, ignoreShieldSpells);
@@ -341,10 +343,14 @@ namespace LeagueSharp.Common
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion,
             float range,
             DamageType type,
-            bool ignoreShieldSpells = true)
+            bool ignoreShieldSpells = true,
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null)
         {
             try
             {
+                if (ignoredChamps == null)
+                    ignoredChamps = new List<Obj_AI_Hero>();
+
                 var targetingMode = TargetingMode.AutoPriority;
                 var damageType = (Damage.DamageType)Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
@@ -361,7 +367,7 @@ namespace LeagueSharp.Common
 
                 var targets =
                     ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => IsValidTarget(hero, range, type, ignoreShieldSpells));
+                        .Where(hero => !ignoredChamps.Any(ignored => ignored.NetworkId == hero.NetworkId) && IsValidTarget(hero, range, type, ignoreShieldSpells));
 
                 switch (targetingMode)
                 {
