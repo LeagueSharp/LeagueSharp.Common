@@ -37,6 +37,7 @@ namespace LeagueSharp.Common
         private static int offset;
         private static int lastLeveled;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
+        private static Random RandomNumber;
 
         public AutoLevel(int[] levels)
         {
@@ -52,12 +53,14 @@ namespace LeagueSharp.Common
 
         private static void Initialize()
         {
+            RandomNumber = new Random(Environment.TickCount);
             var spellbook = Player.Spellbook;
             var spells = new List<SpellSlot> { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
-            offset = HasLevelOneSpell() ? 1 : 0;
+
 
             if (HasLevelOneSpell())
             {
+                offset = 1;
                 spells.Remove(SpellSlot.R);
             }
 
@@ -72,7 +75,7 @@ namespace LeagueSharp.Common
             for (var i = 0; i < ObjectManager.Player.Level; i++)
             {
                 var spell = (SpellSlot) (order[i + offset] - 1);
-                Utility.DelayAction.Add(250, () => { spellbook.LevelSpell(spell); });
+                Utility.DelayAction.Add(RandomNumber.Next(500), () => { spellbook.LevelSpell(spell); });
             }
 
 
@@ -88,7 +91,7 @@ namespace LeagueSharp.Common
             }
 
             Utility.DelayAction.Add(
-                250, () =>
+                RandomNumber.Next(500), () =>
                 {
                     var spell = (SpellSlot) (order[Player.Level + offset - 1] - 1);
                     Player.Spellbook.LevelSpell(spell);
