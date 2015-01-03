@@ -202,9 +202,9 @@ namespace LeagueSharp.Common
                 return ObjectManager.Player.ServerPosition.Distance(target, true) < RangeSqr;
             }
 
-            public bool IsOwned()
+            public bool IsOwned(Obj_AI_Hero target = null)
             {
-                return HasItem(Id);
+                return HasItem(Id, target);
             }
 
             public bool IsReady()
