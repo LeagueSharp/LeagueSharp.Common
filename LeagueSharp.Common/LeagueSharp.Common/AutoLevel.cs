@@ -33,7 +33,6 @@ namespace LeagueSharp.Common
     public class AutoLevel
     {
         private static int[] order = new int[18];
-        private static bool newGame;
         private static int offset;
         private static int lastLeveled;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;

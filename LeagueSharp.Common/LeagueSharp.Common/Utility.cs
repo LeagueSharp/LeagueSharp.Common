@@ -298,6 +298,17 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the spell slot with the name.
         /// </summary>
+         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name)
+        {
+            foreach (var spell in unit.Spellbook.Spells.Where(spell => String.Equals(spell.Name, name, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return spell.Slot;
+            }
+
+            return SpellSlot.Unknown;
+        }
+
+        [Obsolete("Use GetSpellSlot(this Obj_AI_Hero unit, string name)", false)]
         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name, bool searchInSummoners = true)
         {
             name = name.ToLower();
@@ -312,6 +323,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns true if Player is under tower range.
         /// </summary>
+        [Obsolete("Use UnderTurret(this Obj_AI_Base unit)", false)]
         public static bool UnderTurret()
         {
             return UnderTurret(ObjectManager.Player.Position, true);
@@ -348,6 +360,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Counts the enemies in range of Player.
         /// </summary>
+        [Obsolete("Use CountEnemysInRange(this Obj_AI_Base unit, int range)", false)]
         public static int CountEnemysInRange(int range)
         {
             return ObjectManager.Player.CountEnemysInRange(range);
@@ -434,7 +447,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        [Obsolete("Use ObjectManager.Player.InFounta()", false)]
+        [Obsolete("Use ObjectManager.Player.InFountain()", false)]
         public static bool InFountain()
         {
             float fountainRange = 750;
