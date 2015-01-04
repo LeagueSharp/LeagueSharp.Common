@@ -108,6 +108,13 @@
     <Compile Include="LastCastedSpell.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuWrapper.cs" />
+    <Compile Include="Network\Packets\PKT_BuyItemReq.cs" />
+    <Compile Include="Network\Packets\PKT_NPC_CastSpellReq.cs" />
+    <Compile Include="Network\Packets\PKT_SwapItemAns.cs" />
+    <Compile Include="Network\Packets\PKT_SwapItemReq.cs" />
+    <Compile Include="Network\PacketAttribute.cs" />
+    <Compile Include="Network\Serialization\SerializeAttribute.cs" />
+    <Compile Include="Network\Serialization\Serializer.cs" />
     <Compile Include="Orbwalking.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
@@ -133,12 +140,9 @@
     <Compile Include="Network\Packets\PKT_InteractReq.cs" />
     <Compile Include="Network\Packets\PKT_RemoveItemAns.cs" />
     <Compile Include="Network\Packets\PKT_RemoveItemReq.cs" />
-    <Compile Include="Network\Serialization\ISerialized.cs" />
     <Compile Include="Network\Packets\Packet.cs" />
     <Compile Include="Network\Packets\PKT_NPC_UpgradeSpellReq.cs" />
     <Compile Include="Network\Cryptography\IOperation.cs" />
-    <Compile Include="Network\Serialization\SerializedData.cs" />
-    <Compile Include="Network\Serialization\Serializer.cs" />
     <Compile Include="Network\Util\Extensions.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="Spell.cs" />

@@ -29,7 +29,6 @@ namespace LeagueSharp.Network.Cryptography
             CryptOperations.Add(0x163FBC87, new Operations(new Ror(1), new Xor(56), new Rol(2), new Ror(3), new Rol(4), new Xor(226)));
             CryptOperations.Add(0x173EDB9, new Operations(new Sub(76), new Ror(1), new Xor(112), new Add(66), new Rol(2), new Ror(2), new Ror(3)));
             CryptOperations.Add(0x1B7CEFB2, new Operations(new Add(121), new Rol(1), new Rol(1), new Ror(3), new Ror(4), new Xor(39)));
-            CryptOperations.Add(0x1B8764F3, new Operations(new Xor(5), new Add(44), new Xor(150), new Ror(3), new Xor(11), new Rol(3), new Ror(1), new Add(78)));
             CryptOperations.Add(0x1BF4047, new Operations(new Xor(95), new Rol(2), new Sub(85), new Ror(2), new Rol(2), new Sub(61)));
             CryptOperations.Add(0x1C500FE6, new Operations(new Ror(1), new Add(33), new Rol(3), new Add(20), new Xor(196), new Ror(1)));
             CryptOperations.Add(0x20251AD, new Operations(new Xor(151), new Sub(72), new Ror(1), new Dec(), new Rol(3), new Add(72), new Ror(1)));
@@ -90,7 +89,6 @@ namespace LeagueSharp.Network.Cryptography
             CryptOperations.Add(0x4D47A944, new Operations(new Ror(2), new Ror(2), new Rol(2), new Xor(13), new Add(4), new Xor(29)));
             CryptOperations.Add(0x4D8B6355, new Operations(new Add(81), new Xor(252), new Add(3), new Rol(3)));
             CryptOperations.Add(0x4E6CE5A, new Operations(new Sub(77), new Xor(71), new Add(73), new Ror(2), new Rol(2), new Rol(2), new Add(33)));
-            CryptOperations.Add(0x4EF56E, new Operations(new Add(66), new Rol(4), new Rol(1), new Ror(2), new Ror(3), new Ror(1), new Rol(2)));
             CryptOperations.Add(0x4FC86601, new Operations(new Ror(2), new Sub(127), new Rol(2), new Rol(3), new Xor(3), new Rol(3), new Xor(92)));
             CryptOperations.Add(0x50B896F2, new Operations(new Xor(158), new Add(107), new Xor(91), new Sub(105), new Xor(252)));
             CryptOperations.Add(0x50BBBD28, new Operations(new Rol(3), new Sub(48), new Rol(4), new Ror(4), new Rol(3), new Rol(1), new Ror(1), new Xor(131)));
@@ -161,7 +159,6 @@ namespace LeagueSharp.Network.Cryptography
             CryptOperations.Add(0x8D8AFC5F, new Operations(new Xor(144), new Ror(3), new Xor(2), new Add(81)));
             CryptOperations.Add(0x8E3A9828, new Operations(new Xor(122), new Rol(3), new Add(28), new Xor(85)));
             CryptOperations.Add(0x8E3EF80, new Operations(new Rol(1), new Rol(2), new Rol(3), new Add(120), new Rol(2), new Add(76)));
-            CryptOperations.Add(0x93E22E3C, new Operations(new Xor(92), new Ror(3), new Xor(3), new Ror(3), new Ror(2), new Add(127), new Rol(2)));
             CryptOperations.Add(0x94B0B2A, new Operations(new Add(45), new Ror(2), new Rol(1), new Ror(2), new Xor(165), new Ror(3), new Ror(1)));
             CryptOperations.Add(0x966AE3DC, new Operations(new Ror(4), new Ror(3), new Ror(1), new Ror(4)));
             CryptOperations.Add(0x9685CDF3, new Operations(new Xor(4), new Sub(51), new Ror(2), new Sub(105), new Rol(1), new Rol(3), new Ror(1)));
@@ -218,16 +215,13 @@ namespace LeagueSharp.Network.Cryptography
             CryptOperations.Add(0xC20A701F, new Operations(new Xor(116), new Rol(4), new Ror(2), new Rol(3), new Add(29), new Rol(1), new Xor(178), new Ror(1)));
             CryptOperations.Add(0xC30D0126, new Operations(new Xor(96), new Ror(1), new Ror(4), new Ror(4), new Rol(3)));
             CryptOperations.Add(0xC34F6893, new Operations(new Ror(3), new Rol(3), new Ror(3), new Add(28), new Ror(1)));
-            CryptOperations.Add(0xC39EBDAB, new Operations(new Ror(2), new Rol(3), new Xor(85), new Ror(3), new Rol(3), new Add(104), new Rol(1)));
             CryptOperations.Add(0xC3CD5DA4, new Operations(new Add(44), new Ror(2), new Add(120)));
             CryptOperations.Add(0xC5320C94, new Operations(new Ror(3), new Rol(3), new Ror(2), new Xor(140), new Inc(), new Xor(148)));
             CryptOperations.Add(0xC572E521, new Operations(new Ror(1), new Rol(2), new Sub(65), new Rol(3), new Xor(70)));
             CryptOperations.Add(0xC5B489A3, new Operations(new Xor(131), new Sub(90), new Xor(253), new Sub(23), new Ror(3)));
             CryptOperations.Add(0xC750FD6E, new Operations(new Sub(43), new Rol(1), new Add(44), new Xor(211), new Sub(69), new Xor(112)));
-            CryptOperations.Add(0xC8112FA8, new Operations(new Add(125), new Xor(51), new Ror(1), new Add(105), new Ror(3), new Xor(42), new Rol(3), new Xor(179)));
             CryptOperations.Add(0xC83043DB, new Operations(new Add(66), new Xor(174), new Rol(3), new Rol(3), new Ror(3), new Ror(4)));
             CryptOperations.Add(0xC8B77B5F, new Operations(new Xor(17), new Ror(1), new Sub(104), new Xor(89), new Sub(47), new Ror(4)));
-            CryptOperations.Add(0xC9F9B6C2, new Operations(new Xor(162), new Ror(3), new Sub(112), new Ror(1), new Ror(1), new Ror(2), new Xor(96), new Sub(101)));
             CryptOperations.Add(0xCAA8873F, new Operations(new Ror(1), new Xor(140), new Sub(9), new Xor(191)));
             CryptOperations.Add(0xCB51772A, new Operations(new Ror(3), new Rol(4), new Ror(3), new Ror(2), new Rol(1), new Rol(4), new Ror(2), new Rol(1)));
             CryptOperations.Add(0xCB8AF0AF, new Operations(new Rol(3), new Ror(1), new Ror(3), new Rol(1), new Add(92)));
@@ -275,7 +269,6 @@ namespace LeagueSharp.Network.Cryptography
             CryptOperations.Add(0xF35D2ED, new Operations(new Sub(94), new Xor(199), new Add(6), new Xor(4)));
             CryptOperations.Add(0xF64C7792, new Operations(new Rol(1), new Sub(52), new Xor(20), new Sub(7), new Xor(200)));
             CryptOperations.Add(0xF68409C9, new Operations(new Sub(92), new Rol(3), new Add(95), new Ror(1), new Sub(26), new Rol(3)));
-            CryptOperations.Add(0xF726848B, new Operations(new Rol(4), new Sub(15), new Rol(3), new Sub(112), new Rol(4), new Xor(165), new Ror(2)));
             CryptOperations.Add(0xF7E8FB7F, new Operations(new Sub(102), new Rol(3), new Xor(211), new Add(12), new Ror(4), new Sub(38)));
             CryptOperations.Add(0xF8B85373, new Operations(new Ror(1), new Rol(1), new Add(64), new Rol(4), new Rol(3), new Sub(103), new Xor(205)));
             CryptOperations.Add(0xF959A10D, new Operations(new Sub(94), new Ror(3), new Ror(3), new Ror(3), new Add(13), new Xor(89), new Rol(4), new Xor(246)));

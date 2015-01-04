@@ -205,7 +205,7 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.GetPacketId() == PKT_ChargedSpell.PacketId && Environment.TickCount - _chargedReqSentT < 3000)
+            if (args.GetPacketId() == Network.Packets.Packet.GetPacketId<PKT_ChargedSpell>() && Environment.TickCount - _chargedReqSentT < 3000)
             {
                 var chargedData = new PKT_ChargedSpell();
                 chargedData.Decode(args.PacketData);

@@ -8,12 +8,12 @@ namespace LeagueSharp.Network.Serialization
 {
     public static class Serializer
     {
-        public static bool Encode<T>(T data, BinaryWriter writer, Operations encryptOperations)
+        public static bool Encode(object data, Type type, BinaryWriter writer, Operations encryptOperations, bool reverseByteOrder = false)
         {
-            if (typeof (T) == typeof (Int32)
-                || typeof (T) == typeof (Int16))
+            if (type == typeof (Int32)
+                || type == typeof(Int16))
             {
-                int _data = (dynamic) data;
+                int _data = (int) data;
 
                 while (_data > 0x7F)
                 {
@@ -23,39 +23,48 @@ namespace LeagueSharp.Network.Serialization
                 writer.Write(encryptOperations.Encrypt((byte) _data));
                 return true;
             }
-            else if (typeof (T) == typeof (Byte))
+            else if (type == typeof(Byte))
             {
-                byte _data = (dynamic) data;
+                byte _data = (byte) data;
                 writer.Write(encryptOperations.Encrypt(_data));
                 return true;
             }
-            else if (typeof (T) == typeof (Single))
+            else if (type == typeof(Single))
             {
-                float _data = (dynamic) data;
-                foreach (var b in BitConverter.GetBytes(_data).Reverse())
+                float _data = (float) data;
+                var bytes = BitConverter.GetBytes(_data);
+                
+                foreach (var b in !reverseByteOrder ? bytes.Reverse() : bytes)
                 {
                     writer.Write(encryptOperations.Encrypt(b));
                 }
                 return true;
             }
-            else if (typeof (T) == typeof (Vector3))
+            else if (type == typeof(Vector3))
             {
-                Vector3 _data = (dynamic) data;
+                Vector3 _data = (Vector3) data;
 
-                return Encode<Single>(_data.X, writer, encryptOperations) 
-                    && Encode<Single>(_data.Y, writer, encryptOperations) 
-                    && Encode<Single>(_data.Z, writer, encryptOperations);
+                return Encode(_data.X, typeof(Single), writer, encryptOperations, reverseByteOrder)
+                    && Encode(_data.Y, typeof(Single), writer, encryptOperations, reverseByteOrder)
+                    && Encode(_data.Z, typeof(Single), writer, encryptOperations, reverseByteOrder);
+            }
+            else if (type == typeof(Vector2))
+            {
+                Vector2 _data = (Vector2) data;
+
+                return Encode(_data.X, typeof(Single), writer, encryptOperations, reverseByteOrder)
+                    && Encode(_data.Y, typeof(Single), writer, encryptOperations, reverseByteOrder);
             }
 
             return false;
         }
 
-        public static bool Decode<T>(out T result, BinaryReader reader, Operations encryptOperations)
+        public static bool Decode(out object result, Type type, BinaryReader reader, Operations encryptOperations, bool reverseByteOrder = false)
         {
-            result = default(T);
+            result = null;
 
-            if (typeof (T) == typeof (Int32)
-                || typeof (T) == typeof (Int16))
+            if (type == typeof (Int32)
+                || type == typeof(Int16))
             {
                 var bitcounter = 0;
                 var data = 0;
@@ -71,12 +80,12 @@ namespace LeagueSharp.Network.Serialization
                     bitcounter += 7;
                 } while (reader.BaseStream.Position < reader.BaseStream.Length);
             }
-            else if (typeof (T) == typeof (Byte))
+            else if (type == typeof(Byte))
             {
                 result = (dynamic) encryptOperations.Decrypt(reader.ReadByte());
                 return true;
             }
-            else if (typeof (T) == typeof (Single))
+            else if (type == typeof(Single))
             {
                 byte[] buffer = new byte[4];
 
@@ -85,19 +94,33 @@ namespace LeagueSharp.Network.Serialization
                     buffer[i] = encryptOperations.Decrypt(reader.ReadByte());
                 }
 
-                result = (dynamic) BitConverter.ToSingle(buffer.Reverse().ToArray(), 0);
+                result = BitConverter.ToSingle(reverseByteOrder ? buffer : buffer.Reverse().ToArray(), 0);
 
                 return true;
             }
-            else if (typeof (T) == typeof (Vector3))
+            else if (type == typeof(Vector3))
             {
-                Vector3 _result = new Vector3(0f, 0f, 0f);
+                object x = null;
+                object y = null;
+                object z = null;
 
-                bool success = Decode<Single>(out _result.X, reader, encryptOperations) 
-                    && Decode<Single>(out _result.Y, reader, encryptOperations) 
-                    && Decode<Single>(out _result.Z, reader, encryptOperations);
+                bool success = Decode(out x, typeof(Single), reader, encryptOperations, reverseByteOrder)
+                    && Decode(out y, typeof(Single), reader, encryptOperations, reverseByteOrder)
+                    && Decode(out z, typeof(Single), reader, encryptOperations, reverseByteOrder);
 
-                result = (dynamic)_result;
+                result = new Vector3((float)x, (float)y, (float)z);
+
+                return success;
+            }
+            else if (type == typeof(Vector2))
+            {
+                object x = null;
+                object y = null;
+
+                bool success = Decode(out x, typeof(Single), reader, encryptOperations, reverseByteOrder)
+                    && Decode(out y, typeof(Single), reader, encryptOperations, reverseByteOrder);
+                
+                result = (dynamic)new Vector2((float)x, (float)y);
 
                 return success;
             }
