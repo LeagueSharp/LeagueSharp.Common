@@ -54,8 +54,8 @@ namespace LeagueSharp.Common
                         new Vector2(source.Position.X, source.Position.Y),
                         (Vector2.Subtract(
                             new Vector2(source.ServerPosition.X, source.ServerPosition.Y),
-                            new Vector2(source.Position.X, source.Position.Y)).Normalized() * (target.Distance(source))))) <=
-                lineLength;
+                            new Vector2(source.Position.X, source.Position.Y)).Normalized() * (target.Distance(source)))), true) <=
+                lineLength * lineLength;
         }
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace LeagueSharp.Common
             return
                 ObjectManager.Get<Obj_AI_Hero>()
                     .Where(units => units.IsValidTarget())
-                    .Count(units => Vector2.Distance(point.To2D(), units.Position.To2D()) <= range);
+                    .Count(units => Vector2.DistanceSquared(point.To2D(), units.Position.To2D()) < range * range);
         }
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace LeagueSharp.Common
             return
                 ObjectManager.Get<Obj_Shop>()
                     .Where(shop => shop.IsAlly)
-                    .Any(shop => Vector2.Distance(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1250);
+                    .Any(shop => Vector2.DistanceSquared(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) < 1562500); // 1250 * 1250
         }
 
         /// <summary>
@@ -422,28 +422,28 @@ namespace LeagueSharp.Common
         [Obsolete("Use ObjectManager.Player.InFountain()", false)]
         public static bool InFountain()
         {
-            float fountainRange = 750;
+            float fountainRange = 562500; //750 * 750
             var map = Map.GetMap();
             if (map != null && map.Type == Map.MapType.SummonersRift)
             {
-                fountainRange = 1050;
+                fountainRange = 1102500; //1050 * 1050
             }
             return
                 ObjectManager.Get<GameObject>()
                     .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
                     .Any(
                         spawnPoint =>
-                            Vector2.Distance(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) <
+                            Vector2.DistanceSquared(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) <
                             fountainRange);
         }
 
         public static bool InFountain(this Obj_AI_Hero hero)
         {
-            float fountainRange = 562500; //750²
+            float fountainRange = 562500; //750 * 750
             var map = Map.GetMap();
             if (map != null && map.Type == Map.MapType.SummonersRift)
             {
-                fountainRange = 1102500; //1050²
+                fountainRange = 1102500; //1050 * 1050
             }
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_SpawnPoint>()
