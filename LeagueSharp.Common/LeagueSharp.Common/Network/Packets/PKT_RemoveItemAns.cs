@@ -8,7 +8,7 @@ using LeagueSharp.Network.Serialization;
 
 namespace LeagueSharp.Network.Packets
 {
-    class PKT_RemoveItemAns : Packet, ISerialized
+    public class PKT_RemoveItemAns : Packet, ISerialized
     {
         public static short PacketId { get { return 0xD3; } }
         private SerializedData<Byte> _slot = new SerializedData<byte>(0, 3, new List<uint>()

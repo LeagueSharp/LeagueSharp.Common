@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp.Network.Serialization;
 
 namespace LeagueSharp.Network.Packets
 {
-    class PKT_InteractReq : Packet, ISerialized
+    public class PKT_InteractReq : Packet, ISerialized
     {
-        public static short PacketId { get { return  0x86; } }
-        private SerializedData<Int32> _targetNetworkId = new SerializedData<int>(0, 1, new List<uint>() { 0x988EDF01 });
+        private readonly SerializedData<Int32> _targetNetworkId = new SerializedData<int>(
+            0, 1, new List<uint> { 0x988EDF01 });
+
+        public static short PacketId
+        {
+            get { return 0x86; }
+        }
 
         public Int32 TargetNetworkId
         {
@@ -21,12 +23,12 @@ namespace LeagueSharp.Network.Packets
 
         public bool Decode(byte[] data)
         {
-            BinaryReader reader = new BinaryReader(new MemoryStream(data));
+            var reader = new BinaryReader(new MemoryStream(data));
 
             reader.BaseStream.Position += 2;
-            this.NetworkId = reader.ReadInt32();
+            NetworkId = reader.ReadInt32();
 
-            UInt16 bitmask = (UInt16)reader.ReadByte();
+            UInt16 bitmask = reader.ReadByte();
 
             _targetNetworkId.Decode(bitmask, reader);
 
@@ -45,7 +47,7 @@ namespace LeagueSharp.Network.Packets
             var packet = new byte[ms.Length + 8];
             BitConverter.GetBytes(PacketId).CopyTo(packet, 0);
             BitConverter.GetBytes(NetworkId).CopyTo(packet, 2);
-            BitConverter.GetBytes((byte)bitmask).CopyTo(packet, 6);
+            BitConverter.GetBytes((byte) bitmask).CopyTo(packet, 6);
             Array.Copy(ms.GetBuffer(), 0, packet, 7, ms.Length);
 
             return packet;
