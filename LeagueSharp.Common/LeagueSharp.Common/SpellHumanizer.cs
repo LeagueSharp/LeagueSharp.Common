@@ -27,7 +27,6 @@ namespace LeagueSharp.Common
         static SpellHumanizer()
         {
             Enabled = false;
-            //Game.OnGameSendPacket += Game_OnGameSendPacket;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
 
@@ -47,20 +46,10 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static void Game_OnGameSendPacket(GamePacketEventArgs args)
-        {
-            if (!Enabled || args.PacketData[0] != Packet.C2S.Cast.Header || CanCast(new GamePacket(args.PacketData)))
-            {
-                return;
-            }
-
-            args.Process = false;
-        }
-
-        private static bool CanCast(GamePacket p)
+        /*private static bool CanCast(GamePacket p)
         {
             var slot = (SpellSlot) p.ReadByte(6);
             return ObjectManager.Player.Spellbook.CanUseSpell(slot) == SpellState.Ready;
-        }
+        }*/
     }
 }

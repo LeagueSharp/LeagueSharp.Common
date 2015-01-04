@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.Network.Packets;
 using SharpDX;
 
 #endregion
@@ -175,6 +176,7 @@ namespace LeagueSharp.Common
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Game.OnGameSendPacket += Game_OnGameSendPacket;
+            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
 
         /// <summary>
@@ -203,30 +205,31 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.PacketData[0] == Packet.C2S.ChargedCast.Header && Environment.TickCount - _chargedReqSentT < 3000)
+            if (args.GetPacketId() == PKT_ChargedSpell.PacketId && Environment.TickCount - _chargedReqSentT < 3000)
             {
-                var decoded = Packet.C2S.ChargedCast.Decoded(args.PacketData);
-                if (decoded.SourceNetworkId != ObjectManager.Player.NetworkId)
+                var chargedData = new PKT_ChargedSpell();
+                chargedData.Decode(args.PacketData);
+
+                if (chargedData.NetworkId != ObjectManager.Player.NetworkId)
                 {
                     return;
                 }
-                Console.WriteLine((byte) decoded.Slot);
+
                 args.Process = false;
             }
+        }
 
-            if (args.PacketData[0] == Packet.C2S.Cast.Header)
+        void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
+        {
+            if (args.Slot != Slot)
             {
-                var decoded = Packet.C2S.Cast.Decoded(args.PacketData);
-                if (decoded.Slot != Slot)
+                return;
+            }
+            if ((Environment.TickCount - _chargedReqSentT > 500))
+            {
+                if (IsCharging)
                 {
-                    return;
-                }
-                if ((Environment.TickCount - _chargedReqSentT > 500))
-                {
-                    if (IsCharging)
-                    {
-                        Cast(new Vector2(decoded.ToX, decoded.ToY));
-                    }
+                    Cast(new Vector2(args.EndPosition.X, args.EndPosition.Y));
                 }
             }
         }
@@ -313,10 +316,12 @@ namespace LeagueSharp.Common
 
                 LastCastAttemptT = Environment.TickCount;
 
-                //if (packetCast)
-                if (false)
+                if (packetCast)
                 {
-                    Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(unit.NetworkId, Slot)).Send();
+                    if (!ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false))
+                    {
+                        return CastStates.NotCasted;
+                    }
                 }
                 else
                 {
@@ -363,10 +368,7 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    Packet.C2S.ChargedCast.Encoded(
-                        new Packet.C2S.ChargedCast.Struct(
-                            (SpellSlot) ((byte) Slot), prediction.CastPosition.X, ObjectManager.Player.ServerPosition.Z,
-                            prediction.CastPosition.Y)).Send();
+                    ShootChargedSpell(prediction.CastPosition);
                 }
                 else
                 {
@@ -476,9 +478,7 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    Packet.C2S.ChargedCast.Encoded(
-                        new Packet.C2S.ChargedCast.Struct((SpellSlot) ((byte) Slot), position.X, position.Z, position.Y))
-                        .Send();
+                    ShootChargedSpell(position);
                 }
                 else
                 {
@@ -493,6 +493,18 @@ namespace LeagueSharp.Common
             {
                 ObjectManager.Player.Spellbook.CastSpell(Slot, position);
             }
+        }
+
+        private static void ShootChargedSpell(Vector3 position)
+        {
+            new PKT_ChargedSpell
+            {
+                NetworkId = ObjectManager.Player.NetworkId,
+                SpellSlot = (byte)SpellSlot.Q,
+                TargetPosition = position,
+                Unknown1 = true,
+                Unknown2 = false
+            }.Encode().SendAsPacket();
         }
 
         /// <summary>

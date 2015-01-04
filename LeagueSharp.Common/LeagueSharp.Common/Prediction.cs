@@ -176,7 +176,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public Vector3 CastPosition
         {
-            get { return _castPosition.To2D().IsValid() ? _castPosition : Input.Unit.ServerPosition; }
+            get { return _castPosition.To2D().IsValid() ? _castPosition.SetZ() : Input.Unit.ServerPosition; }
             set { _castPosition = value; }
         }
 
@@ -193,7 +193,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public Vector3 UnitPosition
         {
-            get { return _unitPosition.To2D().IsValid() ? _unitPosition : Input.Unit.ServerPosition; }
+            get { return _unitPosition.To2D().IsValid() ? _unitPosition.SetZ() : Input.Unit.ServerPosition; }
             set { _unitPosition = value; }
         }
     }

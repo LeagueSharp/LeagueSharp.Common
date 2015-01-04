@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.Network.Packets;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -134,33 +135,6 @@ namespace LeagueSharp.Common
             return unit.Mana / unit.MaxMana * 100;
         }
 
-        public static void Highlight(this Obj_AI_Base unit, bool showHighlight = true)
-        {
-            if (showHighlight)
-            {
-                Packet.S2C.HighlightUnit.Encoded(unit.NetworkId).Process();
-            }
-            else
-            {
-                Packet.S2C.RemoveHighlightUnit.Encoded(unit.NetworkId).Process();
-            }
-        }
-
-        public static void DebugMessage(string debugMessage)
-        {
-            Packet.S2C.DebugMessage.Encoded(debugMessage).Process();
-        }
-
-        public static void DumpPacket(this GamePacket packet, bool printChat = false)
-        {
-            var p = packet.Dump();
-            Console.WriteLine(p);
-            if (printChat)
-            {
-                Game.PrintChat(p);
-            }
-        }
-
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
             return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
@@ -170,11 +144,6 @@ namespace LeagueSharp.Common
         {
             var ran = new Random();
             return new Vector2(position.X + ran.Next(min, max), position.Y + ran.Next(min, max)).To3D();
-        }
-
-        public static void PrintFloatText(this GameObject obj, string text, Packet.FloatTextPacket type)
-        {
-            Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct(text, type, obj.NetworkId)).Process();
         }
 
         public static bool IsAutoAttack(this SpellData spellData)
@@ -231,8 +200,11 @@ namespace LeagueSharp.Common
 
         public static void LevelUpSpell(this Spellbook book, SpellSlot slot)
         {
-            Packet.C2S.LevelUpSpell.Encoded(new Packet.C2S.LevelUpSpell.Struct(ObjectManager.Player.NetworkId, slot))
-                .Send();
+            new PKT_NPC_UpgradeSpellReq
+            {
+                NetworkId = ObjectManager.Player.NetworkId,
+                SpellSlot = (byte)slot,
+            }.Encode();
         }
 
         public static List<Vector2> CutPath(this List<Vector2> path, float distance)
@@ -476,6 +448,26 @@ namespace LeagueSharp.Common
             return hero.IsVisible &&
                    ObjectManager.Get<Obj_SpawnPoint>()
                        .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < fountainRange);
+        }
+
+        public static short GetPacketId(this GamePacketEventArgs gamePacketEventArgs)
+        {
+            var packetData = gamePacketEventArgs.PacketData;
+            if (packetData.Length < 2)
+            {
+                return 0;
+            }
+            return (short)(packetData[0] + packetData[1] * 256);
+        }
+
+        public static void SendAsPacket(this byte[] packetData, PacketChannel channel = PacketChannel.C2S, PacketProtocolFlags protocolFlags = PacketProtocolFlags.Reliable)
+        {
+            Game.SendPacket(packetData, channel, protocolFlags);
+        }
+
+        public static void ProcessAsPacket(this byte[] packetData, PacketChannel channel = PacketChannel.S2C)
+        {
+            Game.ProcessPacket(packetData, channel);
         }
 
         public static class DelayAction

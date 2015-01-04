@@ -70,14 +70,14 @@ namespace LeagueSharp.Common
 
             private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
             {
-                //Game end packet
-                if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
+                //Game end packet TODO: Update this
+                /*if (args.PacketData[0] == Packet.S2C.GameEnd.Header)
                 {
                     if (OnGameEnd != null)
                     {
                         OnGameEnd(new EventArgs());
                     }
-                }
+                }*/
             }
         }
 
@@ -106,7 +106,7 @@ namespace LeagueSharp.Common
             private static void PacketHandler(GamePacketEventArgs args)
             {
                 return;//BROKEN on 4.21
-                if (OnLevelUpSpell != null)
+                /*if (OnLevelUpSpell != null)
                 {
                     if (args.PacketData[0] == 0x15)
                     {
@@ -123,7 +123,7 @@ namespace LeagueSharp.Common
                 {
                     var dp = Packet.S2C.LevelUp.Decoded(args.PacketData);
                     OnLevelUp(dp.Unit, new OnLevelUpEventArgs { NewLevel = dp.Level, RemainingPoints = dp.PointsLeft });
-                }
+                }*/
             }
 
             /// <summary>

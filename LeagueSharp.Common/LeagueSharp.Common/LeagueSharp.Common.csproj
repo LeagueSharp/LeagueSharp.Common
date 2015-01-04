@@ -100,8 +100,8 @@
     <Compile Include="Config.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />
-    <Compile Include="ItemData.cs" />
     <Compile Include="GamePacket.cs" />
+    <Compile Include="ItemData.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="Interrupter.cs" />
@@ -120,6 +120,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Network\Cryptography\Add.cs" />
+    <Compile Include="Network\Cryptography\Dec.cs" />
+    <Compile Include="Network\Cryptography\Inc.cs" />
+    <Compile Include="Network\Cryptography\Not.cs" />
+    <Compile Include="Network\Cryptography\Operations.cs" />
+    <Compile Include="Network\Cryptography\Rol.cs" />
+    <Compile Include="Network\Cryptography\Ror.cs" />
+    <Compile Include="Network\Cryptography\Sub.cs" />
+    <Compile Include="Network\Cryptography\Xor.cs" />
+    <Compile Include="Network\Packets\PKT_ChargedSpell.cs" />
+    <Compile Include="Network\Packets\PKT_InteractReq.cs" />
+    <Compile Include="Network\Packets\PKT_RemoveItemAns.cs" />
+    <Compile Include="Network\Packets\PKT_RemoveItemReq.cs" />
+    <Compile Include="Network\Serialization\ISerialized.cs" />
+    <Compile Include="Network\Packets\Packet.cs" />
+    <Compile Include="Network\Packets\PKT_NPC_UpgradeSpellReq.cs" />
+    <Compile Include="Network\Cryptography\IOperation.cs" />
+    <Compile Include="Network\Serialization\SerializedData.cs" />
+    <Compile Include="Network\Serialization\Serializer.cs" />
+    <Compile Include="Network\Util\Extensions.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="SpellHumanizer.cs" />

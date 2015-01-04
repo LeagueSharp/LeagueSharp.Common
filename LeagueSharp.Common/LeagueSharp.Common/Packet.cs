@@ -35,8 +35,15 @@ using SharpDX;
 
 namespace LeagueSharp.Common
 {
+
+    [Obsolete("Use Network.Packets", false)]
     public static class Packet
     {
+        static Packet()
+        {
+            Console.WriteLine(@"LeagueSharp.Common.Packet will be removed soon, use LeagueSharp.Network.Packets instead");
+        }
+
         public enum ActionStates
         {
             BeginRecall = 111207118,

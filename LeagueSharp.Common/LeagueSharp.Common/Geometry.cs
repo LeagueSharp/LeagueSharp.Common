@@ -121,6 +121,19 @@ namespace LeagueSharp.Common
             return new Vector3(v.X, v.Y, ObjectManager.Player.ServerPosition.Z);
         }
 
+        public static Vector3 SetZ(this Vector3 v, float? value = null)
+        {
+            if (value == null)
+            {
+                v.Z = Game.CursorPos.Z;
+            }
+            else
+            {
+                v.Z = (float)value;
+            }
+            return v;
+        }
+
         /// <summary>
         ///     Calculates the distance to the Vector2.
         /// </summary>
