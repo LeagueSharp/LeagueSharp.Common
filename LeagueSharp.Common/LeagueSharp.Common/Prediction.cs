@@ -244,7 +244,7 @@ namespace LeagueSharp.Common
             }
 
             //Target too far away.
-            if (input.Range != float.MaxValue && input.Unit.Distance(input.RangeCheckFrom) >= input.Range * 1.5d)
+            if (input.Range != float.MaxValue && input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
             {
                 return new PredictionOutput { Input = input };
             }

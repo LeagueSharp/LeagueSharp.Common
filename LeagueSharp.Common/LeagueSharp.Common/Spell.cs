@@ -404,7 +404,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (!Slot.IsReady() || From.Distance(unit.ServerPosition) > Range)
+            if (!Slot.IsReady() || From.Distance(unit.ServerPosition, true) > Range * Range)
             {
                 return;
             }
@@ -617,14 +617,14 @@ namespace LeagueSharp.Common
             switch (Type)
             {
                 case SkillshotType.SkillshotCircle:
-                    if (point.To2D().Distance(castPosition) < Width)
+                    if (point.To2D().Distance(castPosition, true) < Width * Width)
                     {
                         return true;
                     }
                     break;
 
                 case SkillshotType.SkillshotLine:
-                    if (point.To2D().Distance(castPosition.To2D(), From.To2D(), true) < Width + extraWidth)
+                    if (point.To2D().Distance(castPosition.To2D(), From.To2D(), true, true) < Math.Pow(Width + extraWidth, 2))
                     {
                         return true;
                     }
@@ -633,7 +633,7 @@ namespace LeagueSharp.Common
                     var edge1 = (castPosition.To2D() - From.To2D()).Rotated(-Width / 2);
                     var edge2 = edge1.Rotated(Width);
                     var v = point.To2D() - From.To2D();
-                    if (point.To2D().Distance(From) < Range && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0)
+                    if (point.To2D().Distance(From, true) < Range * Range && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0)
                     {
                         return true;
                     }

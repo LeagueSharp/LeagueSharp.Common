@@ -94,15 +94,9 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-            _selectedTargetObjAiHero = null;
-            foreach (var enemy in
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(hero => hero.IsValidTarget())
-                    .OrderByDescending(h => h.Distance(Game.CursorPos))
-                    .Where(enemy => enemy.Distance(Game.CursorPos) < 200))
-            {
-                _selectedTargetObjAiHero = enemy;
-            }
+            _selectedTargetObjAiHero = ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
+                    .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
         }
 
         #endregion
@@ -389,7 +383,7 @@ namespace LeagueSharp.Common
                         return targets.OrderBy(hero => champion.Distance(hero, true)).FirstOrDefault();
 
                     case TargetingMode.NearMouse:
-                        return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos) < 150);
+                        return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
 
                     case TargetingMode.AutoPriority:
                         return
