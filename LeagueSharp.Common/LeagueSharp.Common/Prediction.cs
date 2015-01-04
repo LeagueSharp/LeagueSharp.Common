@@ -386,10 +386,10 @@ namespace LeagueSharp.Common
         {
             var speed = input.Unit.MoveSpeed;
 
-            if (input.Unit.Distance(input.From, true) < 300 * 300)
+            if (input.Unit.Distance(input.From, true) < 200 * 200)
             {
-                input.Delay /= 2;
-                speed /= 2;
+                //input.Delay /= 2;
+                speed /= 1.5f;
             }
 
             var result = GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
