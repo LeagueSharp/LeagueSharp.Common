@@ -35,7 +35,7 @@ using System.Resources;
 [ assembly: AssemblyConfiguration("") ]
 [assembly: AssemblyCompany("LeagueSharp")]
 [ assembly: AssemblyProduct("LeagueSharp.Common") ]
-[ assembly: AssemblyCopyright("Copyright © Microsoft 2014") ]
+[ assembly: AssemblyCopyright("Copyright © LeagueSharp 2015") ]
 [assembly: AssemblyTrademark("LeagueSharp")]
 [ assembly: AssemblyCulture("") ]
 
@@ -60,6 +60,6 @@ using System.Resources;
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.0.0.14")]
-[assembly: AssemblyFileVersion("1.0.0.14")]
+[assembly: AssemblyVersion("1.0.0.15")]
+[assembly: AssemblyFileVersion("1.0.0.15")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
