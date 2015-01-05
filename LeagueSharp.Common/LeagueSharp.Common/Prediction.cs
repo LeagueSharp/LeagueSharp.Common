@@ -271,7 +271,7 @@ namespace LeagueSharp.Common
             }
 
             //Check if the unit position is in range
-            if (input.Range != float.MaxValue)
+            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
             {
                 if (result.Hitchance == HitChance.High &&
                     input.RangeCheckFrom.Distance(input.Unit.Position, true) >
@@ -466,7 +466,7 @@ namespace LeagueSharp.Common
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed != float.MaxValue)
+            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
                 path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
                 var tT = 0f;
@@ -811,8 +811,8 @@ namespace LeagueSharp.Common
 
     public static class Collision
     {
-        private static int WallCastT;
-        private static Vector2 YasuoWallCastedPos;
+        private static int _wallCastT;
+        private static Vector2 _yasuoWallCastedPos;
 
         static Collision()
         {
@@ -823,8 +823,8 @@ namespace LeagueSharp.Common
         {
             if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
-                WallCastT = Environment.TickCount;
-                YasuoWallCastedPos = sender.ServerPosition.To2D();
+                _wallCastT = Environment.TickCount;
+                _yasuoWallCastedPos = sender.ServerPosition.To2D();
             }
         }
 
@@ -898,7 +898,7 @@ namespace LeagueSharp.Common
 
                         case CollisionableObjects.YasuoWall:
 
-                            if (Environment.TickCount - WallCastT > 4000)
+                            if (Environment.TickCount - _wallCastT > 4000)
                                 break;
 
                             GameObject wall = null;
@@ -921,7 +921,7 @@ namespace LeagueSharp.Common
                             var level = wall.Name.Substring(wall.Name.Length - 6, 1);
                             var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
-                            var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
+                            var wallDirection = (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
                             var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
                             var wallEnd = wallStart - wallWidth * wallDirection;
 
@@ -930,7 +930,7 @@ namespace LeagueSharp.Common
                                 var t = Environment.TickCount +
                                         (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
                                             .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
-                                if (t < WallCastT + 4000)
+                                if (t < _wallCastT + 4000)
                                 {
                                     result.Add(ObjectManager.Player);
                                 }
@@ -948,7 +948,7 @@ namespace LeagueSharp.Common
     internal class StoredPath
     {
         public List<Vector2> Path;
-        public int Tick = 0;
+        public int Tick;
 
         public double Time
         {
