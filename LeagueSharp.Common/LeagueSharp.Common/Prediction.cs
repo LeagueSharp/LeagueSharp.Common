@@ -244,7 +244,7 @@ namespace LeagueSharp.Common
             }
 
             //Target too far away.
-            if (input.Range != float.MaxValue && input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
+            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon && input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
             {
                 return new PredictionOutput { Input = input };
             }
@@ -414,7 +414,7 @@ namespace LeagueSharp.Common
 
         internal static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
         {
-            speed = (speed == -1) ? input.Unit.MoveSpeed : speed;
+            speed = (Math.Abs(speed - (-1)) < float.Epsilon) ? input.Unit.MoveSpeed : speed;
 
             if (path.Count <= 1)
             {
