@@ -135,6 +135,16 @@ namespace LeagueSharp.Common
             return unit.Mana / unit.MaxMana * 100;
         }
 
+        public static float TotalMagicalDamage(this Obj_AI_Hero target)
+        {
+            return target.BaseAbilityDamage + target.FlatMagicDamageMod;
+        }
+
+        public static float TotalAttackDamage(this Obj_AI_Hero target)
+        {
+            return target.BaseAttackDamage + target.FlatPhysicalDamageMod;
+        }
+
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
             return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
@@ -163,6 +173,23 @@ namespace LeagueSharp.Common
         public static bool IsWall(this Vector2 position)
         {
             return position.To3D().IsWall();
+        }
+
+        public static int ImmobileTime(this Obj_AI_Hero unit)
+        {
+            var result = 0f;
+
+            foreach (var buff in unit.Buffs)
+            {
+                if (buff.IsActive && Game.Time <= buff.EndTime &&
+                    (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                     buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                {
+                    result = Math.Max(result, buff.EndTime);
+                }
+            }
+
+            return (result == 0f) ? -1 : (int)(Environment.TickCount + (result - Game.Time) * 1000);
         }
 
         public static int GetRecallTime(Obj_AI_Hero obj)
