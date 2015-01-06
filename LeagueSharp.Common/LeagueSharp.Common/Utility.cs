@@ -396,6 +396,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Draws a "lag-free" circle
         /// </summary>
+        [Obsolete("Use Render.Circle", false)]
         public static void DrawCircle(Vector3 center,
             float radius,
             Color color,
