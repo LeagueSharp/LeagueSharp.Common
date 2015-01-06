@@ -648,7 +648,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool CanCast(Obj_AI_Base unit)
         {
-            return Slot.IsReady() && InRange(unit);
+            return Slot.IsReady() && unit.IsValidTarget(Range);
         }
 
         /// <summary>

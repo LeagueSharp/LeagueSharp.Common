@@ -173,6 +173,16 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static void ClearConsole()
+        {
+            try
+            {
+                var window_height = Console.WindowHeight;
+                Console.Clear();
+            }
+            catch {}
+        }
+
         /// <summary>
         ///     Returns the directory where the assembly is located
         /// </summary>

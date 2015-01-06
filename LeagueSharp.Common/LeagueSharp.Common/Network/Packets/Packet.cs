@@ -14,6 +14,11 @@ namespace LeagueSharp.Network.Packets
         private static Random random = new Random();
         public Int32 NetworkId { get; set; }
 
+        public bool Decode(GamePacketEventArgs args)
+        {
+            return Decode(args.PacketData);
+        }
+
         public bool Decode(byte[] data)
         {
             BinaryReader reader = new BinaryReader(new MemoryStream(data));
