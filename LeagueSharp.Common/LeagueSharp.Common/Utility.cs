@@ -379,8 +379,7 @@ namespace LeagueSharp.Common
         public static int CountEnemysInRange(this Vector3 point, float range)
         {
             return
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(h => h.IsValidTarget() && h.ServerPosition.Distance(point, true) < range * range).Count();
+                ObjectManager.Get<Obj_AI_Hero>().Count(h => h.IsValidTarget() && h.ServerPosition.Distance(point, true) < range * range);
         }
 
         /// <summary>
