@@ -5,10 +5,15 @@ using LeagueSharp;
 
 namespace LeagueSharp.Common
 {
-    public static class MM
+    public static class ManaManager
     {
         internal static Obj_AI_Hero Player;
         internal static List<SpellSlot> spells = new List<SpellSlot>();
+        /// <summary>
+        /// Checks if specific spell can be used if mana > other selected skills cost
+        /// </summary>
+        /// <param name="spell">SpellSlot</param>
+        /// <returns>bool</returns>
         public static bool canUseSpell(SpellSlot spell)
         {
             var cost = 0f;
@@ -16,10 +21,19 @@ namespace LeagueSharp.Common
                 cost += getManaCost(z);
             return Player.Mana > cost ? true : false;
         }
+        /// <summary>
+        /// Retrieves mana cost shorter way
+        /// </summary>
+        /// <param name="spell">SpellSlot</param>
+        /// <returns>float</returns>
         public static float getManaCost(SpellSlot spell)
         {
             return Player.Spellbook.GetSpell(spell).ManaCost;
         }
+        /// <summary>
+        /// Inserts skill into checks.
+        /// </summary>
+        /// <param name="spell">SpellSlot</param>
         public static void insertSkill(SpellSlot spell)
         {
             spells.Add(spell);
@@ -31,13 +45,16 @@ namespace LeagueSharp.Common
                 cost += getManaCost(spell);
             return cost;
         }
-        public class ManaManager
+        /// <summary>
+        /// Menu class and main potion manager.
+        /// </summary>
+        public class ManagerInit
         {
             internal static Menu Config;
             internal static Items.Item healthPot = new Items.Item(ItemData.Health_Potion.Id);
             internal static Items.Item manaPot = new Items.Item(ItemData.Mana_Potion.Id);
             internal static Items.Item crystallineFlask = new Items.Item(ItemData.Crystalline_Flask.Id);
-            public ManaManager(Menu menu)
+            public ManagerInit(Menu menu)
             {
                 Config = menu;
                 Config.AddItem(new MenuItem("range", "Only use pots within enemy range").SetValue(new Slider(1000, 1000, 2000)));
@@ -50,16 +67,32 @@ namespace LeagueSharp.Common
             {
                 if (Player.InFountain() || Player.IsRecalling() ) return;
                 var range = Config.Item("range").GetValue<Slider>().Value;
+                // FlaskOfCrystalWater - Mana Potion
+                // RegenerationPotion - Health Potion
+                // ItemCrystalFlask - Flask
 
-                if (healthPot.IsReady() && !ObjectManager.Player.HasBuff("RegenerationPotion", true))
+                // Health Potion
+                if (healthPot.IsReady() && !ObjectManager.Player.HasBuff("RegenerationPotion",true) && !ObjectManager.Player.HasBuff("ItemCrystalFlask",true))
                 {
-                    if (Utility.CountEnemysInRange(range) > 0 && ObjectManager.Player.Health + 150 < ObjectManager.Player.MaxHealth
-                        || ObjectManager.Player.Health < ObjectManager.Player.MaxHealth * 0.5)
+                    if (ObjectManager.Player.CountEnemysInRange(range) > 0 &&
+                            ObjectManager.Player.Health + 150 < ObjectManager.Player.MaxHealth 
+                                || ObjectManager.Player.Health < ObjectManager.Player.MaxHealth * 0.5)
+                    {
                         healthPot.Cast();
+                    }
                 }
-                if (manaPot.IsReady() && Utility.CountEnemysInRange(range) > 0 && ObjectManager.Player.Mana < getSkillsCost(spells))
+
+                // Mana Potion
+                if (!ObjectManager.Player.HasBuff("FlaskOfCrystalWater", true) && !ObjectManager.Player.HasBuff("ItemCrystalFlask", true) && manaPot.IsReady() && ObjectManager.Player.CountEnemysInRange(range) > 0 && ObjectManager.Player.Mana < getSkillsCost(spells))
+                {
                     manaPot.Cast();
-                if (crystallineFlask.IsReady() && Utility.CountEnemysInRange(range) > 0 && (ObjectManager.Player.Mana < getSkillsCost(spells) || ObjectManager.Player.Health + 120 < ObjectManager.Player.MaxHealth))
+                }
+
+                // Crystalline Flask
+                if (!ObjectManager.Player.HasBuff("FlaskOfCrystalWater",true) 
+                        && !ObjectManager.Player.HasBuff("ItemCrystalFlask",true)
+                            && !ObjectManager.Player.HasBuff("RegenerationPotion", true)
+                                && crystallineFlask.IsReady() && ObjectManager.Player.CountEnemysInRange(range) > 0 && (ObjectManager.Player.Mana < getSkillsCost(spells) || ObjectManager.Player.Health + 120 < ObjectManager.Player.MaxHealth))
                     crystallineFlask.Cast();
             }
         }
