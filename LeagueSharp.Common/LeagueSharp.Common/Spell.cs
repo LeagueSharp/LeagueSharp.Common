@@ -652,20 +652,6 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the point is in range of the spell.
         /// </summary>
-        [Obsolete("Use InRange(Vector3 point, float r", false)]
-        public bool InRange(Vector3 point, int r = -1)
-        {
-            var range = r == -1 ? Range : r;
-            return RangeCheckFrom.Distance(point, true) < range * range;
-        }
-
-        [Obsolete("Use InRange(Obj_AI_Base unit, float r", false)]
-        public bool InRange(Obj_AI_Base unit, int r = -1)
-        {
-            var range = r == -1 ? Range : r;
-            return RangeCheckFrom.Distance(unit.ServerPosition, true) < range * range;
-        }
-
         public bool InRange(Vector3 point, float r = -1)
         {
             var range = r == -1 ? Range : r;
