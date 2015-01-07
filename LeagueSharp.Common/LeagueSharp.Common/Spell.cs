@@ -45,31 +45,29 @@ namespace LeagueSharp.Common
             OutOfRange,
             Collision,
             NotEnoughTargets,
-            LowHitChance,
+            LowHitChance
         }
-
-        public int ChargeDuration;
-        public string ChargedBuffName;
-        public int ChargedMaxRange;
-        public int ChargedMinRange;
-        public string ChargedSpellName;
-
-        public bool Collision;
-        public float Delay;
-        public bool IsChargedSpell;
-        public bool IsSkillshot;
-        public int LastCastAttemptT = 0;
-        public HitChance MinHitChance = HitChance.High;
-        public SpellSlot Slot;
-        public float Speed;
-        public SkillshotType Type;
-        public float Width;
 
         private int _chargedCastedT;
         private int _chargedReqSentT;
         private Vector3 _from;
         private float _range;
         private Vector3 _rangeCheckFrom;
+        public string ChargedBuffName;
+        public int ChargedMaxRange;
+        public int ChargedMinRange;
+        public string ChargedSpellName;
+        public int ChargeDuration;
+        public bool Collision;
+        public float Delay;
+        public bool IsChargedSpell;
+        public bool IsSkillshot;
+        public int LastCastAttemptT;
+        public HitChance MinHitChance = HitChance.High;
+        public SpellSlot Slot;
+        public float Speed;
+        public SkillshotType Type;
+        public float Width;
 
         public Spell(SpellSlot slot, float range = float.MaxValue)
         {
@@ -121,10 +119,7 @@ namespace LeagueSharp.Common
 
         public Vector3 From
         {
-            get
-            {
-                return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from;
-            }
+            get { return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from; }
             set { _from = value; }
         }
 
@@ -205,7 +200,8 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.GetPacketId() == Network.Packets.Packet.GetPacketId<PKT_ChargedSpell>() && Environment.TickCount - _chargedReqSentT < 3000)
+            if (args.GetPacketId() == Network.Packets.Packet.GetPacketId<PKT_ChargedSpell>() &&
+                Environment.TickCount - _chargedReqSentT < 3000)
             {
                 var chargedData = new PKT_ChargedSpell();
                 chargedData.Decode(args.PacketData);
@@ -219,7 +215,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
+        private void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
         {
             if (args.Slot != Slot)
             {
@@ -263,7 +259,7 @@ namespace LeagueSharp.Common
                         Collision = Collision,
                         Type = Type,
                         RangeCheckFrom = RangeCheckFrom,
-                        Aoe = aoe,
+                        Aoe = aoe
                     });
         }
 
@@ -277,7 +273,7 @@ namespace LeagueSharp.Common
                     Type = Type,
                     Radius = Width,
                     Delay = delayOverride > 0 ? delayOverride : Delay,
-                    Speed = Speed,
+                    Speed = Speed
                 });
         }
 
@@ -434,7 +430,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void Cast(bool packetCast = false)
         {
-            if(!packetCast)
+            if (!packetCast)
             {
                 Cast();
             }
@@ -500,7 +496,7 @@ namespace LeagueSharp.Common
             new PKT_ChargedSpell
             {
                 NetworkId = ObjectManager.Player.NetworkId,
-                SpellSlot = (byte)SpellSlot.Q,
+                SpellSlot = (byte) SpellSlot.Q,
                 TargetPosition = position,
                 Unknown1 = true,
                 Unknown2 = false
@@ -624,7 +620,8 @@ namespace LeagueSharp.Common
                     break;
 
                 case SkillshotType.SkillshotLine:
-                    if (point.To2D().Distance(castPosition.To2D(), From.To2D(), true, true) < Math.Pow(Width + extraWidth, 2))
+                    if (point.To2D().Distance(castPosition.To2D(), From.To2D(), true, true) <
+                        Math.Pow(Width + extraWidth, 2))
                     {
                         return true;
                     }
@@ -633,7 +630,8 @@ namespace LeagueSharp.Common
                     var edge1 = (castPosition.To2D() - From.To2D()).Rotated(-Width / 2);
                     var edge2 = edge1.Rotated(Width);
                     var v = point.To2D() - From.To2D();
-                    if (point.To2D().Distance(From, true) < Range * Range && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0)
+                    if (point.To2D().Distance(From, true) < Range * Range && edge1.CrossProduct(v) > 0 &&
+                        v.CrossProduct(edge2) > 0)
                     {
                         return true;
                     }
@@ -654,13 +652,27 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the point is in range of the spell.
         /// </summary>
+        [Obsolete("Use InRange(Vector3 point, float r", false)]
         public bool InRange(Vector3 point, int r = -1)
         {
             var range = r == -1 ? Range : r;
             return RangeCheckFrom.Distance(point, true) < range * range;
         }
 
+        [Obsolete("Use InRange(Obj_AI_Base unit, float r", false)]
         public bool InRange(Obj_AI_Base unit, int r = -1)
+        {
+            var range = r == -1 ? Range : r;
+            return RangeCheckFrom.Distance(unit.ServerPosition, true) < range * range;
+        }
+
+        public bool InRange(Vector3 point, float r = -1)
+        {
+            var range = r == -1 ? Range : r;
+            return RangeCheckFrom.Distance(point, true) < range * range;
+        }
+
+        public bool InRange(Obj_AI_Base unit, float r = -1)
         {
             var range = r == -1 ? Range : r;
             return RangeCheckFrom.Distance(unit.ServerPosition, true) < range * range;
