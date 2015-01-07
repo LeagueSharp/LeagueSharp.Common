@@ -708,7 +708,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool IsInRange(Vector2 point, float range = -1)
         {
-            return RangeCheckFrom.To2D().Distance(point) < (range < 0 ? RangeSqr : range * range);
+            return RangeCheckFrom.To2D().Distance(point, true) < (range < 0 ? RangeSqr : range * range);
         }
     }
 }
