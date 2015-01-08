@@ -306,6 +306,7 @@ namespace LeagueSharp.Common
             }
 
             LastMoveCommandT = Environment.TickCount;
+            _minDistance = 400 + _random.Next(150);
 
             if (Player.ServerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
