@@ -125,6 +125,11 @@ namespace LeagueSharp.Common
             return obj != null && obj.IsValid && obj is T;
         }
 
+        public static bool IsValidSlot(this InventorySlot slot)
+        {
+            return slot != null && slot.SpellSlot != SpellSlot.Unknown;
+        }
+
         public static float HealthPercentage(this Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
