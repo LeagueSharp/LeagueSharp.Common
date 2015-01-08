@@ -104,7 +104,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool IsReady(this SpellDataInst spell, int t = 0)
         {
-            return t == 0
+            return spell != null && spell.Slot != SpellSlot.Unknown && t == 0
                 ? spell.State == SpellState.Ready
                 : (spell.State == SpellState.Ready ||
                    (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
@@ -211,7 +211,12 @@ namespace LeagueSharp.Common
 
         public static void LevelUpSpell(this Spellbook book, SpellSlot slot, bool evolve = false)
         {
-            new PKT_NPC_UpgradeSpellReq { NetworkId = ObjectManager.Player.NetworkId, SpellSlot = (byte) slot, Evolve = evolve }.Encode();
+            new PKT_NPC_UpgradeSpellReq
+            {
+                NetworkId = ObjectManager.Player.NetworkId,
+                SpellSlot = (byte) slot,
+                Evolve = evolve
+            }.Encode();
         }
 
         public static List<Vector2> CutPath(this List<Vector2> path, float distance)
@@ -279,10 +284,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name)
         {
-            foreach (
-                var spell in
-                    unit.Spellbook.Spells.Where(
-                        spell => String.Equals(spell.Name, name, StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var spell in
+                unit.Spellbook.Spells.Where(
+                    spell => String.Equals(spell.Name, name, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return spell.Slot;
             }
