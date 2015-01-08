@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -488,6 +488,11 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("AACircle", "AACircle").SetShared()
                         .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
+						
+				drawings.AddItem(
+                    new MenuItem("AACircleSize", "AACircle extra size").SetShared()
+						.SetValue(new Slider(65, 0, 100)));
+					
                 drawings.AddItem(
                     new MenuItem("AACircle2", "Enemy AA circle").SetShared()
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
@@ -796,7 +801,7 @@ namespace LeagueSharp.Common
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
                 {
                     Utility.DrawCircle(
-                        Player.Position, GetRealAutoAttackRange(null) + 65,
+                        Player.Position, GetRealAutoAttackRange(null) + _config.Item("AACircleSize").GetValue<Slider>().Value,
                         _config.Item("AACircle").GetValue<Circle>().Color);
                 }
 
