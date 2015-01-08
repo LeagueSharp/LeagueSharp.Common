@@ -218,6 +218,12 @@ namespace LeagueSharp.Common
             SetConsoleMode(handle, mode);
         }
 
+        public static double NextDouble(this Random rng, double min, double max)
+        {
+            
+            return min + (rng.NextDouble() * (max - min));
+        }
+
         internal static class CursorPosT
         {
             private static int _posX;

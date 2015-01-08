@@ -152,8 +152,8 @@ namespace LeagueSharp.Common
 
         public static Vector3 Randomize(this Vector3 position, int min, int max)
         {
-            var ran = new Random();
-            return new Vector2(position.X + ran.Next(min, max), position.Y + ran.Next(min, max)).To3D();
+            var ran = new Random(Environment.TickCount);;
+            return position + new Vector2(ran.Next(min, max), ran.Next(min, max)).To3D();
         }
 
         public static bool IsAutoAttack(this SpellData spellData)
