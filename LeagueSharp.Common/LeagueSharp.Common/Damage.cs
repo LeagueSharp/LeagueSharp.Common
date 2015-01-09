@@ -3470,7 +3470,7 @@ namespace LeagueSharp.Common
                 {
                     Slot = SpellSlot.E,
                     Stage = 1,
-                    DamageType = DamageType.Physical,
+                    DamageType = DamageType.True,
                     Damage = 
                         (source, target, level) =>
                             new double[] { 1.6, 1.8, 2, 2.2, 2.4 }[level] * source.FlatPhysicalDamageMod
