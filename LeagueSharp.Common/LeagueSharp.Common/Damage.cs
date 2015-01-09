@@ -53,7 +53,8 @@ namespace LeagueSharp.Common
             Hydra,
             BlackFireTorch,
             OdingVeils,
-            FrostQueenClaim
+            FrostQueenClaim,
+            LiandrysTorment,
         }
 
         public enum DamageType
@@ -5200,6 +5201,9 @@ namespace LeagueSharp.Common
                 case DamageItems.Tiamat:
                     return source.CalcDamage(
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
+                case DamageItems.LiandrysTorment:
+                    var d = target.Health * .2f * 3f;
+                    return (target.CanMove || target.HasBuff("slow", true, true)) ? d : d*2;
             }
             return 1d;
         }

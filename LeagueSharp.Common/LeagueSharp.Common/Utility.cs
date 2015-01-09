@@ -157,7 +157,7 @@ namespace LeagueSharp.Common
 
         public static Vector3 Randomize(this Vector3 position, int min, int max)
         {
-            var ran = new Random(Environment.TickCount);;
+            var ran = new Random(Environment.TickCount);
             return position + new Vector2(ran.Next(min, max), ran.Next(min, max)).To3D();
         }
 
@@ -274,14 +274,17 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
-        public static bool HasBuff(this Obj_AI_Base unit, string buffName, bool dontUseDisplayName = false)
+        public static bool HasBuff(this Obj_AI_Base unit,
+            string buffName,
+            bool dontUseDisplayName = false,
+            bool ignoreCase = false)
         {
+            var name = ignoreCase ? buffName.ToLower() : buffName;
             return
                 unit.Buffs.Any(
                     buff =>
-                        ((!dontUseDisplayName && buff.DisplayName == buffName) ||
-                         (dontUseDisplayName && buff.Name == buffName)) && buff.IsActive &&
-                        buff.EndTime - Game.Time >= 0);
+                        ((dontUseDisplayName && buff.Name == name) || (!dontUseDisplayName && buff.DisplayName == name)) &&
+                        buff.IsActive && buff.EndTime - Game.Time > 0);
         }
 
         /// <summary>
