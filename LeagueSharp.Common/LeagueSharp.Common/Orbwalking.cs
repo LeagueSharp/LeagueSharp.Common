@@ -52,7 +52,7 @@ namespace LeagueSharp.Common
             Mixed,
             LaneClear,
             Combo,
-            None,
+            None
         }
 
         //Spells that reset the attack timer.
@@ -84,11 +84,10 @@ namespace LeagueSharp.Common
         };
 
         public static int LastAATick;
-
         public static bool Attack = true;
-        public static bool DisableNextAttack = false;
+        public static bool DisableNextAttack;
         public static bool Move = true;
-        public static int LastMoveCommandT = 0;
+        public static int LastMoveCommandT;
         public static Vector3 LastMoveCommandPosition = Vector3.Zero;
         private static AttackableUnit _lastTarget;
         private static readonly Obj_AI_Hero Player;
@@ -101,7 +100,7 @@ namespace LeagueSharp.Common
             Player = ObjectManager.Player;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
-            Obj_AI_Hero.OnInstantStopAttack += ObjAiHeroOnOnInstantStopAttack;
+            Obj_AI_Base.OnInstantStopAttack += ObjAiHeroOnOnInstantStopAttack;
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
@@ -235,7 +234,7 @@ namespace LeagueSharp.Common
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    (target is Obj_AI_Base) ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
+                    (target is Obj_AI_Base) ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
                     Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
@@ -305,6 +304,9 @@ namespace LeagueSharp.Common
                 return;
             }
 
+            var minDistance =
+                (float) (_random.Next((int) _minDistance, (int) _minDistance + 50) * _random.NextDouble(1.5f, 3.5f));
+
             LastMoveCommandT = Environment.TickCount;
 
             if (Player.ServerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
@@ -321,22 +323,21 @@ namespace LeagueSharp.Common
             if (useFixedDistance)
             {
                 point = Player.ServerPosition +
-                        (randomizeMinDistance
-                            ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance
-                            : _minDistance) * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                        (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * minDistance : minDistance) *
+                        (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
             }
             else
             {
                 if (randomizeMinDistance)
                 {
                     point = Player.ServerPosition +
-                            (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance *
+                            (_random.NextFloat(0.6f, 1) + 0.2f) * minDistance *
                             (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
                 }
-                else if (Player.ServerPosition.Distance(position) > _minDistance)
+                else if (Player.ServerPosition.Distance(position) > minDistance)
                 {
                     point = Player.ServerPosition +
-                            _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                            minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
                 }
             }
 
@@ -403,7 +404,6 @@ namespace LeagueSharp.Common
             }
         }
 
-
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
             try
@@ -423,7 +423,7 @@ namespace LeagueSharp.Common
                 if (unit.IsMe && Spell.Target is Obj_AI_Base)
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
-                    var target = (Obj_AI_Base)Spell.Target;
+                    var target = (Obj_AI_Base) Spell.Target;
                     if (target.IsValid)
                     {
                         FireOnTargetSwitch(target);
@@ -433,25 +433,23 @@ namespace LeagueSharp.Common
                     if (unit.IsMelee())
                     {
                         Utility.DelayAction.Add(
-                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
                     }
                 }
 
                 FireOnAttack(unit, _lastTarget);
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            
         }
 
         public class BeforeAttackEventArgs
         {
+            private bool _process = true;
             public AttackableUnit Target;
             public Obj_AI_Base Unit = ObjectManager.Player;
-            private bool _process = true;
 
             public bool Process
             {
@@ -473,11 +471,9 @@ namespace LeagueSharp.Common
             private const float LaneClearWaitTimeMod = 2f;
             private static Menu _config;
             private readonly Obj_AI_Hero Player;
-
             private Obj_AI_Base _forcedTarget;
             private OrbwalkingMode _mode = OrbwalkingMode.None;
             private Vector3 _orbwalkingPoint;
-
             private Obj_AI_Minion _prevMinion;
 
             public Orbwalker(Menu attachToMenu)
@@ -508,18 +504,17 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                     new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(80, 0, 200)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
-                _config.AddItem(new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(80, 0, 150)))
+                _config.AddItem(
+                    new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(80, 0, 150)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
-                
+
 
                 /*Load the menu*/
                 _config.AddItem(
-                    new MenuItem("LastHit", "Last hit").SetShared()
-                        .SetValue(new KeyBind('X', KeyBindType.Press, false)));
+                    new MenuItem("LastHit", "Last hit").SetShared().SetValue(new KeyBind('X', KeyBindType.Press, false)));
 
                 _config.AddItem(
-                    new MenuItem("Farm", "Mixed").SetShared()
-                        .SetValue(new KeyBind('C', KeyBindType.Press, false)));
+                    new MenuItem("Farm", "Mixed").SetShared().SetValue(new KeyBind('C', KeyBindType.Press, false)));
 
                 _config.AddItem(
                     new MenuItem("LaneClear", "LaneClear").SetShared()
@@ -684,16 +679,14 @@ namespace LeagueSharp.Common
 
                     /* inhibitor */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_BarracksDampener>()
-                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* nexus */
                     foreach (var nexus in
-                        ObjectManager.Get<Obj_HQ>()
-                            .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return nexus;
                     }
@@ -780,8 +773,8 @@ namespace LeagueSharp.Common
                     }
 
                     var target = GetTarget();
-                    Orbwalk(target
-                        , (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                    Orbwalk(
+                        target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         _config.Item("HoldPosRadius").GetValue<Slider>().Value);
                 }
