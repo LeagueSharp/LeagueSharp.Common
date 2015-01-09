@@ -286,13 +286,13 @@ namespace LeagueSharp.Common
                     });
         }
 
-        public List<Obj_AI_Base> GetCollision(Vector2 from, List<Vector2> to, float delayOverride = -1)
+        public List<Obj_AI_Base> GetCollision(Vector3 from, List<Vector3> to, float delayOverride = -1)
         {
             return Common.Collision.GetCollision(
-                to.Select(h => h.To3D()).ToList(),
+                to,
                 new PredictionInput
                 {
-                    From = from.To3D(),
+                    From = from,
                     Type = Type,
                     Radius = Width,
                     Delay = delayOverride > 0 ? delayOverride : Delay,
