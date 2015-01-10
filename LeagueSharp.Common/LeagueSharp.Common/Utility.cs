@@ -155,10 +155,26 @@ namespace LeagueSharp.Common
             return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
         }
 
+        public static bool IsOnScreen(this Vector3 position)
+        {
+            var pos = Drawing.WorldToScreen(position);
+            return pos.X > 0 && pos.X <= Drawing.Width && pos.Y > 0 && pos.Y <= Drawing.Height;
+        }
+
+        public static bool IsOnScreen(this Vector2 position)
+        {
+            return position.To3D().IsOnScreen();
+        }
+
         public static Vector3 Randomize(this Vector3 position, int min, int max)
         {
             var ran = new Random(Environment.TickCount);
             return position + new Vector2(ran.Next(min, max), ran.Next(min, max)).To3D();
+        }
+
+        public static Vector2 Randomize(this Vector2 position, int min, int max)
+        {
+            return position.To3D().Randomize(min, max).To2D();
         }
 
         public static bool IsAutoAttack(this SpellData spellData)
