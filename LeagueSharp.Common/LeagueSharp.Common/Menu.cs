@@ -681,10 +681,10 @@ namespace LeagueSharp.Common
         {
             InitMenuState(Assembly.GetCallingAssembly().GetName().Name);
 
-            CustomEvents.Game.OnGameEnd += delegate { UnloadMenuState(); };
-            Game.OnGameEnd += delegate { UnloadMenuState(); };
+            CustomEvents.Game.OnGameEnd += delegate { UnloadAllMenuStates(); };
+            Game.OnGameEnd += delegate { UnloadAllMenuStates(); };
             AppDomain.CurrentDomain.DomainUnload += (sender, args) => UnloadMenuState();
-            AppDomain.CurrentDomain.ProcessExit += (sender, args) => UnloadMenuState();
+            AppDomain.CurrentDomain.ProcessExit += (sender, args) => UnloadAllMenuStates();
 
             Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
@@ -708,7 +708,7 @@ namespace LeagueSharp.Common
                 }
                 string menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName + "." + Name);
                 _menuStateFileInfo = new FileInfo(menuStateProcessFile);
-                _menuStateFileInfo.Create();
+                _menuStateFileInfo.Create().Dispose();
             }
             catch (Exception e)
             {
@@ -723,6 +723,21 @@ namespace LeagueSharp.Common
                 try
                 {
                     _menuStateFileInfo.Delete();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+
+        private void UnloadAllMenuStates()
+        {
+            if (_menuStateFileInfo != null && _menuStateFileInfo.Directory != null)
+            {
+                try
+                {
+                    _menuStateFileInfo.Directory.Delete(true);
                 }
                 catch (Exception e)
                 {
