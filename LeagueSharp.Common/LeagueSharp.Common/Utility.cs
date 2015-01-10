@@ -122,7 +122,7 @@ namespace LeagueSharp.Common
 
         public static bool IsValid<T>(this GameObject obj)
         {
-            return obj != null && obj.IsValid && obj is T;
+            return obj is T && obj.IsValid;
         }
 
         public static bool IsValidSlot(this InventorySlot slot)
