@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Utility.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -522,7 +522,10 @@ namespace LeagueSharp.Common
                                 //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
                             }
                         }
-                        catch (Exception e) {}
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
 
                         ActionList.RemoveAt(i);
                     }
@@ -626,7 +629,7 @@ namespace LeagueSharp.Common
                         ShortName = "crystalScar",
                         Type = MapType.CrystalScar,
                         _MapType = MapType.CrystalScar,
-                        Grid = new Vector2(13894 / 2, 13218 / 2),
+                        Grid = new Vector2((float)13894 / 2, (float)13218 / 2),
                         StartingLevel = 3
                     }
                 },
@@ -638,7 +641,7 @@ namespace LeagueSharp.Common
                         ShortName = "twistedTreeline",
                         Type = MapType.TwistedTreeline,
                         _MapType = MapType.TwistedTreeline,
-                        Grid = new Vector2(15436 / 2, 14474 / 2),
+                        Grid = new Vector2((float)15436 / 2, (float)14474 / 2),
                         StartingLevel = 1
                     }
                 },
@@ -650,7 +653,7 @@ namespace LeagueSharp.Common
                         ShortName = "summonerRift",
                         Type = MapType.SummonersRift,
                         _MapType = MapType.SummonersRift,
-                        Grid = new Vector2(13982 / 2, 14446 / 2),
+                        Grid = new Vector2((float)13982 / 2, (float)14446 / 2),
                         StartingLevel = 1
                     }
                 },
@@ -662,7 +665,7 @@ namespace LeagueSharp.Common
                         ShortName = "howlingAbyss",
                         Type = MapType.HowlingAbyss,
                         _MapType = MapType.HowlingAbyss,
-                        Grid = new Vector2(13120 / 2, 12618 / 2),
+                        Grid = new Vector2((float)13120 / 2, (float)12618 / 2),
                         StartingLevel = 3
                     }
                 }
