@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Orbwalking.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -105,6 +105,12 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
+            // Deny InvalidCastException
+            if (sender is Obj_LampBulb)
+            {
+                return;
+            }
+
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
@@ -396,7 +402,6 @@ namespace LeagueSharp.Common
         {
             if (sender.IsValid && sender.IsMe && (args.BitData & 1) == 0 && ((args.BitData >> 4) & 1) == 1)
             {
-                //Game.PrintChat("RESET!!!" + Environment.TickCount);
                 ResetAutoAttackTimer();
             }
         }
@@ -467,11 +472,11 @@ namespace LeagueSharp.Common
         {
             private const float LaneClearWaitTimeMod = 2f;
             private static Menu _config;
-            private readonly Obj_AI_Hero Player;
             private Obj_AI_Base _forcedTarget;
             private OrbwalkingMode _mode = OrbwalkingMode.None;
             private Vector3 _orbwalkingPoint;
             private Obj_AI_Minion _prevMinion;
+            private readonly Obj_AI_Hero Player;
 
             public Orbwalker(Menu attachToMenu)
             {
@@ -508,17 +513,15 @@ namespace LeagueSharp.Common
 
                 /*Load the menu*/
                 _config.AddItem(
-                    new MenuItem("LastHit", "Last hit").SetShared().SetValue(new KeyBind('X', KeyBindType.Press, false)));
+                    new MenuItem("LastHit", "Last hit").SetShared().SetValue(new KeyBind('X', KeyBindType.Press)));
+
+                _config.AddItem(new MenuItem("Farm", "Mixed").SetShared().SetValue(new KeyBind('C', KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("Farm", "Mixed").SetShared().SetValue(new KeyBind('C', KeyBindType.Press, false)));
+                    new MenuItem("LaneClear", "LaneClear").SetShared().SetValue(new KeyBind('V', KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("LaneClear", "LaneClear").SetShared()
-                        .SetValue(new KeyBind('V', KeyBindType.Press, false)));
-
-                _config.AddItem(
-                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press, false)));
+                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
 
                 Player = ObjectManager.Player;
@@ -613,7 +616,7 @@ namespace LeagueSharp.Common
             public AttackableUnit GetTarget()
             {
                 AttackableUnit result = null;
-                var r = float.MaxValue;
+                float[] r = { float.MaxValue };
 
                 if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
@@ -707,15 +710,15 @@ namespace LeagueSharp.Common
                             .Where(
                                 mob =>
                                     mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
-                            .Where(mob => mob.MaxHealth >= r || Math.Abs(r - float.MaxValue) < float.Epsilon))
+                            .Where(mob => mob.MaxHealth >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon))
                     {
                         result = mob;
-                        r = mob.MaxHealth;
+                        r[0] = mob.MaxHealth;
                     }
                 }
 
                 /*Lane Clear minions*/
-                r = float.MaxValue;
+                r[0] = float.MaxValue;
                 if (ActiveMode == OrbwalkingMode.LaneClear)
                 {
                     if (!ShouldWait())
@@ -724,7 +727,7 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion, false) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -732,21 +735,21 @@ namespace LeagueSharp.Common
                         }
 
                         foreach (var minion in
-                            ObjectManager.Get<Obj_AI_Minion>()
-                                .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion)))
+                            from minion in
+                                ObjectManager.Get<Obj_AI_Minion>()
+                                    .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                            let predHealth =
+                                HealthPrediction.LaneClearHealthPrediction(
+                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                            where
+                                predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
+                                Math.Abs(predHealth - minion.Health) < float.Epsilon
+                            where minion.Health >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon
+                            select minion)
                         {
-                            var predHealth = HealthPrediction.LaneClearHealthPrediction(
-                                minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
-                                Math.Abs(predHealth - minion.Health) < float.Epsilon)
-                            {
-                                if (minion.Health >= r || Math.Abs(r - float.MaxValue) < float.Epsilon)
-                                {
-                                    result = minion;
-                                    r = minion.Health;
-                                    _prevMinion = minion;
-                                }
-                            }
+                            result = minion;
+                            r[0] = minion.Health;
+                            _prevMinion = minion;
                         }
                     }
                 }
@@ -785,7 +788,7 @@ namespace LeagueSharp.Common
             {
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
                 {
-                    Utility.DrawCircle(
+                    Render.Circle.DrawCircle(
                         Player.Position, GetRealAutoAttackRange(null) + 65,
                         _config.Item("AACircle").GetValue<Circle>().Color);
                 }
@@ -795,7 +798,7 @@ namespace LeagueSharp.Common
                     foreach (var target in
                         ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
                     {
-                        Utility.DrawCircle(
+                        Render.Circle.DrawCircle(
                             target.Position, GetRealAutoAttackRange(target) + 65,
                             _config.Item("AACircle2").GetValue<Circle>().Color);
                     }
@@ -803,7 +806,7 @@ namespace LeagueSharp.Common
 
                 if (_config.Item("HoldZone").GetValue<Circle>().Active)
                 {
-                    Utility.DrawCircle(
+                    Render.Circle.DrawCircle(
                         Player.Position, _config.Item("HoldPosRadius").GetValue<Slider>().Value,
                         _config.Item("HoldZone").GetValue<Circle>().Color);
                 }

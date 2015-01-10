@@ -1,8 +1,8 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
- CustomEvents.cs is part of LeagueSharp.Common.
+ Copyright 2014 - 2015 LeagueSharp
+ ItemData.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 
 #region
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 #endregion
@@ -32,108 +31,182 @@ namespace LeagueSharp.Common
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class ItemData
     {
-        [Flags]
-        public enum ItemCategory
-        {
-            None = 0,
-            CriticalStrike = 1 << 0,
-            HealthRegen = 1 << 1,
-            Consumable = 1 << 2,
-            Health = 1 << 3,
-            Damage = 1 << 4,
-            ManaRegen = 1 << 5,
-            SpellBlock = 1 << 6,
-            AttackSpeed = 1 << 7,
-            LifeSteal = 1 << 8,
-            SpellDamage = 1 << 9,
-            Mana = 1 << 10,
-            Armor = 1 << 11
-        }
-
-        [Flags]
-        public enum ItemTier
-        {
-            None = 0,
-            Basic = 1 << 0,
-            Advanced = 1 << 1,
-            Legendary = 1 << 2,
-            Mythical = 1 << 3,
-            Enchantment = 1 << 4,
-            Consumable = 1 << 5,
-            RengarsTrinket = 1 << 6,
-            BasicTrinket = 1 << 7,
-            AdvancedTrinket = 1 << 8
-        }
-
-        /// <summary>
-        ///     Returns if item should have a reduced price
-        /// </summary>
-        /// <param name="itemId">Item Id</param>
-        /// <returns>True/False</returns>
-        private static bool IsReducedSellItem(int itemId)
-        {
-            switch (itemId)
-            {
-                case 3069:
-                case 3092:
-                case 1055:
-                case 1054:
-                case 1039:
-                case 1062:
-                case 1063:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
-        ///     Returns the sell price.
-        /// </summary>
-        /// <param name="itemId">Item Id</param>
-        /// <param name="fullPrice">Full Price of the Item Id</param>
-        /// <returns>Returns the sell price.</returns>
-        private static int GetReducedPrice(int itemId, int fullPrice)
-        {
-            return IsReducedSellItem(itemId) ? ((fullPrice * 30) / 100) : ((fullPrice * 70) / 100);
-        }
-
         public struct Item
         {
-            public float FlatArmorMod;
-            public float FlatCritChanceMod;
-            public float FlatCritDamageMod;
-            public float FlatHPPoolMod;
-            public float FlatHPRegenMod;
-            public float FlatMagicDamageMod;
-            public float FlatMovementSpeedMod;
-            public float FlatPhysicalDamageMod;
-            public float FlatSpellBlockMod;
+            /// <summary>
+            ///     Item Consumed
+            /// </summary>
+            public bool Consumed;
+
+            /// <summary>
+            ///     Consume Item On Full
+            /// </summary>
+            public bool ConsumeOnFull;
+
+            /// <summary>
+            ///     Item Depth
+            /// </summary>
+            public int Depth;
+
+            /// <summary>
+            ///     Item Disabled Maps
+            /// </summary>
+            public int[] DisabledMaps;
+
+            /// <summary>
+            ///     Item From Item Ids
+            /// </summary>
+            public int[] From;
+
+            /// <summary>
+            ///     Gold Base Price
+            /// </summary>
+            public int GoldBase;
+
+            /// <summary>
+            ///     Gold Price
+            /// </summary>
+            public int GoldPrice;
+
+            /// <summary>
+            ///     Gold Sell Price
+            /// </summary>
+            public int GoldSell;
+
+            /// <summary>
+            ///     Item Group
+            /// </summary>
+            public string Group;
+
+            /// <summary>
+            ///     Item Hide from All
+            /// </summary>
+            public bool HideFromAll;
+
+            /// <summary>
+            ///     Item Id
+            /// </summary>
             public int Id;
-            public bool IsRecipe;
-            public ItemCategory ItemCategory;
-            public ItemTier ItemTier;
-            public int MaxStacks;
+
+            /// <summary>
+            ///     Item In Store
+            /// </summary>
+            public bool InStore;
+
+            /// <summary>
+            ///     Item into Items
+            /// </summary>
+            public int[] Into;
+
+            /// <summary>
+            ///     Item Name
+            /// </summary>
             public string Name;
-            public float PercentArmorMod;
-            public float PercentCritDamageMod;
-            public float PercentEXPBonus;
-            public float PercentHPPoolMod;
-            public float PercentHPRegenMod;
-            public float PercentMagicDamageMod;
-            public float PercentMovementSpeedMod;
-            public float PercentPhysicalDamageMod;
-            public float PercentSpellBlockMod;
-            public float PercentAttackSpeedMod;
-            public int Price;
+
+            /// <summary>
+            ///     Item Purchasable
+            /// </summary>
+            public bool Purchasable;
+
+            /// <summary>
+            ///     Item Range
+            /// </summary>
             public float Range;
-            public int[] RecipeItems;
-            public int SellPrice;
+
+            /// <summary>
+            ///     Required Champion for Item
+            /// </summary>
+            public string RequiredChampion;
+
+            /// <summary>
+            ///     Special Recipe
+            /// </summary>
+            public int SpecialRecipe;
+
+            /// <summary>
+            ///     Item Stacks
+            /// </summary>
+            public int Stacks;
+
+            /// <summary>
+            ///     Item Tags
+            /// </summary>
+            public string[] Tags;
 
             public Items.Item GetItem()
             {
                 return new Items.Item(Id, Range);
             }
+
+            #region Item Stats
+
+            public float FlatHPPoolMod;
+            public float rFlatHPModPerLevel;
+            public float FlatMPPoolMod;
+            public float rFlatMPModPerLevel;
+            public float PercentHPPoolMod;
+            public float PercentMPPoolMod;
+            public float FlatHPRegenMod;
+            public float rFlatHPRegenModPerLevel;
+            public float PercentHPRegenMod;
+            public float FlatMPRegenMod;
+            public float rFlatMPRegenModPerLevel;
+            public float PercentMPRegenMod;
+            public float FlatArmorMod;
+            public float rFlatArmorModPerLevel;
+            public float PercentArmorMod;
+            public float rFlatArmorPenetrationMod;
+            public float rFlatArmorPenetrationModPerLevel;
+            public float rPercentArmorPenetrationMod;
+            public float rPercentArmorPenetrationModPerLevel;
+            public float FlatPhysicalDamageMod;
+            public float rFlatPhysicalDamageModPerLevel;
+            public float PercentPhysicalDamageMod;
+            public float FlatMagicDamageMod;
+            public float rFlatMagicDamageModPerLevel;
+            public float PercentMagicDamageMod;
+            public float FlatMovementSpeedMod;
+            public float rFlatMovementSpeedModPerLevel;
+            public float PercentMovementSpeedMod;
+            public float rPercentMovementSpeedModPerLevel;
+            public float FlatAttackSpeedMod;
+            public float PercentAttackSpeedMod;
+            public float rPercentAttackSpeedModPerLevel;
+            public float rFlatDodgeMod;
+            public float rFlatDodgeModPerLevel;
+            public float PercentDodgeMod;
+            public float FlatCritChanceMod;
+            public float rFlatCritChanceModPerLevel;
+            public float PercentCritChanceMod;
+            public float FlatCritDamageMod;
+            public float rFlatCritDamageModPerLevel;
+            public float PercentCritDamageMod;
+            public float FlatBlockMod;
+            public float PercentBlockMod;
+            public float FlatSpellBlockMod;
+            public float rFlatSpellBlockModPerLevel;
+            public float PercentSpellBlockMod;
+            public float FlatEXPBonus;
+            public float PercentEXPBonus;
+            public float rPercentCooldownMod;
+            public float rPercentCooldownModPerLevel;
+            public float rFlatTimeDeadMod;
+            public float rFlatTimeDeadModPerLevel;
+            public float rPercentTimeDeadMod;
+            public float rPercentTimeDeadModPerLevel;
+            public float rFlatGoldPer10Mod;
+            public float rFlatMagicPenetrationMod;
+            public float rFlatMagicPenetrationModPerLevel;
+            public float rPercentMagicPenetrationMod;
+            public float rPercentMagicPenetrationModPerLevel;
+            public float FlatEnergyRegenMod;
+            public float rFlatEnergyRegenModPerLevel;
+            public float FlatEnergyPoolMod;
+            public float rFlatEnergyModPerLevel;
+            public float PercentLifeStealMod;
+            public float PercentSpellVampMod;
+
+            #endregion
         }
 
         #region Items
@@ -142,14 +215,19 @@ namespace LeagueSharp.Common
 
         public static Item Boots_of_Speed = new Item
         {
-            Id = 1001,
             Name = "Boots of Speed",
-            MaxStacks = 1,
-            Price = 325,
-            SellPrice = GetReducedPrice(1001, 325),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 325,
+            GoldPrice = 325,
+            GoldSell = 227,
+            Purchasable = true,
+            Group = "BootsNormal",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3006, 3047, 3020, 3158, 3111, 3117, 3009 },
+            InStore = true,
             FlatMovementSpeedMod = 25f,
+            Tags = new[] { "Boots" },
+            Id = 1001
         };
 
         #endregion
@@ -158,28 +236,17 @@ namespace LeagueSharp.Common
 
         public static Item Faerie_Charm = new Item
         {
-            Id = 1004,
             Name = "Faerie Charm",
-            MaxStacks = 1,
-            Price = 180,
-            SellPrice = GetReducedPrice(1004, 180),
-            ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Basic,
-        };
-
-        #endregion
-
-        #region Meki Pendant
-
-        public static Item Meki_Pendant = new Item
-        {
-            Id = 1005,
-            Name = "Meki Pendant",
-            MaxStacks = 1,
-            Price = 390,
-            SellPrice = GetReducedPrice(1005, 390),
-            ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 180,
+            GoldPrice = 180,
+            GoldSell = 126,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3028, 3070, 3073, 3114 },
+            InStore = true,
+            Tags = new[] { "ManaRegen" },
+            Id = 1004
         };
 
         #endregion
@@ -188,29 +255,17 @@ namespace LeagueSharp.Common
 
         public static Item Rejuvenation_Bead = new Item
         {
-            Id = 1006,
             Name = "Rejuvenation Bead",
-            MaxStacks = 1,
-            Price = 180,
-            SellPrice = GetReducedPrice(1006, 180),
-            ItemCategory = ItemCategory.HealthRegen,
-            ItemTier = ItemTier.Basic,
-        };
-
-        #endregion
-
-        #region Regrowth Pendant
-
-        public static Item Regrowth_Pendant = new Item
-        {
-            Id = 1007,
-            Name = "Regrowth Pendant",
-            MaxStacks = 1,
-            Price = 435,
-            SellPrice = GetReducedPrice(1007, 435),
-            ItemCategory = ItemCategory.HealthRegen,
-            ItemTier = ItemTier.Basic,
-            FlatHPRegenMod = 3f,
+            GoldBase = 180,
+            GoldPrice = 180,
+            GoldSell = 126,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3077, 3112, 2051, 2053, 3105, 3801 },
+            InStore = true,
+            Tags = new[] { "HealthRegen" },
+            Id = 1006
         };
 
         #endregion
@@ -219,14 +274,18 @@ namespace LeagueSharp.Common
 
         public static Item Giants_Belt = new Item
         {
-            Id = 1011,
             Name = "Giant's Belt",
-            MaxStacks = 1,
-            Price = 1000,
-            SellPrice = GetReducedPrice(1011, 1000),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 1000,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3068, 3143, 3116, 3083, 3084, 3022 },
+            InStore = true,
             FlatHPPoolMod = 380f,
+            Tags = new[] { "Health" },
+            Id = 1011
         };
 
         #endregion
@@ -235,14 +294,18 @@ namespace LeagueSharp.Common
 
         public static Item Cloak_of_Agility = new Item
         {
-            Id = 1018,
             Name = "Cloak of Agility",
-            MaxStacks = 1,
-            Price = 730,
-            SellPrice = GetReducedPrice(1018, 730),
-            ItemCategory = ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 730,
+            GoldPrice = 730,
+            GoldSell = 511,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3046, 3031, 3104, 3185 },
+            InStore = true,
             FlatCritChanceMod = 0.15f,
+            Tags = new[] { "CriticalStrike" },
+            Id = 1018
         };
 
         #endregion
@@ -251,14 +314,18 @@ namespace LeagueSharp.Common
 
         public static Item Blasting_Wand = new Item
         {
-            Id = 1026,
             Name = "Blasting Wand",
-            MaxStacks = 1,
-            Price = 860,
-            SellPrice = GetReducedPrice(1026, 860),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 860,
+            GoldPrice = 860,
+            GoldSell = 602,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3001, 3135, 3027, 3029, 3089, 3116, 3124, 3188, 3090, 3003, 3007 },
+            InStore = true,
             FlatMagicDamageMod = 40f,
+            Tags = new[] { "SpellDamage" },
+            Id = 1026
         };
 
         #endregion
@@ -267,13 +334,18 @@ namespace LeagueSharp.Common
 
         public static Item Sapphire_Crystal = new Item
         {
-            Id = 1027,
             Name = "Sapphire Crystal",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(1027, 400),
-            ItemCategory = ItemCategory.Mana,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 280,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3057, 3070, 3073, 3010, 3024 },
+            InStore = true,
+            FlatMPPoolMod = 200f,
+            Tags = new[] { "Mana" },
+            Id = 1027
         };
 
         #endregion
@@ -282,14 +354,18 @@ namespace LeagueSharp.Common
 
         public static Item Ruby_Crystal = new Item
         {
-            Id = 1028,
             Name = "Ruby Crystal",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(1028, 400),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 280,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 2051, 2049, 3067, 3044, 3211, 3010, 3105, 3801, 3136, 2045, 3185, 3102, 3071, 3083, 3084, 3022, 3056, 3709, 3717, 3721, 3725 },
+            InStore = true,
             FlatHPPoolMod = 150f,
+            Tags = new[] { "Health" },
+            Id = 1028
         };
 
         #endregion
@@ -298,14 +374,18 @@ namespace LeagueSharp.Common
 
         public static Item Cloth_Armor = new Item
         {
-            Id = 1029,
             Name = "Cloth Armor",
-            MaxStacks = 1,
-            Price = 300,
-            SellPrice = GetReducedPrice(1029, 300),
-            ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 300,
+            GoldPrice = 300,
+            GoldSell = 210,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3047, 1031, 3191, 3024, 3082, 3159, 2053, 3075 },
+            InStore = true,
             FlatArmorMod = 15f,
+            Tags = new[] { "Armor" },
+            Id = 1029
         };
 
         #endregion
@@ -314,32 +394,39 @@ namespace LeagueSharp.Common
 
         public static Item Chain_Vest = new Item
         {
-            Id = 1031,
             Name = "Chain Vest",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 450,
-            RecipeItems = new[] { 1029 },
-            SellPrice = GetReducedPrice(1031, 750),
-            ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 450,
+            GoldPrice = 750,
+            GoldSell = 525,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1029 },
+            Into = new[] { 3068, 3026, 3075 },
+            InStore = true,
             FlatArmorMod = 40f,
+            Tags = new[] { "Armor" },
+            Id = 1031
         };
 
         #endregion
 
         #region Null-Magic Mantle
 
-        public static Item NullMagic_Mantle = new Item
+        public static Item Null_Magic_Mantle = new Item
         {
-            Id = 1033,
             Name = "Null-Magic Mantle",
-            MaxStacks = 1,
-            Price = 500,
-            SellPrice = GetReducedPrice(1033, 500),
-            ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Basic,
-            FlatSpellBlockMod = 25f
+            GoldBase = 500,
+            GoldPrice = 500,
+            GoldSell = 350,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3111, 3211, 1057, 3028, 3112, 3140, 3155, 3105, 3091, 3170, 3180 },
+            InStore = true,
+            FlatSpellBlockMod = 25f,
+            Tags = new[] { "SpellBlock" },
+            Id = 1033
         };
 
         #endregion
@@ -348,14 +435,18 @@ namespace LeagueSharp.Common
 
         public static Item Long_Sword = new Item
         {
-            Id = 1036,
             Name = "Long Sword",
-            MaxStacks = 1,
-            Price = 360,
-            SellPrice = GetReducedPrice(1036, 360),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 360,
+            GoldPrice = 360,
+            GoldSell = 252,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 1053, 3044, 3134, 3155, 3077, 3035, 3154, 3144, 3122, 3141, 3159 },
+            InStore = true,
             FlatPhysicalDamageMod = 10f,
+            Tags = new[] { "Damage", "Lane" },
+            Id = 1036
         };
 
         #endregion
@@ -364,14 +455,18 @@ namespace LeagueSharp.Common
 
         public static Item Pickaxe = new Item
         {
-            Id = 1037,
             Name = "Pickaxe",
-            MaxStacks = 1,
-            Price = 875,
-            SellPrice = GetReducedPrice(1037, 875),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 875,
+            GoldPrice = 875,
+            GoldSell = 613,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3035, 3124, 3031, 3156, 3077, 3104, 3184, 3004, 3008, 3022, 3172, 3181 },
+            InStore = true,
             FlatPhysicalDamageMod = 25f,
+            Tags = new[] { "Damage" },
+            Id = 1037
         };
 
         #endregion
@@ -380,14 +475,18 @@ namespace LeagueSharp.Common
 
         public static Item B_F_Sword = new Item
         {
-            Id = 1038,
             Name = "B. F. Sword",
-            MaxStacks = 1,
-            Price = 1550,
-            SellPrice = GetReducedPrice(1038, 1550),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 1550,
+            GoldPrice = 1550,
+            GoldSell = 1085,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3031, 3072, 3139, 3508 },
+            InStore = true,
             FlatPhysicalDamageMod = 50f,
+            Tags = new[] { "Damage" },
+            Id = 1038
         };
 
         #endregion
@@ -396,13 +495,18 @@ namespace LeagueSharp.Common
 
         public static Item Hunters_Machete = new Item
         {
-            Id = 1039,
             Name = "Hunter's Machete",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(1039, 400),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3706, 3711, 3715, 3713 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Id = 1039
         };
 
         #endregion
@@ -411,13 +515,18 @@ namespace LeagueSharp.Common
 
         public static Item Dagger = new Item
         {
-            Id = 1042,
             Name = "Dagger",
-            MaxStacks = 1,
-            Price = 450,
-            SellPrice = GetReducedPrice(1042, 450),
-            ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 450,
+            GoldPrice = 450,
+            GoldSell = 315,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3006, 3106, 3086, 3101, 3153, 3046, 3154, 3091, 3085, 3159, 3710, 3718, 3722, 3726 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.15f,
+            Tags = new[] { "AttackSpeed" },
+            Id = 1042
         };
 
         #endregion
@@ -426,13 +535,18 @@ namespace LeagueSharp.Common
 
         public static Item Recurve_Bow = new Item
         {
-            Id = 1043,
             Name = "Recurve Bow",
-            MaxStacks = 1,
-            Price = 900,
-            SellPrice = GetReducedPrice(1043, 900),
-            ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 900,
+            GoldPrice = 900,
+            GoldSell = 630,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3091, 3085 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.3f,
+            Tags = new[] { "AttackSpeed" },
+            Id = 1043
         };
 
         #endregion
@@ -441,14 +555,18 @@ namespace LeagueSharp.Common
 
         public static Item Brawlers_Gloves = new Item
         {
-            Id = 1051,
             Name = "Brawler's Gloves",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(1051, 400),
-            ItemCategory = ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 280,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3086, 3093, 3122 },
+            InStore = true,
             FlatCritChanceMod = 0.08f,
+            Tags = new[] { "CriticalStrike" },
+            Id = 1051
         };
 
         #endregion
@@ -457,14 +575,18 @@ namespace LeagueSharp.Common
 
         public static Item Amplifying_Tome = new Item
         {
-            Id = 1052,
             Name = "Amplifying Tome",
-            MaxStacks = 1,
-            Price = 435,
-            SellPrice = GetReducedPrice(1052, 435),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 435,
+            GoldPrice = 435,
+            GoldSell = 305,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3108, 3191, 3057, 3136, 3135, 3145, 3113, 3090, 3116, 3151, 3041 },
+            InStore = true,
             FlatMagicDamageMod = 20f,
+            Tags = new[] { "SpellDamage" },
+            Id = 1052
         };
 
         #endregion
@@ -473,16 +595,20 @@ namespace LeagueSharp.Common
 
         public static Item Vampiric_Scepter = new Item
         {
-            Id = 1053,
             Name = "Vampiric Scepter",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 440,
-            RecipeItems = new[] { 1036 },
-            SellPrice = GetReducedPrice(1053, 800),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 440,
+            GoldPrice = 800,
+            GoldSell = 560,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1036 },
+            Into = new[] { 3144, 3181, 3072, 3074, 3508, 3050 },
+            InStore = true,
             FlatPhysicalDamageMod = 10f,
+            PercentLifeStealMod = 0.08f,
+            Tags = new[] { "Damage", "LifeSteal" },
+            Id = 1053
         };
 
         #endregion
@@ -491,15 +617,18 @@ namespace LeagueSharp.Common
 
         public static Item Dorans_Shield = new Item
         {
-            Id = 1054,
             Name = "Doran's Shield",
-            MaxStacks = 1,
-            Price = 440,
-            SellPrice = GetReducedPrice(1054, 440),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 440,
+            GoldPrice = 440,
+            GoldSell = 176,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatHPPoolMod = 80f,
             FlatHPRegenMod = 1.2f,
+            Tags = new[] { "Health", "HealthRegen", "Lane" },
+            Id = 1054
         };
 
         #endregion
@@ -508,15 +637,19 @@ namespace LeagueSharp.Common
 
         public static Item Dorans_Blade = new Item
         {
-            Id = 1055,
             Name = "Doran's Blade",
-            MaxStacks = 1,
-            Price = 440,
-            SellPrice = GetReducedPrice(1055, 440),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 440,
+            GoldPrice = 440,
+            GoldSell = 176,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatHPPoolMod = 70f,
             FlatPhysicalDamageMod = 7f,
+            PercentLifeStealMod = 0.03f,
+            Tags = new[] { "Health", "Damage", "LifeSteal", "Lane" },
+            Id = 1055
         };
 
         #endregion
@@ -525,15 +658,19 @@ namespace LeagueSharp.Common
 
         public static Item Dorans_Ring = new Item
         {
-            Id = 1056,
             Name = "Doran's Ring",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(1056, 400),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatHPPoolMod = 60f,
+            FlatMPRegenMod = 0.6f,
             FlatMagicDamageMod = 15f,
+            Tags = new[] { "Health", "SpellDamage", "ManaRegen", "Lane" },
+            Id = 1056
         };
 
         #endregion
@@ -542,16 +679,19 @@ namespace LeagueSharp.Common
 
         public static Item Negatron_Cloak = new Item
         {
-            Id = 1057,
             Name = "Negatron Cloak",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1033 },
-            SellPrice = GetReducedPrice(1057, 850),
-            ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Basic,
-            FlatSpellBlockMod = 45f
+            GoldBase = 350,
+            GoldPrice = 850,
+            GoldSell = 595,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1033 },
+            Into = new[] { 3001, 3026 },
+            InStore = true,
+            FlatSpellBlockMod = 45f,
+            Tags = new[] { "SpellBlock" },
+            Id = 1057
         };
 
         #endregion
@@ -560,14 +700,18 @@ namespace LeagueSharp.Common
 
         public static Item Needlessly_Large_Rod = new Item
         {
-            Id = 1058,
             Name = "Needlessly Large Rod",
-            MaxStacks = 1,
-            Price = 1600,
-            SellPrice = GetReducedPrice(1058, 1600),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 1600,
+            GoldPrice = 1600,
+            GoldSell = 1120,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3089, 3157, 3128 },
+            InStore = true,
             FlatMagicDamageMod = 80f,
+            Tags = new[] { "SpellDamage" },
+            Id = 1058
         };
 
         #endregion
@@ -576,14 +720,18 @@ namespace LeagueSharp.Common
 
         public static Item Prospectors_Blade = new Item
         {
-            Id = 1062,
             Name = "Prospector's Blade",
-            MaxStacks = 1,
-            Price = 950,
-            SellPrice = GetReducedPrice(1062, 950),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 950,
+            GoldPrice = 950,
+            GoldSell = 380,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatPhysicalDamageMod = 16f,
+            PercentAttackSpeedMod = 0.15f,
+            Tags = new[] { "Health", "Damage", "AttackSpeed" },
+            Id = 1062
         };
 
         #endregion
@@ -592,14 +740,18 @@ namespace LeagueSharp.Common
 
         public static Item Prospectors_Ring = new Item
         {
-            Id = 1063,
             Name = "Prospector's Ring",
-            MaxStacks = 1,
-            Price = 950,
-            SellPrice = GetReducedPrice(1063, 950),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 950,
+            GoldPrice = 950,
+            GoldSell = 380,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            FlatMPRegenMod = 1.2f,
             FlatMagicDamageMod = 35f,
+            Tags = new[] { "Health", "SpellDamage", "ManaRegen" },
+            Id = 1063
         };
 
         #endregion
@@ -608,15 +760,19 @@ namespace LeagueSharp.Common
 
         public static Item Dorans_Shield_Showdown = new Item
         {
-            Id = 1074,
             Name = "Doran's Shield (Showdown)",
-            MaxStacks = 1,
-            Price = 440,
-            SellPrice = GetReducedPrice(1074, 440),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 440,
+            GoldPrice = 440,
+            GoldSell = 176,
+            Purchasable = true,
+            Group = "DoransShowdown",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatHPPoolMod = 100f,
             FlatHPRegenMod = 2f,
+            Tags = new[] { "Health", "HealthRegen" },
+            Id = 1074
         };
 
         #endregion
@@ -625,15 +781,20 @@ namespace LeagueSharp.Common
 
         public static Item Dorans_Blade_Showdown = new Item
         {
-            Id = 1075,
             Name = "Doran's Blade (Showdown)",
-            MaxStacks = 1,
-            Price = 440,
-            SellPrice = GetReducedPrice(1075, 440),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 440,
+            GoldPrice = 440,
+            GoldSell = 176,
+            Purchasable = true,
+            Group = "DoransShowdown",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatHPPoolMod = 70f,
             FlatPhysicalDamageMod = 7f,
+            PercentLifeStealMod = 0.03f,
+            Tags = new[] { "Health", "Damage", "LifeSteal", "OnHit" },
+            Id = 1075
         };
 
         #endregion
@@ -642,116 +803,20 @@ namespace LeagueSharp.Common
 
         public static Item Dorans_Ring_Showdown = new Item
         {
-            Id = 1076,
             Name = "Doran's Ring (Showdown)",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(1076, 400),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Group = "DoransShowdown",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
             FlatHPPoolMod = 60f,
+            FlatMPRegenMod = 0.6f,
             FlatMagicDamageMod = 15f,
-        };
-
-        #endregion
-
-        #region Spirit Stone
-
-        public static Item Spirit_Stone = new Item
-        {
-            Id = 1080,
-            Name = "Spirit Stone",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 15,
-            RecipeItems = new[] { 1004, 1006, 1039 },
-            SellPrice = GetReducedPrice(1080, 775),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Penetrating Bullets
-
-        public static Item Penetrating_Bullets = new Item
-        {
-            Id = 1500,
-            Name = "Penetrating Bullets",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Fortification
-
-        public static Item Fortification = new Item
-        {
-            Id = 1501,
-            Name = "Fortification",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Reinforced Armor
-
-        public static Item Reinforced_Armor = new Item
-        {
-            Id = 1502,
-            Name = "Reinforced Armor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Warden's Eye
-
-        public static Item Wardens_Eye = new Item
-        {
-            Id = 1503,
-            Name = "Warden's Eye",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Vanguard
-
-        public static Item Vanguard = new Item
-        {
-            Id = 1504,
-            Name = "Vanguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Lightning Rod
-
-        public static Item Lightning_Rod = new Item
-        {
-            Id = 1505,
-            Name = "Lightning Rod",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            Tags = new[] { "Health", "SpellDamage", "ManaRegen" },
+            Id = 1076
         };
 
         #endregion
@@ -760,13 +825,18 @@ namespace LeagueSharp.Common
 
         public static Item Health_Potion = new Item
         {
-            Id = 2003,
             Name = "Health Potion",
-            MaxStacks = 5,
-            Price = 35,
-            SellPrice = GetReducedPrice(2003, 35),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 35,
+            GoldPrice = 35,
+            GoldSell = 14,
+            Purchasable = true,
+            Group = "HealthPotion",
+            Consumed = true,
+            Stacks = 5,
+            Depth = 1,
+            InStore = true,
+            Tags = new[] { "Consumable", "Jungle", "Lane" },
+            Id = 2003
         };
 
         #endregion
@@ -775,13 +845,18 @@ namespace LeagueSharp.Common
 
         public static Item Mana_Potion = new Item
         {
-            Id = 2004,
             Name = "Mana Potion",
-            MaxStacks = 5,
-            Price = 35,
-            SellPrice = GetReducedPrice(2004, 35),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 35,
+            GoldPrice = 35,
+            GoldSell = 14,
+            Purchasable = true,
+            Group = "ManaPotion",
+            Consumed = true,
+            Stacks = 5,
+            Depth = 1,
+            InStore = true,
+            Tags = new[] { "Consumable", "Lane" },
+            Id = 2004
         };
 
         #endregion
@@ -790,11 +865,12 @@ namespace LeagueSharp.Common
 
         public static Item Total_Biscuit_of_Rejuvenation = new Item
         {
-            Id = 2009,
             Name = "Total Biscuit of Rejuvenation",
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Consumable,
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            Id = 2009
         };
 
         #endregion
@@ -803,73 +879,16 @@ namespace LeagueSharp.Common
 
         public static Item Total_Biscuit_of_Rejuvenation2 = new Item
         {
-            Id = 2010,
             Name = "Total Biscuit of Rejuvenation",
-            MaxStacks = 5,
-            Price = 35,
-            SellPrice = GetReducedPrice(2010, 35),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Consumable,
-        };
-
-        #endregion
-
-        #region Elixir of Fortitude
-
-        public static Item Elixir_of_Fortitude = new Item
-        {
-            Id = 2037,
-            Name = "Elixir of Fortitude",
-            MaxStacks = 3,
-            Price = 350,
-            SellPrice = GetReducedPrice(2037, 350),
-            ItemCategory = ItemCategory.Damage & ItemCategory.Consumable & ItemCategory.Health,
-            ItemTier = ItemTier.Consumable,
-        };
-
-        #endregion
-
-        #region Elixir of Agility
-
-        public static Item Elixir_of_Agility = new Item
-        {
-            Id = 2038,
-            Name = "Elixir of Agility",
-            MaxStacks = 3,
-            Price = 250,
-            SellPrice = GetReducedPrice(2038, 250),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
-        };
-
-        #endregion
-
-        #region Elixir of Brilliance
-
-        public static Item Elixir_of_Brilliance = new Item
-        {
-            Id = 2039,
-            Name = "Elixir of Brilliance",
-            MaxStacks = 3,
-            Price = 250,
-            SellPrice = GetReducedPrice(2039, 250),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
-        };
-
-        #endregion
-
-        #region Ichor of Rage
-
-        public static Item Ichor_of_Rage = new Item
-        {
-            Id = 2040,
-            Name = "Ichor of Rage",
-            MaxStacks = 3,
-            Price = 500,
-            SellPrice = GetReducedPrice(2040, 500),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 35,
+            GoldPrice = 35,
+            GoldSell = 14,
+            Group = "HealthPotion",
+            Consumed = true,
+            Stacks = 5,
+            Depth = 1,
+            InStore = false,
+            Id = 2010
         };
 
         #endregion
@@ -878,28 +897,16 @@ namespace LeagueSharp.Common
 
         public static Item Crystalline_Flask = new Item
         {
-            Id = 2041,
             Name = "Crystalline Flask",
-            MaxStacks = 1,
-            Price = 345,
-            SellPrice = GetReducedPrice(2041, 345),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
-        };
-
-        #endregion
-
-        #region Oracle's Elixir
-
-        public static Item Oracles_Elixir = new Item
-        {
-            Id = 2042,
-            Name = "Oracle's Elixir",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(2042, 400),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 345,
+            GoldPrice = 345,
+            GoldSell = 138,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            Tags = new[] { "HealthRegen", "ManaRegen", "Consumable", "Active" },
+            Id = 2041
         };
 
         #endregion
@@ -908,14 +915,19 @@ namespace LeagueSharp.Common
 
         public static Item Vision_Ward = new Item
         {
-            Id = 2043,
             Name = "Vision Ward",
             Range = 600f,
-            MaxStacks = 2,
-            Price = 100,
-            SellPrice = GetReducedPrice(2043, 100),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 100,
+            GoldPrice = 100,
+            GoldSell = 40,
+            Purchasable = true,
+            Group = "PinkWards",
+            Consumed = true,
+            Stacks = 2,
+            Depth = 1,
+            InStore = true,
+            Tags = new[] { "Consumable", "Vision", "Stealth", "Lane" },
+            Id = 2043
         };
 
         #endregion
@@ -924,14 +936,19 @@ namespace LeagueSharp.Common
 
         public static Item Stealth_Ward = new Item
         {
-            Id = 2044,
             Name = "Stealth Ward",
             Range = 600f,
-            MaxStacks = 3,
-            Price = 75,
-            SellPrice = GetReducedPrice(2044, 75),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 75,
+            GoldPrice = 75,
+            GoldSell = 30,
+            Purchasable = true,
+            Group = "GreenWards",
+            Consumed = true,
+            Stacks = 3,
+            Depth = 1,
+            InStore = true,
+            Tags = new[] { "Consumable", "Vision", "Lane" },
+            Id = 2044
         };
 
         #endregion
@@ -940,17 +957,19 @@ namespace LeagueSharp.Common
 
         public static Item Ruby_Sightstone = new Item
         {
-            Id = 2045,
             Name = "Ruby Sightstone",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 400,
-            RecipeItems = new[] { 2049, 1028 },
-            SellPrice = GetReducedPrice(2045, 1200),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Consumable & ItemTier.Legendary,
+            GoldBase = 400,
+            GoldPrice = 1600,
+            GoldSell = 640,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 2049, 1028 },
+            InStore = true,
             FlatHPPoolMod = 400f,
+            Tags = new[] { "Health", "Vision", "Active" },
+            Id = 2045
         };
 
         #endregion
@@ -959,28 +978,18 @@ namespace LeagueSharp.Common
 
         public static Item Oracles_Extract = new Item
         {
-            Id = 2047,
             Name = "Oracle's Extract",
-            MaxStacks = 1,
-            Price = 250,
-            SellPrice = GetReducedPrice(2047, 250),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Basic,
-        };
-
-        #endregion
-
-        #region Ichor of Illumination
-
-        public static Item Ichor_of_Illumination = new Item
-        {
-            Id = 2048,
-            Name = "Ichor of Illumination",
-            MaxStacks = 3,
-            Price = 500,
-            SellPrice = GetReducedPrice(2048, 500),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 250,
+            GoldPrice = 250,
+            GoldSell = 100,
+            Purchasable = true,
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            ConsumeOnFull = true,
+            InStore = true,
+            Tags = new[] { "Consumable", "Stealth", "Vision" },
+            Id = 2047
         };
 
         #endregion
@@ -989,17 +998,20 @@ namespace LeagueSharp.Common
 
         public static Item Sightstone = new Item
         {
-            Id = 2049,
             Name = "Sightstone",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 400,
-            RecipeItems = new[] { 1028 },
-            SellPrice = GetReducedPrice(2049, 800),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Consumable & ItemTier.Advanced,
+            GoldBase = 400,
+            GoldPrice = 800,
+            GoldSell = 320,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028 },
+            Into = new[] { 2045 },
+            InStore = true,
             FlatHPPoolMod = 150f,
+            Tags = new[] { "Health", "Vision", "Active" },
+            Id = 2049
         };
 
         #endregion
@@ -1008,12 +1020,13 @@ namespace LeagueSharp.Common
 
         public static Item Explorers_Ward = new Item
         {
-            Id = 2050,
             Name = "Explorer's Ward",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            Tags = new[] { "Consumable" },
+            Id = 2050
         };
 
         #endregion
@@ -1022,29 +1035,33 @@ namespace LeagueSharp.Common
 
         public static Item Guardians_Horn = new Item
         {
-            Id = 2051,
             Name = "Guardian's Horn",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 445,
-            RecipeItems = new[] { 1006, 1028 },
-            SellPrice = GetReducedPrice(2051, 1025),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 445,
+            GoldPrice = 1025,
+            GoldSell = 718,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1006, 1028 },
+            InStore = true,
             FlatHPPoolMod = 180f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "Armor", "Active", "NonbootsMovement" },
+            Id = 2051
         };
 
         #endregion
 
         #region Poro-Snax
 
-        public static Item PoroSnax = new Item
+        public static Item Poro_Snax = new Item
         {
-            Id = 2052,
             Name = "Poro-Snax",
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Consumable,
+            Group = "RelicBase",
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            Id = 2052
         };
 
         #endregion
@@ -1053,29 +1070,34 @@ namespace LeagueSharp.Common
 
         public static Item Raptor_Cloak = new Item
         {
-            Id = 2053,
             Name = "Raptor Cloak",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 520,
-            RecipeItems = new[] { 1006, 1029 },
-            SellPrice = GetReducedPrice(2053, 1000),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 520,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1006, 1029 },
+            Into = new[] { 3056 },
+            InStore = true,
             FlatArmorMod = 30f,
+            Tags = new[] { "HealthRegen", "Armor", "NonbootsMovement" },
+            Id = 2053
         };
 
         #endregion
 
         #region Diet Poro-Snax
 
-        public static Item Diet_PoroSnax = new Item
+        public static Item Diet_Poro_Snax = new Item
         {
-            Id = 2054,
             Name = "Diet Poro-Snax",
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Consumable,
+            Group = "RelicBase",
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            Id = 2054
         };
 
         #endregion
@@ -1084,13 +1106,19 @@ namespace LeagueSharp.Common
 
         public static Item Elixir_of_Ruin = new Item
         {
-            Id = 2137,
             Name = "Elixir of Ruin",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(2137, 400),
-            ItemCategory = ItemCategory.Consumable & ItemCategory.Health,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Group = "Flasks",
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            ConsumeOnFull = true,
+            InStore = true,
+            Tags = new[] { "Health", "Consumable" },
+            Id = 2137
         };
 
         #endregion
@@ -1099,13 +1127,19 @@ namespace LeagueSharp.Common
 
         public static Item Elixir_of_Iron = new Item
         {
-            Id = 2138,
             Name = "Elixir of Iron",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(2138, 400),
-            ItemCategory = ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Group = "Flasks",
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            ConsumeOnFull = true,
+            InStore = true,
+            Tags = new[] { "Consumable", "NonbootsMovement", "Tenacity" },
+            Id = 2138
         };
 
         #endregion
@@ -1114,13 +1148,19 @@ namespace LeagueSharp.Common
 
         public static Item Elixir_of_Sorcery = new Item
         {
-            Id = 2139,
             Name = "Elixir of Sorcery",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(2139, 400),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Group = "Flasks",
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            ConsumeOnFull = true,
+            InStore = true,
+            Tags = new[] { "SpellDamage", "ManaRegen", "Consumable" },
+            Id = 2139
         };
 
         #endregion
@@ -1129,13 +1169,19 @@ namespace LeagueSharp.Common
 
         public static Item Elixir_of_Wrath = new Item
         {
-            Id = 2140,
             Name = "Elixir of Wrath",
-            MaxStacks = 1,
-            Price = 400,
-            SellPrice = GetReducedPrice(2140, 400),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Consumable,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 400,
+            GoldPrice = 400,
+            GoldSell = 160,
+            Purchasable = true,
+            Group = "Flasks",
+            Consumed = true,
+            Stacks = 1,
+            Depth = 1,
+            ConsumeOnFull = true,
+            InStore = true,
+            Tags = new[] { "Damage", "LifeSteal", "Consumable", "SpellVamp" },
+            Id = 2140
         };
 
         #endregion
@@ -1144,18 +1190,20 @@ namespace LeagueSharp.Common
 
         public static Item Abyssal_Scepter = new Item
         {
-            Id = 3001,
             Name = "Abyssal Scepter",
             Range = 700f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 730,
-            RecipeItems = new[] { 1026, 1057 },
-            SellPrice = GetReducedPrice(3001, 1940),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 730,
+            GoldPrice = 2440,
+            GoldSell = 1708,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1026, 1057 },
+            InStore = true,
             FlatMagicDamageMod = 70f,
-            FlatSpellBlockMod = 50f
+            FlatSpellBlockMod = 50f,
+            Tags = new[] { "SpellBlock", "SpellDamage", "Aura" },
+            Id = 3001
         };
 
         #endregion
@@ -1164,16 +1212,20 @@ namespace LeagueSharp.Common
 
         public static Item Archangels_Staff = new Item
         {
-            Id = 3003,
             Name = "Archangel's Staff",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1120,
-            RecipeItems = new[] { 3070, 1026 },
-            SellPrice = GetReducedPrice(3003, 2120),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1120,
+            GoldPrice = 2700,
+            GoldSell = 1890,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3070, 1026 },
+            Into = new[] { 3040 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "SpellDamage", "Mana", "ManaRegen" },
+            Id = 3003
         };
 
         #endregion
@@ -1182,35 +1234,20 @@ namespace LeagueSharp.Common
 
         public static Item Manamune = new Item
         {
-            Id = 3004,
             Name = "Manamune",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 605,
-            RecipeItems = new[] { 1037, 3070 },
-            SellPrice = GetReducedPrice(3004, 1620),
-            ItemCategory = ItemCategory.Mana & ItemCategory.Damage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 605,
+            GoldPrice = 2200,
+            GoldSell = 1540,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3070, 1037 },
+            Into = new[] { 3042 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
             FlatPhysicalDamageMod = 25f,
-        };
-
-        #endregion
-
-        #region Atma's Impaler
-
-        public static Item Atmas_Impaler = new Item
-        {
-            Id = 3005,
-            Name = "Atma's Impaler",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 700,
-            RecipeItems = new[] { 3093, 1031 },
-            SellPrice = GetReducedPrice(3005, 1550),
-            ItemCategory = ItemCategory.Damage & ItemCategory.Armor & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 45f,
-            FlatCritChanceMod = 0.15f,
+            Tags = new[] { "Damage", "Mana", "ManaRegen", "OnHit" },
+            Id = 3004
         };
 
         #endregion
@@ -1219,16 +1256,20 @@ namespace LeagueSharp.Common
 
         public static Item Berserkers_Greaves = new Item
         {
-            Id = 3006,
             Name = "Berserker's Greaves",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 225,
-            RecipeItems = new[] { 1001, 1042 },
-            SellPrice = GetReducedPrice(3006, 1000),
-            ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 225,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001, 1042 },
+            Into = new[] { 3254, 3253, 3252, 3251, 3250 },
+            InStore = true,
             FlatMovementSpeedMod = 45f,
+            PercentAttackSpeedMod = 0.25f,
+            Tags = new[] { "AttackSpeed", "Boots" },
+            Id = 3006
         };
 
         #endregion
@@ -1237,16 +1278,20 @@ namespace LeagueSharp.Common
 
         public static Item Archangels_Staff_Crystal_Scar = new Item
         {
-            Id = 3007,
             Name = "Archangel's Staff (Crystal Scar)",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1120,
-            RecipeItems = new[] { 3073, 1026 },
-            SellPrice = GetReducedPrice(3007, 2120),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1120,
+            GoldPrice = 2700,
+            GoldSell = 1890,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3073, 1026 },
+            Into = new[] { 3048 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "SpellDamage", "Mana", "ManaRegen" },
+            Id = 3007
         };
 
         #endregion
@@ -1255,16 +1300,20 @@ namespace LeagueSharp.Common
 
         public static Item Manamune_Crystal_Scar = new Item
         {
-            Id = 3008,
             Name = "Manamune (Crystal Scar)",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 605,
-            RecipeItems = new[] { 1037, 3073 },
-            SellPrice = GetReducedPrice(3008, 1620),
-            ItemCategory = ItemCategory.Mana & ItemCategory.Damage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 605,
+            GoldPrice = 2200,
+            GoldSell = 1540,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3073, 1037 },
+            Into = new[] { 3043 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
             FlatPhysicalDamageMod = 25f,
+            Tags = new[] { "Damage", "Mana", "ManaRegen", "OnHit" },
+            Id = 3008
         };
 
         #endregion
@@ -1273,16 +1322,19 @@ namespace LeagueSharp.Common
 
         public static Item Boots_of_Swiftness = new Item
         {
-            Id = 3009,
             Name = "Boots of Swiftness",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 675,
-            RecipeItems = new[] { 1001 },
-            SellPrice = GetReducedPrice(3009, 1000),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 675,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001 },
+            Into = new[] { 3284, 3283, 3282, 3281, 3280 },
+            InStore = true,
             FlatMovementSpeedMod = 60f,
+            Tags = new[] { "Boots" },
+            Id = 3009
         };
 
         #endregion
@@ -1291,16 +1343,20 @@ namespace LeagueSharp.Common
 
         public static Item Catalyst_the_Protector = new Item
         {
-            Id = 3010,
             Name = "Catalyst the Protector",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 400,
-            RecipeItems = new[] { 1027, 1028 },
-            SellPrice = GetReducedPrice(3010, 1200),
-            ItemCategory = ItemCategory.Mana & ItemCategory.HealthRegen & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 400,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1027 },
+            Into = new[] { 3027, 3029, 3180, 3800 },
+            InStore = true,
             FlatHPPoolMod = 200f,
+            FlatMPPoolMod = 300f,
+            Tags = new[] { "Health", "HealthRegen", "Mana", "ManaRegen" },
+            Id = 3010
         };
 
         #endregion
@@ -1309,16 +1365,19 @@ namespace LeagueSharp.Common
 
         public static Item Sorcerers_Shoes = new Item
         {
-            Id = 3020,
             Name = "Sorcerer's Shoes",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 775,
-            RecipeItems = new[] { 1001 },
-            SellPrice = GetReducedPrice(3020, 1100),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 775,
+            GoldPrice = 1100,
+            GoldSell = 770,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001 },
+            Into = new[] { 3259, 3258, 3257, 3256, 3255 },
+            InStore = true,
             FlatMovementSpeedMod = 45f,
+            Tags = new[] { "Boots", "MagicPenetration" },
+            Id = 3020
         };
 
         #endregion
@@ -1327,17 +1386,19 @@ namespace LeagueSharp.Common
 
         public static Item Frozen_Mallet = new Item
         {
-            Id = 3022,
             Name = "Frozen Mallet",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1025,
-            RecipeItems = new[] { 1037, 1011, 1028 },
-            SellPrice = GetReducedPrice(3022, 3300),
-            ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1025,
+            GoldPrice = 3300,
+            GoldSell = 2310,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1011, 1037 },
+            InStore = true,
             FlatHPPoolMod = 700f,
             FlatPhysicalDamageMod = 30f,
+            Tags = new[] { "Health", "Damage", "Slow", "OnHit" },
+            Id = 3022
         };
 
         #endregion
@@ -1346,17 +1407,19 @@ namespace LeagueSharp.Common
 
         public static Item Twin_Shadows = new Item
         {
-            Id = 3023,
             Name = "Twin Shadows",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 630,
-            RecipeItems = new[] { 3113, 3108 },
-            SellPrice = GetReducedPrice(3023, 1530),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
-            PercentMovementSpeedMod = 0.06f,
+            GoldBase = 630,
+            GoldPrice = 2400,
+            GoldSell = 1680,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3108, 3113 },
+            InStore = true,
             FlatMagicDamageMod = 80f,
+            PercentMovementSpeedMod = 0.06f,
+            Tags = new[] { "SpellDamage", "Active", "CooldownReduction", "Slow", "NonbootsMovement" },
+            Id = 3023
         };
 
         #endregion
@@ -1365,16 +1428,20 @@ namespace LeagueSharp.Common
 
         public static Item Glacial_Shroud = new Item
         {
-            Id = 3024,
             Name = "Glacial Shroud",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 250,
-            RecipeItems = new[] { 1027, 1029 },
-            SellPrice = GetReducedPrice(3024, 950),
-            ItemCategory = ItemCategory.Mana & ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 250,
+            GoldPrice = 950,
+            GoldSell = 665,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1027, 1029 },
+            Into = new[] { 3110, 3025, 3187 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
             FlatArmorMod = 20f,
+            Tags = new[] { "Armor", "Mana", "CooldownReduction" },
+            Id = 3024
         };
 
         #endregion
@@ -1383,17 +1450,20 @@ namespace LeagueSharp.Common
 
         public static Item Iceborn_Gauntlet = new Item
         {
-            Id = 3025,
             Name = "Iceborn Gauntlet",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 750,
-            RecipeItems = new[] { 3057, 3024 },
-            SellPrice = GetReducedPrice(3025, 1365),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 750,
+            GoldPrice = 2900,
+            GoldSell = 2030,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3057, 3024 },
+            InStore = true,
+            FlatMPPoolMod = 500f,
             FlatArmorMod = 60f,
             FlatMagicDamageMod = 30f,
+            Tags = new[] { "Armor", "SpellDamage", "Mana", "CooldownReduction", "Slow" },
+            Id = 3025
         };
 
         #endregion
@@ -1402,17 +1472,19 @@ namespace LeagueSharp.Common
 
         public static Item Guardian_Angel = new Item
         {
-            Id = 3026,
             Name = "Guardian Angel",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1250,
-            RecipeItems = new[] { 1057, 1031 },
-            SellPrice = GetReducedPrice(3026, 2050),
-            ItemCategory = ItemCategory.Armor & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1250,
+            GoldPrice = 2850,
+            GoldSell = 1140,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1057, 1031 },
+            InStore = true,
             FlatArmorMod = 50f,
-            FlatSpellBlockMod = 50f
+            FlatSpellBlockMod = 50f,
+            Tags = new[] { "SpellBlock", "Armor" },
+            Id = 3026
         };
 
         #endregion
@@ -1421,19 +1493,20 @@ namespace LeagueSharp.Common
 
         public static Item Rod_of_Ages = new Item
         {
-            Id = 3027,
             Name = "Rod of Ages",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 740,
-            RecipeItems = new[] { 3010, 1026 },
-            SellPrice = GetReducedPrice(3027, 2000),
-            ItemCategory =
-                ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.ManaRegen &
-                ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 740,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3010, 1026 },
+            InStore = true,
             FlatHPPoolMod = 450f,
+            FlatMPPoolMod = 450f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "Health", "HealthRegen", "SpellDamage", "Mana", "ManaRegen" },
+            Id = 3027
         };
 
         #endregion
@@ -1442,16 +1515,19 @@ namespace LeagueSharp.Common
 
         public static Item Chalice_of_Harmony = new Item
         {
-            Id = 3028,
             Name = "Chalice of Harmony",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 140,
-            RecipeItems = new[] { 1033, 1004 },
-            SellPrice = GetReducedPrice(3028, 820),
-            ItemCategory = ItemCategory.SpellBlock & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-            FlatSpellBlockMod = 25f
+            GoldBase = 140,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1004, 1033, 1004 },
+            Into = new[] { 3174, 3222 },
+            InStore = true,
+            FlatSpellBlockMod = 25f,
+            Tags = new[] { "SpellBlock", "ManaRegen" },
+            Id = 3028
         };
 
         #endregion
@@ -1460,19 +1536,20 @@ namespace LeagueSharp.Common
 
         public static Item Rod_of_Ages_Crystal_Scar = new Item
         {
-            Id = 3029,
             Name = "Rod of Ages (Crystal Scar)",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 740,
-            RecipeItems = new[] { 3010, 1026 },
-            SellPrice = GetReducedPrice(3029, 2000),
-            ItemCategory =
-                ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.ManaRegen &
-                ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 740,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3010, 1026 },
+            InStore = true,
             FlatHPPoolMod = 450f,
+            FlatMPPoolMod = 450f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "Health", "HealthRegen", "SpellDamage", "Mana", "ManaRegen" },
+            Id = 3029
         };
 
         #endregion
@@ -1481,17 +1558,19 @@ namespace LeagueSharp.Common
 
         public static Item Infinity_Edge = new Item
         {
-            Id = 3031,
             Name = "Infinity Edge",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 645,
-            RecipeItems = new[] { 1018, 1037, 1038 },
-            SellPrice = GetReducedPrice(3031, 3800),
-            ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatCritChanceMod = 0.25f,
+            GoldBase = 645,
+            GoldPrice = 3800,
+            GoldSell = 2660,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1038, 1037, 1018 },
+            InStore = true,
             FlatPhysicalDamageMod = 80f,
+            FlatCritChanceMod = 0.25f,
+            Tags = new[] { "Damage", "CriticalStrike" },
+            Id = 3031
         };
 
         #endregion
@@ -1500,16 +1579,18 @@ namespace LeagueSharp.Common
 
         public static Item Last_Whisper = new Item
         {
-            Id = 3035,
             Name = "Last Whisper",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1065,
-            RecipeItems = new[] { 1036, 1037 },
-            SellPrice = GetReducedPrice(3035, 2300),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1065,
+            GoldPrice = 2300,
+            GoldSell = 1610,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1037, 1036 },
+            InStore = true,
             FlatPhysicalDamageMod = 40f,
+            Tags = new[] { "Damage", "ArmorPenetration" },
+            Id = 3035
         };
 
         #endregion
@@ -1518,14 +1599,19 @@ namespace LeagueSharp.Common
 
         public static Item Seraphs_Embrace = new Item
         {
-            Id = 3040,
             Name = "Seraph's Embrace",
-            MaxStacks = 1,
-            Price = 2700,
-            SellPrice = GetReducedPrice(3040, 2700),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 2700,
+            GoldPrice = 2700,
+            GoldSell = 3780,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3003 },
+            SpecialRecipe = 3003,
+            InStore = false,
+            FlatMPPoolMod = 1000f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "Active" },
+            Id = 3040
         };
 
         #endregion
@@ -1534,16 +1620,18 @@ namespace LeagueSharp.Common
 
         public static Item Mejais_Soulstealer = new Item
         {
-            Id = 3041,
             Name = "Mejai's Soulstealer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 965,
-            RecipeItems = new[] { 1052 },
-            SellPrice = GetReducedPrice(3041, 1400),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 965,
+            GoldPrice = 1400,
+            GoldSell = 980,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1052 },
+            InStore = true,
             FlatMagicDamageMod = 20f,
+            Tags = new[] { "SpellDamage" },
+            Id = 3041
         };
 
         #endregion
@@ -1552,14 +1640,19 @@ namespace LeagueSharp.Common
 
         public static Item Muramana = new Item
         {
-            Id = 3042,
             Name = "Muramana",
-            MaxStacks = 1,
-            Price = 2200,
-            SellPrice = GetReducedPrice(3042, 2200),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 2200,
+            GoldPrice = 2200,
+            GoldSell = 3080,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3004 },
+            SpecialRecipe = 3004,
+            InStore = false,
+            FlatMPPoolMod = 1000f,
             FlatPhysicalDamageMod = 25f,
+            Tags = new[] { "OnHit" },
+            Id = 3042
         };
 
         #endregion
@@ -1568,14 +1661,19 @@ namespace LeagueSharp.Common
 
         public static Item Muramana2 = new Item
         {
-            Id = 3043,
             Name = "Muramana",
-            MaxStacks = 1,
-            Price = 2200,
-            SellPrice = GetReducedPrice(3043, 2200),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 2200,
+            GoldPrice = 2200,
+            GoldSell = 3080,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3008 },
+            SpecialRecipe = 3008,
+            InStore = false,
+            FlatMPPoolMod = 1000f,
             FlatPhysicalDamageMod = 25f,
+            Tags = new[] { "OnHit" },
+            Id = 3043
         };
 
         #endregion
@@ -1584,17 +1682,20 @@ namespace LeagueSharp.Common
 
         public static Item Phage = new Item
         {
-            Id = 3044,
             Name = "Phage",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 565,
-            RecipeItems = new[] { 1036, 1028 },
-            SellPrice = GetReducedPrice(3044, 1325),
-            ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 565,
+            GoldPrice = 1325,
+            GoldSell = 927,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1036 },
+            Into = new[] { 3078, 3184 },
+            InStore = true,
             FlatHPPoolMod = 200f,
             FlatPhysicalDamageMod = 20f,
+            Tags = new[] { "Health", "Damage", "OnHit", "NonbootsMovement" },
+            Id = 3044
         };
 
         #endregion
@@ -1603,17 +1704,20 @@ namespace LeagueSharp.Common
 
         public static Item Phantom_Dancer = new Item
         {
-            Id = 3046,
             Name = "Phantom Dancer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 520,
-            RecipeItems = new[] { 1018, 3086, 1042 },
-            SellPrice = GetReducedPrice(3046, 1950),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 520,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1018, 3086, 1042 },
+            InStore = true,
             PercentMovementSpeedMod = 0.05f,
+            PercentAttackSpeedMod = 0.5f,
             FlatCritChanceMod = 0.3f,
+            Tags = new[] { "CriticalStrike", "AttackSpeed", "NonbootsMovement" },
+            Id = 3046
         };
 
         #endregion
@@ -1622,17 +1726,20 @@ namespace LeagueSharp.Common
 
         public static Item Ninja_Tabi = new Item
         {
-            Id = 3047,
             Name = "Ninja Tabi",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 375,
-            RecipeItems = new[] { 1001, 1029 },
-            SellPrice = GetReducedPrice(3047, 1000),
-            ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 375,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001, 1029 },
+            Into = new[] { 3264, 3263, 3262, 3261, 3260 },
+            InStore = true,
             FlatArmorMod = 25f,
             FlatMovementSpeedMod = 45f,
+            Tags = new[] { "Armor", "Boots" },
+            Id = 3047
         };
 
         #endregion
@@ -1641,14 +1748,19 @@ namespace LeagueSharp.Common
 
         public static Item Seraphs_Embrace2 = new Item
         {
-            Id = 3048,
             Name = "Seraph's Embrace",
-            MaxStacks = 1,
-            Price = 2700,
-            SellPrice = GetReducedPrice(3048, 2700),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 2700,
+            GoldPrice = 2700,
+            GoldSell = 3780,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3007 },
+            SpecialRecipe = 3007,
+            InStore = false,
+            FlatMPPoolMod = 1000f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "Active" },
+            Id = 3048
         };
 
         #endregion
@@ -1657,16 +1769,18 @@ namespace LeagueSharp.Common
 
         public static Item Zekes_Herald = new Item
         {
-            Id = 3050,
             Name = "Zeke's Herald",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 800,
-            RecipeItems = new[] { 3067, 1053 },
-            SellPrice = GetReducedPrice(3050, 1690),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 800,
+            GoldPrice = 2450,
+            GoldSell = 1715,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3067, 1053 },
+            InStore = true,
             FlatHPPoolMod = 250f,
+            Tags = new[] { "Health", "Damage", "LifeSteal", "CooldownReduction", "Aura" },
+            Id = 3050
         };
 
         #endregion
@@ -1675,17 +1789,19 @@ namespace LeagueSharp.Common
 
         public static Item Ohmwrecker = new Item
         {
-            Id = 3056,
             Name = "Ohmwrecker",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 750,
-            RecipeItems = new[] { 3067, 2053 },
-            SellPrice = GetReducedPrice(3056, 1720),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 50f,
+            GoldBase = 750,
+            GoldPrice = 2600,
+            GoldSell = 1820,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 2053, 3067 },
+            InStore = true,
             FlatHPPoolMod = 300f,
+            FlatArmorMod = 50f,
+            Tags = new[] { "Health", "HealthRegen", "Armor", "CooldownReduction", "Active", "NonbootsMovement" },
+            Id = 3056
         };
 
         #endregion
@@ -1694,16 +1810,20 @@ namespace LeagueSharp.Common
 
         public static Item Sheen = new Item
         {
-            Id = 3057,
             Name = "Sheen",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 365,
-            RecipeItems = new[] { 1052, 1027 },
-            SellPrice = GetReducedPrice(3057, 1200),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 365,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1027, 1052 },
+            Into = new[] { 3078, 3100, 3025 },
+            InStore = true,
+            FlatMPPoolMod = 200f,
             FlatMagicDamageMod = 25f,
+            Tags = new[] { "SpellDamage", "Mana" },
+            Id = 3057
         };
 
         #endregion
@@ -1712,19 +1832,20 @@ namespace LeagueSharp.Common
 
         public static Item Banner_of_Command = new Item
         {
-            Id = 3060,
             Name = "Banner of Command",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 280,
-            RecipeItems = new[] { 3105, 3108 },
-            SellPrice = GetReducedPrice(3060, 1485),
-            ItemCategory =
-                ItemCategory.SpellDamage & ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 280,
+            GoldPrice = 3000,
+            GoldSell = 2100,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3105, 3108 },
+            InStore = true,
             FlatHPPoolMod = 200f,
             FlatMagicDamageMod = 60f,
-            FlatSpellBlockMod = 20f
+            FlatSpellBlockMod = 20f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "SpellDamage", "CooldownReduction", "Aura", "Active" },
+            Id = 3060
         };
 
         #endregion
@@ -1733,17 +1854,19 @@ namespace LeagueSharp.Common
 
         public static Item Spirit_Visage = new Item
         {
-            Id = 3065,
             Name = "Spirit Visage",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 700,
-            RecipeItems = new[] { 3067, 3211 },
-            SellPrice = GetReducedPrice(3065, 1450),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 700,
+            GoldPrice = 2750,
+            GoldSell = 1925,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3211, 3067 },
+            InStore = true,
             FlatHPPoolMod = 400f,
-            FlatSpellBlockMod = 55f
+            FlatSpellBlockMod = 55f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "CooldownReduction" },
+            Id = 3065
         };
 
         #endregion
@@ -1752,16 +1875,19 @@ namespace LeagueSharp.Common
 
         public static Item Kindlegem = new Item
         {
-            Id = 3067,
             Name = "Kindlegem",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 450,
-            RecipeItems = new[] { 1028 },
-            SellPrice = GetReducedPrice(3067, 850),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 450,
+            GoldPrice = 850,
+            GoldSell = 595,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028 },
+            Into = new[] { 3187, 3401, 3065, 3190, 3050, 3056, 3709, 3717, 3721, 3725 },
+            InStore = true,
             FlatHPPoolMod = 200f,
+            Tags = new[] { "Health", "CooldownReduction" },
+            Id = 3067
         };
 
         #endregion
@@ -1770,18 +1896,20 @@ namespace LeagueSharp.Common
 
         public static Item Sunfire_Cape = new Item
         {
-            Id = 3068,
             Name = "Sunfire Cape",
             Range = 400f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 850,
-            RecipeItems = new[] { 1011, 1031 },
-            SellPrice = GetReducedPrice(3068, 2300),
-            ItemCategory = ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 45f,
+            GoldBase = 850,
+            GoldPrice = 2600,
+            GoldSell = 1820,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1031, 1011 },
+            InStore = true,
             FlatHPPoolMod = 450f,
+            FlatArmorMod = 45f,
+            Tags = new[] { "Health", "Armor" },
+            Id = 3068
         };
 
         #endregion
@@ -1790,16 +1918,19 @@ namespace LeagueSharp.Common
 
         public static Item Talisman_of_Ascension = new Item
         {
-            Id = 3069,
             Name = "Talisman of Ascension",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 635,
-            RecipeItems = new[] { 3114, 3096 },
-            SellPrice = GetReducedPrice(3069, 1375),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 635,
+            GoldPrice = 2100,
+            GoldSell = 840,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3096, 3114 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "ManaRegen", "CooldownReduction", "NonbootsMovement", "Active", "GoldPer" },
+            Id = 3069
         };
 
         #endregion
@@ -1808,15 +1939,19 @@ namespace LeagueSharp.Common
 
         public static Item Tear_of_the_Goddess = new Item
         {
-            Id = 3070,
             Name = "Tear of the Goddess",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 140,
-            RecipeItems = new[] { 1004, 1027 },
-            SellPrice = GetReducedPrice(3070, 720),
-            ItemCategory = ItemCategory.Mana & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 140,
+            GoldPrice = 720,
+            GoldSell = 504,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1027, 1004 },
+            Into = new[] { 3003, 3004 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
+            Tags = new[] { "Mana", "ManaRegen" },
+            Id = 3070
         };
 
         #endregion
@@ -1825,17 +1960,19 @@ namespace LeagueSharp.Common
 
         public static Item The_Black_Cleaver = new Item
         {
-            Id = 3071,
             Name = "The Black Cleaver",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1263,
-            RecipeItems = new[] { 3134, 1028 },
-            SellPrice = GetReducedPrice(3071, 2280),
-            ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1263,
+            GoldPrice = 3000,
+            GoldSell = 2100,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3134, 1028 },
+            InStore = true,
             FlatHPPoolMod = 200f,
             FlatPhysicalDamageMod = 50f,
+            Tags = new[] { "Health", "Damage", "CooldownReduction", "ArmorPenetration", "OnHit" },
+            Id = 3071
         };
 
         #endregion
@@ -1844,16 +1981,18 @@ namespace LeagueSharp.Common
 
         public static Item The_Bloodthirster = new Item
         {
-            Id = 3072,
             Name = "The Bloodthirster",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1150,
-            RecipeItems = new[] { 1053, 1038 },
-            SellPrice = GetReducedPrice(3072, 3140),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1150,
+            GoldPrice = 3500,
+            GoldSell = 2450,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1053, 1038 },
+            InStore = true,
             FlatPhysicalDamageMod = 80f,
+            Tags = new[] { "Damage", "LifeSteal" },
+            Id = 3072
         };
 
         #endregion
@@ -1862,15 +2001,19 @@ namespace LeagueSharp.Common
 
         public static Item Tear_of_the_Goddess_Crystal_Scar = new Item
         {
-            Id = 3073,
             Name = "Tear of the Goddess (Crystal Scar)",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 140,
-            RecipeItems = new[] { 1004, 1027 },
-            SellPrice = GetReducedPrice(3073, 720),
-            ItemCategory = ItemCategory.Mana & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 140,
+            GoldPrice = 720,
+            GoldSell = 504,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1027, 1004 },
+            Into = new[] { 3007, 3008 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
+            Tags = new[] { "Mana", "ManaRegen" },
+            Id = 3073
         };
 
         #endregion
@@ -1879,17 +2022,20 @@ namespace LeagueSharp.Common
 
         public static Item Ravenous_Hydra_Melee_Only = new Item
         {
-            Id = 3074,
             Name = "Ravenous Hydra (Melee Only)",
             Range = 400f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 1053, 3077 },
-            SellPrice = GetReducedPrice(3074, 1345),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 600,
+            GoldPrice = 3300,
+            GoldSell = 2310,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3077, 1053 },
+            InStore = true,
             FlatPhysicalDamageMod = 75f,
+            PercentLifeStealMod = 0.12f,
+            Tags = new[] { "HealthRegen", "Damage", "LifeSteal", "Active", "OnHit" },
+            Id = 3074
         };
 
         #endregion
@@ -1898,16 +2044,18 @@ namespace LeagueSharp.Common
 
         public static Item Thornmail = new Item
         {
-            Id = 3075,
             Name = "Thornmail",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1050,
-            RecipeItems = new[] { 1029, 1031 },
-            SellPrice = GetReducedPrice(3075, 1800),
-            ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1050,
+            GoldPrice = 2100,
+            GoldSell = 1470,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1029, 1031 },
+            InStore = true,
             FlatArmorMod = 100f,
+            Tags = new[] { "Armor" },
+            Id = 3075
         };
 
         #endregion
@@ -1916,17 +2064,20 @@ namespace LeagueSharp.Common
 
         public static Item Tiamat_Melee_Only = new Item
         {
-            Id = 3077,
             Name = "Tiamat (Melee Only)",
             Range = 400f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 305,
-            RecipeItems = new[] { 1036, 1037, 1006 },
-            SellPrice = GetReducedPrice(3077, 1720),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 305,
+            GoldPrice = 1900,
+            GoldSell = 1330,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1037, 1036, 1006, 1006 },
+            Into = new[] { 3074 },
+            InStore = true,
             FlatPhysicalDamageMod = 40f,
+            Tags = new[] { "HealthRegen", "Damage", "Active", "OnHit" },
+            Id = 3077
         };
 
         #endregion
@@ -1935,22 +2086,24 @@ namespace LeagueSharp.Common
 
         public static Item Trinity_Force = new Item
         {
-            Id = 3078,
             Name = "Trinity Force",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 78,
-            RecipeItems = new[] { 3086, 3057, 3044 },
-            SellPrice = GetReducedPrice(3078, 1258),
-            ItemCategory =
-                ItemCategory.Mana & ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.AttackSpeed &
-                ItemCategory.CriticalStrike & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            PercentMovementSpeedMod = 0.08f,
-            FlatCritChanceMod = 0.1f,
+            GoldBase = 78,
+            GoldPrice = 3703,
+            GoldSell = 2592,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3086, 3057, 3044 },
+            InStore = true,
             FlatHPPoolMod = 250f,
-            FlatMagicDamageMod = 30f,
+            FlatMPPoolMod = 200f,
             FlatPhysicalDamageMod = 30f,
+            FlatMagicDamageMod = 30f,
+            PercentMovementSpeedMod = 0.08f,
+            PercentAttackSpeedMod = 0.3f,
+            FlatCritChanceMod = 0.1f,
+            Tags = new[] { "Health", "Damage", "AttackSpeed", "SpellDamage", "Mana", "CriticalStrike", "NonbootsMovement", "OnHit" },
+            Id = 3078
         };
 
         #endregion
@@ -1959,16 +2112,19 @@ namespace LeagueSharp.Common
 
         public static Item Wardens_Mail = new Item
         {
-            Id = 3082,
             Name = "Warden's Mail",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 450,
-            RecipeItems = new[] { 1029 },
-            SellPrice = GetReducedPrice(3082, 750),
-            ItemCategory = ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 450,
+            GoldPrice = 1050,
+            GoldSell = 735,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1029, 1029 },
+            Into = new[] { 3110, 3143 },
+            InStore = true,
             FlatArmorMod = 45f,
+            Tags = new[] { "Armor", "Slow" },
+            Id = 3082
         };
 
         #endregion
@@ -1977,16 +2133,18 @@ namespace LeagueSharp.Common
 
         public static Item Warmogs_Armor = new Item
         {
-            Id = 3083,
             Name = "Warmog's Armor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 300,
-            RecipeItems = new[] { 3801, 1011 },
-            SellPrice = GetReducedPrice(3083, 1320),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 300,
+            GoldPrice = 2500,
+            GoldSell = 1750,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3801, 1011, 3801 },
+            InStore = true,
             FlatHPPoolMod = 800f,
+            Tags = new[] { "Health", "HealthRegen" },
+            Id = 3083
         };
 
         #endregion
@@ -1995,16 +2153,18 @@ namespace LeagueSharp.Common
 
         public static Item Overlords_Bloodmail = new Item
         {
-            Id = 3084,
             Name = "Overlord's Bloodmail",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1055,
-            RecipeItems = new[] { 1011, 1028 },
-            SellPrice = GetReducedPrice(3084, 2455),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1055,
+            GoldPrice = 2455,
+            GoldSell = 1719,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1011, 1028 },
+            InStore = true,
             FlatHPPoolMod = 850f,
+            Tags = new[] { "Health", "HealthRegen" },
+            Id = 3084
         };
 
         #endregion
@@ -2013,15 +2173,18 @@ namespace LeagueSharp.Common
 
         public static Item Runaans_Hurricane_Ranged_Only = new Item
         {
-            Id = 3085,
             Name = "Runaan's Hurricane (Ranged Only)",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 1043, 1042 },
-            SellPrice = GetReducedPrice(3085, 1950),
-            ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 600,
+            GoldPrice = 2400,
+            GoldSell = 1680,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1042, 1043, 1042 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.7f,
+            Tags = new[] { "AttackSpeed", "OnHit" },
+            Id = 3085
         };
 
         #endregion
@@ -2030,17 +2193,21 @@ namespace LeagueSharp.Common
 
         public static Item Zeal = new Item
         {
-            Id = 3086,
             Name = "Zeal",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 250,
-            RecipeItems = new[] { 1051, 1042 },
-            SellPrice = GetReducedPrice(3086, 1100),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 250,
+            GoldPrice = 1100,
+            GoldSell = 770,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1051, 1042 },
+            Into = new[] { 3046, 3078, 3087 },
+            InStore = true,
             PercentMovementSpeedMod = 0.05f,
+            PercentAttackSpeedMod = 0.2f,
             FlatCritChanceMod = 0.1f,
+            Tags = new[] { "CriticalStrike", "AttackSpeed", "NonbootsMovement" },
+            Id = 3086
         };
 
         #endregion
@@ -2049,17 +2216,20 @@ namespace LeagueSharp.Common
 
         public static Item Statikk_Shiv = new Item
         {
-            Id = 3087,
             Name = "Statikk Shiv",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3086, 3093 },
-            SellPrice = GetReducedPrice(3087, 1250),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 600,
+            GoldPrice = 2500,
+            GoldSell = 1750,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3086, 3093 },
+            InStore = true,
             PercentMovementSpeedMod = 0.06f,
+            PercentAttackSpeedMod = 0.4f,
             FlatCritChanceMod = 0.2f,
+            Tags = new[] { "CriticalStrike", "AttackSpeed", "OnHit", "NonbootsMovement" },
+            Id = 3087
         };
 
         #endregion
@@ -2068,16 +2238,18 @@ namespace LeagueSharp.Common
 
         public static Item Rabadons_Deathcap = new Item
         {
-            Id = 3089,
             Name = "Rabadon's Deathcap",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 840,
-            RecipeItems = new[] { 1058, 1026 },
-            SellPrice = GetReducedPrice(3089, 3300),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 840,
+            GoldPrice = 3300,
+            GoldSell = 2310,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1026, 1058 },
+            InStore = true,
             FlatMagicDamageMod = 120f,
+            Tags = new[] { "SpellDamage" },
+            Id = 3089
         };
 
         #endregion
@@ -2086,17 +2258,19 @@ namespace LeagueSharp.Common
 
         public static Item Wooglets_Witchcap = new Item
         {
-            Id = 3090,
             Name = "Wooglet's Witchcap",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1045,
-            RecipeItems = new[] { 1052, 3191, 1026 },
-            SellPrice = GetReducedPrice(3090, 2805),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1045,
+            GoldPrice = 3540,
+            GoldSell = 2478,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3191, 1026, 1052 },
+            InStore = true,
             FlatArmorMod = 45f,
             FlatMagicDamageMod = 100f,
+            Tags = new[] { "Armor", "SpellDamage", "Active" },
+            Id = 3090
         };
 
         #endregion
@@ -2105,16 +2279,19 @@ namespace LeagueSharp.Common
 
         public static Item Wits_End = new Item
         {
-            Id = 3091,
             Name = "Wit's End",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 750,
-            RecipeItems = new[] { 1033, 1043, 1042 },
-            SellPrice = GetReducedPrice(3091, 2600),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
-            FlatSpellBlockMod = 30f
+            GoldBase = 750,
+            GoldPrice = 2600,
+            GoldSell = 1820,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1043, 1033, 1042 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.5f,
+            FlatSpellBlockMod = 30f,
+            Tags = new[] { "SpellBlock", "AttackSpeed", "OnHit" },
+            Id = 3091
         };
 
         #endregion
@@ -2123,17 +2300,20 @@ namespace LeagueSharp.Common
 
         public static Item Frost_Queens_Claim = new Item
         {
-            Id = 3092,
             Name = "Frost Queen's Claim",
             Range = 850f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 515,
-            RecipeItems = new[] { 3098, 3108 },
-            SellPrice = GetReducedPrice(3092, 1400),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 515,
+            GoldPrice = 2200,
+            GoldSell = 880,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3098, 3108 },
+            InStore = true,
             FlatMagicDamageMod = 50f,
+            Tags = new[] { "SpellDamage", "ManaRegen", "CooldownReduction", "Slow", "GoldPer", "Active" },
+            Id = 3092
         };
 
         #endregion
@@ -2142,16 +2322,19 @@ namespace LeagueSharp.Common
 
         public static Item Avarice_Blade = new Item
         {
-            Id = 3093,
             Name = "Avarice Blade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 400,
-            RecipeItems = new[] { 1051 },
-            SellPrice = GetReducedPrice(3093, 800),
-            ItemCategory = ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 400,
+            GoldPrice = 800,
+            GoldSell = 320,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1051 },
+            Into = new[] { 3087, 3142, 3005 },
+            InStore = true,
             FlatCritChanceMod = 0.1f,
+            Tags = new[] { "CriticalStrike", "GoldPer" },
+            Id = 3093
         };
 
         #endregion
@@ -2160,15 +2343,19 @@ namespace LeagueSharp.Common
 
         public static Item Nomads_Medallion = new Item
         {
-            Id = 3096,
             Name = "Nomad's Medallion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 500,
-            RecipeItems = new[] { 3301 },
-            SellPrice = GetReducedPrice(3096, 865),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 500,
+            GoldPrice = 865,
+            GoldSell = 346,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3301 },
+            Into = new[] { 3069 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "ManaRegen", "GoldPer", "Active" },
+            Id = 3096
         };
 
         #endregion
@@ -2177,16 +2364,20 @@ namespace LeagueSharp.Common
 
         public static Item Targons_Brace = new Item
         {
-            Id = 3097,
             Name = "Targon's Brace",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 500,
-            RecipeItems = new[] { 3302 },
-            SellPrice = GetReducedPrice(3097, 865),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 500,
+            GoldPrice = 865,
+            GoldSell = 346,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3302 },
+            Into = new[] { 3401 },
+            InStore = true,
             FlatHPPoolMod = 175f,
+            Tags = new[] { "Health", "HealthRegen", "Aura", "GoldPer" },
+            Id = 3097
         };
 
         #endregion
@@ -2195,34 +2386,20 @@ namespace LeagueSharp.Common
 
         public static Item Frostfang = new Item
         {
-            Id = 3098,
             Name = "Frostfang",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 500,
-            RecipeItems = new[] { 3303 },
-            SellPrice = GetReducedPrice(3098, 865),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 500,
+            GoldPrice = 865,
+            GoldSell = 346,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3303 },
+            Into = new[] { 3092 },
+            InStore = true,
             FlatMagicDamageMod = 10f,
-        };
-
-        #endregion
-
-        #region Soul Shroud
-
-        public static Item Soul_Shroud = new Item
-        {
-            Id = 3099,
-            Name = "Soul Shroud",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 485,
-            RecipeItems = new[] { 3067, 1028 },
-            SellPrice = GetReducedPrice(3099, 1335),
-            ItemCategory = ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatHPPoolMod = 520f,
+            Tags = new[] { "SpellDamage", "ManaRegen", "GoldPer", "Active" },
+            Id = 3098
         };
 
         #endregion
@@ -2231,17 +2408,20 @@ namespace LeagueSharp.Common
 
         public static Item Lich_Bane = new Item
         {
-            Id = 3100,
             Name = "Lich Bane",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 850,
-            RecipeItems = new[] { 3113, 3057 },
-            SellPrice = GetReducedPrice(3100, 1730),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
-            PercentMovementSpeedMod = 0.05f,
+            GoldBase = 850,
+            GoldPrice = 3000,
+            GoldSell = 2100,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3057, 3113 },
+            InStore = true,
+            FlatMPPoolMod = 250f,
             FlatMagicDamageMod = 80f,
+            PercentMovementSpeedMod = 0.05f,
+            Tags = new[] { "SpellDamage", "Mana", "NonbootsMovement" },
+            Id = 3100
         };
 
         #endregion
@@ -2250,15 +2430,19 @@ namespace LeagueSharp.Common
 
         public static Item Stinger = new Item
         {
-            Id = 3101,
             Name = "Stinger",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1042 },
-            SellPrice = GetReducedPrice(3101, 800),
-            ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 350,
+            GoldPrice = 1250,
+            GoldSell = 875,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1042, 1042 },
+            Into = new[] { 3115, 3172, 3137 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.4f,
+            Tags = new[] { "AttackSpeed", "CooldownReduction" },
+            Id = 3101
         };
 
         #endregion
@@ -2267,17 +2451,19 @@ namespace LeagueSharp.Common
 
         public static Item Banshees_Veil = new Item
         {
-            Id = 3102,
             Name = "Banshee's Veil",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1150,
-            RecipeItems = new[] { 3211, 1028 },
-            SellPrice = GetReducedPrice(3102, 1850),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1150,
+            GoldPrice = 2750,
+            GoldSell = 1925,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3211, 1028 },
+            InStore = true,
             FlatHPPoolMod = 450f,
-            FlatSpellBlockMod = 55f
+            FlatSpellBlockMod = 55f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen" },
+            Id = 3102
         };
 
         #endregion
@@ -2286,17 +2472,19 @@ namespace LeagueSharp.Common
 
         public static Item Lord_Van_Damms_Pillager = new Item
         {
-            Id = 3104,
             Name = "Lord Van Damm's Pillager",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 995,
-            RecipeItems = new[] { 1018, 1037, 3122 },
-            SellPrice = GetReducedPrice(3104, 3040),
-            ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatCritChanceMod = 0.25f,
+            GoldBase = 995,
+            GoldPrice = 3800,
+            GoldSell = 2660,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3122, 1037, 1018 },
+            InStore = true,
             FlatPhysicalDamageMod = 80f,
+            FlatCritChanceMod = 0.25f,
+            Tags = new[] { "Damage", "CriticalStrike" },
+            Id = 3104
         };
 
         #endregion
@@ -2305,18 +2493,21 @@ namespace LeagueSharp.Common
 
         public static Item Aegis_of_the_Legion = new Item
         {
-            Id = 3105,
             Name = "Aegis of the Legion",
             Range = 1100f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 820,
-            RecipeItems = new[] { 1033, 1006, 1028 },
-            SellPrice = GetReducedPrice(3105, 1900),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 820,
+            GoldPrice = 1900,
+            GoldSell = 1330,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1033, 1006 },
+            Into = new[] { 3190, 3060 },
+            InStore = true,
             FlatHPPoolMod = 200f,
-            FlatSpellBlockMod = 20f
+            FlatSpellBlockMod = 20f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "Aura" },
+            Id = 3105
         };
 
         #endregion
@@ -2325,34 +2516,19 @@ namespace LeagueSharp.Common
 
         public static Item Madreds_Razors = new Item
         {
-            Id = 3106,
             Name = "Madred's Razors",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 300,
-            RecipeItems = new[] { 1042 },
-            SellPrice = GetReducedPrice(3106, 750),
-            ItemCategory = ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Runic Bulwark
-
-        public static Item Runic_Bulwark = new Item
-        {
-            Id = 3107,
-            Name = "Runic Bulwark",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 400,
-            SellPrice = GetReducedPrice(3107, 400),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 20f,
-            FlatHPPoolMod = 300f,
-            FlatSpellBlockMod = 30f
+            GoldBase = 300,
+            GoldPrice = 750,
+            GoldSell = 525,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1042 },
+            Into = new[] { 3154, 3159 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.15f,
+            Tags = new[] { "AttackSpeed", "OnHit" },
+            Id = 3106
         };
 
         #endregion
@@ -2361,36 +2537,19 @@ namespace LeagueSharp.Common
 
         public static Item Fiendish_Codex = new Item
         {
-            Id = 3108,
             Name = "Fiendish Codex",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 385,
-            RecipeItems = new[] { 1052 },
-            SellPrice = GetReducedPrice(3108, 820),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 385,
+            GoldPrice = 820,
+            GoldSell = 574,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1052 },
+            Into = new[] { 3174, 3092, 3115, 3128, 3188, 3290, 3165, 3152, 3060, 3023, 3708, 3716, 3720, 3724 },
+            InStore = true,
             FlatMagicDamageMod = 30f,
-        };
-
-        #endregion
-
-        #region Force of Nature
-
-        public static Item Force_of_Nature = new Item
-        {
-            Id = 3109,
-            Name = "Force of Nature",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1000,
-            RecipeItems = new[] { 1006, 1057 },
-            SellPrice = GetReducedPrice(3109, 1530),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
-            PercentMovementSpeedMod = 0.08f,
-            FlatHPRegenMod = 4f,
-            FlatSpellBlockMod = 76f
+            Tags = new[] { "SpellDamage", "CooldownReduction" },
+            Id = 3108
         };
 
         #endregion
@@ -2399,17 +2558,20 @@ namespace LeagueSharp.Common
 
         public static Item Frozen_Heart = new Item
         {
-            Id = 3110,
             Name = "Frozen Heart",
             Range = 700f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 450,
-            RecipeItems = new[] { 3082, 3024 },
-            SellPrice = GetReducedPrice(3110, 1150),
-            ItemCategory = ItemCategory.Mana & ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 450,
+            GoldPrice = 2450,
+            GoldSell = 1715,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3082, 3024 },
+            InStore = true,
+            FlatMPPoolMod = 400f,
             FlatArmorMod = 100f,
+            Tags = new[] { "Armor", "Mana", "CooldownReduction", "Aura" },
+            Id = 3110
         };
 
         #endregion
@@ -2418,17 +2580,20 @@ namespace LeagueSharp.Common
 
         public static Item Mercurys_Treads = new Item
         {
-            Id = 3111,
             Name = "Mercury's Treads",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 375,
-            RecipeItems = new[] { 1001, 1033 },
-            SellPrice = GetReducedPrice(3111, 1200),
-            ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 375,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001, 1033 },
+            Into = new[] { 3269, 3268, 3267, 3266, 3265 },
+            InStore = true,
             FlatMovementSpeedMod = 45f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Tags = new[] { "SpellBlock", "Boots", "Tenacity" },
+            Id = 3111
         };
 
         #endregion
@@ -2437,16 +2602,18 @@ namespace LeagueSharp.Common
 
         public static Item Orb_of_Winter = new Item
         {
-            Id = 3112,
             Name = "Orb of Winter",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 850,
-            RecipeItems = new[] { 1033, 1006 },
-            SellPrice = GetReducedPrice(3112, 1530),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
-            FlatSpellBlockMod = 70f
+            GoldBase = 850,
+            GoldPrice = 2210,
+            GoldSell = 1547,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1006, 1006, 1033, 1033 },
+            InStore = true,
+            FlatSpellBlockMod = 70f,
+            Tags = new[] { "SpellBlock", "HealthRegen" },
+            Id = 3112
         };
 
         #endregion
@@ -2455,16 +2622,19 @@ namespace LeagueSharp.Common
 
         public static Item Aether_Wisp = new Item
         {
-            Id = 3113,
             Name = "Aether Wisp",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 515,
-            RecipeItems = new[] { 1052 },
-            SellPrice = GetReducedPrice(3113, 950),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 515,
+            GoldPrice = 950,
+            GoldSell = 665,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1052 },
+            Into = new[] { 3023, 3290, 3100, 3504 },
+            InStore = true,
             FlatMagicDamageMod = 30f,
+            Tags = new[] { "SpellDamage", "NonbootsMovement" },
+            Id = 3113
         };
 
         #endregion
@@ -2473,15 +2643,18 @@ namespace LeagueSharp.Common
 
         public static Item Forbidden_Idol = new Item
         {
-            Id = 3114,
             Name = "Forbidden Idol",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 240,
-            RecipeItems = new[] { 1004 },
-            SellPrice = GetReducedPrice(3114, 420),
-            ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 240,
+            GoldPrice = 600,
+            GoldSell = 420,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1004, 1004 },
+            Into = new[] { 3069, 3165, 3222, 3504 },
+            InStore = true,
+            Tags = new[] { "ManaRegen", "CooldownReduction" },
+            Id = 3114
         };
 
         #endregion
@@ -2490,16 +2663,19 @@ namespace LeagueSharp.Common
 
         public static Item Nashors_Tooth = new Item
         {
-            Id = 3115,
             Name = "Nashor's Tooth",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 850,
-            RecipeItems = new[] { 3101, 3108 },
-            SellPrice = GetReducedPrice(3115, 1585),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Legendary,
+            GoldBase = 850,
+            GoldPrice = 2920,
+            GoldSell = 2044,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3101, 3108 },
+            InStore = true,
             FlatMagicDamageMod = 60f,
+            PercentAttackSpeedMod = 0.5f,
+            Tags = new[] { "AttackSpeed", "SpellDamage", "CooldownReduction", "OnHit" },
+            Id = 3115
         };
 
         #endregion
@@ -2508,17 +2684,19 @@ namespace LeagueSharp.Common
 
         public static Item Rylais_Crystal_Scepter = new Item
         {
-            Id = 3116,
             Name = "Rylai's Crystal Scepter",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 605,
-            RecipeItems = new[] { 1052, 1026, 1011 },
-            SellPrice = GetReducedPrice(3116, 2900),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
-            ItemTier = ItemTier.Legendary,
+            GoldBase = 605,
+            GoldPrice = 2900,
+            GoldSell = 2030,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1026, 1052, 1011 },
+            InStore = true,
             FlatHPPoolMod = 400f,
             FlatMagicDamageMod = 100f,
+            Tags = new[] { "Health", "SpellDamage", "Slow" },
+            Id = 3116
         };
 
         #endregion
@@ -2527,16 +2705,19 @@ namespace LeagueSharp.Common
 
         public static Item Boots_of_Mobility = new Item
         {
-            Id = 3117,
             Name = "Boots of Mobility",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 1001 },
-            SellPrice = GetReducedPrice(3117, 800),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 475,
+            GoldPrice = 800,
+            GoldSell = 560,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001 },
+            Into = new[] { 3274, 3273, 3272, 3271, 3270 },
+            InStore = true,
             FlatMovementSpeedMod = 105f,
+            Tags = new[] { "Boots" },
+            Id = 3117
         };
 
         #endregion
@@ -2545,36 +2726,20 @@ namespace LeagueSharp.Common
 
         public static Item Wicked_Hatchet = new Item
         {
-            Id = 3122,
             Name = "Wicked Hatchet",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 440,
-            RecipeItems = new[] { 1051, 1036 },
-            SellPrice = GetReducedPrice(3122, 1200),
-            ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatCritChanceMod = 0.1f,
+            GoldBase = 440,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1051, 1036 },
+            Into = new[] { 3104, 3185 },
+            InStore = true,
             FlatPhysicalDamageMod = 20f,
-        };
-
-        #endregion
-
-        #region Executioner's Calling
-
-        public static Item Executioners_Calling = new Item
-        {
-            Id = 3123,
-            Name = "Executioner's Calling",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 740,
-            RecipeItems = new[] { 1036, 3093 },
-            SellPrice = GetReducedPrice(3123, 1500),
-            ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatCritChanceMod = 0.2f,
-            FlatPhysicalDamageMod = 25f,
+            FlatCritChanceMod = 0.1f,
+            Tags = new[] { "Damage", "CriticalStrike", "OnHit" },
+            Id = 3122
         };
 
         #endregion
@@ -2583,37 +2748,19 @@ namespace LeagueSharp.Common
 
         public static Item Guinsoos_Rageblade = new Item
         {
-            Id = 3124,
             Name = "Guinsoo's Rageblade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 865,
-            RecipeItems = new[] { 1037, 1026 },
-            SellPrice = GetReducedPrice(3124, 2600),
-            ItemCategory =
-                ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
-            FlatMagicDamageMod = 40f,
+            GoldBase = 865,
+            GoldPrice = 2600,
+            GoldSell = 1820,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1026, 1037 },
+            InStore = true,
             FlatPhysicalDamageMod = 30f,
-        };
-
-        #endregion
-
-        #region Madred's Bloodrazor
-
-        public static Item Madreds_Bloodrazor = new Item
-        {
-            Id = 3126,
-            Name = "Madred's Bloodrazor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 775,
-            RecipeItems = new[] { 1037, 3106, 1043 },
-            SellPrice = GetReducedPrice(3126, 2850),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 25f,
-            FlatPhysicalDamageMod = 40f,
+            FlatMagicDamageMod = 40f,
+            Tags = new[] { "Damage", "AttackSpeed", "LifeSteal", "SpellDamage", "SpellVamp", "OnHit" },
+            Id = 3124
         };
 
         #endregion
@@ -2622,52 +2769,19 @@ namespace LeagueSharp.Common
 
         public static Item Deathfire_Grasp = new Item
         {
-            Id = 3128,
             Name = "Deathfire Grasp",
             Range = 750f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 680,
-            RecipeItems = new[] { 1058, 3108 },
-            SellPrice = GetReducedPrice(3128, 2665),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 680,
+            GoldPrice = 3100,
+            GoldSell = 2170,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1058, 3108 },
+            InStore = true,
             FlatMagicDamageMod = 120f,
-        };
-
-        #endregion
-
-        #region Sword of the Divine
-
-        public static Item Sword_of_the_Divine = new Item
-        {
-            Id = 3131,
-            Name = "Sword of the Divine",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 800,
-            RecipeItems = new[] { 1043, 1042 },
-            SellPrice = GetReducedPrice(3131, 2150),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Heart of Gold
-
-        public static Item Heart_of_Gold = new Item
-        {
-            Id = 3132,
-            Name = "Heart of Gold",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1028 },
-            SellPrice = GetReducedPrice(3132, 750),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatHPPoolMod = 325f,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "Active" },
+            Id = 3128
         };
 
         #endregion
@@ -2676,15 +2790,19 @@ namespace LeagueSharp.Common
 
         public static Item The_Brutalizer = new Item
         {
-            Id = 3134,
             Name = "The Brutalizer",
-            IsRecipe = true,
-            Price = 617,
-            RecipeItems = new[] { 1036 },
-            SellPrice = GetReducedPrice(3134, 977),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 617,
+            GoldPrice = 1337,
+            GoldSell = 936,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1036, 1036 },
+            Into = new[] { 3142, 3071, 3707, 3714, 3719, 3723 },
+            InStore = true,
             FlatPhysicalDamageMod = 25f,
+            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration" },
+            Id = 3134
         };
 
         #endregion
@@ -2693,16 +2811,18 @@ namespace LeagueSharp.Common
 
         public static Item Void_Staff = new Item
         {
-            Id = 3135,
             Name = "Void Staff",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1000,
-            RecipeItems = new[] { 1052, 1026 },
-            SellPrice = GetReducedPrice(3135, 2295),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Consumable,
+            GoldBase = 1000,
+            GoldPrice = 2295,
+            GoldSell = 1607,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1026, 1052 },
+            InStore = true,
             FlatMagicDamageMod = 70f,
+            Tags = new[] { "SpellDamage", "MagicPenetration" },
+            Id = 3135
         };
 
         #endregion
@@ -2711,16 +2831,20 @@ namespace LeagueSharp.Common
 
         public static Item Haunting_Guise = new Item
         {
-            Id = 3136,
             Name = "Haunting Guise",
-            IsRecipe = true,
-            Price = 650,
-            RecipeItems = new[] { 1052, 1028 },
-            SellPrice = GetReducedPrice(3136, 1485),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 650,
+            GoldPrice = 1485,
+            GoldSell = 1040,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1052 },
+            Into = new[] { 3151 },
+            InStore = true,
             FlatHPPoolMod = 200f,
             FlatMagicDamageMod = 25f,
+            Tags = new[] { "Health", "SpellDamage", "MagicPenetration" },
+            Id = 3136
         };
 
         #endregion
@@ -2729,34 +2853,19 @@ namespace LeagueSharp.Common
 
         public static Item Dervish_Blade = new Item
         {
-            Id = 3137,
             Name = "Dervish Blade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 200,
-            RecipeItems = new[] { 3101, 3140 },
-            SellPrice = GetReducedPrice(3137, 1300),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
-            FlatSpellBlockMod = 45f
-        };
-
-        #endregion
-
-        #region Leviathan
-
-        public static Item Leviathan = new Item
-        {
-            Id = 3138,
-            Name = "Leviathan",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 800,
-            RecipeItems = new[] { 1028 },
-            SellPrice = GetReducedPrice(3138, 1200),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatHPPoolMod = 180f,
+            GoldBase = 200,
+            GoldPrice = 2700,
+            GoldSell = 1890,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3140, 3101 },
+            InStore = true,
+            PercentAttackSpeedMod = 0.5f,
+            FlatSpellBlockMod = 45f,
+            Tags = new[] { "SpellBlock", "AttackSpeed", "NonbootsMovement", "CooldownReduction", "Active" },
+            Id = 3137
         };
 
         #endregion
@@ -2765,17 +2874,19 @@ namespace LeagueSharp.Common
 
         public static Item Mercurial_Scimitar = new Item
         {
-            Id = 3139,
             Name = "Mercurial Scimitar",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 900,
-            RecipeItems = new[] { 1038, 3140 },
-            SellPrice = GetReducedPrice(3139, 3200),
-            ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 900,
+            GoldPrice = 3700,
+            GoldSell = 2590,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1038, 3140 },
+            InStore = true,
             FlatPhysicalDamageMod = 80f,
-            FlatSpellBlockMod = 35f
+            FlatSpellBlockMod = 35f,
+            Tags = new[] { "SpellBlock", "Damage", "NonbootsMovement", "Active" },
+            Id = 3139
         };
 
         #endregion
@@ -2784,16 +2895,19 @@ namespace LeagueSharp.Common
 
         public static Item Quicksilver_Sash = new Item
         {
-            Id = 3140,
             Name = "Quicksilver Sash",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 750,
-            RecipeItems = new[] { 1033 },
-            SellPrice = GetReducedPrice(3140, 1250),
-            ItemCategory = ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
-            FlatSpellBlockMod = 30f
+            GoldBase = 750,
+            GoldPrice = 1250,
+            GoldSell = 875,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1033 },
+            Into = new[] { 3139, 3137 },
+            InStore = true,
+            FlatSpellBlockMod = 30f,
+            Tags = new[] { "SpellBlock", "Active" },
+            Id = 3140
         };
 
         #endregion
@@ -2802,16 +2916,18 @@ namespace LeagueSharp.Common
 
         public static Item Sword_of_the_Occult = new Item
         {
-            Id = 3141,
             Name = "Sword of the Occult",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1040,
-            RecipeItems = new[] { 1036 },
-            SellPrice = GetReducedPrice(3141, 1400),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1040,
+            GoldPrice = 1400,
+            GoldSell = 980,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1036 },
+            InStore = true,
             FlatPhysicalDamageMod = 10f,
+            Tags = new[] { "Damage" },
+            Id = 3141
         };
 
         #endregion
@@ -2820,17 +2936,19 @@ namespace LeagueSharp.Common
 
         public static Item Youmuus_Ghostblade = new Item
         {
-            Id = 3142,
             Name = "Youmuu's Ghostblade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 563,
-            RecipeItems = new[] { 3134, 3093 },
-            SellPrice = GetReducedPrice(3142, 1580),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatCritChanceMod = 0.15f,
+            GoldBase = 563,
+            GoldPrice = 2700,
+            GoldSell = 1890,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3093, 3134 },
+            InStore = true,
             FlatPhysicalDamageMod = 30f,
+            FlatCritChanceMod = 0.15f,
+            Tags = new[] { "Damage", "CriticalStrike", "AttackSpeed", "Active", "CooldownReduction", "NonbootsMovement", "ArmorPenetration" },
+            Id = 3142
         };
 
         #endregion
@@ -2839,18 +2957,20 @@ namespace LeagueSharp.Common
 
         public static Item Randuins_Omen = new Item
         {
-            Id = 3143,
             Name = "Randuin's Omen",
             Range = 500f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 800,
-            RecipeItems = new[] { 3082, 1011 },
-            SellPrice = GetReducedPrice(3143, 2250),
-            ItemCategory = ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 70f,
+            GoldBase = 800,
+            GoldPrice = 2850,
+            GoldSell = 1995,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3082, 1011 },
+            InStore = true,
             FlatHPPoolMod = 500f,
+            FlatArmorMod = 70f,
+            Tags = new[] { "Health", "Armor", "Slow", "Active" },
+            Id = 3143
         };
 
         #endregion
@@ -2859,17 +2979,21 @@ namespace LeagueSharp.Common
 
         public static Item Bilgewater_Cutlass = new Item
         {
-            Id = 3144,
             Name = "Bilgewater Cutlass",
             Range = 450f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 240,
-            RecipeItems = new[] { 1053, 1036 },
-            SellPrice = GetReducedPrice(3144, 1040),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 240,
+            GoldPrice = 1400,
+            GoldSell = 980,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1036, 1053 },
+            Into = new[] { 3146, 3153 },
+            InStore = true,
             FlatPhysicalDamageMod = 25f,
+            PercentLifeStealMod = 0.08f,
+            Tags = new[] { "Damage", "LifeSteal", "Active", "Slow" },
+            Id = 3144
         };
 
         #endregion
@@ -2878,16 +3002,19 @@ namespace LeagueSharp.Common
 
         public static Item Hextech_Revolver = new Item
         {
-            Id = 3145,
             Name = "Hextech Revolver",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 330,
-            RecipeItems = new[] { 1052 },
-            SellPrice = GetReducedPrice(3145, 765),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 330,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1052, 1052 },
+            Into = new[] { 3146, 3152 },
+            InStore = true,
             FlatMagicDamageMod = 40f,
+            Tags = new[] { "SpellDamage", "SpellVamp" },
+            Id = 3145
         };
 
         #endregion
@@ -2896,18 +3023,21 @@ namespace LeagueSharp.Common
 
         public static Item Hextech_Gunblade = new Item
         {
-            Id = 3146,
             Name = "Hextech Gunblade",
             Range = 700f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 800,
-            RecipeItems = new[] { 3144, 3145 },
-            SellPrice = GetReducedPrice(3146, 1370),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
-            FlatMagicDamageMod = 65f,
+            GoldBase = 800,
+            GoldPrice = 3400,
+            GoldSell = 2380,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3144, 3145 },
+            InStore = true,
             FlatPhysicalDamageMod = 45f,
+            FlatMagicDamageMod = 65f,
+            PercentLifeStealMod = 0.12f,
+            Tags = new[] { "Damage", "LifeSteal", "SpellDamage", "SpellVamp", "Slow", "Active" },
+            Id = 3146
         };
 
         #endregion
@@ -2916,16 +3046,19 @@ namespace LeagueSharp.Common
 
         public static Item Liandrys_Torment = new Item
         {
-            Id = 3151,
             Name = "Liandry's Torment",
-            IsRecipe = true,
-            Price = 980,
-            RecipeItems = new[] { 1052, 3136 },
-            SellPrice = GetReducedPrice(3151, 2065),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 980,
+            GoldPrice = 2900,
+            GoldSell = 2030,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3136, 1052 },
+            InStore = true,
             FlatHPPoolMod = 300f,
             FlatMagicDamageMod = 50f,
+            Tags = new[] { "Health", "SpellDamage", "MagicPenetration" },
+            Id = 3151
         };
 
         #endregion
@@ -2934,16 +3067,18 @@ namespace LeagueSharp.Common
 
         public static Item Will_of_the_Ancients = new Item
         {
-            Id = 3152,
             Name = "Will of the Ancients",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 480,
-            RecipeItems = new[] { 3145, 3108 },
-            SellPrice = GetReducedPrice(3152, 1195),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 480,
+            GoldPrice = 2500,
+            GoldSell = 1750,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3145, 3108 },
+            InStore = true,
             FlatMagicDamageMod = 80f,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "SpellVamp" },
+            Id = 3152
         };
 
         #endregion
@@ -2952,17 +3087,21 @@ namespace LeagueSharp.Common
 
         public static Item Blade_of_the_Ruined_King = new Item
         {
-            Id = 3153,
             Name = "Blade of the Ruined King",
             Range = 450f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 900,
-            RecipeItems = new[] { 3144, 1042 },
-            SellPrice = GetReducedPrice(3153, 1590),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 900,
+            GoldPrice = 3200,
+            GoldSell = 2240,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 1042, 3144, 1042 },
+            InStore = true,
             FlatPhysicalDamageMod = 25f,
+            PercentAttackSpeedMod = 0.4f,
+            PercentLifeStealMod = 0.1f,
+            Tags = new[] { "Damage", "AttackSpeed", "LifeSteal", "NonbootsMovement", "Active", "OnHit" },
+            Id = 3153
         };
 
         #endregion
@@ -2971,17 +3110,22 @@ namespace LeagueSharp.Common
 
         public static Item Wriggles_Lantern = new Item
         {
-            Id = 3154,
             Name = "Wriggle's Lantern",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 215,
-            RecipeItems = new[] { 1036, 3106, 1042 },
-            SellPrice = GetReducedPrice(3154, 1325),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 215,
+            GoldPrice = 1775,
+            GoldSell = 710,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3106, 1036, 1042 },
+            Into = new[] { 3160 },
+            InStore = true,
             FlatPhysicalDamageMod = 12f,
+            PercentAttackSpeedMod = 0.3f,
+            Tags = new[] { "Damage", "AttackSpeed", "Active", "OnHit", "Vision", "GoldPer" },
+            Id = 3154
         };
 
         #endregion
@@ -2990,16 +3134,20 @@ namespace LeagueSharp.Common
 
         public static Item Hexdrinker = new Item
         {
-            Id = 3155,
             Name = "Hexdrinker",
-            IsRecipe = true,
-            Price = 590,
-            RecipeItems = new[] { 1033, 1036 },
-            SellPrice = GetReducedPrice(3155, 1450),
-            ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 590,
+            GoldPrice = 1450,
+            GoldSell = 1015,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1036, 1033 },
+            Into = new[] { 3156 },
+            InStore = true,
             FlatPhysicalDamageMod = 25f,
-            FlatSpellBlockMod = 30f
+            FlatSpellBlockMod = 30f,
+            Tags = new[] { "SpellBlock", "Damage" },
+            Id = 3155
         };
 
         #endregion
@@ -3008,16 +3156,19 @@ namespace LeagueSharp.Common
 
         public static Item Maw_of_Malmortius = new Item
         {
-            Id = 3156,
             Name = "Maw of Malmortius",
-            IsRecipe = true,
-            Price = 875,
-            RecipeItems = new[] { 1037, 3155 },
-            SellPrice = GetReducedPrice(3156, 2340),
-            ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 875,
+            GoldPrice = 3200,
+            GoldSell = 2240,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3155, 1037 },
+            InStore = true,
             FlatPhysicalDamageMod = 60f,
-            FlatSpellBlockMod = 40f
+            FlatSpellBlockMod = 40f,
+            Tags = new[] { "SpellBlock", "Damage" },
+            Id = 3156
         };
 
         #endregion
@@ -3026,17 +3177,19 @@ namespace LeagueSharp.Common
 
         public static Item Zhonyas_Hourglass = new Item
         {
-            Id = 3157,
             Name = "Zhonya's Hourglass",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 500,
-            RecipeItems = new[] { 1058, 3191 },
-            SellPrice = GetReducedPrice(3157, 2565),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 500,
+            GoldPrice = 3300,
+            GoldSell = 2310,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3191, 1058 },
+            InStore = true,
             FlatArmorMod = 50f,
             FlatMagicDamageMod = 120f,
+            Tags = new[] { "Armor", "SpellDamage", "Active" },
+            Id = 3157
         };
 
         #endregion
@@ -3045,16 +3198,19 @@ namespace LeagueSharp.Common
 
         public static Item Ionian_Boots_of_Lucidity = new Item
         {
-            Id = 3158,
             Name = "Ionian Boots of Lucidity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 675,
-            RecipeItems = new[] { 1001 },
-            SellPrice = GetReducedPrice(3158, 1000),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 675,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1001 },
+            Into = new[] { 3279, 3278, 3277, 3276, 3275 },
+            InStore = true,
             FlatMovementSpeedMod = 45f,
+            Tags = new[] { "CooldownReduction", "Boots" },
+            Id = 3158
         };
 
         #endregion
@@ -3063,16 +3219,20 @@ namespace LeagueSharp.Common
 
         public static Item Grezs_Spectral_Lantern = new Item
         {
-            Id = 3159,
             Name = "Grez's Spectral Lantern",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 180,
-            RecipeItems = new[] { 1036, 3106, 1042 },
-            SellPrice = GetReducedPrice(3159, 1290),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 180,
+            GoldPrice = 1740,
+            GoldSell = 696,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3106, 1036, 1042 },
+            InStore = true,
             FlatPhysicalDamageMod = 15f,
+            PercentAttackSpeedMod = 0.3f,
+            Tags = new[] { "Damage", "AttackSpeed", "Active", "OnHit", "Stealth", "Vision", "GoldPer" },
+            Id = 3159
         };
 
         #endregion
@@ -3081,16 +3241,21 @@ namespace LeagueSharp.Common
 
         public static Item Feral_Flare = new Item
         {
-            Id = 3160,
             Name = "Feral Flare",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1800,
-            SellPrice = GetReducedPrice(3160, 1800),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 1800,
+            GoldPrice = 1800,
+            GoldSell = 1430,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3154 },
+            SpecialRecipe = 3154,
+            InStore = false,
             FlatPhysicalDamageMod = 12f,
+            PercentAttackSpeedMod = 0.3f,
+            Tags = new[] { "Damage", "AttackSpeed", "OnHit" },
+            Id = 3160
         };
 
         #endregion
@@ -3099,16 +3264,18 @@ namespace LeagueSharp.Common
 
         public static Item Morellonomicon = new Item
         {
-            Id = 3165,
             Name = "Morellonomicon",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 680,
-            RecipeItems = new[] { 3114, 3108 },
-            SellPrice = GetReducedPrice(3165, 1305),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 680,
+            GoldPrice = 2100,
+            GoldSell = 1470,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3108, 3114 },
+            InStore = true,
             FlatMagicDamageMod = 80f,
+            Tags = new[] { "SpellDamage", "ManaRegen", "CooldownReduction" },
+            Id = 3165
         };
 
         #endregion
@@ -3117,12 +3284,34 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace = new Item
         {
-            Id = 3166,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3166
+        };
+
+        #endregion
+
+        #region Bonetooth Necklace
+
+        public static Item Bonetooth_Necklace1 = new Item
+        {
+            Name = "Bonetooth Necklace",
+            Range = 600f,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3167
         };
 
         #endregion
@@ -3131,12 +3320,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace2 = new Item
         {
-            Id = 3167,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3168
         };
 
         #endregion
@@ -3145,26 +3338,17 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace3 = new Item
         {
-            Id = 3168,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace4 = new Item
-        {
-            Id = 3169,
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3175, 3410, 3416, 3422, 3455 },
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3169
         };
 
         #endregion
@@ -3173,32 +3357,38 @@ namespace LeagueSharp.Common
 
         public static Item Moonflair_Spellblade = new Item
         {
-            Id = 3170,
             Name = "Moonflair Spellblade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 920,
-            RecipeItems = new[] { 1033, 3191 },
-            SellPrice = GetReducedPrice(3170, 1885),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor & ItemCategory.SpellBlock,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 920,
+            GoldPrice = 2620,
+            GoldSell = 1834,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3191, 1033 },
+            InStore = true,
             FlatArmorMod = 50f,
             FlatMagicDamageMod = 50f,
-            FlatSpellBlockMod = 50f
+            FlatSpellBlockMod = 50f,
+            Tags = new[] { "SpellBlock", "Armor", "SpellDamage", "Tenacity" },
+            Id = 3170
         };
 
         #endregion
 
         #region Bonetooth Necklace
 
-        public static Item Bonetooth_Necklace5 = new Item
+        public static Item Bonetooth_Necklace4 = new Item
         {
-            Id = 3171,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3171
         };
 
         #endregion
@@ -3207,17 +3397,20 @@ namespace LeagueSharp.Common
 
         public static Item Zephyr = new Item
         {
-            Id = 3172,
             Name = "Zephyr",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 725,
-            RecipeItems = new[] { 3101, 1037 },
-            SellPrice = GetReducedPrice(3172, 1950),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
-            PercentMovementSpeedMod = 0.1f,
+            GoldBase = 725,
+            GoldPrice = 2850,
+            GoldSell = 1995,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3101, 1037 },
+            InStore = true,
             FlatPhysicalDamageMod = 25f,
+            PercentMovementSpeedMod = 0.1f,
+            PercentAttackSpeedMod = 0.5f,
+            Tags = new[] { "Damage", "AttackSpeed", "NonbootsMovement", "CooldownReduction", "Tenacity" },
+            Id = 3172
         };
 
         #endregion
@@ -3226,66 +3419,39 @@ namespace LeagueSharp.Common
 
         public static Item Athenes_Unholy_Grail = new Item
         {
-            Id = 3174,
             Name = "Athene's Unholy Grail",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 880,
-            RecipeItems = new[] { 3028, 3108 },
-            SellPrice = GetReducedPrice(3174, 1405),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.SpellBlock & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 880,
+            GoldPrice = 2700,
+            GoldSell = 1890,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3108, 3028 },
+            InStore = true,
             FlatMagicDamageMod = 60f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Tags = new[] { "SpellBlock", "SpellDamage", "ManaRegen", "CooldownReduction" },
+            Id = 3174
         };
 
         #endregion
 
         #region Head of Kha'Zix
 
-        public static Item Head_of_Kha_Zix = new Item
+        public static Item Head_of_KhaZix = new Item
         {
-            Id = 3175,
             Name = "Head of Kha'Zix",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Arcane Helix
-
-        public static Item Arcane_Helix = new Item
-        {
-            Id = 3176,
-            Name = "Arcane Helix",
-            IsRecipe = true,
-            Price = 500,
-            RecipeItems = new[] { 3010, 1028 },
-            SellPrice = GetReducedPrice(3176, 1300),
-            ItemCategory = ItemCategory.Mana & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatHPPoolMod = 400f,
-        };
-
-        #endregion
-
-        #region Ionic Spark
-
-        public static Item Ionic_Spark = new Item
-        {
-            Id = 3178,
-            Name = "Ionic Spark",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 575,
-            RecipeItems = new[] { 1043, 1028 },
-            SellPrice = GetReducedPrice(3178, 1875),
-            ItemCategory = ItemCategory.AttackSpeed & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatHPPoolMod = 250f,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3169 },
+            SpecialRecipe = 3169,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3175
         };
 
         #endregion
@@ -3294,17 +3460,20 @@ namespace LeagueSharp.Common
 
         public static Item Odyns_Veil = new Item
         {
-            Id = 3180,
             Name = "Odyn's Veil",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 800,
-            RecipeItems = new[] { 1033, 3010 },
-            SellPrice = GetReducedPrice(3180, 1700),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 800,
+            GoldPrice = 2500,
+            GoldSell = 1750,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1033, 3010 },
+            InStore = true,
             FlatHPPoolMod = 350f,
-            FlatSpellBlockMod = 50f
+            FlatMPPoolMod = 350f,
+            FlatSpellBlockMod = 50f,
+            Tags = new[] { "Health", "SpellBlock", "Mana", "Active" },
+            Id = 3180
         };
 
         #endregion
@@ -3313,34 +3482,19 @@ namespace LeagueSharp.Common
 
         public static Item Sanguine_Blade = new Item
         {
-            Id = 3181,
             Name = "Sanguine Blade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 1053, 1037 },
-            SellPrice = GetReducedPrice(3181, 1915),
-            ItemCategory = ItemCategory.Damage & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 600,
+            GoldPrice = 2275,
+            GoldSell = 1593,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1037, 1053 },
+            InStore = true,
             FlatPhysicalDamageMod = 45f,
-        };
-
-        #endregion
-
-        #region Priscilla's Blessing
-
-        public static Item Priscillas_Blessing = new Item
-        {
-            Id = 3183,
-            Name = "Priscilla's Blessing",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 9999999,
-            RecipeItems = new[] { 1006 },
-            SellPrice = GetReducedPrice(3183, 10000179),
-            ItemCategory = ItemCategory.HealthRegen,
-            ItemTier = ItemTier.Advanced,
-            FlatHPRegenMod = 5f,
+            PercentLifeStealMod = 0.1f,
+            Tags = new[] { "Damage", "LifeSteal" },
+            Id = 3181
         };
 
         #endregion
@@ -3349,17 +3503,19 @@ namespace LeagueSharp.Common
 
         public static Item Entropy = new Item
         {
-            Id = 3184,
             Name = "Entropy",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 500,
-            RecipeItems = new[] { 1037, 3044 },
-            SellPrice = GetReducedPrice(3184, 1940),
-            ItemCategory = ItemCategory.Damage & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 500,
+            GoldPrice = 2700,
+            GoldSell = 1890,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3044, 1037 },
+            InStore = true,
             FlatHPPoolMod = 275f,
             FlatPhysicalDamageMod = 55f,
+            Tags = new[] { "Health", "Damage", "Slow", "Active", "NonbootsMovement" },
+            Id = 3184
         };
 
         #endregion
@@ -3368,35 +3524,19 @@ namespace LeagueSharp.Common
 
         public static Item The_Lightbringer = new Item
         {
-            Id = 3185,
             Name = "The Lightbringer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1018, 3122 },
-            SellPrice = GetReducedPrice(3185, 1520),
-            ItemCategory = ItemCategory.Damage & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 350,
+            GoldPrice = 2280,
+            GoldSell = 1596,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3122, 1018 },
+            InStore = true,
+            FlatPhysicalDamageMod = 30f,
             FlatCritChanceMod = 0.3f,
-            FlatPhysicalDamageMod = 30f,
-        };
-
-        #endregion
-
-        #region Kitae's Bloodrazor
-
-        public static Item Kitaes_Bloodrazor = new Item
-        {
-            Id = 3186,
-            Name = "Kitae's Bloodrazor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 700,
-            RecipeItems = new[] { 1037, 1043 },
-            SellPrice = GetReducedPrice(3186, 2475),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Advanced,
-            FlatPhysicalDamageMod = 30f,
+            Tags = new[] { "Damage", "CriticalStrike", "OnHit", "Stealth", "Active", "Vision" },
+            Id = 3185
         };
 
         #endregion
@@ -3405,18 +3545,20 @@ namespace LeagueSharp.Common
 
         public static Item Hextech_Sweeper = new Item
         {
-            Id = 3187,
             Name = "Hextech Sweeper",
-            Range = 800f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 330,
-            RecipeItems = new[] { 3067, 3024 },
-            SellPrice = GetReducedPrice(3187, 1030),
-            ItemCategory = ItemCategory.Mana & ItemCategory.Armor & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 25f,
+            GoldBase = 330,
+            GoldPrice = 2130,
+            GoldSell = 1491,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3024, 3067 },
+            InStore = true,
             FlatHPPoolMod = 225f,
+            FlatMPPoolMod = 250f,
+            FlatArmorMod = 25f,
+            Tags = new[] { "Health", "Armor", "Mana", "CooldownReduction", "Active", "Stealth", "Vision" },
+            Id = 3187
         };
 
         #endregion
@@ -3425,17 +3567,19 @@ namespace LeagueSharp.Common
 
         public static Item Blackfire_Torch = new Item
         {
-            Id = 3188,
             Name = "Blackfire Torch",
             Range = 750f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 970,
-            RecipeItems = new[] { 1026, 3108 },
-            SellPrice = GetReducedPrice(3188, 2215),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 970,
+            GoldPrice = 2650,
+            GoldSell = 1855,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1026, 3108 },
+            InStore = true,
             FlatMagicDamageMod = 80f,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "Active" },
+            Id = 3188
         };
 
         #endregion
@@ -3444,18 +3588,20 @@ namespace LeagueSharp.Common
 
         public static Item Locket_of_the_Iron_Solari = new Item
         {
-            Id = 3190,
             Name = "Locket of the Iron Solari",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 50,
-            RecipeItems = new[] { 3067, 3105 },
-            SellPrice = GetReducedPrice(3190, 1320),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 50,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3105, 3067 },
+            InStore = true,
             FlatHPPoolMod = 400f,
-            FlatSpellBlockMod = 20f
+            FlatSpellBlockMod = 20f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "CooldownReduction", "Active", "Aura" },
+            Id = 3190
         };
 
         #endregion
@@ -3464,53 +3610,66 @@ namespace LeagueSharp.Common
 
         public static Item Seekers_Armguard = new Item
         {
-            Id = 3191,
             Name = "Seeker's Armguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 465,
-            RecipeItems = new[] { 1052, 1029 },
-            SellPrice = GetReducedPrice(3191, 1200),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.Armor,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 465,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1029, 1052 },
+            Into = new[] { 3090, 3157, 3170 },
+            InStore = true,
             FlatArmorMod = 30f,
             FlatMagicDamageMod = 25f,
+            Tags = new[] { "Armor", "SpellDamage" },
+            Id = 3191
         };
 
         #endregion
 
         #region The Hex Core mk-1
 
-        public static Item The_Hex_Core_mk1 = new Item
+        public static Item The_Hex_Core_mk_1 = new Item
         {
-            Id = 3196,
             Name = "The Hex Core mk-1",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1000,
-            RecipeItems = new[] { 3200 },
-            SellPrice = GetReducedPrice(3196, 1000),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 1000,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3200 },
+            Into = new[] { 3197 },
+            InStore = true,
+            RequiredChampion = "Viktor",
+            FlatMPPoolMod = 150f,
             FlatMagicDamageMod = 20f,
+            Tags = new[] { "SpellDamage", "Mana" },
+            Id = 3196
         };
 
         #endregion
 
         #region The Hex Core mk-2
 
-        public static Item The_Hex_Core_mk2 = new Item
+        public static Item The_Hex_Core_mk_2 = new Item
         {
-            Id = 3197,
             Name = "The Hex Core mk-2",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1000,
-            RecipeItems = new[] { 3196 },
-            SellPrice = GetReducedPrice(3197, 2000),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 1000,
+            GoldPrice = 2000,
+            GoldSell = 1400,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3196 },
+            Into = new[] { 3198 },
+            InStore = true,
+            RequiredChampion = "Viktor",
+            FlatMPPoolMod = 300f,
             FlatMagicDamageMod = 40f,
+            Tags = new[] { "SpellDamage", "Mana" },
+            Id = 3197
         };
 
         #endregion
@@ -3519,16 +3678,20 @@ namespace LeagueSharp.Common
 
         public static Item Perfect_Hex_Core = new Item
         {
-            Id = 3198,
             Name = "Perfect Hex Core",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 1000,
-            RecipeItems = new[] { 3197 },
-            SellPrice = GetReducedPrice(3198, 2000),
-            ItemCategory = ItemCategory.Mana & ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 1000,
+            GoldPrice = 3000,
+            GoldSell = 2100,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 4,
+            From = new[] { 3197 },
+            InStore = true,
+            RequiredChampion = "Viktor",
+            FlatMPPoolMod = 500f,
             FlatMagicDamageMod = 60f,
+            Tags = new[] { "SpellDamage", "Mana" },
+            Id = 3198
         };
 
         #endregion
@@ -3537,144 +3700,14 @@ namespace LeagueSharp.Common
 
         public static Item Prototype_Hex_Core = new Item
         {
-            Id = 3200,
             Name = "Prototype Hex Core",
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Basic,
-        };
-
-        #endregion
-
-        #region Quill Coat
-
-        public static Item Quill_Coat = new Item
-        {
-            Id = 3204,
-            Name = "Quill Coat",
-            Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 75,
-            RecipeItems = new[] { 1039, 1029 },
-            SellPrice = GetReducedPrice(3204, 775),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 20f,
-        };
-
-        #endregion
-
-        #region Quill Coat
-
-        public static Item Quill_Coat2 = new Item
-        {
-            Id = 3205,
-            Name = "Quill Coat",
-            Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 75,
-            RecipeItems = new[] { 1039, 1029 },
-            SellPrice = GetReducedPrice(3205, 775),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 20f,
-        };
-
-        #endregion
-
-        #region Spirit of the Spectral Wraith
-
-        public static Item Spirit_of_the_Spectral_Wraith = new Item
-        {
-            Id = 3206,
-            Name = "Spirit of the Spectral Wraith",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 480,
-            RecipeItems = new[] { 1080, 3108 },
-            SellPrice = GetReducedPrice(3206, 880),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
-            FlatMagicDamageMod = 50f,
-        };
-
-        #endregion
-
-        #region Spirit of the Ancient Golem
-
-        public static Item Spirit_of_the_Ancient_Golem = new Item
-        {
-            Id = 3207,
-            Name = "Spirit of the Ancient Golem",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 450,
-            RecipeItems = new[] { 3067, 3205 },
-            SellPrice = GetReducedPrice(3207, 975),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 20f,
-            FlatHPPoolMod = 200f,
-        };
-
-        #endregion
-
-        #region Spirit of the Ancient Golem
-
-        public static Item Spirit_of_the_Ancient_Golem2 = new Item
-        {
-            Id = 3208,
-            Name = "Spirit of the Ancient Golem",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 450,
-            RecipeItems = new[] { 3067, 3204 },
-            SellPrice = GetReducedPrice(3208, 975),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Armor & ItemCategory.ManaRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
-            FlatArmorMod = 20f,
-            FlatHPPoolMod = 200f,
-        };
-
-        #endregion
-
-        #region Spirit of the Elder Lizard
-
-        public static Item Spirit_of_the_Elder_Lizard = new Item
-        {
-            Id = 3209,
-            Name = "Spirit of the Elder Lizard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 580,
-            RecipeItems = new[] { 1080, 1036 },
-            SellPrice = GetReducedPrice(3209, 955),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Advanced,
-            FlatPhysicalDamageMod = 30f,
-        };
-
-        #endregion
-
-        #region Spellbreaker (Melee Only)
-
-        public static Item Spellbreaker_Melee_Only = new Item
-        {
-            Id = 3210,
-            Name = "Spellbreaker (Melee Only)",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 650,
-            RecipeItems = new[] { 3093, 3155 },
-            SellPrice = GetReducedPrice(3210, 1640),
-            ItemCategory = ItemCategory.Damage & ItemCategory.SpellBlock & ItemCategory.CriticalStrike,
-            ItemTier = ItemTier.Advanced,
-            FlatCritChanceMod = 0.2f,
-            FlatPhysicalDamageMod = 40f,
-            FlatSpellBlockMod = 25f
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3196 },
+            SpecialRecipe = 1,
+            InStore = false,
+            RequiredChampion = "Viktor",
+            Id = 3200
         };
 
         #endregion
@@ -3683,17 +3716,20 @@ namespace LeagueSharp.Common
 
         public static Item Spectres_Cowl = new Item
         {
-            Id = 3211,
             Name = "Spectre's Cowl",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 300,
-            RecipeItems = new[] { 1033, 1028 },
-            SellPrice = GetReducedPrice(3211, 1200),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.SpellBlock & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 300,
+            GoldPrice = 1200,
+            GoldSell = 840,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1033 },
+            Into = new[] { 3065, 3102 },
+            InStore = true,
             FlatHPPoolMod = 200f,
-            FlatSpellBlockMod = 35f
+            FlatSpellBlockMod = 35f,
+            Tags = new[] { "Health", "SpellBlock", "HealthRegen" },
+            Id = 3211
         };
 
         #endregion
@@ -3702,656 +3738,768 @@ namespace LeagueSharp.Common
 
         public static Item Mikaels_Crucible = new Item
         {
-            Id = 3222,
             Name = "Mikael's Crucible",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 850,
-            RecipeItems = new[] { 3114, 3028 },
-            SellPrice = GetReducedPrice(3222, 1230),
-            ItemCategory = ItemCategory.SpellBlock & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-            FlatSpellBlockMod = 40f
+            GoldBase = 850,
+            GoldPrice = 2450,
+            GoldSell = 1715,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3028, 3114 },
+            InStore = true,
+            FlatSpellBlockMod = 40f,
+            Tags = new[] { "SpellBlock", "ManaRegen", "CooldownReduction", "Active" },
+            Id = 3222
         };
 
         #endregion
 
-        #region Berserker's Greaves - Homeguard
+        #region Berserker's Greaves Enchantment: Homeguard
 
-        public static Item Berserkers_Greaves_Homeguard = new Item
+        public static Item Berserkers_Greaves_Enchantment_Homeguard = new Item
         {
-            Id = 3250,
-            Name = "Berserker's Greaves - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3006 },
-            SellPrice = GetReducedPrice(3250, 700),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Berserker's Greaves Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3006 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            PercentAttackSpeedMod = 0.25f,
+            Id = 3250
         };
 
         #endregion
 
-        #region Berserker's Greaves - Captain
+        #region Berserker's Greaves Enchantment: Captain
 
-        public static Item Berserkers_Greaves_Captain = new Item
+        public static Item Berserkers_Greaves_Enchantment_Captain = new Item
         {
-            Id = 3251,
-            Name = "Berserker's Greaves - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3006 },
-            SellPrice = GetReducedPrice(3251, 825),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Berserker's Greaves Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1600,
+            GoldSell = 1120,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3006 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            PercentAttackSpeedMod = 0.25f,
+            Id = 3251
         };
 
         #endregion
 
-        #region Berserker's Greaves - Furor
+        #region Berserker's Greaves Enchantment: Furor
 
-        public static Item Berserkers_Greaves_Furor = new Item
+        public static Item Berserkers_Greaves_Enchantment_Furor = new Item
         {
-            Id = 3252,
-            Name = "Berserker's Greaves - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3006 },
-            SellPrice = GetReducedPrice(3252, 700),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Berserker's Greaves Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3006 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            PercentAttackSpeedMod = 0.25f,
+            Id = 3252
         };
 
         #endregion
 
-        #region Berserker's Greaves - Distortion
+        #region Berserker's Greaves Enchantment: Distortion
 
-        public static Item Berserkers_Greaves_Distortion = new Item
+        public static Item Berserkers_Greaves_Enchantment_Distortion = new Item
         {
-            Id = 3253,
-            Name = "Berserker's Greaves - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3006 },
-            SellPrice = GetReducedPrice(3253, 700),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Berserker's Greaves Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3006 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            PercentAttackSpeedMod = 0.25f,
+            Id = 3253
         };
 
         #endregion
 
-        #region Berserker's Greaves - Alacrity
+        #region Berserker's Greaves Enchantment: Alacrity
 
-        public static Item Berserkers_Greaves_Alacrity = new Item
+        public static Item Berserkers_Greaves_Enchantment_Alacrity = new Item
         {
-            Id = 3254,
-            Name = "Berserker's Greaves - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3006 },
-            SellPrice = GetReducedPrice(3254, 700),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Berserker's Greaves Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3006 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            PercentAttackSpeedMod = 0.25f,
+            Id = 3254
         };
 
         #endregion
 
-        #region Sorcerer's Shoes - Homeguard
+        #region Sorcerer's Shoes Enchantment: Homeguard
 
-        public static Item Sorcerers_Shoes_Homeguard = new Item
+        public static Item Sorcerers_Shoes_Enchantment_Homeguard = new Item
         {
-            Id = 3255,
-            Name = "Sorcerer's Shoes - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3020 },
-            SellPrice = GetReducedPrice(3255, 1250),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Sorcerer's Shoes Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1575,
+            GoldSell = 1103,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3020 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3255
         };
 
         #endregion
 
-        #region Sorcerer's Shoes - Captain
+        #region Sorcerer's Shoes Enchantment: Captain
 
-        public static Item Sorcerers_Shoes_Captain = new Item
+        public static Item Sorcerers_Shoes_Enchantment_Captain = new Item
         {
-            Id = 3256,
-            Name = "Sorcerer's Shoes - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3020 },
-            SellPrice = GetReducedPrice(3256, 1375),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Sorcerer's Shoes Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1700,
+            GoldSell = 1190,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3020 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3256
         };
 
         #endregion
 
-        #region Sorcerer's Shoes - Furor
+        #region Sorcerer's Shoes Enchantment: Furor
 
-        public static Item Sorcerers_Shoes_Furor = new Item
+        public static Item Sorcerers_Shoes_Enchantment_Furor = new Item
         {
-            Id = 3257,
-            Name = "Sorcerer's Shoes - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3020 },
-            SellPrice = GetReducedPrice(3257, 1250),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Sorcerer's Shoes Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1575,
+            GoldSell = 1103,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3020 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3257
         };
 
         #endregion
 
-        #region Sorcerer's Shoes - Distortion
+        #region Sorcerer's Shoes Enchantment: Distortion
 
-        public static Item Sorcerers_Shoes_Distortion = new Item
+        public static Item Sorcerers_Shoes_Enchantment_Distortion = new Item
         {
-            Id = 3258,
-            Name = "Sorcerer's Shoes - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3020 },
-            SellPrice = GetReducedPrice(3258, 1250),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Sorcerer's Shoes Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1575,
+            GoldSell = 1103,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3020 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3258
         };
 
         #endregion
 
-        #region Sorcerer's Shoes - Alacrity
+        #region Sorcerer's Shoes Enchantment: Alacrity
 
-        public static Item Sorcerers_Shoes_Alacrity = new Item
+        public static Item Sorcerers_Shoes_Enchantment_Alacrity = new Item
         {
-            Id = 3259,
-            Name = "Sorcerer's Shoes - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3020 },
-            SellPrice = GetReducedPrice(3259, 1250),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Sorcerer's Shoes Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1575,
+            GoldSell = 1103,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3020 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3259
         };
 
         #endregion
 
-        #region Ninja Tabi - Homeguard
+        #region Ninja Tabi Enchantment: Homeguard
 
-        public static Item Ninja_Tabi_Homeguard = new Item
+        public static Item Ninja_Tabi_Enchantment_Homeguard = new Item
         {
-            Id = 3260,
-            Name = "Ninja Tabi - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3047 },
-            SellPrice = GetReducedPrice(3260, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ninja Tabi Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3047 },
+            InStore = true,
+            HideFromAll = true,
             FlatArmorMod = 25f,
             FlatMovementSpeedMod = 45f,
+            Id = 3260
         };
 
         #endregion
 
-        #region Ninja Tabi - Captain
+        #region Ninja Tabi Enchantment: Captain
 
-        public static Item Ninja_Tabi_Captain = new Item
+        public static Item Ninja_Tabi_Enchantment_Captain = new Item
         {
-            Id = 3261,
-            Name = "Ninja Tabi - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3047 },
-            SellPrice = GetReducedPrice(3261, 975),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ninja Tabi Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1600,
+            GoldSell = 1120,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3047 },
+            InStore = true,
+            HideFromAll = true,
             FlatArmorMod = 25f,
             FlatMovementSpeedMod = 45f,
+            Id = 3261
         };
 
         #endregion
 
-        #region Ninja Tabi - Furor
+        #region Ninja Tabi Enchantment: Furor
 
-        public static Item Ninja_Tabi_Furor = new Item
+        public static Item Ninja_Tabi_Enchantment_Furor = new Item
         {
-            Id = 3262,
-            Name = "Ninja Tabi - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3047 },
-            SellPrice = GetReducedPrice(3262, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ninja Tabi Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3047 },
+            InStore = true,
+            HideFromAll = true,
             FlatArmorMod = 25f,
             FlatMovementSpeedMod = 45f,
+            Id = 3262
         };
 
         #endregion
 
-        #region Ninja Tabi - Distortion
+        #region Ninja Tabi Enchantment: Distortion
 
-        public static Item Ninja_Tabi_Distortion = new Item
+        public static Item Ninja_Tabi_Enchantment_Distortion = new Item
         {
-            Id = 3263,
-            Name = "Ninja Tabi - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3047 },
-            SellPrice = GetReducedPrice(3263, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ninja Tabi Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3047 },
+            InStore = true,
+            HideFromAll = true,
             FlatArmorMod = 25f,
             FlatMovementSpeedMod = 45f,
+            Id = 3263
         };
 
         #endregion
 
-        #region Ninja Tabi - Alacrity
+        #region Ninja Tabi Enchantment: Alacrity
 
-        public static Item Ninja_Tabi_Alacrity = new Item
+        public static Item Ninja_Tabi_Enchantment_Alacrity = new Item
         {
-            Id = 3264,
-            Name = "Ninja Tabi - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3047 },
-            SellPrice = GetReducedPrice(3264, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ninja Tabi Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3047 },
+            InStore = true,
+            HideFromAll = true,
             FlatArmorMod = 25f,
             FlatMovementSpeedMod = 45f,
+            Id = 3264
         };
 
         #endregion
 
-        #region Mercury's Treads - Homeguard
+        #region Mercury's Treads Enchantment: Homeguard
 
-        public static Item Mercurys_Treads_Homeguard = new Item
+        public static Item Mercurys_Treads_Enchantment_Homeguard = new Item
         {
-            Id = 3265,
-            Name = "Mercury's Treads - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3111 },
-            SellPrice = GetReducedPrice(3265, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Mercury's Treads Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1675,
+            GoldSell = 1173,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3111 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Id = 3265
         };
 
         #endregion
 
-        #region Mercury's Treads - Captain
+        #region Mercury's Treads Enchantment: Captain
 
-        public static Item Mercurys_Treads_Captain = new Item
+        public static Item Mercurys_Treads_Enchantment_Captain = new Item
         {
-            Id = 3266,
-            Name = "Mercury's Treads - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3111 },
-            SellPrice = GetReducedPrice(3266, 975),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Mercury's Treads Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1800,
+            GoldSell = 1260,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3111 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Id = 3266
         };
 
         #endregion
 
-        #region Mercury's Treads - Furor
+        #region Mercury's Treads Enchantment: Furor
 
-        public static Item Mercurys_Treads_Furor = new Item
+        public static Item Mercurys_Treads_Enchantment_Furor = new Item
         {
-            Id = 3267,
-            Name = "Mercury's Treads - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3111 },
-            SellPrice = GetReducedPrice(3267, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Mercury's Treads Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1675,
+            GoldSell = 1173,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3111 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Id = 3267
         };
 
         #endregion
 
-        #region Mercury's Treads - Distortion
+        #region Mercury's Treads Enchantment: Distortion
 
-        public static Item Mercurys_Treads_Distortion = new Item
+        public static Item Mercurys_Treads_Enchantment_Distortion = new Item
         {
-            Id = 3268,
-            Name = "Mercury's Treads - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3111 },
-            SellPrice = GetReducedPrice(3268, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Mercury's Treads Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1675,
+            GoldSell = 1173,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3111 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Id = 3268
         };
 
         #endregion
 
-        #region Mercury's Treads - Alacrity
+        #region Mercury's Treads Enchantment: Alacrity
 
-        public static Item Mercurys_Treads_Alacrity = new Item
+        public static Item Mercurys_Treads_Enchantment_Alacrity = new Item
         {
-            Id = 3269,
-            Name = "Mercury's Treads - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3111 },
-            SellPrice = GetReducedPrice(3269, 850),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Mercury's Treads Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1675,
+            GoldSell = 1173,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3111 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
-            FlatSpellBlockMod = 25f
+            FlatSpellBlockMod = 25f,
+            Id = 3269
         };
 
         #endregion
 
-        #region Boots of Mobility - Homeguard
+        #region Boots of Mobility Enchantment: Homeguard
 
-        public static Item Boots_of_Mobility_Homeguard = new Item
+        public static Item Boots_of_Mobility_Enchantment_Homeguard = new Item
         {
-            Id = 3270,
-            Name = "Boots of Mobility - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3117 },
-            SellPrice = GetReducedPrice(3270, 950),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Mobility Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1275,
+            GoldSell = 893,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3117 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 105f,
+            Id = 3270
         };
 
         #endregion
 
-        #region Boots of Mobility - Captain
+        #region Boots of Mobility Enchantment: Captain
 
-        public static Item Boots_of_Mobility_Captain = new Item
+        public static Item Boots_of_Mobility_Enchantment_Captain = new Item
         {
-            Id = 3271,
-            Name = "Boots of Mobility - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3117 },
-            SellPrice = GetReducedPrice(3271, 1075),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Mobility Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1400,
+            GoldSell = 980,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3117 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 105f,
+            Id = 3271
         };
 
         #endregion
 
-        #region Boots of Mobility - Furor
+        #region Boots of Mobility Enchantment: Furor
 
-        public static Item Boots_of_Mobility_Furor = new Item
+        public static Item Boots_of_Mobility_Enchantment_Furor = new Item
         {
-            Id = 3272,
-            Name = "Boots of Mobility - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3117 },
-            SellPrice = GetReducedPrice(3272, 950),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Mobility Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1275,
+            GoldSell = 893,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3117 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 105f,
+            Id = 3272
         };
 
         #endregion
 
-        #region Boots of Mobility - Distortion
+        #region Boots of Mobility Enchantment: Distortion
 
-        public static Item Boots_of_Mobility_Distortion = new Item
+        public static Item Boots_of_Mobility_Enchantment_Distortion = new Item
         {
-            Id = 3273,
-            Name = "Boots of Mobility - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3117 },
-            SellPrice = GetReducedPrice(3273, 950),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Mobility Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1275,
+            GoldSell = 893,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3117 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 105f,
+            Id = 3273
         };
 
         #endregion
 
-        #region Boots of Mobility - Alacrity
+        #region Boots of Mobility Enchantment: Alacrity
 
-        public static Item Boots_of_Mobility_Alacrity = new Item
+        public static Item Boots_of_Mobility_Enchantment_Alacrity = new Item
         {
-            Id = 3274,
-            Name = "Boots of Mobility - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3117 },
-            SellPrice = GetReducedPrice(3274, 950),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Mobility Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1275,
+            GoldSell = 893,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3117 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 105f,
+            Id = 3274
         };
 
         #endregion
 
-        #region Ionian Boots of Lucidity - Homeguard
+        #region Ionian Boots of Lucidity Enchantment: Homeguard
 
-        public static Item Ionian_Boots_of_Lucidity_Homeguard = new Item
+        public static Item Ionian_Boots_of_Lucidity_Enchantment_Homeguard = new Item
         {
-            Id = 3275,
-            Name = "Ionian Boots of Lucidity - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3158 },
-            SellPrice = GetReducedPrice(3275, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ionian Boots of Lucidity Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3158 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3275
         };
 
         #endregion
 
-        #region Ionian Boots of Lucidity - Captain
+        #region Ionian Boots of Lucidity Enchantment: Captain
 
-        public static Item Ionian_Boots_of_Lucidity_Captain = new Item
+        public static Item Ionian_Boots_of_Lucidity_Enchantment_Captain = new Item
         {
-            Id = 3276,
-            Name = "Ionian Boots of Lucidity - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3158 },
-            SellPrice = GetReducedPrice(3276, 1275),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ionian Boots of Lucidity Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1600,
+            GoldSell = 1120,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3158 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3276
         };
 
         #endregion
 
-        #region Ionian Boots of Lucidity - Furor
+        #region Ionian Boots of Lucidity Enchantment: Furor
 
-        public static Item Ionian_Boots_of_Lucidity_Furor = new Item
+        public static Item Ionian_Boots_of_Lucidity_Enchantment_Furor = new Item
         {
-            Id = 3277,
-            Name = "Ionian Boots of Lucidity - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3158 },
-            SellPrice = GetReducedPrice(3277, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ionian Boots of Lucidity Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3158 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3277
         };
 
         #endregion
 
-        #region Ionian Boots of Lucidity - Distortion
+        #region Ionian Boots of Lucidity Enchantment: Distortion
 
-        public static Item Ionian_Boots_of_Lucidity_Distortion = new Item
+        public static Item Ionian_Boots_of_Lucidity_Enchantment_Distortion = new Item
         {
-            Id = 3278,
-            Name = "Ionian Boots of Lucidity - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3158 },
-            SellPrice = GetReducedPrice(3278, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ionian Boots of Lucidity Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3158 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3278
         };
 
         #endregion
 
-        #region Ionian Boots of Lucidity - Alacrity
+        #region Ionian Boots of Lucidity Enchantment: Alacrity
 
-        public static Item Ionian_Boots_of_Lucidity_Alacrity = new Item
+        public static Item Ionian_Boots_of_Lucidity_Enchantment_Alacrity = new Item
         {
-            Id = 3279,
-            Name = "Ionian Boots of Lucidity - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3158 },
-            SellPrice = GetReducedPrice(3279, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ionian Boots of Lucidity Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3158 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 45f,
+            Id = 3279
         };
 
         #endregion
 
-        #region Boots of Swiftness - Homeguard
+        #region Boots of Swiftness Enchantment: Homeguard
 
-        public static Item Boots_of_Swiftness_Homeguard = new Item
+        public static Item Boots_of_Swiftness_Enchantment_Homeguard = new Item
         {
-            Id = 3280,
-            Name = "Boots of Swiftness - Homeguard",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3009 },
-            SellPrice = GetReducedPrice(3280, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Swiftness Enchantment: Homeguard",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsHomeguard",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3009 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 60f,
+            Id = 3280
         };
 
         #endregion
 
-        #region Boots of Swiftness - Captain
+        #region Boots of Swiftness Enchantment: Captain
 
-        public static Item Boots_of_Swiftness_Captain = new Item
+        public static Item Boots_of_Swiftness_Enchantment_Captain = new Item
         {
-            Id = 3281,
-            Name = "Boots of Swiftness - Captain",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3009 },
-            SellPrice = GetReducedPrice(3281, 1275),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Swiftness Enchantment: Captain",
+            GoldBase = 600,
+            GoldPrice = 1600,
+            GoldSell = 1120,
+            Purchasable = true,
+            Group = "BootsCaptain",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3009 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 60f,
+            Id = 3281
         };
 
         #endregion
 
-        #region Boots of Swiftness - Furor
+        #region Boots of Swiftness Enchantment: Furor
 
-        public static Item Boots_of_Swiftness_Furor = new Item
+        public static Item Boots_of_Swiftness_Enchantment_Furor = new Item
         {
-            Id = 3282,
-            Name = "Boots of Swiftness - Furor",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3009 },
-            SellPrice = GetReducedPrice(3282, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Swiftness Enchantment: Furor",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsFuror",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3009 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 60f,
+            Id = 3282
         };
 
         #endregion
 
-        #region Boots of Swiftness - Distortion
+        #region Boots of Swiftness Enchantment: Distortion
 
-        public static Item Boots_of_Swiftness_Distortion = new Item
+        public static Item Boots_of_Swiftness_Enchantment_Distortion = new Item
         {
-            Id = 3283,
-            Name = "Boots of Swiftness - Distortion",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3009 },
-            SellPrice = GetReducedPrice(3283, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Swiftness Enchantment: Distortion",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsDistortion",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3009 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 60f,
+            Id = 3283
         };
 
         #endregion
 
-        #region Boots of Swiftness - Alacrity
+        #region Boots of Swiftness Enchantment: Alacrity
 
-        public static Item Boots_of_Swiftness_Alacrity = new Item
+        public static Item Boots_of_Swiftness_Enchantment_Alacrity = new Item
         {
-            Id = 3284,
-            Name = "Boots of Swiftness - Alacrity",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3009 },
-            SellPrice = GetReducedPrice(3284, 1150),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Boots of Swiftness Enchantment: Alacrity",
+            GoldBase = 475,
+            GoldPrice = 1475,
+            GoldSell = 1033,
+            Purchasable = true,
+            Group = "BootsAlacrity",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3009 },
+            InStore = true,
+            HideFromAll = true,
             FlatMovementSpeedMod = 60f,
+            Id = 3284
         };
 
         #endregion
@@ -4360,17 +4508,19 @@ namespace LeagueSharp.Common
 
         public static Item Twin_Shadows2 = new Item
         {
-            Id = 3290,
             Name = "Twin Shadows",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 630,
-            RecipeItems = new[] { 3113, 3108 },
-            SellPrice = GetReducedPrice(3290, 1530),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Advanced,
-            PercentMovementSpeedMod = 0.06f,
+            GoldBase = 630,
+            GoldPrice = 2400,
+            GoldSell = 1680,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3108, 3113 },
+            InStore = true,
             FlatMagicDamageMod = 80f,
+            PercentMovementSpeedMod = 0.06f,
+            Tags = new[] { "SpellDamage", "NonbootsMovement", "CooldownReduction", "Slow", "Active", "Vision" },
+            Id = 3290
         };
 
         #endregion
@@ -4379,13 +4529,18 @@ namespace LeagueSharp.Common
 
         public static Item Ancient_Coin = new Item
         {
-            Id = 3301,
             Name = "Ancient Coin",
-            MaxStacks = 1,
-            Price = 365,
-            SellPrice = GetReducedPrice(3301, 365),
-            ItemCategory = ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 365,
+            GoldPrice = 365,
+            GoldSell = 146,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3096 },
+            InStore = true,
+            Tags = new[] { "ManaRegen", "GoldPer", "Lane" },
+            Id = 3301
         };
 
         #endregion
@@ -4394,15 +4549,19 @@ namespace LeagueSharp.Common
 
         public static Item Relic_Shield = new Item
         {
-            Id = 3302,
             Name = "Relic Shield",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 365,
-            SellPrice = GetReducedPrice(3302, 365),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 365,
+            GoldPrice = 365,
+            GoldSell = 146,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3097 },
+            InStore = true,
             FlatHPPoolMod = 75f,
+            Tags = new[] { "Health", "Aura", "GoldPer", "Lane" },
+            Id = 3302
         };
 
         #endregion
@@ -4411,14 +4570,19 @@ namespace LeagueSharp.Common
 
         public static Item Spellthiefs_Edge = new Item
         {
-            Id = 3303,
             Name = "Spellthief's Edge",
-            MaxStacks = 1,
-            Price = 365,
-            SellPrice = GetReducedPrice(3303, 365),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 365,
+            GoldPrice = 365,
+            GoldSell = 146,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3098 },
+            InStore = true,
             FlatMagicDamageMod = 5f,
+            Tags = new[] { "SpellDamage", "ManaRegen", "GoldPer", "Lane" },
+            Id = 3303
         };
 
         #endregion
@@ -4427,12 +4591,16 @@ namespace LeagueSharp.Common
 
         public static Item Warding_Totem_Trinket = new Item
         {
-            Id = 3340,
             Name = "Warding Totem (Trinket)",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.BasicTrinket,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3361, 3362 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket", "Lane", "Jungle" },
+            Id = 3340
         };
 
         #endregion
@@ -4441,12 +4609,16 @@ namespace LeagueSharp.Common
 
         public static Item Sweeping_Lens_Trinket = new Item
         {
-            Id = 3341,
             Name = "Sweeping Lens (Trinket)",
             Range = 400f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.BasicTrinket,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3364 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket", "Jungle" },
+            Id = 3341
         };
 
         #endregion
@@ -4455,12 +4627,16 @@ namespace LeagueSharp.Common
 
         public static Item Scrying_Orb_Trinket = new Item
         {
-            Id = 3342,
             Name = "Scrying Orb (Trinket)",
             Range = 2500f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.BasicTrinket,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            Into = new[] { 3363 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket" },
+            Id = 3342
         };
 
         #endregion
@@ -4469,56 +4645,14 @@ namespace LeagueSharp.Common
 
         public static Item Soul_Anchor_Trinket = new Item
         {
-            Id = 3345,
             Name = "Soul Anchor (Trinket)",
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.BasicTrinket,
-        };
-
-        #endregion
-
-        #region Greater Totem (Trinket)
-
-        public static Item Greater_Totem_Trinket = new Item
-        {
-            Id = 3350,
-            Name = "Greater Totem (Trinket)",
-            Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.AdvancedTrinket,
-        };
-
-        #endregion
-
-        #region Greater Lens (Trinket)
-
-        public static Item Greater_Lens_Trinket = new Item
-        {
-            Id = 3351,
-            Name = "Greater Lens (Trinket)",
-            Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.AdvancedTrinket,
-        };
-
-        #endregion
-
-        #region Greater Orb (Trinket)
-
-        public static Item Greater_Orb_Trinket = new Item
-        {
-            Id = 3352,
-            Name = "Greater Orb (Trinket)",
-            Range = 3500f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.AdvancedTrinket,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket" },
+            Id = 3345
         };
 
         #endregion
@@ -4527,16 +4661,19 @@ namespace LeagueSharp.Common
 
         public static Item Greater_Stealth_Totem_Trinket = new Item
         {
-            Id = 3361,
             Name = "Greater Stealth Totem (Trinket)",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3340 },
-            SellPrice = GetReducedPrice(3361, 475),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.AdvancedTrinket,
+            GoldBase = 475,
+            GoldPrice = 475,
+            GoldSell = 333,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3340 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket" },
+            Id = 3361
         };
 
         #endregion
@@ -4545,16 +4682,19 @@ namespace LeagueSharp.Common
 
         public static Item Greater_Vision_Totem_Trinket = new Item
         {
-            Id = 3362,
             Name = "Greater Vision Totem (Trinket)",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3340 },
-            SellPrice = GetReducedPrice(3362, 475),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.AdvancedTrinket,
+            GoldBase = 475,
+            GoldPrice = 475,
+            GoldSell = 333,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3340 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket" },
+            Id = 3362
         };
 
         #endregion
@@ -4563,16 +4703,19 @@ namespace LeagueSharp.Common
 
         public static Item Farsight_Orb_Trinket = new Item
         {
-            Id = 3363,
             Name = "Farsight Orb (Trinket)",
             Range = 4000f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3342 },
-            SellPrice = GetReducedPrice(3363, 475),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.AdvancedTrinket,
+            GoldBase = 475,
+            GoldPrice = 475,
+            GoldSell = 333,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3342 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket" },
+            Id = 3363
         };
 
         #endregion
@@ -4581,16 +4724,19 @@ namespace LeagueSharp.Common
 
         public static Item Oracles_Lens_Trinket = new Item
         {
-            Id = 3364,
             Name = "Oracle's Lens (Trinket)",
             Range = 600f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 475,
-            RecipeItems = new[] { 3341 },
-            SellPrice = GetReducedPrice(3364, 475),
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.BasicTrinket,
+            GoldBase = 475,
+            GoldPrice = 475,
+            GoldSell = 333,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3341 },
+            InStore = true,
+            Tags = new[] { "Active", "Vision", "Trinket" },
+            Id = 3364
         };
 
         #endregion
@@ -4599,17 +4745,38 @@ namespace LeagueSharp.Common
 
         public static Item Face_of_the_Mountain = new Item
         {
-            Id = 3401,
             Name = "Face of the Mountain",
             Range = 750f,
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 485,
-            RecipeItems = new[] { 3097, 3067 },
-            SellPrice = GetReducedPrice(3401, 1435),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 485,
+            GoldPrice = 2200,
+            GoldSell = 880,
+            Purchasable = true,
+            Group = "GoldBase",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3097, 3067 },
+            InStore = true,
             FlatHPPoolMod = 500f,
+            Tags = new[] { "Health", "HealthRegen", "CooldownReduction", "GoldPer" },
+            Id = 3401
+        };
+
+        #endregion
+
+        #region Bonetooth Necklace
+
+        public static Item Bonetooth_Necklace5 = new Item
+        {
+            Name = "Bonetooth Necklace",
+            Range = 600f,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3405
         };
 
         #endregion
@@ -4618,12 +4785,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace6 = new Item
         {
-            Id = 3405,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3406
         };
 
         #endregion
@@ -4632,12 +4803,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace7 = new Item
         {
-            Id = 3406,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3407
         };
 
         #endregion
@@ -4646,12 +4821,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace8 = new Item
         {
-            Id = 3407,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3408
         };
 
         #endregion
@@ -4660,12 +4839,36 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace9 = new Item
         {
-            Id = 3408,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3409
+        };
+
+        #endregion
+
+        #region Head of Kha'Zix
+
+        public static Item Head_of_KhaZix1 = new Item
+        {
+            Name = "Head of Kha'Zix",
+            Range = 600f,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3169 },
+            SpecialRecipe = 3169,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3410
         };
 
         #endregion
@@ -4674,26 +4877,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace10 = new Item
         {
-            Id = 3409,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_Kha_Zix2 = new Item
-        {
-            Id = 3410,
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3411
         };
 
         #endregion
@@ -4702,12 +4895,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace11 = new Item
         {
-            Id = 3411,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3412
         };
 
         #endregion
@@ -4716,12 +4913,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace12 = new Item
         {
-            Id = 3412,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3413
         };
 
         #endregion
@@ -4730,12 +4931,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace13 = new Item
         {
-            Id = 3413,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3414
         };
 
         #endregion
@@ -4744,12 +4949,36 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace14 = new Item
         {
-            Id = 3414,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3415
+        };
+
+        #endregion
+
+        #region Head of Kha'Zix
+
+        public static Item Head_of_KhaZix2 = new Item
+        {
+            Name = "Head of Kha'Zix",
+            Range = 600f,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3169 },
+            SpecialRecipe = 3169,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3416
         };
 
         #endregion
@@ -4758,26 +4987,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace15 = new Item
         {
-            Id = 3415,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_Kha_Zix3 = new Item
-        {
-            Id = 3416,
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3417
         };
 
         #endregion
@@ -4786,12 +5005,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace16 = new Item
         {
-            Id = 3417,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3418
         };
 
         #endregion
@@ -4800,12 +5023,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace17 = new Item
         {
-            Id = 3418,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3419
         };
 
         #endregion
@@ -4814,12 +5041,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace18 = new Item
         {
-            Id = 3419,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3420
         };
 
         #endregion
@@ -4828,12 +5059,36 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace19 = new Item
         {
-            Id = 3420,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3421
+        };
+
+        #endregion
+
+        #region Head of Kha'Zix
+
+        public static Item Head_of_KhaZix3 = new Item
+        {
+            Name = "Head of Kha'Zix",
+            Range = 600f,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3169 },
+            SpecialRecipe = 3169,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3422
         };
 
         #endregion
@@ -4842,26 +5097,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace20 = new Item
         {
-            Id = 3421,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_Kha_Zix4 = new Item
-        {
-            Id = 3422,
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            Purchasable = true,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3450
         };
 
         #endregion
@@ -4870,12 +5115,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace21 = new Item
         {
-            Id = 3450,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3451
         };
 
         #endregion
@@ -4884,12 +5133,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace22 = new Item
         {
-            Id = 3451,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3452
         };
 
         #endregion
@@ -4898,12 +5151,16 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace23 = new Item
         {
-            Id = 3452,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3453
         };
 
         #endregion
@@ -4912,40 +5169,36 @@ namespace LeagueSharp.Common
 
         public static Item Bonetooth_Necklace24 = new Item
         {
-            Id = 3453,
             Name = "Bonetooth Necklace",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace25 = new Item
-        {
-            Id = 3454,
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.RengarsTrinket,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3454
         };
 
         #endregion
 
         #region Head of Kha'Zix
 
-        public static Item Head_of_Kha_Zix5 = new Item
+        public static Item Head_of_KhaZix4 = new Item
         {
-            Id = 3455,
             Name = "Head of Kha'Zix",
             Range = 600f,
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Advanced,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 3169 },
+            SpecialRecipe = 3169,
+            InStore = false,
+            HideFromAll = true,
+            RequiredChampion = "Rengar",
+            Tags = new[] { "Vision", "Trinket", "Active" },
+            Id = 3455
         };
 
         #endregion
@@ -4954,11 +5207,13 @@ namespace LeagueSharp.Common
 
         public static Item Golden_Transcendence = new Item
         {
-            Id = 3460,
             Name = "Golden Transcendence",
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Consumable,
+            Group = "RelicBase",
+            Stacks = 1,
+            Depth = 1,
+            InStore = false,
+            Tags = new[] { "Trinket", "Active" },
+            Id = 3460
         };
 
         #endregion
@@ -4967,16 +5222,18 @@ namespace LeagueSharp.Common
 
         public static Item Ardent_Censer = new Item
         {
-            Id = 3504,
             Name = "Ardent Censer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 550,
-            RecipeItems = new[] { 3114, 3113 },
-            SellPrice = GetReducedPrice(3504, 1305),
-            ItemCategory = ItemCategory.SpellDamage & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 550,
+            GoldPrice = 2100,
+            GoldSell = 1470,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3114, 3113 },
+            InStore = true,
             FlatMagicDamageMod = 40f,
+            Tags = new[] { "SpellDamage", "ManaRegen", "CooldownReduction", "NonbootsMovement" },
+            Id = 3504
         };
 
         #endregion
@@ -4985,16 +5242,19 @@ namespace LeagueSharp.Common
 
         public static Item Essence_Reaver = new Item
         {
-            Id = 3508,
             Name = "Essence Reaver",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 850,
-            RecipeItems = new[] { 1053, 1038 },
-            SellPrice = GetReducedPrice(3508, 2840),
-            ItemCategory = ItemCategory.Damage & ItemCategory.ManaRegen & ItemCategory.LifeSteal,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 850,
+            GoldPrice = 3200,
+            GoldSell = 2240,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1053, 1038 },
+            InStore = true,
             FlatPhysicalDamageMod = 80f,
+            PercentLifeStealMod = 0.1f,
+            Tags = new[] { "Damage", "LifeSteal", "ManaRegen", "CooldownReduction" },
+            Id = 3508
         };
 
         #endregion
@@ -5003,11 +5263,15 @@ namespace LeagueSharp.Common
 
         public static Item The_Black_Spear = new Item
         {
-            Id = 3599,
             Name = "The Black Spear",
-            MaxStacks = 1,
-            ItemCategory = ItemCategory.None,
-            ItemTier = ItemTier.Basic,
+            Purchasable = true,
+            Group = "TheBlackSpear",
+            Stacks = 1,
+            Depth = 1,
+            InStore = true,
+            RequiredChampion = "Kalista",
+            Tags = new[] { "Active" },
+            Id = 3599
         };
 
         #endregion
@@ -5016,83 +5280,103 @@ namespace LeagueSharp.Common
 
         public static Item Stalkers_Blade = new Item
         {
-            Id = 3706,
             Name = "Stalker's Blade",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1039 },
-            SellPrice = GetReducedPrice(3706, 750),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 350,
+            GoldPrice = 750,
+            GoldSell = 525,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1039 },
+            Into = new[] { 3707, 3708, 3709, 3710 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Id = 3706
         };
 
         #endregion
 
-        #region Stalker's Blade - Warrior
+        #region Stalker's Blade Enchantment: Warrior
 
-        public static Item Stalkers_Blade_Warrior = new Item
+        public static Item Stalkers_Blade_Enchantment_Warrior = new Item
         {
-            Id = 3707,
-            Name = "Stalker's Blade - Warrior",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 163,
-            RecipeItems = new[] { 3706, 3134 },
-            SellPrice = GetReducedPrice(3707, 1130),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Stalker's Blade Enchantment: Warrior",
+            GoldBase = 163,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3706, 3134 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Id = 3707
         };
 
         #endregion
 
-        #region Stalker's Blade - Magus
+        #region Stalker's Blade Enchantment: Magus
 
-        public static Item Stalkers_Blade_Magus = new Item
+        public static Item Stalkers_Blade_Enchantment_Magus = new Item
         {
-            Id = 3708,
-            Name = "Stalker's Blade - Magus",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 680,
-            RecipeItems = new[] { 3706, 3108 },
-            SellPrice = GetReducedPrice(3708, 1415),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Stalker's Blade Enchantment: Magus",
+            GoldBase = 680,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3706, 3108 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Id = 3708
         };
 
         #endregion
 
-        #region Stalker's Blade - Juggernaut
+        #region Stalker's Blade Enchantment: Juggernaut
 
-        public static Item Stalkers_Blade_Juggernaut = new Item
+        public static Item Stalkers_Blade_Enchantment_Juggernaut = new Item
         {
-            Id = 3709,
-            Name = "Stalker's Blade - Juggernaut",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 250,
-            RecipeItems = new[] { 3706, 3067, 1028 },
-            SellPrice = GetReducedPrice(3709, 1450),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Stalker's Blade Enchantment: Juggernaut",
+            GoldBase = 250,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3706, 3067, 1028 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Id = 3709
         };
 
         #endregion
 
-        #region Stalker's Blade - Devourer
+        #region Stalker's Blade Enchantment: Devourer
 
-        public static Item Stalkers_Blade_Devourer = new Item
+        public static Item Stalkers_Blade_Enchantment_Devourer = new Item
         {
-            Id = 3710,
-            Name = "Stalker's Blade - Devourer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3706, 1042 },
-            SellPrice = GetReducedPrice(3710, 1400),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Stalker's Blade Enchantment: Devourer",
+            GoldBase = 600,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3706, 1042, 1042 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Id = 3710
         };
 
         #endregion
@@ -5101,32 +5385,19 @@ namespace LeagueSharp.Common
 
         public static Item Poachers_Knife = new Item
         {
-            Id = 3711,
             Name = "Poacher's Knife",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1039 },
-            SellPrice = GetReducedPrice(3711, 750),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
-        };
-
-        #endregion
-
-        #region Cultivator's Staff
-
-        public static Item Cultivators_Staff = new Item
-        {
-            Id = 3712,
-            Name = "Cultivator's Staff",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1039 },
-            SellPrice = GetReducedPrice(3712, 750),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 350,
+            GoldPrice = 750,
+            GoldSell = 525,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1039 },
+            Into = new[] { 3719, 3720, 3721, 3722 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "NonbootsMovement", "Jungle" },
+            Id = 3711
         };
 
         #endregion
@@ -5135,32 +5406,40 @@ namespace LeagueSharp.Common
 
         public static Item Rangers_Trailblazer = new Item
         {
-            Id = 3713,
             Name = "Ranger's Trailblazer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1039 },
-            SellPrice = GetReducedPrice(3713, 750),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 350,
+            GoldPrice = 750,
+            GoldSell = 525,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1039 },
+            Into = new[] { 3723, 3724, 3725, 3726 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Id = 3713
         };
 
         #endregion
 
-        #region Skirmisher's Sabre - Warrior
+        #region Skirmisher's Sabre Enchantment: Warrior
 
-        public static Item Skirmishers_Sabre_Warrior = new Item
+        public static Item Skirmishers_Sabre_Enchantment_Warrior = new Item
         {
-            Id = 3714,
-            Name = "Skirmisher's Sabre - Warrior",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 163,
-            RecipeItems = new[] { 3134, 3715 },
-            SellPrice = GetReducedPrice(3714, 1130),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Skirmisher's Sabre Enchantment: Warrior",
+            GoldBase = 163,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3715, 3134 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Id = 3714
         };
 
         #endregion
@@ -5169,202 +5448,250 @@ namespace LeagueSharp.Common
 
         public static Item Skirmishers_Sabre = new Item
         {
-            Id = 3715,
             Name = "Skirmisher's Sabre",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 350,
-            RecipeItems = new[] { 1039 },
-            SellPrice = GetReducedPrice(3715, 750),
-            ItemCategory = ItemCategory.Damage & ItemCategory.HealthRegen & ItemCategory.ManaRegen,
-            ItemTier = ItemTier.Advanced,
+            GoldBase = 350,
+            GoldPrice = 750,
+            GoldSell = 525,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1039 },
+            Into = new[] { 3714, 3716, 3717, 3718 },
+            InStore = true,
+            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Id = 3715
         };
 
         #endregion
 
-        #region Skirmisher's Sabre - Magus
+        #region Skirmisher's Sabre Enchantment: Magus
 
-        public static Item Skirmishers_Sabre_Magus = new Item
+        public static Item Skirmishers_Sabre_Enchantment_Magus = new Item
         {
-            Id = 3716,
-            Name = "Skirmisher's Sabre - Magus",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 680,
-            RecipeItems = new[] { 3715, 3108 },
-            SellPrice = GetReducedPrice(3716, 1415),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Skirmisher's Sabre Enchantment: Magus",
+            GoldBase = 680,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3715, 3108 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Id = 3716
         };
 
         #endregion
 
-        #region Skirmisher's Sabre - Juggernaut
+        #region Skirmisher's Sabre Enchantment: Juggernaut
 
-        public static Item Skirmishers_Sabre_Juggernaut = new Item
+        public static Item Skirmishers_Sabre_Enchantment_Juggernaut = new Item
         {
-            Id = 3717,
-            Name = "Skirmisher's Sabre - Juggernaut",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 250,
-            RecipeItems = new[] { 3067, 3715, 1028 },
-            SellPrice = GetReducedPrice(3717, 1450),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Skirmisher's Sabre Enchantment: Juggernaut",
+            GoldBase = 250,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3715, 3067, 1028 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Id = 3717
         };
 
         #endregion
 
-        #region Skirmisher's Sabre - Devourer
+        #region Skirmisher's Sabre Enchantment: Devourer
 
-        public static Item Skirmishers_Sabre_Devourer = new Item
+        public static Item Skirmishers_Sabre_Enchantment_Devourer = new Item
         {
-            Id = 3718,
-            Name = "Skirmisher's Sabre - Devourer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3715, 1042 },
-            SellPrice = GetReducedPrice(3718, 1400),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Skirmisher's Sabre Enchantment: Devourer",
+            GoldBase = 600,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3715, 1042, 1042 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Id = 3718
         };
 
         #endregion
 
-        #region Poacher's Knife - Warrior
+        #region Poacher's Knife Enchantment: Warrior
 
-        public static Item Poachers_Knife_Warrior = new Item
+        public static Item Poachers_Knife_Enchantment_Warrior = new Item
         {
-            Id = 3719,
-            Name = "Poacher's Knife - Warrior",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 163,
-            RecipeItems = new[] { 3711, 3134 },
-            SellPrice = GetReducedPrice(3719, 1130),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Poacher's Knife Enchantment: Warrior",
+            GoldBase = 163,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3711, 3134 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Id = 3719
         };
 
         #endregion
 
-        #region Poacher's Knife - Magus
+        #region Poacher's Knife Enchantment: Magus
 
-        public static Item Poachers_Knife_Magus = new Item
+        public static Item Poachers_Knife_Enchantment_Magus = new Item
         {
-            Id = 3720,
-            Name = "Poacher's Knife - Magus",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 680,
-            RecipeItems = new[] { 3711, 3108 },
-            SellPrice = GetReducedPrice(3720, 1415),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Poacher's Knife Enchantment: Magus",
+            GoldBase = 680,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3711, 3108 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Id = 3720
         };
 
         #endregion
 
-        #region Poacher's Knife - Juggernaut
+        #region Poacher's Knife Enchantment: Juggernaut
 
-        public static Item Poachers_Knife_Juggernaut = new Item
+        public static Item Poachers_Knife_Enchantment_Juggernaut = new Item
         {
-            Id = 3721,
-            Name = "Poacher's Knife - Juggernaut",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 250,
-            RecipeItems = new[] { 3067, 3711, 1028 },
-            SellPrice = GetReducedPrice(3721, 1450),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Poacher's Knife Enchantment: Juggernaut",
+            GoldBase = 250,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3711, 3067, 1028 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Id = 3721
         };
 
         #endregion
 
-        #region Poacher's Knife - Devourer
+        #region Poacher's Knife Enchantment: Devourer
 
-        public static Item Poachers_Knife_Devourer = new Item
+        public static Item Poachers_Knife_Enchantment_Devourer = new Item
         {
-            Id = 3722,
-            Name = "Poacher's Knife - Devourer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3711, 1042 },
-            SellPrice = GetReducedPrice(3722, 1400),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Poacher's Knife Enchantment: Devourer",
+            GoldBase = 600,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3711, 1042, 1042 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Id = 3722
         };
 
         #endregion
 
-        #region Ranger's Trailblazer - Warrior
+        #region Ranger's Trailblazer Enchantment: Warrior
 
-        public static Item Rangers_Trailblazer_Warrior = new Item
+        public static Item Rangers_Trailblazer_Enchantment_Warrior = new Item
         {
-            Id = 3723,
-            Name = "Ranger's Trailblazer - Warrior",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 163,
-            RecipeItems = new[] { 3713, 3134 },
-            SellPrice = GetReducedPrice(3723, 1130),
-            ItemCategory = ItemCategory.Damage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ranger's Trailblazer Enchantment: Warrior",
+            GoldBase = 163,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3713, 3134 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Id = 3723
         };
 
         #endregion
 
-        #region Ranger's Trailblazer - Magus
+        #region Ranger's Trailblazer Enchantment: Magus
 
-        public static Item Rangers_Trailblazer_Magus = new Item
+        public static Item Rangers_Trailblazer_Enchantment_Magus = new Item
         {
-            Id = 3724,
-            Name = "Ranger's Trailblazer - Magus",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 680,
-            RecipeItems = new[] { 3713, 3108 },
-            SellPrice = GetReducedPrice(3724, 1415),
-            ItemCategory = ItemCategory.SpellDamage,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ranger's Trailblazer Enchantment: Magus",
+            GoldBase = 680,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3713, 3108 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Id = 3724
         };
 
         #endregion
 
-        #region Ranger's Trailblazer - Juggernaut
+        #region Ranger's Trailblazer Enchantment: Juggernaut
 
-        public static Item Rangers_Trailblazer_Juggernaut = new Item
+        public static Item Rangers_Trailblazer_Enchantment_Juggernaut = new Item
         {
-            Id = 3725,
-            Name = "Ranger's Trailblazer - Juggernaut",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 250,
-            RecipeItems = new[] { 3067, 3713, 1028 },
-            SellPrice = GetReducedPrice(3725, 1450),
-            ItemCategory = ItemCategory.Health,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ranger's Trailblazer Enchantment: Juggernaut",
+            GoldBase = 250,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3713, 3067, 1028 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Id = 3725
         };
 
         #endregion
 
-        #region Ranger's Trailblazer - Devourer
+        #region Ranger's Trailblazer Enchantment: Devourer
 
-        public static Item Rangers_Trailblazer_Devourer = new Item
+        public static Item Rangers_Trailblazer_Enchantment_Devourer = new Item
         {
-            Id = 3726,
-            Name = "Ranger's Trailblazer - Devourer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 600,
-            RecipeItems = new[] { 3713, 1042 },
-            SellPrice = GetReducedPrice(3726, 1400),
-            ItemCategory = ItemCategory.Damage & ItemCategory.AttackSpeed,
-            ItemTier = ItemTier.Enchantment,
+            Name = "Ranger's Trailblazer Enchantment: Devourer",
+            GoldBase = 600,
+            GoldPrice = 2250,
+            GoldSell = 1575,
+            Purchasable = true,
+            Group = "JungleItems",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3713, 1042, 1042 },
+            InStore = true,
+            HideFromAll = true,
+            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Id = 3726
         };
 
         #endregion
@@ -5373,16 +5700,19 @@ namespace LeagueSharp.Common
 
         public static Item Righteous_Glory = new Item
         {
-            Id = 3800,
             Name = "Righteous Glory",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 700,
-            RecipeItems = new[] { 3801, 3010 },
-            SellPrice = GetReducedPrice(3800, 1120),
-            ItemCategory = ItemCategory.Mana & ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.None,
+            GoldBase = 700,
+            GoldPrice = 2500,
+            GoldSell = 1750,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3010, 3801 },
+            InStore = true,
             FlatHPPoolMod = 500f,
+            FlatMPPoolMod = 300f,
+            Tags = new[] { "Health", "HealthRegen", "Mana", "Active", "Slow", "NonbootsMovement" },
+            Id = 3800
         };
 
         #endregion
@@ -5391,16 +5721,19 @@ namespace LeagueSharp.Common
 
         public static Item Crystalline_Bracer = new Item
         {
-            Id = 3801,
             Name = "Crystalline Bracer",
-            MaxStacks = 1,
-            IsRecipe = true,
-            Price = 20,
-            RecipeItems = new[] { 1006, 1028 },
-            SellPrice = GetReducedPrice(3801, 600),
-            ItemCategory = ItemCategory.HealthRegen & ItemCategory.Health,
-            ItemTier = ItemTier.Basic,
+            GoldBase = 20,
+            GoldPrice = 600,
+            GoldSell = 420,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028, 1006 },
+            Into = new[] { 3083, 3800 },
+            InStore = true,
             FlatHPPoolMod = 200f,
+            Tags = new[] { "Health", "HealthRegen" },
+            Id = 3801
         };
 
         #endregion

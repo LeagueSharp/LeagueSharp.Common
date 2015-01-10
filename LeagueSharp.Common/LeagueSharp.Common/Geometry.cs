@@ -1,6 +1,7 @@
 ﻿#region LICENSE
+
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Geometry.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -16,16 +17,17 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
-#endregion
 
+#endregion
 
 #region
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SharpDX;
 using ClipperLib;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -102,7 +104,7 @@ namespace LeagueSharp.Common
         //Vector2 class extended methods:
 
         /// <summary>
-        /// Returns true if the vector is valid.
+        ///     Returns true if the vector is valid.
         /// </summary>
         public static bool IsValid(this Vector2 v)
         {
@@ -130,7 +132,7 @@ namespace LeagueSharp.Common
             }
             else
             {
-                v.Z = (float)value;
+                v.Z = (float) value;
             }
             return v;
         }
@@ -160,7 +162,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Retursn the distance to the line segment.
+        ///     Retursn the distance to the line segment.
         /// </summary>
         public static float Distance(this Vector2 point,
             Vector2 segmentStart,
@@ -298,7 +300,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the closest vector from a list.
+        ///     Returns the closest vector from a list.
         /// </summary>
         public static Vector2 Closest(this Vector2 v, List<Vector2> vList)
         {
@@ -319,7 +321,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the projection of the Vector2 on the segment.
+        ///     Returns the projection of the Vector2 on the segment.
         /// </summary>
         public static ProjectionInfo ProjectOn(this Vector2 point, Vector2 segmentStart, Vector2 segmentEnd)
         {
@@ -351,10 +353,9 @@ namespace LeagueSharp.Common
             return new ProjectionInfo(isOnSegment, pointSegment, pointLine);
         }
 
-
         //From: http://social.msdn.microsoft.com/Forums/vstudio/en-US/e5993847-c7a9-46ec-8edc-bfb86bd689e3/help-on-line-segment-intersection-algorithm
         /// <summary>
-        /// Intersects two line segments.
+        ///     Intersects two line segments.
         /// </summary>
         public static IntersectionResult Intersection(this Vector2 lineSegment1Start,
             Vector2 lineSegment1End,
@@ -371,9 +372,9 @@ namespace LeagueSharp.Common
             var denominator = deltaBAx * deltaDCy - deltaBAy * deltaDCx;
             var numerator = deltaACy * deltaDCx - deltaACx * deltaDCy;
 
-            if (denominator == 0)
+            if (Math.Abs(denominator) < float.Epsilon)
             {
-                if (numerator == 0)
+                if (Math.Abs(numerator) < float.Epsilon)
                 {
                     // collinear. Potentially infinite intersection points.
                     // Check and return one of them.
@@ -423,8 +424,9 @@ namespace LeagueSharp.Common
                 sP2y = startPoint2.Y;
 
             float d = eP1x - sP1x, e = eP1y - sP1y;
-            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN, t2 = float.NaN;
-            float S = dist != 0f ? v1 * d / dist : 0, K = (dist != 0) ? v1 * e / dist : 0f;
+            float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN;
+            float S = Math.Abs(dist) > float.Epsilon ? v1 * d / dist : 0,
+                K = (Math.Abs(dist) > float.Epsilon) ? v1 * e / dist : 0f;
 
             float r = sP2x - sP1x, j = sP2y - sP1y;
             var c = r * r + j * j;
@@ -432,12 +434,12 @@ namespace LeagueSharp.Common
 
             if (dist > 0f)
             {
-                if (v1 == float.MaxValue)
+                if (Math.Abs(v1 - float.MaxValue) < float.Epsilon)
                 {
                     var t = dist / v1;
                     t1 = v2 * t >= 0f ? t : float.NaN;
                 }
-                else if (v2 == float.MaxValue)
+                else if (Math.Abs(v2 - float.MaxValue) < float.Epsilon)
                 {
                     t1 = 0f;
                 }
@@ -445,11 +447,11 @@ namespace LeagueSharp.Common
                 {
                     float a = S * S + K * K - v2 * v2, b = -r * S - j * K;
 
-                    if (a == 0f)
+                    if (Math.Abs(a) < float.Epsilon)
                     {
-                        if (b == 0f)
+                        if (Math.Abs(b) < float.Epsilon)
                         {
-                            t1 = (c == 0f) ? 0f : float.NaN;
+                            t1 = (Math.Abs(c) < float.Epsilon) ? 0f : float.NaN;
                         }
                         else
                         {
@@ -466,29 +468,33 @@ namespace LeagueSharp.Common
                             var t = (-nom - b) / a;
                             t1 = v2 * t >= 0f ? t : float.NaN;
                             t = (nom - b) / a;
-                            t2 = (v2 * t >= 0f) ? t : float.NaN;
+                            var t2 = (v2 * t >= 0f) ? t : float.NaN;
 
                             if (!float.IsNaN(t2) && !float.IsNaN(t1))
                             {
                                 if (t1 >= delay && t2 >= delay)
+                                {
                                     t1 = Math.Min(t1, t2);
+                                }
                                 else if (t2 >= delay)
+                                {
                                     t1 = t2;
+                                }
                             }
                         }
                     }
                 }
             }
-            else if (dist == 0f)
+            else if (Math.Abs(dist) < float.Epsilon)
             {
                 t1 = 0f;
             }
 
-            return new Object[2] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
+            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
         }
 
         /// <summary>
-        /// Returns the total distance of a path.
+        ///     Returns the total distance of a path.
         /// </summary>
         public static float PathLength(this List<Vector2> path)
         {
@@ -501,16 +507,15 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Converts a 3D path to 2D
+        ///     Converts a 3D path to 2D
         /// </summary>
         public static List<Vector2> To2D(this List<Vector3> path)
         {
             return path.Select(point => point.To2D()).ToList();
         }
 
-
         /// <summary>
-        /// Returns the two intersection points between two circles.
+        ///     Returns the two intersection points between two circles.
         /// </summary>
         public static Vector2[] CircleCircleIntersection(Vector2 center1, Vector2 center2, float radius1, float radius2)
         {
@@ -532,37 +537,11 @@ namespace LeagueSharp.Common
 
         public static bool Close(float a, float b, float eps)
         {
-            if (eps == 0)
+            if (Math.Abs(eps) < float.Epsilon)
             {
                 eps = (float) 1e-9;
             }
             return Math.Abs(a - b) <= eps;
-        }
-
-        public struct IntersectionResult
-        {
-            public bool Intersects;
-            public Vector2 Point;
-
-            public IntersectionResult(bool Intersects = false, Vector2 Point = new Vector2())
-            {
-                this.Intersects = Intersects;
-                this.Point = Point;
-            }
-        }
-
-        public struct ProjectionInfo
-        {
-            public bool IsOnSegment;
-            public Vector2 LinePoint;
-            public Vector2 SegmentPoint;
-
-            public ProjectionInfo(bool isOnSegment, Vector2 segmentPoint, Vector2 linePoint)
-            {
-                IsOnSegment = isOnSegment;
-                SegmentPoint = segmentPoint;
-                LinePoint = linePoint;
-            }
         }
 
         /// <summary>
@@ -577,7 +556,7 @@ namespace LeagueSharp.Common
             var x = ((rotated.X - around.X) * cos) - ((around.Y - rotated.Y) * sin) + around.X;
             var y = ((around.Y - rotated.Y) * cos) + ((rotated.X - around.X) * sin) + around.Y;
 
-            return new Vector2((float)x, (float)y);
+            return new Vector2((float) x, (float) y);
         }
 
         /// <summary>
@@ -586,11 +565,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Polygon RotatePolygon(this Polygon polygon, Vector2 around, float angle)
         {
-            Polygon p = new Polygon();
+            var p = new Polygon();
 
-            foreach (var poinit in polygon.Points)
+            foreach (var polygonePoint in polygon.Points.Select(poinit => poinit.RotateAroundPoint(around, angle)))
             {
-                var polygonePoint = poinit.RotateAroundPoint(around, angle);
                 p.Add(polygonePoint);
             }
             return p;
@@ -603,7 +581,7 @@ namespace LeagueSharp.Common
         {
             var deltaX = around.X - direction.X;
             var deltaY = around.Y - direction.Y;
-            var angle = (float)Math.Atan2(deltaY, deltaX);
+            var angle = (float) Math.Atan2(deltaY, deltaX);
             return RotatePolygon(polygon, around, angle - DegreeToRadian(90));
         }
 
@@ -612,35 +590,32 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Polygon MovePolygone(this Polygon polygon, Vector2 moveTo)
         {
-            Polygon p = new Polygon();
+            var p = new Polygon();
 
             p.Add(moveTo);
 
-            int count = polygon.Points.Count;
+            var count = polygon.Points.Count;
 
             var startPoint = polygon.Points[0];
 
-            for (int i = 1; i < count; i++)
+            for (var i = 1; i < count; i++)
             {
                 var polygonePoint = polygon.Points[i];
 
-                p.Add(new Vector2(moveTo.X + (polygonePoint.X - startPoint.X), moveTo.Y + (polygonePoint.Y - startPoint.Y)));
+                p.Add(
+                    new Vector2(
+                        moveTo.X + (polygonePoint.X - startPoint.X), moveTo.Y + (polygonePoint.Y - startPoint.Y)));
             }
             return p;
         }
 
         public static List<Polygon> ToPolygons(this List<List<IntPoint>> v)
         {
-            var result = new List<Polygon>();
-            foreach (var path in v)
-            {
-                result.Add(path.ToPolygon());
-            }
-            return result;
+            return v.Select(path => path.ToPolygon()).ToList();
         }
 
         /// <summary>
-        ///     Returns the position where the vector will be after t(time) with s(speed) and delay. 
+        ///     Returns the position where the vector will be after t(time) with s(speed) and delay.
         /// </summary>
         public static Vector2 PositionAfter(this List<Vector2> self, int t, int s, int delay = 0)
         {
@@ -649,7 +624,7 @@ namespace LeagueSharp.Common
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int)to.Distance(from);
+                var d = (int) to.Distance(from);
                 if (d > distance)
                 {
                     return from + distance * (to - from).Normalized();
@@ -686,13 +661,39 @@ namespace LeagueSharp.Common
             return solution;
         }
 
+        public struct IntersectionResult
+        {
+            public bool Intersects;
+            public Vector2 Point;
+
+            public IntersectionResult(bool Intersects = false, Vector2 Point = new Vector2())
+            {
+                this.Intersects = Intersects;
+                this.Point = Point;
+            }
+        }
+
+        public struct ProjectionInfo
+        {
+            public bool IsOnSegment;
+            public Vector2 LinePoint;
+            public Vector2 SegmentPoint;
+
+            public ProjectionInfo(bool isOnSegment, Vector2 segmentPoint, Vector2 linePoint)
+            {
+                IsOnSegment = isOnSegment;
+                SegmentPoint = segmentPoint;
+                LinePoint = linePoint;
+            }
+        }
+
         public class Arc
         {
-            public Vector2 StartPos;
-            public Vector2 EndPos;
             public float Angle;
+            public Vector2 EndPos;
             public float Radius;
-            private int Quality;
+            public Vector2 StartPos;
+            private readonly int _quality;
 
             public Arc(Vector2 start, Vector2 end, float angle, float radius, int quality = 20)
             {
@@ -700,18 +701,19 @@ namespace LeagueSharp.Common
                 EndPos = (end - start).Normalized();
                 Angle = angle;
                 Radius = radius;
-                Quality = quality;
+                _quality = quality;
             }
 
             public Polygon ToPolygon(int offset = 0)
             {
                 var result = new Polygon();
-                var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / Quality);
-                var Side1 = EndPos.Rotated(-Angle * 0.5f);
-                for (var i = 0; i <= Quality; i++)
+                var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / _quality);
+                var side1 = EndPos.Rotated(-Angle * 0.5f);
+                for (var i = 0; i <= _quality; i++)
                 {
-                    var cDirection = Side1.Rotated(i * Angle / Quality).Normalized();
-                    result.Add(new Vector2(StartPos.X + outRadius * cDirection.X, StartPos.Y + outRadius * cDirection.Y));
+                    var cDirection = side1.Rotated(i * Angle / _quality).Normalized();
+                    result.Add(
+                        new Vector2(StartPos.X + outRadius * cDirection.X, StartPos.Y + outRadius * cDirection.Y));
                 }
                 return result;
             }
@@ -720,11 +722,8 @@ namespace LeagueSharp.Common
             {
                 var poly = ToPolygon();
                 var result = new List<IntPoint>(poly.Points.Count);
+                result.AddRange(poly.Points.Select(point => new IntPoint(point.X, point.Y)));
 
-                foreach (var point in poly.Points)
-                {
-                    result.Add(new IntPoint(point.X, point.Y));
-                }
                 return result;
             }
 
@@ -737,9 +736,9 @@ namespace LeagueSharp.Common
 
         public class Line
         {
-            public Vector2 LineStart;
-            public Vector2 LineEnd;
             public float Length;
+            public Vector2 LineEnd;
+            public Vector2 LineStart;
 
             public Line(Vector2 start, Vector2 end, float length)
             {
@@ -783,10 +782,7 @@ namespace LeagueSharp.Common
             public List<IntPoint> ToClipperPath()
             {
                 var result = new List<IntPoint>(Points.Count);
-                foreach (var point in Points)
-                {
-                    result.Add(new IntPoint(point.X, point.Y));
-                }
+                result.AddRange(Points.Select(point => new IntPoint(point.X, point.Y)));
                 return result;
             }
 
@@ -801,26 +797,26 @@ namespace LeagueSharp.Common
         {
             public Vector2 Center;
             public float Radius;
-            private int Quality;
+            private readonly int _quality;
 
             public Circle(Vector2 center, float radius, int quality = 20)
             {
                 Center = center;
                 Radius = radius;
-                Quality = quality;
+                _quality = quality;
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
             {
                 var result = new Polygon();
                 var outRadius = (overrideWidth > 0
-                ? overrideWidth
-                : (offset + Radius) / (float)Math.Cos(2 * Math.PI / Quality));
-                for (var i = 1; i <= Quality; i++)
+                    ? overrideWidth
+                    : (offset + Radius) / (float) Math.Cos(2 * Math.PI / _quality));
+                for (var i = 1; i <= _quality; i++)
                 {
-                    var angle = i * 2 * Math.PI / Quality;
+                    var angle = i * 2 * Math.PI / _quality;
                     var point = new Vector2(
-                    Center.X + outRadius * (float)Math.Cos(angle), Center.Y + outRadius * (float)Math.Sin(angle));
+                        Center.X + outRadius * (float) Math.Cos(angle), Center.Y + outRadius * (float) Math.Sin(angle));
                     result.Add(point);
                 }
                 return result;
@@ -830,11 +826,8 @@ namespace LeagueSharp.Common
             {
                 var poly = ToPolygon();
                 var result = new List<IntPoint>(poly.Points.Count);
+                result.AddRange(poly.Points.Select(point => new IntPoint(point.X, point.Y)));
 
-                foreach (var point in poly.Points)
-                {
-                    result.Add(new IntPoint(point.X, point.Y));
-                }
                 return result;
             }
 
@@ -866,13 +859,13 @@ namespace LeagueSharp.Common
             {
                 var result = new Polygon();
                 result.Add(
-                RStart + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                    RStart + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
                 result.Add(
-                RStart - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                    RStart - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
                 result.Add(
-                REnd - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+                    REnd - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
                 result.Add(
-                REnd + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+                    REnd + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
                 return result;
             }
 
@@ -880,11 +873,8 @@ namespace LeagueSharp.Common
             {
                 var poly = ToPolygon();
                 var result = new List<IntPoint>(poly.Points.Count);
+                result.AddRange(poly.Points.Select(point => new IntPoint(point.X, point.Y)));
 
-                foreach (var point in poly.Points)
-                {
-                    result.Add(new IntPoint(point.X, point.Y));
-                }
                 return result;
             }
 
@@ -900,34 +890,34 @@ namespace LeagueSharp.Common
             public Vector2 Center;
             public float InnerRadius;
             public float OuterRadius;
-            private int Quality;
+            private readonly int _quality;
 
             public Ring(Vector2 center, float innerRadius, float outerRadius, int quality = 20)
             {
                 Center = center;
                 InnerRadius = innerRadius;
                 OuterRadius = outerRadius;
-                Quality = quality;
+                _quality = quality;
             }
 
             public Polygon ToPolygon(int offset = 0)
             {
                 var result = new Polygon();
-                var outRadius = (offset + InnerRadius + OuterRadius) / (float)Math.Cos(2 * Math.PI / Quality);
+                var outRadius = (offset + InnerRadius + OuterRadius) / (float) Math.Cos(2 * Math.PI / _quality);
                 var innerRadius = InnerRadius - OuterRadius - offset;
-                for (var i = 0; i <= Quality; i++)
+                for (var i = 0; i <= _quality; i++)
                 {
-                    var angle = i * 2 * Math.PI / Quality;
+                    var angle = i * 2 * Math.PI / _quality;
                     var point = new Vector2(
-                    Center.X - outRadius * (float)Math.Cos(angle), Center.Y - outRadius * (float)Math.Sin(angle));
+                        Center.X - outRadius * (float) Math.Cos(angle), Center.Y - outRadius * (float) Math.Sin(angle));
                     result.Add(point);
                 }
-                for (var i = 0; i <= Quality; i++)
+                for (var i = 0; i <= _quality; i++)
                 {
-                    var angle = i * 2 * Math.PI / Quality;
+                    var angle = i * 2 * Math.PI / _quality;
                     var point = new Vector2(
-                    Center.X + innerRadius * (float)Math.Cos(angle),
-                    Center.Y - innerRadius * (float)Math.Sin(angle));
+                        Center.X + innerRadius * (float) Math.Cos(angle),
+                        Center.Y - innerRadius * (float) Math.Sin(angle));
                     result.Add(point);
                 }
                 return result;
@@ -937,11 +927,8 @@ namespace LeagueSharp.Common
             {
                 var poly = ToPolygon();
                 var result = new List<IntPoint>(poly.Points.Count);
+                result.AddRange(poly.Points.Select(point => new IntPoint(point.X, point.Y)));
 
-                foreach (var point in poly.Points)
-                {
-                    result.Add(new IntPoint(point.X, point.Y));
-                }
                 return result;
             }
 
@@ -958,7 +945,7 @@ namespace LeagueSharp.Common
             public Vector2 Center;
             public Vector2 Direction;
             public float Radius;
-            private int Quality;
+            private readonly int _quality;
 
             public Sector(Vector2 center, Vector2 direction, float angle, float radius, int quality = 20)
             {
@@ -966,18 +953,18 @@ namespace LeagueSharp.Common
                 Direction = (direction - center).Normalized();
                 Angle = angle;
                 Radius = radius;
-                Quality = quality;
+                _quality = quality;
             }
 
             public Polygon ToPolygon(int offset = 0)
             {
                 var result = new Polygon();
-                var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / Quality);
+                var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / _quality);
                 result.Add(Center);
-                var Side1 = Direction.Rotated(-Angle * 0.5f);
-                for (var i = 0; i <= Quality; i++)
+                var side1 = Direction.Rotated(-Angle * 0.5f);
+                for (var i = 0; i <= _quality; i++)
                 {
-                    var cDirection = Side1.Rotated(i * Angle / Quality).Normalized();
+                    var cDirection = side1.Rotated(i * Angle / _quality).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
                 return result;
@@ -987,11 +974,8 @@ namespace LeagueSharp.Common
             {
                 var poly = ToPolygon();
                 var result = new List<IntPoint>(poly.Points.Count);
+                result.AddRange(poly.Points.Select(point => new IntPoint(point.X, point.Y)));
 
-                foreach (var point in poly.Points)
-                {
-                    result.Add(new IntPoint(point.X, point.Y));
-                }
                 return result;
             }
 
@@ -1004,56 +988,65 @@ namespace LeagueSharp.Common
 
         public static class Draw
         {
-            public static void DrawArc(Arc arc, System.Drawing.Color color, int width = 1)
+            public static void DrawArc(Arc arc, Color color, int width = 1)
             {
                 var a = arc.ToPolygon();
                 DrawPolygon(a, color, width);
             }
 
-            public static void DrawLine(Line line, System.Drawing.Color color, int width)
+            public static void DrawLine(Line line, Color color, int width)
             {
                 var from = Drawing.WorldToScreen(line.LineStart.To3D());
                 var to = Drawing.WorldToScreen(line.LineEnd.To3D());
                 Drawing.DrawLine(from, to, width, color);
             }
 
-            public static void DrawLine(Vector2 start, Vector2 end, System.Drawing.Color color, int width = 1)
+            public static void DrawLine(Vector2 start, Vector2 end, Color color, int width = 1)
             {
                 var from = Drawing.WorldToScreen(start.To3D());
                 var to = Drawing.WorldToScreen(end.To3D());
                 Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
             }
 
-            public static void DrawLine(Vector3 start, Vector3 end, System.Drawing.Color color, int width = 1)
+            public static void DrawLine(Vector3 start, Vector3 end, Color color, int width = 1)
             {
                 var from = Drawing.WorldToScreen(start);
                 var to = Drawing.WorldToScreen(end);
                 Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
             }
 
-            public static void DrawText(Vector2 position, string text, System.Drawing.Color color)
+            public static void DrawText(Vector2 position, string text, Color color)
             {
                 var pos = Drawing.WorldToScreen(position.To3D());
                 Drawing.DrawText(pos.X, pos.Y, color, text);
             }
 
-            public static void DrawText(Vector3 position, string text, System.Drawing.Color color)
+            public static void DrawText(Vector3 position, string text, Color color)
             {
                 var pos = Drawing.WorldToScreen(position);
                 Drawing.DrawText(pos.X, pos.Y, color, text);
             }
 
-            public static void DrawCircle(Vector3 center, float radius, System.Drawing.Color color, int width = 1, int quality = 30, bool onMiniMap = false)
+            public static void DrawCircle(Vector3 center,
+                float radius,
+                Color color,
+                int width = 1,
+                int quality = 30,
+                bool onMiniMap = false)
             {
                 Utility.DrawCircle(center, radius, color, width, quality, onMiniMap);
             }
 
-            public static void DrawCircle(Circle circle, System.Drawing.Color color, int width = 1, int quality = 30, bool onMiniMap = false)
+            public static void DrawCircle(Circle circle,
+                Color color,
+                int width = 1,
+                int quality = 30,
+                bool onMiniMap = false)
             {
                 Utility.DrawCircle(circle.Center.To3D(), circle.Radius, color, width, quality, onMiniMap);
             }
 
-            public static void DrawPolygon(Polygon polygon, System.Drawing.Color color, int width = 1)
+            public static void DrawPolygon(Polygon polygon, Color color, int width = 1)
             {
                 for (var i = 0; i <= polygon.Points.Count - 1; i++)
                 {
@@ -1062,21 +1055,21 @@ namespace LeagueSharp.Common
                 }
             }
 
-            public static void DrawRectangle(Rectangle rectangle, System.Drawing.Color color, int width = 1)
+            public static void DrawRectangle(Rectangle rectangle, Color color, int width = 1)
             {
                 var polygone = rectangle.ToPolygon();
 
                 DrawPolygon(polygone, color, width);
             }
 
-            public static void DrawRectangle(Vector2 start, Vector2 end, System.Drawing.Color color, int width = 1)
+            public static void DrawRectangle(Vector2 start, Vector2 end, Color color, int width = 1)
             {
                 var rect = new Rectangle(start, end, width);
 
                 DrawRectangle(rect, color, width);
             }
 
-            public static void DrawRing(Ring ring, System.Drawing.Color color, int width = 1, int quality = 30, bool onMiniMap = false)
+            public static void DrawRing(Ring ring, Color color, int width = 1, int quality = 30, bool onMiniMap = false)
             {
                 DrawCircle(ring.Center.To3D(), ring.InnerRadius, color, width, quality, onMiniMap);
                 DrawCircle(ring.Center.To3D(), ring.OuterRadius, color, width, quality, onMiniMap);
@@ -1085,7 +1078,7 @@ namespace LeagueSharp.Common
             public static void DrawRing(Vector3 center,
                 float innerRadius,
                 float outerRadius,
-                System.Drawing.Color color,
+                Color color,
                 int width = 1,
                 int quality = 30,
                 bool onMiniMap = false)
@@ -1094,7 +1087,7 @@ namespace LeagueSharp.Common
                 DrawCircle(center, outerRadius, color, width, quality, onMiniMap);
             }
 
-            public static void DrawSector(Sector sector, System.Drawing.Color color, int width = 1)
+            public static void DrawSector(Sector sector, Color color, int width = 1)
             {
                 var poly = sector.ToPolygon();
                 DrawPolygon(poly, color, width);
