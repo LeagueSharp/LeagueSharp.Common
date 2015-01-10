@@ -629,7 +629,7 @@ namespace LeagueSharp.Common
                         ShortName = "crystalScar",
                         Type = MapType.CrystalScar,
                         _MapType = MapType.CrystalScar,
-                        Grid = new Vector2(13894f / 2, 13218f / 2),
+                        Grid = new Vector2(13894 / 2, 13218 / 2),
                         StartingLevel = 3
                     }
                 },
@@ -641,7 +641,7 @@ namespace LeagueSharp.Common
                         ShortName = "twistedTreeline",
                         Type = MapType.TwistedTreeline,
                         _MapType = MapType.TwistedTreeline,
-                        Grid = new Vector2(15436f / 2, 14474f / 2),
+                        Grid = new Vector2(15436 / 2, 14474 / 2),
                         StartingLevel = 1
                     }
                 },
@@ -653,7 +653,7 @@ namespace LeagueSharp.Common
                         ShortName = "summonerRift",
                         Type = MapType.SummonersRift,
                         _MapType = MapType.SummonersRift,
-                        Grid = new Vector2(13982f / 2, 14446f / 2),
+                        Grid = new Vector2(13982 / 2, 14446 / 2),
                         StartingLevel = 1
                     }
                 },
@@ -665,7 +665,7 @@ namespace LeagueSharp.Common
                         ShortName = "howlingAbyss",
                         Type = MapType.HowlingAbyss,
                         _MapType = MapType.HowlingAbyss,
-                        Grid = new Vector2(13120f / 2, 12618f / 2),
+                        Grid = new Vector2(13120 / 2, 12618 / 2),
                         StartingLevel = 3
                     }
                 }
