@@ -57,7 +57,7 @@ namespace LeagueSharp.Common
         ///     Returns if both source and target are Facing Themselves.
         /// </summary>
         [Obsolete("The optional parameter lineLength will be removed, please avoid using it :-)", false)]
-        public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength)
+        public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength = 1337)
         {
             return source.IsFacing(target) && target.IsFacing(source);
         }
