@@ -304,9 +304,6 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            var minDistance =
-                (float) (_random.Next((int) _minDistance, (int) _minDistance + 50) * _random.NextDouble(1.5f, 3.5f));
-
             LastMoveCommandT = Environment.TickCount;
 
             if (Player.ServerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
@@ -323,7 +320,7 @@ namespace LeagueSharp.Common
             if (useFixedDistance)
             {
                 point = Player.ServerPosition +
-                        (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * minDistance : minDistance) *
+                        (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance) *
                         (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
             }
             else
@@ -331,13 +328,13 @@ namespace LeagueSharp.Common
                 if (randomizeMinDistance)
                 {
                     point = Player.ServerPosition +
-                            (_random.NextFloat(0.6f, 1) + 0.2f) * minDistance *
+                            (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance *
                             (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
                 }
-                else if (Player.ServerPosition.Distance(position) > minDistance)
+                else if (Player.ServerPosition.Distance(position) > _minDistance)
                 {
                     point = Player.ServerPosition +
-                            minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                            _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
                 }
             }
 
