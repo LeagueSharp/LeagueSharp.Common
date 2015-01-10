@@ -541,7 +541,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            public static void DrawCircle(Vector3 position, float radius, Color color, int width = 1, bool zDeep = false)
+            public static void DrawCircle(Vector3 position, float radius, Color color, int width = 5, bool zDeep = false)
             {
                 try
                 {
