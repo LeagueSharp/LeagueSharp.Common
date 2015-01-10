@@ -41,6 +41,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the source is facing the target.
         /// </summary>
+        [Obsolete("The optional parameter lineLength will be removed, please avoid using it :-)", false)]
         public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
         {
             if (source == null || target == null)
@@ -48,22 +49,17 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            return
-                target.Distance(
-                    Vector2.Add(
-                        new Vector2(source.Position.X, source.Position.Y),
-                        (Vector2.Subtract(
-                            new Vector2(source.ServerPosition.X, source.ServerPosition.Y),
-                            new Vector2(source.Position.X, source.Position.Y)).Normalized() * (target.Distance(source)))),
-                    true) <= lineLength * lineLength;
+            const float angle = 90;
+            return source.Direction.To2D().AngleBetween((target.Position - source.Position).To2D()) < angle;
         }
 
         /// <summary>
         ///     Returns if both source and target are Facing Themselves.
         /// </summary>
+        [Obsolete("The optional parameter lineLength will be removed, please avoid using it :-)", false)]
         public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength)
         {
-            return source.IsFacing(target, lineLength) && target.IsFacing(source, lineLength);
+            return source.IsFacing(target) && target.IsFacing(source);
         }
 
         /// <summary>
