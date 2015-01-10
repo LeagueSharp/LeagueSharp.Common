@@ -283,7 +283,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the angle with the vector p2.
+        ///     Returns the angle with the vector p2 in degrees;
         /// </summary>
         public static float AngleBetween(this Vector2 p1, Vector2 p2)
         {
