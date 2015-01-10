@@ -205,6 +205,7 @@ namespace LeagueSharp.Common
         {
             _configMenu = config;
             config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            config.AddItem(new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false));
             config.AddItem(
                 new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
             config.AddItem(new MenuItem("Sep", "").SetShared());
@@ -349,7 +350,9 @@ namespace LeagueSharp.Common
                 var targetingMode = TargetingMode.AutoPriority;
                 var damageType = (Damage.DamageType)Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
-                if (IsValidTarget(SelectedTarget, range, type, ignoreShieldSpells))
+                if (IsValidTarget(
+                    SelectedTarget, _configMenu.Item("ForceFocusSelected").GetValue<bool>() ? float.MaxValue : range,
+                    type, ignoreShieldSpells))
                 {
                     return SelectedTarget;
                 }
