@@ -147,7 +147,6 @@
     <Compile Include="Network\Util\Extensions.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="Spell.cs" />
-    <Compile Include="SpellHumanizer.cs" />
     <Compile Include="TargetSelector.cs" />
     <Compile Include="MultiLanguage.cs" />
     <Compile Include="Utility.cs" />
