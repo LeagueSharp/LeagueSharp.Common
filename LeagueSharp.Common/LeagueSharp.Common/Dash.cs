@@ -50,7 +50,7 @@ namespace LeagueSharp.Common
                 path.AddRange(args.Path.ToList().To2D());
 
                 DetectedDashes[sender.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
-                DetectedDashes[sender.NetworkId].Speed = args.Speed; //TODO
+                DetectedDashes[sender.NetworkId].Speed = args.Speed;
                 DetectedDashes[sender.NetworkId].StartPos = sender.ServerPosition.To2D();
                 DetectedDashes[sender.NetworkId].Unit = sender;
                 DetectedDashes[sender.NetworkId].Path = path;
