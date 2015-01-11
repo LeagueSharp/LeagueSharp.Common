@@ -616,7 +616,6 @@ namespace LeagueSharp.Common
             public AttackableUnit GetTarget()
             {
                 AttackableUnit result = null;
-                float[] r = { float.MaxValue };
 
                 if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
@@ -705,20 +704,10 @@ namespace LeagueSharp.Common
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
                 {
-                    foreach (var mob in
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                mob =>
-                                    mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
-                            .Where(mob => mob.MaxHealth >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon))
-                    {
-                        result = mob;
-                        r[0] = mob.MaxHealth;
-                    }
+                    result = ObjectManager.Get<Obj_AI_Minion>().Where(mob =>mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral).MaxOrDefault(mob => mob.MaxHealth);
                 }
 
                 /*Lane Clear minions*/
-                r[0] = float.MaxValue;
                 if (ActiveMode == OrbwalkingMode.LaneClear)
                 {
                     if (!ShouldWait())
@@ -734,22 +723,20 @@ namespace LeagueSharp.Common
                             }
                         }
 
-                        foreach (var minion in
-                            from minion in
-                                ObjectManager.Get<Obj_AI_Minion>()
-                                    .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                        result = (from minion in
+                            ObjectManager.Get<Obj_AI_Minion>()
+                                .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             let predHealth =
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                    minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
                             where
                                 predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon
-                            where minion.Health >= r[0] || Math.Abs(r[0] - float.MaxValue) < float.Epsilon
-                            select minion)
+                            select minion).MaxOrDefault(m => m.Health);
+
+                        if (result != null)
                         {
-                            result = minion;
-                            r[0] = minion.Health;
-                            _prevMinion = minion;
+                            _prevMinion = (Obj_AI_Minion)result;
                         }
                     }
                 }
