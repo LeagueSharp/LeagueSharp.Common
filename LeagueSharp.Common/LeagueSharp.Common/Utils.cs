@@ -249,4 +249,53 @@ namespace LeagueSharp.Common
             }
         }
     }
+
+    public static class EnumerableExtensions
+    {
+        public static T MaxOrDefault<T, R>(this IEnumerable<T> container, Func<T, R> valuingFoo) where R : IComparable
+        {
+            var enumerator = container.GetEnumerator();
+            if (!enumerator.MoveNext())
+                return default(T);
+            
+            var maxElem = enumerator.Current;
+            var maxVal = valuingFoo(maxElem);
+
+            while (enumerator.MoveNext())
+            {
+                var currVal = valuingFoo(enumerator.Current);
+
+                if (currVal.CompareTo(maxVal) > 0)
+                {
+                    maxVal = currVal;
+                    maxElem = enumerator.Current;
+                }
+            }
+
+            return maxElem;
+        }
+
+        public static T MinOrDefault<T, R>(this IEnumerable<T> container, Func<T, R> valuingFoo) where R : IComparable
+        {
+            var enumerator = container.GetEnumerator();
+            if (!enumerator.MoveNext())
+                return default(T);
+
+            var minElem = enumerator.Current;
+            var minVal = valuingFoo(minElem);
+
+            while (enumerator.MoveNext())
+            {
+                var currVal = valuingFoo(enumerator.Current);
+
+                if (currVal.CompareTo(minVal) < 0)
+                {
+                    minVal = currVal;
+                    minElem = enumerator.Current;
+                }
+            }
+
+            return minElem;
+        }
+    }
 }
