@@ -124,6 +124,14 @@ namespace LeagueSharp.Common
             return new Vector3(v.X, v.Y, ObjectManager.Player.ServerPosition.Z);
         }
 
+        /// <summary>
+        ///     Converts the Vector2 to Vector3. (Z = NavMesh.GetHeightForPosition)
+        /// </summary>
+        public static Vector3 To3DNavMesh(this Vector2 v)
+        {
+            return new Vector3(v.X, v.Y, NavMesh.GetHeightForPosition(v.X, v.Y));
+        }
+
         public static Vector3 SetZ(this Vector3 v, float? value = null)
         {
             if (value == null)
@@ -609,6 +617,54 @@ namespace LeagueSharp.Common
             return p;
         }
 
+        /// <summary>
+        ///     Returns a Vector2 at center of the polygone.
+        /// </summary>
+        public static Vector2 CenterOfPolygone(this Polygon p)
+        {
+            var cX = 0f;
+            var cY = 0f;
+            var pc = p.Points.Count;
+            foreach (var point in p.Points)
+            {
+                cX += point.X;
+                cY += point.Y;
+            }
+            return new Vector2(cX / pc, cY / pc);
+        }
+
+        /// <summary>
+        ///     Joins all the polygones in the list in one polygone if they interect.
+        /// </summary>
+        public static List<Polygon> JoinPolygons(this List<Polygon> sList)
+        {
+            var p = ClipPolygons(sList);
+            List<List<IntPoint>> tList = new List<List<IntPoint>>();
+
+            Clipper c = new Clipper();
+            c.AddPaths(p, PolyType.ptClip, true);
+            c.Execute(ClipType.ctUnion, tList, PolyFillType.pftNonZero, PolyFillType.pftNonZero);
+
+            return ToPolygons(tList);
+        }
+        
+        /// <summary>
+        ///     Joins all the polygones.
+        ///     ClipType: http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/ClipType.htm
+        ///     PolyFillType: http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/PolyFillType.htm
+        /// </summary>
+        public static List<Polygon> JoinPolygons(this List<Polygon> sList, ClipType cType, PolyType pType = PolyType.ptClip, PolyFillType pFType1 = PolyFillType.pftNonZero, PolyFillType pFType2 = PolyFillType.pftNonZero)
+        {
+            var p = ClipPolygons(sList);
+            List<List<IntPoint>> tList = new List<List<IntPoint>>();
+
+            Clipper c = new Clipper();
+            c.AddPaths(p, pType, true);
+            c.Execute(cType, tList, pFType1, pFType2);
+
+            return ToPolygons(tList);
+        }
+
         public static List<Polygon> ToPolygons(this List<List<IntPoint>> v)
         {
             return v.Select(path => path.ToPolygon()).ToList();
@@ -695,10 +751,10 @@ namespace LeagueSharp.Common
             public Vector2 StartPos;
             private readonly int _quality;
 
-            public Arc(Vector2 start, Vector2 end, float angle, float radius, int quality = 20)
+            public Arc(Vector2 start, Vector2 direction, float angle, float radius, int quality = 20)
             {
                 StartPos = start;
-                EndPos = (end - start).Normalized();
+                EndPos = (direction - start).Normalized();
                 Angle = angle;
                 Radius = radius;
                 _quality = quality;
@@ -749,7 +805,7 @@ namespace LeagueSharp.Common
 
             public void ChangeLength(float newLenght)
             {
-                LineEnd = LineEnd.Normalized() * newLenght;
+                LineEnd = (LineEnd - LineStart).Normalized() * newLenght + LineStart;
                 Length = newLenght;
             }
 
@@ -784,6 +840,21 @@ namespace LeagueSharp.Common
                 var result = new List<IntPoint>(Points.Count);
                 result.AddRange(Points.Select(point => new IntPoint(point.X, point.Y)));
                 return result;
+            }
+
+            public bool IsInside(Vector2 point)
+            {
+                return !IsOutside(point);
+            }
+
+            public bool IsInside(Vector3 point)
+            {
+                return !IsOutside(point.To2D());
+            }
+
+            public bool IsInside(GameObject point)
+            {
+                return !IsOutside(point.Position.To2D());
             }
 
             public bool IsOutside(Vector2 point)
@@ -1055,6 +1126,36 @@ namespace LeagueSharp.Common
                 }
             }
 
+            public static void DrawPolygon(List<Vector2> pList, Color color, int width = 1)
+            {
+                for (var i = 0; i <= pList.Count - 1; i++)
+                {
+                    var nextIndex = (pList.Count - 1 == i) ? 0 : (i + 1);
+                    DrawLine(pList[i].To3D(), pList[nextIndex].To3D(), color, width);
+                }
+            }
+
+            public static void DrawPolygon(List<Vector3> pList, Color color, int width = 1)
+            {
+                for (var i = 0; i <= pList.Count - 1; i++)
+                {
+                    var nextIndex = (pList.Count - 1 == i) ? 0 : (i + 1);
+                    DrawLine(pList[i], pList[nextIndex], color, width);
+                }
+            }
+
+            /// <summary>
+            ///     Draw a polygone using To3DNavMesh
+            /// </summary>
+            public static void DrawPolygonNavMesh(Polygon polygon, Color color, int width = 1)
+            {
+                for (var i = 0; i <= polygon.Points.Count - 1; i++)
+                {
+                    var nextIndex = (polygon.Points.Count - 1 == i) ? 0 : (i + 1);
+                    DrawLine(polygon.Points[i].To3DNavMesh(), polygon.Points[nextIndex].To3DNavMesh(), color, width);
+                }
+            }
+
             public static void DrawRectangle(Rectangle rectangle, Color color, int width = 1)
             {
                 var polygone = rectangle.ToPolygon();
@@ -1062,9 +1163,9 @@ namespace LeagueSharp.Common
                 DrawPolygon(polygone, color, width);
             }
 
-            public static void DrawRectangle(Vector2 start, Vector2 end, Color color, int width = 1)
+            public static void DrawRectangle(Vector2 start, Vector2 end, float rWidth, Color color, int width = 1)
             {
-                var rect = new Rectangle(start, end, width);
+                var rect = new Rectangle(start, end, rWidth);
 
                 DrawRectangle(rect, color, width);
             }
