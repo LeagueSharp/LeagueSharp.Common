@@ -54,7 +54,15 @@ namespace LeagueSharp.Common
         private float _range;
         private Vector3 _rangeCheckFrom;
         private float _width;
-        private float _widthSqr;
+
+        public Spell(SpellSlot slot, float range = float.MaxValue)
+        {
+            Slot = slot;
+            Range = range;
+
+            // Default values
+            MinHitChance = HitChance.High;
+        }
 
         public string ChargedBuffName { get; set; }
         public int ChargedMaxRange { get; set; }
@@ -70,28 +78,18 @@ namespace LeagueSharp.Common
         public SpellSlot Slot { get; set; }
         public float Speed { get; set; }
         public SkillshotType Type { get; set; }
+
         public float Width
         {
             get { return _width; }
             set
             {
                 _width = value;
-                _widthSqr = value * value;
+                WidthSqr = value * value;
             }
         }
-        public float WidthSqr
-        {
-            get { return _widthSqr; }
-        }
 
-        public Spell(SpellSlot slot, float range = float.MaxValue)
-        {
-            Slot = slot;
-            Range = range;
-
-            // Default values
-            MinHitChance = HitChance.High;
-        }
+        public float WidthSqr { get; private set; }
 
         public SpellDataInst Instance
         {
@@ -451,44 +449,37 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Casts the spell (selfcast).
         /// </summary>
-        public void Cast(bool packetCast = false)
+        public bool Cast(bool packetCast = false)
         {
-            if (!packetCast)
-            {
-                Cast();
-            }
-            else
-            {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
-            }
+            return ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
         }
 
-        public void Cast(Vector2 fromPosition, Vector2 toPosition)
+        public bool Cast(Vector2 fromPosition, Vector2 toPosition)
         {
-            ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition.To3D(), toPosition.To3D());
+            return ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition.To3D(), toPosition.To3D());
         }
 
-        public void Cast(Vector3 fromPosition, Vector3 toPosition)
+        public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
-            ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
+            return ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
         }
 
         /// <summary>
         ///     Casts the spell to the position.
         /// </summary>
-        public void Cast(Vector2 position, bool packetCast = false)
+        public bool Cast(Vector2 position, bool packetCast = false)
         {
-            Cast(position.To3D(), packetCast);
+            return Cast(position.To3D(), packetCast);
         }
 
         /// <summary>
         ///     Casts the spell to the position.
         /// </summary>
-        public void Cast(Vector3 position, bool packetCast = false)
+        public bool Cast(Vector3 position, bool packetCast = false)
         {
             if (!Slot.IsReady())
             {
-                return;
+                return false;
             }
 
             LastCastAttemptT = Environment.TickCount;
@@ -506,12 +497,13 @@ namespace LeagueSharp.Common
             }
             else if (packetCast)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, position, false);
+                return ObjectManager.Player.Spellbook.CastSpell(Slot, position, false);
             }
             else
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, position);
+                return ObjectManager.Player.Spellbook.CastSpell(Slot, position);
             }
+            return false;
         }
 
         private static void ShootChargedSpell(Vector3 position)
@@ -692,7 +684,8 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool IsInRange(GameObject obj, float range = -1)
         {
-            return IsInRange(obj is Obj_AI_Base ? (obj as Obj_AI_Base).ServerPosition.To2D() : obj.Position.To2D(), range);
+            return IsInRange(
+                obj is Obj_AI_Base ? (obj as Obj_AI_Base).ServerPosition.To2D() : obj.Position.To2D(), range);
         }
 
         /// <summary>
