@@ -538,21 +538,22 @@ namespace LeagueSharp.Common
             return new PredictionOutput();
         }
 
-        internal static List<PosibleTarget> GetPosibleTargets(PredictionInput input)
+        internal static List<PossibleTarget> GetPossibleTargets(PredictionInput input)
         {
-            var result = new List<PosibleTarget>();
+            var result = new List<PossibleTarget>();
+            var originalUnit = input.Unit;
             foreach (var enemy in
                 ObjectManager.Get<Obj_AI_Hero>()
                     .Where(
                         h =>
-                            h.NetworkId != input.Unit.NetworkId &&
+                            h.NetworkId != originalUnit.NetworkId &&
                             h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
             {
                 input.Unit = enemy;
                 var prediction = Prediction.GetPrediction(input, false, false);
                 if (prediction.Hitchance >= HitChance.High)
                 {
-                    result.Add(new PosibleTarget { Position = prediction.UnitPosition.To2D(), Unit = enemy });
+                    result.Add(new PossibleTarget { Position = prediction.UnitPosition.To2D(), Unit = enemy });
                 }
             }
             return result;
@@ -563,15 +564,15 @@ namespace LeagueSharp.Common
             public static PredictionOutput GetPrediction(PredictionInput input)
             {
                 var mainTargetPrediction = Prediction.GetPrediction(input, false, true);
-                var posibleTargets = new List<PosibleTarget>
+                var posibleTargets = new List<PossibleTarget>
                 {
-                    new PosibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
+                    new PossibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
                 };
 
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     //Add the posible targets  in range:
-                    posibleTargets.AddRange(GetPosibleTargets(input));
+                    posibleTargets.AddRange(GetPossibleTargets(input));
                 }
 
                 while (posibleTargets.Count > 1)
@@ -627,15 +628,15 @@ namespace LeagueSharp.Common
             public static PredictionOutput GetPrediction(PredictionInput input)
             {
                 var mainTargetPrediction = Prediction.GetPrediction(input, false, true);
-                var posibleTargets = new List<PosibleTarget>
+                var posibleTargets = new List<PossibleTarget>
                 {
-                    new PosibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
+                    new PossibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
                 };
 
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     //Add the posible targets  in range:
-                    posibleTargets.AddRange(GetPosibleTargets(input));
+                    posibleTargets.AddRange(GetPossibleTargets(input));
                 }
 
                 if (posibleTargets.Count > 1)
@@ -717,14 +718,14 @@ namespace LeagueSharp.Common
             public static PredictionOutput GetPrediction(PredictionInput input)
             {
                 var mainTargetPrediction = Prediction.GetPrediction(input, false, true);
-                var posibleTargets = new List<PosibleTarget>
+                var posibleTargets = new List<PossibleTarget>
                 {
-                    new PosibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
+                    new PossibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
                 };
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     //Add the posible targets  in range:
-                    posibleTargets.AddRange(GetPosibleTargets(input));
+                    posibleTargets.AddRange(GetPossibleTargets(input));
                 }
 
                 if (posibleTargets.Count > 1)
@@ -802,7 +803,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal class PosibleTarget
+        internal class PossibleTarget
         {
             public Vector2 Position;
             public Obj_AI_Base Unit;
