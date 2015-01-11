@@ -365,47 +365,38 @@ namespace LeagueSharp.Common
 
                 var targets =
                     ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => !ignoredChamps.Any(ignored => ignored.NetworkId == hero.NetworkId) && IsValidTarget(hero, range, type, ignoreShieldSpells));
+                        .Where(hero => ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) && IsValidTarget(hero, range, type, ignoreShieldSpells));
 
                 switch (targetingMode)
                 {
                     case TargetingMode.LowHP:
-                        return targets.OrderBy(hero => hero.Health).FirstOrDefault();
+                        return targets.MinOrDefault(hero => hero.Health);
 
                     case TargetingMode.MostAD:
                         return
-                            targets.OrderByDescending(hero => hero.BaseAttackDamage + hero.FlatPhysicalDamageMod)
-                                .FirstOrDefault();
+                            targets.MaxOrDefault(hero => hero.BaseAttackDamage + hero.FlatPhysicalDamageMod);
 
                     case TargetingMode.MostAP:
                         return
-                            targets.OrderByDescending(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod)
-                                .FirstOrDefault();
+                            targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
 
                     case TargetingMode.Closest:
-                        return targets.OrderBy(hero => champion.Distance(hero, true)).FirstOrDefault();
+                        return targets.MinOrDefault(hero => champion.Distance(hero, true));
 
                     case TargetingMode.NearMouse:
                         return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
 
                     case TargetingMode.AutoPriority:
                         return
-                            targets.OrderByDescending(
-                                hero =>
-                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero))
-                                .FirstOrDefault();
+                            targets.MaxOrDefault(hero => champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero));
 
                     case TargetingMode.LessAttack:
                         return
-                            targets.OrderBy(
-                                hero => hero.Health - champion.CalcDamage(hero, Damage.DamageType.Physical, hero.Health))
-                                .FirstOrDefault();
+                            targets.MaxOrDefault(hero => champion.CalcDamage(hero, Damage.DamageType.Physical, 100) / (1 + hero.Health) * GetPriority(hero));
 
                     case TargetingMode.LessCast:
                         return
-                            targets.OrderBy(
-                                hero => hero.Health - champion.CalcDamage(hero, Damage.DamageType.Magical, hero.Health))
-                                .FirstOrDefault();
+                            targets.MaxOrDefault(hero => champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) * GetPriority(hero));
                 }
             }
             catch (Exception e)
