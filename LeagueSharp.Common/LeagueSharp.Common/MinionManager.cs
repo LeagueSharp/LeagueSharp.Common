@@ -22,7 +22,6 @@
 
 #region
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
@@ -69,23 +68,11 @@ namespace LeagueSharp.Common
         {
             var result = (from minion in ObjectManager.Get<Obj_AI_Minion>()
                 where minion.IsValidTarget(range, false, @from)
-                let minionTeam = minion.Team
                 where
-                    team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
-                    team == MinionTeam.Ally &&
-                    minionTeam ==
-                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
-                    team == MinionTeam.Enemy &&
-                    minionTeam ==
-                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
-                    team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
-                    team == MinionTeam.NotAllyForEnemy &&
-                    (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
-                    team == MinionTeam.All
-                where
-                    minion.IsMelee() && type == MinionTypes.Melee || !minion.IsMelee() && type == MinionTypes.Ranged ||
-                    type == MinionTypes.All
-                where IsMinion(minion) || minionTeam == GameObjectTeam.Neutral
+                    minion.IsValidNeutral(team) || minion.IsValidAlly(team) || minion.IsValidEnemy(team) ||
+                    minion.IsValidAllyOrNeutral(team)
+                where type.IsAll() || (minion.IsMelee() && type.IsMelee()) || (!minion.IsMelee() && type.IsRanged())
+                where IsMinion(minion) || minion.Team.IsNeutral()
                 select minion).Cast<Obj_AI_Base>().ToList();
 
             switch (order)
@@ -126,7 +113,7 @@ namespace LeagueSharp.Common
             var result = new Vector2();
             var minionCount = 0;
 
-            range = range * range;
+            range *= range;
 
             if (minionPositions.Count == 0)
             {
@@ -139,16 +126,18 @@ namespace LeagueSharp.Common
                 var subGroups = GetCombinations(minionPositions);
                 foreach (var subGroup in subGroups)
                 {
-                    if (subGroup.Count > 0)
+                    if (subGroup.Count <= 0)
                     {
-                        var circle = MEC.GetMec(subGroup);
+                        continue;
+                    }
 
-                        if (circle.Radius <= width &&
-                            Vector2.DistanceSquared(circle.Center, ObjectManager.Player.ServerPosition.To2D()) <= range)
-                        {
-                            minionCount = subGroup.Count;
-                            return new FarmLocation(circle.Center, minionCount);
-                        }
+                    var circle = MEC.GetMec(subGroup);
+
+                    if (circle.Radius <= width &&
+                        circle.Center.Distance(ObjectManager.Player.ServerPosition.To2D(), true) <= range)
+                    {
+                        minionCount = subGroup.Count;
+                        return new FarmLocation(circle.Center, minionCount);
                     }
                 }
             }
@@ -156,15 +145,20 @@ namespace LeagueSharp.Common
             {
                 foreach (var pos in minionPositions)
                 {
-                    if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range)
+                    if (pos.Distance(ObjectManager.Player.ServerPosition.To2D(), true) > range)
                     {
-                        var count = minionPositions.Count(pos2 => Vector2.DistanceSquared(pos, pos2) <= width * width);
-                        if (count >= minionCount)
-                        {
-                            result = pos;
-                            minionCount = count;
-                        }
+                        continue;
                     }
+
+                    var count = minionPositions.Count(pos2 => pos.Distance(pos2, true) <= width * width);
+
+                    if (count < minionCount)
+                    {
+                        continue;
+                    }
+
+                    result = pos;
+                    minionCount = count;
                 }
             }
 
@@ -194,19 +188,22 @@ namespace LeagueSharp.Common
 
             foreach (var pos in minionPositions)
             {
-                if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range * range)
+                if (pos.Distance(ObjectManager.Player.ServerPosition.To2D(), true) > range * range)
                 {
-                    var endPos = startPos + range * (pos - startPos).Normalized();
-
-                    var count =
-                        minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
-
-                    if (count >= minionCount)
-                    {
-                        result = endPos;
-                        minionCount = count;
-                    }
+                    continue;
                 }
+
+                var endPos = startPos + range * (pos - startPos).Normalized();
+
+                var count = minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
+
+                if (count < minionCount)
+                {
+                    continue;
+                }
+
+                result = endPos;
+                minionCount = count;
             }
 
             return new FarmLocation(result, minionCount);
@@ -251,7 +248,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns all the subgroup combinations that can be made from a group
         /// </summary>
-        private static List<List<Vector2>> GetCombinations(List<Vector2> allValues)
+        private static IEnumerable<List<Vector2>> GetCombinations(IReadOnlyCollection<Vector2> allValues)
         {
             var collection = new List<List<Vector2>>();
             for (var counter = 0; counter < (1 << allValues.Count); ++counter)
@@ -273,6 +270,90 @@ namespace LeagueSharp.Common
                 Position = position;
                 MinionsHit = minionsHit;
             }
+        }
+    }
+
+    internal static class Utilities
+    {
+        public static readonly GameObjectTeam Team = ObjectManager.Player.Team;
+
+        public static bool IsAlly(this MinionTeam team)
+        {
+            return team.Equals(MinionTeam.Ally);
+        }
+
+        public static bool IsNeutral(this MinionTeam team)
+        {
+            return team.Equals(MinionTeam.Neutral);
+        }
+
+        public static bool IsEnemy(this MinionTeam team)
+        {
+            return team.Equals(MinionTeam.Enemy);
+        }
+
+        public static bool IsNeutral(this GameObjectTeam team)
+        {
+            return team.Equals(GameObjectTeam.Neutral);
+        }
+
+        public static bool IsAlly(this GameObjectTeam team)
+        {
+            return Team.Equals(GameObjectTeam.Chaos)
+                ? team.Equals(GameObjectTeam.Chaos)
+                : team.Equals(GameObjectTeam.Order);
+        }
+
+        public static bool IsEnemy(this GameObjectTeam team)
+        {
+            return Team.Equals(GameObjectTeam.Chaos)
+                ? team.Equals(GameObjectTeam.Order)
+                : team.Equals(GameObjectTeam.Chaos);
+        }
+
+        public static bool IsNotAllyForEnemy(this MinionTeam team)
+        {
+            return team.Equals(MinionTeam.NotAllyForEnemy);
+        }
+
+        public static bool IsAll(this MinionTeam team)
+        {
+            return team.Equals(MinionTeam.All);
+        }
+
+        public static bool IsValidNeutral(this Obj_AI_Minion unit, MinionTeam team)
+        {
+            return team.IsNeutral() && unit.Team.IsNeutral();
+        }
+
+        public static bool IsValidAlly(this Obj_AI_Minion unit, MinionTeam team)
+        {
+            return team.IsAlly() && unit.Team.IsAlly();
+        }
+
+        public static bool IsValidEnemy(this Obj_AI_Minion unit, MinionTeam team)
+        {
+            return team.IsEnemy() && unit.Team.IsEnemy();
+        }
+
+        public static bool IsValidAllyOrNeutral(this Obj_AI_Minion unit, MinionTeam team)
+        {
+            return team.IsAll() || (team.IsNotAllyForEnemy() && (unit.Team.IsAlly() || unit.Team.IsNeutral()));
+        }
+
+        public static bool IsMelee(this MinionTypes type)
+        {
+            return type.Equals(MinionTypes.Melee);
+        }
+
+        public static bool IsRanged(this MinionTypes type)
+        {
+            return type.Equals(MinionTypes.Ranged);
+        }
+
+        public static bool IsAll(this MinionTypes type)
+        {
+            return type.Equals(MinionTypes.All);
         }
     }
 }
