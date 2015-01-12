@@ -83,6 +83,12 @@ namespace LeagueSharp.Common
             "xenzhaothrust3"
         };
 
+        //Champs whose auto attacks can't be cancelled
+        private static readonly string[] NoCancelChamps =
+        {
+            "Kalista"
+        };
+
         public static int LastAATick;
         public static bool Attack = true;
         public static bool DisableNextAttack;
@@ -272,8 +278,9 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return (Environment.TickCount + Game.Ping / 2 >=
-                        LastAATick + Player.AttackCastDelay * 1000 + extraWindup) && Move;
+                return NoCancelChamps.Contains(ObjectManager.Player.ChampionName) ||
+                    (Environment.TickCount + Game.Ping / 2 >=
+                    LastAATick + Player.AttackCastDelay * 1000 + extraWindup) && Move;
             }
 
             return false;
