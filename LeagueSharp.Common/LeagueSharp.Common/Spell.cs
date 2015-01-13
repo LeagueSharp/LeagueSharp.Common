@@ -55,10 +55,11 @@ namespace LeagueSharp.Common
         private Vector3 _rangeCheckFrom;
         private float _width;
 
-        public Spell(SpellSlot slot, float range = float.MaxValue)
+        public Spell(SpellSlot slot, float range = float.MaxValue, TargetSelector.DamageType damageType = TargetSelector.DamageType.Physical)
         {
             Slot = slot;
             Range = range;
+            DamageType = damageType;
 
             // Default values
             MinHitChance = HitChance.High;
@@ -78,6 +79,7 @@ namespace LeagueSharp.Common
         public SpellSlot Slot { get; set; }
         public float Speed { get; set; }
         public SkillshotType Type { get; set; }
+        public TargetSelector.DamageType DamageType { get; set; }
 
         public float Width
         {
@@ -702,6 +704,24 @@ namespace LeagueSharp.Common
         public bool IsInRange(Vector2 point, float range = -1)
         {
             return RangeCheckFrom.To2D().Distance(point, true) < (range < 0 ? RangeSqr : range * range);
+        }
+
+        /// <summary>
+        ///     Returns the best target found using the current TargetSelector mode.
+        ///     Please make sure to set the Spell.DamageType Property to the type of damage this spell does (if not done on initialization).
+        /// </summary>
+        public Obj_AI_Hero GetTarget(float extraRange = 0)
+        {
+            return TargetSelector.GetTarget(Range + extraRange, DamageType);
+        }
+
+        /// <summary>
+        ///     Spell will be casted on the best target found with the Spell.GetTarget method.
+        /// </summary>
+        public CastStates CastOnBestTarget()
+        {
+            var target = GetTarget();
+            return target != null ? Cast(target) : CastStates.NotCasted;
         }
     }
 }
