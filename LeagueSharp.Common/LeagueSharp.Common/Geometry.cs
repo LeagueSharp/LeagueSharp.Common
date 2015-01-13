@@ -127,7 +127,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Converts the Vector2 to Vector3. (Z = NavMesh.GetHeightForPosition)
         /// </summary>
-        public static Vector3 To3DNavMesh(this Vector2 v)
+        public static Vector3 To3D2(this Vector2 v)
         {
             return new Vector3(v.X, v.Y, NavMesh.GetHeightForPosition(v.X, v.Y));
         }
@@ -1145,14 +1145,14 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            ///     Draw a polygone using To3DNavMesh
+            ///     Draw a polygone using To3D2
             /// </summary>
-            public static void DrawPolygonNavMesh(Polygon polygon, Color color, int width = 1)
+            public static void DrawPolygon2(Polygon polygon, Color color, int width = 1)
             {
                 for (var i = 0; i <= polygon.Points.Count - 1; i++)
                 {
                     var nextIndex = (polygon.Points.Count - 1 == i) ? 0 : (i + 1);
-                    DrawLine(polygon.Points[i].To3DNavMesh(), polygon.Points[nextIndex].To3DNavMesh(), color, width);
+                    DrawLine(polygon.Points[i].To3D2(), polygon.Points[nextIndex].To3D2(), color, width);
                 }
             }
 
