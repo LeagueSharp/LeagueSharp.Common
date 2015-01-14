@@ -807,6 +807,9 @@ namespace LeagueSharp.Common
                 public Vector2 StartPos;
                 private readonly int _quality;
 
+                public Arc(Vector3 start, Vector3 direction, float angle, float radius, int quality = 20)
+                    : this(start.To2D(), direction.To2D(), angle, radius, quality) {}
+
                 public Arc(Vector2 start, Vector2 direction, float angle, float radius, int quality = 20)
                 {
                     StartPos = start;
@@ -836,6 +839,7 @@ namespace LeagueSharp.Common
                 public float Length;
                 public Vector2 LineEnd;
                 public Vector2 LineStart;
+                public Line(Vector3 start, Vector3 end, float length) : this(start.To2D(), end.To2D(), length) {}
 
                 public Line(Vector2 start, Vector2 end, float length)
                 {
@@ -864,6 +868,7 @@ namespace LeagueSharp.Common
                 public Vector2 Center;
                 public float Radius;
                 private readonly int _quality;
+                public Circle(Vector3 center, float radius, int quality = 20) : this(center.To2D(), radius, quality) {}
 
                 public Circle(Vector2 center, float radius, int quality = 20)
                 {
@@ -896,6 +901,7 @@ namespace LeagueSharp.Common
                 public Vector2 REnd;
                 public Vector2 RStart;
                 public float Width;
+                public Rectangle(Vector3 start, Vector3 end, float width) : this(start.To2D(), end.To2D(), width) {}
 
                 public Rectangle(Vector2 start, Vector2 end, float width)
                 {
@@ -927,6 +933,9 @@ namespace LeagueSharp.Common
                 public float InnerRadius;
                 public float OuterRadius;
                 private readonly int _quality;
+
+                public Ring(Vector3 center, float innerRadius, float outerRadius, int quality = 20)
+                    : this(center.To2D(), innerRadius, outerRadius, quality) {}
 
                 public Ring(Vector2 center, float innerRadius, float outerRadius, int quality = 20)
                 {
@@ -967,6 +976,9 @@ namespace LeagueSharp.Common
                 public Vector2 Direction;
                 public float Radius;
                 private readonly int _quality;
+
+                public Sector(Vector3 center, Vector3 direction, float angle, float radius, int quality = 20)
+                    : this(center.To2D(), direction.To2D(), angle, radius, quality) {}
 
                 public Sector(Vector2 center, Vector2 direction, float angle, float radius, int quality = 20)
                 {
