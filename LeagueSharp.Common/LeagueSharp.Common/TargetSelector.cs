@@ -321,18 +321,21 @@ namespace LeagueSharp.Common
         public static Obj_AI_Hero GetTarget(float range,
             DamageType damageType,
             bool ignoreShield = true,
-            IEnumerable<Obj_AI_Hero> ignoredChamps = null)
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
         {
-            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps);
+            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
         }
 
         private static bool IsValidTarget(Obj_AI_Base target,
             float range,
             DamageType damageType,
             bool ignoreShieldSpells = true,
-            IEnumerable<Obj_AI_Hero> ignoredChamps = null)
+            Vector3? rangeCheckFrom = null)
         {
-            return target.IsValidTarget(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range) &&
+            return target.IsValidTarget() &&
+                target.Distance(rangeCheckFrom.HasValue ? rangeCheckFrom.Value : ObjectManager.Player.ServerPosition, true) <
+                Math.Pow(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range, 2) &&
                 !IsInvulnerable(target, damageType, ignoreShieldSpells);
         }
 
@@ -340,7 +343,8 @@ namespace LeagueSharp.Common
             float range,
             DamageType type,
             bool ignoreShieldSpells = true,
-            IEnumerable<Obj_AI_Hero> ignoredChamps = null)
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
         {
             try
             {
@@ -352,7 +356,7 @@ namespace LeagueSharp.Common
 
                 if (IsValidTarget(
                     SelectedTarget, _configMenu.Item("ForceFocusSelected").GetValue<bool>() ? float.MaxValue : range,
-                    type, ignoreShieldSpells))
+                    type, ignoreShieldSpells, rangeCheckFrom))
                 {
                     return SelectedTarget;
                 }
@@ -365,7 +369,7 @@ namespace LeagueSharp.Common
 
                 var targets =
                     ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) && IsValidTarget(hero, range, type, ignoreShieldSpells));
+                        .Where(hero => ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) && IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom));
 
                 switch (targetingMode)
                 {
@@ -381,7 +385,7 @@ namespace LeagueSharp.Common
                             targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
 
                     case TargetingMode.Closest:
-                        return targets.MinOrDefault(hero => champion.Distance(hero, true));
+                        return targets.MinOrDefault(hero => (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).Distance(hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:
                         return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150

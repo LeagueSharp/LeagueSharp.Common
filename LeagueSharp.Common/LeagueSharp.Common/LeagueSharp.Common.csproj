@@ -97,7 +97,7 @@
     <Compile Include="Alerter.cs" />
     <Compile Include="AntiGapcloser.cs" />
     <Compile Include="AutoLevel.cs" />
-    <Compile Include="BetterWebClient.cs"/>
+    <Compile Include="BetterWebClient.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />

@@ -712,7 +712,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public Obj_AI_Hero GetTarget(float extraRange = 0, IEnumerable<Obj_AI_Hero> champsToIgnore = null)
         {
-            return TargetSelector.GetTarget(Range + extraRange, DamageType, true, champsToIgnore);
+            return TargetSelector.GetTarget(Range + extraRange, DamageType, true, champsToIgnore, From);
         }
 
         /// <summary>
