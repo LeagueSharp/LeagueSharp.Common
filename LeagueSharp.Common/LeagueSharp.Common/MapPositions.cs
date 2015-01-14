@@ -106,7 +106,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 9880), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 9880), 775);
                 }
             }
 
@@ -114,7 +114,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 6100), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 6100), 775);
                 }
             }
 
@@ -122,7 +122,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(1250, 6100), new Vector2(1250, 9880), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(1250, 6100), new Vector2(1250, 9880), 775);
 
                 }
             }
@@ -168,7 +168,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(10900, 13675), new Vector2(4880, 13675), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(10900, 13675), new Vector2(4880, 13675), 775);
 
                 }
             }
@@ -177,7 +177,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(10900, 13675), new Vector2(8400, 13675), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(10900, 13675), new Vector2(8400, 13675), 775);
                 }
             }
 
@@ -185,7 +185,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(8400, 13675), new Vector2(4880, 13675), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(8400, 13675), new Vector2(4880, 13675), 775);
                 }
             }
 
@@ -237,7 +237,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(3490, 3500), new Vector2(5760, 5950), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(3490, 3500), new Vector2(5760, 5950), 775);
                 }
             }
 
@@ -245,7 +245,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(3490, 3500), new Vector2(4560, 4700), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(3490, 3500), new Vector2(4560, 4700), 775);
                 }
             }
 
@@ -253,7 +253,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(4560, 4700), new Vector2(5760, 5950), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(4560, 4700), new Vector2(5760, 5950), 775);
 
                 }
             }
@@ -283,7 +283,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(11330, 11400), new Vector2(8980, 8920), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(11330, 11400), new Vector2(8980, 8920), 775);
 
                 }
             }
@@ -292,7 +292,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(11330, 11400), new Vector2(10310, 10210), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(11330, 11400), new Vector2(10310, 10210), 775);
                 }
             }
 
@@ -300,7 +300,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(10310, 10210), new Vector2(8980, 8920), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(10310, 10210), new Vector2(8980, 8920), 775);
                 }
             }
 
@@ -375,7 +375,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(3900, 1250), new Vector2(9880, 1250), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(3900, 1250), new Vector2(9880, 1250), 775);
                 }
             }
 
@@ -383,7 +383,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(3900, 1250), new Vector2(6100, 1250), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(3900, 1250), new Vector2(6100, 1250), 775);
                 }
             }
 
@@ -391,7 +391,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(6100, 1250), new Vector2(9880, 1250), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(6100, 1250), new Vector2(9880, 1250), 775);
 
                 }
             }
@@ -439,7 +439,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 4880), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 4880), 775);
 
                 }
             }
@@ -448,7 +448,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 8400), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 8400), 775);
                 }
             }
 
@@ -456,7 +456,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return new Geometry.Rectangle(new Vector2(13675, 8400), new Vector2(13675, 4880), 775).ToPolygon();
+                    return new Geometry.Polygon.Rectangle(new Vector2(13675, 8400), new Vector2(13675, 4880), 775);
                 }
             }
 
@@ -491,8 +491,8 @@ namespace LeagueSharp.Common
                     blueBase.Add(new Vector2(300, 300));
                     blueBase.Add(new Vector2(5000, 300));
                     blueBase.Add(
-                        new Geometry.Arc(
-                            new Vector2(1700, 1700), new Vector2(4000, 4000), Geometry.DegreeToRadian(90), 3200).ToPolygon());
+                        new Geometry.Polygon.Arc(
+                            new Vector2(1700, 1700), new Vector2(4000, 4000), Geometry.DegreeToRadian(90), 3200));
                     blueBase.Add(new Vector2(300, 5000));
                     return blueBase;
                 }
@@ -577,7 +577,7 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Blue_Spawn
             {
-                get { return new Geometry.Circle(new Vector2(450, 500), 800).ToPolygon(); }
+                get { return new Geometry.Polygon.Circle(new Vector2(450, 500), 800); }
             }
 
             public static Vector2 Red_Top_Turret
@@ -627,7 +627,7 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Red_Spawn
             {
-                get { return new Geometry.Circle(new Vector2(14300, 14400), 800).ToPolygon(); }
+                get { return new Geometry.Polygon.Circle(new Vector2(14300, 14400), 800); }
             }
         }
 
@@ -905,7 +905,7 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Dragon_Pit
             {
-                get { return new Geometry.Circle(new Vector2(9900, 4400), 650).ToPolygon(); }
+                get { return new Geometry.Polygon.Circle(new Vector2(9900, 4400), 650); }
             }
 
             public static Geometry.Polygon Dragon_Contest_Zone
@@ -940,7 +940,7 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Baron_Pit
             {
-                get { return new Geometry.Circle(new Vector2(4950, 10400), 650).ToPolygon(); }
+                get { return new Geometry.Polygon.Circle(new Vector2(4950, 10400), 650); }
             }
 
             public static Geometry.Polygon Baron_Contest_Zone
