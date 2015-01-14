@@ -710,9 +710,9 @@ namespace LeagueSharp.Common
         ///     Returns the best target found using the current TargetSelector mode.
         ///     Please make sure to set the Spell.DamageType Property to the type of damage this spell does (if not done on initialization).
         /// </summary>
-        public Obj_AI_Hero GetTarget(float extraRange = 0)
+        public Obj_AI_Hero GetTarget(float extraRange = 0, IEnumerable<Obj_AI_Hero> champsToIgnore = null)
         {
-            return TargetSelector.GetTarget(Range + extraRange, DamageType);
+            return TargetSelector.GetTarget(Range + extraRange, DamageType, true, champsToIgnore);
         }
 
         /// <summary>
