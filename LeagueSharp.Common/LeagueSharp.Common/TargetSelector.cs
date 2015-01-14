@@ -55,12 +55,12 @@ namespace LeagueSharp.Common
 
         public enum TargetingMode
         {
+            AutoPriority,
             LowHP,
             MostAD,
             MostAP,
             Closest,
             NearMouse,
-            AutoPriority,
             LessAttack,
             LessCast
         }
@@ -69,6 +69,7 @@ namespace LeagueSharp.Common
 
         #region Vars
 
+        public static TargetingMode Mode = TargetingMode.AutoPriority;
         private static Menu _configMenu;
         private static Obj_AI_Hero _selectedTargetObjAiHero;
 
@@ -167,7 +168,7 @@ namespace LeagueSharp.Common
             {
                 "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax",
                 "Lee Sin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain",
-                "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao"
+                "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"
             };
 
             string[] p3 =
@@ -180,7 +181,7 @@ namespace LeagueSharp.Common
             string[] p4 =
             {
                 "Ahri", "Anivia", "Annie", "Ashe", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
-                "Ezreal", "Graves", "Jinx", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "LeBlanc", "Lucian",
+                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "LeBlanc", "Lucian",
                 "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon", "Teemo",
                 "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath", "Zed",
                 "Ziggs"
@@ -231,12 +232,7 @@ namespace LeagueSharp.Common
             config.AddItem(autoPriorityItem);
             config.AddItem(
                 new MenuItem("TargetingMode", "Target Mode").SetShared()
-                    .SetValue(
-                        new StringList(
-                            new[]
-                            {
-                                "LowHP", "MostAD", "MostAP", "Closest", "NearMouse", "Priority", "LessAttack", "LessCast"
-                            }, 5)));
+                    .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
         }
 
         private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
@@ -349,10 +345,11 @@ namespace LeagueSharp.Common
             try
             {
                 if (ignoredChamps == null)
+                {
                     ignoredChamps = new List<Obj_AI_Hero>();
+                }
 
-                var targetingMode = TargetingMode.AutoPriority;
-                var damageType = (Damage.DamageType)Enum.Parse(typeof(Damage.DamageType), type.ToString());
+                var damageType = (Damage.DamageType) Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
                 if (IsValidTarget(
                     SelectedTarget, _configMenu.Item("ForceFocusSelected").GetValue<bool>() ? float.MaxValue : range,
@@ -361,17 +358,18 @@ namespace LeagueSharp.Common
                     return SelectedTarget;
                 }
 
-                if (_configMenu != null && _configMenu.Item("TargetingMode") != null)
+                if (_configMenu != null && _configMenu.Item("TargetingMode") != null &&
+                    Mode == TargetingMode.AutoPriority)
                 {
                     var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
-                    Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out targetingMode);
+                    Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out Mode);
                 }
 
                 var targets =
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(hero => ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) && IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom));
 
-                switch (targetingMode)
+                switch (Mode)
                 {
                     case TargetingMode.LowHP:
                         return targets.MinOrDefault(hero => hero.Health);
