@@ -529,7 +529,7 @@ namespace LeagueSharp.Common
         {
             var D = center1.Distance(center2);
             //The Circles dont intersect:
-            if (D > radius1 + radius2)
+            if (D > radius1 + radius2 || (D <= Math.Abs(radius1 - radius2)))
             {
                 return new Vector2[] { };
             }
