@@ -752,6 +752,11 @@ namespace LeagueSharp.Common
                 Points.Add(point);
             }
 
+            public void Add(Vector3 point)
+            {
+                Points.Add(point.To2D());
+            }
+
             public void Add(Polygon polygon)
             {
                 foreach (var point in polygon.Points)
@@ -836,23 +841,25 @@ namespace LeagueSharp.Common
 
             public class Line : Polygon
             {
-                public float Length;
-                public Vector2 LineEnd;
                 public Vector2 LineStart;
-                public Line(Vector3 start, Vector3 end, float length) : this(start.To2D(), end.To2D(), length) {}
-
-                public Line(Vector2 start, Vector2 end, float length)
+                public Vector2 LineEnd;
+                public float Length
                 {
-                    LineStart = start;
-                    LineEnd = (end - start).Normalized() * length + start;
-                    Length = length;
-                    UpdatePolygon();
+                    get { return LineStart.Distance(LineEnd); }
+                    set { LineEnd = (LineEnd - LineStart).Normalized() * value + LineStart; }
                 }
 
-                public void ChangeLength(float newLenght)
+                public Line(Vector3 start, Vector3 end, float length = -1) : this(start.To2D(), end.To2D(), length) {}
+
+                public Line(Vector2 start, Vector2 end, float length = -1)
                 {
-                    LineEnd = (LineEnd - LineStart).Normalized() * newLenght + LineStart;
-                    Length = newLenght;
+                    LineStart = start;
+                    LineEnd = end;
+                    if (length > 0)
+                    {
+                        Length = length;
+                    }
+                    UpdatePolygon();
                 }
 
                 public void UpdatePolygon()
@@ -868,6 +875,7 @@ namespace LeagueSharp.Common
                 public Vector2 Center;
                 public float Radius;
                 private readonly int _quality;
+
                 public Circle(Vector3 center, float radius, int quality = 20) : this(center.To2D(), radius, quality) {}
 
                 public Circle(Vector2 center, float radius, int quality = 20)
@@ -896,20 +904,18 @@ namespace LeagueSharp.Common
 
             public class Rectangle : Polygon
             {
-                public Vector2 Direction;
-                public Vector2 Perpendicular;
-                public Vector2 REnd;
-                public Vector2 RStart;
+                public Vector2 Direction { get { return (End - Start).Normalized(); } }
+                public Vector2 Perpendicular { get { return Direction.Perpendicular(); } }
+                public Vector2 End;
+                public Vector2 Start;
                 public float Width;
                 public Rectangle(Vector3 start, Vector3 end, float width) : this(start.To2D(), end.To2D(), width) {}
 
                 public Rectangle(Vector2 start, Vector2 end, float width)
                 {
-                    RStart = start;
-                    REnd = end;
+                    Start = start;
+                    End = end;
                     Width = width;
-                    Direction = (end - start).Normalized();
-                    Perpendicular = Direction.Perpendicular();
                     UpdatePolygon();
                 }
 
@@ -917,13 +923,13 @@ namespace LeagueSharp.Common
                 {
                     Points.Clear();
                     Points.Add(
-                        RStart + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                        Start + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
                     Points.Add(
-                        RStart - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                        Start - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
                     Points.Add(
-                        REnd - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+                        End - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
                     Points.Add(
-                        REnd + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+                        End + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
                 }
             }
 
