@@ -361,7 +361,12 @@ namespace LeagueSharp.Common
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 2051, 2049, 3067, 3044, 3211, 3010, 3105, 3801, 3136, 2045, 3185, 3102, 3071, 3083, 3084, 3022, 3056, 3709, 3717, 3721, 3725 },
+            Into =
+                new[]
+                {
+                    2051, 2049, 3067, 3044, 3211, 3010, 3105, 3801, 3136, 2045, 3185, 3102, 3071, 3083, 3084, 3022, 3056,
+                    3709, 3717, 3721, 3725
+                },
             InStore = true,
             FlatHPPoolMod = 150f,
             Tags = new[] { "Health" },
@@ -1036,15 +1041,16 @@ namespace LeagueSharp.Common
         public static Item Guardians_Horn = new Item
         {
             Name = "Guardian's Horn",
-            GoldBase = 445,
-            GoldPrice = 1025,
+            GoldBase = 435,
+            GoldPrice = 1015,
             GoldSell = 718,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
             From = new[] { 1006, 1028 },
             InStore = true,
-            FlatHPPoolMod = 180f,
+            FlatHPPoolMod = 200f,
+            PercentHPRegenMod = 1.25f,
             Tags = new[] { "Health", "SpellBlock", "HealthRegen", "Armor", "Active", "NonbootsMovement" },
             Id = 2051
         };
@@ -1473,8 +1479,8 @@ namespace LeagueSharp.Common
         public static Item Guardian_Angel = new Item
         {
             Name = "Guardian Angel",
-            GoldBase = 1250,
-            GoldPrice = 2850,
+            GoldBase = 1200,
+            GoldPrice = 2800,
             GoldSell = 1140,
             Purchasable = true,
             Stacks = 1,
@@ -1568,7 +1574,7 @@ namespace LeagueSharp.Common
             From = new[] { 1038, 1037, 1018 },
             InStore = true,
             FlatPhysicalDamageMod = 80f,
-            FlatCritChanceMod = 0.25f,
+            FlatCritChanceMod = 0.20f,
             Tags = new[] { "Damage", "CriticalStrike" },
             Id = 3031
         };
@@ -1715,7 +1721,7 @@ namespace LeagueSharp.Common
             InStore = true,
             PercentMovementSpeedMod = 0.05f,
             PercentAttackSpeedMod = 0.5f,
-            FlatCritChanceMod = 0.3f,
+            FlatCritChanceMod = 0.35f,
             Tags = new[] { "CriticalStrike", "AttackSpeed", "NonbootsMovement" },
             Id = 3046
         };
@@ -2102,7 +2108,12 @@ namespace LeagueSharp.Common
             PercentMovementSpeedMod = 0.08f,
             PercentAttackSpeedMod = 0.3f,
             FlatCritChanceMod = 0.1f,
-            Tags = new[] { "Health", "Damage", "AttackSpeed", "SpellDamage", "Mana", "CriticalStrike", "NonbootsMovement", "OnHit" },
+            Tags =
+                new[]
+                {
+                    "Health", "Damage", "AttackSpeed", "SpellDamage", "Mana", "CriticalStrike", "NonbootsMovement",
+                    "OnHit"
+                },
             Id = 3078
         };
 
@@ -2947,7 +2958,12 @@ namespace LeagueSharp.Common
             InStore = true,
             FlatPhysicalDamageMod = 30f,
             FlatCritChanceMod = 0.15f,
-            Tags = new[] { "Damage", "CriticalStrike", "AttackSpeed", "Active", "CooldownReduction", "NonbootsMovement", "ArmorPenetration" },
+            Tags =
+                new[]
+                {
+                    "Damage", "CriticalStrike", "AttackSpeed", "Active", "CooldownReduction", "NonbootsMovement",
+                    "ArmorPenetration"
+                },
             Id = 3142
         };
 
@@ -3265,8 +3281,8 @@ namespace LeagueSharp.Common
         public static Item Morellonomicon = new Item
         {
             Name = "Morellonomicon",
-            GoldBase = 680,
-            GoldPrice = 2100,
+            GoldBase = 880,
+            GoldPrice = 2300,
             GoldSell = 1470,
             Purchasable = true,
             Stacks = 1,
@@ -5733,6 +5749,28 @@ namespace LeagueSharp.Common
             InStore = true,
             FlatHPPoolMod = 200f,
             Tags = new[] { "Health", "HealthRegen" },
+            Id = 3801
+        };
+
+        #endregion
+
+        #region Zz'Rot Portal
+
+        public static Item ZzRot_Portal = new Item
+        {
+            Name = "Zz'Rot Portal",
+            GoldBase = 950,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 2053, 1057 },
+            InStore = true,
+            FlatArmorMod = 50f,
+            FlatSpellBlockMod = 50f,
+            PercentHPRegenMod = 1f,
+            Tags = new[] { "Armor", "SpellBlock", "HealthRegen" },
             Id = 3801
         };
 
