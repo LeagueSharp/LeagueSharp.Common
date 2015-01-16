@@ -718,10 +718,10 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Spell will be casted on the best target found with the Spell.GetTarget method.
         /// </summary>
-        public CastStates CastOnBestTarget()
+        public CastStates CastOnBestTarget(float extraRange = 0, bool packetCast = false, bool aoe = false)
         {
-            var target = GetTarget();
-            return target != null ? Cast(target) : CastStates.NotCasted;
+            var target = GetTarget(extraRange);
+            return target != null ? Cast(target, packetCast, aoe) : CastStates.NotCasted;
         }
     }
 }

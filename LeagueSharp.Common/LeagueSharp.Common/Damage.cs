@@ -88,7 +88,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Aatrox",
-                IsActive = (source, target) => (source.HasBuff("aatroxwpower") && source.HasBuff("aatroxwonhpowerbuff")),
+                IsActive = (source, target) => (source.HasBuff("AatroxWPower") && source.HasBuff("AatroxWONHPowerBuff")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
