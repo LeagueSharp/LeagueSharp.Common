@@ -162,6 +162,12 @@ namespace LeagueSharp.Common
             return target.BaseAttackDamage + target.FlatPhysicalDamageMod;
         }
 
+        public static bool IsChampion(this Obj_AI_Base unit, string championName)
+        {
+            var hero = unit as Obj_AI_Hero;
+            return hero != null && hero.IsValid && hero.ChampionName.Equals(championName);
+        }
+
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
             return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
