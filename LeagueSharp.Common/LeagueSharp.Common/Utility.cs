@@ -43,7 +43,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static TSource Find<TSource>(this IEnumerable<TSource> source, Predicate<TSource> match)
         {
-            return (source is List<TSource> ? source as List<TSource> : source.ToList()).Find(match);
+            return (source as List<TSource> ?? source.ToList()).Find(match);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static List<TSource> FindAll<TSource>(this IEnumerable<TSource> source, Predicate<TSource> match)
         {
-            return (source is List<TSource> ? source as List<TSource> : source.ToList()).FindAll(match);
+            return (source as List<TSource> ?? source.ToList()).FindAll(match);
         }
 
         /// <summary>
