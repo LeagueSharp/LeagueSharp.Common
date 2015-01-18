@@ -25,7 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.Network.Packets;
 using SharpDX;
 
 #endregion
@@ -55,7 +54,9 @@ namespace LeagueSharp.Common
         private Vector3 _rangeCheckFrom;
         private float _width;
 
-        public Spell(SpellSlot slot, float range = float.MaxValue, TargetSelector.DamageType damageType = TargetSelector.DamageType.Physical)
+        public Spell(SpellSlot slot,
+            float range = float.MaxValue,
+            TargetSelector.DamageType damageType = TargetSelector.DamageType.Physical)
         {
             Slot = slot;
             Range = range;
@@ -223,7 +224,7 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-            if (args.GetPacketId() == Network.Packets.Packet.GetPacketId<PKT_ChargedSpell>() &&
+            /* if (args.GetPacketId() == Network.Packets.Packet.GetPacketId<PKT_ChargedSpell>() &&
                 Environment.TickCount - _chargedReqSentT < 3000)
             {
                 var chargedData = new PKT_ChargedSpell();
@@ -236,6 +237,7 @@ namespace LeagueSharp.Common
 
                 args.Process = false;
             }
+            */
         }
 
         private void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
@@ -510,7 +512,7 @@ namespace LeagueSharp.Common
 
         private static void ShootChargedSpell(Vector3 position)
         {
-            new PKT_ChargedSpell
+            /*new PKT_ChargedSpell
             {
                 NetworkId = ObjectManager.Player.NetworkId,
                 SpellSlot = (byte) SpellSlot.Q,
@@ -518,6 +520,8 @@ namespace LeagueSharp.Common
                 Unknown1 = true,
                 Unknown2 = false
             }.Encode().SendAsPacket();
+        
+             */
         }
 
         /// <summary>
@@ -708,7 +712,8 @@ namespace LeagueSharp.Common
 
         /// <summary>
         ///     Returns the best target found using the current TargetSelector mode.
-        ///     Please make sure to set the Spell.DamageType Property to the type of damage this spell does (if not done on initialization).
+        ///     Please make sure to set the Spell.DamageType Property to the type of damage this spell does (if not done on
+        ///     initialization).
         /// </summary>
         public Obj_AI_Hero GetTarget(float extraRange = 0, IEnumerable<Obj_AI_Hero> champsToIgnore = null)
         {

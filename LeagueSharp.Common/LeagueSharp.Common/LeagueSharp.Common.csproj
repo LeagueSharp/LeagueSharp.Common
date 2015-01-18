@@ -97,7 +97,9 @@
     <Compile Include="Alerter.cs" />
     <Compile Include="AntiGapcloser.cs" />
     <Compile Include="AutoLevel.cs" />
-    <Compile Include="BetterWebClient.cs" />
+    <Compile Include="BetterWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Config.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />
@@ -107,16 +109,9 @@
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="Interrupter.cs" />
     <Compile Include="LastCastedSpell.cs" />
-	<Compile Include="MapPositions.cs" />
+    <Compile Include="MapPositions.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuWrapper.cs" />
-    <Compile Include="Network\Packets\PKT_BuyItemReq.cs" />
-    <Compile Include="Network\Packets\PKT_NPC_CastSpellReq.cs" />
-    <Compile Include="Network\Packets\PKT_SwapItemAns.cs" />
-    <Compile Include="Network\Packets\PKT_SwapItemReq.cs" />
-    <Compile Include="Network\PacketAttribute.cs" />
-    <Compile Include="Network\Serialization\SerializeAttribute.cs" />
-    <Compile Include="Network\Serialization\Serializer.cs" />
     <Compile Include="Orbwalking.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
@@ -129,23 +124,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Network\Cryptography\Add.cs" />
-    <Compile Include="Network\Cryptography\Dec.cs" />
-    <Compile Include="Network\Cryptography\Inc.cs" />
-    <Compile Include="Network\Cryptography\Not.cs" />
-    <Compile Include="Network\Cryptography\Operations.cs" />
-    <Compile Include="Network\Cryptography\Rol.cs" />
-    <Compile Include="Network\Cryptography\Ror.cs" />
-    <Compile Include="Network\Cryptography\Sub.cs" />
-    <Compile Include="Network\Cryptography\Xor.cs" />
-    <Compile Include="Network\Packets\PKT_ChargedSpell.cs" />
-    <Compile Include="Network\Packets\PKT_InteractReq.cs" />
-    <Compile Include="Network\Packets\PKT_RemoveItemAns.cs" />
-    <Compile Include="Network\Packets\PKT_RemoveItemReq.cs" />
-    <Compile Include="Network\Packets\Packet.cs" />
-    <Compile Include="Network\Packets\PKT_NPC_UpgradeSpellReq.cs" />
-    <Compile Include="Network\Cryptography\IOperation.cs" />
-    <Compile Include="Network\Util\Extensions.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="TargetSelector.cs" />
