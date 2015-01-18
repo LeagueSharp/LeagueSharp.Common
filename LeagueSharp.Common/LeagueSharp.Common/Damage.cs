@@ -5168,9 +5168,15 @@ namespace LeagueSharp.Common
 
             if (summonerSpell == SummonerSpell.Smite)
             {
+                var hero = target as Obj_AI_Hero;
+                if (hero != null)
+                {
+                    return 20 + 8 * hero.Level;
+                }
+
                 return
                     new double[]
-                    { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
+                    {390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000}[
                         source.Level - 1];
             }
 
