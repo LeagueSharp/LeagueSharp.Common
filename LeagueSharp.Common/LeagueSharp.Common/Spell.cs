@@ -671,21 +671,6 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns if the point is in range of the spell.
-        /// </summary>
-        [Obsolete("Use IsInRange(Vector3 obj, float range)", false)]
-        public bool InRange(Vector3 point, float r = -1)
-        {
-            return IsInRange(point, r);
-        }
-
-        [Obsolete("Use IsInRange(GameObject obj, float range)", false)]
-        public bool InRange(Obj_AI_Base unit, float r = -1)
-        {
-            return IsInRange(unit, r);
-        }
-
-        /// <summary>
         ///     Returns if the GameObject is in range of the spell.
         /// </summary>
         public bool IsInRange(GameObject obj, float range = -1)
