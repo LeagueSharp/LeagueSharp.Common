@@ -1422,7 +1422,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public static class UpdateModel
             {
-                public static byte Header = 0x1A;
+                public static byte Header = 0x17;
 
                 public static GamePacket Encoded(Struct packetStruct)
                 {
