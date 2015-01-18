@@ -5168,10 +5168,9 @@ namespace LeagueSharp.Common
 
             if (summonerSpell == SummonerSpell.Smite)
             {
-                var hero = target as Obj_AI_Hero;
-                if (hero != null)
+                if (target is Obj_AI_Hero)
                 {
-                    return 20 + 8 * hero.Level;
+                    return 20 + 8 * source.Level;
                 }
 
                 return
