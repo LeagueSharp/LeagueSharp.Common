@@ -42,7 +42,7 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
             Game.OnGameUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnInstantStopAttack += ObjAiHeroOnOnInstantStopAttack;
+            Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -58,13 +58,13 @@ namespace LeagueSharp.Common
             LastTick = Environment.TickCount;
         }
 
-        private static void ObjAiHeroOnOnInstantStopAttack(Obj_AI_Base sender, GameObjectInstantStopAttackEventArgs args)
+        private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
-            if (sender.IsValid && (args.BitData & 1) == 0 && ((args.BitData >> 4) & 1) == 1)
+            if (spellbook.Owner.IsValid)
             {
-                if (ActiveAttacks.ContainsKey(sender.NetworkId))
+                if (ActiveAttacks.ContainsKey(spellbook.Owner.NetworkId))
                 {
-                    ActiveAttacks.Remove(sender.NetworkId);
+                    ActiveAttacks.Remove(spellbook.Owner.NetworkId);
                 }
             }
         }

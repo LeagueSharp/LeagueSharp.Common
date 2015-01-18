@@ -195,7 +195,7 @@ namespace LeagueSharp.Common
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Game.OnGameSendPacket += Game_OnGameSendPacket;
-            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
+            Spellbook.OnCastSpell += SpellbookOnCastSpell;
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace LeagueSharp.Common
             */
         }
 
-        private void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
+        private void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
         {
             if (args.Slot != Slot)
             {

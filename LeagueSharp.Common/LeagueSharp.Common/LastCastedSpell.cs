@@ -65,12 +65,12 @@ namespace LeagueSharp.Common
         static LastCastedSpell()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
+            Spellbook.OnCastSpell += SpellbookOnCastSpell;
         }
 
-        static void Spellbook_OnCastSpell(GameObject sender, SpellbookCastSpellEventArgs args)
+        static void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
         {
-            if (sender.IsMe)
+            if (spellbook.Owner.IsMe)
             {
                 LastCastPacketSent = new LastCastPacketSentEntry(
                         args.Slot, Environment.TickCount, (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0 );
