@@ -308,6 +308,28 @@ namespace LeagueSharp.Common
             return result;
         }
 
+        public static List<Vector2Time> GetWaypointsWithTime(this Obj_AI_Base unit)
+        {
+            var wp = unit.GetWaypoints();
+
+            if (wp.Count < 1)
+            {
+                return null;
+            }
+
+            var result = new List<Vector2Time>();
+            var speed = unit.MoveSpeed;
+            var lastPoint = wp[0];
+
+            foreach (var point in wp)
+            {
+                result.Add(new Vector2Time(point, point.Distance(lastPoint) / speed));
+                lastPoint = point;
+            }
+
+            return result;
+        }
+
         /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
@@ -792,6 +814,18 @@ namespace LeagueSharp.Common
                 }
             }
             return true;
+        }
+    }
+
+    public class Vector2Time
+    {
+        public Vector2 Position;
+        public float Time;
+
+        public Vector2Time(Vector2 pos, float time)
+        {
+            Position = pos;
+            Time = time;
         }
     }
 }
