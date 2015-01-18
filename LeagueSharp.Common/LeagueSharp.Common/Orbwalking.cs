@@ -409,7 +409,7 @@ namespace LeagueSharp.Common
         {
             if (spellbook.Owner.IsValid && spellbook.Owner.IsMe)
             {
-                ResetAutoAttackTimer();
+                //ResetAutoAttackTimer();
             }
         }
 
