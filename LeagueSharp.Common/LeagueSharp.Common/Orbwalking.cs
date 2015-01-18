@@ -407,9 +407,9 @@ namespace LeagueSharp.Common
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
-            if (spellbook.Owner.IsValid && spellbook.Owner.IsMe)
+            if (spellbook.Owner.IsValid && spellbook.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
             {
-                //ResetAutoAttackTimer();
+                ResetAutoAttackTimer();
             }
         }
 

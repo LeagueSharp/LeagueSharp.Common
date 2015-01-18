@@ -42,7 +42,7 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
             Game.OnGameUpdate += Game_OnGameUpdate;
-            //Spellbook.OnStopCast += SpellbookOnStopCast;
+            Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -60,7 +60,7 @@ namespace LeagueSharp.Common
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
-            if (spellbook.Owner.IsValid)
+            if (spellbook.Owner.IsValid && args.DestroyMissile && args.StopAnimation)
             {
                 if (ActiveAttacks.ContainsKey(spellbook.Owner.NetworkId))
                 {
