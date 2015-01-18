@@ -42,7 +42,7 @@ namespace LeagueSharp.Common
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
             Game.OnGameUpdate += Game_OnGameUpdate;
-            Spellbook.OnStopCast += SpellbookOnStopCast;
+            //Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
