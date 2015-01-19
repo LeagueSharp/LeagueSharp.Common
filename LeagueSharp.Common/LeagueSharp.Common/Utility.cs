@@ -412,11 +412,22 @@ namespace LeagueSharp.Common
             return NavMesh.GetCell((short) nav.X, (short) nav.Y);
         }
 
+        [Obsolete("Use CountEnemiesInRange", false)]
+        public static int CountEnemysInRange(this Obj_AI_Base unit, float range)
+        {
+            return unit.ServerPosition.CountEnemiesInRange(range);
+        }
+
+        [Obsolete("Use CountEnemiesInRange", false)]
+        public static int CountEnemysInRange(this Vector3 point, float range)
+        {
+            return point.CountEnemiesInRange(range);
+        }
+
         /// <summary>
         ///     Counts the enemies in range of Player.
         /// </summary>
-        [Obsolete("Use CountEnemysInRange(this Obj_AI_Base unit, int range)", false)]
-        public static int CountEnemysInRange(float range)
+        public static int CountEnemiesInRange(float range)
         {
             return ObjectManager.Player.CountEnemysInRange(range);
         }
@@ -424,7 +435,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Counts the enemies in range of Unit.
         /// </summary>
-        public static int CountEnemysInRange(this Obj_AI_Base unit, float range)
+        public static int CountEnemiesInRange(this Obj_AI_Base unit, float range)
         {
             return unit.ServerPosition.CountEnemysInRange(range);
         }
@@ -432,7 +443,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Counts the enemies in range of point.
         /// </summary>
-        public static int CountEnemysInRange(this Vector3 point, float range)
+        public static int CountEnemiesInRange(this Vector3 point, float range)
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()

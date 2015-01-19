@@ -426,7 +426,8 @@ namespace LeagueSharp.Common
     }
 
     /// <summary>
-    ///     This TS attempts to always lock the same target, useful for people getting targets for each spell, or for champions that have to burst 1 target.
+    ///     This TS attempts to always lock the same target, useful for people getting targets for each spell, or for champions
+    ///     that have to burst 1 target.
     /// </summary>
     public class LockedTargetSelector
     {
