@@ -194,7 +194,7 @@ namespace LeagueSharp.Common
             _chargedCastedT = 0;
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            Game.OnGameSendPacket += Game_OnGameSendPacket;
+            Spellbook.OnUpdateChargedSpell += Spellbook_OnUpdateChargedSpell;
             Spellbook.OnCastSpell += SpellbookOnCastSpell;
         }
 
@@ -221,23 +221,13 @@ namespace LeagueSharp.Common
                 _chargedReqSentT = Environment.TickCount;
             }
         }
-
-        private void Game_OnGameSendPacket(GamePacketEventArgs args)
+        
+        void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
-            /* if (args.GetPacketId() == Network.Packets.Packet.GetPacketId<PKT_ChargedSpell>() &&
-                Environment.TickCount - _chargedReqSentT < 3000)
+            if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 3000)
             {
-                var chargedData = new PKT_ChargedSpell();
-                chargedData.Decode(args.PacketData);
-
-                if (chargedData.NetworkId != ObjectManager.Player.NetworkId)
-                {
-                    return;
-                }
-
                 args.Process = false;
             }
-            */
         }
 
         private void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
@@ -389,7 +379,7 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    ShootChargedSpell(prediction.CastPosition);
+                    ShootChargedSpell(Slot, prediction.CastPosition);
                 }
                 else
                 {
@@ -492,7 +482,7 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    ShootChargedSpell(position);
+                    ShootChargedSpell(Slot, position);
                 }
                 else
                 {
@@ -510,18 +500,9 @@ namespace LeagueSharp.Common
             return false;
         }
 
-        private static void ShootChargedSpell(Vector3 position)
+        private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
         {
-            /*new PKT_ChargedSpell
-            {
-                NetworkId = ObjectManager.Player.NetworkId,
-                SpellSlot = (byte) SpellSlot.Q,
-                TargetPosition = position,
-                Unknown1 = true,
-                Unknown2 = false
-            }.Encode().SendAsPacket();
-        
-             */
+            ObjectManager.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast);
         }
 
         /// <summary>
