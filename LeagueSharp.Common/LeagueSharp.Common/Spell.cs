@@ -224,7 +224,7 @@ namespace LeagueSharp.Common
         
         void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
-            if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 3000)
+            if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 200)
             {
                 args.Process = false;
             }
@@ -236,6 +236,7 @@ namespace LeagueSharp.Common
             {
                 return;
             }
+
             if ((Environment.TickCount - _chargedReqSentT > 500))
             {
                 if (IsCharging)
@@ -502,6 +503,7 @@ namespace LeagueSharp.Common
 
         private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
         {
+            ObjectManager.Player.Spellbook.CastSpell(slot, position, false);
             ObjectManager.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast);
         }
 
