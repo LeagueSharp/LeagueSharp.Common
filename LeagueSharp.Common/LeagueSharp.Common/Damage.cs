@@ -2365,15 +2365,15 @@ namespace LeagueSharp.Common
                             (source, target, level) =>
                                 new double[] { 55, 80, 105, 130, 155 }[level] + 0.4 * source.FlatMagicDamageMod
                     },
-                    //Q . explosion
+                    //Q-R
                     new DamageSpell
                     {
-                        Slot = SpellSlot.Q,
-                        Stage = 1,
+                        Slot = SpellSlot.R,
+                        Stage = 0,
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 55, 80, 105, 130, 155 }[level] + 0.4 * source.FlatMagicDamageMod
+                                new double[] { 100, 200, 300 }[level] + 0.65 * source.FlatMagicDamageMod
                     },
                     //W
                     new DamageSpell
@@ -2384,6 +2384,16 @@ namespace LeagueSharp.Common
                             (source, target, level) =>
                                 new double[] { 85, 125, 165, 205, 245 }[level] + 0.6 * source.FlatMagicDamageMod
                     },
+                    //W-R
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.R,
+                        Stage = 1,
+                        DamageType = DamageType.Magical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] { 150, 300, 450 }[level] + 0.98 * source.FlatMagicDamageMod
+                    },
                     //E
                     new DamageSpell
                     {
@@ -2393,6 +2403,7 @@ namespace LeagueSharp.Common
                             (source, target, level) =>
                                 new double[] { 40, 65, 90, 115, 140 }[level] + 0.5 * source.FlatMagicDamageMod
                     },
+                    //E-R : Use GetSpellDamage(target, SpellSlot.R, 0);
                 });
 
             Spells.Add(
