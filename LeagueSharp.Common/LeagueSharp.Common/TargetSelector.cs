@@ -129,7 +129,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the priority of the hero
+        ///     Returns the priority of the hero 
         /// </summary>
         public static float GetPriority(Obj_AI_Hero hero)
         {
@@ -138,20 +138,7 @@ namespace LeagueSharp.Common
             {
                 p = _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").GetValue<Slider>().Value;
             }
-
-            switch (p)
-            {
-                case 2:
-                    return 1.5f;
-                case 3:
-                    return 1.75f;
-                case 4:
-                    return 2f;
-                case 5:
-                    return 2.5f;
-                default:
-                    return 1f;
-            }
+            return p;
         }
 
         private static int GetPriorityFromDb(string championName)
