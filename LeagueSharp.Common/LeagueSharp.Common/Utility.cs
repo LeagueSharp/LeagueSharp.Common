@@ -57,8 +57,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the source is facing the target.
         /// </summary>
-        [Obsolete("The optional parameter lineLength will be removed, please avoid using it :-)", false)]
-        public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target, float lineLength = 300)
+        public static bool IsFacing(this Obj_AI_Base source, Obj_AI_Base target)
         {
             if (source == null || target == null)
             {
@@ -72,8 +71,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if both source and target are Facing Themselves.
         /// </summary>
-        [Obsolete("The optional parameter lineLength will be removed, please avoid using it :-)", false)]
-        public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target, float lineLength = 1337)
+        public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target)
         {
             return source.IsFacing(target) && target.IsFacing(source);
         }
@@ -363,27 +361,6 @@ namespace LeagueSharp.Common
             return SpellSlot.Unknown;
         }
 
-        [Obsolete("Use GetSpellSlot(this Obj_AI_Hero unit, string name)", false)]
-        public static SpellSlot GetSpellSlot(this Obj_AI_Hero unit, string name, bool searchInSummoners = true)
-        {
-            name = name.ToLower();
-            foreach (var spell in unit.Spellbook.Spells.Where(spell => spell.Name.ToLower() == name))
-            {
-                return spell.Slot;
-            }
-
-            return SpellSlot.Unknown;
-        }
-
-        /// <summary>
-        ///     Returns true if Player is under tower range.
-        /// </summary>
-        [Obsolete("Use UnderTurret(this Obj_AI_Base unit)", false)]
-        public static bool UnderTurret()
-        {
-            return UnderTurret(ObjectManager.Player.Position, true);
-        }
-
         /// <summary>
         ///     Returns true if the unit is under tower range.
         /// </summary>
@@ -451,22 +428,6 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns true if Player is in shop range.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Use ObjectManager.Player.InShop()", false)]
-        public static bool InShopRange()
-        {
-            return
-                ObjectManager.Get<Obj_Shop>()
-                    .Where(shop => shop.IsAlly)
-                    .Any(
-                        shop =>
-                            Vector2.DistanceSquared(ObjectManager.Player.Position.To2D(), shop.Position.To2D()) <
-                            1562500); // 1250 * 1250
-        }
-
-        /// <summary>
         ///     Returns true if hero is in shop range.
         /// </summary>
         /// <returns></returns>
@@ -514,24 +475,6 @@ namespace LeagueSharp.Common
 
                 Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
-        }
-
-        [Obsolete("Use ObjectManager.Player.InFountain()", false)]
-        public static bool InFountain()
-        {
-            float fountainRange = 562500; //750 * 750
-            var map = Map.GetMap();
-            if (map != null && map.Type == Map.MapType.SummonersRift)
-            {
-                fountainRange = 1102500; //1050 * 1050
-            }
-            return
-                ObjectManager.Get<GameObject>()
-                    .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
-                    .Any(
-                        spawnPoint =>
-                            Vector2.DistanceSquared(ObjectManager.Player.Position.To2D(), spawnPoint.Position.To2D()) <
-                            fountainRange);
         }
 
         public static bool InFountain(this Obj_AI_Hero hero)
@@ -700,7 +643,6 @@ namespace LeagueSharp.Common
                         Name = "The Crystal Scar",
                         ShortName = "crystalScar",
                         Type = MapType.CrystalScar,
-                        _MapType = MapType.CrystalScar,
                         Grid = new Vector2(13894 / 2, 13218 / 2),
                         StartingLevel = 3
                     }
@@ -712,7 +654,6 @@ namespace LeagueSharp.Common
                         Name = "The Twisted Treeline",
                         ShortName = "twistedTreeline",
                         Type = MapType.TwistedTreeline,
-                        _MapType = MapType.TwistedTreeline,
                         Grid = new Vector2(15436 / 2, 14474 / 2),
                         StartingLevel = 1
                     }
@@ -724,7 +665,6 @@ namespace LeagueSharp.Common
                         Name = "Summoner's Rift",
                         ShortName = "summonerRift",
                         Type = MapType.SummonersRift,
-                        _MapType = MapType.SummonersRift,
                         Grid = new Vector2(13982 / 2, 14446 / 2),
                         StartingLevel = 1
                     }
@@ -736,7 +676,6 @@ namespace LeagueSharp.Common
                         Name = "Howling Abyss",
                         ShortName = "howlingAbyss",
                         Type = MapType.HowlingAbyss,
-                        _MapType = MapType.HowlingAbyss,
                         Grid = new Vector2(13120 / 2, 12618 / 2),
                         StartingLevel = 3
                     }
@@ -744,10 +683,6 @@ namespace LeagueSharp.Common
             };
 
             public MapType Type { get; private set; }
-
-            [Obsolete("Use Map.Type", false)]
-            public MapType _MapType { get; private set; }
-
             public Vector2 Grid { get; private set; }
             public string Name { get; private set; }
             public string ShortName { get; private set; }
