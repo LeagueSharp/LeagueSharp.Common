@@ -688,7 +688,7 @@ namespace LeagueSharp.Common
                     Sender = (Obj_AI_Hero)sender,
                     TickCount = Environment.TickCount,
                     SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
-                    Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name, false)
+                    Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name)
                 });
         }
 

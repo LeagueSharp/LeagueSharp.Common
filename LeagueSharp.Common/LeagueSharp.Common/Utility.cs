@@ -703,7 +703,6 @@ namespace LeagueSharp.Common
                     Name = "Unknown",
                     ShortName = "unknown",
                     Type = MapType.Unknown,
-                    _MapType = MapType.Unknown,
                     Grid = new Vector2(0, 0),
                     StartingLevel = 1
                 };
