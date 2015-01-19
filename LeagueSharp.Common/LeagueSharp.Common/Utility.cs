@@ -320,10 +320,12 @@ namespace LeagueSharp.Common
             var result = new List<Vector2Time>();
             var speed = unit.MoveSpeed;
             var lastPoint = wp[0];
+            var time = 0f;
 
             foreach (var point in wp)
             {
-                result.Add(new Vector2Time(point, point.Distance(lastPoint) / speed));
+                time += point.Distance(lastPoint) / speed;
+                result.Add(new Vector2Time(point, time));
                 lastPoint = point;
             }
 
