@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
-using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 
 #endregion
@@ -451,6 +450,38 @@ namespace LeagueSharp.Common
         public static int CountAlliesInRange(this Vector3 point, float range)
         {
             return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly).Count(x => x.IsValidTarget(range, false));
+        }
+
+        public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(x => x.IsAlly && point.Distance(x.ServerPosition, true) <= range * range)
+                    .ToList();
+        }
+
+        public static List<Obj_AI_Hero> GetEnemiesInRange(this Vector3 point, float range)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(x => x.IsEnemy && point.Distance(x.ServerPosition, true) <= range * range)
+                    .ToList();
+        }
+
+        public static List<T> GetObjects<T>(this Vector3 position, float range) where T : GameObject, new()
+        {
+            return ObjectManager.Get<T>().Where(x => position.Distance(x.Position, true) < range * range).ToList();
+        }
+
+        public static List<T> GetObjects<T>(string objectName, float range, Vector3 rangeCheckFrom = new Vector3())
+            where T : GameObject, new()
+        {
+            if (rangeCheckFrom.Equals(Vector3.Zero))
+            {
+                rangeCheckFrom = ObjectManager.Player.ServerPosition;
+            }
+
+            return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
         /// <summary>
