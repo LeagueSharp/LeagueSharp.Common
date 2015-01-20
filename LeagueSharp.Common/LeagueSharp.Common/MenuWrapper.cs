@@ -266,7 +266,7 @@ namespace LeagueSharp.Common
                 var prefix = "";
                 if (fullName)
                 {
-                    var currentSubMenu = this;
+                    var currentSubMenu = Parent;
                     while (currentSubMenu != null)
                     {
                         prefix = currentSubMenu.MenuHandle.Name + prefix;
