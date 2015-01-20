@@ -131,9 +131,9 @@ namespace LeagueSharp.Common
             return IsReady(ObjectManager.Player.Spellbook.GetSpell(slot), t);
         }
 
-        public static bool IsValid<T>(this GameObject obj)
+        public static bool IsValid<T>(this GameObject obj) where T : GameObject
         {
-            return obj is T && obj.IsValid;
+            return obj as T != null && obj.IsValid;
         }
 
         public static bool IsValidSlot(this InventorySlot slot)
@@ -407,7 +407,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemiesInRange(float range)
         {
-            return ObjectManager.Player.CountEnemysInRange(range);
+            return ObjectManager.Player.CountEnemiesInRange(range);
         }
 
         /// <summary>
@@ -415,7 +415,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemiesInRange(this Obj_AI_Base unit, float range)
         {
-            return unit.ServerPosition.CountEnemysInRange(range);
+            return unit.ServerPosition.CountEnemiesInRange(range);
         }
 
         /// <summary>
