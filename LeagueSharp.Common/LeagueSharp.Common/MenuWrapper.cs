@@ -93,6 +93,7 @@ namespace LeagueSharp.Common
 
         public class SubMenu
         {
+            public SubMenu Parent { get; private set; }
             private readonly Menu _subMenu;
 
             public SubMenu(Menu current)
@@ -101,20 +102,20 @@ namespace LeagueSharp.Common
                 _subMenu = current;
             }
 
-            public SubMenu(Menu parent, string name)
+            public SubMenu(SubMenu parent, string name)
             {
                 // Initialize this submenu
                 _subMenu = new Menu(name, GetName(name, false));
 
                 // Add submenu to the parent menu
-                parent.AddSubMenu(_subMenu);
+                parent.MenuHandle.AddSubMenu(_subMenu);
             }
 
             #region SubMenu
 
             public SubMenu AddSubMenu(string name)
             {
-                return new SubMenu(_subMenu, name);
+                return new SubMenu(this, name);
             }
 
             public SubMenu GetSubMenu(string name)
@@ -264,11 +265,11 @@ namespace LeagueSharp.Common
                 var prefix = "";
                 if (fullName)
                 {
-                    var currentSubMenu = _subMenu;
+                    var currentSubMenu = this;
                     while (currentSubMenu != null)
                     {
-                        prefix = _subMenu.Name + prefix;
-                        currentSubMenu = _subMenu.Parent;
+                        prefix = currentSubMenu.MenuHandle.Name + prefix;
+                        currentSubMenu = currentSubMenu.Parent;
                     }
                 }
                 return Regex.Replace(prefix + name.ToLower(), @"\s+", "");
