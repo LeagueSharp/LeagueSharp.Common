@@ -105,7 +105,8 @@ namespace LeagueSharp.Common
             public SubMenu(SubMenu parent, string name)
             {
                 // Initialize this submenu
-                _subMenu = new Menu(name, GetName(name, false));
+                Parent = parent;
+                _subMenu = new Menu(name, GetName(name));
 
                 // Add submenu to the parent menu
                 parent.MenuHandle.AddSubMenu(_subMenu);
