@@ -261,7 +261,16 @@ namespace LeagueSharp.Common
 
             private string GetName(string name, bool fullName = true)
             {
-                return Regex.Replace((fullName ? _subMenu.Name : "") + name.ToLower(), @"\s+", "");
+                var prefix = "";
+                if (fullName)
+                {
+                    var currentSubMenu = _subMenu;
+                    while (currentSubMenu != null)
+                    {
+                        prefix = _subMenu.Name + prefix;
+                    }
+                }
+                return Regex.Replace(prefix + name.ToLower(), @"\s+", "");
             }
         }
 
