@@ -371,18 +371,18 @@ namespace LeagueSharp.Common
         public static bool IsChannelingImportantSpell(this Obj_AI_Hero unit)
         {
             return
-                Spells.Where(spell => spell.ChampionName == unit.ChampionName)
-                    .Any(
-                        spell =>
-                            (unit.LastCastedspell() != null &&
-                             String.Equals(
-                                 unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
-                             Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
-                            (ObjectManager.Player.NetworkId == unit.NetworkId &&
-                             LastCastedSpell.LastCastPacketSent != null &&
-                             LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                             Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping));
+                Spells.Any(
+                    spell =>
+                        spell.ChampionName == unit.ChampionName &&
+                        (unit.LastCastedspell() != null &&
+                            String.Equals(
+                                unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
+                            Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                        (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
+                        (unit.IsMe &&
+                            LastCastedSpell.LastCastPacketSent != null &&
+                            LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
+                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping));
         }
     }
 }
