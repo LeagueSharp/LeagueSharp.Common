@@ -423,9 +423,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemiesInRange(this Vector3 point, float range)
         {
-            return
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Count(h => h.IsValidTarget(range, true, point));
+            return ObjectManager.Get<Obj_AI_Hero>().Count(h => h.IsValidTarget(range, true, point));
         }
 
         // Use same interface as CountEnemiesInRange
@@ -450,7 +448,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountAlliesInRange(this Vector3 point, float range)
         {
-            return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly).Count(x => x.IsValidTarget(range, false, point));
+            return ObjectManager.Get<Obj_AI_Hero>()
+                .Where(x => x.IsAlly)
+                .Count(x => x.IsValidTarget(range, false, point));
         }
 
         public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
@@ -825,13 +825,12 @@ namespace LeagueSharp.Common
         ///     Checks for a mastery
         /// </summary>
         /// <param name="source">Source Object</param>
-        /// <param name="treeType">Mastery Tree Type</param>
         /// <param name="data">Mastery Data</param>
         /// <returns>True/False Bool</returns>
-        public static bool HasMastery(this Obj_AI_Hero source, MasteryPage treeType, MasteryData.Mastery data)
+        public static bool HasMastery(this Obj_AI_Hero source, MasteryData.Mastery data)
         {
             return (source.IsValidTarget()) &&
-                   source.Masteries.Find(m => m.Page == treeType && m.Id == data.ByteId) != null;
+                   source.Masteries.Find(m => m.Page == data.Tree && m.Id == data.ByteId) != null;
         }
     }
 
