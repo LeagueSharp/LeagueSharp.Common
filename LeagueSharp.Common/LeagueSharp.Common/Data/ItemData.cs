@@ -2,7 +2,7 @@
 
 /*
  Copyright 2014 - 2015 LeagueSharp
- ItemData.cs is part of LeagueSharp.Common.
+ ItemData.cs is part of LeagueSharp.Common.Data.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -22,23 +22,15 @@
 
 #region
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace LeagueSharp.Common
+namespace LeagueSharp.Common.Data
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    [Obsolete("Use Data.ItemData", false)]
     public class ItemData
     {
-        static ItemData()
-        {
-            Console.WriteLine(
-                @"LeagueSharp.Common.ItemData will be removed and placed under LeagueSharp.Common.Data.ItemData");
-        }
-
         public struct Item
         {
             /// <summary>
