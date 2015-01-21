@@ -103,6 +103,8 @@
     <Compile Include="Config.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />
+    <Compile Include="Data\ItemData.cs" />
+    <Compile Include="Data\MasteryData.cs" />
     <Compile Include="GamePacket.cs" />
     <Compile Include="ItemData.cs" />
     <Compile Include="Global.cs" />

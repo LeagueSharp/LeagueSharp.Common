@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.Common.Data;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -818,6 +819,19 @@ namespace LeagueSharp.Common
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        ///     Checks for a mastery
+        /// </summary>
+        /// <param name="source">Source Object</param>
+        /// <param name="treeType">Mastery Tree Type</param>
+        /// <param name="data">Mastery Data</param>
+        /// <returns>True/False Bool</returns>
+        public static bool HasMastery(this Obj_AI_Hero source, MasteryPage treeType, MasteryData.Mastery data)
+        {
+            return (source.IsValidTarget()) &&
+                   source.Masteries.Find(m => m.Page == treeType && m.Id == data.ByteId) != null;
         }
     }
 
