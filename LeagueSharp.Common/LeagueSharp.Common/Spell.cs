@@ -404,32 +404,24 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Self-casts the spell.
-        /// </summary>
-        public bool Cast()
-        {
-            return Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
-        }
-
-        /// <summary>
         ///     Casts the targetted spell on the unit.
         /// </summary>
-        public void CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
+        public bool CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (!Slot.IsReady() || From.Distance(unit.ServerPosition, true) > RangeSqr)
+            if (!Slot.IsReady() || (!unit.IsMe && From.Distance(unit.ServerPosition, true) > RangeSqr))
             {
-                return;
+                return false;
             }
 
             LastCastAttemptT = Environment.TickCount;
 
             if (packetCast)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false);
+                return ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false);
             }
             else
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+                return ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
             }
         }
 
@@ -446,17 +438,17 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast(bool packetCast = false)
         {
-            return ObjectManager.Player.Spellbook.CastSpell(Slot, ObjectManager.Player);
+            return CastOnUnit(ObjectManager.Player, packetCast);
         }
 
         public bool Cast(Vector2 fromPosition, Vector2 toPosition)
         {
-            return ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition.To3D(), toPosition.To3D());
+            return Cast(fromPosition.To3D(), toPosition.To3D());
         }
 
         public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
-            return ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
+            return Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
         }
 
         /// <summary>
