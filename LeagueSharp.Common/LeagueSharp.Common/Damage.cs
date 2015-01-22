@@ -5170,8 +5170,22 @@ namespace LeagueSharp.Common
             {
                 if (target is Obj_AI_Hero)
                 {
-                    return 20 + 8 * source.Level;
-                }
+                    var chillingSmite =
+                        source.Spellbook.Spells.FirstOrDefault(h => h.Name.Equals("s5_summonersmiteplayerganker"));
+                    var challengingSmite =
+                        source.Spellbook.Spells.FirstOrDefault(h => h.Name.Equals("s5_summonersmiteduel"));
+
+                    if (chillingSmite != null)
+                    {
+                        return 20 + 8 * source.Level;
+                    }
+
+                    if (challengingSmite != null)
+
+                    {
+                        return 54 + 6 * source.Level;
+                    }
+            }
 
                 return
                     new double[]
