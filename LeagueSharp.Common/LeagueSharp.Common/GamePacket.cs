@@ -33,14 +33,14 @@ using SharpDX;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    /// This class makes easier to handle packets.
+    ///     This class makes easier to handle packets.
     /// </summary>
     public class GamePacket
     {
+        private readonly byte _header;
         private readonly BinaryReader Br;
         private readonly BinaryWriter Bw;
         private readonly MemoryStream Ms;
-        private readonly byte _header;
         private readonly byte[] rawPacket;
         public PacketChannel Channel = PacketChannel.C2S;
         public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
@@ -73,7 +73,9 @@ namespace LeagueSharp.Common
             Flags = args.ProtocolFlag;
         }
 
-        public GamePacket(byte header, PacketChannel channel = PacketChannel.C2S, PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
+        public GamePacket(byte header,
+            PacketChannel channel = PacketChannel.C2S,
+            PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             Block = false;
             Ms = new MemoryStream();
@@ -108,7 +110,7 @@ namespace LeagueSharp.Common
         public bool Block { get; set; }
 
         /// <summary>
-        /// Returns the packet size.
+        ///     Returns the packet size.
         /// </summary>
         public long Size()
         {
@@ -116,7 +118,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Reads a byte from the packet and increases the position by 1.
+        ///     Reads a byte from the packet and increases the position by 1.
         /// </summary>
         public byte ReadByte(long position = -1)
         {
@@ -125,7 +127,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Reads and returns a double byte.
+        ///     Reads and returns a double byte.
         /// </summary>
         public short ReadShort(long position = -1)
         {
@@ -134,7 +136,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Reads and returns a float.
+        ///     Reads and returns a float.
         /// </summary>
         public float ReadFloat(long position = -1)
         {
@@ -143,7 +145,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Reads and returns an integer.
+        ///     Reads and returns an integer.
         /// </summary>
         public int ReadInteger(long position = -1)
         {
@@ -152,7 +154,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Reads and returns a string.
+        ///     Reads and returns a string.
         /// </summary>
         public string ReadString(long position = -1)
         {
@@ -173,9 +175,8 @@ namespace LeagueSharp.Common
             return sb.ToString();
         }
 
-
         /// <summary>
-        /// Writes a byte.
+        ///     Writes a byte.
         /// </summary>
         public void WriteByte(byte b, int repeat = 1)
         {
@@ -186,7 +187,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Writes a short.
+        ///     Writes a short.
         /// </summary>
         public void WriteShort(short s)
         {
@@ -194,7 +195,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Writes a float.
+        ///     Writes a float.
         /// </summary>
         public void WriteFloat(float f)
         {
@@ -202,7 +203,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Writes an integer.
+        ///     Writes an integer.
         /// </summary>
         public void WriteInteger(int i)
         {
@@ -210,7 +211,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Writes the hex string as bytes to the packet.
+        ///     Writes the hex string as bytes to the packet.
         /// </summary>
         public void WriteHexString(string hex)
         {
@@ -229,7 +230,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Writes the string.
+        ///     Writes the string.
         /// </summary>
         public void WriteString(string str)
         {
@@ -351,33 +352,40 @@ namespace LeagueSharp.Common
             return SearchGameTile(obj.Position.To2D());
         }
 
+        public byte[] GetRawPacket()
+        {
+            return Ms.ToArray();
+        }
 
         /// <summary>
-        /// Sends the packet
+        ///     Sends the packet
         /// </summary>
         public void Send(PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
-            return;//Blocked for now 4.21
+            return; //Blocked for now 4.21
             if (!Block)
             {
-                Game.SendPacket(Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel, Flags == PacketProtocolFlags.Reliable ? flags : Flags);
+                Game.SendPacket(
+                    Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
+                    Flags == PacketProtocolFlags.Reliable ? flags : Flags);
             }
         }
 
         /// <summary>
-        /// Receives the packet.
+        ///     Receives the packet.
         /// </summary>
         public void Process(PacketChannel channel = PacketChannel.S2C)
         {
-            return;//Blocked for now 4.21
+            return; //Blocked for now 4.21
             if (!Block)
             {
                 Game.ProcessPacket(Ms.ToArray(), channel);
             }
         }
+
         /// <summary>
-        /// Dumps the packet.
+        ///     Dumps the packet.
         /// </summary>
         public string Dump(bool additionalInfo = false)
         {
@@ -390,7 +398,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Saves the packet dump to a file
+        ///     Saves the packet dump to a file
         /// </summary>
         public void SaveToFile(string filePath)
         {
