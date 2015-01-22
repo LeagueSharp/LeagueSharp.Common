@@ -3423,6 +3423,62 @@ namespace LeagueSharp.Common
                     },
                 });
 
+            Spells.Add("RekSai", new List<DamageSpell>
+            {
+                //Q Unburrowed
+                new DamageSpell
+                {
+                    Slot = SpellSlot.Q,
+                    DamageType = DamageType.Physical,
+                    Damage = 
+                        (source, target, level) =>
+                            new double[] { 15, 35, 55, 75, 95 }[level] + 
+                            0.4 * source.FlatPhysicalDamageMod
+                },
+                //Q burrowed
+                new DamageSpell
+                {
+                    Slot = SpellSlot.Q,
+                    Stage = 1,
+                    DamageType = DamageType.Magical,
+                    Damage = 
+                        (source, target, level) =>
+                            new double[] { 60, 90, 120, 150, 180}[level] + 
+                            1 * source.FlatPhysicalDamageMod
+                },
+                //W 
+                new DamageSpell
+                {
+                    Slot = SpellSlot.W,
+                    DamageType = DamageType.Physical,
+                    Damage = 
+                        (source, target, level) =>
+                            new double[] { 60, 110, 160, 210, 260 }[level] + 
+                            0.5 * source.FlatPhysicalDamageMod
+                },
+                //E
+                new DamageSpell
+                {
+                    Slot = SpellSlot.E,
+                    DamageType = DamageType.Physical,
+                    Damage = 
+                        (source, target, level) =>
+                            new double[] { 0.8, 0.9, 1, 1.1, 1.2 }[level] * source.FlatPhysicalDamageMod
+                },
+
+                //E max fury
+                new DamageSpell
+                {
+                    Slot = SpellSlot.E,
+                    Stage = 1,
+                    DamageType = DamageType.True,
+                    Damage = 
+                        (source, target, level) =>
+                            new double[] { 1.6, 1.8, 2, 2.2, 2.4 }[level] * source.FlatPhysicalDamageMod
+                },
+
+            });
+
             Spells.Add(
                 "Renekton", new List<DamageSpell>
                 {
@@ -3553,7 +3609,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 new double[] { 10, 30, 50, 70, 90 }[level] +
-                                new double[] { 40, 45, 50, 55, 60 }[level] *
+                                new double[] { 0.4, 0.45, 0.5, 0.55, 0.6 }[level] * 
                                 (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                     //W
