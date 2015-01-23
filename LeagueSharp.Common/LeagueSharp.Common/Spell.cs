@@ -530,7 +530,7 @@ namespace LeagueSharp.Common
         }
 
         public MinionManager.FarmLocation GetCircularFarmLocation(List<Obj_AI_Base> minionPositions,
-            float overrideWidth = float.MaxValue)
+            float overrideWidth = -1)
         {
             var positions = MinionManager.GetMinionsPredictedPositions(
                 minionPositions, Delay, Width, Speed, From, Range, false, SkillshotType.SkillshotCircle);
