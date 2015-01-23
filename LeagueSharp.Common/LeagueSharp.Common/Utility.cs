@@ -142,7 +142,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the unit's health percentage (From 0 to 100).
+        ///     Returns the unit's health percentage (From 0 to 100).
         /// </summary>
         public static float HealthPercentage(this Obj_AI_Base unit)
         {
@@ -150,7 +150,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns the unit's mana percentage (From 0 to 100).
+        ///     Returns the unit's mana percentage (From 0 to 100).
         /// </summary>
         public static float ManaPercentage(this Obj_AI_Base unit)
         {
@@ -481,6 +481,12 @@ namespace LeagueSharp.Common
             }
 
             return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
+        }
+
+        public static bool IsMovementImpaired(this Obj_AI_Hero hero)
+        {
+            return hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                   hero.HasBuffOfType(BuffType.Taunt);
         }
 
         /// <summary>
