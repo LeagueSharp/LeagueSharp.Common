@@ -374,7 +374,7 @@ namespace LeagueSharp.Common
                 Spells.Any(
                     spell =>
                         spell.ChampionName == unit.ChampionName &&
-                        (unit.LastCastedspell() != null &&
+                        ((unit.LastCastedspell() != null &&
                             String.Equals(
                                 unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
                             Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
@@ -382,7 +382,7 @@ namespace LeagueSharp.Common
                         (unit.IsMe &&
                             LastCastedSpell.LastCastPacketSent != null &&
                             LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping));
+                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
         }
     }
 }
