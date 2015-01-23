@@ -408,7 +408,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (!Slot.IsReady() || (!unit.IsMe && From.Distance(unit.ServerPosition, true) > RangeSqr))
+            if (!Slot.IsReady() || From.Distance(unit.ServerPosition, true) > RangeSqr)
             {
                 return false;
             }
