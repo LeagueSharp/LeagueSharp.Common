@@ -451,12 +451,22 @@ namespace LeagueSharp.Common
                 .Count(x => x.IsValidTarget(range, false, point));
         }
 
+        public static List<Obj_AI_Hero> GetAlliesInRange(this Obj_AI_Base unit, float range)
+        {
+            return GetAlliesInRange(unit.ServerPosition, range);
+        }
+
         public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
                     .Where(x => x.IsAlly && point.Distance(x.ServerPosition, true) <= range * range)
                     .ToList();
+        }
+
+        public static List<Obj_AI_Hero> GetEnemiesInRange(this Obj_AI_Base unit, float range)
+        {
+            return GetEnemiesInRange(unit.ServerPosition, range);
         }
 
         public static List<Obj_AI_Hero> GetEnemiesInRange(this Vector3 point, float range)
