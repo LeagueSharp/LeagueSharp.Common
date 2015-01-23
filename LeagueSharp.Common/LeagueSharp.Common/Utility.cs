@@ -462,7 +462,7 @@ namespace LeagueSharp.Common
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(x => x.IsAlly && x.IsValidTarget(range, false, point))
+                    .Where(x => x.IsAlly && point.Distance(x.ServerPosition, true) <= range * range)
                     .ToList();
         }
 
@@ -475,7 +475,7 @@ namespace LeagueSharp.Common
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(x => x.IsValidTarget(range, true, point))
+                    .Where(x => x.IsEnemy && point.Distance(x.ServerPosition, true) <= range * range)
                     .ToList();
         }
 
