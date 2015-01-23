@@ -141,11 +141,17 @@ namespace LeagueSharp.Common
             return slot != null && slot.SpellSlot != SpellSlot.Unknown;
         }
 
+        /// <summary>
+        /// Returns the unit's health percentage (From 0 to 100).
+        /// </summary>
         public static float HealthPercentage(this Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
         }
 
+        /// <summary>
+        /// Returns the unit's mana percentage (From 0 to 100).
+        /// </summary>
         public static float ManaPercentage(this Obj_AI_Base unit)
         {
             return unit.Mana / unit.MaxMana * 100;
@@ -250,14 +256,6 @@ namespace LeagueSharp.Common
         public static void LevelUpSpell(this Spellbook book, SpellSlot slot, bool evolve = false)
         {
             book.LevelSpell(slot);
-            /*
-            new PKT_NPC_UpgradeSpellReq
-            {
-                NetworkId = ObjectManager.Player.NetworkId,
-                SpellSlot = (byte) slot,
-                Evolve = evolve
-            }.Encode();
-             */
         }
 
         public static List<Vector2> CutPath(this List<Vector2> path, float distance)
