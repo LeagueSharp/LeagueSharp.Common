@@ -325,7 +325,8 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool HasBuff(this Obj_AI_Base unit,
             string buffName,
-            bool dontUseDisplayName = false)
+            bool dontUseDisplayName = false,
+            bool kappa = true)
         {
             return
                 unit.Buffs.Any(
