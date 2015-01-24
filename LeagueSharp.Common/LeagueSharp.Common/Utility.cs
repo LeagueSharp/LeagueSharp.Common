@@ -330,19 +330,27 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        /// Returns true if the buff is active and didn't expire.
+        /// </summary>
+        public static bool IsBuffValid(this BuffInstance buff)
+        {
+            return buff.IsActive && buff.EndTime - Game.Time > 0;
+        }
+
+        /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
         public static bool HasBuff(this Obj_AI_Base unit,
             string buffName,
             bool dontUseDisplayName = false,
-            bool ignoreCase = false)
+            bool ignoreCase = true)
         {
             var name = ignoreCase ? buffName.ToLower() : buffName;
             return
                 unit.Buffs.Any(
                     buff =>
                         ((dontUseDisplayName && buff.Name == name) || (!dontUseDisplayName && buff.DisplayName == name)) &&
-                        buff.IsActive && buff.EndTime - Game.Time > 0);
+                        buff.IsBuffValid());
         }
 
         /// <summary>
