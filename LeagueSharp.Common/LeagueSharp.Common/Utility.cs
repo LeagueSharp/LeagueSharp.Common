@@ -328,11 +328,10 @@ namespace LeagueSharp.Common
             bool dontUseDisplayName = false,
             bool ignoreCase = true)
         {
-            var name = ignoreCase ? buffName.ToLower() : buffName;
             return
                 unit.Buffs.Any(
                     buff =>
-                        ((dontUseDisplayName && buff.Name == name) || (!dontUseDisplayName && buff.DisplayName == name)) &&
+                        ((dontUseDisplayName && String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase)) || (!dontUseDisplayName && String.Equals(buff.DisplayName, buffName, StringComparison.CurrentCultureIgnoreCase))) &&
                         buff.IsBuffValid());
         }
 
