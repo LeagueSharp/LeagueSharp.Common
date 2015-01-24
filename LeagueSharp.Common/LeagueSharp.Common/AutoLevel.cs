@@ -24,7 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 #endregion
 
@@ -32,70 +31,51 @@ namespace LeagueSharp.Common
 {
     public class AutoLevel
     {
-        private static int[] order = new int[18];
-        private static int offset;
-        private static int lastLeveled;
+        private static List<SpellSlot> order = new List<SpellSlot>();
+        private static float LastLeveled;
+        private static float NextDelay;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         private static Random RandomNumber;
 
-        public AutoLevel(int[] levels)
+        public AutoLevel(IEnumerable<int> levels)
+        {
+            foreach (var level in levels)
+            {
+                order.Add((SpellSlot) (level - 1));
+            }
+            RandomNumber = new Random(Environment.TickCount);
+            Game.OnGameUpdate += Game_OnGameUpdate;
+        }
+
+        public AutoLevel(List<SpellSlot> levels)
         {
             order = levels;
-            Utility.DelayAction.Add(500, Initialize);
-        }
-
-        public AutoLevel(IEnumerable<SpellSlot> levels)
-        {
-            order = levels.Select(spell => (int) spell).ToArray();
-            Utility.DelayAction.Add(500, Initialize);
-        }
-
-        private static void Initialize()
-        {
             RandomNumber = new Random(Environment.TickCount);
-            var spellbook = Player.Spellbook;
-            var spells = new List<SpellSlot> { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
-
-
-            if (HasLevelOneSpell())
-            {
-                offset = 1;
-                spells.Remove(SpellSlot.R);
-            }
-
-            //not beginning of game
-            if (spells.Any(spell => spellbook.GetSpell(spell).Level != 0))
-            {
-                lastLeveled = Player.Level;
-                Game.OnGameUpdate += Game_OnGameUpdate;
-                return;
-            }
-
-            for (var i = 0; i < ObjectManager.Player.Level; i++)
-            {
-                var spell = (SpellSlot) (order[i + offset] - 1);
-                Utility.DelayAction.Add(RandomNumber.Next(500), () => { spellbook.LevelSpell(spell); });
-            }
-
-
-            lastLeveled = ObjectManager.Player.Level;
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Player.Level <= lastLeveled)
+            if (Player.SpellTrainingPoints < 1 || Environment.TickCount - LastLeveled < NextDelay)
             {
                 return;
             }
 
-            Utility.DelayAction.Add(
-                RandomNumber.Next(500), () =>
-                {
-                    var spell = (SpellSlot) (order[Player.Level + offset - 1] - 1);
-                    Player.Spellbook.LevelSpell(spell);
-                });
-            lastLeveled = Player.Level;
+            NextDelay = RandomNumber.Next(750);
+            LastLeveled = Environment.TickCount;
+            var spell = order[GetTotalPoints()];
+            Player.Spellbook.LevelSpell(spell);
+        }
+
+        private static int GetTotalPoints()
+        {
+            var spell = Player.Spellbook;
+            var q = spell.GetSpell(SpellSlot.Q).Level;
+            var w = spell.GetSpell(SpellSlot.W).Level;
+            var e = spell.GetSpell(SpellSlot.E).Level;
+            var r = spell.GetSpell(SpellSlot.R).Level;
+
+            return q + w + e + r;
         }
 
         public static void Enabled(bool enabled)
@@ -108,13 +88,6 @@ namespace LeagueSharp.Common
             {
                 Game.OnGameUpdate -= Game_OnGameUpdate;
             }
-        }
-
-        private static bool HasLevelOneSpell()
-        {
-            var name = Player.ChampionName;
-            var list = new List<string> { "Elise", "Jayce", "Karma", "Nidalee" };
-            return list.Contains(name);
         }
     }
 }
