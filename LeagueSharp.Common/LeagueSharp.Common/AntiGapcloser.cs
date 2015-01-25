@@ -1,6 +1,7 @@
 ﻿#region LICENSE
+
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  AntiGapcloser.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -23,7 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using SharpDX;
 
 #endregion
@@ -51,9 +52,9 @@ namespace LeagueSharp.Common
         public Vector3 End;
         public Obj_AI_Hero Sender;
         public GapcloserType SkillType;
+        public SpellSlot Slot;
         public Vector3 Start;
         public int TickCount;
-        public SpellSlot Slot;
     }
 
     public static class AntiGapcloser
@@ -138,7 +139,7 @@ namespace LeagueSharp.Common
                     SpellName = "elisespiderqcast",
                     SkillType = GapcloserType.Skillshot
                 });
-                
+
             Spells.Add(
                 new Gapcloser
                 {
@@ -660,14 +661,13 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            foreach (
-                var gapcloser in
-                    ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
-                        .Where(
-                            gapcloser =>
-                                gapcloser.SkillType == GapcloserType.Targeted ||
-                                (gapcloser.SkillType == GapcloserType.Skillshot &&
-                                 ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
+            foreach (var gapcloser in
+                ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
+                    .Where(
+                        gapcloser =>
+                            gapcloser.SkillType == GapcloserType.Targeted ||
+                            (gapcloser.SkillType == GapcloserType.Skillshot &&
+                             ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
             {
                 OnEnemyGapcloser(gapcloser);
             }
@@ -685,10 +685,11 @@ namespace LeagueSharp.Common
                 {
                     Start = args.Start,
                     End = args.End,
-                    Sender = (Obj_AI_Hero)sender,
+                    Sender = (Obj_AI_Hero) sender,
                     TickCount = Environment.TickCount,
-                    SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
-                    Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name)
+                    SkillType =
+                        (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
+                    Slot = ((Obj_AI_Hero) sender).GetSpellSlot(args.SData.Name)
                 });
         }
 

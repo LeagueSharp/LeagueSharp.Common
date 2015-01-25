@@ -1,6 +1,7 @@
 ﻿#region LICENSE
+
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Dash.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -35,7 +37,7 @@ namespace LeagueSharp.Common
 
         static Dash()
         {
-            Obj_AI_Hero.OnNewPath += ObjAiHeroOnOnNewPath;
+            Obj_AI_Base.OnNewPath += ObjAiHeroOnOnNewPath;
         }
 
         private static void ObjAiHeroOnOnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
@@ -56,18 +58,20 @@ namespace LeagueSharp.Common
                 DetectedDashes[sender.NetworkId].Path = path;
                 DetectedDashes[sender.NetworkId].EndPos = DetectedDashes[sender.NetworkId].Path.Last();
                 DetectedDashes[sender.NetworkId].EndTick = DetectedDashes[sender.NetworkId].StartTick +
-                                                       (int)
-                                                           (1000 *
-                                                            (DetectedDashes[sender.NetworkId].EndPos.Distance(
-                                                                DetectedDashes[sender.NetworkId].StartPos) / DetectedDashes[sender.NetworkId].Speed));
-                DetectedDashes[sender.NetworkId].Duration = DetectedDashes[sender.NetworkId].EndTick - DetectedDashes[sender.NetworkId].StartTick;
+                                                           (int)
+                                                               (1000 *
+                                                                (DetectedDashes[sender.NetworkId].EndPos.Distance(
+                                                                    DetectedDashes[sender.NetworkId].StartPos) /
+                                                                 DetectedDashes[sender.NetworkId].Speed));
+                DetectedDashes[sender.NetworkId].Duration = DetectedDashes[sender.NetworkId].EndTick -
+                                                            DetectedDashes[sender.NetworkId].StartTick;
 
                 CustomEvents.Unit.TriggerOnDash(DetectedDashes[sender.NetworkId].Unit, DetectedDashes[sender.NetworkId]);
             }
         }
 
         /// <summary>
-        /// Returns true if the unit is dashing.
+        ///     Returns true if the unit is dashing.
         /// </summary>
         public static bool IsDashing(this Obj_AI_Base unit)
         {
@@ -79,7 +83,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the speed of the dashing unit if it is dashing.
+        ///     Gets the speed of the dashing unit if it is dashing.
         /// </summary>
         public static DashItem GetDashInfo(this Obj_AI_Base unit)
         {
@@ -91,12 +95,12 @@ namespace LeagueSharp.Common
             public int Duration;
             public Vector2 EndPos;
             public int EndTick;
+            public bool IsBlink;
             public List<Vector2> Path;
             public float Speed;
             public Vector2 StartPos;
             public int StartTick;
             public Obj_AI_Base Unit;
-            public bool IsBlink;
         }
     }
 }
