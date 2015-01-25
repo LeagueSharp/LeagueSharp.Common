@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2015 LeagueSharp
+ Copyright 2014 - 2014 LeagueSharp
  Spell.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -221,8 +221,8 @@ namespace LeagueSharp.Common
                 _chargedReqSentT = Environment.TickCount;
             }
         }
-
-        private void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
+        
+        void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
             if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 3000)
             {
@@ -419,7 +419,10 @@ namespace LeagueSharp.Common
             {
                 return ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false);
             }
-            return ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+            else
+            {
+                return ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+            }
         }
 
         /// <summary>
@@ -503,7 +506,7 @@ namespace LeagueSharp.Common
         {
             var currentHitchance = MinHitChance;
             MinHitChance = hitChance;
-            var castResult = _cast(unit, packetCast);
+            var castResult = _cast(unit, packetCast, false, false);
             MinHitChance = currentHitchance;
             return castResult == CastStates.SuccessfullyCasted;
         }
@@ -648,7 +651,7 @@ namespace LeagueSharp.Common
         public bool IsInRange(GameObject obj, float range = -1)
         {
             return IsInRange(
-                obj is Obj_AI_Base ? ((Obj_AI_Base) obj).ServerPosition.To2D() : obj.Position.To2D(), range);
+                obj is Obj_AI_Base ? (obj as Obj_AI_Base).ServerPosition.To2D() : obj.Position.To2D(), range);
         }
 
         /// <summary>

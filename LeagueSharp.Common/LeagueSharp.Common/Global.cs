@@ -1,5 +1,4 @@
 ﻿#region LICENSE
-
 /*
  Copyright 2014 - 2014 LeagueSharp
  Global.cs is part of LeagueSharp.Common.
@@ -17,24 +16,21 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
-
 #endregion
 
 #region
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
+using System.Diagnostics;
+using System.Linq;
 
 #endregion
 
@@ -53,7 +49,7 @@ namespace LeagueSharp.Common
                 MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
-
+		
         public static bool Evade
         {
             get { return Read<bool>("Evade"); }
@@ -74,7 +70,7 @@ namespace LeagueSharp.Common
                 return null;
             }
             var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
+            var ms = new System.IO.MemoryStream();
             bf.Serialize(ms, obj);
             return ms.ToArray();
         }
@@ -82,10 +78,10 @@ namespace LeagueSharp.Common
         // Convert a byte array to an Object
         internal static T Deserialize<T>(byte[] arrBytes)
         {
-            var memStream = new MemoryStream();
+            var memStream = new System.IO.MemoryStream();
             var binForm = new BinaryFormatter();
             memStream.Write(arrBytes, 0, arrBytes.Length);
-            memStream.Seek(0, SeekOrigin.Begin);
+            memStream.Seek(0, System.IO.SeekOrigin.Begin);
             return (T) binForm.Deserialize(memStream);
         }
 
@@ -133,7 +129,7 @@ namespace LeagueSharp.Common
                                     {
                                         buff2 = new byte[entry.Capacity];
                                         strm.ReadArray(thisOffset + OffsetEntrySize, buff2, 0, entry.Capacity);
-                                        var data = Encoding.UTF8.GetString(buff2, 0, entry.Capacity);
+                                        var data = System.Text.Encoding.UTF8.GetString(buff2, 0, entry.Capacity);
                                         var end = data.IndexOf('\0');
                                         var result = data.Substring(0, end);
                                         return (T) (object) result;
@@ -173,7 +169,7 @@ namespace LeagueSharp.Common
         {
             var LoadedEntries = new Dictionary<ulong, byte[]>();
             var count = 0;
-            using (var fl = new BinaryReader(File.Open(path, FileMode.Open)))
+            using (var fl = new System.IO.BinaryReader(System.IO.File.Open(path, System.IO.FileMode.Open)))
             {
                 long pos = 0;
                 var len = fl.BaseStream.Length;
@@ -251,7 +247,7 @@ namespace LeagueSharp.Common
             {
                 using (var strm = MMFile.CreateViewAccessor())
                 {
-                    using (var fl = new BinaryWriter(File.Create(path)))
+                    using (var fl = new System.IO.BinaryWriter(System.IO.File.Create(path)))
                     {
                         var signature = strm.ReadInt32(0);
                         const int startingOffset = 2 * sizeof (int);
@@ -273,9 +269,10 @@ namespace LeagueSharp.Common
                             var buff = new byte[OffsetEntrySize];
                             strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
                             var entry = FromByteArray<OffsetEntry>(buff);
-                            foreach (var hash in
-                                keys.Select(CalculateHash)
-                                    .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
+                            foreach (
+                                var hash in
+                                    keys.Select(CalculateHash)
+                                        .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
                             {
                                 fl.Write(buff);
                                 var buff2 = new byte[entry.Capacity];
@@ -291,10 +288,12 @@ namespace LeagueSharp.Common
             }
         }
 
+
         public static void Write<T>(string key, T val)
         {
             try
             {
+
                 using (new CustomMutex(700))
                 {
                     using (var strm = MMFile.CreateViewAccessor())
@@ -363,7 +362,7 @@ namespace LeagueSharp.Common
                                     }
                                     else
                                     {
-                                        var strz = Encoding.UTF8.GetBytes(val + "\0");
+                                        var strz = System.Text.Encoding.UTF8.GetBytes(val + "\0");
                                         strm.WriteArray(thisOffset + OffsetEntrySize, strz, 0, strz.Length);
                                     }
                                     return;
@@ -398,7 +397,7 @@ namespace LeagueSharp.Common
                         }
                         else
                         {
-                            var arr = Encoding.UTF8.GetBytes(val + "\0");
+                            var arr = System.Text.Encoding.UTF8.GetBytes(val + "\0");
                             strm.WriteArray(currentOffset + OffsetEntrySize, arr, 0, arr.Length);
                         }
                         // write new currentoffset
@@ -436,6 +435,7 @@ namespace LeagueSharp.Common
             return rawdata;
         }
 
+
         internal static ulong CalculateHash(string s)
         {
             return s.Aggregate<char, ulong>(5381, (current, c) => ((current << 5) + current) + c);
@@ -448,6 +448,7 @@ namespace LeagueSharp.Common
             Allocated
         }
 
+
         internal struct OffsetEntry
         {
             internal int Capacity;
@@ -458,8 +459,8 @@ namespace LeagueSharp.Common
 
     internal class CustomMutex : IDisposable
     {
-        private Mutex mutex;
         private readonly bool hasHandle;
+        private Mutex mutex;
 
         internal CustomMutex(int timeOut = -1)
         {
@@ -481,6 +482,7 @@ namespace LeagueSharp.Common
                 hasHandle = true;
             }
         }
+
 
         public void Dispose()
         {

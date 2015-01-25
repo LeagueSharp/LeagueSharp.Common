@@ -314,7 +314,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns true if the buff is active and didn't expire.
+        /// Returns true if the buff is active and didn't expire.
         /// </summary>
         public static bool IsValidBuff(this BuffInstance buff)
         {
@@ -332,10 +332,7 @@ namespace LeagueSharp.Common
             return
                 unit.Buffs.Any(
                     buff =>
-                        ((dontUseDisplayName &&
-                          String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase)) ||
-                         (!dontUseDisplayName &&
-                          String.Equals(buff.DisplayName, buffName, StringComparison.CurrentCultureIgnoreCase))) &&
+                        ((dontUseDisplayName && String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase)) || (!dontUseDisplayName && String.Equals(buff.DisplayName, buffName, StringComparison.CurrentCultureIgnoreCase))) &&
                         buff.IsValidBuff());
         }
 

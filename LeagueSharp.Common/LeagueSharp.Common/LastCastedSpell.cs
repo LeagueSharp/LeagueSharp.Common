@@ -1,7 +1,6 @@
 ﻿#region LICENSE
-
 /*
- Copyright 2014 - 2015 LeagueSharp
+ Copyright 2014 - 2014 LeagueSharp
  LastCastedSpell.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -17,7 +16,6 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
-
 #endregion
 
 #region
@@ -70,12 +68,12 @@ namespace LeagueSharp.Common
             Spellbook.OnCastSpell += SpellbookOnCastSpell;
         }
 
-        private static void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
+        static void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
         {
             if (spellbook.Owner.IsMe)
             {
                 LastCastPacketSent = new LastCastPacketSentEntry(
-                    args.Slot, Environment.TickCount, (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0);
+                        args.Slot, Environment.TickCount, (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0 );
             }
         }
 

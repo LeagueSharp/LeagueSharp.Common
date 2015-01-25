@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2015 LeagueSharp
+ Copyright 2014 - 2014 LeagueSharp
  Render.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -30,8 +30,17 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D9;
+using Bitmap = System.Drawing.Bitmap;
 using Color = System.Drawing.Color;
+using Device = SharpDX.Direct3D9.Device;
+using Effect = SharpDX.Direct3D9.Effect;
 using Font = SharpDX.Direct3D9.Font;
+using Format = SharpDX.Direct3D9.Format;
+using Image = System.Drawing.Image;
+using Matrix = SharpDX.Matrix;
+using PrimitiveType = SharpDX.Direct3D9.PrimitiveType;
+using Texture = SharpDX.Direct3D9.Texture;
+using Usage = SharpDX.Direct3D9.Usage;
 
 #endregion
 
@@ -146,7 +155,9 @@ namespace LeagueSharp.Common
             private static Effect _effect;
             private static EffectHandle _technique;
             private static bool Initialized;
+
             private static Vector3 _offset = new Vector3(0, 0, 0);
+
 
             public Circle(GameObject unit, float radius, Color color, int width = 1, bool zDeep = false)
             {
@@ -188,6 +199,7 @@ namespace LeagueSharp.Common
 
             public Vector3 Position { get; set; }
             public GameObject Unit { get; set; }
+
             public float Radius { get; set; }
             public Color Color { get; set; }
             public int Width { get; set; }
@@ -585,11 +597,11 @@ namespace LeagueSharp.Common
         {
             public delegate Vector2 PositionDelegate();
 
+            private readonly SharpDX.Direct3D9.Line _line;
+            public ColorBGRA Color;
             private Vector2 _end;
             private Vector2 _start;
             private int _width;
-            public ColorBGRA Color;
-            private readonly SharpDX.Direct3D9.Line _line;
 
             public Line(Vector2 start, Vector2 end, int width, ColorBGRA color)
             {
@@ -665,12 +677,11 @@ namespace LeagueSharp.Common
 
         public class Rectangle : RenderObject
         {
-            public delegate Vector2 PositionDelegate();
-
+            private readonly SharpDX.Direct3D9.Line _line;
+            public ColorBGRA Color;
             private int _x;
             private int _y;
-            public ColorBGRA Color;
-            private readonly SharpDX.Direct3D9.Line _line;
+
 
             public Rectangle(int x, int y, int width, int height, ColorBGRA color)
             {
@@ -710,6 +721,9 @@ namespace LeagueSharp.Common
 
             public int Width { get; set; }
             public int Height { get; set; }
+
+            public delegate Vector2 PositionDelegate();
+
             public PositionDelegate PositionUpdate { get; set; }
 
             public override void OnEndScene()
@@ -754,9 +768,9 @@ namespace LeagueSharp.Common
         {
             public delegate bool VisibleConditionDelegate(RenderObject sender);
 
-            private bool _visible = true;
             public int Layer;
             public VisibleConditionDelegate VisibleCondition;
+            private bool _visible = true;
 
             public bool Visible
             {
@@ -764,11 +778,15 @@ namespace LeagueSharp.Common
                 set { _visible = value; }
             }
 
-            public virtual void Dispose() {}
             public virtual void OnDraw() {}
+
             public virtual void OnEndScene() {}
+
             public virtual void OnPreReset() {}
+
             public virtual void OnPostReset() {}
+
+            public virtual void Dispose() {}
         }
 
         public class Sprite : RenderObject
@@ -777,6 +795,7 @@ namespace LeagueSharp.Common
 
             public delegate Vector2 PositionDelegate();
 
+            private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
             private ColorBGRA _color = SharpDX.Color.White;
             private SharpDX.Rectangle? _crop;
             private bool _hide;
@@ -785,7 +804,7 @@ namespace LeagueSharp.Common
             private Texture _texture;
             private int _x;
             private int _y;
-            private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
+            private float _rotation;
 
             public Sprite(Bitmap bitmap, Vector2 position)
             {
@@ -880,7 +899,11 @@ namespace LeagueSharp.Common
                 get { return _scale; }
             }
 
-            public float Rotation { set; get; }
+            public float Rotation
+            {
+                set { _rotation = value; }
+                get { return _rotation; }
+            }
 
             public ColorBGRA Color
             {
@@ -912,6 +935,7 @@ namespace LeagueSharp.Common
                         (int) (_scale.Y * rect.Height));
                 }
             }
+
 
             public void Show()
             {
@@ -1004,9 +1028,7 @@ namespace LeagueSharp.Common
                 }
 
                 if (Bitmap != null)
-                {
                     Bitmap.Dispose();
-                }
                 Bitmap = newBitmap;
 
                 _texture = Texture.FromMemory(
@@ -1076,17 +1098,20 @@ namespace LeagueSharp.Common
 
             public delegate string TextDelegate();
 
-            private string _text;
-            private int _x;
-            private int _y;
+            private readonly Font _textFont;
+
             public bool Centered = false;
             public Vector2 Offset;
             public bool OutLined = false;
+
             public PositionDelegate PositionUpdate;
             public FontDescription TextFontDescription;
             public TextDelegate TextUpdate;
             public Obj_AI_Base Unit;
-            private readonly Font _textFont;
+
+            private string _text;
+            private int _x;
+            private int _y;
 
             public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri")
             {
@@ -1103,9 +1128,10 @@ namespace LeagueSharp.Common
                         FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
+                        Quality = FontQuality.Default,
                     });
             }
+
 
             public Text(string text, Vector2 position, int size, ColorBGRA color, string fontName = "Calibri")
             {
@@ -1122,7 +1148,7 @@ namespace LeagueSharp.Common
                         FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
+                        Quality = FontQuality.Default,
                     });
             }
 
@@ -1150,7 +1176,7 @@ namespace LeagueSharp.Common
                         FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
+                        Quality = FontQuality.Default,
                     });
             }
 
@@ -1169,9 +1195,10 @@ namespace LeagueSharp.Common
                         FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
+                        Quality = FontQuality.Default,
                     });
             }
+
 
             public Text(Vector2 position, string text, int size, ColorBGRA color, string fontName = "Calibri")
             {
@@ -1186,7 +1213,7 @@ namespace LeagueSharp.Common
                         FaceName = fontName,
                         Height = size,
                         OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
+                        Quality = FontQuality.Default,
                     });
             }
 
@@ -1226,7 +1253,14 @@ namespace LeagueSharp.Common
 
             public string text
             {
-                get { return TextUpdate != null ? TextUpdate() : _text; }
+                get
+                {
+                    if (TextUpdate != null)
+                    {
+                        return TextUpdate();
+                    }
+                    return _text;
+                }
                 set { _text = value; }
             }
 
