@@ -111,7 +111,8 @@ namespace LeagueSharp.Common
 
         public static bool IsReady(this SpellSlot slot, int t = 0)
         {
-            return IsReady(ObjectManager.Player.Spellbook.GetSpell(slot), t);
+            var s = ObjectManager.Player.Spellbook.GetSpell(slot);
+            return s != null && IsReady(s, t);
         }
 
         public static bool IsValid<T>(this GameObject obj) where T : GameObject
