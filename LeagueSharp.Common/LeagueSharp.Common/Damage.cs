@@ -5421,16 +5421,21 @@ namespace LeagueSharp.Common
 
         private static double CalcMagicDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
-            var magicResist = (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod;
+            var magicResist = target.SpellBlock;
 
+            //Penetration cant reduce magic resist below 0
             double k;
             if (magicResist < 0)
             {
                 k = 2 - 100 / (100 - magicResist);
             }
+            else if ((target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod < 0)
+            {
+                k = 1;
+            }
             else
             {
-                k = 100 / (100 + magicResist);
+                k = 100 / (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
             //Take into account the percent passives
@@ -5460,16 +5465,21 @@ namespace LeagueSharp.Common
                 armorPenPercent = 0.7f; //Penetrating Bullets passive.
             }
 
-            var armor = (target.Armor * armorPenPercent) - armorPenFlat;
+            //Penetration cant reduce armor below 0
+            var armor = target.Armor;
 
             double k;
             if (armor < 0)
             {
                 k = 2 - 100 / (100 - armor);
             }
+            else if ((target.Armor * armorPenPercent) - armorPenFlat < 0)
+            {
+                k = 1;
+            }
             else
             {
-                k = 100 / (100 + armor);
+                k = 100 / (100 + (target.Armor * armorPenPercent) - armorPenFlat);
             }
 
             //Take into account the percent passives
@@ -5603,6 +5613,52 @@ namespace LeagueSharp.Common
                         m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     d = d + 2;
+                }
+            }
+
+            //Defensive masteries:
+
+            //Block
+            //Reduces incoming damage from champion basic attacks by 1 / 2
+            if (source is Obj_AI_Hero && target is Obj_AI_Hero)
+            {
+                var mastery =
+                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                if (mastery != null && mastery.Points >= 1)
+                {
+                    d = d - 1 * mastery.Points;
+                }
+            }
+
+            //Tough Skin
+            //Reduces damage taken from neutral monsters by 1 / 2
+            if (source is Obj_AI_Minion && target is Obj_AI_Hero && source.Team == GameObjectTeam.Neutral)
+            {
+                var mastery =
+                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
+                if (mastery != null && mastery.Points >= 1)
+                {
+                    d = d - 1 * mastery.Points;
+                }
+            }
+
+            //Unyielding
+            //Melee - Reduces all incoming damage from champions by 2
+            //Ranged - Reduces all incoming damage from champions by 1
+            if (source is Obj_AI_Hero && target is Obj_AI_Hero)
+            {
+                var mastery =
+                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
+                if (mastery != null && mastery.Points == 1)
+                {
+                    if (source.IsMelee())
+                    {
+                        d = d - 2;
+                    }
+                    else
+                    {
+                        d = d - 1;
+                    }
                 }
             }
 
