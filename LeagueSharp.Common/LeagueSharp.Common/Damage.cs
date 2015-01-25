@@ -34,11 +34,11 @@ namespace LeagueSharp.Common
 
     public class DamageSpell
     {
-        public double CalculatedDamage = 0d;
+        public double CalculatedDamage;
         public SpellDamageDelegate Damage;
         public Damage.DamageType DamageType;
         public SpellSlot Slot;
-        public int Stage = 0;
+        public int Stage;
     }
 
     public static class Damage
@@ -110,7 +110,6 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
 
             #region Caitlyn
 
@@ -1075,15 +1074,16 @@ namespace LeagueSharp.Common
                     {
                         Slot = SpellSlot.Q,
                         DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                Math.Min(
-                                    target.Team == GameObjectTeam.Neutral
-                                        ? new double[] { 300 / 400 / 500 / 600 / 700 }[level]
-                                        : 9999,
-                                    Math.Max(
-                                        new double[] { 80, 130, 180, 230, 280 }[level],
-                                        new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health))
+                        Damage = (source, target, level) =>
+                        {
+                            if (target.IsMinion)
+                            {
+                                return new double[] { 300, 400, 500, 600, 700 }[level];
+                            }
+                            return Math.Max(
+                                new double[] { 80, 130, 180, 230, 280 }[level],
+                                new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health);
+                        }
                     },
                     //W - per second
                     new DamageSpell
@@ -1093,7 +1093,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 new double[] { 35, 50, 65, 80, 95 }[level] + 0.2 * source.FlatMagicDamageMod
-                    },
+                    }
                 });
 
             Spells.Add(
@@ -2347,7 +2347,7 @@ namespace LeagueSharp.Common
                                        0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
                                       ((target.Buffs.First(b => b.DisplayName == "KalistaExpungeMarker").Count - 1) *
                                        (new double[] { 10, 14, 19, 25, 32 }[level] +
-                                        new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] *
+                                        new[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] *
                                         (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))
                                     : 0
                     },
@@ -5222,7 +5222,7 @@ namespace LeagueSharp.Common
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:
                     var d = target.Health * .2f * 3f;
-                    return (target.CanMove || target.HasBuff("slow", true, true)) ? d : d*2;
+                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d*2;
             }
             return 1d;
         }
@@ -5597,19 +5597,15 @@ namespace LeagueSharp.Common
         {
             double d = 0;
 
-            if (!(source is Obj_AI_Hero))
-            {
-                return d;
-            }
-
             //Offensive masteries:
 
             //Butcher
             //  Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
-            if (target is Obj_AI_Minion)
+            var hero = source as Obj_AI_Hero;
+            if (hero != null && target is Obj_AI_Minion)
             {
                 if (
-                    ((Obj_AI_Hero) source).Masteries.Any(
+                    hero.Masteries.Any(
                         m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     d = d + 2;
