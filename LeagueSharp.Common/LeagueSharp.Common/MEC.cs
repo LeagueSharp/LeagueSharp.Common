@@ -1,5 +1,4 @@
 ﻿#region LICENSE
-
 /*
  Copyright 2014 - 2014 LeagueSharp
  MEC.cs is part of LeagueSharp.Common.
@@ -17,7 +16,6 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
-
 #endregion
 
 #region
@@ -25,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using SharpDX;
 
 #endregion
@@ -39,7 +38,7 @@ namespace LeagueSharp.Common
         public static Vector2[] g_NonCulledPoints;
 
         /// <summary>
-        ///     Returns the mininimum enclosing circle from a list of points.
+        /// Returns the mininimum enclosing circle from a list of points.
         /// </summary>
         public static MecCircle GetMec(List<Vector2> points)
         {
@@ -158,11 +157,8 @@ namespace LeagueSharp.Common
             // if (there's a tie, take the one with the smaller X value.
             Vector2[] best_pt = { points[0] };
             foreach (
-                var pt in
-                    points.Where(
-                        pt =>
-                            (pt.Y < best_pt[0].Y) ||
-                            ((Math.Abs(pt.Y - best_pt[0].Y) < float.Epsilon) && (pt.X < best_pt[0].X))))
+                var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))
+                )
             {
                 best_pt[0] = pt;
             }
@@ -237,7 +233,7 @@ namespace LeagueSharp.Common
             var ax = Math.Abs(dx);
             var dy = y2 - y1;
             var ay = Math.Abs(dy);
-            if (Math.Abs(ax + ay) < float.Epsilon)
+            if (ax + ay == 0)
             {
                 // if (the two points are the same, return 360.
                 t = 360f / 9f;
@@ -320,7 +316,7 @@ namespace LeagueSharp.Common
             } // for j
 
             center = best_center;
-            if (Math.Abs(best_radius2 - float.MaxValue) < float.Epsilon)
+            if (best_radius2 == float.MaxValue)
             {
                 radius = 0;
             }

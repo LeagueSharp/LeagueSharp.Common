@@ -31,8 +31,7 @@ using System.Linq;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    ///     This class allows you to calculate the health of units after a set time. Only works on minions and only taking into
-    ///     account the auto-attack damage.
+    ///     This class allows you to calculate the health of units after a set time. Only works on minions and only taking into account the auto-attack damage.
     /// </summary>
     public class HealthPrediction
     {
@@ -90,7 +89,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the unit health after a set time milliseconds.
+        /// Returns the unit health after a set time milliseconds. 
         /// </summary>
         public static float GetHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
         {
@@ -118,7 +117,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the unit health after time milliseconds assuming that the past auto-attacks are periodic.
+        /// Returns the unit health after time milliseconds assuming that the past auto-attacks are periodic. 
         /// </summary>
         public static float LaneClearHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
         {
@@ -153,6 +152,7 @@ namespace LeagueSharp.Common
         private class PredictedDamage
         {
             public readonly float AnimationTime;
+
             public readonly float Damage;
             public readonly float Delay;
             public readonly int ProjectileSpeed;

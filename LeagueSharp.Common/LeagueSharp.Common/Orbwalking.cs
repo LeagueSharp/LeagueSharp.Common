@@ -85,9 +85,13 @@ namespace LeagueSharp.Common
         };
 
         // Champs whose auto attacks can't be cancelled
-        private static readonly string[] NoCancelChamps = { "Kalista" };
+        private static readonly string[] NoCancelChamps =
+        {
+            "Kalista"
+        };
+
         // Champs and their spells that won't get cancelled when moving
-        private static readonly Dictionary<string, string[]> NoInterruptSpells = new Dictionary<string, string[]>
+        private static readonly Dictionary<string, string[]> NoInterruptSpells = new Dictionary<string, string[]>()
         {
             { "Varus", new[] { "VarusQ" } },
             { "Lucian", new[] { "LucianR" } }
@@ -282,9 +286,9 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return Move && NoCancelChamps.Contains(Player.ChampionName)
-                    ? (Environment.TickCount - LastAATick > 250)
-                    : (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
+                return Move && NoCancelChamps.Contains(Player.ChampionName) ?
+                    (Environment.TickCount - LastAATick > 250) :
+                    (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
             }
 
             return false;
@@ -715,12 +719,7 @@ namespace LeagueSharp.Common
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
                 {
-                    result =
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                mob =>
-                                    mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
-                            .MaxOrDefault(mob => mob.MaxHealth);
+                    result = ObjectManager.Get<Obj_AI_Minion>().Where(mob =>mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral).MaxOrDefault(mob => mob.MaxHealth);
                     if (result != null)
                     {
                         return result;
@@ -748,7 +747,7 @@ namespace LeagueSharp.Common
                                 .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             let predHealth =
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                    minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
                             where
                                 predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon
@@ -756,7 +755,7 @@ namespace LeagueSharp.Common
 
                         if (result != null)
                         {
-                            _prevMinion = (Obj_AI_Minion) result;
+                            _prevMinion = (Obj_AI_Minion)result;
                         }
                     }
                 }
@@ -776,11 +775,8 @@ namespace LeagueSharp.Common
                     //Prevent canceling important channeled spells
                     if (Player.IsChannelingImportantSpell())
                     {
-                        if (!NoInterruptSpells.ContainsKey(Player.ChampionName) ||
-                            !NoInterruptSpells[Player.ChampionName].Contains(Player.LastCastedSpellName()))
-                        {
+                        if (!NoInterruptSpells.ContainsKey(Player.ChampionName) || !NoInterruptSpells[Player.ChampionName].Contains(Player.LastCastedSpellName()))
                             return;
-                        }
                     }
 
                     var target = GetTarget();
