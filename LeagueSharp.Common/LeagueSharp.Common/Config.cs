@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Config.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -77,7 +77,8 @@ namespace LeagueSharp.Common
                         var config = new XmlDocument();
                         config.Load(configFile);
 
-                        if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
+                        if (config.DocumentElement != null &&
+                            config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
                             return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
                         }

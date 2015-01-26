@@ -1,8 +1,8 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
- Orbwalking.cs is part of LeagueSharp.Common.
+ Copyright 2014 - 2015 LeagueSharp
+ Items.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ namespace LeagueSharp.Common
     public static class Items
     {
         /// <summary>
-        /// Returns true if the hero has the item.
+        ///     Returns true if the hero has the item.
         /// </summary>
         public static bool HasItem(string name, Obj_AI_Hero hero = null)
         {
@@ -41,85 +41,75 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Returns true if the hero has the item.
+        ///     Returns true if the hero has the item.
         /// </summary>
         public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
+            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId) id);
         }
 
         /// <summary>
-        /// Retruns true if the player has the item and its not on cooldown.
+        ///     Retruns true if the player has the item and its not on cooldown.
         /// </summary>
         public static bool CanUseItem(string name)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
-            {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
-                return inst != null && inst.State == SpellState.Ready;
-            }
-
-            return false;
+            return
+                ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name)
+                    .Select(
+                        slot =>
+                            ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                                spell => (int) spell.Slot == slot.Slot + (int) SpellSlot.Item1))
+                    .Select(inst => inst != null && inst.State == SpellState.Ready)
+                    .FirstOrDefault();
         }
 
         /// <summary>
-        /// Retruns true if the player has the item and its not on cooldown.
+        ///     Retruns true if the player has the item and its not on cooldown.
         /// </summary>
         public static bool CanUseItem(int id)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
-            {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
-                return inst != null && inst.State == SpellState.Ready;
-            }
-
-            return false;
+            return
+                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
+                    .Select(
+                        slot =>
+                            ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                                spell => (int) spell.Slot == slot.Slot + (int) SpellSlot.Item1))
+                    .Select(inst => inst != null && inst.State == SpellState.Ready)
+                    .FirstOrDefault();
         }
 
         /// <summary>
-        /// Casts the item on the target.
+        ///     Casts the item on the target.
         /// </summary>
         public static bool UseItem(string name, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
-            {
-                if (target != null)
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
-                }
-                else
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
-                }
-            }
-
-            return false;
+            return
+                ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name)
+                    .Select(
+                        slot =>
+                            target != null
+                                ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                                : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot))
+                    .FirstOrDefault();
         }
 
         /// <summary>
-        /// Casts the item on the target.
+        ///     Casts the item on the target.
         /// </summary>
         public static bool UseItem(int id, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
-            {
-                if (target != null)
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
-                }
-                else
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
-                }
-            }
-
-            return false;
+            return
+                ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
+                    .Select(
+                        slot =>
+                            target != null
+                                ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                                : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot))
+                    .FirstOrDefault();
         }
 
         /// <summary>
-        /// Casts the item on a Vector2 position.
+        ///     Casts the item on a Vector2 position.
         /// </summary>
         public static bool UseItem(int id, Vector2 position)
         {
@@ -127,64 +117,61 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Casts the item on a Vector3 position.
+        ///     Casts the item on a Vector3 position.
         /// </summary>
         public static bool UseItem(int id, Vector3 position)
         {
-            if (position != Vector3.Zero)
-            {
-                foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
-                }
-            }
-
-            return false;
+            return position != Vector3.Zero &&
+                   ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id)
+                       .Select(slot => ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position))
+                       .FirstOrDefault();
         }
 
         /// <summary>
-        /// Returns the ward slot.
+        ///     Returns the ward slot.
         /// </summary>
         public static InventorySlot GetWardSlot()
         {
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             return (from wardId in wardIds
-                    where CanUseItem(wardId)
-                    select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
+                where CanUseItem(wardId)
+                select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId) wardId))
                 .FirstOrDefault();
         }
 
         public class Item
         {
-            public int Id { get; private set; }
             private float _range;
+
+            public Item(int id, float range = 0)
+            {
+                Id = id;
+                Range = range;
+            }
+
+            public int Id { get; private set; }
+
             public float Range
             {
                 get { return _range; }
                 set
                 {
                     _range = value;
-                    _rangeSqr = value * value;
+                    RangeSqr = value * value;
                 }
             }
-            private float _rangeSqr;
-            public float RangeSqr
-            {
-                get { return _rangeSqr; }
-            }
+
+            public float RangeSqr { get; private set; }
+
             public List<SpellSlot> Slots
             {
                 get
                 {
-                    return ObjectManager.Player.InventoryItems.Where(slot =>
-                        slot.Id == (ItemId)Id).Select(slot => slot.SpellSlot).ToList();
+                    return
+                        ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) Id)
+                            .Select(slot => slot.SpellSlot)
+                            .ToList();
                 }
-            }
-
-            public Item(int id, float range = 0)
-            {
-                Id = id;
-                Range = range;
             }
 
             public bool IsInRange(Obj_AI_Base target)
@@ -234,7 +221,7 @@ namespace LeagueSharp.Common
 
             public void Buy()
             {
-                ObjectManager.Player.BuyItem((ItemId)Id);
+                ObjectManager.Player.BuyItem((ItemId) Id);
             }
         }
     }

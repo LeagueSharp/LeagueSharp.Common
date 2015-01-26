@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Utils.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -180,7 +180,10 @@ namespace LeagueSharp.Common
                 var window_height = Console.WindowHeight;
                 Console.Clear();
             }
-            catch {}
+            catch
+            {
+                // ignored
+            }
         }
 
         /// <summary>
@@ -220,7 +223,6 @@ namespace LeagueSharp.Common
 
         public static double NextDouble(this Random rng, double min, double max)
         {
-            
             return min + (rng.NextDouble() * (max - min));
         }
 
@@ -273,8 +275,10 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
-            
+            }
+
             var maxElem = enumerator.Current;
             var maxVal = valuingFoo(maxElem);
 
@@ -296,7 +300,9 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
+            }
 
             var minElem = enumerator.Current;
             var minVal = valuingFoo(minElem);
