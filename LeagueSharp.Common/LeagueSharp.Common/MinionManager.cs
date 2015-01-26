@@ -22,7 +22,6 @@
 
 #region
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
@@ -125,6 +124,7 @@ namespace LeagueSharp.Common
         {
             var result = new Vector2();
             var minionCount = 0;
+            var startPos = ObjectManager.Player.ServerPosition.To2D();
 
             range = range * range;
 
@@ -143,8 +143,7 @@ namespace LeagueSharp.Common
                     {
                         var circle = MEC.GetMec(subGroup);
 
-                        if (circle.Radius <= width &&
-                            Vector2.DistanceSquared(circle.Center, ObjectManager.Player.ServerPosition.To2D()) <= range)
+                        if (circle.Radius <= width && circle.Center.Distance(startPos, true) <= range)
                         {
                             minionCount = subGroup.Count;
                             return new FarmLocation(circle.Center, minionCount);
@@ -156,9 +155,10 @@ namespace LeagueSharp.Common
             {
                 foreach (var pos in minionPositions)
                 {
-                    if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range)
+                    if (pos.Distance(startPos, true) <= range)
                     {
-                        var count = minionPositions.Count(pos2 => Vector2.DistanceSquared(pos, pos2) <= width * width);
+                        var count = minionPositions.Count(pos2 => pos.Distance(pos2, true) <= width * width);
+
                         if (count >= minionCount)
                         {
                             result = pos;
@@ -194,7 +194,7 @@ namespace LeagueSharp.Common
 
             foreach (var pos in minionPositions)
             {
-                if (Vector2.DistanceSquared(pos, ObjectManager.Player.ServerPosition.To2D()) <= range * range)
+                if (pos.Distance(startPos, true) <= range * range)
                 {
                     var endPos = startPos + range * (pos - startPos).Normalized();
 
