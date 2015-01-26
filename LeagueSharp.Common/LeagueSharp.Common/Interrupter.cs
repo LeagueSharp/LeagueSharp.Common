@@ -139,6 +139,7 @@ namespace LeagueSharp.Common
                     DangerLevel = InterruptableDangerLevel.High,
                     Slot = SpellSlot.R,
                     BuffName = "alzaharnethergraspsound",
+                    ExtraDuration = 300
                 });
 
             #endregion
