@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Prediction.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -430,7 +430,7 @@ namespace LeagueSharp.Common
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed == float.MaxValue)
+            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
             {
                 var tDistance = input.Delay * speed - input.RealRadius;
 
@@ -731,10 +731,12 @@ namespace LeagueSharp.Common
                 if (posibleTargets.Count > 1)
                 {
                     var candidates = new List<Vector2>();
-                    foreach (var target in posibleTargets)
+                    foreach (
+                        var targetCandidates in
+                            posibleTargets.Select(
+                                target => GetCandidates(input.From.To2D(), target.Position, (input.Radius), input.Range))
+                        )
                     {
-                        var targetCandidates = GetCandidates(
-                            input.From.To2D(), target.Position, (input.Radius), input.Range);
                         candidates.AddRange(targetCandidates);
                     }
 
@@ -923,7 +925,7 @@ namespace LeagueSharp.Common
                             var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
                             var wallDirection = (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
-                            var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
+                            var wallStart = wall.Position.To2D() + wallWidth / 2f * wallDirection;
                             var wallEnd = wallStart - wallWidth * wallDirection;
 
                             if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)

@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Render.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -804,7 +804,6 @@ namespace LeagueSharp.Common
             private Texture _texture;
             private int _x;
             private int _y;
-            private float _rotation;
 
             public Sprite(Bitmap bitmap, Vector2 position)
             {
@@ -899,11 +898,7 @@ namespace LeagueSharp.Common
                 get { return _scale; }
             }
 
-            public float Rotation
-            {
-                set { _rotation = value; }
-                get { return _rotation; }
-            }
+            public float Rotation { set; get; }
 
             public ColorBGRA Color
             {
