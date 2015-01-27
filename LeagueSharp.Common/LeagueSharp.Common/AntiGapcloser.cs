@@ -101,6 +101,19 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
+            
+            #region Caitlyn
+
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Caitlyn",
+                    Slot = SpellSlot.E,
+                    SpellName = "caitlynentrapment",
+                    SkillType = GapcloserType.Skillshot
+                });
+
+            #endregion
 
             #region Corki
 
