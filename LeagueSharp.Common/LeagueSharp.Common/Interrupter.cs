@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Interrupter.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -354,15 +354,16 @@ namespace LeagueSharp.Common
         {
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(e => e.IsValidTarget()))
             {
+                var enemy1 = enemy;
                 foreach (var spell in
                     Spells.Where(
                         spell =>
-                            (enemy.LastCastedspell() != null &&
+                            (enemy1.LastCastedspell() != null &&
                              String.Equals(
-                                 enemy.LastCastedspell().Name, spell.SpellName,
+                                 enemy1.LastCastedspell().Name, spell.SpellName,
                                  StringComparison.CurrentCultureIgnoreCase) &&
-                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true))))
+                             Environment.TickCount - enemy1.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                            (spell.BuffName != null && enemy1.HasBuff(spell.BuffName, true))))
                 {
                     FireOnInterruptable(enemy, spell);
                 }
@@ -376,14 +377,13 @@ namespace LeagueSharp.Common
                     spell =>
                         spell.ChampionName == unit.ChampionName &&
                         ((unit.LastCastedspell() != null &&
-                            String.Equals(
-                                unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
-                            Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                        (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
-                        (unit.IsMe &&
-                            LastCastedSpell.LastCastPacketSent != null &&
-                            LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
+                          String.Equals(
+                              unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
+                          Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                         (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
+                         (unit.IsMe && LastCastedSpell.LastCastPacketSent != null &&
+                          LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
+                          Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
         }
     }
 }

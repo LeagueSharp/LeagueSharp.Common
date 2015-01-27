@@ -104,27 +104,17 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Blue_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 9880), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 9880), 775); }
             }
 
             public static Geometry.Polygon Blue_Inhib_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 6100), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(1250, 3900), new Vector2(1250, 6100), 775); }
             }
 
             public static Geometry.Polygon Blue_Inner_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(1250, 6100), new Vector2(1250, 9880), 775);
-
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(1250, 6100), new Vector2(1250, 9880), 775); }
             }
 
             public static Geometry.Polygon Contest_Zone
@@ -166,27 +156,17 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Red_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(10900, 13675), new Vector2(4880, 13675), 775);
-
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(10900, 13675), new Vector2(4880, 13675), 775); }
             }
 
             public static Geometry.Polygon Red_Inhib_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(10900, 13675), new Vector2(8400, 13675), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(10900, 13675), new Vector2(8400, 13675), 775); }
             }
 
             public static Geometry.Polygon Red_Inner_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(8400, 13675), new Vector2(4880, 13675), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(8400, 13675), new Vector2(4880, 13675), 775); }
             }
 
             public static Vector2 Blue_Outer_Turret
@@ -235,27 +215,17 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Blue_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(3490, 3500), new Vector2(5760, 5950), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(3490, 3500), new Vector2(5760, 5950), 775); }
             }
 
             public static Geometry.Polygon Blue_Inhib_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(3490, 3500), new Vector2(4560, 4700), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(3490, 3500), new Vector2(4560, 4700), 775); }
             }
 
             public static Geometry.Polygon Blue_Inner_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(4560, 4700), new Vector2(5760, 5950), 775);
-
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(4560, 4700), new Vector2(5760, 5950), 775); }
             }
 
             public static Geometry.Polygon Contest_Zone
@@ -281,11 +251,7 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Red_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(11330, 11400), new Vector2(8980, 8920), 775);
-
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(11330, 11400), new Vector2(8980, 8920), 775); }
             }
 
             public static Geometry.Polygon Red_Inhib_Zone
@@ -298,10 +264,7 @@ namespace LeagueSharp.Common
 
             public static Geometry.Polygon Red_Inner_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(10310, 10210), new Vector2(8980, 8920), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(10310, 10210), new Vector2(8980, 8920), 775); }
             }
 
             public static Vector2 Blue_Outer_Turret
@@ -373,27 +336,17 @@ namespace LeagueSharp.Common
 
             private static Geometry.Polygon Blue_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(3900, 1250), new Vector2(9880, 1250), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(3900, 1250), new Vector2(9880, 1250), 775); }
             }
 
             private static Geometry.Polygon Blue_Inhib_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(3900, 1250), new Vector2(6100, 1250), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(3900, 1250), new Vector2(6100, 1250), 775); }
             }
 
             private static Geometry.Polygon Blue_Inner_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(6100, 1250), new Vector2(9880, 1250), 775);
-
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(6100, 1250), new Vector2(9880, 1250), 775); }
             }
 
             private static Geometry.Polygon Contest_Zone
@@ -437,27 +390,17 @@ namespace LeagueSharp.Common
 
             private static Geometry.Polygon Red_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 4880), 775);
-
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 4880), 775); }
             }
 
             private static Geometry.Polygon Red_Inhib_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 8400), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(13675, 10900), new Vector2(13675, 8400), 775); }
             }
 
             private static Geometry.Polygon Red_Inner_Zone
             {
-                get
-                {
-                    return new Geometry.Polygon.Rectangle(new Vector2(13675, 8400), new Vector2(13675, 4880), 775);
-                }
+                get { return new Geometry.Polygon.Rectangle(new Vector2(13675, 8400), new Vector2(13675, 4880), 775); }
             }
 
             public static Vector2 Blue_Outer_Turret

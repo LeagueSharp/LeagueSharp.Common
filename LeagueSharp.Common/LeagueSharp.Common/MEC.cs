@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  MEC.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -157,7 +157,7 @@ namespace LeagueSharp.Common
             // if (there's a tie, take the one with the smaller X value.
             Vector2[] best_pt = { points[0] };
             foreach (
-                var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))
+                var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((Math.Abs(pt.Y - best_pt[0].Y) < float.Epsilon) && (pt.X < best_pt[0].X)))
                 )
             {
                 best_pt[0] = pt;
@@ -233,7 +233,7 @@ namespace LeagueSharp.Common
             var ax = Math.Abs(dx);
             var dy = y2 - y1;
             var ay = Math.Abs(dy);
-            if (ax + ay == 0)
+            if (Math.Abs(ax + ay) < float.Epsilon)
             {
                 // if (the two points are the same, return 360.
                 t = 360f / 9f;
@@ -316,7 +316,7 @@ namespace LeagueSharp.Common
             } // for j
 
             center = best_center;
-            if (best_radius2 == float.MaxValue)
+            if (Math.Abs(best_radius2 - float.MaxValue) < float.Epsilon)
             {
                 radius = 0;
             }

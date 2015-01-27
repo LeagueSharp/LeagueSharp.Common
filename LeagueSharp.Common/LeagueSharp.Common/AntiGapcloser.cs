@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  AntiGapcloser.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -138,7 +138,7 @@ namespace LeagueSharp.Common
                     SpellName = "elisespiderqcast",
                     SkillType = GapcloserType.Skillshot
                 });
-                
+
             Spells.Add(
                 new Gapcloser
                 {
@@ -660,14 +660,13 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            foreach (
-                var gapcloser in
-                    ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
-                        .Where(
-                            gapcloser =>
-                                gapcloser.SkillType == GapcloserType.Targeted ||
-                                (gapcloser.SkillType == GapcloserType.Skillshot &&
-                                 ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
+            foreach (var gapcloser in
+                ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
+                    .Where(
+                        gapcloser =>
+                            gapcloser.SkillType == GapcloserType.Targeted ||
+                            (gapcloser.SkillType == GapcloserType.Skillshot &&
+                             ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
             {
                 OnEnemyGapcloser(gapcloser);
             }
@@ -685,10 +684,11 @@ namespace LeagueSharp.Common
                 {
                     Start = args.Start,
                     End = args.End,
-                    Sender = (Obj_AI_Hero)sender,
+                    Sender = (Obj_AI_Hero) sender,
                     TickCount = Environment.TickCount,
-                    SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
-                    Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name)
+                    SkillType =
+                        (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
+                    Slot = ((Obj_AI_Hero) sender).GetSpellSlot(args.SData.Name)
                 });
         }
 

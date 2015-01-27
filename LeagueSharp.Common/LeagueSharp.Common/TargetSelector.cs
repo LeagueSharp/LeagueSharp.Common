@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  TargetSelector.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -387,7 +387,7 @@ namespace LeagueSharp.Common
                         return
                             targets.MinOrDefault(
                                 hero =>
-                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).Distance(
+                                    (rangeCheckFrom ?? champion.ServerPosition).Distance(
                                         hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:

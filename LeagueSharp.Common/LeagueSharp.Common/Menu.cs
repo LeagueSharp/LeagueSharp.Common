@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Menu.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -323,7 +323,7 @@ namespace LeagueSharp.Common
         {
             width = (width > 0 ? width : item.Width);
             var percentage = 100 * (value - min) / (max - min);
-            var x = position.X + 3 + (percentage * (width - 3)) / 100;
+            var x = position.X + 3 + (percentage * (width - 3)) / 100f;
             Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.Yellow);
 
             if (drawText)
@@ -405,8 +405,8 @@ namespace LeagueSharp.Common
                     return _cachedMenuCount;
                 }
 
-                int result = 0;
-                int i = 0;
+                var result = 0;
+                var i = 0;
                 if (_menuStateFileInfo.Directory != null)
                 {
                     foreach (FileInfo info in

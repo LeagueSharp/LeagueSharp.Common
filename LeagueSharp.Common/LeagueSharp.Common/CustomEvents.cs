@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  CustomEvents.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -42,7 +42,8 @@ namespace LeagueSharp.Common
 
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
-                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs())); //Otherwise the .ctor didn't return yet and no callback will occur
+                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs()));
+                        //Otherwise the .ctor didn't return yet and no callback will occur
                 }
                 else
                 {
@@ -59,7 +60,7 @@ namespace LeagueSharp.Common
             /// OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
             /// </summary>
             public static event OnGameEnded OnGameEnd;
-            
+
             private static void Game_OnGameStart(EventArgs args)
             {
                 if (OnGameLoad != null)
@@ -105,7 +106,7 @@ namespace LeagueSharp.Common
 
             private static void PacketHandler(GamePacketEventArgs args)
             {
-                return;//BROKEN on 4.21
+                return; //BROKEN on 4.21
                 /*if (OnLevelUpSpell != null)
                 {
                     if (args.PacketData[0] == 0x15)
@@ -141,7 +142,7 @@ namespace LeagueSharp.Common
                 var dashHandler = OnDash;
                 if (dashHandler != null)
                 {
-                   dashHandler(sender, args);
+                    dashHandler(sender, args);
                 }
             }
 
@@ -157,7 +158,7 @@ namespace LeagueSharp.Common
                 public int SpellId;
                 public int SpellLevel;
 
-                internal OnLevelUpSpellEventArgs() { }
+                internal OnLevelUpSpellEventArgs() {}
             }
         }
     }

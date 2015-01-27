@@ -1,7 +1,7 @@
 #region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  Damage.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -5185,11 +5185,11 @@ namespace LeagueSharp.Common
                     {
                         return 54 + 6 * source.Level;
                     }
-            }
+                }
 
                 return
                     new double[]
-                    {390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000}[
+                    { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
                         source.Level - 1];
             }
 
@@ -5222,7 +5222,7 @@ namespace LeagueSharp.Common
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:
                     var d = target.Health * .2f * 3f;
-                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d*2;
+                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d * 2;
             }
             return 1d;
         }
@@ -5435,7 +5435,8 @@ namespace LeagueSharp.Common
             }
             else
             {
-                k = 100 / (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
+                k = 100 /
+                    (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
             //Take into account the percent passives
@@ -5604,9 +5605,7 @@ namespace LeagueSharp.Common
             var hero = source as Obj_AI_Hero;
             if (hero != null && target is Obj_AI_Minion)
             {
-                if (
-                    hero.Masteries.Any(
-                        m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     d = d + 2;
                 }
@@ -5619,7 +5618,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -5631,7 +5630,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Minion && target is Obj_AI_Hero && source.Team == GameObjectTeam.Neutral)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -5644,7 +5643,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
                 if (mastery != null && mastery.Points == 1)
                 {
                     if (source.IsMelee())
