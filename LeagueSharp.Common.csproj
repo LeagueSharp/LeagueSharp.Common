@@ -104,7 +104,6 @@
     <Compile Include="Data\ItemData.cs" />
     <Compile Include="Data\MasteryData.cs" />
     <Compile Include="GamePacket.cs" />
-    <Compile Include="ItemData.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="Interrupter.cs" />
