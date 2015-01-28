@@ -660,7 +660,7 @@ namespace LeagueSharp.Common
                 {
                     if (_damageToUnit == null)
                     {
-                        //Drawing.OnDraw += Drawing_OnDraw;
+                        Drawing.OnDraw += Drawing_OnDraw;
                     }
                     _damageToUnit = value;
                 }
