@@ -97,7 +97,7 @@
     <Compile Include="Alerter.cs" />
     <Compile Include="AntiGapcloser.cs" />
     <Compile Include="AutoLevel.cs" />
-    <Compile Include="BetterWebClient.cs"/>
+    <Compile Include="BetterWebClient.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="Global.cs" />
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="Interrupter.cs" />
+    <Compile Include="Interrupter2.cs" />
     <Compile Include="LastCastedSpell.cs" />
     <Compile Include="MapPositions.cs" />
     <Compile Include="Menu.cs" />

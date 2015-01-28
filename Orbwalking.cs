@@ -90,13 +90,6 @@ namespace LeagueSharp.Common
             "Kalista"
         };
 
-        // Champs and their spells that won't get cancelled when moving
-        private static readonly Dictionary<string, string[]> NoInterruptSpells = new Dictionary<string, string[]>()
-        {
-            { "Varus", new[] { "VarusQ" } },
-            { "Lucian", new[] { "LucianR" } }
-        };
-
         public static int LastAATick;
         public static bool Attack = true;
         public static bool DisableNextAttack;
@@ -772,11 +765,10 @@ namespace LeagueSharp.Common
                         return;
                     }
 
-                    //Prevent canceling important channeled spells
-                    if (Player.IsChannelingImportantSpell())
+                    //Prevent canceling important spells
+                    if (Player.IsCastingInterruptableSpell(true))
                     {
-                        if (!NoInterruptSpells.ContainsKey(Player.ChampionName) || !NoInterruptSpells[Player.ChampionName].Contains(Player.LastCastedSpellName()))
-                            return;
+                        return;
                     }
 
                     var target = GetTarget();
