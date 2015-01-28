@@ -72,7 +72,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>..\..\..\..\..\Desktop\LeagueSharpLoader\bin\Release\System\clipper_library.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>C:\Program Files (x86)\LeagueSharp\\System\LeagueSharp.dll</HintPath>
