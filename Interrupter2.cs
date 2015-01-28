@@ -10,7 +10,7 @@ namespace LeagueSharp.Common
 {
     public static class Interrupter2
     {
-        public delegate void InterruptableTargetHandler(Obj_AI_Hero target, DangerLevel dangerLevel, float endTime);
+        public delegate void InterruptableTargetHandler(Obj_AI_Hero target, DangerLevel dangerLevel, float endTime, bool movementInterrupts);
         public static event InterruptableTargetHandler OnInterruptableTarget;
 
         public class InterruptableTargetData
@@ -105,7 +105,7 @@ namespace LeagueSharp.Common
                     var newArgs = GetInterruptableTargetData(enemy);
                     if (newArgs != null)
                     {
-                        OnInterruptableTarget(enemy, newArgs.DangerLevel, newArgs.EndTime);
+                        OnInterruptableTarget(enemy, newArgs.DangerLevel, newArgs.EndTime, newArgs.MovementInterrupts);
                     }
                 });
             }
