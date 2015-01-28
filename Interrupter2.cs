@@ -121,7 +121,7 @@ namespace LeagueSharp.Common
         public static bool IsCastingInterruptableSpell(this Obj_AI_Hero target, bool checkMovementInterruption = false)
         {
             var data = GetInterruptableTargetData(target);
-            return data != null && checkMovementInterruption ? data.MovementInterrupts : true;
+            return data != null && (checkMovementInterruption ? data.MovementInterrupts : true);
         }
 
         public static InterruptableTargetData GetInterruptableTargetData(Obj_AI_Hero target)
