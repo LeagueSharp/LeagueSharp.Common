@@ -430,7 +430,9 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                if (unit.IsMe && Spell.Target is Obj_AI_Base)
+                if (unit.IsMe && (Spell.Target is Obj_AI_Base || 
+                    Spell.Target is Obj_BarracksDampener ||
+                    Spell.Target is Obj_HQ))
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
                     var target = (Obj_AI_Base) Spell.Target;
