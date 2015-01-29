@@ -866,8 +866,8 @@ namespace LeagueSharp.Common
                         case CollisionableObjects.Heroes:
                             foreach (
                                 var hero in
-                                    ObjectManager.Get<Obj_AI_Hero>()
-                                        .Where(
+                                    HeroManager.Enemies
+                                        .FindAll(
                                             hero =>
                                                 hero.IsValidTarget(
                                                     Math.Min(input.Range + input.Radius + 100, 2000), true,

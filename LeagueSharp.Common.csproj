@@ -106,6 +106,7 @@
     <Compile Include="GamePacket.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="HealthPrediction.cs" />
+    <Compile Include="HeroManager.cs" />
     <Compile Include="Interrupter.cs" />
     <Compile Include="Interrupter2.cs" />
     <Compile Include="LastCastedSpell.cs" />

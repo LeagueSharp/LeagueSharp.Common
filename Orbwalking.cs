@@ -797,7 +797,7 @@ namespace LeagueSharp.Common
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetRealAutoAttackRange(target) + 65,

@@ -69,9 +69,6 @@ namespace LeagueSharp.Common
 
         #region Vars
 
-        // Get all heroes for now until Jodus improves ObjectManager
-        private static readonly List<Obj_AI_Hero> Enemies = ObjectManager.Get<Obj_AI_Hero>().FindAll(o => o.IsEnemy);
-
         public static TargetingMode Mode = TargetingMode.AutoPriority;
         private static Menu _configMenu;
         private static Obj_AI_Hero _selectedTargetObjAiHero;
@@ -99,7 +96,7 @@ namespace LeagueSharp.Common
                 return;
             }
             _selectedTargetObjAiHero =
-                Enemies
+                HeroManager.Enemies
                     .FindAll(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
                     .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
         }
@@ -218,7 +215,7 @@ namespace LeagueSharp.Common
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
 
-            foreach (var enemy in Enemies)
+            foreach (var enemy in HeroManager.Enemies)
             {
                 config.AddItem(
                     new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
@@ -245,7 +242,7 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-            foreach (var enemy in Enemies)
+            foreach (var enemy in HeroManager.Enemies)
             {
                 _configMenu.Item("TargetSelector" + enemy.ChampionName + "Priority")
                     .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
@@ -367,7 +364,7 @@ namespace LeagueSharp.Common
                 }
 
                 var targets =
-                    Enemies
+                    HeroManager.Enemies
                         .FindAll(
                             hero =>
                                 ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) &&

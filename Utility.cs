@@ -420,7 +420,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemiesInRange(this Vector3 point, float range)
         {
-            return ObjectManager.Get<Obj_AI_Hero>().Count(h => h.IsValidTarget(range, true, point));
+            return HeroManager.Enemies.Count(h => h.IsValidTarget(range, true, point));
         }
 
         // Use same interface as CountEnemiesInRange
@@ -445,8 +445,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountAlliesInRange(this Vector3 point, float range)
         {
-            return ObjectManager.Get<Obj_AI_Hero>()
-                .Where(x => x.IsAlly)
+            return HeroManager.Allies
                 .Count(x => x.IsValidTarget(range, false, point));
         }
 
@@ -458,9 +457,8 @@ namespace LeagueSharp.Common
         public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
         {
             return
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(x => x.IsAlly && point.Distance(x.ServerPosition, true) <= range * range)
-                    .ToList();
+                HeroManager.Allies
+                    .FindAll(x => point.Distance(x.ServerPosition, true) <= range * range);
         }
 
         public static List<Obj_AI_Hero> GetEnemiesInRange(this Obj_AI_Base unit, float range)
@@ -471,9 +469,8 @@ namespace LeagueSharp.Common
         public static List<Obj_AI_Hero> GetEnemiesInRange(this Vector3 point, float range)
         {
             return
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(x => x.IsEnemy && point.Distance(x.ServerPosition, true) <= range * range)
-                    .ToList();
+                HeroManager.Enemies
+                    .FindAll(x => point.Distance(x.ServerPosition, true) <= range * range);
         }
 
         public static List<T> GetObjects<T>(this Vector3 position, float range) where T : GameObject, new()
@@ -674,7 +671,7 @@ namespace LeagueSharp.Common
                 }
 
                 foreach (var unit in
-                    ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValid && h.IsHPBarRendered && h.IsEnemy))
+                    HeroManager.Enemies.FindAll(h => h.IsValid && h.IsHPBarRendered))
                 {
                     var barPos = unit.HPBarPosition;
                     var damage = _damageToUnit(unit);

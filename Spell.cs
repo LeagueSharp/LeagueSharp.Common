@@ -295,9 +295,7 @@ namespace LeagueSharp.Common
 
         public float GetHitCount(HitChance hitChance = HitChance.High)
         {
-            return
-                (from hero in ObjectManager.Get<Obj_AI_Hero>() where hero.IsValidTarget() select GetPrediction(hero))
-                    .Count(prediction => prediction.Hitchance >= hitChance);
+            return HeroManager.Enemies.Select(e => GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
         }
 
         private CastStates _cast(Obj_AI_Base unit,
