@@ -1,35 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region LICENSE
 
-using LeagueSharp;
+/*
+ Copyright 2014 - 2015 LeagueSharp
+ Interrupter2.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#endregion
+
+#region
+
+using System;
+using System.Collections.Generic;
+
+#endregion
 
 namespace LeagueSharp.Common
 {
     public static class Interrupter2
     {
-        public delegate void InterruptableTargetHandler(Obj_AI_Hero target, DangerLevel dangerLevel, float endTime, bool movementInterrupts);
-        public static event InterruptableTargetHandler OnInterruptableTarget;
+        public delegate void InterruptableTargetHandler(Obj_AI_Hero sender, InterruptableTargetEventArgs args);
 
-        public class InterruptableTargetData
+        public enum DangerLevel
         {
-            public DangerLevel DangerLevel { get; private set; }
-            public float EndTime { get; private set; }
-            public bool MovementInterrupts { get; private set; }
-
-            public InterruptableTargetData(DangerLevel dangerLevel, float endTime, bool movementInterrupts)
-            {
-                DangerLevel = dangerLevel;
-                EndTime = endTime;
-                MovementInterrupts = movementInterrupts;
-            }
+            Low,
+            Medium,
+            High
         }
-
-        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
-        // Until jodus improves ObjectManager, we'll use this
-        private static List<Obj_AI_Hero> Enemies { get; set; }
 
         static Interrupter2()
         {
@@ -45,6 +54,11 @@ namespace LeagueSharp.Common
             // Listen to required events
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
+
+        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
+        // Until jodus improves ObjectManager, we'll use this
+        private static List<Obj_AI_Hero> Enemies { get; set; }
+        public static event InterruptableTargetHandler OnInterruptableTarget;
 
         private static void InitializeSpells()
         {
@@ -74,24 +88,12 @@ namespace LeagueSharp.Common
             #endregion
         }
 
-        private class InterruptableSpell
-        {
-            public SpellSlot Slot { get; private set; }
-            public DangerLevel DangerLevel { get; private set; }
-            public bool MovementInterrupts { get; private set; }
-
-            public InterruptableSpell(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
-            {
-                Slot = slot;
-                DangerLevel = dangerLevel;
-                MovementInterrupts = movementInterrupts;
-            }
-        }
-
         private static void RegisterSpell(string champName, InterruptableSpell spell)
         {
             if (!InterruptableSpells.ContainsKey(champName))
+            {
                 InterruptableSpells.Add(champName, new List<InterruptableSpell>());
+            }
 
             InterruptableSpells[champName].Add(spell);
         }
@@ -100,31 +102,25 @@ namespace LeagueSharp.Common
         {
             if (OnInterruptableTarget != null)
             {
-                Enemies.ForEach(enemy =>
-                {
-                    var newArgs = GetInterruptableTargetData(enemy);
-                    if (newArgs != null)
+                Enemies.ForEach(
+                    enemy =>
                     {
-                        OnInterruptableTarget(enemy, newArgs.DangerLevel, newArgs.EndTime, newArgs.MovementInterrupts);
-                    }
-                });
+                        var newArgs = GetInterruptableTargetData(enemy);
+                        if (newArgs != null)
+                        {
+                            OnInterruptableTarget(enemy, newArgs);
+                        }
+                    });
             }
-        }
-
-        public enum DangerLevel
-        {
-            Low,
-            Medium,
-            High
         }
 
         public static bool IsCastingInterruptableSpell(this Obj_AI_Hero target, bool checkMovementInterruption = false)
         {
             var data = GetInterruptableTargetData(target);
-            return data != null && (checkMovementInterruption ? data.MovementInterrupts : true);
+            return data != null && (!checkMovementInterruption || data.MovementInterrupts);
         }
 
-        public static InterruptableTargetData GetInterruptableTargetData(Obj_AI_Hero target)
+        public static InterruptableTargetEventArgs GetInterruptableTargetData(Obj_AI_Hero target)
         {
             if (target.IsValid<Obj_AI_Hero>())
             {
@@ -134,17 +130,48 @@ namespace LeagueSharp.Common
                     if (InterruptableSpells.ContainsKey(target.ChampionName))
                     {
                         // Get the interruptable spell
-                        var spell = InterruptableSpells[target.ChampionName].Find(s => s.Slot == target.GetSpellSlot(target.LastCastedSpellName()));
+                        var spell =
+                            InterruptableSpells[target.ChampionName].Find(
+                                s => s.Slot == target.GetSpellSlot(target.LastCastedSpellName()));
                         if (spell != null)
                         {
                             // Return the args with spell end time
-                            return new InterruptableTargetData(spell.DangerLevel, target.Spellbook.CastEndTime, spell.MovementInterrupts);
+                            return new InterruptableTargetEventArgs(
+                                spell.DangerLevel, target.Spellbook.CastEndTime, spell.MovementInterrupts);
                         }
                     }
                 }
             }
 
             return null;
+        }
+
+        public class InterruptableTargetEventArgs
+        {
+            public InterruptableTargetEventArgs(DangerLevel dangerLevel, float endTime, bool movementInterrupts)
+            {
+                DangerLevel = dangerLevel;
+                EndTime = endTime;
+                MovementInterrupts = movementInterrupts;
+            }
+
+            public DangerLevel DangerLevel { get; private set; }
+            public float EndTime { get; private set; }
+            public bool MovementInterrupts { get; private set; }
+        }
+
+        private class InterruptableSpell
+        {
+            public InterruptableSpell(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
+            {
+                Slot = slot;
+                DangerLevel = dangerLevel;
+                MovementInterrupts = movementInterrupts;
+            }
+
+            public SpellSlot Slot { get; private set; }
+            public DangerLevel DangerLevel { get; private set; }
+            public bool MovementInterrupts { get; private set; }
         }
     }
 }
