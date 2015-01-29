@@ -24,6 +24,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using SharpDX;
 
 #endregion
 
@@ -31,6 +32,7 @@ namespace LeagueSharp.Common
 {
     public enum MinionOrderTypes
     {
+        None,
         Health,
         MaxHealth
     }
@@ -58,7 +60,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the minions in range from From.
         /// </summary>
-        private static List<Obj_AI_Base> GetMinions(Vector3 from,
+        public static List<Obj_AI_Base> GetMinions(Vector3 from,
             float range,
             MinionTypes type = MinionTypes.All,
             MinionTeam team = MinionTeam.Enemy,
@@ -118,7 +120,7 @@ namespace LeagueSharp.Common
         public static FarmLocation GetBestCircularFarmLocation(List<Vector2> minionPositions,
             float width,
             float range,
-            int useMecMax = 9)
+            int useMECMax = 9)
         {
             var result = new Vector2();
             var minionCount = 0;
@@ -132,29 +134,37 @@ namespace LeagueSharp.Common
             }
 
             /* Use MEC to get the best positions only when there are less than 9 positions because it causes lag with more. */
-            if (minionPositions.Count <= useMecMax)
+            if (minionPositions.Count <= useMECMax)
             {
                 var subGroups = GetCombinations(minionPositions);
                 foreach (var subGroup in subGroups)
                 {
-                    if (subGroup.Count <= 0) continue;
-                    var circle = Mec.GetMec(subGroup);
+                    if (subGroup.Count > 0)
+                    {
+                        var circle = MEC.GetMec(subGroup);
 
-                    if (!(circle.Radius <= width) || !(circle.Center.Distance(startPos, true) <= range)) continue;
-                    minionCount = subGroup.Count;
-                    return new FarmLocation(circle.Center, minionCount);
+                        if (circle.Radius <= width && circle.Center.Distance(startPos, true) <= range)
+                        {
+                            minionCount = subGroup.Count;
+                            return new FarmLocation(circle.Center, minionCount);
+                        }
+                    }
                 }
             }
             else
             {
                 foreach (var pos in minionPositions)
                 {
-                    if (!(pos.Distance(startPos, true) <= range)) continue;
-                    var count = minionPositions.Count(pos2 => pos.Distance(pos2, true) <= width * width);
+                    if (pos.Distance(startPos, true) <= range)
+                    {
+                        var count = minionPositions.Count(pos2 => pos.Distance(pos2, true) <= width * width);
 
-                    if (count < minionCount) continue;
-                    result = pos;
-                    minionCount = count;
+                        if (count >= minionCount)
+                        {
+                            result = pos;
+                            minionCount = count;
+                        }
+                    }
                 }
             }
 
@@ -184,15 +194,19 @@ namespace LeagueSharp.Common
 
             foreach (var pos in minionPositions)
             {
-                if (!(pos.Distance(startPos, true) <= range*range)) continue;
-                var endPos = startPos + range * (pos - startPos).Normalized();
+                if (pos.Distance(startPos, true) <= range * range)
+                {
+                    var endPos = startPos + range * (pos - startPos).Normalized();
 
-                var count =
-                    minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
+                    var count =
+                        minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
 
-                if (count < minionCount) continue;
-                result = endPos;
-                minionCount = count;
+                    if (count >= minionCount)
+                    {
+                        result = endPos;
+                        minionCount = count;
+                    }
+                }
             }
 
             return new FarmLocation(result, minionCount);
@@ -251,13 +265,13 @@ namespace LeagueSharp.Common
 
         public struct FarmLocation
         {
-            private int _minionsHit;
-            private Vector2 _position;
+            public int MinionsHit;
+            public Vector2 Position;
 
             public FarmLocation(Vector2 position, int minionsHit)
             {
-                _position = position;
-                _minionsHit = minionsHit;
+                Position = position;
+                MinionsHit = minionsHit;
             }
         }
     }

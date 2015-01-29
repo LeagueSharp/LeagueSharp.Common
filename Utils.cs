@@ -1,4 +1,26 @@
-﻿#region
+﻿#region LICENSE
+
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ Utils.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#endregion
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -7,6 +29,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using SharpDX;
 
 #endregion
 
@@ -14,18 +37,18 @@ namespace LeagueSharp.Common
 {
     public enum WindowsMessages
     {
-        WmLbuttondblclck = 0x203,
-        WmRbuttondblclck = 0x206,
-        WmMbuttondblclck = 0x209,
-        WmMbuttondown = 0x207,
-        WmMbuttonup = 0x208,
-        WmMousemove = 0x200,
-        WmLbuttondown = 0x201,
-        WmLbuttonup = 0x202,
-        WmRbuttondown = 0x204,
-        WmRbuttonup = 0x205,
-        WmKeydown = 0x0100,
-        WmKeyup = 0x101
+        WM_LBUTTONDBLCLCK = 0x203,
+        WM_RBUTTONDBLCLCK = 0x206,
+        WM_MBUTTONDBLCLCK = 0x209,
+        WM_MBUTTONDOWN = 0x207,
+        WM_MBUTTONUP = 0x208,
+        WM_MOUSEMOVE = 0x200,
+        WM_LBUTTONDOWN = 0x201,
+        WM_LBUTTONUP = 0x202,
+        WM_RBUTTONDOWN = 0x204,
+        WM_RBUTTONUP = 0x205,
+        WM_KEYDOWN = 0x0100,
+        WM_KEYUP = 0x101
     }
 
     /// <summary>
@@ -33,8 +56,8 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Utils
     {
-        private const int StdInputHandle = -10;
-        private const int EnableQuickEditMode = 0x40 | 0x80;
+        private const int STD_INPUT_HANDLE = -10;
+        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
         /// <summary>
         ///     Returns the cursor position on the screen.
@@ -114,14 +137,14 @@ namespace LeagueSharp.Common
 
         public static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length*sizeof (char)];
+            var bytes = new byte[str.Length * sizeof (char)];
             Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
-            var chars = new char[bytes.Length/sizeof (char)];
+            var chars = new char[bytes.Length / sizeof (char)];
             Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
@@ -154,13 +177,10 @@ namespace LeagueSharp.Common
         {
             try
             {
-                var windowHeight = Console.WindowHeight;
+                var window_height = Console.WindowHeight;
                 Console.Clear();
             }
-            catch
-            {
-                // ignored
-            }
+            catch {}
         }
 
         /// <summary>
@@ -168,13 +188,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public static string GetLocation()
         {
-            var fileLoc = Assembly.GetExecutingAssembly().Location;
-            return fileLoc.Remove(fileLoc.LastIndexOf("\\", StringComparison.Ordinal));
+            var FileLoc = Assembly.GetExecutingAssembly().Location;
+            return FileLoc.Remove(FileLoc.LastIndexOf("\\", StringComparison.Ordinal));
         }
 
         public static string ToHexString(this byte bit)
         {
-            return BitConverter.ToString(new[] {bit});
+            return BitConverter.ToString(new[] { bit });
         }
 
         [DllImport("kernel32.dll")]
@@ -192,18 +212,19 @@ namespace LeagueSharp.Common
         public static void EnableConsoleEditMode()
         {
             int mode;
-            var handle = GetStdHandle(StdInputHandle);
+            var handle = GetStdHandle(STD_INPUT_HANDLE);
             GetConsoleMode(handle, out mode);
-            mode |= EnableQuickEditMode;
+            mode |= ENABLE_QUICK_EDIT_MODE;
             SetConsoleMode(handle, mode);
         }
 
         public static double NextDouble(this Random rng, double min, double max)
         {
-            return min + (rng.NextDouble()*(max - min));
+            
+            return min + (rng.NextDouble() * (max - min));
         }
 
-        private static class CursorPosT
+        internal static class CursorPosT
         {
             private static int _posX;
             private static int _posY;
@@ -215,9 +236,11 @@ namespace LeagueSharp.Common
 
             private static void Game_OnWndProc(WndEventArgs args)
             {
-                if (args.Msg != (uint) WindowsMessages.WmMousemove) return;
-                _posX = unchecked((short) args.LParam);
-                _posY = unchecked((short) ((long) args.LParam >> 16));
+                if (args.Msg == (uint) WindowsMessages.WM_MOUSEMOVE)
+                {
+                    _posX = unchecked((short) args.LParam);
+                    _posY = unchecked((short) ((long) args.LParam >> 16));
+                }
             }
 
             internal static Vector2 GetCursorPos()
@@ -246,13 +269,12 @@ namespace LeagueSharp.Common
             return (source as List<TSource> ?? source.ToList()).FindAll(match);
         }
 
-        public static T MaxOrDefault<T, TR>(this IEnumerable<T> container, Func<T, TR> valuingFoo)
-            where TR : IComparable
+        public static T MaxOrDefault<T, R>(this IEnumerable<T> container, Func<T, R> valuingFoo) where R : IComparable
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
                 return default(T);
-
+            
             var maxElem = enumerator.Current;
             var maxVal = valuingFoo(maxElem);
 
@@ -260,16 +282,17 @@ namespace LeagueSharp.Common
             {
                 var currVal = valuingFoo(enumerator.Current);
 
-                if (currVal.CompareTo(maxVal) <= 0) continue;
-                maxVal = currVal;
-                maxElem = enumerator.Current;
+                if (currVal.CompareTo(maxVal) > 0)
+                {
+                    maxVal = currVal;
+                    maxElem = enumerator.Current;
+                }
             }
 
             return maxElem;
         }
 
-        public static T MinOrDefault<T, TR>(this IEnumerable<T> container, Func<T, TR> valuingFoo)
-            where TR : IComparable
+        public static T MinOrDefault<T, R>(this IEnumerable<T> container, Func<T, R> valuingFoo) where R : IComparable
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
@@ -282,9 +305,11 @@ namespace LeagueSharp.Common
             {
                 var currVal = valuingFoo(enumerator.Current);
 
-                if (currVal.CompareTo(minVal) >= 0) continue;
-                minVal = currVal;
-                minElem = enumerator.Current;
+                if (currVal.CompareTo(minVal) < 0)
+                {
+                    minVal = currVal;
+                    minElem = enumerator.Current;
+                }
             }
 
             return minElem;

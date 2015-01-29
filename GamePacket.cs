@@ -26,6 +26,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SharpDX;
 
 #endregion
 
@@ -37,36 +38,36 @@ namespace LeagueSharp.Common
     public class GamePacket
     {
         private readonly byte _header;
-        private readonly BinaryReader _br;
-        private readonly BinaryWriter _bw;
-        private readonly MemoryStream _ms;
-        private readonly byte[] _rawPacket;
+        private readonly BinaryReader Br;
+        private readonly BinaryWriter Bw;
+        private readonly MemoryStream Ms;
+        private readonly byte[] rawPacket;
         public PacketChannel Channel = PacketChannel.C2S;
         public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
         public GamePacket(byte[] data)
         {
             Block = false;
-            _ms = new MemoryStream(data);
-            _br = new BinaryReader(_ms);
-            _bw = new BinaryWriter(_ms);
+            Ms = new MemoryStream(data);
+            Br = new BinaryReader(Ms);
+            Bw = new BinaryWriter(Ms);
 
-            _br.BaseStream.Position = 0;
-            _bw.BaseStream.Position = 0;
-            _rawPacket = data;
+            Br.BaseStream.Position = 0;
+            Bw.BaseStream.Position = 0;
+            rawPacket = data;
             _header = data[0];
         }
 
         public GamePacket(GamePacketEventArgs args)
         {
             Block = false;
-            _ms = new MemoryStream(args.PacketData);
-            _br = new BinaryReader(_ms);
-            _bw = new BinaryWriter(_ms);
+            Ms = new MemoryStream(args.PacketData);
+            Br = new BinaryReader(Ms);
+            Bw = new BinaryWriter(Ms);
 
-            _br.BaseStream.Position = 0;
-            _bw.BaseStream.Position = 0;
-            _rawPacket = args.PacketData;
+            Br.BaseStream.Position = 0;
+            Bw.BaseStream.Position = 0;
+            rawPacket = args.PacketData;
             _header = args.PacketData[0];
             Channel = args.Channel;
             Flags = args.ProtocolFlag;
@@ -77,12 +78,12 @@ namespace LeagueSharp.Common
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             Block = false;
-            _ms = new MemoryStream();
-            _br = new BinaryReader(_ms);
-            _bw = new BinaryWriter(_ms);
+            Ms = new MemoryStream();
+            Br = new BinaryReader(Ms);
+            Bw = new BinaryWriter(Ms);
 
-            _br.BaseStream.Position = 0;
-            _bw.BaseStream.Position = 0;
+            Br.BaseStream.Position = 0;
+            Bw.BaseStream.Position = 0;
             WriteByte(header);
             _header = header;
             Channel = channel;
@@ -96,12 +97,12 @@ namespace LeagueSharp.Common
 
         public long Position
         {
-            get { return _br.BaseStream.Position; }
+            get { return Br.BaseStream.Position; }
             set
             {
                 if (value >= 0L)
                 {
-                    _br.BaseStream.Position = value;
+                    Br.BaseStream.Position = value;
                 }
             }
         }
@@ -113,7 +114,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public long Size()
         {
-            return _br.BaseStream.Length;
+            return Br.BaseStream.Length;
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace LeagueSharp.Common
         public byte ReadByte(long position = -1)
         {
             Position = position;
-            return _br.ReadBytes(1)[0];
+            return Br.ReadBytes(1)[0];
         }
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace LeagueSharp.Common
         public short ReadShort(long position = -1)
         {
             Position = position;
-            return BitConverter.ToInt16(_br.ReadBytes(2), 0);
+            return BitConverter.ToInt16(Br.ReadBytes(2), 0);
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace LeagueSharp.Common
         public float ReadFloat(long position = -1)
         {
             Position = position;
-            return BitConverter.ToSingle(_br.ReadBytes(4), 0);
+            return BitConverter.ToSingle(Br.ReadBytes(4), 0);
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace LeagueSharp.Common
         public int ReadInteger(long position = -1)
         {
             Position = position;
-            return BitConverter.ToInt32(_br.ReadBytes(4), 0);
+            return BitConverter.ToInt32(Br.ReadBytes(4), 0);
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace LeagueSharp.Common
         {
             for (var i = 0; i < repeat; i++)
             {
-                _bw.Write(b);
+                Bw.Write(b);
             }
         }
 
@@ -190,7 +191,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void WriteShort(short s)
         {
-            _bw.Write(s);
+            Bw.Write(s);
         }
 
         /// <summary>
@@ -198,7 +199,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void WriteFloat(float f)
         {
-            _bw.Write(f);
+            Bw.Write(f);
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void WriteInteger(int i)
         {
-            _bw.Write(i);
+            Bw.Write(i);
         }
 
         /// <summary>
@@ -221,7 +222,7 @@ namespace LeagueSharp.Common
                 hex = "0" + hex;
             }
 
-            _bw.Write(
+            Bw.Write(
                 Enumerable.Range(0, hex.Length)
                     .Where(x => x % 2 == 0)
                     .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
@@ -233,33 +234,33 @@ namespace LeagueSharp.Common
         /// </summary>
         public void WriteString(string str)
         {
-            _bw.Write(Encoding.UTF8.GetBytes(str));
+            Bw.Write(Encoding.UTF8.GetBytes(str));
         }
 
         public int[] SearchByte(byte num)
         {
             //return rawPacket.IndexOf(new byte[num]).ToArray();
-            return _rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         public int[] SearchShort(short num)
         {
-            return _rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         public int[] SearchFloat(float num)
         {
-            return _rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         public int[] SearchInteger(int num)
         {
-            return _rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         public int[] SearchString(string str)
         {
-            return _rawPacket.IndexOf(Utils.GetBytes(str)).ToArray();
+            return rawPacket.IndexOf(Utils.GetBytes(str)).ToArray();
         }
 
         public int[] SearchHexString(string hex)
@@ -272,7 +273,7 @@ namespace LeagueSharp.Common
             }
 
             return
-                _rawPacket.IndexOf(
+                rawPacket.IndexOf(
                     Enumerable.Range(0, hex.Length)
                         .Where(x => x % 2 == 0)
                         .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
@@ -353,7 +354,7 @@ namespace LeagueSharp.Common
 
         public byte[] GetRawPacket()
         {
-            return _ms.ToArray();
+            return Ms.ToArray();
         }
 
         /// <summary>
@@ -366,7 +367,7 @@ namespace LeagueSharp.Common
             if (!Block)
             {
                 Game.SendPacket(
-                    _ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
+                    Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
                     Flags == PacketProtocolFlags.Reliable ? flags : Flags);
             }
         }
@@ -379,7 +380,7 @@ namespace LeagueSharp.Common
             return; //Blocked for now 4.21
             if (!Block)
             {
-                Game.ProcessPacket(_ms.ToArray(), channel);
+                Game.ProcessPacket(Ms.ToArray(), channel);
             }
         }
 
@@ -388,7 +389,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public string Dump(bool additionalInfo = false)
         {
-            var s = string.Concat(_ms.ToArray().Select(b => b.ToString("X2") + " "));
+            var s = string.Concat(Ms.ToArray().Select(b => b.ToString("X2") + " "));
             if (additionalInfo)
             {
                 s = "Channel: " + Channel + " Flags: " + Flags + " Data: " + s;

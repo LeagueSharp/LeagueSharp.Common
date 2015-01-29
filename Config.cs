@@ -79,9 +79,7 @@ namespace LeagueSharp.Common
 
                         if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
-                            var selectSingleNode = config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage");
-                            if (selectSingleNode != null)
-                                return selectSingleNode.InnerText;
+                            return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
                         }
                     }
                 }
@@ -129,19 +127,15 @@ namespace LeagueSharp.Common
                 {
                     var config = new XmlDocument();
                     config.Load(configFile);
-                    if (config.DocumentElement != null)
+                    var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
+                    foreach (var b in from XmlElement element in node.ChildNodes
+                        where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
+                        select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
+                        into b
+                        where b != null
+                        select b)
                     {
-                        var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
-                        if (node != null)
-                            foreach (var b in from XmlElement element in node.ChildNodes
-                                where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
-                                select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
-                                into b
-                                where b != null
-                                select b)
-                            {
-                                return byte.Parse(b.InnerText);
-                            }
+                        return byte.Parse(b.InnerText);
                     }
                 }
             }

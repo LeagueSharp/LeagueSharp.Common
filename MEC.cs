@@ -24,16 +24,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using SharpDX;
+
 #endregion
 
 namespace LeagueSharp.Common
 {
-    public static class Mec
+    public static class MEC
     {
         // For debugging.
-        private static Vector2[] _gMinMaxCorners;
-        private static RectangleF _gMinMaxBox;
-        private static Vector2[] _gNonCulledPoints;
+        public static Vector2[] g_MinMaxCorners;
+        public static RectangleF g_MinMaxBox;
+        public static Vector2[] g_NonCulledPoints;
 
         /// <summary>
         /// Returns the mininimum enclosing circle from a list of points.
@@ -43,8 +45,8 @@ namespace LeagueSharp.Common
             var center = new Vector2();
             float radius;
 
-            var convexHull = MakeConvexHull(points);
-            FindMinimalBoundingCircle(convexHull, out center, out radius);
+            var ConvexHull = MakeConvexHull(points);
+            FindMinimalBoundingCircle(ConvexHull, out center, out radius);
             return new MecCircle(center, radius);
         }
 
@@ -83,7 +85,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            _gMinMaxCorners = new[] { ul, ur, lr, ll }; // For debugging.
+            g_MinMaxCorners = new[] { ul, ur, lr, ll }; // For debugging.
         }
 
         // Find a box that fits inside the MinMax quadrilateral.
@@ -119,7 +121,7 @@ namespace LeagueSharp.Common
             }
 
             var result = new RectangleF(xmin, ymin, xmax - xmin, ymax - ymin);
-            _gMinMaxBox = result; // For debugging.
+            g_MinMaxBox = result; // For debugging.
             return result;
         }
 
@@ -130,43 +132,43 @@ namespace LeagueSharp.Common
         private static List<Vector2> HullCull(List<Vector2> points)
         {
             // Find a culling box.
-            var cullingBox = GetMinMaxBox(points);
+            var culling_box = GetMinMaxBox(points);
 
             // Cull the points.
             var results =
                 points.Where(
                     pt =>
-                        pt.X <= cullingBox.Left || pt.X >= cullingBox.Right || pt.Y <= cullingBox.Top ||
-                        pt.Y >= cullingBox.Bottom).ToList();
+                        pt.X <= culling_box.Left || pt.X >= culling_box.Right || pt.Y <= culling_box.Top ||
+                        pt.Y >= culling_box.Bottom).ToList();
 
-            _gNonCulledPoints = new Vector2[results.Count]; // For debugging.
-            results.CopyTo(_gNonCulledPoints); // For debugging.
+            g_NonCulledPoints = new Vector2[results.Count]; // For debugging.
+            results.CopyTo(g_NonCulledPoints); // For debugging.
             return results;
         }
 
         // Return the points that make up a polygon's convex hull.
         // This method leaves the points list unchanged.
-        private static List<Vector2> MakeConvexHull(List<Vector2> points)
+        public static List<Vector2> MakeConvexHull(List<Vector2> points)
         {
             // Cull.
             points = HullCull(points);
 
             // Find the remaining point with the smallest Y value.
             // if (there's a tie, take the one with the smaller X value.
-            Vector2[] bestPt = { points[0] };
+            Vector2[] best_pt = { points[0] };
             foreach (
-                var pt in points.Where(pt => (pt.Y < bestPt[0].Y) || ((pt.Y == bestPt[0].Y) && (pt.X < bestPt[0].X)))
+                var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))
                 )
             {
-                bestPt[0] = pt;
+                best_pt[0] = pt;
             }
 
             // Move this point to the convex hull.
-            var hull = new List<Vector2> { bestPt[0] };
-            points.Remove(bestPt[0]);
+            var hull = new List<Vector2> { best_pt[0] };
+            points.Remove(best_pt[0]);
 
             // Start wrapping up the other points.
-            float sweepAngle = 0;
+            float sweep_angle = 0;
             for (;;)
             {
                 // If all of the points are on the hull, we're done.
@@ -177,34 +179,36 @@ namespace LeagueSharp.Common
 
                 // Find the point with smallest AngleValue
                 // from the last point.
-                var x = hull[hull.Count - 1].X;
-                var y = hull[hull.Count - 1].Y;
-                bestPt[0] = points[0];
-                float bestAngle = 3600;
+                var X = hull[hull.Count - 1].X;
+                var Y = hull[hull.Count - 1].Y;
+                best_pt[0] = points[0];
+                float best_angle = 3600;
 
                 // Search the rest of the points.
                 foreach (var pt in points)
                 {
-                    var testAngle = AngleValue(x, y, pt.X, pt.Y);
-                    if ((!(testAngle >= sweepAngle)) || (!(bestAngle > testAngle))) continue;
-                    bestAngle = testAngle;
-                    bestPt[0] = pt;
+                    var test_angle = AngleValue(X, Y, pt.X, pt.Y);
+                    if ((test_angle >= sweep_angle) && (best_angle > test_angle))
+                    {
+                        best_angle = test_angle;
+                        best_pt[0] = pt;
+                    }
                 }
 
                 // See if the first point is better.
                 // If so, we are done.
-                var firstAngle = AngleValue(x, y, hull[0].X, hull[0].Y);
-                if ((firstAngle >= sweepAngle) && (bestAngle >= firstAngle))
+                var first_angle = AngleValue(X, Y, hull[0].X, hull[0].Y);
+                if ((first_angle >= sweep_angle) && (best_angle >= first_angle))
                 {
                     // The first point is better. We're done.
                     break;
                 }
 
                 // Add the best point to the convex hull.
-                hull.Add(bestPt[0]);
-                points.Remove(bestPt[0]);
+                hull.Add(best_pt[0]);
+                points.Remove(best_pt[0]);
 
-                sweepAngle = bestAngle;
+                sweep_angle = best_angle;
             }
 
             return hull;
@@ -250,14 +254,14 @@ namespace LeagueSharp.Common
         }
 
         // Find a minimal bounding circle.
-        private static void FindMinimalBoundingCircle(List<Vector2> points, out Vector2 center, out float radius)
+        public static void FindMinimalBoundingCircle(List<Vector2> points, out Vector2 center, out float radius)
         {
             // Find the convex hull.
             var hull = MakeConvexHull(points);
 
             // The best solution so far.
-            var bestCenter = points[0];
-            var bestRadius2 = float.MaxValue;
+            var best_center = points[0];
+            var best_radius2 = float.MaxValue;
 
             // Look at pairs of hull points.
             for (var i = 0; i < hull.Count - 1; i++)
@@ -265,18 +269,22 @@ namespace LeagueSharp.Common
                 for (var j = i + 1; j < hull.Count; j++)
                 {
                     // Find the circle through these two points.
-                    var testCenter = new Vector2((hull[i].X + hull[j].X) / 2f, (hull[i].Y + hull[j].Y) / 2f);
-                    var dx = testCenter.X - hull[i].X;
-                    var dy = testCenter.Y - hull[i].Y;
-                    var testRadius2 = dx * dx + dy * dy;
+                    var test_center = new Vector2((hull[i].X + hull[j].X) / 2f, (hull[i].Y + hull[j].Y) / 2f);
+                    var dx = test_center.X - hull[i].X;
+                    var dy = test_center.Y - hull[i].Y;
+                    var test_radius2 = dx * dx + dy * dy;
 
                     // See if this circle would be an improvement.
-                    if (!(testRadius2 < bestRadius2)) continue;
-                    // See if this circle encloses all of the points.
-                    if (!CircleEnclosesPoints(testCenter, testRadius2, points, i, j, -1)) continue;
-                    // Save this solution.
-                    bestCenter = testCenter;
-                    bestRadius2 = testRadius2;
+                    if (test_radius2 < best_radius2)
+                    {
+                        // See if this circle encloses all of the points.
+                        if (CircleEnclosesPoints(test_center, test_radius2, points, i, j, -1))
+                        {
+                            // Save this solution.
+                            best_center = test_center;
+                            best_radius2 = test_radius2;
+                        }
+                    }
                 } // for i
             } // for j
 
@@ -288,29 +296,33 @@ namespace LeagueSharp.Common
                     for (var k = j + 1; k < hull.Count; k++)
                     {
                         // Find the circle through these three points.
-                        Vector2 testCenter;
-                        float testRadius2;
-                        FindCircle(hull[i], hull[j], hull[k], out testCenter, out testRadius2);
+                        Vector2 test_center;
+                        float test_radius2;
+                        FindCircle(hull[i], hull[j], hull[k], out test_center, out test_radius2);
 
                         // See if this circle would be an improvement.
-                        if (!(testRadius2 < bestRadius2)) continue;
-                        // See if this circle encloses all of the points.
-                        if (!CircleEnclosesPoints(testCenter, testRadius2, points, i, j, k)) continue;
-                        // Save this solution.
-                        bestCenter = testCenter;
-                        bestRadius2 = testRadius2;
+                        if (test_radius2 < best_radius2)
+                        {
+                            // See if this circle encloses all of the points.
+                            if (CircleEnclosesPoints(test_center, test_radius2, points, i, j, k))
+                            {
+                                // Save this solution.
+                                best_center = test_center;
+                                best_radius2 = test_radius2;
+                            }
+                        }
                     } // for k
                 } // for i
             } // for j
 
-            center = bestCenter;
-            if (bestRadius2 == float.MaxValue)
+            center = best_center;
+            if (best_radius2 == float.MaxValue)
             {
                 radius = 0;
             }
             else
             {
-                radius = (float) Math.Sqrt(bestRadius2);
+                radius = (float) Math.Sqrt(best_radius2);
             }
         }
 
@@ -325,7 +337,7 @@ namespace LeagueSharp.Common
             return (from point in points.Where((t, i) => (i != skip1) && (i != skip2) && (i != skip3))
                 let dx = center.X - point.X
                 let dy = center.Y - point.Y
-                select dx * dx + dy * dy).All(testRadius2 => !(testRadius2 > radius2));
+                select dx * dx + dy * dy).All(test_radius2 => !(test_radius2 > radius2));
         }
 
         // Find a circle through the three points.
@@ -355,8 +367,8 @@ namespace LeagueSharp.Common
 
         public struct MecCircle
         {
-            public readonly Vector2 Center;
-            public readonly float Radius;
+            public Vector2 Center;
+            public float Radius;
 
             public MecCircle(Vector2 center, float radius)
             {

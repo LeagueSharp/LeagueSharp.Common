@@ -29,6 +29,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using SharpDX;
+using SharpDX.Direct3D9;
+using Color = System.Drawing.Color;
 using Font = SharpDX.Direct3D9.Font;
 
 #endregion
@@ -862,12 +865,12 @@ namespace LeagueSharp.Common
 
             public int Width
             {
-                get { return Bitmap.Width * _scale.X; }
+                get { return (int) (Bitmap.Width * _scale.X); }
             }
 
             public int Height
             {
-                get { return Bitmap.Height * _scale.Y; }
+                get { return (int) (Bitmap.Height * _scale.Y); }
             }
 
             public Vector2 Size
@@ -911,7 +914,7 @@ namespace LeagueSharp.Common
                 if (scale)
                 {
                     _crop = new SharpDX.Rectangle(
-                        _scale.X * x, _scale.Y * y, _scale.X * w, _scale.Y * h);
+                        (int) (_scale.X * x), (int) (_scale.Y * y), (int) (_scale.X * w), (int) (_scale.Y * h));
                 }
             }
 
@@ -1253,7 +1256,11 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return TextUpdate != null ? TextUpdate() : _text;
+                    if (TextUpdate != null)
+                    {
+                        return TextUpdate();
+                    }
+                    return _text;
                 }
                 set { _text = value; }
             }

@@ -28,6 +28,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using SharpDX;
 
 #endregion
 
@@ -52,7 +54,7 @@ namespace LeagueSharp.Common
         {
             Circular = 0,
             ConeSkillShot = 1, // Cone and Skillshot spells
-            TargetedAa = 2, // Targeted spells and AAs
+            TargetedAA = 2, // Targeted spells and AAs
         }
 
         public enum DamageTypePacket
@@ -132,7 +134,7 @@ namespace LeagueSharp.Common
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 FB 16 00 40 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 FB 16 00 40
 //FE 19 00 00 40 25 01 00 00 07 00 00 00 06 56 04 00 40 B2 04 00 40 B2 04 00 40 56 05 00 40 56 05 00 40 FB 16 00 40
-            NpcDeath = 0x26, //confirmed in ida, struct from intwars/ida
+            NPCDeath = 0x26, //confirmed in ida, struct from intwars/ida
             Unknown129 = 0x29, //related to spells (kalista ally unit), add?
             Unknown12A = 0x2A, //related to spells (kalist ally unit after 0x129), maybe delete?
             //FE 06 00 00 40 2A 01 3C 00 00 00
@@ -1088,7 +1090,8 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct {UnitNetworkId = packet.ReadInteger(2)};
+                    var result = new Struct();
+                    result.UnitNetworkId = packet.ReadInteger(2);
                     return result;
                 }
 
@@ -1165,13 +1168,11 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct
-                    {
-                        CampId = packet.ReadInteger(6),
-                        UnitNetworkId = packet.ReadInteger(),
-                        EmptyType = packet.ReadByte()
-                    };
+                    var result = new Struct();
+                    result.CampId = packet.ReadInteger(6);
+                    result.UnitNetworkId = packet.ReadInteger();
                     //No idea where this is now or if it still exists :^)
+                    result.EmptyType = packet.ReadByte();
                     return result;
                 }
 
@@ -1303,9 +1304,10 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct {UnitNetworkId = packet.ReadInteger(12), Speed = 900};
+                    var result = new Struct();
 
-                    //packet.ReadFloat();
+                    result.UnitNetworkId = packet.ReadInteger(12);
+                    result.Speed = 900;//packet.ReadFloat();
 
                     return result;
                 }
@@ -1345,8 +1347,9 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct {Winner = packet.ReadByte(5)};
+                    var result = new Struct();
 
+                    result.Winner = packet.ReadByte(5);
                     return result;
                 }
 
@@ -1384,12 +1387,10 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct
-                    {
-                        TurretNetworkId = packet.ReadInteger(1),
-                        TargetNetworkId = packet.ReadInteger()
-                    };
+                    var result = new Struct();
 
+                    result.TurretNetworkId = packet.ReadInteger(1);
+                    result.TargetNetworkId = packet.ReadInteger();
 
                     if (result.TurretNetworkId != 0)
                     {
@@ -1449,14 +1450,12 @@ namespace LeagueSharp.Common
                 public static Struct Decoded(byte[] data)
                 {
                     var packet = new GamePacket(data);
-                    var result = new Struct
-                    {
-                        NetworkId = packet.ReadInteger(2),
-                        Id = packet.ReadInteger(),
-                        BOk = packet.ReadByte() == 0x01,
-                        SkinId = packet.ReadInteger()
-                    };
+                    var result = new Struct();
 
+                    result.NetworkId = packet.ReadInteger(2);
+                    result.Id = packet.ReadInteger();
+                    result.BOk = packet.ReadByte() == 0x01;
+                    result.SkinId = packet.ReadInteger();
 
                     return result;
                 }
@@ -1613,11 +1612,11 @@ namespace LeagueSharp.Common
                     {
                         if (TypeByString.ContainsKey(args.RecallType))
                         {
-                            var teleportMethod = TypeByString[args.RecallType];
+                            ITeleport teleportMethod = TypeByString[args.RecallType];
 
-                            var duration = teleportMethod.GetDuration(args);
-                            var type = teleportMethod.Type;
-                            var time = Environment.TickCount;
+                            int duration = teleportMethod.GetDuration(args);
+                            Type type = teleportMethod.Type;
+                            int time = Environment.TickCount;
 
                             RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData
                             {
@@ -1634,7 +1633,7 @@ namespace LeagueSharp.Common
                     }
                     else
                     {
-                        var shorter = Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
+                        bool shorter = Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
                                        RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap;
                         result.Status = shorter ? Status.Abort : Status.Finish;
                         result.Type = RecallDataByNetworkId[result.UnitNetworkId].Type;

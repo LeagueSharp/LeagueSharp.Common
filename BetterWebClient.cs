@@ -67,12 +67,14 @@ namespace LeagueSharp.Common
             {
                 var result = HttpStatusCode.BadRequest;
 
-                if (_request == null) return result;
-                var response = GetWebResponse(_request) as HttpWebResponse;
-
-                if (response != null)
+                if (_request != null)
                 {
-                    result = response.StatusCode;
+                    var response = base.GetWebResponse(_request) as HttpWebResponse;
+
+                    if (response != null)
+                    {
+                        result = response.StatusCode;
+                    }
                 }
 
                 return result;
@@ -85,7 +87,7 @@ namespace LeagueSharp.Common
 
             if (_request != null)
             {
-                var response = GetWebResponse(_request) as HttpWebResponse;
+                var response = base.GetWebResponse(_request) as HttpWebResponse;
                 if (response != null)
                 {
                     result = response.Headers[headerName];

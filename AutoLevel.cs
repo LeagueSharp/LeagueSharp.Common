@@ -31,39 +31,39 @@ namespace LeagueSharp.Common
 {
     public class AutoLevel
     {
-        private static List<SpellSlot> _order = new List<SpellSlot>();
-        private static float _lastLeveled;
-        private static float _nextDelay;
+        private static List<SpellSlot> order = new List<SpellSlot>();
+        private static float LastLeveled;
+        private static float NextDelay;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
-        private static Random _randomNumber;
+        private static Random RandomNumber;
 
         public AutoLevel(IEnumerable<int> levels)
         {
             foreach (var level in levels)
             {
-                _order.Add((SpellSlot) (level - 1));
+                order.Add((SpellSlot) (level - 1));
             }
-            _randomNumber = new Random(Environment.TickCount);
+            RandomNumber = new Random(Environment.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
         public AutoLevel(List<SpellSlot> levels)
         {
-            _order = levels;
-            _randomNumber = new Random(Environment.TickCount);
+            order = levels;
+            RandomNumber = new Random(Environment.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Player.SpellTrainingPoints < 1 || Environment.TickCount - _lastLeveled < _nextDelay)
+            if (Player.SpellTrainingPoints < 1 || Environment.TickCount - LastLeveled < NextDelay)
             {
                 return;
             }
 
-            _nextDelay = _randomNumber.Next(750);
-            _lastLeveled = Environment.TickCount;
-            var spell = _order[GetTotalPoints()];
+            NextDelay = RandomNumber.Next(750);
+            LastLeveled = Environment.TickCount;
+            var spell = order[GetTotalPoints()];
             Player.Spellbook.LevelSpell(spell);
         }
 

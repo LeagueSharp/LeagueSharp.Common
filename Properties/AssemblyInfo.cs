@@ -21,8 +21,8 @@
 #region
 
 using System.Reflection;
-using System.Resources;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 #endregion
 
@@ -62,4 +62,4 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.0.0.27")]
 [assembly: AssemblyFileVersion("1.0.0.27")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: NeutralResourcesLanguageAttribute("en")]

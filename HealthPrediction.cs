@@ -36,7 +36,7 @@ namespace LeagueSharp.Common
     public class HealthPrediction
     {
         private static readonly Dictionary<int, PredictedDamage> ActiveAttacks = new Dictionary<int, PredictedDamage>();
-        private static int _lastTick;
+        private static int LastTick;
 
         static HealthPrediction()
         {
@@ -47,7 +47,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Environment.TickCount - _lastTick <= 60 * 1000)
+            if (Environment.TickCount - LastTick <= 60 * 1000)
             {
                 return;
             }
@@ -55,15 +55,17 @@ namespace LeagueSharp.Common
                 .Where(pair => pair.Value.StartTick < Environment.TickCount - 60000)
                 .ToList()
                 .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-            _lastTick = Environment.TickCount;
+            LastTick = Environment.TickCount;
         }
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
-            if (!spellbook.Owner.IsValid || !args.DestroyMissile || !args.StopAnimation) return;
-            if (ActiveAttacks.ContainsKey(spellbook.Owner.NetworkId))
+            if (spellbook.Owner.IsValid && args.DestroyMissile && args.StopAnimation)
             {
-                ActiveAttacks.Remove(spellbook.Owner.NetworkId);
+                if (ActiveAttacks.ContainsKey(spellbook.Owner.NetworkId))
+                {
+                    ActiveAttacks.Remove(spellbook.Owner.NetworkId);
+                }
             }
         }
 

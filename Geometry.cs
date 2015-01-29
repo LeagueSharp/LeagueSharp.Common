@@ -24,8 +24,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using ClipperLib;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -212,7 +214,7 @@ namespace LeagueSharp.Common
             return v + distance * (to - v).Normalized();
         }
 
-        public static Vector3 SwitchYz(this Vector3 v)
+        public static Vector3 SwitchYZ(this Vector3 v)
         {
             return new Vector3(v.X, v.Z, v.Y);
         }
@@ -316,9 +318,11 @@ namespace LeagueSharp.Common
             foreach (var vector in vList)
             {
                 var distance = Vector2.DistanceSquared(v, vector);
-                if (!(distance < dist)) continue;
-                dist = distance;
-                result = vector;
+                if (distance < dist)
+                {
+                    dist = distance;
+                    result = vector;
+                }
             }
 
             return result;
@@ -378,19 +382,22 @@ namespace LeagueSharp.Common
 
             if (Math.Abs(denominator) < float.Epsilon)
             {
-                if (!(Math.Abs(numerator) < float.Epsilon)) return new IntersectionResult();
-                // collinear. Potentially infinite intersection points.
-                // Check and return one of them.
-                if (lineSegment1Start.X >= lineSegment2Start.X && lineSegment1Start.X <= lineSegment2End.X)
+                if (Math.Abs(numerator) < float.Epsilon)
                 {
-                    return new IntersectionResult(true, lineSegment1Start);
+                    // collinear. Potentially infinite intersection points.
+                    // Check and return one of them.
+                    if (lineSegment1Start.X >= lineSegment2Start.X && lineSegment1Start.X <= lineSegment2End.X)
+                    {
+                        return new IntersectionResult(true, lineSegment1Start);
+                    }
+                    if (lineSegment2Start.X >= lineSegment1Start.X && lineSegment2Start.X <= lineSegment1End.X)
+                    {
+                        return new IntersectionResult(true, lineSegment2Start);
+                    }
+                    return new IntersectionResult();
                 }
-                if (lineSegment2Start.X >= lineSegment1Start.X && lineSegment2Start.X <= lineSegment1End.X)
-                {
-                    return new IntersectionResult(true, lineSegment2Start);
-                }
-                return new IntersectionResult();
                 // parallel
+                return new IntersectionResult();
             }
 
             var r = numerator / denominator;
@@ -417,19 +424,19 @@ namespace LeagueSharp.Common
             float v2,
             float delay = 0f)
         {
-            float sP1X = startPoint1.X,
-                sP1Y = startPoint1.Y,
-                eP1X = endPoint1.X,
-                eP1Y = endPoint1.Y,
-                sP2X = startPoint2.X,
-                sP2Y = startPoint2.Y;
+            float sP1x = startPoint1.X,
+                sP1y = startPoint1.Y,
+                eP1x = endPoint1.X,
+                eP1y = endPoint1.Y,
+                sP2x = startPoint2.X,
+                sP2y = startPoint2.Y;
 
-            float d = eP1X - sP1X, e = eP1Y - sP1Y;
+            float d = eP1x - sP1x, e = eP1y - sP1y;
             float dist = (float) Math.Sqrt(d * d + e * e), t1 = float.NaN;
-            float s = Math.Abs(dist) > float.Epsilon ? v1 * d / dist : 0,
-                k = (Math.Abs(dist) > float.Epsilon) ? v1 * e / dist : 0f;
+            float S = Math.Abs(dist) > float.Epsilon ? v1 * d / dist : 0,
+                K = (Math.Abs(dist) > float.Epsilon) ? v1 * e / dist : 0f;
 
-            float r = sP2X - sP1X, j = sP2Y - sP1Y;
+            float r = sP2x - sP1x, j = sP2y - sP1y;
             var c = r * r + j * j;
 
 
@@ -446,7 +453,7 @@ namespace LeagueSharp.Common
                 }
                 else
                 {
-                    float a = s * s + k * k - v2 * v2, b = -r * s - j * k;
+                    float a = S * S + K * K - v2 * v2, b = -r * S - j * K;
 
                     if (Math.Abs(a) < float.Epsilon)
                     {
@@ -463,25 +470,25 @@ namespace LeagueSharp.Common
                     else
                     {
                         var sqr = b * b - a * c;
-                        if (!(sqr >= 0))
-                            return new Object[]
-                            {t1, (!float.IsNaN(t1)) ? new Vector2(sP1X + s*t1, sP1Y + k*t1) : new Vector2()};
-                        var nom = (float) Math.Sqrt(sqr);
-                        var t = (-nom - b) / a;
-                        t1 = v2 * t >= 0f ? t : float.NaN;
-                        t = (nom - b) / a;
-                        var t2 = (v2 * t >= 0f) ? t : float.NaN;
+                        if (sqr >= 0)
+                        {
+                            var nom = (float) Math.Sqrt(sqr);
+                            var t = (-nom - b) / a;
+                            t1 = v2 * t >= 0f ? t : float.NaN;
+                            t = (nom - b) / a;
+                            var t2 = (v2 * t >= 0f) ? t : float.NaN;
 
-                        if (float.IsNaN(t2) || float.IsNaN(t1))
-                            return new Object[]
-                            {t1, (!float.IsNaN(t1)) ? new Vector2(sP1X + s*t1, sP1Y + k*t1) : new Vector2()};
-                        if (t1 >= delay && t2 >= delay)
-                        {
-                            t1 = Math.Min(t1, t2);
-                        }
-                        else if (t2 >= delay)
-                        {
-                            t1 = t2;
+                            if (!float.IsNaN(t2) && !float.IsNaN(t1))
+                            {
+                                if (t1 >= delay && t2 >= delay)
+                                {
+                                    t1 = Math.Min(t1, t2);
+                                }
+                                else if (t2 >= delay)
+                                {
+                                    t1 = t2;
+                                }
+                            }
                         }
                     }
                 }
@@ -491,7 +498,7 @@ namespace LeagueSharp.Common
                 t1 = 0f;
             }
 
-            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1X + s * t1, sP1Y + k * t1) : new Vector2() };
+            return new Object[] { t1, (!float.IsNaN(t1)) ? new Vector2(sP1x + S * t1, sP1y + K * t1) : new Vector2() };
         }
 
         /// <summary>
@@ -520,23 +527,23 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Vector2[] CircleCircleIntersection(Vector2 center1, Vector2 center2, float radius1, float radius2)
         {
-            var d = center1.Distance(center2);
+            var D = center1.Distance(center2);
             //The Circles dont intersect:
-            if (d > radius1 + radius2 || (d <= Math.Abs(radius1 - radius2)))
+            if (D > radius1 + radius2 || (D <= Math.Abs(radius1 - radius2)))
             {
                 return new Vector2[] { };
             }
 
-            var a = (radius1 * radius1 - radius2 * radius2 + d * d) / (2 * d);
-            var h = (float) Math.Sqrt(radius1 * radius1 - a * a);
-            var direction = (center2 - center1).Normalized();
-            var pa = center1 + a * direction;
-            var s1 = pa + h * direction.Perpendicular();
-            var s2 = pa - h * direction.Perpendicular();
-            return new[] { s1, s2 };
+            var A = (radius1 * radius1 - radius2 * radius2 + D * D) / (2 * D);
+            var H = (float) Math.Sqrt(radius1 * radius1 - A * A);
+            var Direction = (center2 - center1).Normalized();
+            var PA = center1 + A * Direction;
+            var S1 = PA + H * Direction.Perpendicular();
+            var S2 = PA - H * Direction.Perpendicular();
+            return new[] { S1, S2 };
         }
 
-        private static bool Close(float a, float b, float eps)
+        public static bool Close(float a, float b, float eps)
         {
             if (Math.Abs(eps) < float.Epsilon)
             {
@@ -564,7 +571,7 @@ namespace LeagueSharp.Common
         ///     Rotates the polygon around the set position.
         ///     Angle is in radians.
         /// </summary>
-        private static Polygon RotatePolygon(this Polygon polygon, Vector2 around, float angle)
+        public static Polygon RotatePolygon(this Polygon polygon, Vector2 around, float angle)
         {
             var p = new Polygon();
 
@@ -658,7 +665,7 @@ namespace LeagueSharp.Common
             return ToPolygons(tList);
         }
 
-        private static List<Polygon> ToPolygons(this List<List<IntPoint>> v)
+        public static List<Polygon> ToPolygons(this List<List<IntPoint>> v)
         {
             return v.Select(path => path.ToPolygon()).ToList();
         }
@@ -683,7 +690,7 @@ namespace LeagueSharp.Common
             return self[self.Count - 1];
         }
 
-        private static Polygon ToPolygon(this List<IntPoint> v)
+        public static Polygon ToPolygon(this List<IntPoint> v)
         {
             var polygon = new Polygon();
             foreach (var point in v)
@@ -693,7 +700,7 @@ namespace LeagueSharp.Common
             return polygon;
         }
 
-        private static List<List<IntPoint>> ClipPolygons(List<Polygon> polygons)
+        public static List<List<IntPoint>> ClipPolygons(List<Polygon> polygons)
         {
             var subj = new List<List<IntPoint>>(polygons.Count);
             var clip = new List<List<IntPoint>>(polygons.Count);
@@ -712,21 +719,21 @@ namespace LeagueSharp.Common
 
         public struct IntersectionResult
         {
-            private bool Intersects;
-            private Vector2 Point;
+            public bool Intersects;
+            public Vector2 Point;
 
-            public IntersectionResult(bool intersects = false, Vector2 point = new Vector2())
+            public IntersectionResult(bool Intersects = false, Vector2 Point = new Vector2())
             {
-                Intersects = intersects;
-                Point = point;
+                this.Intersects = Intersects;
+                this.Point = Point;
             }
         }
 
         public struct ProjectionInfo
         {
-            private bool IsOnSegment;
-            private Vector2 LinePoint;
-            private Vector2 SegmentPoint;
+            public bool IsOnSegment;
+            public Vector2 LinePoint;
+            public Vector2 SegmentPoint;
 
             public ProjectionInfo(bool isOnSegment, Vector2 segmentPoint, Vector2 linePoint)
             {
@@ -738,7 +745,7 @@ namespace LeagueSharp.Common
 
         public class Polygon
         {
-            public readonly List<Vector2> Points = new List<Vector2>();
+            public List<Vector2> Points = new List<Vector2>();
 
             public void Add(Vector2 point)
             {
@@ -765,7 +772,7 @@ namespace LeagueSharp.Common
                 return result;
             }
 
-            public void Draw(Color color, int width = 1)
+            public virtual void Draw(Color color, int width = 1)
             {
                 for (var i = 0; i <= Points.Count - 1; i++)
                 {
@@ -791,7 +798,7 @@ namespace LeagueSharp.Common
                 return !IsOutside(point.Position.To2D());
             }
 
-            private bool IsOutside(Vector2 point)
+            public bool IsOutside(Vector2 point)
             {
                 var p = new IntPoint(point.X, point.Y);
                 return Clipper.PointInPolygon(p, ToClipperPath()) != 1;
@@ -799,10 +806,10 @@ namespace LeagueSharp.Common
 
             public class Arc : Polygon
             {
-                private readonly float _angle;
-                private readonly Vector2 EndPos;
-                private readonly float _radius;
-                private readonly Vector2 _startPos;
+                public float Angle;
+                public Vector2 EndPos;
+                public float Radius;
+                public Vector2 StartPos;
                 private readonly int _quality;
 
                 public Arc(Vector3 start, Vector3 direction, float angle, float radius, int quality = 20)
@@ -810,35 +817,35 @@ namespace LeagueSharp.Common
 
                 public Arc(Vector2 start, Vector2 direction, float angle, float radius, int quality = 20)
                 {
-                    _startPos = start;
+                    StartPos = start;
                     EndPos = (direction - start).Normalized();
-                    _angle = angle;
-                    _radius = radius;
+                    Angle = angle;
+                    Radius = radius;
                     _quality = quality;
                     UpdatePolygon();
                 }
 
-                private void UpdatePolygon(int offset = 0)
+                public void UpdatePolygon(int offset = 0)
                 {
                     Points.Clear();
-                    var outRadius = (_radius + offset) / (float)Math.Cos(2 * Math.PI / _quality);
-                    var side1 = EndPos.Rotated(-_angle * 0.5f);
+                    var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / _quality);
+                    var side1 = EndPos.Rotated(-Angle * 0.5f);
                     for (var i = 0; i <= _quality; i++)
                     {
-                        var cDirection = side1.Rotated(i * _angle / _quality).Normalized();
+                        var cDirection = side1.Rotated(i * Angle / _quality).Normalized();
                         Points.Add(
-                            new Vector2(_startPos.X + outRadius * cDirection.X, _startPos.Y + outRadius * cDirection.Y));
+                            new Vector2(StartPos.X + outRadius * cDirection.X, StartPos.Y + outRadius * cDirection.Y));
                     }
                 }
             }
 
             public class Line : Polygon
             {
-                private readonly Vector2 LineStart;
-                private Vector2 LineEnd;
-
-                private float Length
+                public Vector2 LineStart;
+                public Vector2 LineEnd;
+                public float Length
                 {
+                    get { return LineStart.Distance(LineEnd); }
                     set { LineEnd = (LineEnd - LineStart).Normalized() * value + LineStart; }
                 }
 
@@ -855,7 +862,7 @@ namespace LeagueSharp.Common
                     UpdatePolygon();
                 }
 
-                private void UpdatePolygon()
+                public void UpdatePolygon()
                 {
                     Points.Clear();
                     Points.Add(LineStart);
@@ -865,31 +872,31 @@ namespace LeagueSharp.Common
 
             public class Circle : Polygon
             {
-                private readonly Vector2 _center;
-                private readonly float _radius;
+                public Vector2 Center;
+                public float Radius;
                 private readonly int _quality;
 
                 public Circle(Vector3 center, float radius, int quality = 20) : this(center.To2D(), radius, quality) {}
 
                 public Circle(Vector2 center, float radius, int quality = 20)
                 {
-                    _center = center;
-                    _radius = radius;
+                    Center = center;
+                    Radius = radius;
                     _quality = quality;
                     UpdatePolygon();
                 }
 
-                private void UpdatePolygon(int offset = 0, float overrideWidth = -1)
+               public void UpdatePolygon(int offset = 0, float overrideWidth = -1)
                 {
                    Points.Clear();
                     var outRadius = (overrideWidth > 0
                         ? overrideWidth
-                        : (offset + _radius) / (float)Math.Cos(2 * Math.PI / _quality));
+                        : (offset + Radius) / (float)Math.Cos(2 * Math.PI / _quality));
                     for (var i = 1; i <= _quality; i++)
                     {
                         var angle = i * 2 * Math.PI / _quality;
                         var point = new Vector2(
-                            _center.X + outRadius * (float)Math.Cos(angle), _center.Y + outRadius * (float)Math.Sin(angle));
+                            Center.X + outRadius * (float)Math.Cos(angle), Center.Y + outRadius * (float)Math.Sin(angle));
                         Points.Add(point);
                     }
                 }
@@ -897,11 +904,11 @@ namespace LeagueSharp.Common
 
             public class Rectangle : Polygon
             {
-                private Vector2 Direction { get { return (End - Start).Normalized(); } }
-                private Vector2 Perpendicular { get { return Direction.Perpendicular(); } }
-                private readonly Vector2 End;
-                private readonly Vector2 Start;
-                private readonly float Width;
+                public Vector2 Direction { get { return (End - Start).Normalized(); } }
+                public Vector2 Perpendicular { get { return Direction.Perpendicular(); } }
+                public Vector2 End;
+                public Vector2 Start;
+                public float Width;
                 public Rectangle(Vector3 start, Vector3 end, float width) : this(start.To2D(), end.To2D(), width) {}
 
                 public Rectangle(Vector2 start, Vector2 end, float width)
@@ -912,7 +919,7 @@ namespace LeagueSharp.Common
                     UpdatePolygon();
                 }
 
-                private void UpdatePolygon(int offset = 0, float overrideWidth = -1)
+                public void UpdatePolygon(int offset = 0, float overrideWidth = -1)
                 {
                     Points.Clear();
                     Points.Add(
@@ -928,9 +935,9 @@ namespace LeagueSharp.Common
 
             public class Ring : Polygon
             {
-                private readonly Vector2 Center;
-                private readonly float InnerRadius;
-                private readonly float OuterRadius;
+                public Vector2 Center;
+                public float InnerRadius;
+                public float OuterRadius;
                 private readonly int _quality;
 
                 public Ring(Vector3 center, float innerRadius, float outerRadius, int quality = 20)
@@ -945,7 +952,7 @@ namespace LeagueSharp.Common
                     UpdatePolygon();
                 }
 
-                private void UpdatePolygon(int offset = 0)
+                public void UpdatePolygon(int offset = 0)
                 {
                     Points.Clear();
                     var outRadius = (offset + InnerRadius + OuterRadius) / (float)Math.Cos(2 * Math.PI / _quality);
@@ -970,10 +977,10 @@ namespace LeagueSharp.Common
 
             public class Sector : Polygon
             {
-                private readonly float Angle;
-                private readonly Vector2 Center;
-                private readonly Vector2 Direction;
-                private readonly float Radius;
+                public float Angle;
+                public Vector2 Center;
+                public Vector2 Direction;
+                public float Radius;
                 private readonly int _quality;
 
                 public Sector(Vector3 center, Vector3 direction, float angle, float radius, int quality = 20)
