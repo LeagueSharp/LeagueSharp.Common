@@ -33,9 +33,10 @@ namespace LeagueSharp.Common
     {
         private static Dictionary<string, string> Translations = new Dictionary<string, string>();
 
-       /* public static readonly XmlSerializer Serializer = new XmlSerializer(
+        /* public static readonly XmlSerializer Serializer = new XmlSerializer(
             typeof(TranslatedEntry[]), new XmlRootAttribute { ElementName = "entries" });
         */
+
         static MultiLanguage()
         {
             //LoadLanguage(Config.SelectedLanguage);
@@ -45,6 +46,7 @@ namespace LeagueSharp.Common
         {
             return Translations.ContainsKey(textToTranslate) ? Translations[textToTranslate] : textToTranslate;
         }
+
         /*
         public static bool LoadLanguage(string name)
         {

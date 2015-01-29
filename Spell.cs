@@ -223,8 +223,8 @@ namespace LeagueSharp.Common
             ObjectManager.Player.Spellbook.CastSpell(Slot, position);
             _chargedReqSentT = Environment.TickCount;
         }
-        
-        void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
+
+        private void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
             if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 3000)
             {
@@ -418,7 +418,9 @@ namespace LeagueSharp.Common
 
             LastCastAttemptT = Environment.TickCount;
 
-            return packetCast ? ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false) : ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+            return packetCast
+                ? ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false)
+                : ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
         }
 
         /// <summary>

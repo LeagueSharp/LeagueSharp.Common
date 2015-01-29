@@ -204,8 +204,7 @@ namespace LeagueSharp.Common
                 }
                 var endPos = startPos + range * (pos - startPos).Normalized();
 
-                var count =
-                    minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
+                var count = minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
 
                 if (count < minionCount)
                 {

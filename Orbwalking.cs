@@ -84,10 +84,7 @@ namespace LeagueSharp.Common
         };
 
         // Champs whose auto attacks can't be cancelled
-        private static readonly string[] NoCancelChamps =
-        {
-            "Kalista"
-        };
+        private static readonly string[] NoCancelChamps = { "Kalista" };
 
         private static int LastAATick;
         private static bool Attack = true;
@@ -279,9 +276,9 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Environment.TickCount)
             {
-                return Move && NoCancelChamps.Contains(Player.ChampionName) ?
-                    (Environment.TickCount - LastAATick > 250) :
-                    (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
+                return Move && NoCancelChamps.Contains(Player.ChampionName)
+                    ? (Environment.TickCount - LastAATick > 250)
+                    : (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
             }
 
             return false;
@@ -431,9 +428,8 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                if (unit.IsMe && (Spell.Target is Obj_AI_Base || 
-                    Spell.Target is Obj_BarracksDampener ||
-                    Spell.Target is Obj_HQ))
+                if (unit.IsMe &&
+                    (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
                     var target = (Obj_AI_Base) Spell.Target;
@@ -569,7 +565,9 @@ namespace LeagueSharp.Common
                         return OrbwalkingMode.Mixed;
                     }
 
-                    return _config.Item("LastHit").GetValue<KeyBind>().Active ? OrbwalkingMode.LastHit : OrbwalkingMode.None;
+                    return _config.Item("LastHit").GetValue<KeyBind>().Active
+                        ? OrbwalkingMode.LastHit
+                        : OrbwalkingMode.None;
                 }
                 set { _mode = value; }
             }
@@ -711,7 +709,12 @@ namespace LeagueSharp.Common
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
                 {
-                    result = ObjectManager.Get<Obj_AI_Minion>().Where(mob =>mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral).MaxOrDefault(mob => mob.MaxHealth);
+                    result =
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(
+                                mob =>
+                                    mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
+                            .MaxOrDefault(mob => mob.MaxHealth);
                     if (result != null)
                     {
                         return result;

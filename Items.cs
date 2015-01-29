@@ -45,7 +45,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
+            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId) id);
         }
 
         /// <summary>
@@ -55,8 +55,9 @@ namespace LeagueSharp.Common
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
+                var inst =
+                    ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                        spell => (int) spell.Slot == slot.Slot + (int) SpellSlot.Item1);
                 return inst != null && inst.State == SpellState.Ready;
             }
 
@@ -68,10 +69,11 @@ namespace LeagueSharp.Common
         /// </summary>
         private static bool CanUseItem(int id)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
+                var inst =
+                    ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                        spell => (int) spell.Slot == slot.Slot + (int) SpellSlot.Item1);
                 return inst != null && inst.State == SpellState.Ready;
             }
 
@@ -85,7 +87,9 @@ namespace LeagueSharp.Common
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                return target != null ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target) : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
+                return target != null
+                    ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                    : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
             }
 
             return false;
@@ -96,9 +100,11 @@ namespace LeagueSharp.Common
         /// </summary>
         private static bool UseItem(int id, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
             {
-                return target != null ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target) : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
+                return target != null
+                    ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                    : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
             }
 
             return false;
@@ -121,7 +127,7 @@ namespace LeagueSharp.Common
             {
                 return false;
             }
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
             {
                 return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
             }
@@ -136,8 +142,8 @@ namespace LeagueSharp.Common
         {
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             return (from wardId in wardIds
-                    where CanUseItem(wardId)
-                    select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
+                where CanUseItem(wardId)
+                select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId) wardId))
                 .FirstOrDefault();
         }
 
@@ -162,8 +168,10 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return ObjectManager.Player.InventoryItems.Where(slot =>
-                        slot.Id == (ItemId)Id).Select(slot => slot.SpellSlot).ToList();
+                    return
+                        ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) Id)
+                            .Select(slot => slot.SpellSlot)
+                            .ToList();
                 }
             }
 
@@ -220,7 +228,7 @@ namespace LeagueSharp.Common
 
             public void Buy()
             {
-                ObjectManager.Player.BuyItem((ItemId)Id);
+                ObjectManager.Player.BuyItem((ItemId) Id);
             }
         }
     }

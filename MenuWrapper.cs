@@ -234,7 +234,8 @@ namespace LeagueSharp.Common
 
             public SubMenu AddStringList(string name, string[] sList, int defaultSelectedIndex = 0)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
+                _subMenu.AddItem(
+                    new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
                 return this;
             }
 

@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Global.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -49,7 +51,7 @@ namespace LeagueSharp.Common
                 MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
-		
+
         public static bool Evade
         {
             get { return Read<bool>("Evade"); }
@@ -269,10 +271,9 @@ namespace LeagueSharp.Common
                             var buff = new byte[OffsetEntrySize];
                             strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
                             var entry = FromByteArray<OffsetEntry>(buff);
-                            foreach (
-                                var hash in
-                                    keys.Select(CalculateHash)
-                                        .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
+                            foreach (var hash in
+                                keys.Select(CalculateHash)
+                                    .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
                             {
                                 fl.Write(buff);
                                 var buff2 = new byte[entry.Capacity];
@@ -293,7 +294,6 @@ namespace LeagueSharp.Common
         {
             try
             {
-
                 using (new CustomMutex(700))
                 {
                     using (var strm = MMFile.CreateViewAccessor())

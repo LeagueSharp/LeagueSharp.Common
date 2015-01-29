@@ -652,13 +652,17 @@ namespace LeagueSharp.Common
 
             return ToPolygons(tList);
         }
-        
+
         /// <summary>
         ///     Joins all the polygones.
         ///     ClipType: http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/ClipType.htm
         ///     PolyFillType: http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/PolyFillType.htm
         /// </summary>
-        public static List<Polygon> JoinPolygons(this List<Polygon> sList, ClipType cType, PolyType pType = PolyType.ptClip, PolyFillType pFType1 = PolyFillType.pftNonZero, PolyFillType pFType2 = PolyFillType.pftNonZero)
+        public static List<Polygon> JoinPolygons(this List<Polygon> sList,
+            ClipType cType,
+            PolyType pType = PolyType.ptClip,
+            PolyFillType pFType1 = PolyFillType.pftNonZero,
+            PolyFillType pFType2 = PolyFillType.pftNonZero)
         {
             var p = ClipPolygons(sList);
             List<List<IntPoint>> tList = new List<List<IntPoint>>();
@@ -833,7 +837,7 @@ namespace LeagueSharp.Common
                 private void UpdatePolygon(int offset = 0)
                 {
                     Points.Clear();
-                    var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / _quality);
+                    var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / _quality);
                     var side1 = EndPos.Rotated(-Angle * 0.5f);
                     for (var i = 0; i <= _quality; i++)
                     {
@@ -894,15 +898,16 @@ namespace LeagueSharp.Common
 
                 private void UpdatePolygon(int offset = 0, float overrideWidth = -1)
                 {
-                   Points.Clear();
+                    Points.Clear();
                     var outRadius = (overrideWidth > 0
                         ? overrideWidth
-                        : (offset + Radius) / (float)Math.Cos(2 * Math.PI / _quality));
+                        : (offset + Radius) / (float) Math.Cos(2 * Math.PI / _quality));
                     for (var i = 1; i <= _quality; i++)
                     {
                         var angle = i * 2 * Math.PI / _quality;
                         var point = new Vector2(
-                            Center.X + outRadius * (float)Math.Cos(angle), Center.Y + outRadius * (float)Math.Sin(angle));
+                            Center.X + outRadius * (float) Math.Cos(angle),
+                            Center.Y + outRadius * (float) Math.Sin(angle));
                         Points.Add(point);
                     }
                 }
@@ -910,8 +915,16 @@ namespace LeagueSharp.Common
 
             public class Rectangle : Polygon
             {
-                private Vector2 Direction { get { return (End - Start).Normalized(); } }
-                private Vector2 Perpendicular { get { return Direction.Perpendicular(); } }
+                private Vector2 Direction
+                {
+                    get { return (End - Start).Normalized(); }
+                }
+
+                private Vector2 Perpendicular
+                {
+                    get { return Direction.Perpendicular(); }
+                }
+
                 private readonly Vector2 End;
                 private readonly Vector2 Start;
                 private readonly float Width;
@@ -929,9 +942,11 @@ namespace LeagueSharp.Common
                 {
                     Points.Clear();
                     Points.Add(
-                        Start + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                        Start + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular -
+                        offset * Direction);
                     Points.Add(
-                        Start - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                        Start - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular -
+                        offset * Direction);
                     Points.Add(
                         End - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
                     Points.Add(
@@ -961,21 +976,22 @@ namespace LeagueSharp.Common
                 private void UpdatePolygon(int offset = 0)
                 {
                     Points.Clear();
-                    var outRadius = (offset + InnerRadius + OuterRadius) / (float)Math.Cos(2 * Math.PI / _quality);
+                    var outRadius = (offset + InnerRadius + OuterRadius) / (float) Math.Cos(2 * Math.PI / _quality);
                     var innerRadius = InnerRadius - OuterRadius - offset;
                     for (var i = 0; i <= _quality; i++)
                     {
                         var angle = i * 2 * Math.PI / _quality;
                         var point = new Vector2(
-                            Center.X - outRadius * (float)Math.Cos(angle), Center.Y - outRadius * (float)Math.Sin(angle));
+                            Center.X - outRadius * (float) Math.Cos(angle),
+                            Center.Y - outRadius * (float) Math.Sin(angle));
                         Points.Add(point);
                     }
                     for (var i = 0; i <= _quality; i++)
                     {
                         var angle = i * 2 * Math.PI / _quality;
                         var point = new Vector2(
-                            Center.X + innerRadius * (float)Math.Cos(angle),
-                            Center.Y - innerRadius * (float)Math.Sin(angle));
+                            Center.X + innerRadius * (float) Math.Cos(angle),
+                            Center.Y - innerRadius * (float) Math.Sin(angle));
                         Points.Add(point);
                     }
                 }
@@ -1004,13 +1020,14 @@ namespace LeagueSharp.Common
                 public void UpdatePolygon(int offset = 0)
                 {
                     Points.Clear();
-                    var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / _quality);
+                    var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / _quality);
                     Points.Add(Center);
                     var side1 = Direction.Rotated(-Angle * 0.5f);
                     for (var i = 0; i <= _quality; i++)
                     {
                         var cDirection = side1.Rotated(i * Angle / _quality).Normalized();
-                        Points.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
+                        Points.Add(
+                            new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                     }
                 }
             }

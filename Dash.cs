@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Dash.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -61,8 +63,10 @@ namespace LeagueSharp.Common
                                                        (int)
                                                            (1000 *
                                                             (DetectedDashes[sender.NetworkId].EndPos.Distance(
-                                                                DetectedDashes[sender.NetworkId].StartPos) / DetectedDashes[sender.NetworkId].Speed));
-            DetectedDashes[sender.NetworkId].Duration = DetectedDashes[sender.NetworkId].EndTick - DetectedDashes[sender.NetworkId].StartTick;
+                                                                DetectedDashes[sender.NetworkId].StartPos) /
+                                                             DetectedDashes[sender.NetworkId].Speed));
+            DetectedDashes[sender.NetworkId].Duration = DetectedDashes[sender.NetworkId].EndTick -
+                                                        DetectedDashes[sender.NetworkId].StartTick;
 
             CustomEvents.Unit.TriggerOnDash(DetectedDashes[sender.NetworkId].Unit, DetectedDashes[sender.NetworkId]);
         }

@@ -81,7 +81,11 @@ namespace LeagueSharp.Common
     {
         public string[] SList;
         public int SelectedIndex;
-        public string SelectedValue { get { return SList[SelectedIndex]; } }
+
+        public string SelectedValue
+        {
+            get { return SList[SelectedIndex]; }
+        }
 
         public StringList(string[] sList, int defaultSelectedIndex = 0)
         {
@@ -297,15 +301,17 @@ namespace LeagueSharp.Common
             Font.DrawText(
                 null, s,
                 new SharpDX.Rectangle(
-                    (int) (item.Position.X + item.Width - MenuItem.Height), (int) item.Position.Y, MenuItem.Height, MenuItem.Height),
-                FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
+                    (int) (item.Position.X + item.Width - MenuItem.Height), (int) item.Position.Y, MenuItem.Height,
+                    MenuItem.Height), FontDrawFlags.VerticalCenter | FontDrawFlags.Center,
+                new ColorBGRA(255, 255, 255, 255));
         }
 
         internal static void DrawArrow(string s, Vector2 position, MenuItem item, Color color)
         {
             DrawBox(position, MenuItem.Height, MenuItem.Height, Color.Blue, 1, color);
             Font.DrawText(
-                null, s, new SharpDX.Rectangle((int) (position.X), (int) item.Position.Y, MenuItem.Height, MenuItem.Height),
+                null, s,
+                new SharpDX.Rectangle((int) (position.X), (int) item.Position.Y, MenuItem.Height, MenuItem.Height),
                 FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
         }
 
@@ -889,10 +895,7 @@ namespace LeagueSharp.Common
 
         private Vector2 MyBasePosition
         {
-            get
-            {
-                return Parent == null ? MenuSettings.BasePosition : Parent.MyBasePosition;
-            }
+            get { return Parent == null ? MenuSettings.BasePosition : Parent.MyBasePosition; }
         }
 
 

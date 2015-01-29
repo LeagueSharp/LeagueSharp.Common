@@ -1255,10 +1255,7 @@ namespace LeagueSharp.Common
 
             public string text
             {
-                private get
-                {
-                    return TextUpdate != null ? TextUpdate() : _text;
-                }
+                private get { return TextUpdate != null ? TextUpdate() : _text; }
                 set { _text = value; }
             }
 

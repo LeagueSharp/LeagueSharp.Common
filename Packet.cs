@@ -34,13 +34,13 @@ using SharpDX;
 
 namespace LeagueSharp.Common
 {
-
     [Obsolete("Use Network.Packets", false)]
     public static class Packet
     {
         static Packet()
         {
-            Console.WriteLine(@"LeagueSharp.Common.Packet will be removed soon, use LeagueSharp.Network.Packets instead");
+            Console.WriteLine(
+                @"LeagueSharp.Common.Packet will be removed soon, use LeagueSharp.Network.Packets instead");
         }
 
         public enum ActionStates
@@ -180,7 +180,7 @@ namespace LeagueSharp.Common
                 private static readonly byte Header = 0x1D;
                 private static readonly PacketChannel Channel = PacketChannel.C2S;
                 private static readonly PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
-             
+
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header, Channel, Flags);
@@ -372,8 +372,9 @@ namespace LeagueSharp.Common
                     result.WriteFloat(packetStruct.ToX);
                     result.WriteFloat(packetStruct.ToY);
                     result.WriteInteger(packetStruct.TargetNetworkId);
-                    result.WriteByte((byte)packetStruct.Slot);
-                    result.WriteByte(0); //packetStruct.SpellFlag == 0xFF ? GetSpellByte(packetStruct.Slot) : packetStruct.SpellFlag
+                    result.WriteByte((byte) packetStruct.Slot);
+                    result.WriteByte(0);
+                        //packetStruct.SpellFlag == 0xFF ? GetSpellByte(packetStruct.Slot) : packetStruct.SpellFlag
                     return result;
                 }
 
@@ -387,7 +388,7 @@ namespace LeagueSharp.Common
                     result.FromY = packet.ReadFloat();
                     result.ToX = packet.ReadFloat();
                     result.ToY = packet.ReadFloat();
-                    result.Slot = (SpellSlot)packet.ReadByte();
+                    result.Slot = (SpellSlot) packet.ReadByte();
                     result.SpellFlag = packet.ReadByte();
                     return result;
                 }
@@ -466,13 +467,12 @@ namespace LeagueSharp.Common
             /// <summary>
             ///     Packet sent when casting charged spells second cast.
             /// </summary>
-
             public static class ChargedCast
             {
                 private const byte Header = 0x03;
                 public static PacketChannel Channel = PacketChannel.C2S;
                 public static PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
-             
+
                 public static GamePacket Encoded(Struct packetStruct)
                 {
                     var result = new GamePacket(Header);
@@ -981,7 +981,6 @@ namespace LeagueSharp.Common
 
             #endregion
 
-
             #region Resume 4.21 (NO STRUCT)
 
             /// <summary>
@@ -1015,7 +1014,7 @@ namespace LeagueSharp.Common
                     result.WriteByte(0);
                     result.WriteInteger(0);
                     result.WriteInteger(packetStruct.TargetNetworkId);
-                    result.WriteByte((byte)packetStruct.Type);
+                    result.WriteByte((byte) packetStruct.Type);
                     result.WriteInteger(packetStruct.SourceNetworkId);
                     result.WriteFloat(packetStruct.X);
                     result.WriteFloat(packetStruct.Y);
@@ -1033,9 +1032,7 @@ namespace LeagueSharp.Common
                     var x = packet.ReadFloat();
                     var y = packet.ReadFloat();
                     var silent = (packet.ReadByte() & 1) != 1;
-                    return new Struct(
-                        x, y, targetNetworkId, sourceNetworkId,
-                        (PingType)type, silent);
+                    return new Struct(x, y, targetNetworkId, sourceNetworkId, (PingType) type, silent);
                 }
 
                 public struct Struct
@@ -1142,6 +1139,7 @@ namespace LeagueSharp.Common
             #endregion
 
             #region EmptyJungleCamp - 4.21 partially
+
             /// <summary>
             ///     Gets received when gaining vision of an empty jungle camp.
             /// </summary>
@@ -1569,13 +1567,14 @@ namespace LeagueSharp.Common
 
                 private const int ErrorGap = 100; //in ticks
 
-                private static readonly IDictionary<string, ITeleport> TypeByString = new Dictionary<string, ITeleport>
-                {
-                    {"Recall", new RecallTeleport()},
-                    {"Teleport", new TeleportTeleport()},
-                    {"Gate", new TwistedFateTeleport()},
-                    {"Shen", new ShenTeleport()},
-                };
+                private static readonly IDictionary<string, ITeleport> TypeByString =
+                    new Dictionary<string, ITeleport>
+                    {
+                        { "Recall", new RecallTeleport() },
+                        { "Teleport", new TeleportTeleport() },
+                        { "Gate", new TwistedFateTeleport() },
+                        { "Shen", new ShenTeleport() },
+                    };
 
                 private static readonly IDictionary<int, TeleportData> RecallDataByNetworkId =
                     new Dictionary<int, TeleportData>();
@@ -1588,13 +1587,9 @@ namespace LeagueSharp.Common
 
                 public static Struct Decoded(GameObject sender, GameObjectTeleportEventArgs args) //
                 {
-                    var result = new Struct
-                    {
-                        Status = Status.Unknown,
-                        Type = Type.Unknown
-                    };
+                    var result = new Struct { Status = Status.Unknown, Type = Type.Unknown };
 
-                    if(sender == null || !sender.IsValid || !(sender is Obj_AI_Hero))
+                    if (sender == null || !sender.IsValid || !(sender is Obj_AI_Hero))
                     {
                         return result;
                     }
@@ -1605,7 +1600,7 @@ namespace LeagueSharp.Common
 
                     if (!RecallDataByNetworkId.ContainsKey(result.UnitNetworkId))
                     {
-                        RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData {Type = Type.Unknown};
+                        RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData { Type = Type.Unknown };
                     }
 
                     if (!string.IsNullOrEmpty(args.RecallType))
@@ -1672,7 +1667,7 @@ namespace LeagueSharp.Common
 
             #endregion
 
-           #region PlayEmote - 4.21
+            #region PlayEmote - 4.21
 
             /// <summary>
             ///     Gets received when an unit uses an emote.

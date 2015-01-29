@@ -53,8 +53,7 @@ namespace LeagueSharp.Common
                             .Modules.Cast<ProcessModule>()
                             .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
                             .FileName;
-                    _leagueSharpDirectory =
-                        Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
+                    _leagueSharpDirectory = Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
                 }
                 catch (Exception ee)
                 {
@@ -78,7 +77,8 @@ namespace LeagueSharp.Common
                         var config = new XmlDocument();
                         config.Load(configFile);
 
-                        if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
+                        if (config.DocumentElement != null &&
+                            config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
                             var selectSingleNode = config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage");
                             if (selectSingleNode != null)
@@ -132,10 +132,12 @@ namespace LeagueSharp.Common
                 {
                     var config = new XmlDocument();
                     config.Load(configFile);
-                    if (config.DocumentElement != null) {
+                    if (config.DocumentElement != null)
+                    {
                         var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
                         foreach (var b in from XmlElement element in node.ChildNodes
-                            where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
+                            where
+                                element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
                             select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
                             into b
                             where b != null

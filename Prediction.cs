@@ -244,7 +244,8 @@ namespace LeagueSharp.Common
             }
 
             //Target too far away.
-            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon && input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
+            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon &&
+                input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
             {
                 return new PredictionOutput { Input = input };
             }
@@ -340,8 +341,7 @@ namespace LeagueSharp.Common
             {
                 var endP = dashData.Path.Last();
                 var timeToPoint = input.Delay + input.From.To2D().Distance(endP) / input.Speed;
-                if (timeToPoint <=
-                    input.Unit.Distance(endP) / dashData.Speed + input.RealRadius / input.Unit.MoveSpeed)
+                if (timeToPoint <= input.Unit.Distance(endP) / dashData.Speed + input.RealRadius / input.Unit.MoveSpeed)
                 {
                     return new PredictionOutput
                     {
@@ -468,7 +468,8 @@ namespace LeagueSharp.Common
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius &&
+                Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
                 path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
                 var tT = 0f;
@@ -807,8 +808,7 @@ namespace LeagueSharp.Common
                         var dist = Vector2.DistanceSquared(bestCandidateHitPoints[i], proj1.LinePoint) +
                                    Vector2.DistanceSquared(bestCandidateHitPoints[j], proj2.LinePoint);
                         if (!(dist >= maxDistance) ||
-                            (proj1.LinePoint - positionsList[i]).AngleBetween(proj2.LinePoint - positionsList[j]) <=
-                            90)
+                            (proj1.LinePoint - positionsList[i]).AngleBetween(proj2.LinePoint - positionsList[j]) <= 90)
                         {
                             continue;
                         }
@@ -870,14 +870,13 @@ namespace LeagueSharp.Common
                     switch (objectType)
                     {
                         case CollisionableObjects.Minions:
-                            foreach (
-                                var minion in
-                                    ObjectManager.Get<Obj_AI_Minion>()
-                                        .Where(
-                                            minion =>
-                                                minion.IsValidTarget(
-                                                    Math.Min(input.Range + input.Radius + 100, 2000), true,
-                                                    input.RangeCheckFrom)))
+                            foreach (var minion in
+                                ObjectManager.Get<Obj_AI_Minion>()
+                                    .Where(
+                                        minion =>
+                                            minion.IsValidTarget(
+                                                Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                                input.RangeCheckFrom)))
                             {
                                 input.Unit = minion;
                                 var minionPrediction = Prediction.GetPrediction(input, false, false);
@@ -891,14 +890,13 @@ namespace LeagueSharp.Common
                             }
                             break;
                         case CollisionableObjects.Heroes:
-                            foreach (
-                                var hero in
-                                    ObjectManager.Get<Obj_AI_Hero>()
-                                        .Where(
-                                            hero =>
-                                                hero.IsValidTarget(
-                                                    Math.Min(input.Range + input.Radius + 100, 2000), true,
-                                                    input.RangeCheckFrom)))
+                            foreach (var hero in
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .Where(
+                                        hero =>
+                                            hero.IsValidTarget(
+                                                Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                                input.RangeCheckFrom)))
                             {
                                 input.Unit = hero;
                                 var prediction = Prediction.GetPrediction(input, false, false);
@@ -927,18 +925,19 @@ namespace LeagueSharp.Common
                         case CollisionableObjects.YasuoWall:
 
                             if (Environment.TickCount - _wallCastT > 4000)
+                            {
                                 break;
+                            }
 
                             GameObject wall = null;
-                            foreach (
-                                var gameObject in
-                                    ObjectManager.Get<GameObject>()
-                                        .Where(
-                                            gameObject =>
-                                                gameObject.IsValid &&
-                                                System.Text.RegularExpressions.Regex.IsMatch(
-                                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
-                                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase)))
+                            foreach (var gameObject in
+                                ObjectManager.Get<GameObject>()
+                                    .Where(
+                                        gameObject =>
+                                            gameObject.IsValid &&
+                                            System.Text.RegularExpressions.Regex.IsMatch(
+                                                gameObject.Name, "_w_windwall_enemy_0.\\.troy",
+                                                System.Text.RegularExpressions.RegexOptions.IgnoreCase)))
                             {
                                 wall = gameObject;
                             }
@@ -949,7 +948,8 @@ namespace LeagueSharp.Common
                             var level = wall.Name.Substring(wall.Name.Length - 6, 1);
                             var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
-                            var wallDirection = (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
+                            var wallDirection =
+                                (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
                             var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
                             var wallEnd = wallStart - wallWidth * wallDirection;
 

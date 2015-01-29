@@ -220,7 +220,6 @@ namespace LeagueSharp.Common
 
         public static double NextDouble(this Random rng, double min, double max)
         {
-            
             return min + (rng.NextDouble() * (max - min));
         }
 
@@ -274,8 +273,10 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
-            
+            }
+
             var maxElem = enumerator.Current;
             var maxVal = valuingFoo(maxElem);
 
@@ -298,7 +299,9 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
+            }
 
             var minElem = enumerator.Current;
             var minVal = valuingFoo(minElem);
