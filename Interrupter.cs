@@ -340,6 +340,7 @@ namespace LeagueSharp.Common
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
+        [Obsolete("Use Interrupter2.OnInterruptableTarget", false)]
         public static event OnPossibleToInterruptH OnPossibleToInterrupt;
 
         private static void FireOnInterruptable(Obj_AI_Hero unit, InterruptableSpell spell)
