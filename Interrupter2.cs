@@ -44,6 +44,7 @@ namespace LeagueSharp.Common
         {
             // Initialize Properties
             InterruptableSpells = new Dictionary<string, List<InterruptableSpell>>();
+            CastingInterruptableSpell = new Dictionary<int, InterruptableSpell>();
             Enemies = ObjectManager.Get<Obj_AI_Hero>().FindAll(o => o.IsEnemy);
 
             InitializeSpells();
@@ -53,9 +54,13 @@ namespace LeagueSharp.Common
 
             // Listen to required events
             Game.OnGameUpdate += Game_OnGameUpdate;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
         private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
+        private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
+
         // Until jodus improves ObjectManager, we'll use this
         private static List<Obj_AI_Hero> Enemies { get; set; }
         public static event InterruptableTargetHandler OnInterruptableTarget;
@@ -77,6 +82,7 @@ namespace LeagueSharp.Common
             RegisterSpell("MissFortune", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Nunu", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("RekSai", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Shen", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
             RegisterSpell("TwistedFate", new InterruptableSpell(SpellSlot.R, DangerLevel.Medium));
             RegisterSpell("Urgot", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
@@ -114,6 +120,40 @@ namespace LeagueSharp.Common
             }
         }
 
+        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            var target = sender as Obj_AI_Hero;
+            if (target != null && !CastingInterruptableSpell.ContainsKey(target.NetworkId))
+            {
+                // Check if the target is known to have interruptable spells
+                if (InterruptableSpells.ContainsKey(target.ChampionName))
+                {
+                    // Get the interruptable spell
+                    var spell =
+                        InterruptableSpells[target.ChampionName].Find(
+                            s => s.Slot == target.GetSpellSlot(args.SData.Name));
+                    if (spell != null)
+                    {
+                        // Mark champ as casting interruptable spell
+                        CastingInterruptableSpell.Add(target.NetworkId, spell);
+                    }
+                }
+            }
+        }
+
+        private static void Spellbook_OnStopCast(Spellbook sender, SpellbookStopCastEventArgs args)
+        {
+            var target = sender.Owner as Obj_AI_Hero;
+            if (target != null)
+            {
+                // Check if the spell itself stopped casting (interrupted)
+                if (!target.Spellbook.IsCastingSpell && !target.Spellbook.IsChanneling && !target.Spellbook.IsCharging)
+                {
+                    CastingInterruptableSpell.Remove(target.NetworkId);
+                }
+            }
+        }
+
         public static bool IsCastingInterruptableSpell(this Obj_AI_Hero target, bool checkMovementInterruption = false)
         {
             var data = GetInterruptableTargetData(target);
@@ -124,22 +164,11 @@ namespace LeagueSharp.Common
         {
             if (target.IsValid<Obj_AI_Hero>())
             {
-                if (target.Spellbook.IsCastingSpell || target.Spellbook.IsChanneling || target.Spellbook.IsCharging)
+                if (CastingInterruptableSpell.ContainsKey(target.NetworkId))
                 {
-                    // Check if the target is known to have interruptable spells
-                    if (InterruptableSpells.ContainsKey(target.ChampionName))
-                    {
-                        // Get the interruptable spell
-                        var spell =
-                            InterruptableSpells[target.ChampionName].Find(
-                                s => s.Slot == target.GetSpellSlot(target.LastCastedSpellName()));
-                        if (spell != null)
-                        {
-                            // Return the args with spell end time
-                            return new InterruptableTargetEventArgs(
-                                spell.DangerLevel, target.Spellbook.CastEndTime, spell.MovementInterrupts);
-                        }
-                    }
+                    // Return the args with spell end time
+                    return new InterruptableTargetEventArgs(
+                        CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime, CastingInterruptableSpell[target.NetworkId].MovementInterrupts);
                 }
             }
 
