@@ -67,14 +67,15 @@ namespace LeagueSharp.Common
             {
                 var result = HttpStatusCode.BadRequest;
 
-                if (_request != null)
+                if (_request == null)
                 {
-                    var response = base.GetWebResponse(_request) as HttpWebResponse;
+                    return result;
+                }
+                var response = GetWebResponse(_request) as HttpWebResponse;
 
-                    if (response != null)
-                    {
-                        result = response.StatusCode;
-                    }
+                if (response != null)
+                {
+                    result = response.StatusCode;
                 }
 
                 return result;
@@ -85,13 +86,14 @@ namespace LeagueSharp.Common
         {
             string result = null;
 
-            if (_request != null)
+            if (_request == null)
             {
-                var response = base.GetWebResponse(_request) as HttpWebResponse;
-                if (response != null)
-                {
-                    result = response.Headers[headerName];
-                }
+                return null;
+            }
+            var response = GetWebResponse(_request) as HttpWebResponse;
+            if (response != null)
+            {
+                result = response.Headers[headerName];
             }
 
             return result;
@@ -103,12 +105,13 @@ namespace LeagueSharp.Common
 
             var httpRequest = _request as HttpWebRequest;
 
-            if (httpRequest != null)
+            if (httpRequest == null)
             {
-                httpRequest.AllowAutoRedirect = AutoRedirect;
-                httpRequest.CookieContainer = CookieContainer;
-                httpRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                return _request;
             }
+            httpRequest.AllowAutoRedirect = AutoRedirect;
+            httpRequest.CookieContainer = CookieContainer;
+            httpRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
             return _request;
         }
