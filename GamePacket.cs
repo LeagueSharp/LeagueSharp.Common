@@ -26,6 +26,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using SharpDX;
 
 #endregion
@@ -331,7 +332,7 @@ namespace LeagueSharp.Common
             return pos2 == null ? pos : null;
         }
 
-        public int[][] SearchGameTile(Vector2 position)
+        private int[][] SearchGameTile(Vector2 position)
         {
             var tile = NavMesh.WorldToGrid(position.X, position.Y);
             var cell = NavMesh.GetCell((short) tile.X, (short) tile.Y);
@@ -342,12 +343,12 @@ namespace LeagueSharp.Common
             return new[] { x, y };
         }
 
-        public int[][] SearchGameTile(Vector3 position)
+        private int[][] SearchGameTile(Vector3 position)
         {
             return SearchGameTile(position.To2D());
         }
 
-        public int[][] SearchGameTile(GameObject obj)
+        private int[][] SearchGameTile(GameObject obj)
         {
             return SearchGameTile(obj.Position.To2D());
         }
@@ -358,36 +359,9 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Sends the packet
-        /// </summary>
-        public void Send(PacketChannel channel = PacketChannel.C2S,
-            PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
-        {
-            return; //Blocked for now 4.21
-            if (!Block)
-            {
-                Game.SendPacket(
-                    Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
-                    Flags == PacketProtocolFlags.Reliable ? flags : Flags);
-            }
-        }
-
-        /// <summary>
-        ///     Receives the packet.
-        /// </summary>
-        public void Process(PacketChannel channel = PacketChannel.S2C)
-        {
-            return; //Blocked for now 4.21
-            if (!Block)
-            {
-                Game.ProcessPacket(Ms.ToArray(), channel);
-            }
-        }
-
-        /// <summary>
         ///     Dumps the packet.
         /// </summary>
-        public string Dump(bool additionalInfo = false)
+        private string Dump(bool additionalInfo = false)
         {
             var s = string.Concat(Ms.ToArray().Select(b => b.ToString("X2") + " "));
             if (additionalInfo)
