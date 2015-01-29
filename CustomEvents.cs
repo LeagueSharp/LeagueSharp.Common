@@ -105,7 +105,6 @@ namespace LeagueSharp.Common
 
             private static void PacketHandler(GamePacketEventArgs args)
             {
-                return;//BROKEN on 4.21
                 /*if (OnLevelUpSpell != null)
                 {
                     if (args.PacketData[0] == 0x15)
