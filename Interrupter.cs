@@ -52,6 +52,7 @@ namespace LeagueSharp.Common
     /// <summary>
     ///     This class allows you to easily interrupt interruptable spells like Katarina's ult.
     /// </summary>
+    [Obsolete("Use Interrupter2", false)]
     public static class Interrupter
     {
         public static List<InterruptableSpell> Spells = new List<InterruptableSpell>();
@@ -370,6 +371,7 @@ namespace LeagueSharp.Common
             }
         }
 
+        
         public static bool IsChannelingImportantSpell(this Obj_AI_Hero unit)
         {
             return
