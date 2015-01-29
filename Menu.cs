@@ -81,7 +81,11 @@ namespace LeagueSharp.Common
     {
         public string[] SList;
         public int SelectedIndex;
-        public string SelectedValue { get { return SList[SelectedIndex]; } }
+
+        public string SelectedValue
+        {
+            get { return SList[SelectedIndex]; }
+        }
 
         public StringList(string[] sList, int defaultSelectedIndex = 0)
         {
@@ -114,7 +118,7 @@ namespace LeagueSharp.Common
     [Serializable]
     internal static class SavedSettings
     {
-        public static Dictionary<string, Dictionary<string, byte[]>> LoadedFiles =
+        private static Dictionary<string, Dictionary<string, byte[]>> LoadedFiles =
             new Dictionary<string, Dictionary<string, byte[]>>();
 
         public static byte[] GetSavedData(string name, string key)
@@ -165,7 +169,7 @@ namespace LeagueSharp.Common
 
     internal static class MenuSettings
     {
-        public static Vector2 BasePosition = new Vector2(10, 10);
+        public static readonly Vector2 BasePosition = new Vector2(10, 10);
         private static bool _drawTheMenu;
 
         static MenuSettings()
@@ -177,7 +181,7 @@ namespace LeagueSharp.Common
         internal static bool DrawMenu
         {
             get { return _drawTheMenu; }
-            set
+            private set
             {
                 _drawTheMenu = value;
                 Global.Write("DrawMenu", value);
@@ -251,11 +255,12 @@ namespace LeagueSharp.Common
 
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
         {
-            if (Font != null)
+            if (Font == null)
             {
-                Font.Dispose();
-                Font = null;
+                return;
             }
+            Font.Dispose();
+            Font = null;
         }
 
         private static void DrawingOnOnPostReset(EventArgs args)
@@ -277,33 +282,36 @@ namespace LeagueSharp.Common
         {
             Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, height, color);
 
-            if (borderwidth > 0)
+            if (borderwidth <= 0)
             {
-                Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, borderwidth, borderColor);
-                Drawing.DrawLine(
-                    position.X, position.Y + height, position.X + width, position.Y + height, borderwidth, borderColor);
-                Drawing.DrawLine(position.X, position.Y, position.X, position.Y + height, borderwidth, borderColor);
-                Drawing.DrawLine(
-                    position.X + width, position.Y, position.X + width, position.Y + height, borderwidth, borderColor);
+                return;
             }
+            Drawing.DrawLine(position.X, position.Y, position.X + width, position.Y, borderwidth, borderColor);
+            Drawing.DrawLine(
+                position.X, position.Y + height, position.X + width, position.Y + height, borderwidth, borderColor);
+            Drawing.DrawLine(position.X, position.Y, position.X, position.Y + height, borderwidth, borderColor);
+            Drawing.DrawLine(
+                position.X + width, position.Y, position.X + width, position.Y + height, borderwidth, borderColor);
         }
 
         internal static void DrawOnOff(bool on, Vector2 position, MenuItem item)
         {
-            DrawBox(position, item.Height, item.Height, on ? Color.Green : Color.Red, 1, Color.Black);
+            DrawBox(position, MenuItem.Height, MenuItem.Height, on ? Color.Green : Color.Red, 1, Color.Black);
             var s = on ? "On" : "Off";
             Font.DrawText(
                 null, s,
                 new SharpDX.Rectangle(
-                    (int) (item.Position.X + item.Width - item.Height), (int) item.Position.Y, item.Height, item.Height),
-                FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
+                    (int) (item.Position.X + item.Width - MenuItem.Height), (int) item.Position.Y, MenuItem.Height,
+                    MenuItem.Height), FontDrawFlags.VerticalCenter | FontDrawFlags.Center,
+                new ColorBGRA(255, 255, 255, 255));
         }
 
         internal static void DrawArrow(string s, Vector2 position, MenuItem item, Color color)
         {
-            DrawBox(position, item.Height, item.Height, Color.Blue, 1, color);
+            DrawBox(position, MenuItem.Height, MenuItem.Height, Color.Blue, 1, color);
             Font.DrawText(
-                null, s, new SharpDX.Rectangle((int) (position.X), (int) item.Position.Y, item.Height, item.Height),
+                null, s,
+                new SharpDX.Rectangle((int) (position.X), (int) item.Position.Y, MenuItem.Height, MenuItem.Height),
                 FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
         }
 
@@ -313,7 +321,7 @@ namespace LeagueSharp.Common
             DrawSlider(position, item, val.MinValue, val.MaxValue, val.Value, width, drawText);
         }
 
-        internal static void DrawSlider(Vector2 position,
+        private static void DrawSlider(Vector2 position,
             MenuItem item,
             int min,
             int max,
@@ -324,13 +332,13 @@ namespace LeagueSharp.Common
             width = (width > 0 ? width : item.Width);
             var percentage = 100 * (value - min) / (max - min);
             var x = position.X + 3 + (percentage * (width - 3)) / 100;
-            Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.Yellow);
+            Drawing.DrawLine(x, position.Y + 2, x, position.Y + MenuItem.Height, 2, Color.Yellow);
 
             if (drawText)
             {
                 Font.DrawText(
                     null, value.ToString(),
-                    new SharpDX.Rectangle((int) position.X - 5, (int) position.Y, item.Width, item.Height),
+                    new SharpDX.Rectangle((int) position.X - 5, (int) position.Y, item.Width, MenuItem.Height),
                     FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
             }
         }
@@ -338,13 +346,13 @@ namespace LeagueSharp.Common
 
     public class Menu
     {
-        public List<Menu> Children = new List<Menu>();
+        public readonly List<Menu> Children = new List<Menu>();
 
-        public string DisplayName;
-        public bool IsRootMenu;
-        public List<MenuItem> Items = new List<MenuItem>();
-        public string Name;
-        public Menu Parent;
+        private readonly string DisplayName;
+        private readonly bool IsRootMenu;
+        public readonly List<MenuItem> Items = new List<MenuItem>();
+        public readonly string Name;
+        private Menu Parent;
 
         private int _cachedMenuCount = -1;
         private int _cachedMenuCountT;
@@ -358,13 +366,14 @@ namespace LeagueSharp.Common
             Name = name;
             IsRootMenu = isRootMenu;
 
-            if (isRootMenu)
+            if (!isRootMenu)
             {
-                CustomEvents.Game.OnGameEnd += delegate { SaveAll(); };
-                Game.OnGameEnd += delegate { SaveAll(); };
-                AppDomain.CurrentDomain.DomainUnload += delegate { SaveAll(); };
-                AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
+                return;
             }
+            CustomEvents.Game.OnGameEnd += delegate { SaveAll(); };
+            Game.OnGameEnd += delegate { SaveAll(); };
+            AppDomain.CurrentDomain.DomainUnload += delegate { SaveAll(); };
+            AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
         }
 
         internal int XLevel
@@ -396,7 +405,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal int MenuCount
+        private int MenuCount
         {
             get
             {
@@ -475,7 +484,7 @@ namespace LeagueSharp.Common
             get { return Parent != null ? Parent.ChildrenMenuWidth : MenuSettings.MenuItemWidth; }
         }
 
-        internal int NeededWidth
+        private int NeededWidth
         {
             get
             {
@@ -483,12 +492,12 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal int Height
+        private static int Height
         {
             get { return MenuSettings.MenuItemHeight; }
         }
 
-        internal bool Visible
+        private bool Visible
         {
             get
             {
@@ -502,32 +511,33 @@ namespace LeagueSharp.Common
             {
                 _visible = value;
                 //Hide all the children
-                if (!_visible)
+                if (_visible)
                 {
-                    foreach (var schild in Children)
-                    {
-                        schild.Visible = false;
-                    }
+                    return;
+                }
+                foreach (var schild in Children)
+                {
+                    schild.Visible = false;
+                }
 
-                    foreach (var sitem in Items)
-                    {
-                        sitem.Visible = false;
-                    }
+                foreach (var sitem in Items)
+                {
+                    sitem.Visible = false;
                 }
             }
         }
 
-        internal bool IsInside(Vector2 position)
+        private bool IsInside(Vector2 position)
         {
             return Utils.IsUnderRectangle(position, Position.X, Position.Y, Width, Height);
         }
 
-        internal void Game_OnWndProc(WndEventArgs args)
+        private void Game_OnWndProc(WndEventArgs args)
         {
             OnReceiveMessage((WindowsMessages) args.Msg, Utils.GetCursorPos(), args.WParam);
         }
 
-        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
+        private void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
         {
             //Spread the message to the menu's children recursively
             foreach (var child in Children)
@@ -606,7 +616,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal void Drawing_OnDraw(EventArgs args)
+        private void Drawing_OnDraw(EventArgs args)
         {
             if (!Visible)
             {
@@ -645,7 +655,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal void RecursiveSaveAll(ref Dictionary<string, Dictionary<string, byte[]>> dics)
+        private void RecursiveSaveAll(ref Dictionary<string, Dictionary<string, byte[]>> dics)
         {
             foreach (var child in Children)
             {
@@ -658,7 +668,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal void SaveAll()
+        private void SaveAll()
         {
             var dic = new Dictionary<string, Dictionary<string, byte[]>>();
             RecursiveSaveAll(ref dic);
@@ -718,31 +728,33 @@ namespace LeagueSharp.Common
 
         private void UnloadMenuState()
         {
-            if (_menuStateFileInfo != null)
+            if (_menuStateFileInfo == null)
             {
-                try
-                {
-                    _menuStateFileInfo.Delete();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                return;
+            }
+            try
+            {
+                _menuStateFileInfo.Delete();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 
         private void UnloadAllMenuStates()
         {
-            if (_menuStateFileInfo != null && _menuStateFileInfo.Directory != null)
+            if (_menuStateFileInfo == null || _menuStateFileInfo.Directory == null)
             {
-                try
-                {
-                    _menuStateFileInfo.Directory.Delete(true);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                return;
+            }
+            try
+            {
+                _menuStateFileInfo.Directory.Delete(true);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 
@@ -803,13 +815,12 @@ namespace LeagueSharp.Common
     {
         private readonly object _newValue;
         private readonly object _oldValue;
-        private bool _process;
 
         public OnValueChangeEventArgs(object oldValue, object newValue)
         {
             _oldValue = oldValue;
             _newValue = newValue;
-            _process = true;
+            Process = true;
         }
 
         public T GetOldValue<T>()
@@ -822,24 +833,17 @@ namespace LeagueSharp.Common
             return (T) _newValue;
         }
 
-        public bool Process
-        {
-            get
-            {
-                return _process;
-            }
-            set { _process = value; }
-        }
+        public bool Process { get; private set; }
     }
 
     public class MenuItem
     {
-        public string DisplayName;
-        internal bool Interacting;
-        public string Name;
+        public readonly string DisplayName;
+        private bool Interacting;
+        public readonly string Name;
 
         public Menu Parent;
-        internal MenuValueType ValueType;
+        private MenuValueType ValueType;
 
         private bool _dontSave;
         private bool _isShared;
@@ -849,12 +853,12 @@ namespace LeagueSharp.Common
         private bool _valueSet;
         private bool _visible;
 
-        internal string SaveFileName
+        private string SaveFileName
         {
             get { return (_isShared ? "SharedConfig" : AppDomain.CurrentDomain.FriendlyName.Substring(8)); }
         }
 
-        internal string SaveKey
+        private string SaveKey
         {
             get { return Utils.Md5Hash("v3" + DisplayName + Name); }
         }
@@ -876,7 +880,7 @@ namespace LeagueSharp.Common
             set { _visible = value; }
         }
 
-        internal int YLevel
+        private int YLevel
         {
             get
             {
@@ -889,17 +893,9 @@ namespace LeagueSharp.Common
             }
         }
 
-        internal Vector2 MyBasePosition
+        private Vector2 MyBasePosition
         {
-            get
-            {
-                if (Parent == null)
-                {
-                    return MenuSettings.BasePosition;
-                }
-
-                return Parent.MyBasePosition;
-            }
+            get { return Parent == null ? MenuSettings.BasePosition : Parent.MyBasePosition; }
         }
 
 
@@ -941,20 +937,23 @@ namespace LeagueSharp.Common
                     extra += max;
                 }
 
-                if (ValueType == MenuValueType.KeyBind)
+                if (ValueType != MenuValueType.KeyBind)
                 {
-                    var val = GetValue<KeyBind>();
-                    extra +=
-                        MenuDrawHelper.Font.MeasureText(null, " (" + Utils.KeyToText(val.Key) + ")", FontDrawFlags.Left)
-                            .Width;
+                    return
+                        MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width +
+                        Height * 2 + 10 + extra;
                 }
+                var val = GetValue<KeyBind>();
+                extra +=
+                    MenuDrawHelper.Font.MeasureText(null, " (" + Utils.KeyToText(val.Key) + ")", FontDrawFlags.Left)
+                        .Width;
 
                 return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width +
                        Height * 2 + 10 + extra;
             }
         }
 
-        internal int Height
+        internal static int Height
         {
             get { return MenuSettings.MenuItemHeight; }
         }
@@ -1100,18 +1099,19 @@ namespace LeagueSharp.Common
 
         internal void SaveToFile(ref Dictionary<string, Dictionary<string, byte[]>> dics)
         {
-            if (!_dontSave)
+            if (_dontSave)
             {
-                if (!dics.ContainsKey(SaveFileName))
-                {
-                    dics[SaveFileName] = new Dictionary<string, byte[]>();
-                }
-
-                dics[SaveFileName][SaveKey] = _serialized;
+                return;
             }
+            if (!dics.ContainsKey(SaveFileName))
+            {
+                dics[SaveFileName] = new Dictionary<string, byte[]>();
+            }
+
+            dics[SaveFileName][SaveKey] = _serialized;
         }
 
-        internal bool IsInside(Vector2 position)
+        private bool IsInside(Vector2 position)
         {
             return Utils.IsUnderRectangle(position, Position.X, Position.Y, Width, Height);
         }
@@ -1416,23 +1416,23 @@ namespace LeagueSharp.Common
     {
         public delegate void OnSelectColor(Color color);
 
-        public static OnSelectColor OnChangeColor;
+        private static OnSelectColor OnChangeColor;
         private static int _x = 100;
         private static int _y = 100;
 
         private static bool _moving;
         private static bool _selecting;
 
-        public static Render.Sprite BackgroundSprite;
-        public static Render.Sprite LuminitySprite;
-        public static Render.Sprite OpacitySprite;
-        public static Render.Rectangle PreviewRectangle;
+        private static readonly Render.Sprite BackgroundSprite;
+        private static readonly Render.Sprite LuminitySprite;
+        private static readonly Render.Sprite OpacitySprite;
+        private static readonly Render.Rectangle PreviewRectangle;
 
-        public static Bitmap LuminityBitmap;
-        public static Bitmap OpacityBitmap;
+        private static readonly Bitmap LuminityBitmap;
+        private static readonly Bitmap OpacityBitmap;
 
-        public static CPSlider LuminositySlider;
-        public static CPSlider AlphaSlider;
+        private static readonly CPSlider LuminositySlider;
+        private static readonly CPSlider AlphaSlider;
 
         private static Vector2 _prevPos;
         private static bool _visible;
@@ -1468,7 +1468,7 @@ namespace LeagueSharp.Common
             Game.OnWndProc += Game_OnWndProc;
         }
 
-        public static int X
+        private static int X
         {
             get { return _x; }
             set
@@ -1484,7 +1484,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static int Y
+        private static int Y
         {
             get { return _y; }
             set
@@ -1500,7 +1500,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool Visible
+        private static bool Visible
         {
             get { return _visible; }
             set
@@ -1515,22 +1515,22 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static int ColorPickerX
+        private static int ColorPickerX
         {
             get { return X + 18; }
         }
 
-        public static int ColorPickerY
+        private static int ColorPickerY
         {
             get { return Y + 61; }
         }
 
-        public static int ColorPickerW
+        private static int ColorPickerW
         {
             get { return 252 - 18; }
         }
 
-        public static int ColorPickerH
+        private static int ColorPickerH
         {
             get { return 282 - 61; }
         }
@@ -1598,11 +1598,12 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                if (Utils.IsUnderRectangle(pos, ColorPickerX, ColorPickerY, ColorPickerW, ColorPickerH))
+                if (!Utils.IsUnderRectangle(pos, ColorPickerX, ColorPickerY, ColorPickerW, ColorPickerH))
                 {
-                    _selecting = true;
-                    UpdateColor();
+                    return;
                 }
+                _selecting = true;
+                UpdateColor();
             }
             else if (args.Msg == (uint) WindowsMessages.WM_LBUTTONUP)
             {
@@ -1700,7 +1701,7 @@ namespace LeagueSharp.Common
             FireOnChangeColor(r);
         }
 
-        public static void FireOnChangeColor(Color color)
+        private static void FireOnChangeColor(Color color)
         {
             if (OnChangeColor != null)
             {
@@ -1710,14 +1711,14 @@ namespace LeagueSharp.Common
 
         //From: https://richnewman.wordpress.com/about/code-listings-and-diagrams/hslcolor-class/
 
-        public class CPSlider
+        private class CPSlider
         {
             private readonly int _x;
             private readonly int _y;
-            internal Render.Sprite ActiveSprite;
-            public int Height;
-            internal Render.Sprite InactiveSprite;
-            public bool Moving = false;
+            private readonly Render.Sprite ActiveSprite;
+            private readonly int Height;
+            private readonly Render.Sprite InactiveSprite;
+            public bool Moving;
             private float _percent;
 
             private bool _visible = true;
@@ -1768,7 +1769,7 @@ namespace LeagueSharp.Common
                 get { return _y + Y; }
             }
 
-            public int Width
+            private static int Width
             {
                 get { return Properties.Resources.CPActiveSlider.Width; }
             }
@@ -1832,7 +1833,7 @@ namespace LeagueSharp.Common
             private double luminosity = 1.0;
             private double saturation = 1.0;
 
-            public HSLColor() {}
+            private HSLColor() {}
 
             public HSLColor(Color color)
             {
@@ -1869,7 +1870,7 @@ namespace LeagueSharp.Common
                 set { luminosity = CheckRange(value / scale); }
             }
 
-            private double CheckRange(double value)
+            private static double CheckRange(double value)
             {
                 if (value < 0.0)
                 {
@@ -1893,7 +1894,7 @@ namespace LeagueSharp.Common
                 return String.Format("R: {0:#0.##} G: {1:#0.##} B: {2:#0.##}", color.R, color.G, color.B);
             }
 
-            public void SetRGB(int red, int green, int blue)
+            private void SetRGB(int red, int green, int blue)
             {
                 HSLColor hslColor = Color.FromArgb(red, green, blue);
                 hue = hslColor.hue;
@@ -1906,21 +1907,22 @@ namespace LeagueSharp.Common
             public static implicit operator Color(HSLColor hslColor)
             {
                 double r = 0, g = 0, b = 0;
-                if (hslColor.luminosity != 0)
+                if (hslColor.luminosity == 0)
                 {
-                    if (hslColor.saturation == 0)
-                    {
-                        r = g = b = hslColor.luminosity;
-                    }
-                    else
-                    {
-                        var temp2 = GetTemp2(hslColor);
-                        var temp1 = 2.0 * hslColor.luminosity - temp2;
+                    return Color.FromArgb((int) (255 * r), (int) (255 * g), (int) (255 * b));
+                }
+                if (hslColor.saturation == 0)
+                {
+                    r = g = b = hslColor.luminosity;
+                }
+                else
+                {
+                    var temp2 = GetTemp2(hslColor);
+                    var temp1 = 2.0 * hslColor.luminosity - temp2;
 
-                        r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0 / 3.0);
-                        g = GetColorComponent(temp1, temp2, hslColor.hue);
-                        b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
-                    }
+                    r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0 / 3.0);
+                    g = GetColorComponent(temp1, temp2, hslColor.hue);
+                    b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
                 }
                 return Color.FromArgb((int) (255 * r), (int) (255 * g), (int) (255 * b));
             }

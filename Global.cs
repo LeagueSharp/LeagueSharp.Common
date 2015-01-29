@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  Global.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -38,9 +40,9 @@ namespace LeagueSharp.Common
 {
     public static class Global
     {
-        internal static MemoryMappedFile MMFile;
-        internal static int MemoryCapacity = 1024 * 1024;
-        internal static int OffsetEntrySize = Marshal.SizeOf(typeof(OffsetEntry));
+        private static readonly MemoryMappedFile MMFile;
+        private const int MemoryCapacity = 1024 * 1024;
+        private static readonly int OffsetEntrySize = Marshal.SizeOf(typeof(OffsetEntry));
 
         static Global()
         {
@@ -49,7 +51,7 @@ namespace LeagueSharp.Common
                 MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
-		
+
         public static bool Evade
         {
             get { return Read<bool>("Evade"); }
@@ -134,18 +136,18 @@ namespace LeagueSharp.Common
                                         var result = data.Substring(0, end);
                                         return (T) (object) result;
                                     }
-                                    if (typeof(T).IsSerializable)
+                                    if (!typeof(T).IsSerializable)
                                     {
-                                        var size = strm.ReadInt32(thisOffset + OffsetEntrySize);
-                                        buff2 = new byte[size];
-                                        strm.ReadArray(thisOffset + OffsetEntrySize + sizeof (int), buff2, 0, size);
-
-
-                                        // it is a class, must serialize.
-                                        return Deserialize<T>(buff2);
+                                        throw new Exception(
+                                            String.Format("Type {0} is not serializable!  Cannot read.", typeof(T)));
                                     }
-                                    throw new Exception(
-                                        String.Format("Type {0} is not serializable!  Cannot read.", typeof(T)));
+                                    var size = strm.ReadInt32(thisOffset + OffsetEntrySize);
+                                    buff2 = new byte[size];
+                                    strm.ReadArray(thisOffset + OffsetEntrySize + sizeof (int), buff2, 0, size);
+
+
+                                    // it is a class, must serialize.
+                                    return Deserialize<T>(buff2);
                                 }
                             }
                             thisOffset += OffsetEntrySize + entry.Capacity;
@@ -269,10 +271,9 @@ namespace LeagueSharp.Common
                             var buff = new byte[OffsetEntrySize];
                             strm.ReadArray(thisOffset, buff, 0, OffsetEntrySize);
                             var entry = FromByteArray<OffsetEntry>(buff);
-                            foreach (
-                                var hash in
-                                    keys.Select(CalculateHash)
-                                        .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
+                            foreach (var hash in
+                                keys.Select(CalculateHash)
+                                    .Where(hash => entry.Type != EntryType.Invalid && entry.KeyHash == hash))
                             {
                                 fl.Write(buff);
                                 var buff2 = new byte[entry.Capacity];
@@ -293,7 +294,6 @@ namespace LeagueSharp.Common
         {
             try
             {
-
                 using (new CustomMutex(700))
                 {
                     using (var strm = MMFile.CreateViewAccessor())
@@ -411,7 +411,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static T FromByteArray<T>(byte[] rawValue)
+        private static T FromByteArray<T>(byte[] rawValue)
         {
             var handle = GCHandle.Alloc(rawValue, GCHandleType.Pinned);
             var structure = (T) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
@@ -419,24 +419,24 @@ namespace LeagueSharp.Common
             return structure;
         }
 
-        public static byte[] ToByteArray(object value, int maxLength)
+        private static byte[] ToByteArray(object value, int maxLength)
         {
             var rawsize = Marshal.SizeOf(value);
             var rawdata = new byte[rawsize];
             var handle = GCHandle.Alloc(rawdata, GCHandleType.Pinned);
             Marshal.StructureToPtr(value, handle.AddrOfPinnedObject(), false);
             handle.Free();
-            if (maxLength < rawdata.Length)
+            if (maxLength >= rawdata.Length)
             {
-                var temp = new byte[maxLength];
-                Array.Copy(rawdata, temp, maxLength);
-                return temp;
+                return rawdata;
             }
-            return rawdata;
+            var temp = new byte[maxLength];
+            Array.Copy(rawdata, temp, maxLength);
+            return temp;
         }
 
 
-        internal static ulong CalculateHash(string s)
+        private static ulong CalculateHash(string s)
         {
             return s.Aggregate<char, ulong>(5381, (current, c) => ((current << 5) + current) + c);
         }
@@ -449,7 +449,7 @@ namespace LeagueSharp.Common
         }
 
 
-        internal struct OffsetEntry
+        private struct OffsetEntry
         {
             internal int Capacity;
             internal ulong KeyHash;
@@ -486,17 +486,18 @@ namespace LeagueSharp.Common
 
         public void Dispose()
         {
-            if (mutex != null)
+            if (mutex == null)
             {
-                if (hasHandle)
-                {
-                    mutex.ReleaseMutex();
-                }
-                mutex.Dispose();
+                return;
             }
+            if (hasHandle)
+            {
+                mutex.ReleaseMutex();
+            }
+            mutex.Dispose();
         }
 
-        internal void InitMutex()
+        private void InitMutex()
         {
             var appGuid =
                 ((GuidAttribute)

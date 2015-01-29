@@ -54,7 +54,7 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Interrupter
     {
-        public static List<InterruptableSpell> Spells = new List<InterruptableSpell>();
+        private static readonly List<InterruptableSpell> Spells = new List<InterruptableSpell>();
 
         static Interrupter()
         {
@@ -377,14 +377,13 @@ namespace LeagueSharp.Common
                     spell =>
                         spell.ChampionName == unit.ChampionName &&
                         ((unit.LastCastedspell() != null &&
-                            String.Equals(
-                                unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
-                            Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                        (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
-                        (unit.IsMe &&
-                            LastCastedSpell.LastCastPacketSent != null &&
-                            LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
+                          String.Equals(
+                              unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
+                          Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                         (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
+                         (unit.IsMe && LastCastedSpell.LastCastPacketSent != null &&
+                          LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
+                          Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
         }
     }
 }

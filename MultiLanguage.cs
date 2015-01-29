@@ -22,10 +22,7 @@
 
 #region
 
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Xml.Serialization;
 
 #endregion
@@ -34,11 +31,12 @@ namespace LeagueSharp.Common
 {
     public static class MultiLanguage
     {
-        public static Dictionary<string, string> Translations = new Dictionary<string, string>();
+        private static Dictionary<string, string> Translations = new Dictionary<string, string>();
 
-       /* public static readonly XmlSerializer Serializer = new XmlSerializer(
+        /* public static readonly XmlSerializer Serializer = new XmlSerializer(
             typeof(TranslatedEntry[]), new XmlRootAttribute { ElementName = "entries" });
         */
+
         static MultiLanguage()
         {
             //LoadLanguage(Config.SelectedLanguage);
@@ -48,6 +46,7 @@ namespace LeagueSharp.Common
         {
             return Translations.ContainsKey(textToTranslate) ? Translations[textToTranslate] : textToTranslate;
         }
+
         /*
         public static bool LoadLanguage(string name)
         {

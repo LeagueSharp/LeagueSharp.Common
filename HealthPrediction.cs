@@ -60,12 +60,13 @@ namespace LeagueSharp.Common
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
         {
-            if (spellbook.Owner.IsValid && args.DestroyMissile && args.StopAnimation)
+            if (!spellbook.Owner.IsValid || !args.DestroyMissile || !args.StopAnimation)
             {
-                if (ActiveAttacks.ContainsKey(spellbook.Owner.NetworkId))
-                {
-                    ActiveAttacks.Remove(spellbook.Owner.NetworkId);
-                }
+                return;
+            }
+            if (ActiveAttacks.ContainsKey(spellbook.Owner.NetworkId))
+            {
+                ActiveAttacks.Remove(spellbook.Owner.NetworkId);
             }
         }
 

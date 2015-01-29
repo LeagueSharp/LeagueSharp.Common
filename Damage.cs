@@ -5185,11 +5185,11 @@ namespace LeagueSharp.Common
                     {
                         return 54 + 6 * source.Level;
                     }
-            }
+                }
 
                 return
                     new double[]
-                    {390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000}[
+                    { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
                         source.Level - 1];
             }
 
@@ -5222,7 +5222,7 @@ namespace LeagueSharp.Common
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:
                     var d = target.Health * .2f * 3f;
-                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d*2;
+                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d * 2;
             }
             return 1d;
         }
@@ -5370,24 +5370,24 @@ namespace LeagueSharp.Common
             SpellSlot slot,
             int stage = 0)
         {
-            if (Spells.ContainsKey(source.ChampionName))
+            if (!Spells.ContainsKey(source.ChampionName))
             {
-                var spell = Spells[source.ChampionName].FirstOrDefault(s => s.Slot == slot && stage == s.Stage) ??
-                            Spells[source.ChampionName].FirstOrDefault(s => s.Slot == slot);
+                return null;
+            }
+            var spell = Spells[source.ChampionName].FirstOrDefault(s => s.Slot == slot && stage == s.Stage) ??
+                        Spells[source.ChampionName].FirstOrDefault(s => s.Slot == slot);
 
-                if (spell == null)
-                {
-                    return null;
-                }
-
-                var rawDamage = spell.Damage(
-                    source, target, Math.Max(0, Math.Min(source.Spellbook.GetSpell(slot).Level - 1, 5)));
-                spell.CalculatedDamage = CalcDamage(source, target, spell.DamageType, rawDamage);
-                return spell;
+            if (spell == null)
+            {
+                return null;
             }
 
+            var rawDamage = spell.Damage(
+                source, target, Math.Max(0, Math.Min(source.Spellbook.GetSpell(slot).Level - 1, 5)));
+            spell.CalculatedDamage = CalcDamage(source, target, spell.DamageType, rawDamage);
+            return spell;
+
             //Spell not found.
-            return null;
         }
 
         public static double GetSpellDamage(this Obj_AI_Base source, Obj_AI_Base target, string spellName)
@@ -5435,7 +5435,8 @@ namespace LeagueSharp.Common
             }
             else
             {
-                k = 100 / (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
+                k = 100 /
+                    (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
             //Take into account the percent passives
@@ -5578,16 +5579,17 @@ namespace LeagueSharp.Common
             //Double edge sword:
             //     Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
             //     Ranged champions: You deal and take 1.5% increased damage from all sources. 
-            if (targetAsHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+            if (!targetAsHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
             {
-                if (target.CombatType == GameObjectCombatType.Melee)
-                {
-                    k = k * 1.01d;
-                }
-                else
-                {
-                    k = k * 1.015d;
-                }
+                return k;
+            }
+            if (target.CombatType == GameObjectCombatType.Melee)
+            {
+                k = k * 1.01d;
+            }
+            else
+            {
+                k = k * 1.015d;
             }
 
             return k;
@@ -5604,9 +5606,7 @@ namespace LeagueSharp.Common
             var hero = source as Obj_AI_Hero;
             if (hero != null && target is Obj_AI_Minion)
             {
-                if (
-                    hero.Masteries.Any(
-                        m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     d = d + 2;
                 }
@@ -5619,7 +5619,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -5631,7 +5631,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Minion && target is Obj_AI_Hero && source.Team == GameObjectTeam.Neutral)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -5641,21 +5641,23 @@ namespace LeagueSharp.Common
             //Unyielding
             //Melee - Reduces all incoming damage from champions by 2
             //Ranged - Reduces all incoming damage from champions by 1
-            if (source is Obj_AI_Hero && target is Obj_AI_Hero)
+            if (!(source is Obj_AI_Hero) || !(target is Obj_AI_Hero))
             {
-                var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
-                if (mastery != null && mastery.Points == 1)
-                {
-                    if (source.IsMelee())
-                    {
-                        d = d - 2;
-                    }
-                    else
-                    {
-                        d = d - 1;
-                    }
-                }
+                return d;
+            }
+            var mastery =
+                ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
+            if (mastery == null || mastery.Points != 1)
+            {
+                return d;
+            }
+            if (source.IsMelee())
+            {
+                d = d - 2;
+            }
+            else
+            {
+                d = d - 1;
             }
 
             return d;

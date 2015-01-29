@@ -45,7 +45,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
+            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId) id);
         }
 
         /// <summary>
@@ -55,8 +55,9 @@ namespace LeagueSharp.Common
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
+                var inst =
+                    ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                        spell => (int) spell.Slot == slot.Slot + (int) SpellSlot.Item1);
                 return inst != null && inst.State == SpellState.Ready;
             }
 
@@ -66,12 +67,13 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Retruns true if the player has the item and its not on cooldown.
         /// </summary>
-        public static bool CanUseItem(int id)
+        private static bool CanUseItem(int id)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
+                var inst =
+                    ObjectManager.Player.Spellbook.Spells.FirstOrDefault(
+                        spell => (int) spell.Slot == slot.Slot + (int) SpellSlot.Item1);
                 return inst != null && inst.State == SpellState.Ready;
             }
 
@@ -85,14 +87,9 @@ namespace LeagueSharp.Common
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                if (target != null)
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
-                }
-                else
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
-                }
+                return target != null
+                    ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                    : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
             }
 
             return false;
@@ -101,18 +98,13 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Casts the item on the target.
         /// </summary>
-        public static bool UseItem(int id, Obj_AI_Base target = null)
+        private static bool UseItem(int id, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
             {
-                if (target != null)
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
-                }
-                else
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
-                }
+                return target != null
+                    ? ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target)
+                    : ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
             }
 
             return false;
@@ -121,7 +113,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Casts the item on a Vector2 position.
         /// </summary>
-        public static bool UseItem(int id, Vector2 position)
+        private static bool UseItem(int id, Vector2 position)
         {
             return UseItem(id, position.To3D());
         }
@@ -129,14 +121,15 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Casts the item on a Vector3 position.
         /// </summary>
-        public static bool UseItem(int id, Vector3 position)
+        private static bool UseItem(int id, Vector3 position)
         {
-            if (position != Vector3.Zero)
+            if (position == Vector3.Zero)
             {
-                foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
-                {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
-                }
+                return false;
+            }
+            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) id))
+            {
+                return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
             }
 
             return false;
@@ -149,8 +142,8 @@ namespace LeagueSharp.Common
         {
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             return (from wardId in wardIds
-                    where CanUseItem(wardId)
-                    select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
+                where CanUseItem(wardId)
+                select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId) wardId))
                 .FirstOrDefault();
         }
 
@@ -158,26 +151,27 @@ namespace LeagueSharp.Common
         {
             public int Id { get; private set; }
             private float _range;
-            public float Range
+
+            private float Range
             {
                 get { return _range; }
                 set
                 {
                     _range = value;
-                    _rangeSqr = value * value;
+                    RangeSqr = value * value;
                 }
             }
-            private float _rangeSqr;
-            public float RangeSqr
-            {
-                get { return _rangeSqr; }
-            }
+
+            private float RangeSqr { get; set; }
+
             public List<SpellSlot> Slots
             {
                 get
                 {
-                    return ObjectManager.Player.InventoryItems.Where(slot =>
-                        slot.Id == (ItemId)Id).Select(slot => slot.SpellSlot).ToList();
+                    return
+                        ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId) Id)
+                            .Select(slot => slot.SpellSlot)
+                            .ToList();
                 }
             }
 
@@ -187,17 +181,17 @@ namespace LeagueSharp.Common
                 Range = range;
             }
 
-            public bool IsInRange(Obj_AI_Base target)
+            private bool IsInRange(Obj_AI_Base target)
             {
                 return IsInRange(target.ServerPosition);
             }
 
-            public bool IsInRange(Vector2 target)
+            private bool IsInRange(Vector2 target)
             {
                 return IsInRange(target.To3D());
             }
 
-            public bool IsInRange(Vector3 target)
+            private bool IsInRange(Vector3 target)
             {
                 return ObjectManager.Player.ServerPosition.Distance(target, true) < RangeSqr;
             }
@@ -234,7 +228,7 @@ namespace LeagueSharp.Common
 
             public void Buy()
             {
-                ObjectManager.Player.BuyItem((ItemId)Id);
+                ObjectManager.Player.BuyItem((ItemId) Id);
             }
         }
     }

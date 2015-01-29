@@ -93,7 +93,7 @@ namespace LeagueSharp.Common
 
         public class SubMenu
         {
-            public SubMenu Parent { get; private set; }
+            private SubMenu Parent { get; set; }
             private readonly Menu _subMenu;
 
             public SubMenu(Menu current)
@@ -102,7 +102,7 @@ namespace LeagueSharp.Common
                 _subMenu = current;
             }
 
-            public SubMenu(SubMenu parent, string name)
+            private SubMenu(SubMenu parent, string name)
             {
                 // Initialize this submenu
                 Parent = parent;
@@ -128,7 +128,7 @@ namespace LeagueSharp.Common
 
             #region Boolean
 
-            public SubMenu AddBool(string name, bool defaultValue = true)
+            private SubMenu AddBool(string name, bool defaultValue = true)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(defaultValue));
                 return this;
@@ -145,7 +145,7 @@ namespace LeagueSharp.Common
                 return _subMenu.Item(GetName(name)).GetValue<bool>();
             }
 
-            public BoolLink CreateBoolLink(string name)
+            private BoolLink CreateBoolLink(string name)
             {
                 return new BoolLink(this, name);
             }
@@ -154,7 +154,7 @@ namespace LeagueSharp.Common
 
             #region Circle
 
-            public SubMenu AddCircle(string name, bool enabled, Color color, float radius = 100)
+            private SubMenu AddCircle(string name, bool enabled, Color color, float radius = 100)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Circle(enabled, color, radius)));
                 return this;
@@ -171,7 +171,7 @@ namespace LeagueSharp.Common
                 return _subMenu.Item(GetName(name)).GetValue<Circle>();
             }
 
-            public CircleLink CreateCircleLink(string name)
+            private CircleLink CreateCircleLink(string name)
             {
                 return new CircleLink(this, name);
             }
@@ -180,7 +180,7 @@ namespace LeagueSharp.Common
 
             #region KeyBind
 
-            public SubMenu AddKeyBind(string name, uint key, KeyBindType type, bool defaultValue = false)
+            private SubMenu AddKeyBind(string name, uint key, KeyBindType type, bool defaultValue = false)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new KeyBind(key, type, defaultValue)));
                 return this;
@@ -197,7 +197,7 @@ namespace LeagueSharp.Common
                 return _subMenu.Item(GetName(name)).GetValue<KeyBind>();
             }
 
-            public KeyBindLink CreateKeyBindLink(string name)
+            private KeyBindLink CreateKeyBindLink(string name)
             {
                 return new KeyBindLink(this, name);
             }
@@ -206,7 +206,7 @@ namespace LeagueSharp.Common
 
             #region Slider
 
-            public SubMenu AddSlider(string name, int value, int minValue = 0, int maxValue = 100)
+            private SubMenu AddSlider(string name, int value, int minValue = 0, int maxValue = 100)
             {
                 _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Slider(value, minValue, maxValue)));
                 return this;
@@ -223,7 +223,7 @@ namespace LeagueSharp.Common
                 return _subMenu.Item(GetName(name)).GetValue<Slider>();
             }
 
-            public SliderLink CreateSliderLink(string name)
+            private SliderLink CreateSliderLink(string name)
             {
                 return new SliderLink(this, name);
             }
@@ -234,7 +234,8 @@ namespace LeagueSharp.Common
 
             public SubMenu AddStringList(string name, string[] sList, int defaultSelectedIndex = 0)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
+                _subMenu.AddItem(
+                    new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
                 return this;
             }
 
@@ -264,14 +265,15 @@ namespace LeagueSharp.Common
             private string GetName(string name, bool fullName = true)
             {
                 var prefix = "";
-                if (fullName)
+                if (!fullName)
                 {
-                    var currentSubMenu = Parent;
-                    while (currentSubMenu != null)
-                    {
-                        prefix = currentSubMenu.MenuHandle.Name + prefix;
-                        currentSubMenu = currentSubMenu.Parent;
-                    }
+                    return Regex.Replace(prefix + name.ToLower(), @"\s+", "");
+                }
+                var currentSubMenu = Parent;
+                while (currentSubMenu != null)
+                {
+                    prefix = currentSubMenu.MenuHandle.Name + prefix;
+                    currentSubMenu = currentSubMenu.Parent;
                 }
                 return Regex.Replace(prefix + name.ToLower(), @"\s+", "");
             }

@@ -1,4 +1,5 @@
 ﻿#region LICENSE
+
 /*
  Copyright 2014 - 2014 LeagueSharp
  MEC.cs is part of LeagueSharp.Common.
@@ -16,6 +17,7 @@
  You should have received a copy of the GNU General Public License
  along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #endregion
 
 #region
@@ -23,7 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using SharpDX;
 
 #endregion
@@ -33,9 +34,9 @@ namespace LeagueSharp.Common
     public static class MEC
     {
         // For debugging.
-        public static Vector2[] g_MinMaxCorners;
-        public static RectangleF g_MinMaxBox;
-        public static Vector2[] g_NonCulledPoints;
+        private static Vector2[] g_MinMaxCorners;
+        private static RectangleF g_MinMaxBox;
+        private static Vector2[] g_NonCulledPoints;
 
         /// <summary>
         /// Returns the mininimum enclosing circle from a list of points.
@@ -148,7 +149,7 @@ namespace LeagueSharp.Common
 
         // Return the points that make up a polygon's convex hull.
         // This method leaves the points list unchanged.
-        public static List<Vector2> MakeConvexHull(List<Vector2> points)
+        private static List<Vector2> MakeConvexHull(List<Vector2> points)
         {
             // Cull.
             points = HullCull(points);
@@ -188,11 +189,12 @@ namespace LeagueSharp.Common
                 foreach (var pt in points)
                 {
                     var test_angle = AngleValue(X, Y, pt.X, pt.Y);
-                    if ((test_angle >= sweep_angle) && (best_angle > test_angle))
+                    if ((!(test_angle >= sweep_angle)) || (!(best_angle > test_angle)))
                     {
-                        best_angle = test_angle;
-                        best_pt[0] = pt;
+                        continue;
                     }
+                    best_angle = test_angle;
+                    best_pt[0] = pt;
                 }
 
                 // See if the first point is better.
@@ -254,7 +256,7 @@ namespace LeagueSharp.Common
         }
 
         // Find a minimal bounding circle.
-        public static void FindMinimalBoundingCircle(List<Vector2> points, out Vector2 center, out float radius)
+        private static void FindMinimalBoundingCircle(List<Vector2> points, out Vector2 center, out float radius)
         {
             // Find the convex hull.
             var hull = MakeConvexHull(points);
@@ -275,15 +277,11 @@ namespace LeagueSharp.Common
                     var test_radius2 = dx * dx + dy * dy;
 
                     // See if this circle would be an improvement.
-                    if (test_radius2 < best_radius2)
+                    if (test_radius2 < best_radius2 && CircleEnclosesPoints(test_center, test_radius2, points, i, j, -1))
                     {
-                        // See if this circle encloses all of the points.
-                        if (CircleEnclosesPoints(test_center, test_radius2, points, i, j, -1))
-                        {
-                            // Save this solution.
-                            best_center = test_center;
-                            best_radius2 = test_radius2;
-                        }
+                        // Save this solution.
+                        best_center = test_center;
+                        best_radius2 = test_radius2;
                     }
                 } // for i
             } // for j
@@ -301,15 +299,12 @@ namespace LeagueSharp.Common
                         FindCircle(hull[i], hull[j], hull[k], out test_center, out test_radius2);
 
                         // See if this circle would be an improvement.
-                        if (test_radius2 < best_radius2)
+                        if (test_radius2 < best_radius2 &&
+                            CircleEnclosesPoints(test_center, test_radius2, points, i, j, k))
                         {
-                            // See if this circle encloses all of the points.
-                            if (CircleEnclosesPoints(test_center, test_radius2, points, i, j, k))
-                            {
-                                // Save this solution.
-                                best_center = test_center;
-                                best_radius2 = test_radius2;
-                            }
+                            // Save this solution.
+                            best_center = test_center;
+                            best_radius2 = test_radius2;
                         }
                     } // for k
                 } // for i
@@ -367,8 +362,8 @@ namespace LeagueSharp.Common
 
         public struct MecCircle
         {
-            public Vector2 Center;
-            public float Radius;
+            public readonly Vector2 Center;
+            public readonly float Radius;
 
             public MecCircle(Vector2 center, float radius)
             {

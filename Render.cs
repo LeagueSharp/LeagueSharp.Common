@@ -58,7 +58,7 @@ namespace LeagueSharp.Common
             new Thread(PrepareObjects).Start();
         }
 
-        public static Device Device
+        private static Device Device
         {
             get { return Drawing.Direct3DDevice; }
         }
@@ -203,14 +203,14 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
             }
 
-            public Vector3 Position { get; set; }
-            public GameObject Unit { get; set; }
-            public float Radius { get; set; }
-            public Color Color { get; set; }
-            public int Width { get; set; }
-            public bool ZDeep { get; set; }
+            private Vector3 Position { get; set; }
+            private GameObject Unit { get; set; }
+            private float Radius { get; set; }
+            private Color Color { get; set; }
+            private int Width { get; set; }
+            private bool ZDeep { get; set; }
 
-            public Vector3 Offset
+            private Vector3 Offset
             {
                 get { return _offset; }
                 set { _offset = value; }
@@ -235,7 +235,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            public static void CreateVertexes()
+            private static void CreateVertexes()
             {
                 const float x = 6000f;
                 _vertices = new VertexBuffer(
@@ -503,13 +503,14 @@ namespace LeagueSharp.Common
 
                 _technique = _effect.GetTechnique(0);
 
-                if (!_initialized)
+                if (_initialized)
                 {
-                    _initialized = true;
-                    Drawing.OnPreReset += OnPreReset;
-                    Drawing.OnPreReset += OnPostReset;
-                    AppDomain.CurrentDomain.DomainUnload += Dispose;
+                    return;
                 }
+                _initialized = true;
+                Drawing.OnPreReset += OnPreReset;
+                Drawing.OnPreReset += OnPostReset;
+                AppDomain.CurrentDomain.DomainUnload += Dispose;
             }
 
             private static void OnPreReset(EventArgs args)
@@ -606,7 +607,7 @@ namespace LeagueSharp.Common
             private Vector2 _end;
             private Vector2 _start;
             private int _width;
-            public ColorBGRA Color;
+            private readonly ColorBGRA Color;
 
             public Line(Vector2 start, Vector2 end, int width, ColorBGRA color)
             {
@@ -617,22 +618,22 @@ namespace LeagueSharp.Common
                 _end = end;
             }
 
-            public Vector2 Start
+            private Vector2 Start
             {
                 get { return StartPositionUpdate != null ? StartPositionUpdate() : _start; }
                 set { _start = value; }
             }
 
-            public Vector2 End
+            private Vector2 End
             {
                 get { return EndPositionUpdate != null ? EndPositionUpdate() : _end; }
                 set { _end = value; }
             }
 
-            public PositionDelegate StartPositionUpdate { get; set; }
-            public PositionDelegate EndPositionUpdate { get; set; }
+            private PositionDelegate StartPositionUpdate { get; set; }
+            private PositionDelegate EndPositionUpdate { get; set; }
 
-            public int Width
+            private int Width
             {
                 get { return _width; }
                 set
@@ -725,9 +726,9 @@ namespace LeagueSharp.Common
                 set { _y = value; }
             }
 
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public PositionDelegate PositionUpdate { get; set; }
+            private int Width { get; set; }
+            private int Height { get; set; }
+            private PositionDelegate PositionUpdate { get; set; }
 
             public override void OnEndScene()
             {
@@ -773,7 +774,7 @@ namespace LeagueSharp.Common
 
             private bool _visible = true;
             public int Layer;
-            public VisibleConditionDelegate VisibleCondition;
+            private VisibleConditionDelegate VisibleCondition;
 
             public bool Visible
             {
@@ -861,16 +862,16 @@ namespace LeagueSharp.Common
                 set { _y = value; }
             }
 
-            public Bitmap Bitmap { get; set; }
+            public Bitmap Bitmap { get; private set; }
 
             public int Width
             {
-                get { return (int) (Bitmap.Width * _scale.X); }
+                get { return Bitmap.Width * _scale.X; }
             }
 
             public int Height
             {
-                get { return (int) (Bitmap.Height * _scale.Y); }
+                get { return Bitmap.Height * _scale.Y; }
             }
 
             public Vector2 Size
@@ -878,7 +879,7 @@ namespace LeagueSharp.Common
                 get { return new Vector2(Bitmap.Width, Bitmap.Height); }
             }
 
-            public Vector2 Position
+            private Vector2 Position
             {
                 set
                 {
@@ -889,15 +890,15 @@ namespace LeagueSharp.Common
                 get { return new Vector2(X, Y); }
             }
 
-            public PositionDelegate PositionUpdate { get; set; }
+            private PositionDelegate PositionUpdate { get; set; }
 
-            public Vector2 Scale
+            private Vector2 Scale
             {
                 set { _scale = value; }
                 get { return _scale; }
             }
 
-            public float Rotation { set; get; }
+            private float Rotation { set; get; }
 
             public ColorBGRA Color
             {
@@ -940,7 +941,7 @@ namespace LeagueSharp.Common
                 _hide = true;
             }
 
-            public void Reset()
+            private void Reset()
             {
                 UpdateTextureBitmap(
                     (Bitmap) Image.FromStream(BaseTexture.ToStream(_originalTexture, ImageFileFormat.Bmp)));
@@ -966,7 +967,7 @@ namespace LeagueSharp.Common
                 SetSaturation(-1.0f);
             }
 
-            public void SetSaturation(float saturiation)
+            private void SetSaturation(float saturiation)
             {
                 UpdateTextureBitmap(SaturateBitmap(Bitmap, saturiation));
             }
@@ -1090,20 +1091,20 @@ namespace LeagueSharp.Common
         /// </summary>
         public class Text : RenderObject
         {
-            public delegate Vector2 PositionDelegate();
+            private delegate Vector2 PositionDelegate();
 
-            public delegate string TextDelegate();
+            private delegate string TextDelegate();
 
             private string _text;
             private Font _textFont;
             private int _x;
             private int _y;
-            public bool Centered = false;
-            public Vector2 Offset;
-            public bool OutLined = false;
-            public PositionDelegate PositionUpdate;
-            public TextDelegate TextUpdate;
-            public Obj_AI_Base Unit;
+            private const bool Centered = false;
+            private readonly Vector2 Offset;
+            private const bool OutLined = false;
+            private PositionDelegate PositionUpdate;
+            private TextDelegate TextUpdate;
+            private readonly Obj_AI_Base Unit;
 
             public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri")
             {
@@ -1220,7 +1221,7 @@ namespace LeagueSharp.Common
 
             public int X
             {
-                get
+                private get
                 {
                     var dx = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Width / 2 : 0;
 
@@ -1236,7 +1237,7 @@ namespace LeagueSharp.Common
 
             public int Y
             {
-                get
+                private get
                 {
                     var dy = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Height / 2 : 0;
 
@@ -1250,18 +1251,11 @@ namespace LeagueSharp.Common
             }
 
             public int Width { get; set; }
-            public ColorBGRA Color { get; set; }
+            private ColorBGRA Color { get; set; }
 
             public string text
             {
-                get
-                {
-                    if (TextUpdate != null)
-                    {
-                        return TextUpdate();
-                    }
-                    return _text;
-                }
+                private get { return TextUpdate != null ? TextUpdate() : _text; }
                 set { _text = value; }
             }
 

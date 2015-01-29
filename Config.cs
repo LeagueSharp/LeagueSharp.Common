@@ -42,23 +42,23 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (_leagueSharpDirectory == null)
+                if (_leagueSharpDirectory != null)
                 {
-                    try
-                    {
-                        _leagueSharpDirectory =
-                            Process.GetCurrentProcess()
-                                .Modules.Cast<ProcessModule>()
-                                .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                .FileName;
-                        _leagueSharpDirectory =
-                            Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
-                    }
-                    catch (Exception ee)
-                    {
-                        Console.WriteLine(@"Could not resolve LeagueSharp directory: " + ee);
-                        _leagueSharpDirectory = Directory.GetCurrentDirectory();
-                    }
+                    return _leagueSharpDirectory;
+                }
+                try
+                {
+                    _leagueSharpDirectory =
+                        Process.GetCurrentProcess()
+                            .Modules.Cast<ProcessModule>()
+                            .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
+                            .FileName;
+                    _leagueSharpDirectory = Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
+                }
+                catch (Exception ee)
+                {
+                    Console.WriteLine(@"Could not resolve LeagueSharp directory: " + ee);
+                    _leagueSharpDirectory = Directory.GetCurrentDirectory();
                 }
 
                 return _leagueSharpDirectory;
@@ -77,9 +77,14 @@ namespace LeagueSharp.Common
                         var config = new XmlDocument();
                         config.Load(configFile);
 
-                        if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
+                        if (config.DocumentElement != null &&
+                            config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
-                            return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
+                            var selectSingleNode = config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage");
+                            if (selectSingleNode != null)
+                            {
+                                return selectSingleNode.InnerText;
+                            }
                         }
                     }
                 }
@@ -127,15 +132,19 @@ namespace LeagueSharp.Common
                 {
                     var config = new XmlDocument();
                     config.Load(configFile);
-                    var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
-                    foreach (var b in from XmlElement element in node.ChildNodes
-                        where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
-                        select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
-                        into b
-                        where b != null
-                        select b)
+                    if (config.DocumentElement != null)
                     {
-                        return byte.Parse(b.InnerText);
+                        var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
+                        foreach (var b in from XmlElement element in node.ChildNodes
+                            where
+                                element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
+                            select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
+                            into b
+                            where b != null
+                            select b)
+                        {
+                            return byte.Parse(b.InnerText);
+                        }
                     }
                 }
             }
