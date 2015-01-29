@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
@@ -45,7 +46,8 @@ namespace LeagueSharp.Common
             // Initialize Properties
             InterruptableSpells = new Dictionary<string, List<InterruptableSpell>>();
             CastingInterruptableSpell = new Dictionary<int, InterruptableSpell>();
-            Enemies = ObjectManager.Get<Obj_AI_Hero>().FindAll(o => o.IsEnemy);
+            AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
+            Enemies = AllHeroes.FindAll(o => o.IsEnemy);
 
             InitializeSpells();
 
@@ -62,6 +64,7 @@ namespace LeagueSharp.Common
         private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
 
         // Until jodus improves ObjectManager, we'll use this
+        private static List<Obj_AI_Hero> AllHeroes { get; set; }
         private static List<Obj_AI_Hero> Enemies { get; set; }
         public static event InterruptableTargetHandler OnInterruptableTarget;
 
@@ -106,6 +109,20 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
+            // Remove heros that have finished casting their interruptable spell
+            AllHeroes.ForEach(
+                hero =>
+                {
+                    if (CastingInterruptableSpell.ContainsKey(hero.NetworkId) &&
+                        !hero.Spellbook.IsCastingSpell &&
+                        !hero.Spellbook.IsChanneling &&
+                        !hero.Spellbook.IsCharging)
+                    {
+                        CastingInterruptableSpell.Remove(hero.NetworkId);
+                    }
+                });
+
+            // Trigger OnInterruptableTarget event if needed
             if (OnInterruptableTarget != null)
             {
                 Enemies.ForEach(
