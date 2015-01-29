@@ -43,8 +43,8 @@ namespace LeagueSharp.Common
         private readonly BinaryWriter Bw;
         private readonly MemoryStream Ms;
         private readonly byte[] rawPacket;
-        public PacketChannel Channel = PacketChannel.C2S;
-        public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
+        private readonly PacketChannel Channel = PacketChannel.C2S;
+        private readonly PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
         public GamePacket(byte[] data)
         {
@@ -108,12 +108,12 @@ namespace LeagueSharp.Common
             }
         }
 
-        public bool Block { get; set; }
+        private bool Block { get; set; }
 
         /// <summary>
         ///     Returns the packet size.
         /// </summary>
-        public long Size()
+        private long Size()
         {
             return Br.BaseStream.Length;
         }
@@ -244,17 +244,17 @@ namespace LeagueSharp.Common
             return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
-        public int[] SearchShort(short num)
+        private int[] SearchShort(short num)
         {
             return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
-        public int[] SearchFloat(float num)
+        private int[] SearchFloat(float num)
         {
             return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
-        public int[] SearchInteger(int num)
+        private int[] SearchInteger(int num)
         {
             return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
@@ -296,7 +296,7 @@ namespace LeagueSharp.Common
             return networkId == 0 ? null : SearchInteger(networkId);
         }
 
-        public int[][] SearchPosition(Vector2 position)
+        private int[][] SearchPosition(Vector2 position)
         {
             var x = SearchFloat(position.X);
             var y = SearchFloat(position.Y);
@@ -309,17 +309,17 @@ namespace LeagueSharp.Common
             return new[] { x, y };
         }
 
-        public int[][] SearchPosition(Vector3 position)
+        private int[][] SearchPosition(Vector3 position)
         {
             return SearchPosition(position.To2D());
         }
 
-        public int[][] SearchPosition(GameObject unit)
+        private int[][] SearchPosition(GameObject unit)
         {
             return SearchPosition(unit.Position.To2D());
         }
 
-        public int[][] SearchPosition(Obj_AI_Base unit)
+        private int[][] SearchPosition(Obj_AI_Base unit)
         {
             var pos = SearchPosition(unit.Position.To2D());
             var pos2 = SearchPosition(unit.ServerPosition.To2D());
