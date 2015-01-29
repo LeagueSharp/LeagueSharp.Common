@@ -224,7 +224,7 @@ namespace LeagueSharp.Common
             return min + (rng.NextDouble() * (max - min));
         }
 
-        internal static class CursorPosT
+        private static class CursorPosT
         {
             private static int _posX;
             private static int _posY;
@@ -236,11 +236,12 @@ namespace LeagueSharp.Common
 
             private static void Game_OnWndProc(WndEventArgs args)
             {
-                if (args.Msg == (uint) WindowsMessages.WM_MOUSEMOVE)
+                if (args.Msg != (uint) WindowsMessages.WM_MOUSEMOVE)
                 {
-                    _posX = unchecked((short) args.LParam);
-                    _posY = unchecked((short) ((long) args.LParam >> 16));
+                    return;
                 }
+                _posX = unchecked((short) args.LParam);
+                _posY = unchecked((short) ((long) args.LParam >> 16));
             }
 
             internal static Vector2 GetCursorPos()
@@ -282,11 +283,12 @@ namespace LeagueSharp.Common
             {
                 var currVal = valuingFoo(enumerator.Current);
 
-                if (currVal.CompareTo(maxVal) > 0)
+                if (currVal.CompareTo(maxVal) <= 0)
                 {
-                    maxVal = currVal;
-                    maxElem = enumerator.Current;
+                    continue;
                 }
+                maxVal = currVal;
+                maxElem = enumerator.Current;
             }
 
             return maxElem;
@@ -305,11 +307,12 @@ namespace LeagueSharp.Common
             {
                 var currVal = valuingFoo(enumerator.Current);
 
-                if (currVal.CompareTo(minVal) < 0)
+                if (currVal.CompareTo(minVal) >= 0)
                 {
-                    minVal = currVal;
-                    minElem = enumerator.Current;
+                    continue;
                 }
+                minVal = currVal;
+                minElem = enumerator.Current;
             }
 
             return minElem;
