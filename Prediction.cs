@@ -543,8 +543,8 @@ namespace LeagueSharp.Common
             var result = new List<PossibleTarget>();
             var originalUnit = input.Unit;
             foreach (var enemy in
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(
+                HeroManager.Enemies
+                    .FindAll(
                         h =>
                             h.NetworkId != originalUnit.NetworkId &&
                             h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
