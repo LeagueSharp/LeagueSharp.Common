@@ -54,7 +54,7 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Interrupter
     {
-        public static List<InterruptableSpell> Spells = new List<InterruptableSpell>();
+        private static readonly List<InterruptableSpell> Spells = new List<InterruptableSpell>();
 
         static Interrupter()
         {

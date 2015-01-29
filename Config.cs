@@ -79,7 +79,9 @@ namespace LeagueSharp.Common
 
                         if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
                         {
-                            return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
+                            var selectSingleNode = config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage");
+                            if (selectSingleNode != null)
+                                return selectSingleNode.InnerText;
                         }
                     }
                 }
@@ -127,15 +129,19 @@ namespace LeagueSharp.Common
                 {
                     var config = new XmlDocument();
                     config.Load(configFile);
-                    var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
-                    foreach (var b in from XmlElement element in node.ChildNodes
-                        where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
-                        select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
-                        into b
-                        where b != null
-                        select b)
+                    if (config.DocumentElement != null)
                     {
-                        return byte.Parse(b.InnerText);
+                        var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
+                        if (node != null)
+                            foreach (var b in from XmlElement element in node.ChildNodes
+                                where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
+                                select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
+                                into b
+                                where b != null
+                                select b)
+                            {
+                                return byte.Parse(b.InnerText);
+                            }
                     }
                 }
             }

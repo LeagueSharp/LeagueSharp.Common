@@ -24,10 +24,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using LeagueSharp.Common.Data;
-using SharpDX;
-using Color = System.Drawing.Color;
 
 #endregion
 
@@ -96,7 +95,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the spell is ready to use.
         /// </summary>
-        public static bool IsReady(this SpellDataInst spell, int t = 0)
+        private static bool IsReady(this SpellDataInst spell, int t = 0)
         {
             return spell != null && spell.Slot != SpellSlot.Unknown && t == 0
                 ? spell.State == SpellState.Ready
@@ -104,12 +103,12 @@ namespace LeagueSharp.Common
                    (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
         }
 
-        public static bool IsReady(this Spell spell, int t = 0)
+        private static bool IsReady(this Spell spell, int t = 0)
         {
             return IsReady(spell.Instance, t);
         }
 
-        public static bool IsReady(this SpellSlot slot, int t = 0)
+        private static bool IsReady(this SpellSlot slot, int t = 0)
         {
             var s = ObjectManager.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
@@ -117,7 +116,7 @@ namespace LeagueSharp.Common
 
         public static bool IsValid<T>(this GameObject obj) where T : GameObject
         {
-            return obj as T != null && obj.IsValid;
+            return obj is T && obj.IsValid;
         }
 
         public static bool IsValidSlot(this InventorySlot slot)
@@ -370,12 +369,12 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns true if the unit is under turret range.
         /// </summary>
-        public static bool UnderTurret(this Obj_AI_Base unit, bool enemyTurretsOnly)
+        private static bool UnderTurret(this Obj_AI_Base unit, bool enemyTurretsOnly)
         {
             return UnderTurret(unit.Position, enemyTurretsOnly);
         }
 
-        public static bool UnderTurret(this Vector3 position, bool enemyTurretsOnly)
+        private static bool UnderTurret(this Vector3 position, bool enemyTurretsOnly)
         {
             return
                 ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
@@ -455,7 +454,7 @@ namespace LeagueSharp.Common
             return GetAlliesInRange(unit.ServerPosition, range);
         }
 
-        public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
+        private static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
@@ -468,7 +467,7 @@ namespace LeagueSharp.Common
             return GetEnemiesInRange(unit.ServerPosition, range);
         }
 
-        public static List<Obj_AI_Hero> GetEnemiesInRange(this Vector3 point, float range)
+        private static List<Obj_AI_Hero> GetEnemiesInRange(this Vector3 point, float range)
         {
             return
                 ObjectManager.Get<Obj_AI_Hero>()
@@ -587,7 +586,7 @@ namespace LeagueSharp.Common
         {
             public delegate void Callback();
 
-            public static List<Action> ActionList = new List<Action>();
+            private static readonly List<Action> ActionList = new List<Action>();
 
             static DelayAction()
             {
@@ -598,23 +597,21 @@ namespace LeagueSharp.Common
             {
                 for (var i = ActionList.Count - 1; i >= 0; i--)
                 {
-                    if (ActionList[i].Time <= Environment.TickCount)
+                    if (ActionList[i].Time > Environment.TickCount) continue;
+                    try
                     {
-                        try
+                        if (ActionList[i].CallbackObject != null)
                         {
-                            if (ActionList[i].CallbackObject != null)
-                            {
-                                ActionList[i].CallbackObject();
-                                //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
-                            }
+                            ActionList[i].CallbackObject();
+                            //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
                         }
-                        catch (Exception)
-                        {
-                            // ignored
-                        }
-
-                        ActionList.RemoveAt(i);
                     }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+
+                    ActionList.RemoveAt(i);
                 }
             }
 
@@ -624,10 +621,10 @@ namespace LeagueSharp.Common
                 ActionList.Add(action);
             }
 
-            public struct Action
+            private struct Action
             {
-                public Callback CallbackObject;
-                public int Time;
+                public readonly Callback CallbackObject;
+                public readonly int Time;
 
                 public Action(int time, Callback callback)
                 {
@@ -645,8 +642,8 @@ namespace LeagueSharp.Common
             private const int YOffset = 20;
             private const int Width = 103;
             private const int Height = 8;
-            public static Color Color = Color.Lime;
-            public static bool Enabled = true;
+            private static readonly Color Color = Color.Lime;
+            private static readonly bool Enabled = true;
             private static DamageToUnitDelegate _damageToUnit;
 
             private static readonly Render.Text Text = new Render.Text(
@@ -754,10 +751,10 @@ namespace LeagueSharp.Common
             };
 
             public MapType Type { get; private set; }
-            public Vector2 Grid { get; private set; }
-            public string Name { get; private set; }
-            public string ShortName { get; private set; }
-            public int StartingLevel { get; private set; }
+            private Vector2 Grid { get; set; }
+            private string Name { get; set; }
+            private string ShortName { get; set; }
+            private int StartingLevel { get; set; }
 
             /// <summary>
             ///     Returns the current map.
@@ -783,7 +780,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Internal class used to get the waypoints even when the enemy enters the fow of war.
         /// </summary>
-        internal static class WaypointTracker
+        private static class WaypointTracker
         {
             public static readonly Dictionary<int, List<Vector2>> StoredPaths = new Dictionary<int, List<Vector2>>();
             public static readonly Dictionary<int, int> StoredTick = new Dictionary<int, int>();
@@ -792,21 +789,18 @@ namespace LeagueSharp.Common
 
     public static class Version
     {
-        public static int MajorVersion;
-        public static int MinorVersion;
-        public static int Build;
-        public static int Revision;
+        private static readonly int MinorVersion;
         private static readonly int[] VersionArray;
 
         static Version()
         {
             var d = Game.Version.Split('.');
-            MajorVersion = Convert.ToInt32(d[0]);
+            int majorVersion = Convert.ToInt32(d[0]);
             MinorVersion = Convert.ToInt32(d[1]);
-            Build = Convert.ToInt32(d[2]);
-            Revision = Convert.ToInt32(d[3]);
+            int build = Convert.ToInt32(d[2]);
+            int revision = Convert.ToInt32(d[3]);
 
-            VersionArray = new[] { MajorVersion, MinorVersion, Build, Revision };
+            VersionArray = new[] { majorVersion, MinorVersion, build, revision };
         }
 
         public static bool IsOlder(string version)
@@ -849,13 +843,13 @@ namespace LeagueSharp.Common
 
     public class Vector2Time
     {
-        public Vector2 Position;
-        public float Time;
+        private Vector2 _position;
+        private float _time;
 
         public Vector2Time(Vector2 pos, float time)
         {
-            Position = pos;
-            Time = time;
+            _position = pos;
+            _time = time;
         }
     }
 }

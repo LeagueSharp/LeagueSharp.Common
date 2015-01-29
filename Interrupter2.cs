@@ -155,8 +155,8 @@ namespace LeagueSharp.Common
                 MovementInterrupts = movementInterrupts;
             }
 
-            public DangerLevel DangerLevel { get; private set; }
-            public float EndTime { get; private set; }
+            private DangerLevel DangerLevel { get; set; }
+            private float EndTime { get; set; }
             public bool MovementInterrupts { get; private set; }
         }
 
@@ -170,8 +170,8 @@ namespace LeagueSharp.Common
             }
 
             public SpellSlot Slot { get; private set; }
-            public DangerLevel DangerLevel { get; private set; }
-            public bool MovementInterrupts { get; private set; }
+            private DangerLevel DangerLevel { get; set; }
+            private bool MovementInterrupts { get; set; }
         }
     }
 }

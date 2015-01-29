@@ -29,9 +29,9 @@ namespace LeagueSharp.Common
 {
     public class LastCastedSpellEntry
     {
-        public string Name;
-        public Obj_AI_Base Target;
-        public int Tick;
+        public readonly string Name;
+        public readonly Obj_AI_Base Target;
+        public readonly int Tick;
 
         public LastCastedSpellEntry(string name, int tick, Obj_AI_Base target)
         {
@@ -43,9 +43,9 @@ namespace LeagueSharp.Common
 
     public class LastCastPacketSentEntry
     {
-        public SpellSlot Slot;
-        public int TargetNetworkId;
-        public int Tick;
+        public readonly SpellSlot Slot;
+        private int TargetNetworkId;
+        public readonly int Tick;
 
         public LastCastPacketSentEntry(SpellSlot slot, int tick, int targetNetworkId)
         {
@@ -57,7 +57,7 @@ namespace LeagueSharp.Common
 
     public static class LastCastedSpell
     {
-        internal static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
+        private static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
             new Dictionary<int, LastCastedSpellEntry>();
 
         public static LastCastPacketSentEntry LastCastPacketSent;
@@ -79,17 +79,15 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender is Obj_AI_Hero)
+            if (!(sender is Obj_AI_Hero)) return;
+            var entry = new LastCastedSpellEntry(args.SData.Name, Environment.TickCount, ObjectManager.Player);
+            if (CastedSpells.ContainsKey(sender.NetworkId))
             {
-                var entry = new LastCastedSpellEntry(args.SData.Name, Environment.TickCount, ObjectManager.Player);
-                if (CastedSpells.ContainsKey(sender.NetworkId))
-                {
-                    CastedSpells[sender.NetworkId] = entry;
-                }
-                else
-                {
-                    CastedSpells.Add(sender.NetworkId, entry);
-                }
+                CastedSpells[sender.NetworkId] = entry;
+            }
+            else
+            {
+                CastedSpells.Add(sender.NetworkId, entry);
             }
         }
 

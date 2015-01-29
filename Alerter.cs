@@ -23,7 +23,6 @@
 #region
 
 using System;
-using SharpDX;
 
 #endregion
 

@@ -24,15 +24,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using SharpDX;
-using Color = System.Drawing.Color;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
-    public class TargetSelector
+    public static class TargetSelector
     {
         #region Main
 
@@ -56,9 +55,9 @@ namespace LeagueSharp.Common
         public enum TargetingMode
         {
             AutoPriority,
-            LowHP,
-            MostAD,
-            MostAP,
+            LowHp,
+            MostAd,
+            MostAp,
             Closest,
             NearMouse,
             LessAttack,
@@ -69,7 +68,7 @@ namespace LeagueSharp.Common
 
         #region Vars
 
-        public static TargetingMode Mode = TargetingMode.AutoPriority;
+        private static TargetingMode Mode = TargetingMode.AutoPriority;
         private static Menu _configMenu;
         private static Obj_AI_Hero _selectedTargetObjAiHero;
 
@@ -91,7 +90,7 @@ namespace LeagueSharp.Common
 
         private static void GameOnOnWndProc(WndEventArgs args)
         {
-            if (args.Msg != (uint) WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg != (uint) WindowsMessages.WmLbuttondown)
             {
                 return;
             }
@@ -105,7 +104,7 @@ namespace LeagueSharp.Common
 
         #region Functions
 
-        public static Obj_AI_Hero SelectedTarget
+        private static Obj_AI_Hero SelectedTarget
         {
             get
             {
@@ -132,7 +131,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the priority of the hero
         /// </summary>
-        public static float GetPriority(Obj_AI_Hero hero)
+        private static float GetPriority(Obj_AI_Hero hero)
         {
             var p = 1;
             if (_configMenu != null && _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") != null)
@@ -251,7 +250,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
+        private static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
             // Tryndamere's Undying Rage (R)
             if (!damageType.Equals(DamageType.True) && target.HasBuff("Undying Rage") && target.Health <= 2f)
@@ -291,13 +290,7 @@ namespace LeagueSharp.Common
             }
 
             // Nocturne's Shroud of Darkness (W)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
-            {
-                // TODO: Get exact Nocturne's Shourd of Darkness buff name
-                return true;
-            }
-
-            return false;
+            return damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness");
         }
 
 
@@ -374,13 +367,13 @@ namespace LeagueSharp.Common
 
                 switch (Mode)
                 {
-                    case TargetingMode.LowHP:
+                    case TargetingMode.LowHp:
                         return targets.MinOrDefault(hero => hero.Health);
 
-                    case TargetingMode.MostAD:
+                    case TargetingMode.MostAd:
                         return targets.MaxOrDefault(hero => hero.BaseAttackDamage + hero.FlatPhysicalDamageMod);
 
-                    case TargetingMode.MostAP:
+                    case TargetingMode.MostAp:
                         return targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
 
                     case TargetingMode.Closest:
