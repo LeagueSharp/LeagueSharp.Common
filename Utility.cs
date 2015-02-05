@@ -329,10 +329,28 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
+        [Obsolete("HasBuff(unit, buffNme, dontUseDisplayName)", false)]
         public static bool HasBuff(this Obj_AI_Base unit,
             string buffName,
             bool dontUseDisplayName = false,
             bool kappa = true)
+        {
+            return
+                unit.Buffs.Any(
+                    buff =>
+                        ((dontUseDisplayName &&
+                          String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase)) ||
+                         (!dontUseDisplayName &&
+                          String.Equals(buff.DisplayName, buffName, StringComparison.CurrentCultureIgnoreCase))) &&
+                        buff.IsValidBuff());
+        }
+
+        /// <summary>
+        ///     Returns if the unit has the buff and it is active
+        /// </summary>
+        public static bool HasBuff(this Obj_AI_Base unit,
+            string buffName,
+            bool dontUseDisplayName = false)
         {
             return
                 unit.Buffs.Any(
