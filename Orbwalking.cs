@@ -36,7 +36,9 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Orbwalking
     {
-        public delegate void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target, SpellData SData);
+		public delegate void AfterAttackEvenHEx(AttackableUnit unit, AttackableUnit target, SpellData SData);
+
+        public delegate void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target);
 
         public delegate void BeforeAttackEvenH(BeforeAttackEventArgs args);
 
@@ -138,6 +140,11 @@ namespace LeagueSharp.Common
         /// </summary>
         public static event AfterAttackEvenH AfterAttack;
 
+		/// <summary>
+        ///     This event is fired after a unit finishes auto-attacking another unit (Only works with player for now).
+        ///		Also provides SpellData info.
+        /// </summary>
+		public static event AfterAttackEvenHEx AfterAttackEx;
         /// <summary>
         ///     Gets called on target changes
         /// </summary>
@@ -172,8 +179,12 @@ namespace LeagueSharp.Common
         {
             if (AfterAttack != null)
             {
-                AfterAttack(unit, target, SData);
+                AfterAttack(unit, target);
             }
+	        if (AfterAttackEx != null)
+	        {
+				AfterAttackEx(unit, target, SData);
+	        }
         }
 
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
