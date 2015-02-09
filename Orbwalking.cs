@@ -107,12 +107,6 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
-            // Deny InvalidCastException
-            if (sender is Obj_LampBulb)
-            {
-                return;
-            }
-
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
