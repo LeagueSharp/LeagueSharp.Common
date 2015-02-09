@@ -319,8 +319,8 @@ namespace LeagueSharp.Common
             {
                 if (Player.Path.Count() > 1)
                 {
+                    Player.IssueOrder((GameObjectOrder)10, Player.ServerPosition);
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
-                    Player.IssueOrder((GameObjectOrder) 10, Player.ServerPosition);
                     LastMoveCommandPosition = Player.ServerPosition;
                 }
                 return;
