@@ -540,6 +540,11 @@ namespace LeagueSharp.Common
                 Drawing.OnDraw += DrawingOnOnDraw;
             }
 
+            public virtual bool InAutoAttackRange(AttackableUnit target)
+            {
+                return Orbwalking.InAutoAttackRange(target);
+            }
+
             private int FarmDelay
             {
                 get { return _config.Item("FarmDelay").GetValue<Slider>().Value; }
@@ -624,7 +629,7 @@ namespace LeagueSharp.Common
                                 Player.GetAutoAttackDamage(minion));
             }
 
-            public AttackableUnit GetTarget()
+            public virtual AttackableUnit GetTarget()
             {
                 AttackableUnit result = null;
 
