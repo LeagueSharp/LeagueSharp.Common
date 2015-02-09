@@ -26,6 +26,7 @@ using System;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
+using LeagueSharp;
 
 #endregion
 
@@ -36,7 +37,7 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Orbwalking
     {
-        public delegate void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target);
+        public delegate void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target, SpellData SData);
 
         public delegate void BeforeAttackEvenH(BeforeAttackEventArgs args);
 
@@ -118,7 +119,7 @@ namespace LeagueSharp.Common
                 var missile = (Obj_SpellMissile) sender;
                 if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
                 {
-                    FireAfterAttack(missile.SpellCaster, _lastTarget);
+					FireAfterAttack(missile.SpellCaster, _lastTarget, missile.SData);
                 }
             }
         }
@@ -168,11 +169,11 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
+        private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target, SpellData SData)
         {
             if (AfterAttack != null)
             {
-                AfterAttack(unit, target);
+                AfterAttack(unit, target, SData);
             }
         }
 
@@ -440,7 +441,7 @@ namespace LeagueSharp.Common
                     if (unit.IsMelee())
                     {
                         Utility.DelayAction.Add(
-                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget, Spell.SData));
                     }
                 }
 
