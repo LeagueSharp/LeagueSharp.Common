@@ -58,7 +58,7 @@ namespace LeagueSharp.Common
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
-        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
+        public static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
         private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
 
         public static event InterruptableTargetHandler OnInterruptableTarget;
@@ -203,7 +203,7 @@ namespace LeagueSharp.Common
             public bool MovementInterrupts { get; private set; }
         }
 
-        private class InterruptableSpell
+        public class InterruptableSpell
         {
             public InterruptableSpell(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
             {
