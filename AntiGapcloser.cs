@@ -54,6 +54,7 @@ namespace LeagueSharp.Common
         public Vector3 Start;
         public int TickCount;
         public SpellSlot Slot;
+        public string SpellName;
     }
 
     public static class AntiGapcloser
@@ -688,7 +689,8 @@ namespace LeagueSharp.Common
                     Sender = (Obj_AI_Hero)sender,
                     TickCount = Environment.TickCount,
                     SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
-                    Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name)
+                    Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name),
+                    SpellName = args.SData.Name
                 });
         }
 
