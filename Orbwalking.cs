@@ -424,17 +424,21 @@ namespace LeagueSharp.Common
                     (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
                     LastAATick = Environment.TickCount - Game.Ping / 2;
-                    var target = (Obj_AI_Base) Spell.Target;
-                    if (target.IsValid)
+                    
+                    if(Spell.Target is Obj_AI_Base)
                     {
-                        FireOnTargetSwitch(target);
-                        _lastTarget = target;
-                    }
+                        var target = (Obj_AI_Base)Spell.Target;
+                        if (target.IsValid)
+                        {
+                            FireOnTargetSwitch(target);
+                            _lastTarget = target;
+                        }
 
-                    if (unit.IsMelee())
-                    {
-                        Utility.DelayAction.Add(
-                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                        if (unit.IsMelee())
+                        {
+                            Utility.DelayAction.Add(
+                                (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                        }
                     }
                 }
 
