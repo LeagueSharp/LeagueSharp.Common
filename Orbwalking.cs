@@ -245,7 +245,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetMyProjectileSpeed()
         {
-            return IsMelee(Player) ? float.MaxValue : Player.BasicAttack.MissileSpeed;
+            return IsMelee(Player) || Player.ChampionName == "Azir" ? float.MaxValue : Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
