@@ -706,13 +706,18 @@ namespace LeagueSharp.Common
                 var intersections = Geometry.CircleCircleIntersection(
                     from, middlePoint, radius, from.Distance(middlePoint));
 
-                var c1 = intersections[0];
-                var c2 = intersections[1];
+                if(intersections.Length > 1)
+                {
+                    var c1 = intersections[0];
+                    var c2 = intersections[1];
 
-                c1 = from + range * (to - c1).Normalized();
-                c2 = from + range * (to - c2).Normalized();
+                    c1 = from + range * (to - c1).Normalized();
+                    c2 = from + range * (to - c2).Normalized();
 
-                return new[] { c1, c2 };
+                    return new[] { c1, c2 };
+                }
+
+                return new Vector2[] { };
             }
 
             public static PredictionOutput GetPrediction(PredictionInput input)
