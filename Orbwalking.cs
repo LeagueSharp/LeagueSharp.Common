@@ -36,6 +36,8 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Orbwalking
     {
+		public delegate void AfterAttackEvenHEx(AttackableUnit unit, AttackableUnit target, SpellData SData);
+
         public delegate void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target);
 
         public delegate void BeforeAttackEvenH(BeforeAttackEventArgs args);
@@ -112,7 +114,7 @@ namespace LeagueSharp.Common
                 var missile = (Obj_SpellMissile) sender;
                 if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
                 {
-                    FireAfterAttack(missile.SpellCaster, _lastTarget);
+					FireAfterAttack(missile.SpellCaster, _lastTarget, missile.SData);
                 }
             }
         }
@@ -132,6 +134,11 @@ namespace LeagueSharp.Common
         /// </summary>
         public static event AfterAttackEvenH AfterAttack;
 
+		/// <summary>
+        ///     This event is fired after a unit finishes auto-attacking another unit (Only works with player for now).
+        ///		Also provides SpellData info.
+        /// </summary>
+		public static event AfterAttackEvenHEx AfterAttackEx;
         /// <summary>
         ///     Gets called on target changes
         /// </summary>
@@ -162,12 +169,16 @@ namespace LeagueSharp.Common
             }
         }
 
-        private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
+        private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target, SpellData SData)
         {
             if (AfterAttack != null)
             {
                 AfterAttack(unit, target);
             }
+	        if (AfterAttackEx != null)
+	        {
+				AfterAttackEx(unit, target, SData);
+	        }
         }
 
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
@@ -434,7 +445,7 @@ namespace LeagueSharp.Common
                     if (unit.IsMelee())
                     {
                         Utility.DelayAction.Add(
-                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget, Spell.SData));
                     }
                 }
 
