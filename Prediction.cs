@@ -176,7 +176,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public Vector3 CastPosition
         {
-            get { return _castPosition.To2D().IsValid() ? _castPosition.SetZ() : Input.Unit.ServerPosition; }
+            get { return _castPosition != null && _castPosition.To2D().IsValid() ? _castPosition.SetZ() : Input.Unit.ServerPosition; }
             set { _castPosition = value; }
         }
 
