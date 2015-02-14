@@ -60,14 +60,14 @@ namespace LeagueSharp.Common
         {
             if (draw || update)
             {
-                state = NotificationState.AnimationShowShrink;
+                //state = NotificationState.AnimationShowShrink;
                 return false;
             }
 
             var yAxis = Notifications.GetLocation();
             if (yAxis != -0x1)
             {
-                handler = Notifications.Reserve(GetId());
+                handler = Notifications.Reserve(GetId(), handler);
                 if (handler != null)
                 {
                     duration = newDuration;
@@ -313,10 +313,11 @@ namespace LeagueSharp.Common
 
             sprite.Begin();
 
-            var text = (Text.Length > 27)
+            /*var text = (Text.Length > 27)
                 ? Text.Substring(0, Math.Min(24 + (int) allowOverflow, Text.Length)) +
                   ((Math.Min(24 + (int) allowOverflow, Text.Length) == Text.Length) ? "" : "...")
-                : Text;
+                : Text;*/
+			var text = (Text.Length > 27) ? Text.Substring(0, 24) + "..." : Text;
 
             var textDimension = Font.MeasureText(sprite, text, 0x0);
             var rectangle = new Rectangle((int) position.X, (int) position.Y, (int) line.Width, 0x19);
@@ -451,7 +452,7 @@ namespace LeagueSharp.Common
                             {
                                 position.X -= 1f;
                                 line.Width += 1f;
-                                allowOverflow += 0.2f;
+                                allowOverflow += 0.1f * Text.Length - 27;
                             }
                         }
                     }
@@ -461,7 +462,7 @@ namespace LeagueSharp.Common
                         {
                             position.X += 1f;
                             line.Width -= 1f;
-                            allowOverflow -= 0.2f;
+                            allowOverflow -= 0.1f * Text.Length - 27;
                         }
                         else
                         {
@@ -529,11 +530,11 @@ namespace LeagueSharp.Common
 
                     if (Math.Abs(line.Width - 0xb9) < float.Epsilon)
                     {
-                        var yAxis = Notifications.GetLocation() - 0x1e;
+                        var yAxis = Notifications.GetLocation();
                         if (yAxis != -0x1)
                         {
-                            var newHandler = Notifications.Reserve(GetId());
                             Notifications.Free(handler);
+							var newHandler = Notifications.Reserve(GetId());
                             handler = newHandler;
                             if (handler != null)
                             {
