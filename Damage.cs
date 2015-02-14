@@ -699,12 +699,12 @@ namespace LeagueSharp.Common
                     },
                     //W - Soldier auto attacks
                     new DamageSpell
-                    {
+                    {                                           
                         Slot = SpellSlot.W,
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                45 + ((Obj_AI_Hero)source).Level * 7 + 0.6 * source.FlatMagicDamageMod
+                                45 + new double[] { 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170 }[((Obj_AI_Hero)source).Level - 1] + 0.6 * source.FlatMagicDamageMod
                     },
                     //E
                     new DamageSpell
