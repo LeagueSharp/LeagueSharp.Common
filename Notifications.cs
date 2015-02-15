@@ -227,9 +227,9 @@ namespace LeagueSharp.Common
             // Find a free slot if array does not start from the zero-based location (85)
             if (array.Count > 0x0 && array[0] > 0x55)
             {
-                for (var i = 0x55; i < array[0]; i += 0x1e)
+                for (var i = 0x55; i < array[0]; i += 0x1E)
                 {
-                    if (File.Exists(Path + "\\" + (i + 0x1e) + ".lock"))
+                    if (File.Exists(Path + "\\" + (i + 0x1E) + ".lock"))
                     {
                         // If slot found, return it as value.
                         return i;
@@ -240,15 +240,15 @@ namespace LeagueSharp.Common
             // Find a free slot between the current locked locations
             for (var i = 0x0; i < array.Count - 0x1; ++i)
             {
-                if (array[i] + 0x1e != array[i + 0x1])
+                if (array[i] + 0x1E != array[i + 0x1])
                 {
                     // Return free slot which was found between current locked locations
-                    return array[i] + 0x1e;
+                    return array[i] + 0x1E;
                 }
             }
 
             // Return (last slot + 30) as value
-            return array[array.Count - 1] + 30;
+            return array[array.Count - 0x1] + 0x1E;
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace LeagueSharp.Common
 
             if (array.Count > 0x0)
             {
-                for (var i = position - 0x1e; i > GetLocation(); i -= 0x1e)
+                for (var i = position - 0x1E; i > GetLocation(); i -= 0x1E)
                 {
                     if (array.Contains(i))
                     {
