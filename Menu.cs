@@ -345,7 +345,6 @@ namespace LeagueSharp.Common
     {
         private int _cachedMenuCount = -1;
         private int _cachedMenuCountT;
-        private FileInfo _menuStateFileInfo;
         private bool _visible;
         public List<Menu> Children = new List<Menu>();
         public string DisplayName;
@@ -353,6 +352,7 @@ namespace LeagueSharp.Common
         public List<MenuItem> Items = new List<MenuItem>();
         public string Name;
         public Menu Parent;
+        private string uniqueId;
 
         public Menu(string displayName, string name, bool isRootMenu = false)
         {
@@ -407,22 +407,20 @@ namespace LeagueSharp.Common
                     return _cachedMenuCount;
                 }
 
-                var result = 0;
+                var globalMenuList = Global.Read<List<string>>("MenuState");
                 var i = 0;
-                if (_menuStateFileInfo.Directory != null)
-                {
-                    foreach (var info in
-                        _menuStateFileInfo.Directory.EnumerateFiles().OrderBy(filename => filename.Name))
-                    {
-                        if (info.FullName == _menuStateFileInfo.FullName)
-                        {
-                            result = i;
-                            break;
-                        }
-                        i++;
-                    }
-                }
+                var result = 0;
 
+                foreach (var item in globalMenuList)
+                {
+                    if(item == uniqueId)
+                    {
+                        result = i;
+                        break;
+                    }
+                    i++;
+                }
+                
                 _cachedMenuCount = result;
                 _cachedMenuCountT = Environment.TickCount;
                 return result;
@@ -682,10 +680,7 @@ namespace LeagueSharp.Common
         {
             InitMenuState(Assembly.GetCallingAssembly().GetName().Name);
 
-            CustomEvents.Game.OnGameEnd += delegate { UnloadAllMenuStates(); };
-            Game.OnGameEnd += delegate { UnloadAllMenuStates(); };
             AppDomain.CurrentDomain.DomainUnload += (sender, args) => UnloadMenuState();
-            AppDomain.CurrentDomain.ProcessExit += (sender, args) => UnloadAllMenuStates();
 
             Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
@@ -693,58 +688,30 @@ namespace LeagueSharp.Common
 
         private void InitMenuState(string assemblyName)
         {
-            try
+            List<string> globalMenuList;
+            uniqueId = assemblyName + "." + Name;
+
+            globalMenuList = Global.Read<List<string>>("MenuState", true);
+
+            if (globalMenuList == null)
             {
-                var menuState = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "MenuState");
-                if (!Directory.Exists(menuState))
-                {
-                    Directory.CreateDirectory(menuState);
-                }
-                var menuStateProcess = Path.Combine(
-                    menuState, Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture));
-                if (!Directory.Exists(menuStateProcess))
-                {
-                    Directory.CreateDirectory(menuStateProcess);
-                }
-                var menuStateProcessFile = Path.Combine(menuStateProcess, assemblyName + "." + Name);
-                _menuStateFileInfo = new FileInfo(menuStateProcessFile);
-                _menuStateFileInfo.Create().Dispose();
+                globalMenuList = new List<string>();
             }
-            catch (Exception e)
+            while (globalMenuList.Contains(uniqueId))
             {
-                Console.WriteLine(e);
+                uniqueId += ".";
             }
+
+            globalMenuList.Add(uniqueId);
+
+            Global.Write<List<string>>("MenuState", globalMenuList);
         }
 
         private void UnloadMenuState()
         {
-            if (_menuStateFileInfo != null)
-            {
-                try
-                {
-                    _menuStateFileInfo.Delete();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
-        }
-
-        private void UnloadAllMenuStates()
-        {
-            if (_menuStateFileInfo != null && _menuStateFileInfo.Directory != null)
-            {
-                try
-                {
-                    _menuStateFileInfo.Directory.Delete(true);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
+            var globalMenuList = Global.Read<List<string>>("MenuState");
+            globalMenuList.Remove(uniqueId);
+            Global.Write<List<string>>("MenuState", globalMenuList);
         }
 
         public MenuItem AddItem(MenuItem item)
