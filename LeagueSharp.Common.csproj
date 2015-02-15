@@ -118,8 +118,6 @@
     <Compile Include="Notifications.cs" />
     <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\Notification.cs" />
-    <Compile Include="Resources\Notification.cs" />
-    <Compile Include="Resources\INotification.cs" />
     <Compile Include="Orbwalking.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
