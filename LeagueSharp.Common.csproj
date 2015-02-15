@@ -116,6 +116,8 @@
     <Compile Include="Menu.cs" />
     <Compile Include="MenuWrapper.cs" />
     <Compile Include="Notifications.cs" />
+    <Compile Include="Notifications\INotification.cs" />
+    <Compile Include="Notifications\Notification.cs" />
     <Compile Include="Resources\Notification.cs" />
     <Compile Include="Resources\INotification.cs" />
     <Compile Include="Orbwalking.cs" />
