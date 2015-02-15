@@ -699,12 +699,15 @@ namespace LeagueSharp.Common
                     },
                     //W - Soldier auto attacks
                     new DamageSpell
-                    {                                           
+                    {
                         Slot = SpellSlot.W,
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                45 + new double[] { 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170 }[((Obj_AI_Hero)source).Level - 1] + 0.6 * source.FlatMagicDamageMod
+                                45 +
+                                new double[]
+                                { 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170 }[
+                                    ((Obj_AI_Hero) source).Level - 1] + 0.6 * source.FlatMagicDamageMod
                     },
                     //E
                     new DamageSpell
@@ -1337,7 +1340,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 10, 20, 30, 40, 50 }[level] + new double[] { 4, 5, 6, 7, 8 }[level] / 100 * (target.MaxHealth - target.Health)
+                                new double[] { 10, 20, 30, 40, 50 }[level] +
+                                new double[] { 4, 5, 6, 7, 8 }[level] / 100 * (target.MaxHealth - target.Health)
                     },
                     //E
                     new DamageSpell
@@ -2351,20 +2355,26 @@ namespace LeagueSharp.Common
                     {
                         Slot = SpellSlot.E,
                         DamageType = DamageType.Physical,
-                        Damage =
-                            (source, target, level) =>
+                        Damage = (source, target, level) =>
+                        {
+                            var buff =
+                                target.Buffs.Find(
+                                    b =>
+                                        b.Caster.NetworkId == source.NetworkId && b.IsValidBuff() &&
+                                        b.DisplayName == "KalistaExpungeMarker");
+                            if (buff != null)
                             {
-                                var buff = target.Buffs.Find(b => b.Caster.NetworkId == source.NetworkId && b.IsValidBuff() && b.DisplayName == "KalistaExpungeMarker");
-                                if (buff != null)
-                                {
-                                    return 
-                                        (new double[] { 20, 30, 40, 50, 60 }[level] + 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) + // Base damage of E
-                                        ((buff.Count - 1) *
+                                return (new double[] { 20, 30, 40, 50, 60 }[level] +
+                                        0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
+                                       // Base damage of E
+                                       ((buff.Count - 1) *
                                         (new double[] { 10, 14, 19, 25, 32 }[level] + // Base damage per spear
-                                        new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))); // Damage multiplier per spear
-                                }
-                                return 0;
+                                         new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] *
+                                         (source.BaseAttackDamage + source.FlatPhysicalDamageMod)));
+                                    // Damage multiplier per spear
                             }
+                            return 0;
+                        }
                     },
                 });
 
@@ -4304,7 +4314,9 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 70, 80, 90, 100 }[level] + new double[] { 0.5, 0.65, 0.8, 0.95, 1.10 }[level] * source.FlatPhysicalDamageMod + 0.5 * source.FlatMagicDamageMod
+                                new double[] { 60, 70, 80, 90, 100 }[level] +
+                                new double[] { 0.5, 0.65, 0.8, 0.95, 1.10 }[level] * source.FlatPhysicalDamageMod +
+                                0.5 * source.FlatMagicDamageMod
                     },
                     //R
                     new DamageSpell
@@ -5200,11 +5212,11 @@ namespace LeagueSharp.Common
                     {
                         return 54 + 6 * source.Level;
                     }
-            }
+                }
 
                 return
                     new double[]
-                    {390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000}[
+                    { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
                         source.Level - 1];
             }
 
@@ -5237,7 +5249,7 @@ namespace LeagueSharp.Common
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:
                     var d = target.Health * .2f * 3f;
-                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d*2;
+                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d * 2;
             }
             return 1d;
         }
@@ -5450,7 +5462,8 @@ namespace LeagueSharp.Common
             }
             else
             {
-                k = 100 / (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
+                k = 100 /
+                    (100 + (target.SpellBlock * source.PercentMagicPenetrationMod) - source.FlatMagicPenetrationMod);
             }
 
             //Take into account the percent passives
@@ -5619,9 +5632,7 @@ namespace LeagueSharp.Common
             var hero = source as Obj_AI_Hero;
             if (hero != null && target is Obj_AI_Minion)
             {
-                if (
-                    hero.Masteries.Any(
-                        m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
                 {
                     d = d + 2;
                 }
@@ -5634,7 +5645,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -5646,7 +5657,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Minion && target is Obj_AI_Hero && source.Team == GameObjectTeam.Neutral)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -5659,7 +5670,7 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                        ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
+                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
                 if (mastery != null && mastery.Points == 1)
                 {
                     if (source.IsMelee())
