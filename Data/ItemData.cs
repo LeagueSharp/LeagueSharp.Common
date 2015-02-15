@@ -22,6 +22,7 @@
 
 #region
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 #endregion
@@ -275,12 +276,13 @@ namespace LeagueSharp.Common.Data
         public static Item Giants_Belt = new Item
         {
             Name = "Giant's Belt",
-            GoldBase = 1000,
+            GoldBase = 600,
             GoldPrice = 1000,
             GoldSell = 700,
             Purchasable = true,
             Stacks = 1,
-            Depth = 1,
+            Depth = 2,
+            From = new[] { 1028 },
             Into = new[] { 3068, 3143, 3116, 3083, 3084, 3022 },
             InStore = true,
             FlatHPPoolMod = 380f,
@@ -365,7 +367,7 @@ namespace LeagueSharp.Common.Data
                 new[]
                 {
                     2051, 2049, 3067, 3044, 3211, 3010, 3105, 3801, 3136, 2045, 3185, 3102, 3071, 3083, 3084, 3022, 3056,
-                    3709, 3717, 3721, 3725
+                    1011, 3709, 3717, 3721, 3725
                 },
             InStore = true,
             FlatHPPoolMod = 150f,
@@ -503,14 +505,14 @@ namespace LeagueSharp.Common.Data
             Name = "Hunter's Machete",
             GoldBase = 400,
             GoldPrice = 400,
-            GoldSell = 160,
+            GoldSell = 280,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
             Depth = 1,
             Into = new[] { 3706, 3711, 3715, 3713 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Tags = new[] { "Damage", "HealthRegen", "Jungle", "ManaRegen", "OnHit" },
             Id = 1039
         };
 
@@ -653,7 +655,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 70f,
             FlatPhysicalDamageMod = 7f,
             PercentLifeStealMod = 0.03f,
-            Tags = new[] { "Health", "Damage", "LifeSteal", "Lane" },
+            Tags = new[] { "Damage", "Health", "Lane", "LifeSteal" },
             Id = 1055
         };
 
@@ -674,7 +676,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 60f,
             FlatMPRegenMod = 0.6f,
             FlatMagicDamageMod = 15f,
-            Tags = new[] { "Health", "SpellDamage", "ManaRegen", "Lane" },
+            Tags = new[] { "Health", "Lane", "ManaRegen", "SpellDamage" },
             Id = 1056
         };
 
@@ -692,7 +694,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1033 },
-            Into = new[] { 3001, 3026 },
+            Into = new[] { 3001, 3026, 3512 },
             InStore = true,
             FlatSpellBlockMod = 45f,
             Tags = new[] { "SpellBlock" },
@@ -712,7 +714,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 3089, 3157, 3128 },
+            Into = new[] { 3089, 3157 },
             InStore = true,
             FlatMagicDamageMod = 80f,
             Tags = new[] { "SpellDamage" },
@@ -735,7 +737,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 16f,
             PercentAttackSpeedMod = 0.15f,
-            Tags = new[] { "Health", "Damage", "AttackSpeed" },
+            Tags = new[] { "AttackSpeed", "Damage", "Health" },
             Id = 1062
         };
 
@@ -755,7 +757,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMPRegenMod = 1.2f,
             FlatMagicDamageMod = 35f,
-            Tags = new[] { "Health", "SpellDamage", "ManaRegen" },
+            Tags = new[] { "Health", "ManaRegen", "SpellDamage" },
             Id = 1063
         };
 
@@ -798,7 +800,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 70f,
             FlatPhysicalDamageMod = 7f,
             PercentLifeStealMod = 0.03f,
-            Tags = new[] { "Health", "Damage", "LifeSteal", "OnHit" },
+            Tags = new[] { "Damage", "Health", "LifeSteal", "OnHit" },
             Id = 1075
         };
 
@@ -820,7 +822,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 60f,
             FlatMPRegenMod = 0.6f,
             FlatMagicDamageMod = 15f,
-            Tags = new[] { "Health", "SpellDamage", "ManaRegen" },
+            Tags = new[] { "Health", "ManaRegen", "SpellDamage" },
             Id = 1076
         };
 
@@ -910,7 +912,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { "HealthRegen", "ManaRegen", "Consumable", "Active" },
+            Tags = new[] { "Active", "Consumable", "HealthRegen", "Lane", "ManaRegen" },
             Id = 2041
         };
 
@@ -921,7 +923,6 @@ namespace LeagueSharp.Common.Data
         public static Item Vision_Ward = new Item
         {
             Name = "Vision Ward",
-            Range = 600f,
             GoldBase = 100,
             GoldPrice = 100,
             GoldSell = 40,
@@ -931,7 +932,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 2,
             Depth = 1,
             InStore = true,
-            Tags = new[] { "Consumable", "Vision", "Stealth", "Lane" },
+            Tags = new[] { "Consumable", "Lane", "Stealth", "Vision" },
             Id = 2043
         };
 
@@ -942,7 +943,6 @@ namespace LeagueSharp.Common.Data
         public static Item Stealth_Ward = new Item
         {
             Name = "Stealth Ward",
-            Range = 600f,
             GoldBase = 75,
             GoldPrice = 75,
             GoldSell = 30,
@@ -952,7 +952,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 3,
             Depth = 1,
             InStore = true,
-            Tags = new[] { "Consumable", "Vision", "Lane" },
+            Tags = new[] { "Consumable", "Lane", "Vision" },
             Id = 2044
         };
 
@@ -963,7 +963,6 @@ namespace LeagueSharp.Common.Data
         public static Item Ruby_Sightstone = new Item
         {
             Name = "Ruby Sightstone",
-            Range = 600f,
             GoldBase = 400,
             GoldPrice = 1600,
             GoldSell = 640,
@@ -973,7 +972,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 2049, 1028 },
             InStore = true,
             FlatHPPoolMod = 400f,
-            Tags = new[] { "Health", "Vision", "Active" },
+            Tags = new[] { "Active", "Health", "Vision" },
             Id = 2045
         };
 
@@ -1004,7 +1003,6 @@ namespace LeagueSharp.Common.Data
         public static Item Sightstone = new Item
         {
             Name = "Sightstone",
-            Range = 600f,
             GoldBase = 400,
             GoldPrice = 800,
             GoldSell = 320,
@@ -1015,7 +1013,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 2045 },
             InStore = true,
             FlatHPPoolMod = 150f,
-            Tags = new[] { "Health", "Vision", "Active" },
+            Tags = new[] { "Active", "Health", "Vision" },
             Id = 2049
         };
 
@@ -1026,7 +1024,6 @@ namespace LeagueSharp.Common.Data
         public static Item Explorers_Ward = new Item
         {
             Name = "Explorer's Ward",
-            Range = 600f,
             Stacks = 1,
             Depth = 1,
             InStore = false,
@@ -1043,15 +1040,14 @@ namespace LeagueSharp.Common.Data
             Name = "Guardian's Horn",
             GoldBase = 435,
             GoldPrice = 1015,
-            GoldSell = 718,
+            GoldSell = 711,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
             From = new[] { 1006, 1028 },
             InStore = true,
             FlatHPPoolMod = 200f,
-            PercentHPRegenMod = 1.25f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "Armor", "Active", "NonbootsMovement" },
+            Tags = new[] { "Active", "Armor", "Health", "HealthRegen", "NonbootsMovement", "SpellBlock" },
             Id = 2051
         };
 
@@ -1084,10 +1080,10 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1006, 1029 },
-            Into = new[] { 3056 },
+            Into = new[] { 3056, 3512 },
             InStore = true,
             FlatArmorMod = 30f,
-            Tags = new[] { "HealthRegen", "Armor", "NonbootsMovement" },
+            Tags = new[] { "Armor", "HealthRegen", "NonbootsMovement" },
             Id = 2053
         };
 
@@ -1123,7 +1119,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             ConsumeOnFull = true,
             InStore = true,
-            Tags = new[] { "Health", "Consumable" },
+            Tags = new[] { "Consumable", "Health" },
             Id = 2137
         };
 
@@ -1165,7 +1161,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             ConsumeOnFull = true,
             InStore = true,
-            Tags = new[] { "SpellDamage", "ManaRegen", "Consumable" },
+            Tags = new[] { "Consumable", "ManaRegen", "SpellDamage" },
             Id = 2139
         };
 
@@ -1186,7 +1182,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             ConsumeOnFull = true,
             InStore = true,
-            Tags = new[] { "Damage", "LifeSteal", "Consumable", "SpellVamp" },
+            Tags = new[] { "Consumable", "Damage", "LifeSteal", "SpellVamp" },
             Id = 2140
         };
 
@@ -1208,7 +1204,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMagicDamageMod = 70f,
             FlatSpellBlockMod = 50f,
-            Tags = new[] { "SpellBlock", "SpellDamage", "Aura" },
+            Tags = new[] { "Aura", "SpellBlock", "SpellDamage" },
             Id = 3001
         };
 
@@ -1230,7 +1226,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMPPoolMod = 250f,
             FlatMagicDamageMod = 60f,
-            Tags = new[] { "SpellDamage", "Mana", "ManaRegen" },
+            Tags = new[] { "Mana", "ManaRegen", "SpellDamage" },
             Id = 3003
         };
 
@@ -1296,7 +1292,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMPPoolMod = 250f,
             FlatMagicDamageMod = 60f,
-            Tags = new[] { "SpellDamage", "Mana", "ManaRegen" },
+            Tags = new[] { "Mana", "ManaRegen", "SpellDamage" },
             Id = 3007
         };
 
@@ -1398,12 +1394,12 @@ namespace LeagueSharp.Common.Data
             GoldSell = 2310,
             Purchasable = true,
             Stacks = 1,
-            Depth = 2,
+            Depth = 3,
             From = new[] { 1028, 1011, 1037 },
             InStore = true,
             FlatHPPoolMod = 700f,
             FlatPhysicalDamageMod = 30f,
-            Tags = new[] { "Health", "Damage", "Slow", "OnHit" },
+            Tags = new[] { "Damage", "Health", "OnHit", "Slow" },
             Id = 3022
         };
 
@@ -1414,7 +1410,7 @@ namespace LeagueSharp.Common.Data
         public static Item Twin_Shadows = new Item
         {
             Name = "Twin Shadows",
-            GoldBase = 630,
+            GoldBase = 730,
             GoldPrice = 2400,
             GoldSell = 1680,
             Purchasable = true,
@@ -1424,7 +1420,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMagicDamageMod = 80f,
             PercentMovementSpeedMod = 0.06f,
-            Tags = new[] { "SpellDamage", "Active", "CooldownReduction", "Slow", "NonbootsMovement" },
+            Tags = new[] { "Active", "CooldownReduction", "NonbootsMovement", "Slow", "SpellDamage" },
             Id = 3023
         };
 
@@ -1446,7 +1442,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMPPoolMod = 250f,
             FlatArmorMod = 20f,
-            Tags = new[] { "Armor", "Mana", "CooldownReduction" },
+            Tags = new[] { "Armor", "CooldownReduction", "Mana" },
             Id = 3024
         };
 
@@ -1468,7 +1464,7 @@ namespace LeagueSharp.Common.Data
             FlatMPPoolMod = 500f,
             FlatArmorMod = 60f,
             FlatMagicDamageMod = 30f,
-            Tags = new[] { "Armor", "SpellDamage", "Mana", "CooldownReduction", "Slow" },
+            Tags = new[] { "Armor", "CooldownReduction", "Mana", "Slow", "SpellDamage" },
             Id = 3025
         };
 
@@ -1481,7 +1477,7 @@ namespace LeagueSharp.Common.Data
             Name = "Guardian Angel",
             GoldBase = 1200,
             GoldPrice = 2800,
-            GoldSell = 1140,
+            GoldSell = 1120,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
@@ -1489,7 +1485,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatArmorMod = 50f,
             FlatSpellBlockMod = 50f,
-            Tags = new[] { "SpellBlock", "Armor" },
+            Tags = new[] { "Armor", "SpellBlock" },
             Id = 3026
         };
 
@@ -1511,7 +1507,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 450f,
             FlatMPPoolMod = 450f,
             FlatMagicDamageMod = 60f,
-            Tags = new[] { "Health", "HealthRegen", "SpellDamage", "Mana", "ManaRegen" },
+            Tags = new[] { "Health", "HealthRegen", "Mana", "ManaRegen", "SpellDamage" },
             Id = 3027
         };
 
@@ -1532,7 +1528,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3174, 3222 },
             InStore = true,
             FlatSpellBlockMod = 25f,
-            Tags = new[] { "SpellBlock", "ManaRegen" },
+            Tags = new[] { "ManaRegen", "SpellBlock" },
             Id = 3028
         };
 
@@ -1554,7 +1550,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 450f,
             FlatMPPoolMod = 450f,
             FlatMagicDamageMod = 60f,
-            Tags = new[] { "Health", "HealthRegen", "SpellDamage", "Mana", "ManaRegen" },
+            Tags = new[] { "Health", "HealthRegen", "Mana", "ManaRegen", "SpellDamage" },
             Id = 3029
         };
 
@@ -1574,8 +1570,8 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1038, 1037, 1018 },
             InStore = true,
             FlatPhysicalDamageMod = 80f,
-            FlatCritChanceMod = 0.20f,
-            Tags = new[] { "Damage", "CriticalStrike" },
+            FlatCritChanceMod = 0.2f,
+            Tags = new[] { "CriticalStrike", "Damage" },
             Id = 3031
         };
 
@@ -1595,7 +1591,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1037, 1036 },
             InStore = true,
             FlatPhysicalDamageMod = 40f,
-            Tags = new[] { "Damage", "ArmorPenetration" },
+            Tags = new[] { "ArmorPenetration", "Damage" },
             Id = 3035
         };
 
@@ -1700,7 +1696,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 200f,
             FlatPhysicalDamageMod = 20f,
-            Tags = new[] { "Health", "Damage", "OnHit", "NonbootsMovement" },
+            Tags = new[] { "Damage", "Health", "NonbootsMovement", "OnHit" },
             Id = 3044
         };
 
@@ -1722,7 +1718,7 @@ namespace LeagueSharp.Common.Data
             PercentMovementSpeedMod = 0.05f,
             PercentAttackSpeedMod = 0.5f,
             FlatCritChanceMod = 0.35f,
-            Tags = new[] { "CriticalStrike", "AttackSpeed", "NonbootsMovement" },
+            Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement" },
             Id = 3046
         };
 
@@ -1785,7 +1781,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3067, 1053 },
             InStore = true,
             FlatHPPoolMod = 250f,
-            Tags = new[] { "Health", "Damage", "LifeSteal", "CooldownReduction", "Aura" },
+            Tags = new[] { "Aura", "CooldownReduction", "Damage", "Health", "LifeSteal" },
             Id = 3050
         };
 
@@ -1806,7 +1802,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 300f,
             FlatArmorMod = 50f,
-            Tags = new[] { "Health", "HealthRegen", "Armor", "CooldownReduction", "Active", "NonbootsMovement" },
+            Tags = new[] { "Active", "Armor", "CooldownReduction", "Health", "HealthRegen", "NonbootsMovement" },
             Id = 3056
         };
 
@@ -1828,7 +1824,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMPPoolMod = 200f,
             FlatMagicDamageMod = 25f,
-            Tags = new[] { "SpellDamage", "Mana" },
+            Tags = new[] { "Mana", "SpellDamage" },
             Id = 3057
         };
 
@@ -1850,7 +1846,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 200f,
             FlatMagicDamageMod = 60f,
             FlatSpellBlockMod = 20f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "SpellDamage", "CooldownReduction", "Aura", "Active" },
+            Tags = new[] { "Active", "Aura", "CooldownReduction", "Health", "HealthRegen", "SpellBlock", "SpellDamage" },
             Id = 3060
         };
 
@@ -1871,7 +1867,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 400f,
             FlatSpellBlockMod = 55f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "Health", "HealthRegen", "SpellBlock" },
             Id = 3065
         };
 
@@ -1892,7 +1888,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3187, 3401, 3065, 3190, 3050, 3056, 3709, 3717, 3721, 3725 },
             InStore = true,
             FlatHPPoolMod = 200f,
-            Tags = new[] { "Health", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "Health" },
             Id = 3067
         };
 
@@ -1903,7 +1899,6 @@ namespace LeagueSharp.Common.Data
         public static Item Sunfire_Cape = new Item
         {
             Name = "Sunfire Cape",
-            Range = 400f,
             GoldBase = 850,
             GoldPrice = 2600,
             GoldSell = 1820,
@@ -1914,7 +1909,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 450f,
             FlatArmorMod = 45f,
-            Tags = new[] { "Health", "Armor" },
+            Tags = new[] { "Armor", "Health" },
             Id = 3068
         };
 
@@ -1925,7 +1920,6 @@ namespace LeagueSharp.Common.Data
         public static Item Talisman_of_Ascension = new Item
         {
             Name = "Talisman of Ascension",
-            Range = 600f,
             GoldBase = 635,
             GoldPrice = 2100,
             GoldSell = 840,
@@ -1935,7 +1929,7 @@ namespace LeagueSharp.Common.Data
             Depth = 3,
             From = new[] { 3096, 3114 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "ManaRegen", "CooldownReduction", "NonbootsMovement", "Active", "GoldPer" },
+            Tags = new[] { "Active", "CooldownReduction", "GoldPer", "HealthRegen", "ManaRegen", "NonbootsMovement" },
             Id = 3069
         };
 
@@ -1977,7 +1971,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 200f,
             FlatPhysicalDamageMod = 50f,
-            Tags = new[] { "Health", "Damage", "CooldownReduction", "ArmorPenetration", "OnHit" },
+            Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage", "Health", "OnHit" },
             Id = 3071
         };
 
@@ -2040,7 +2034,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 75f,
             PercentLifeStealMod = 0.12f,
-            Tags = new[] { "HealthRegen", "Damage", "LifeSteal", "Active", "OnHit" },
+            Tags = new[] { "Active", "Damage", "HealthRegen", "LifeSteal", "OnHit" },
             Id = 3074
         };
 
@@ -2082,7 +2076,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3074 },
             InStore = true,
             FlatPhysicalDamageMod = 40f,
-            Tags = new[] { "HealthRegen", "Damage", "Active", "OnHit" },
+            Tags = new[] { "Active", "Damage", "HealthRegen", "OnHit" },
             Id = 3077
         };
 
@@ -2111,8 +2105,8 @@ namespace LeagueSharp.Common.Data
             Tags =
                 new[]
                 {
-                    "Health", "Damage", "AttackSpeed", "SpellDamage", "Mana", "CriticalStrike", "NonbootsMovement",
-                    "OnHit"
+                    "AttackSpeed", "CriticalStrike", "Damage", "Health", "Mana", "NonbootsMovement", "OnHit",
+                    "SpellDamage"
                 },
             Id = 3078
         };
@@ -2170,7 +2164,7 @@ namespace LeagueSharp.Common.Data
             GoldSell = 1719,
             Purchasable = true,
             Stacks = 1,
-            Depth = 2,
+            Depth = 3,
             From = new[] { 1011, 1028 },
             InStore = true,
             FlatHPPoolMod = 850f,
@@ -2217,7 +2211,7 @@ namespace LeagueSharp.Common.Data
             PercentMovementSpeedMod = 0.05f,
             PercentAttackSpeedMod = 0.2f,
             FlatCritChanceMod = 0.1f,
-            Tags = new[] { "CriticalStrike", "AttackSpeed", "NonbootsMovement" },
+            Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement" },
             Id = 3086
         };
 
@@ -2239,7 +2233,7 @@ namespace LeagueSharp.Common.Data
             PercentMovementSpeedMod = 0.06f,
             PercentAttackSpeedMod = 0.4f,
             FlatCritChanceMod = 0.2f,
-            Tags = new[] { "CriticalStrike", "AttackSpeed", "OnHit", "NonbootsMovement" },
+            Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement", "OnHit" },
             Id = 3087
         };
 
@@ -2280,7 +2274,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatArmorMod = 45f,
             FlatMagicDamageMod = 100f,
-            Tags = new[] { "Armor", "SpellDamage", "Active" },
+            Tags = new[] { "Active", "Armor", "SpellDamage" },
             Id = 3090
         };
 
@@ -2301,7 +2295,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             PercentAttackSpeedMod = 0.5f,
             FlatSpellBlockMod = 30f,
-            Tags = new[] { "SpellBlock", "AttackSpeed", "OnHit" },
+            Tags = new[] { "AttackSpeed", "OnHit", "SpellBlock" },
             Id = 3091
         };
 
@@ -2323,7 +2317,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3098, 3108 },
             InStore = true,
             FlatMagicDamageMod = 50f,
-            Tags = new[] { "SpellDamage", "ManaRegen", "CooldownReduction", "Slow", "GoldPer", "Active" },
+            Tags = new[] { "Active", "CooldownReduction", "GoldPer", "ManaRegen", "Slow", "SpellDamage" },
             Id = 3092
         };
 
@@ -2341,7 +2335,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1051 },
-            Into = new[] { 3087, 3142, 3005 },
+            Into = new[] { 3087, 3142 },
             InStore = true,
             FlatCritChanceMod = 0.1f,
             Tags = new[] { "CriticalStrike", "GoldPer" },
@@ -2365,7 +2359,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3301 },
             Into = new[] { 3069 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "ManaRegen", "GoldPer", "Active" },
+            Tags = new[] { "Active", "GoldPer", "HealthRegen", "ManaRegen", "NonbootsMovement" },
             Id = 3096
         };
 
@@ -2387,7 +2381,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3401 },
             InStore = true,
             FlatHPPoolMod = 175f,
-            Tags = new[] { "Health", "HealthRegen", "Aura", "GoldPer" },
+            Tags = new[] { "Aura", "GoldPer", "Health", "HealthRegen" },
             Id = 3097
         };
 
@@ -2409,7 +2403,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3092 },
             InStore = true,
             FlatMagicDamageMod = 10f,
-            Tags = new[] { "SpellDamage", "ManaRegen", "GoldPer", "Active" },
+            Tags = new[] { "Active", "GoldPer", "ManaRegen", "SpellDamage" },
             Id = 3098
         };
 
@@ -2420,7 +2414,7 @@ namespace LeagueSharp.Common.Data
         public static Item Lich_Bane = new Item
         {
             Name = "Lich Bane",
-            GoldBase = 850,
+            GoldBase = 950,
             GoldPrice = 3000,
             GoldSell = 2100,
             Purchasable = true,
@@ -2431,7 +2425,7 @@ namespace LeagueSharp.Common.Data
             FlatMPPoolMod = 250f,
             FlatMagicDamageMod = 80f,
             PercentMovementSpeedMod = 0.05f,
-            Tags = new[] { "SpellDamage", "Mana", "NonbootsMovement" },
+            Tags = new[] { "Mana", "NonbootsMovement", "SpellDamage" },
             Id = 3100
         };
 
@@ -2473,7 +2467,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 450f,
             FlatSpellBlockMod = 55f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen" },
+            Tags = new[] { "Health", "HealthRegen", "SpellBlock" },
             Id = 3102
         };
 
@@ -2494,7 +2488,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 80f,
             FlatCritChanceMod = 0.25f,
-            Tags = new[] { "Damage", "CriticalStrike" },
+            Tags = new[] { "CriticalStrike", "Damage" },
             Id = 3104
         };
 
@@ -2505,7 +2499,6 @@ namespace LeagueSharp.Common.Data
         public static Item Aegis_of_the_Legion = new Item
         {
             Name = "Aegis of the Legion",
-            Range = 1100f,
             GoldBase = 820,
             GoldPrice = 1900,
             GoldSell = 1330,
@@ -2517,7 +2510,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 200f,
             FlatSpellBlockMod = 20f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "Aura" },
+            Tags = new[] { "Aura", "Health", "HealthRegen", "SpellBlock" },
             Id = 3105
         };
 
@@ -2556,10 +2549,10 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1052 },
-            Into = new[] { 3174, 3092, 3115, 3128, 3188, 3290, 3165, 3152, 3060, 3023, 3708, 3716, 3720, 3724 },
+            Into = new[] { 3174, 3092, 3115, 3188, 3290, 3165, 3152, 3060, 3023, 3708, 3716, 3720, 3724 },
             InStore = true,
             FlatMagicDamageMod = 30f,
-            Tags = new[] { "SpellDamage", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "SpellDamage" },
             Id = 3108
         };
 
@@ -2570,7 +2563,6 @@ namespace LeagueSharp.Common.Data
         public static Item Frozen_Heart = new Item
         {
             Name = "Frozen Heart",
-            Range = 700f,
             GoldBase = 450,
             GoldPrice = 2450,
             GoldSell = 1715,
@@ -2581,7 +2573,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMPPoolMod = 400f,
             FlatArmorMod = 100f,
-            Tags = new[] { "Armor", "Mana", "CooldownReduction", "Aura" },
+            Tags = new[] { "Armor", "Aura", "CooldownReduction", "Mana" },
             Id = 3110
         };
 
@@ -2603,7 +2595,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMovementSpeedMod = 45f,
             FlatSpellBlockMod = 25f,
-            Tags = new[] { "SpellBlock", "Boots", "Tenacity" },
+            Tags = new[] { "Boots", "SpellBlock", "Tenacity" },
             Id = 3111
         };
 
@@ -2623,7 +2615,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1006, 1006, 1033, 1033 },
             InStore = true,
             FlatSpellBlockMod = 70f,
-            Tags = new[] { "SpellBlock", "HealthRegen" },
+            Tags = new[] { "HealthRegen", "SpellBlock" },
             Id = 3112
         };
 
@@ -2634,9 +2626,9 @@ namespace LeagueSharp.Common.Data
         public static Item Aether_Wisp = new Item
         {
             Name = "Aether Wisp",
-            GoldBase = 515,
-            GoldPrice = 950,
-            GoldSell = 665,
+            GoldBase = 415,
+            GoldPrice = 850,
+            GoldSell = 595,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -2644,7 +2636,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3023, 3290, 3100, 3504 },
             InStore = true,
             FlatMagicDamageMod = 30f,
-            Tags = new[] { "SpellDamage", "NonbootsMovement" },
+            Tags = new[] { "NonbootsMovement", "SpellDamage" },
             Id = 3113
         };
 
@@ -2664,7 +2656,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1004, 1004 },
             Into = new[] { 3069, 3165, 3222, 3504 },
             InStore = true,
-            Tags = new[] { "ManaRegen", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "ManaRegen" },
             Id = 3114
         };
 
@@ -2685,7 +2677,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMagicDamageMod = 60f,
             PercentAttackSpeedMod = 0.5f,
-            Tags = new[] { "AttackSpeed", "SpellDamage", "CooldownReduction", "OnHit" },
+            Tags = new[] { "AttackSpeed", "CooldownReduction", "OnHit", "SpellDamage" },
             Id = 3115
         };
 
@@ -2701,12 +2693,12 @@ namespace LeagueSharp.Common.Data
             GoldSell = 2030,
             Purchasable = true,
             Stacks = 1,
-            Depth = 2,
+            Depth = 3,
             From = new[] { 1026, 1052, 1011 },
             InStore = true,
             FlatHPPoolMod = 400f,
             FlatMagicDamageMod = 100f,
-            Tags = new[] { "Health", "SpellDamage", "Slow" },
+            Tags = new[] { "Health", "Slow", "SpellDamage" },
             Id = 3116
         };
 
@@ -2749,7 +2741,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 20f,
             FlatCritChanceMod = 0.1f,
-            Tags = new[] { "Damage", "CriticalStrike", "OnHit" },
+            Tags = new[] { "CriticalStrike", "Damage", "OnHit" },
             Id = 3122
         };
 
@@ -2770,7 +2762,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 30f,
             FlatMagicDamageMod = 40f,
-            Tags = new[] { "Damage", "AttackSpeed", "LifeSteal", "SpellDamage", "SpellVamp", "OnHit" },
+            Tags = new[] { "AttackSpeed", "Damage", "LifeSteal", "OnHit", "SpellDamage", "SpellVamp" },
             Id = 3124
         };
 
@@ -2778,6 +2770,7 @@ namespace LeagueSharp.Common.Data
 
         #region Deathfire Grasp
 
+        [Obsolete("Deathfire Grasp has been removed from the gamefiles and will be removed from ItemData.")]
         public static Item Deathfire_Grasp = new Item
         {
             Name = "Deathfire Grasp",
@@ -2812,7 +2805,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3142, 3071, 3707, 3714, 3719, 3723 },
             InStore = true,
             FlatPhysicalDamageMod = 25f,
-            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration" },
+            Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage" },
             Id = 3134
         };
 
@@ -2832,7 +2825,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1026, 1052 },
             InStore = true,
             FlatMagicDamageMod = 70f,
-            Tags = new[] { "SpellDamage", "MagicPenetration" },
+            Tags = new[] { "MagicPenetration", "SpellDamage" },
             Id = 3135
         };
 
@@ -2854,7 +2847,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 200f,
             FlatMagicDamageMod = 25f,
-            Tags = new[] { "Health", "SpellDamage", "MagicPenetration" },
+            Tags = new[] { "Health", "MagicPenetration", "SpellDamage" },
             Id = 3136
         };
 
@@ -2875,7 +2868,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             PercentAttackSpeedMod = 0.5f,
             FlatSpellBlockMod = 45f,
-            Tags = new[] { "SpellBlock", "AttackSpeed", "NonbootsMovement", "CooldownReduction", "Active" },
+            Tags = new[] { "Active", "AttackSpeed", "CooldownReduction", "NonbootsMovement", "SpellBlock" },
             Id = 3137
         };
 
@@ -2896,7 +2889,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 80f,
             FlatSpellBlockMod = 35f,
-            Tags = new[] { "SpellBlock", "Damage", "NonbootsMovement", "Active" },
+            Tags = new[] { "Active", "Damage", "NonbootsMovement", "SpellBlock" },
             Id = 3139
         };
 
@@ -2917,7 +2910,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3139, 3137 },
             InStore = true,
             FlatSpellBlockMod = 30f,
-            Tags = new[] { "SpellBlock", "Active" },
+            Tags = new[] { "Active", "SpellBlock" },
             Id = 3140
         };
 
@@ -2961,8 +2954,8 @@ namespace LeagueSharp.Common.Data
             Tags =
                 new[]
                 {
-                    "Damage", "CriticalStrike", "AttackSpeed", "Active", "CooldownReduction", "NonbootsMovement",
-                    "ArmorPenetration"
+                    "Active", "ArmorPenetration", "AttackSpeed", "CooldownReduction", "CriticalStrike", "Damage",
+                    "NonbootsMovement"
                 },
             Id = 3142
         };
@@ -2985,7 +2978,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 500f,
             FlatArmorMod = 70f,
-            Tags = new[] { "Health", "Armor", "Slow", "Active" },
+            Tags = new[] { "Active", "Armor", "Health", "Slow" },
             Id = 3143
         };
 
@@ -3008,7 +3001,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 25f,
             PercentLifeStealMod = 0.08f,
-            Tags = new[] { "Damage", "LifeSteal", "Active", "Slow" },
+            Tags = new[] { "Active", "Damage", "LifeSteal", "Slow" },
             Id = 3144
         };
 
@@ -3049,10 +3042,10 @@ namespace LeagueSharp.Common.Data
             Depth = 4,
             From = new[] { 3144, 3145 },
             InStore = true,
-            FlatPhysicalDamageMod = 45f,
-            FlatMagicDamageMod = 65f,
-            PercentLifeStealMod = 0.12f,
-            Tags = new[] { "Damage", "LifeSteal", "SpellDamage", "SpellVamp", "Slow", "Active" },
+            FlatPhysicalDamageMod = 40f,
+            FlatMagicDamageMod = 80f,
+            PercentLifeStealMod = 0.1f,
+            Tags = new[] { "Active", "Damage", "LifeSteal", "Slow", "SpellDamage", "SpellVamp" },
             Id = 3146
         };
 
@@ -3073,7 +3066,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 300f,
             FlatMagicDamageMod = 50f,
-            Tags = new[] { "Health", "SpellDamage", "MagicPenetration" },
+            Tags = new[] { "Health", "MagicPenetration", "SpellDamage" },
             Id = 3151
         };
 
@@ -3093,7 +3086,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3145, 3108 },
             InStore = true,
             FlatMagicDamageMod = 80f,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "SpellVamp" },
+            Tags = new[] { "CooldownReduction", "SpellDamage", "SpellVamp" },
             Id = 3152
         };
 
@@ -3116,7 +3109,7 @@ namespace LeagueSharp.Common.Data
             FlatPhysicalDamageMod = 25f,
             PercentAttackSpeedMod = 0.4f,
             PercentLifeStealMod = 0.1f,
-            Tags = new[] { "Damage", "AttackSpeed", "LifeSteal", "NonbootsMovement", "Active", "OnHit" },
+            Tags = new[] { "Active", "AttackSpeed", "Damage", "LifeSteal", "NonbootsMovement", "OnHit" },
             Id = 3153
         };
 
@@ -3136,11 +3129,10 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 3,
             From = new[] { 3106, 1036, 1042 },
-            Into = new[] { 3160 },
             InStore = true,
             FlatPhysicalDamageMod = 12f,
             PercentAttackSpeedMod = 0.3f,
-            Tags = new[] { "Damage", "AttackSpeed", "Active", "OnHit", "Vision", "GoldPer" },
+            Tags = new[] { "Active", "AttackSpeed", "Damage", "GoldPer", "OnHit", "Vision" },
             Id = 3154
         };
 
@@ -3162,7 +3154,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 25f,
             FlatSpellBlockMod = 30f,
-            Tags = new[] { "SpellBlock", "Damage" },
+            Tags = new[] { "Damage", "SpellBlock" },
             Id = 3155
         };
 
@@ -3183,7 +3175,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 60f,
             FlatSpellBlockMod = 40f,
-            Tags = new[] { "SpellBlock", "Damage" },
+            Tags = new[] { "Damage", "SpellBlock" },
             Id = 3156
         };
 
@@ -3204,7 +3196,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatArmorMod = 50f,
             FlatMagicDamageMod = 120f,
-            Tags = new[] { "Armor", "SpellDamage", "Active" },
+            Tags = new[] { "Active", "Armor", "SpellDamage" },
             Id = 3157
         };
 
@@ -3225,7 +3217,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3279, 3278, 3277, 3276, 3275 },
             InStore = true,
             FlatMovementSpeedMod = 45f,
-            Tags = new[] { "CooldownReduction", "Boots" },
+            Tags = new[] { "Boots", "CooldownReduction" },
             Id = 3158
         };
 
@@ -3247,7 +3239,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 15f,
             PercentAttackSpeedMod = 0.3f,
-            Tags = new[] { "Damage", "AttackSpeed", "Active", "OnHit", "Stealth", "Vision", "GoldPer" },
+            Tags = new[] { "Active", "AttackSpeed", "Damage", "GoldPer", "OnHit", "Stealth", "Vision" },
             Id = 3159
         };
 
@@ -3255,6 +3247,7 @@ namespace LeagueSharp.Common.Data
 
         #region Feral Flare
 
+        [Obsolete("Feral Flare has been removed from the gamefiles and will be removed from ItemData.")]
         public static Item Feral_Flare = new Item
         {
             Name = "Feral Flare",
@@ -3283,14 +3276,14 @@ namespace LeagueSharp.Common.Data
             Name = "Morellonomicon",
             GoldBase = 880,
             GoldPrice = 2300,
-            GoldSell = 1470,
+            GoldSell = 1610,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3108, 3114 },
             InStore = true,
             FlatMagicDamageMod = 80f,
-            Tags = new[] { "SpellDamage", "ManaRegen", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "ManaRegen", "SpellDamage" },
             Id = 3165
         };
 
@@ -3308,7 +3301,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             InStore = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3166
         };
 
@@ -3326,7 +3319,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3167
         };
 
@@ -3344,7 +3337,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3168
         };
 
@@ -3363,7 +3356,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3169
         };
 
@@ -3385,7 +3378,7 @@ namespace LeagueSharp.Common.Data
             FlatArmorMod = 50f,
             FlatMagicDamageMod = 50f,
             FlatSpellBlockMod = 50f,
-            Tags = new[] { "SpellBlock", "Armor", "SpellDamage", "Tenacity" },
+            Tags = new[] { "Armor", "SpellBlock", "SpellDamage", "Tenacity" },
             Id = 3170
         };
 
@@ -3403,7 +3396,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3171
         };
 
@@ -3425,7 +3418,7 @@ namespace LeagueSharp.Common.Data
             FlatPhysicalDamageMod = 25f,
             PercentMovementSpeedMod = 0.1f,
             PercentAttackSpeedMod = 0.5f,
-            Tags = new[] { "Damage", "AttackSpeed", "NonbootsMovement", "CooldownReduction", "Tenacity" },
+            Tags = new[] { "AttackSpeed", "CooldownReduction", "Damage", "NonbootsMovement", "Tenacity" },
             Id = 3172
         };
 
@@ -3446,7 +3439,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMagicDamageMod = 60f,
             FlatSpellBlockMod = 25f,
-            Tags = new[] { "SpellBlock", "SpellDamage", "ManaRegen", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "ManaRegen", "SpellBlock", "SpellDamage" },
             Id = 3174
         };
 
@@ -3466,7 +3459,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3175
         };
 
@@ -3488,7 +3481,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 350f,
             FlatMPPoolMod = 350f,
             FlatSpellBlockMod = 50f,
-            Tags = new[] { "Health", "SpellBlock", "Mana", "Active" },
+            Tags = new[] { "Active", "Health", "Mana", "SpellBlock" },
             Id = 3180
         };
 
@@ -3530,7 +3523,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 275f,
             FlatPhysicalDamageMod = 55f,
-            Tags = new[] { "Health", "Damage", "Slow", "Active", "NonbootsMovement" },
+            Tags = new[] { "Active", "Damage", "Health", "NonbootsMovement", "Slow" },
             Id = 3184
         };
 
@@ -3551,7 +3544,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 30f,
             FlatCritChanceMod = 0.3f,
-            Tags = new[] { "Damage", "CriticalStrike", "OnHit", "Stealth", "Active", "Vision" },
+            Tags = new[] { "Active", "CriticalStrike", "Damage", "OnHit", "Stealth", "Vision" },
             Id = 3185
         };
 
@@ -3573,7 +3566,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 225f,
             FlatMPPoolMod = 250f,
             FlatArmorMod = 25f,
-            Tags = new[] { "Health", "Armor", "Mana", "CooldownReduction", "Active", "Stealth", "Vision" },
+            Tags = new[] { "Active", "Armor", "CooldownReduction", "Health", "Mana", "Stealth", "Vision" },
             Id = 3187
         };
 
@@ -3594,7 +3587,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1026, 3108 },
             InStore = true,
             FlatMagicDamageMod = 80f,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Active" },
+            Tags = new[] { "Active", "CooldownReduction", "SpellDamage" },
             Id = 3188
         };
 
@@ -3616,7 +3609,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 400f,
             FlatSpellBlockMod = 20f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen", "CooldownReduction", "Active", "Aura" },
+            Tags = new[] { "Active", "Aura", "CooldownReduction", "Health", "HealthRegen", "SpellBlock" },
             Id = 3190
         };
 
@@ -3661,7 +3654,7 @@ namespace LeagueSharp.Common.Data
             RequiredChampion = "Viktor",
             FlatMPPoolMod = 150f,
             FlatMagicDamageMod = 20f,
-            Tags = new[] { "SpellDamage", "Mana" },
+            Tags = new[] { "Mana", "SpellDamage" },
             Id = 3196
         };
 
@@ -3684,7 +3677,7 @@ namespace LeagueSharp.Common.Data
             RequiredChampion = "Viktor",
             FlatMPPoolMod = 300f,
             FlatMagicDamageMod = 40f,
-            Tags = new[] { "SpellDamage", "Mana" },
+            Tags = new[] { "Mana", "SpellDamage" },
             Id = 3197
         };
 
@@ -3706,7 +3699,7 @@ namespace LeagueSharp.Common.Data
             RequiredChampion = "Viktor",
             FlatMPPoolMod = 500f,
             FlatMagicDamageMod = 60f,
-            Tags = new[] { "SpellDamage", "Mana" },
+            Tags = new[] { "Mana", "SpellDamage" },
             Id = 3198
         };
 
@@ -3744,7 +3737,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 200f,
             FlatSpellBlockMod = 35f,
-            Tags = new[] { "Health", "SpellBlock", "HealthRegen" },
+            Tags = new[] { "Health", "HealthRegen", "SpellBlock" },
             Id = 3211
         };
 
@@ -3764,7 +3757,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3028, 3114 },
             InStore = true,
             FlatSpellBlockMod = 40f,
-            Tags = new[] { "SpellBlock", "ManaRegen", "CooldownReduction", "Active" },
+            Tags = new[] { "Active", "CooldownReduction", "ManaRegen", "SpellBlock" },
             Id = 3222
         };
 
@@ -4526,8 +4519,8 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Twin Shadows",
             GoldBase = 630,
-            GoldPrice = 2400,
-            GoldSell = 1680,
+            GoldPrice = 2300,
+            GoldSell = 1610,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
@@ -4535,7 +4528,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatMagicDamageMod = 80f,
             PercentMovementSpeedMod = 0.06f,
-            Tags = new[] { "SpellDamage", "NonbootsMovement", "CooldownReduction", "Slow", "Active", "Vision" },
+            Tags = new[] { "Active", "CooldownReduction", "NonbootsMovement", "Slow", "SpellDamage", "Vision" },
             Id = 3290
         };
 
@@ -4555,7 +4548,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             Into = new[] { 3096 },
             InStore = true,
-            Tags = new[] { "ManaRegen", "GoldPer", "Lane" },
+            Tags = new[] { "GoldPer", "Lane", "ManaRegen" },
             Id = 3301
         };
 
@@ -4576,7 +4569,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3097 },
             InStore = true,
             FlatHPPoolMod = 75f,
-            Tags = new[] { "Health", "Aura", "GoldPer", "Lane" },
+            Tags = new[] { "Aura", "GoldPer", "Health", "Lane" },
             Id = 3302
         };
 
@@ -4597,7 +4590,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3098 },
             InStore = true,
             FlatMagicDamageMod = 5f,
-            Tags = new[] { "SpellDamage", "ManaRegen", "GoldPer", "Lane" },
+            Tags = new[] { "GoldPer", "Lane", "ManaRegen", "SpellDamage" },
             Id = 3303
         };
 
@@ -4615,7 +4608,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             Into = new[] { 3361, 3362 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket", "Lane", "Jungle" },
+            Tags = new[] { "Active", "Jungle", "Lane", "Trinket", "Vision" },
             Id = 3340
         };
 
@@ -4633,7 +4626,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             Into = new[] { 3364 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket", "Jungle" },
+            Tags = new[] { "Active", "Jungle", "Trinket", "Vision" },
             Id = 3341
         };
 
@@ -4651,7 +4644,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             Into = new[] { 3363 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3342
         };
 
@@ -4667,7 +4660,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3345
         };
 
@@ -4688,7 +4681,7 @@ namespace LeagueSharp.Common.Data
             Depth = 2,
             From = new[] { 3340 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3361
         };
 
@@ -4709,7 +4702,7 @@ namespace LeagueSharp.Common.Data
             Depth = 2,
             From = new[] { 3340 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3362
         };
 
@@ -4730,7 +4723,7 @@ namespace LeagueSharp.Common.Data
             Depth = 2,
             From = new[] { 3342 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3363
         };
 
@@ -4742,16 +4735,16 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Oracle's Lens (Trinket)",
             Range = 600f,
-            GoldBase = 475,
-            GoldPrice = 475,
-            GoldSell = 333,
+            GoldBase = 250,
+            GoldPrice = 250,
+            GoldSell = 175,
             Purchasable = true,
             Group = "RelicBase",
             Stacks = 1,
             Depth = 2,
             From = new[] { 3341 },
             InStore = true,
-            Tags = new[] { "Active", "Vision", "Trinket" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3364
         };
 
@@ -4773,7 +4766,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3097, 3067 },
             InStore = true,
             FlatHPPoolMod = 500f,
-            Tags = new[] { "Health", "HealthRegen", "CooldownReduction", "GoldPer" },
+            Tags = new[] { "CooldownReduction", "GoldPer", "Health", "HealthRegen" },
             Id = 3401
         };
 
@@ -4791,7 +4784,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             InStore = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3405
         };
 
@@ -4809,7 +4802,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3406
         };
 
@@ -4827,7 +4820,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3407
         };
 
@@ -4845,7 +4838,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3408
         };
 
@@ -4863,7 +4856,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3409
         };
 
@@ -4883,7 +4876,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3410
         };
 
@@ -4901,7 +4894,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             InStore = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3411
         };
 
@@ -4919,7 +4912,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3412
         };
 
@@ -4937,7 +4930,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3413
         };
 
@@ -4955,7 +4948,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3414
         };
 
@@ -4973,7 +4966,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3415
         };
 
@@ -4993,7 +4986,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3416
         };
 
@@ -5011,7 +5004,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             InStore = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3417
         };
 
@@ -5029,7 +5022,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3418
         };
 
@@ -5047,7 +5040,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3419
         };
 
@@ -5065,7 +5058,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3420
         };
 
@@ -5083,7 +5076,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3421
         };
 
@@ -5103,7 +5096,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3422
         };
 
@@ -5121,7 +5114,7 @@ namespace LeagueSharp.Common.Data
             Depth = 1,
             InStore = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3450
         };
 
@@ -5139,7 +5132,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3451
         };
 
@@ -5157,7 +5150,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3452
         };
 
@@ -5175,7 +5168,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3453
         };
 
@@ -5193,7 +5186,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3454
         };
 
@@ -5213,7 +5206,7 @@ namespace LeagueSharp.Common.Data
             InStore = false,
             HideFromAll = true,
             RequiredChampion = "Rengar",
-            Tags = new[] { "Vision", "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket", "Vision" },
             Id = 3455
         };
 
@@ -5228,7 +5221,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = false,
-            Tags = new[] { "Trinket", "Active" },
+            Tags = new[] { "Active", "Trinket" },
             Id = 3460
         };
 
@@ -5239,7 +5232,7 @@ namespace LeagueSharp.Common.Data
         public static Item Ardent_Censer = new Item
         {
             Name = "Ardent Censer",
-            GoldBase = 550,
+            GoldBase = 650,
             GoldPrice = 2100,
             GoldSell = 1470,
             Purchasable = true,
@@ -5248,7 +5241,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3114, 3113 },
             InStore = true,
             FlatMagicDamageMod = 40f,
-            Tags = new[] { "SpellDamage", "ManaRegen", "CooldownReduction", "NonbootsMovement" },
+            Tags = new[] { "CooldownReduction", "ManaRegen", "NonbootsMovement", "SpellDamage" },
             Id = 3504
         };
 
@@ -5269,8 +5262,29 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 80f,
             PercentLifeStealMod = 0.1f,
-            Tags = new[] { "Damage", "LifeSteal", "ManaRegen", "CooldownReduction" },
+            Tags = new[] { "CooldownReduction", "Damage", "LifeSteal", "ManaRegen" },
             Id = 3508
+        };
+
+        #endregion
+
+        #region Zz'Rot Portal
+
+        public static Item ZzRot_Portal = new Item
+        {
+            Name = "Zz'Rot Portal",
+            GoldBase = 950,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 2053, 1057 },
+            InStore = true,
+            FlatArmorMod = 50f,
+            FlatSpellBlockMod = 50f,
+            Tags = new[] { "Armor", "HealthRegen", "NonbootsMovement", "SpellBlock" },
+            Id = 3512
         };
 
         #endregion
@@ -5297,9 +5311,9 @@ namespace LeagueSharp.Common.Data
         public static Item Stalkers_Blade = new Item
         {
             Name = "Stalker's Blade",
-            GoldBase = 350,
-            GoldPrice = 750,
-            GoldSell = 525,
+            GoldBase = 450,
+            GoldPrice = 850,
+            GoldSell = 595,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
@@ -5307,7 +5321,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1039 },
             Into = new[] { 3707, 3708, 3709, 3710 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Tags = new[] { "Damage", "HealthRegen", "Jungle", "ManaRegen", "OnHit" },
             Id = 3706
         };
 
@@ -5318,7 +5332,7 @@ namespace LeagueSharp.Common.Data
         public static Item Stalkers_Blade_Enchantment_Warrior = new Item
         {
             Name = "Stalker's Blade Enchantment: Warrior",
-            GoldBase = 163,
+            GoldBase = 63,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5328,7 +5342,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3706, 3134 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage", "Jungle" },
             Id = 3707
         };
 
@@ -5339,7 +5353,7 @@ namespace LeagueSharp.Common.Data
         public static Item Stalkers_Blade_Enchantment_Magus = new Item
         {
             Name = "Stalker's Blade Enchantment: Magus",
-            GoldBase = 680,
+            GoldBase = 580,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5349,7 +5363,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3706, 3108 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Jungle", "SpellDamage" },
             Id = 3708
         };
 
@@ -5360,7 +5374,7 @@ namespace LeagueSharp.Common.Data
         public static Item Stalkers_Blade_Enchantment_Juggernaut = new Item
         {
             Name = "Stalker's Blade Enchantment: Juggernaut",
-            GoldBase = 250,
+            GoldBase = 150,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5370,7 +5384,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3706, 3067, 1028 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
             Id = 3709
         };
 
@@ -5381,7 +5395,7 @@ namespace LeagueSharp.Common.Data
         public static Item Stalkers_Blade_Enchantment_Devourer = new Item
         {
             Name = "Stalker's Blade Enchantment: Devourer",
-            GoldBase = 600,
+            GoldBase = 500,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5391,7 +5405,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3706, 1042, 1042 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Tags = new[] { "AttackSpeed", "Damage", "Jungle", "OnHit" },
             Id = 3710
         };
 
@@ -5402,9 +5416,9 @@ namespace LeagueSharp.Common.Data
         public static Item Poachers_Knife = new Item
         {
             Name = "Poacher's Knife",
-            GoldBase = 350,
-            GoldPrice = 750,
-            GoldSell = 525,
+            GoldBase = 450,
+            GoldPrice = 850,
+            GoldSell = 595,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
@@ -5412,7 +5426,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1039 },
             Into = new[] { 3719, 3720, 3721, 3722 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "NonbootsMovement", "Jungle" },
+            Tags = new[] { "Damage", "HealthRegen", "Jungle", "ManaRegen", "NonbootsMovement", "OnHit" },
             Id = 3711
         };
 
@@ -5423,9 +5437,9 @@ namespace LeagueSharp.Common.Data
         public static Item Rangers_Trailblazer = new Item
         {
             Name = "Ranger's Trailblazer",
-            GoldBase = 350,
-            GoldPrice = 750,
-            GoldSell = 525,
+            GoldBase = 450,
+            GoldPrice = 850,
+            GoldSell = 595,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
@@ -5433,7 +5447,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1039 },
             Into = new[] { 3723, 3724, 3725, 3726 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Tags = new[] { "Damage", "HealthRegen", "Jungle", "ManaRegen", "OnHit" },
             Id = 3713
         };
 
@@ -5444,7 +5458,7 @@ namespace LeagueSharp.Common.Data
         public static Item Skirmishers_Sabre_Enchantment_Warrior = new Item
         {
             Name = "Skirmisher's Sabre Enchantment: Warrior",
-            GoldBase = 163,
+            GoldBase = 63,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5454,7 +5468,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3715, 3134 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage", "Jungle" },
             Id = 3714
         };
 
@@ -5465,9 +5479,9 @@ namespace LeagueSharp.Common.Data
         public static Item Skirmishers_Sabre = new Item
         {
             Name = "Skirmisher's Sabre",
-            GoldBase = 350,
-            GoldPrice = 750,
-            GoldSell = 525,
+            GoldBase = 450,
+            GoldPrice = 850,
+            GoldSell = 595,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
@@ -5475,7 +5489,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1039 },
             Into = new[] { 3714, 3716, 3717, 3718 },
             InStore = true,
-            Tags = new[] { "HealthRegen", "Damage", "ManaRegen", "OnHit", "Jungle" },
+            Tags = new[] { "Damage", "HealthRegen", "Jungle", "ManaRegen", "OnHit" },
             Id = 3715
         };
 
@@ -5486,7 +5500,7 @@ namespace LeagueSharp.Common.Data
         public static Item Skirmishers_Sabre_Enchantment_Magus = new Item
         {
             Name = "Skirmisher's Sabre Enchantment: Magus",
-            GoldBase = 680,
+            GoldBase = 580,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5496,7 +5510,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3715, 3108 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Jungle", "SpellDamage" },
             Id = 3716
         };
 
@@ -5507,7 +5521,7 @@ namespace LeagueSharp.Common.Data
         public static Item Skirmishers_Sabre_Enchantment_Juggernaut = new Item
         {
             Name = "Skirmisher's Sabre Enchantment: Juggernaut",
-            GoldBase = 250,
+            GoldBase = 150,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5517,7 +5531,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3715, 3067, 1028 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
             Id = 3717
         };
 
@@ -5528,7 +5542,7 @@ namespace LeagueSharp.Common.Data
         public static Item Skirmishers_Sabre_Enchantment_Devourer = new Item
         {
             Name = "Skirmisher's Sabre Enchantment: Devourer",
-            GoldBase = 600,
+            GoldBase = 500,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5538,7 +5552,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3715, 1042, 1042 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Tags = new[] { "AttackSpeed", "Damage", "Jungle", "OnHit" },
             Id = 3718
         };
 
@@ -5549,7 +5563,7 @@ namespace LeagueSharp.Common.Data
         public static Item Poachers_Knife_Enchantment_Warrior = new Item
         {
             Name = "Poacher's Knife Enchantment: Warrior",
-            GoldBase = 163,
+            GoldBase = 63,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5559,7 +5573,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3711, 3134 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage", "Jungle" },
             Id = 3719
         };
 
@@ -5570,7 +5584,7 @@ namespace LeagueSharp.Common.Data
         public static Item Poachers_Knife_Enchantment_Magus = new Item
         {
             Name = "Poacher's Knife Enchantment: Magus",
-            GoldBase = 680,
+            GoldBase = 580,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5580,7 +5594,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3711, 3108 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Jungle", "SpellDamage" },
             Id = 3720
         };
 
@@ -5591,7 +5605,7 @@ namespace LeagueSharp.Common.Data
         public static Item Poachers_Knife_Enchantment_Juggernaut = new Item
         {
             Name = "Poacher's Knife Enchantment: Juggernaut",
-            GoldBase = 250,
+            GoldBase = 150,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5601,7 +5615,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3711, 3067, 1028 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
             Id = 3721
         };
 
@@ -5612,7 +5626,7 @@ namespace LeagueSharp.Common.Data
         public static Item Poachers_Knife_Enchantment_Devourer = new Item
         {
             Name = "Poacher's Knife Enchantment: Devourer",
-            GoldBase = 600,
+            GoldBase = 500,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5622,7 +5636,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3711, 1042, 1042 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Tags = new[] { "AttackSpeed", "Damage", "Jungle", "OnHit" },
             Id = 3722
         };
 
@@ -5633,7 +5647,7 @@ namespace LeagueSharp.Common.Data
         public static Item Rangers_Trailblazer_Enchantment_Warrior = new Item
         {
             Name = "Ranger's Trailblazer Enchantment: Warrior",
-            GoldBase = 163,
+            GoldBase = 63,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5643,7 +5657,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3713, 3134 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "CooldownReduction", "ArmorPenetration", "Jungle" },
+            Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage", "Jungle" },
             Id = 3723
         };
 
@@ -5654,7 +5668,7 @@ namespace LeagueSharp.Common.Data
         public static Item Rangers_Trailblazer_Enchantment_Magus = new Item
         {
             Name = "Ranger's Trailblazer Enchantment: Magus",
-            GoldBase = 680,
+            GoldBase = 580,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5664,7 +5678,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3713, 3108 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Jungle", "SpellDamage" },
             Id = 3724
         };
 
@@ -5675,7 +5689,7 @@ namespace LeagueSharp.Common.Data
         public static Item Rangers_Trailblazer_Enchantment_Juggernaut = new Item
         {
             Name = "Ranger's Trailblazer Enchantment: Juggernaut",
-            GoldBase = 250,
+            GoldBase = 150,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5685,7 +5699,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3713, 3067, 1028 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Health", "CooldownReduction", "Tenacity", "Jungle" },
+            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
             Id = 3725
         };
 
@@ -5696,7 +5710,7 @@ namespace LeagueSharp.Common.Data
         public static Item Rangers_Trailblazer_Enchantment_Devourer = new Item
         {
             Name = "Ranger's Trailblazer Enchantment: Devourer",
-            GoldBase = 600,
+            GoldBase = 500,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
@@ -5706,7 +5720,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3713, 1042, 1042 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "Damage", "AttackSpeed", "OnHit", "Jungle" },
+            Tags = new[] { "AttackSpeed", "Damage", "Jungle", "OnHit" },
             Id = 3726
         };
 
@@ -5727,7 +5741,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatHPPoolMod = 500f,
             FlatMPPoolMod = 300f,
-            Tags = new[] { "Health", "HealthRegen", "Mana", "Active", "Slow", "NonbootsMovement" },
+            Tags = new[] { "Active", "Health", "HealthRegen", "Mana", "NonbootsMovement", "Slow" },
             Id = 3800
         };
 
@@ -5754,27 +5768,6 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Zz'Rot Portal
-
-        public static Item ZzRot_Portal = new Item
-        {
-            Name = "Zz'Rot Portal",
-            GoldBase = 950,
-            GoldPrice = 2800,
-            GoldSell = 1960,
-            Purchasable = true,
-            Stacks = 1,
-            Depth = 3,
-            From = new[] { 2053, 1057 },
-            InStore = true,
-            FlatArmorMod = 50f,
-            FlatSpellBlockMod = 50f,
-            PercentHPRegenMod = 1f,
-            Tags = new[] { "Armor", "SpellBlock", "HealthRegen" },
-            Id = 3801
-        };
-
-        #endregion
 
         #endregion
     }
