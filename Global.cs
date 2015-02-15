@@ -218,7 +218,7 @@ namespace LeagueSharp.Common
                             else
                             {
                                 var overwriteEntry = entry;
-                                entry.Type = EntryType.Invalid;
+                                overwriteEntry.Type = EntryType.Invalid;
                                 strm.WriteArray(
                                     thisOffset, ToByteArray(overwriteEntry, OffsetEntrySize), 0, OffsetEntrySize);
                             }
