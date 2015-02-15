@@ -376,7 +376,7 @@ namespace LeagueSharp.Common
                         }
                         OffsetEntry newEntry;
                         newEntry.KeyHash = hash;
-                        newEntry.Capacity = (typeof(T).IsValueType ? 1 : 2) * requiredCapacity;
+                        newEntry.Capacity = (typeof(T).IsValueType ? 1 : 5) * requiredCapacity;
                         newEntry.Type = EntryType.Basic;
                         strm.WriteArray(currentOffset, ToByteArray(newEntry, OffsetEntrySize), 0, OffsetEntrySize);
 
