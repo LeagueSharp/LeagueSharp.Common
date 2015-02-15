@@ -2775,28 +2775,7 @@ namespace LeagueSharp.Common.Data
         };
 
         #endregion
-
-        #region Deathfire Grasp
-
-        public static Item Deathfire_Grasp = new Item
-        {
-            Name = "Deathfire Grasp",
-            Range = 750f,
-            GoldBase = 680,
-            GoldPrice = 3100,
-            GoldSell = 2170,
-            Purchasable = true,
-            Stacks = 1,
-            Depth = 3,
-            From = new[] { 1058, 3108 },
-            InStore = true,
-            FlatMagicDamageMod = 120f,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Active" },
-            Id = 3128
-        };
-
-        #endregion
-
+        
         #region The Brutalizer
 
         public static Item The_Brutalizer = new Item
