@@ -260,7 +260,7 @@ namespace LeagueSharp.Common
             RangeCheckFrom = rangeCheckFrom;
         }
 
-        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1)
+        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1, CollisionableObjects[] collisionable = null)
         {
             return
                 Prediction.GetPrediction(
@@ -275,7 +275,9 @@ namespace LeagueSharp.Common
                         Collision = Collision,
                         Type = Type,
                         RangeCheckFrom = RangeCheckFrom,
-                        Aoe = aoe
+                        Aoe = aoe,
+                        CollisionObjects =
+                            collisionable ?? new[] { CollisionableObjects.Heroes, CollisionableObjects.Minions }
                     });
         }
 

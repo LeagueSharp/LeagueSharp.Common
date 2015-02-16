@@ -406,9 +406,24 @@ namespace LeagueSharp.Common
                         {
                             if (TextColor.A > 0x0 && BoxColor.A > 0x0 && BorderColor.A > 0x0)
                             {
+                                if (duration > 0x0)
+                                {
+                                    if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
+                                    {
+                                        update = false;
+                                        draw = false;
+                                        Notifications.Free(handler);
+                                        return;
+                                    }
+                                }
+
                                 flashingBytes[0x0] = TextColor.A;
                                 flashingBytes[0x1] = BoxColor.A;
                                 flashingBytes[0x2] = BorderColor.A;
+
+                                --flashingBytes[0x0];
+                                --flashingBytes[0x1];
+                                --flashingBytes[0x2];
 
                                 TextColor.A = 0x0;
                                 BoxColor.A = 0x0;
