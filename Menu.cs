@@ -343,7 +343,7 @@ namespace LeagueSharp.Common
 
     public class Menu
     {
-        private int _cachedMenuCount = -1;
+        private int _cachedMenuCount = 2;
         private int _cachedMenuCountT;
         private bool _visible;
         public List<Menu> Children = new List<Menu>();
