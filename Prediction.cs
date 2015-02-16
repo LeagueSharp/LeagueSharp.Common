@@ -851,7 +851,7 @@ namespace LeagueSharp.Common
         {
             if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
-                _wallCastT = Environment.TickCount;
+                _wallCastT = Utils.TickCount;
                 _yasuoWallCastedPos = sender.ServerPosition.To2D();
             }
         }
@@ -923,7 +923,7 @@ namespace LeagueSharp.Common
 
                         case CollisionableObjects.YasuoWall:
 
-                            if (Environment.TickCount - _wallCastT > 4000)
+                            if (Utils.TickCount - _wallCastT > 4000)
                             {
                                 break;
                             }
@@ -954,7 +954,7 @@ namespace LeagueSharp.Common
 
                             if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
                             {
-                                var t = Environment.TickCount +
+                                var t = Utils.TickCount +
                                         (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
                                             .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
                                 if (t < _wallCastT + 4000)
@@ -979,7 +979,7 @@ namespace LeagueSharp.Common
 
         public double Time
         {
-            get { return (Environment.TickCount - Tick) / 1000d; }
+            get { return (Utils.TickCount - Tick) / 1000d; }
         }
 
         public int WaypointCount
@@ -1020,7 +1020,7 @@ namespace LeagueSharp.Common
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());
             }
 
-            var newPath = new StoredPath { Tick = Environment.TickCount, Path = args.Path.ToList().To2D() };
+            var newPath = new StoredPath { Tick = Utils.TickCount, Path = args.Path.ToList().To2D() };
             StoredPaths[sender.NetworkId].Add(newPath);
 
             if (StoredPaths[sender.NetworkId].Count > 50)

@@ -253,9 +253,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanAttack()
         {
-            if (LastAATick <= Environment.TickCount)
+            if (LastAATick <= Utils.TickCount)
             {
-                return Environment.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+                return Utils.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
             }
 
             return false;
@@ -266,11 +266,11 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            if (LastAATick <= Environment.TickCount)
+            if (LastAATick <= Utils.TickCount)
             {
                 return Move && NoCancelChamps.Contains(Player.ChampionName)
-                    ? (Environment.TickCount - LastAATick > 250)
-                    : (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
+                    ? (Utils.TickCount - LastAATick > 250)
+                    : (Utils.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
             }
 
             return false;
@@ -302,12 +302,12 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (Environment.TickCount - LastMoveCommandT < _delay && !overrideTimer)
+            if (Utils.TickCount - LastMoveCommandT < _delay && !overrideTimer)
             {
                 return;
             }
 
-            LastMoveCommandT = Environment.TickCount;
+            LastMoveCommandT = Utils.TickCount;
 
             if (Player.ServerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
@@ -369,7 +369,7 @@ namespace LeagueSharp.Common
 
                         if (_lastTarget != null && _lastTarget.IsValid && _lastTarget != target)
                         {
-                            LastAATick = Environment.TickCount + Game.Ping / 2;
+                            LastAATick = Utils.TickCount + Game.Ping / 2;
                         }
 
                         _lastTarget = target;
@@ -423,7 +423,7 @@ namespace LeagueSharp.Common
                 if (unit.IsMe &&
                     (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
-                    LastAATick = Environment.TickCount - Game.Ping / 2;
+                    LastAATick = Utils.TickCount - Game.Ping / 2;
                     
                     if(Spell.Target is Obj_AI_Base)
                     {

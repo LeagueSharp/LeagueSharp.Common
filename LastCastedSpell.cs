@@ -95,7 +95,7 @@ namespace LeagueSharp.Common
 
         public static int LastCastedSpellT(this Obj_AI_Hero unit)
         {
-            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Tick : 0;
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Tick : (Environment.TickCount > 0 ? 0 : int.MinValue);
         }
 
         public static string LastCastedSpellName(this Obj_AI_Hero unit)

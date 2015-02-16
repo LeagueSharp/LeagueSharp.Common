@@ -58,6 +58,11 @@ namespace LeagueSharp.Common
     {
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
+        
+        public static int TickCount
+        {
+            get { return Environment.TickCount & int.MaxValue; }
+        }
 
         /// <summary>
         ///     Returns the cursor position on the screen.

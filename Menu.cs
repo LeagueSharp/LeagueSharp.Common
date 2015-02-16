@@ -402,7 +402,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (Environment.TickCount - _cachedMenuCountT < 500)
+                if (Utils.TickCount - _cachedMenuCountT < 500)
                 {
                     return _cachedMenuCount;
                 }
@@ -422,7 +422,7 @@ namespace LeagueSharp.Common
                 }
                 
                 _cachedMenuCount = result;
-                _cachedMenuCountT = Environment.TickCount;
+                _cachedMenuCountT = Utils.TickCount;
                 return result;
             }
         }
@@ -1594,11 +1594,11 @@ namespace LeagueSharp.Common
 
         private static void UpdateLuminosityBitmap(HSLColor color, bool force = false)
         {
-            if (Environment.TickCount - LastBitmapUpdate < 100 && !force)
+            if (Utils.TickCount - LastBitmapUpdate < 100 && !force)
             {
                 return;
             }
-            LastBitmapUpdate = Environment.TickCount;
+            LastBitmapUpdate = Utils.TickCount;
 
             color.Luminosity = 0d;
             for (var y = 0; y < LuminityBitmap.Height; y++)
@@ -1619,11 +1619,11 @@ namespace LeagueSharp.Common
 
         private static void UpdateOpacityBitmap(HSLColor color, bool force = false)
         {
-            if (Environment.TickCount - LastBitmapUpdate2 < 100 && !force)
+            if (Utils.TickCount - LastBitmapUpdate2 < 100 && !force)
             {
                 return;
             }
-            LastBitmapUpdate2 = Environment.TickCount;
+            LastBitmapUpdate2 = Utils.TickCount;
 
             color.Luminosity = 0d;
             for (var y = 0; y < OpacityBitmap.Height; y++)

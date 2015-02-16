@@ -284,7 +284,7 @@ namespace LeagueSharp.Common
             else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
             {
                 var path = WaypointTracker.StoredPaths[unit.NetworkId];
-                var timePassed = (Environment.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
+                var timePassed = (Utils.TickCount - WaypointTracker.StoredTick[unit.NetworkId]) / 1000f;
                 if (path.PathLength() >= unit.MoveSpeed * timePassed)
                 {
                     result = CutPath(path, (int) (unit.MoveSpeed * timePassed));
@@ -595,7 +595,7 @@ namespace LeagueSharp.Common
             {
                 for (var i = ActionList.Count - 1; i >= 0; i--)
                 {
-                    if (ActionList[i].Time <= Environment.TickCount)
+                    if (ActionList[i].Time <= Utils.TickCount)
                     {
                         try
                         {
@@ -628,7 +628,7 @@ namespace LeagueSharp.Common
 
                 public Action(int time, Callback callback)
                 {
-                    Time = time + Environment.TickCount;
+                    Time = time + Utils.TickCount;
                     CallbackObject = callback;
                 }
             }

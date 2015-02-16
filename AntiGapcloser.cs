@@ -654,7 +654,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            ActiveGapclosers.RemoveAll(entry => Environment.TickCount > entry.TickCount + 900);
+            ActiveGapclosers.RemoveAll(entry => Utils.TickCount > entry.TickCount + 900);
             if (OnEnemyGapcloser == null)
             {
                 return;
@@ -686,7 +686,7 @@ namespace LeagueSharp.Common
                     Start = args.Start,
                     End = args.End,
                     Sender = (Obj_AI_Hero)sender,
-                    TickCount = Environment.TickCount,
+                    TickCount = Utils.TickCount,
                     SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
                     Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name)
                 });

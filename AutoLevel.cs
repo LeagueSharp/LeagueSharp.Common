@@ -56,13 +56,13 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Player.SpellTrainingPoints < 1 || Environment.TickCount - LastLeveled < NextDelay)
+            if (Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
             {
                 return;
             }
 
             NextDelay = RandomNumber.Next(750);
-            LastLeveled = Environment.TickCount;
+            LastLeveled = Utils.TickCount;
             var spell = order[GetTotalPoints()];
             Player.Spellbook.LevelSpell(spell);
         }

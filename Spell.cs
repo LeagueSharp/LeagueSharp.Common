@@ -113,7 +113,7 @@ namespace LeagueSharp.Common
                     return ChargedMinRange +
                            Math.Min(
                                ChargedMaxRange - ChargedMinRange,
-                               (Environment.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
+                               (Utils.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
                                ChargeDuration - 150);
                 }
 
@@ -132,7 +132,7 @@ namespace LeagueSharp.Common
             get
             {
                 return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
-                       Environment.TickCount - _chargedCastedT < 300 + Game.Ping;
+                       Utils.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
         }
 
@@ -203,10 +203,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public void StartCharging()
         {
-            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            if (!IsCharging && Utils.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
                 ObjectManager.Player.Spellbook.CastSpell(Slot);
-                _chargedReqSentT = Environment.TickCount;
+                _chargedReqSentT = Utils.TickCount;
             }
         }
 
@@ -215,16 +215,16 @@ namespace LeagueSharp.Common
         /// </summary>
         public void StartCharging(Vector3 position)
         {
-            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            if (!IsCharging && Utils.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
                 ObjectManager.Player.Spellbook.CastSpell(Slot, position);
-                _chargedReqSentT = Environment.TickCount;
+                _chargedReqSentT = Utils.TickCount;
             }
         }
         
         void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
-            if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 3000)
+            if (sender.Owner.IsMe && Utils.TickCount - _chargedReqSentT < 3000)
             {
                 args.Process = false;
             }
@@ -237,7 +237,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            if ((Environment.TickCount - _chargedReqSentT > 500))
+            if ((Utils.TickCount - _chargedReqSentT > 500))
             {
                 if (IsCharging)
                 {
@@ -250,7 +250,7 @@ namespace LeagueSharp.Common
         {
             if (sender.IsMe && args.SData.Name == ChargedSpellName)
             {
-                _chargedCastedT = Environment.TickCount;
+                _chargedCastedT = Utils.TickCount;
             }
         }
 

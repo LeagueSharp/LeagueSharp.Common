@@ -44,7 +44,7 @@ namespace LeagueSharp.Common
             float duration = 1f) : base(x, y, text, size, color, faceName)
         {
             _duration = duration;
-            _startTime = Environment.TickCount;
+            _startTime = Utils.TickCount;
             _endTime = _startTime + _duration;
 
             Game.OnGameUpdate += Game_OnGameUpdate;
@@ -73,7 +73,7 @@ namespace LeagueSharp.Common
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (!(Environment.TickCount > EndTime))
+            if (!(Utils.TickCount > EndTime))
             {
                 return;
             }

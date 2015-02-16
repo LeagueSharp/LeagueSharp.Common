@@ -129,7 +129,7 @@ namespace LeagueSharp.Common
         /// <returns>Decreasement Tick</returns>
         private int GetNextDecreasementTick()
         {
-            return Environment.TickCount + ((duration / 0xFF));
+            return Utils.TickCount + ((duration / 0xFF));
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace LeagueSharp.Common
 
                     #region Decreasement Tick
 
-                    if (!flashing && duration > 0x0 && Environment.TickCount - decreasementTick > 0x0)
+                    if (!flashing && duration > 0x0 && Utils.TickCount - decreasementTick > 0x0)
                     {
                         if (TextColor.A > 0x0)
                         {
@@ -402,7 +402,7 @@ namespace LeagueSharp.Common
 
                     if (flashing)
                     {
-                        if (Environment.TickCount - flashTick > 0x0)
+                        if (Utils.TickCount - flashTick > 0x0)
                         {
                             if (TextColor.A > 0x0 && BoxColor.A > 0x0 && BorderColor.A > 0x0)
                             {
@@ -444,7 +444,7 @@ namespace LeagueSharp.Common
                                     }
                                 }
                             }
-                            flashTick = Environment.TickCount + flashInterval;
+                            flashTick = Utils.TickCount + flashInterval;
                         }
                     }
 
