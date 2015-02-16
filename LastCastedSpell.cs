@@ -73,7 +73,7 @@ namespace LeagueSharp.Common
             if (spellbook.Owner.IsMe)
             {
                 LastCastPacketSent = new LastCastPacketSentEntry(
-                        args.Slot, Environment.TickCount, (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0 );
+                        args.Slot, Utils.TickCount, (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0 );
             }
         }
 
@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
         {
             if (sender is Obj_AI_Hero)
             {
-                var entry = new LastCastedSpellEntry(args.SData.Name, Environment.TickCount, ObjectManager.Player);
+                var entry = new LastCastedSpellEntry(args.SData.Name, Utils.TickCount, ObjectManager.Player);
                 if (CastedSpells.ContainsKey(sender.NetworkId))
                 {
                     CastedSpells[sender.NetworkId] = entry;
@@ -95,7 +95,7 @@ namespace LeagueSharp.Common
 
         public static int LastCastedSpellT(this Obj_AI_Hero unit)
         {
-            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Tick : (Environment.TickCount > 0 ? 0 : int.MinValue);
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Tick : (Utils.TickCount > 0 ? 0 : int.MinValue);
         }
 
         public static string LastCastedSpellName(this Obj_AI_Hero unit)

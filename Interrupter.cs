@@ -363,7 +363,7 @@ namespace LeagueSharp.Common
                              String.Equals(
                                  enemy.LastCastedspell().Name, spell.SpellName,
                                  StringComparison.CurrentCultureIgnoreCase) &&
-                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                             Utils.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
                             (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true))))
                 {
                     FireOnInterruptable(enemy, spell);
@@ -381,12 +381,12 @@ namespace LeagueSharp.Common
                         ((unit.LastCastedspell() != null &&
                             String.Equals(
                                 unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
-                            Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                            Utils.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
                         (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
                         (unit.IsMe &&
                             LastCastedSpell.LastCastPacketSent != null &&
                             LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
+                            Utils.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
         }
     }
 }

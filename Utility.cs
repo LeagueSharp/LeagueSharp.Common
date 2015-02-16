@@ -175,7 +175,7 @@ namespace LeagueSharp.Common
 
         public static Vector3 Randomize(this Vector3 position, int min, int max)
         {
-            var ran = new Random(Environment.TickCount);
+            var ran = new Random(Utils.TickCount);
             return position + new Vector2(ran.Next(min, max), ran.Next(min, max)).To3D();
         }
 

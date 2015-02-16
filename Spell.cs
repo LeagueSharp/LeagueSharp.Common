@@ -324,7 +324,7 @@ namespace LeagueSharp.Common
                     return CastStates.OutOfRange;
                 }
 
-                LastCastAttemptT = Environment.TickCount;
+                LastCastAttemptT = Utils.TickCount;
 
                 if (packetCast)
                 {
@@ -372,7 +372,7 @@ namespace LeagueSharp.Common
                 return CastStates.LowHitChance;
             }
 
-            LastCastAttemptT = Environment.TickCount;
+            LastCastAttemptT = Utils.TickCount;
 
             if (IsChargedSpell)
             {
@@ -411,7 +411,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            LastCastAttemptT = Environment.TickCount;
+            LastCastAttemptT = Utils.TickCount;
 
             if (packetCast)
             {
@@ -467,7 +467,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            LastCastAttemptT = Environment.TickCount;
+            LastCastAttemptT = Utils.TickCount;
 
             if (IsChargedSpell)
             {

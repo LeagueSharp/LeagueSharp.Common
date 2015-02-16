@@ -43,14 +43,14 @@ namespace LeagueSharp.Common
             {
                 order.Add((SpellSlot) (level - 1));
             }
-            RandomNumber = new Random(Environment.TickCount);
+            RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
         public AutoLevel(List<SpellSlot> levels)
         {
             order = levels;
-            RandomNumber = new Random(Environment.TickCount);
+            RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
