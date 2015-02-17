@@ -752,6 +752,11 @@ namespace LeagueSharp.Common
         /// <param name="safe">Is Finailized</param>
         private void Dispose(bool safe)
         {
+            if (Notifications.IsValidNotification(this))
+            {
+                Notifications.RemoveNotification(this);
+            }
+
             if (safe)
             {
                 Text = null;
