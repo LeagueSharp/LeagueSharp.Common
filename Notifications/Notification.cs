@@ -26,6 +26,7 @@ using System;
 using System.IO;
 using SharpDX;
 using SharpDX.Direct3D9;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -34,7 +35,7 @@ namespace LeagueSharp.Common
     /// <summary>
     ///     Basic Notification
     /// </summary>
-    public class Notification : INotification
+    public class Notification : INotification, IDisposable
     {
         #region Other
 
@@ -80,7 +81,7 @@ namespace LeagueSharp.Common
         /// <returns></returns>
         public bool Show(int newDuration = -0x1)
         {
-            if (draw || update)
+            if (Draw || Update)
             {
                 state = NotificationState.AnimationShowShrink;
                 return false;
@@ -99,7 +100,7 @@ namespace LeagueSharp.Common
 
                 decreasementTick = GetNextDecreasementTick();
 
-                return draw = update = true;
+                return Draw = Update = true;
             }
 
             return false;
@@ -134,6 +135,37 @@ namespace LeagueSharp.Common
         {
             border = value;
         }
+
+        #region Color Set
+
+        /// <summary>
+        ///     Sets the notification text color
+        /// </summary>
+        /// <param name="color">System Drawing Color</param>
+        public void SetTextColor(Color color)
+        {
+            TextColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+        }
+
+        /// <summary>
+        ///     Sets the notification box color
+        /// </summary>
+        /// <param name="color">System Drawing Color</param>
+        public void SetBoxColor(Color color)
+        {
+            BoxColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+        }
+
+        /// <summary>
+        ///     Sets the notification border color
+        /// </summary>
+        /// <param name="color">System Drawing Color</param>
+        public void SetBorderColor(Color color)
+        {
+            BorderColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+        }
+
+        #endregion
 
         /// <summary>
         ///     Calculate the next decreasement tick.
@@ -191,6 +223,16 @@ namespace LeagueSharp.Common
             FontPrecision.Default, FontQuality.Antialiased, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
             "Tahoma");
 
+        /// <summary>
+        ///     Indicates if notification should be drawn
+        /// </summary>
+        public bool Draw { get; set; }
+
+        /// <summary>
+        ///     Indicates if notification should be updated
+        /// </summary>
+        public bool Update { get; set; }
+
         #endregion
 
         #endregion
@@ -206,16 +248,6 @@ namespace LeagueSharp.Common
         ///     Locally saved Notification's Duration
         /// </summary>
         private int duration;
-
-        /// <summary>
-        ///     Locally saved bool, indicating if OnDraw should be executed/processed.
-        /// </summary>
-        private bool draw;
-
-        /// <summary>
-        ///     Locally saved bool, indicating if OnUpdate should be executed/processed.
-        /// </summary>
-        private bool update;
 
         /// <summary>
         ///     Locally saved handler for FileStream.
@@ -301,7 +333,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void OnDraw()
         {
-            if (!draw)
+            if (!Draw)
             {
                 return;
             }
@@ -394,7 +426,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public void OnUpdate()
         {
-            if (!update)
+            if (!Update)
             {
                 return;
             }
@@ -407,8 +439,8 @@ namespace LeagueSharp.Common
 
                     if (!flashing && duration > 0x0 && TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                     {
-                        update = false;
-                        draw = false;
+                        Update = false;
+                        Draw = false;
 
                         Notifications.Free(handler);
 
@@ -451,8 +483,8 @@ namespace LeagueSharp.Common
                                 {
                                     if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                                     {
-                                        update = false;
-                                        draw = false;
+                                        Update = false;
+                                        Draw = false;
 
                                         Notifications.Free(handler);
 
@@ -491,8 +523,8 @@ namespace LeagueSharp.Common
                                 {
                                     if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                                     {
-                                        update = false;
-                                        draw = false;
+                                        Update = false;
+                                        Draw = false;
 
                                         Notifications.Free(handler);
 
@@ -682,8 +714,8 @@ namespace LeagueSharp.Common
 
                         Notifications.Free(handler);
 
-                        draw = false;
-                        update = false;
+                        Draw = false;
+                        Update = false;
                         return;
                     }
                     clickTick = Utils.TickCount;
@@ -700,6 +732,69 @@ namespace LeagueSharp.Common
         public string GetId()
         {
             return id;
+        }
+
+        #endregion
+
+        #region Disposal
+
+        /// <summary>
+        ///     IDisposable callback
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        ///     Safe disposal callback
+        /// </summary>
+        /// <param name="safe">Is Finailized</param>
+        private void Dispose(bool safe)
+        {
+            if (safe)
+            {
+                Text = null;
+
+                TextColor = new ColorBGRA();
+                BoxColor = new ColorBGRA();
+                BorderColor = new ColorBGRA();
+
+                Font = null;
+
+                Draw = false;
+                Update = false;
+
+                duration = 0;
+
+                if (handler != null)
+                {
+                    Notifications.Free(handler);
+                }
+
+                position = Vector2.Zero;
+                updatePosition = Vector2.Zero;
+
+                state = 0;
+                decreasementTick = 0;
+
+                textFix = Vector2.Zero;
+
+                flashing = false;
+                flashInterval = 0;
+                flashTick = 0;
+                clickTick = 0;
+
+                border = false;
+            }
+        }
+
+        /// <summary>
+        ///     Finalization
+        /// </summary>
+        ~Notification()
+        {
+            Dispose(false);
         }
 
         #endregion
