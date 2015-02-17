@@ -251,6 +251,16 @@ namespace LeagueSharp.Common
             return array[array.Count - 0x1] + 0x1E;
         }
 
+        public static int GetLocation(FileStream stream)
+        {
+            var i = stream.Name;
+            var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
+            var str = i.Substring(length, i.Length - length);
+            var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
+
+            return @int;
+        }
+
         /// <summary>
         ///     Validates if current position is first in line
         /// </summary>

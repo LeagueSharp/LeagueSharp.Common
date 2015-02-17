@@ -62,6 +62,7 @@ namespace LeagueSharp.Common
             // Setting main values
             Text = text;
             state = NotificationState.Idle;
+            border = true;
 
             // Preload Text
             Font.PreloadText(text);
@@ -85,26 +86,20 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            var yAxis = Notifications.GetLocation();
-            if (yAxis != -0x1)
+            handler = Notifications.Reserve(GetId(), handler);
+            if (handler != null)
             {
-                handler = Notifications.Reserve(GetId(), handler);
-                if (handler != null)
-                {
-                    duration = newDuration;
+                duration = newDuration;
 
-                    TextColor.A = 0xFF;
-                    BoxColor.A = 0xFF;
-                    BorderColor.A = 0xFF;
+                TextColor.A = 0xFF;
+                BoxColor.A = 0xFF;
+                BorderColor.A = 0xFF;
 
-                    position = new Vector2(Drawing.Width - 200f, yAxis);
+                position = new Vector2(Drawing.Width - 200f, Notifications.GetLocation(handler));
 
-                    decreasementTick = GetNextDecreasementTick();
+                decreasementTick = GetNextDecreasementTick();
 
-                    draw = update = true;
-
-                    return true;
-                }
+                return draw = update = true;
             }
 
             return false;
@@ -121,6 +116,23 @@ namespace LeagueSharp.Common
             {
                 flashInterval = interval;
             }
+        }
+
+        /// <summary>
+        ///     Toggles the notification border
+        /// </summary>
+        public void Border()
+        {
+            border = !border;
+        }
+
+        /// <summary>
+        ///     Sets the notification border toggle value
+        /// </summary>
+        /// <param name="value">bool value</param>
+        public void Border(bool value)
+        {
+            border = value;
         }
 
         /// <summary>
@@ -175,7 +187,7 @@ namespace LeagueSharp.Common
         ///     Notification's Font
         /// </summary>
         public Font Font = new Font(
-            Drawing.Direct3DDevice, 0xE, 0x0, FontWeight.Bold, 0x0, false, FontCharacterSet.Default,
+            Drawing.Direct3DDevice, 0xE, 0x0, FontWeight.DoNotCare, 0x0, false, FontCharacterSet.Default,
             FontPrecision.Default, FontQuality.Antialiased, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
             "Tahoma");
 
@@ -251,11 +263,6 @@ namespace LeagueSharp.Common
         private Vector2 textFix;
 
         /// <summary>
-        ///     Locally saved float which indicates how much text overflow is allowed.
-        /// </summary>
-        private int overflowText;
-
-        /// <summary>
         ///     Locally saved bool which indicates if flashing mode is on or off.
         /// </summary>
         private bool flashing;
@@ -275,6 +282,16 @@ namespace LeagueSharp.Common
         /// </summary>
         private int flashTick;
 
+        /// <summary>
+        ///     Locally saved int which contains data of the last tick.
+        /// </summary>
+        private int clickTick;
+
+        /// <summary>
+        ///     Locally saved bool which indicates if border should be drawn
+        /// </summary>
+        private bool border;
+
         #endregion
 
         #region Required Functions
@@ -292,11 +309,13 @@ namespace LeagueSharp.Common
             #region Box
 
             line.Begin();
+
             var vertices = new[]
             {
                 new Vector2(position.X + line.Width / 0x2, position.Y),
                 new Vector2(position.X + line.Width / 0x2, position.Y + 25f)
             };
+
             line.Draw(vertices, BoxColor);
             line.End();
 
@@ -304,45 +323,65 @@ namespace LeagueSharp.Common
 
             #region Outline
 
-            var x = position.X;
-            var y = position.Y;
-            var w = line.Width;
-            const float h = 25f;
-            const float px = 1f;
+            if (border)
+            {
+                var x = position.X;
+                var y = position.Y;
+                var w = line.Width;
+                const float h = 25f;
+                const float px = 1f;
 
-            line.Begin();
-            line.Draw(GetBorder(x, y, w, px), BorderColor); // TOP
-            line.End();
+                line.Begin();
+                line.Draw(GetBorder(x, y, w, px), BorderColor); // TOP
+                line.End();
 
-            var oWidth = line.Width;
-            line.Width = px;
+                var oWidth = line.Width;
+                line.Width = px;
 
-            line.Begin();
-            line.Draw(GetBorder(x, y, px, h), BorderColor); // LEFT
-            line.Draw(GetBorder(x + w, y, 1, h), BorderColor); // RIGHT
-            line.End();
+                line.Begin();
+                line.Draw(GetBorder(x, y, px, h), BorderColor); // LEFT
+                line.Draw(GetBorder(x + w, y, 1, h), BorderColor); // RIGHT
+                line.End();
 
-            line.Width = oWidth;
+                line.Width = oWidth;
 
-            line.Begin();
-            line.Draw(GetBorder(x, y + h, w, 1), BorderColor); // BOTTOM
-            line.End();
+                line.Begin();
+                line.Draw(GetBorder(x, y + h, w, 1), BorderColor); // BOTTOM
+                line.End();
+            }
 
             #endregion
 
             #region Text
 
-            var text = (Text.Length > 0x1B)
-                ? Text.Substring(0x0, 0x18 + overflowText) + ((Text.Length - 0x1B != overflowText) ? "..." : "")
-                : Text;
-
             sprite.Begin();
 
-            var textDimension = Font.MeasureText(sprite, text, 0x0);
+            var textDimension = Font.MeasureText(sprite, Text, 0x0);
+            var finalText = Text;
+
+            if (textDimension.Width + 0x5 > line.Width)
+            {
+                for (var i = Text.Length; i > 0x0; --i)
+                {
+                    var text = Text.Substring(0x0, i);
+                    var textWidth = Font.MeasureText(sprite, text, 0x0).Width;
+
+                    if (textWidth + 0x5 > line.Width)
+                    {
+                        continue;
+                    }
+
+                    finalText = (text == Text) ? text : text.Substring(0x0, text.Length - 0x3) + "...";
+                    break;
+                }
+            }
+
+            textDimension = Font.MeasureText(sprite, finalText, 0x0);
+
             var rectangle = new Rectangle((int) position.X, (int) position.Y, (int) line.Width, 0x19);
 
             Font.DrawText(
-                sprite, text, rectangle.TopLeft.X + (rectangle.Width - textDimension.Width) / 0x2,
+                sprite, finalText, rectangle.TopLeft.X + (rectangle.Width - textDimension.Width) / 0x2,
                 rectangle.TopLeft.Y + (rectangle.Height - textDimension.Height) / 0x2, TextColor);
 
             sprite.End();
@@ -370,7 +409,9 @@ namespace LeagueSharp.Common
                     {
                         update = false;
                         draw = false;
+
                         Notifications.Free(handler);
+
                         return;
                     }
 
@@ -412,18 +453,16 @@ namespace LeagueSharp.Common
                                     {
                                         update = false;
                                         draw = false;
+
                                         Notifications.Free(handler);
+
                                         return;
                                     }
                                 }
 
-                                flashingBytes[0x0] = TextColor.A;
-                                flashingBytes[0x1] = BoxColor.A;
-                                flashingBytes[0x2] = BorderColor.A;
-
-                                --flashingBytes[0x0];
-                                --flashingBytes[0x1];
-                                --flashingBytes[0x2];
+                                flashingBytes[0x0] = --TextColor.A;
+                                flashingBytes[0x1] = --BoxColor.A;
+                                flashingBytes[0x2] = --BorderColor.A;
 
                                 TextColor.A = 0x0;
                                 BoxColor.A = 0x0;
@@ -454,7 +493,9 @@ namespace LeagueSharp.Common
                                     {
                                         update = false;
                                         draw = false;
+
                                         Notifications.Free(handler);
+
                                         return;
                                     }
                                 }
@@ -474,9 +515,9 @@ namespace LeagueSharp.Common
                         BoxColor.A = 0xFF;
                         BorderColor.A = 0xFF;
 
-                        if (Text.Length > 0x1B)
+                        var textDimension = Font.MeasureText(sprite, Text, 0x0);
+                        if (textDimension.Width + 0x10 > line.Width)
                         {
-                            var textDimension = Font.MeasureText(sprite, Text, 0x0);
                             var extra = textDimension.Width - 0xB4;
                             if (updatePosition == Vector2.Zero)
                             {
@@ -488,10 +529,6 @@ namespace LeagueSharp.Common
                                 position.X -= 1f;
                                 line.Width += 1f;
                             }
-                            if (Math.Abs(position.X - updatePosition.X) < float.Epsilon && overflowText < Text.Length - 0x1B)
-                            {
-                                ++overflowText;
-                            }
                         }
                     }
                     else if (updatePosition != Vector2.Zero)
@@ -500,10 +537,6 @@ namespace LeagueSharp.Common
                         {
                             position.X += 1f;
                             line.Width -= 1f;
-                            if (overflowText > 0x0)
-                            {
-                                --overflowText;
-                            }
                         }
                         else
                         {
@@ -529,9 +562,9 @@ namespace LeagueSharp.Common
                                     position.X = textFix.X;
                                     textFix = Vector2.Zero;
                                     line.Width = 190f;
-                                    overflowText = 0x0;
                                 }
-                                updatePosition = new Vector2(position.X, location);
+
+                                updatePosition = new Vector2(position.X, Notifications.GetLocation(handler));
                                 state = NotificationState.AnimationMove;
                             }
                         }
@@ -569,15 +602,11 @@ namespace LeagueSharp.Common
 
                     if (Math.Abs(line.Width - 0xB9) < float.Epsilon)
                     {
-                        var yAxis = Notifications.GetLocation();
-                        if (yAxis != -0x1)
+                        handler = Notifications.Reserve(GetId(), handler);
+                        if (handler != null)
                         {
-                            handler = Notifications.Reserve(GetId(), handler);
-                            if (handler != null)
-                            {
-                                state = NotificationState.AnimationShowMove;
-                                updatePosition = new Vector2(position.X, yAxis);
-                            }
+                            state = NotificationState.AnimationShowMove;
+                            updatePosition = new Vector2(position.X, Notifications.GetLocation(handler));
                         }
                         return;
                     }
@@ -640,7 +669,28 @@ namespace LeagueSharp.Common
         /// <param name="args">WndEventArgs</param>
         public void OnWndProc(WndEventArgs args)
         {
-            // Unused Currently.
+            if (Utils.IsUnderRectangle(Drawing.WorldToScreen(Game.CursorPos), position.X, position.Y, line.Width, 25f))
+            {
+                #region Mouse
+
+                var message = (WindowsMessages) args.Msg;
+                if (message == WindowsMessages.WM_LBUTTONDOWN)
+                {
+                    if (Utils.TickCount - clickTick < 0x5DC)
+                    {
+                        clickTick = Utils.TickCount;
+
+                        Notifications.Free(handler);
+
+                        draw = false;
+                        update = false;
+                        return;
+                    }
+                    clickTick = Utils.TickCount;
+                }
+
+                #endregion
+            }
         }
 
         /// <summary>
