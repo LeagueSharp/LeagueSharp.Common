@@ -68,12 +68,9 @@ namespace LeagueSharp.Common
             var type = typeof(T);
             var found = new GameObjectWrapper<T>();
 
-            foreach (var key in gameObjects.Keys)
+            foreach (var key in gameObjects.Keys.FindAll(key => type.IsAssignableFrom(key)))
             {
-                if (type.IsAssignableFrom(key))
-                {
-                    found.AddRange(gameObjects[key].Values.Where(o => o.IsValid).ToList().ConvertAll(o => (T) o));
-                }
+                found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid).ToList().ConvertAll(o => (T) o));
             }
 
             return found;
