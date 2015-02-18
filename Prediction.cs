@@ -111,7 +111,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     The unit that the prediction will made for.
         /// </summary>
-        public Obj_AI_Base Unit = ObjectManager.Player;
+        public Obj_AI_Base Unit = ObjectHandler.Player;
 
         /// <summary>
         ///     Set to true to increase the prediction radius by the unit bounding radius.
@@ -123,7 +123,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public Vector3 From
         {
-            get { return _from.To2D().IsValid() ? _from : ObjectManager.Player.ServerPosition; }
+            get { return _from.To2D().IsValid() ? _from : ObjectHandler.Player.ServerPosition; }
             set { _from = value; }
         }
 
@@ -136,7 +136,7 @@ namespace LeagueSharp.Common
             {
                 return _rangeCheckFrom.To2D().IsValid()
                     ? _rangeCheckFrom
-                    : (From.To2D().IsValid() ? From : ObjectManager.Player.ServerPosition);
+                    : (From.To2D().IsValid() ? From : ObjectHandler.Player.ServerPosition);
             }
             set { _rangeCheckFrom = value; }
         }
@@ -849,7 +849,7 @@ namespace LeagueSharp.Common
 
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
+            if (sender.IsValid && sender.Team != ObjectHandler.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
                 _wallCastT = Utils.TickCount;
                 _yasuoWallCastedPos = sender.ServerPosition.To2D();
@@ -871,7 +871,7 @@ namespace LeagueSharp.Common
                     {
                         case CollisionableObjects.Minions:
                             foreach (var minion in
-                                ObjectManager.Get<Obj_AI_Minion>()
+                                ObjectHandler.Get<Obj_AI_Minion>()
                                     .Where(
                                         minion =>
                                             minion.IsValidTarget(
@@ -916,7 +916,7 @@ namespace LeagueSharp.Common
                                 var p = input.From.To2D().Extend(position.To2D(), step * i);
                                 if (NavMesh.GetCollisionFlags(p.X, p.Y).HasFlag(CollisionFlags.Wall))
                                 {
-                                    result.Add(ObjectManager.Player);
+                                    result.Add(ObjectHandler.Player);
                                 }
                             }
                             break;
@@ -930,7 +930,7 @@ namespace LeagueSharp.Common
 
                             GameObject wall = null;
                             foreach (var gameObject in
-                                ObjectManager.Get<GameObject>()
+                                ObjectHandler.Get<GameObject>()
                                     .Where(
                                         gameObject =>
                                             gameObject.IsValid &&
@@ -959,7 +959,7 @@ namespace LeagueSharp.Common
                                             .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
                                 if (t < _wallCastT + 4000)
                                 {
-                                    result.Add(ObjectManager.Player);
+                                    result.Add(ObjectHandler.Player);
                                 }
                             }
 

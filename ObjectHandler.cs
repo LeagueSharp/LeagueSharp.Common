@@ -14,7 +14,9 @@ namespace LeagueSharp.Common
 
         static ObjectHandler()
         {
+            //Console.WriteLine("Adding existing objects...");
             // All existing objects
+            var n = 0;
             var i = 0;
             foreach (var obj in ObjectManager.Get<GameObject>())
             {
@@ -30,10 +32,10 @@ namespace LeagueSharp.Common
                     index = i;
                     i++;
                 }
-
+                n++;
                 gameObjects[type][index] = obj;
             }
-
+            //Console.WriteLine(n + " objects added");
             // Listen to events
             GameObject.OnCreate += Obj_AI_Base_OnCreate;
             GameObject.OnDelete += Obj_AI_Base_OnDelete;

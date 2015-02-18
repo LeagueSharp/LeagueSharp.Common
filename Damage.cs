@@ -3019,7 +3019,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                (from buff in ObjectManager.Player.Buffs
+                                (from buff in ObjectHandler.Player.Buffs
                                     where buff.DisplayName == "NasusQStacks"
                                     select buff.Count).FirstOrDefault() + new double[] { 30, 50, 70, 90, 110 }[level]
                     },
