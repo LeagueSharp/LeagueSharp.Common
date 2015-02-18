@@ -70,7 +70,7 @@ namespace LeagueSharp.Common
 
             foreach (var key in gameObjects.Keys.FindAll(key => type.IsAssignableFrom(key)))
             {
-                found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid).ToList().ConvertAll(o => (T) o));
+                found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid).ConvertAll(o => (T) o));
             }
 
             return found;
