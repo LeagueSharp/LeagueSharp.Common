@@ -29,7 +29,7 @@ namespace LeagueSharp.Common
                     gameObjects.Add(type, new Dictionary<int, GameObject>());
                 }
 
-                gameObjects[type].Add(obj.NetworkId, obj);
+                gameObjects[type][obj.NetworkId] = obj;
             }
 
             // Listen to events
