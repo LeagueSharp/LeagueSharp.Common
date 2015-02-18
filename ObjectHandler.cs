@@ -70,7 +70,7 @@ namespace LeagueSharp.Common
 
             foreach (var key in gameObjects.Keys.FindAll(key => type.IsAssignableFrom(key)))
             {
-                found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid).ConvertAll(o => (T) o));
+                found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T) o));
             }
 
             return found;
@@ -80,24 +80,24 @@ namespace LeagueSharp.Common
         {
             return
                 (from dict in gameObjects.Values where dict.ContainsKey(networkId) select (T) dict[networkId])
-                    .FirstOrDefault(o => o.IsValid);
+                    .FirstOrDefault(o => o.IsValid<T>());
         }
 
         public class GameObjectWrapper<T> : List<T> where T : GameObject, new()
         {
             public List<T> Allies
             {
-                get { return FindAll(o => o.IsValid && o.IsAlly); }
+                get { return FindAll(o => o.IsValid<T>() && o.IsAlly); }
             }
 
             public List<T> Enemies
             {
-                get { return FindAll(o => o.IsValid && o.IsEnemy); }
+                get { return FindAll(o => o.IsValid<T>() && o.IsEnemy); }
             }
 
             public List<T> Neutrals
             {
-                get { return FindAll(o => o.IsValid && o.Team == GameObjectTeam.Neutral); }
+                get { return FindAll(o => o.IsValid<T>() && o.Team == GameObjectTeam.Neutral); }
             }
         }
     }
