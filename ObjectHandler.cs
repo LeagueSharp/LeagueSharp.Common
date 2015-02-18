@@ -80,7 +80,7 @@ namespace LeagueSharp.Common
         {
             return
                 (from dict in gameObjects.Values where dict.ContainsKey(networkId) select (T) dict[networkId])
-                    .FirstOrDefault();
+                    .FirstOrDefault(o => o.IsValid);
         }
 
         public class GameObjectWrapper<T> : List<T> where T : GameObject, new()
