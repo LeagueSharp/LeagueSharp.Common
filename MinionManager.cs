@@ -66,20 +66,20 @@ namespace LeagueSharp.Common
             MinionTeam team = MinionTeam.Enemy,
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
-            var result = (from minion in ObjectManager.Get<Obj_AI_Minion>()
+            var result = (from minion in ObjectHandler.Get<Obj_AI_Minion>()
                 where minion.IsValidTarget(range, false, @from)
                 let minionTeam = minion.Team
                 where
                     team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
                     team == MinionTeam.Ally &&
                     minionTeam ==
-                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
+                    (ObjectHandler.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Chaos : GameObjectTeam.Order) ||
                     team == MinionTeam.Enemy &&
                     minionTeam ==
-                    (ObjectManager.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
-                    team == MinionTeam.NotAlly && minionTeam != ObjectManager.Player.Team ||
+                    (ObjectHandler.Player.Team == GameObjectTeam.Chaos ? GameObjectTeam.Order : GameObjectTeam.Chaos) ||
+                    team == MinionTeam.NotAlly && minionTeam != ObjectHandler.Player.Team ||
                     team == MinionTeam.NotAllyForEnemy &&
-                    (minionTeam == ObjectManager.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
+                    (minionTeam == ObjectHandler.Player.Team || minionTeam == GameObjectTeam.Neutral) ||
                     team == MinionTeam.All
                 where
                     minion.IsMelee() && type == MinionTypes.Melee || !minion.IsMelee() && type == MinionTypes.Ranged ||
@@ -105,7 +105,7 @@ namespace LeagueSharp.Common
             MinionTeam team = MinionTeam.Enemy,
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
-            return GetMinions(ObjectManager.Player.ServerPosition, range, type, team, order);
+            return GetMinions(ObjectHandler.Player.ServerPosition, range, type, team, order);
         }
 
         public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
@@ -124,7 +124,7 @@ namespace LeagueSharp.Common
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.To2D();
+            var startPos = ObjectHandler.Player.ServerPosition.To2D();
 
             range = range * range;
 
@@ -178,7 +178,7 @@ namespace LeagueSharp.Common
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.To2D();
+            var startPos = ObjectHandler.Player.ServerPosition.To2D();
 
             var max = minionPositions.Count;
             for (var i = 0; i < max; i++)
@@ -222,7 +222,7 @@ namespace LeagueSharp.Common
             SkillshotType stype,
             Vector3 rangeCheckFrom = new Vector3())
         {
-            from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
+            from = from.To2D().IsValid() ? from : ObjectHandler.Player.ServerPosition;
 
             return (from minion in minions
                 select

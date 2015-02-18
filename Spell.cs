@@ -96,7 +96,7 @@ namespace LeagueSharp.Common
 
         public SpellDataInst Instance
         {
-            get { return ObjectManager.Player.Spellbook.GetSpell(Slot); }
+            get { return ObjectHandler.Player.Spellbook.GetSpell(Slot); }
         }
 
         public float Range
@@ -131,25 +131,25 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
+                return ObjectHandler.Player.HasBuff(ChargedBuffName, true) ||
                        Utils.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
         }
 
         public int Level
         {
-            get { return ObjectManager.Player.Spellbook.GetSpell(Slot).Level; }
+            get { return ObjectHandler.Player.Spellbook.GetSpell(Slot).Level; }
         }
 
         public Vector3 From
         {
-            get { return !_from.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _from; }
+            get { return !_from.To2D().IsValid() ? ObjectHandler.Player.ServerPosition : _from; }
             set { _from = value; }
         }
 
         public Vector3 RangeCheckFrom
         {
-            get { return !_rangeCheckFrom.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _rangeCheckFrom; }
+            get { return !_rangeCheckFrom.To2D().IsValid() ? ObjectHandler.Player.ServerPosition : _rangeCheckFrom; }
             set { _rangeCheckFrom = value; }
         }
 
@@ -205,7 +205,7 @@ namespace LeagueSharp.Common
         {
             if (!IsCharging && Utils.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot);
+                ObjectHandler.Player.Spellbook.CastSpell(Slot);
                 _chargedReqSentT = Utils.TickCount;
             }
         }
@@ -217,7 +217,7 @@ namespace LeagueSharp.Common
         {
             if (!IsCharging && Utils.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, position);
+                ObjectHandler.Player.Spellbook.CastSpell(Slot, position);
                 _chargedReqSentT = Utils.TickCount;
             }
         }
@@ -330,7 +330,7 @@ namespace LeagueSharp.Common
 
                 if (packetCast)
                 {
-                    if (!ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false))
+                    if (!ObjectHandler.Player.Spellbook.CastSpell(Slot, unit, false))
                     {
                         return CastStates.NotCasted;
                     }
@@ -338,7 +338,7 @@ namespace LeagueSharp.Common
                 else
                 {
                     //Cant cast the Spell.
-                    if (!ObjectManager.Player.Spellbook.CastSpell(Slot, unit))
+                    if (!ObjectHandler.Player.Spellbook.CastSpell(Slot, unit))
                     {
                         return CastStates.NotCasted;
                     }
@@ -389,12 +389,12 @@ namespace LeagueSharp.Common
             }
             else if (packetCast)
             {
-                ObjectManager.Player.Spellbook.CastSpell(Slot, prediction.CastPosition, false);
+                ObjectHandler.Player.Spellbook.CastSpell(Slot, prediction.CastPosition, false);
             }
             else
             {
                 //Cant cast the spell (actually should not happen).
-                if (!ObjectManager.Player.Spellbook.CastSpell(Slot, prediction.CastPosition))
+                if (!ObjectHandler.Player.Spellbook.CastSpell(Slot, prediction.CastPosition))
                 {
                     return CastStates.NotCasted;
                 }
@@ -417,11 +417,11 @@ namespace LeagueSharp.Common
 
             if (packetCast)
             {
-                return ObjectManager.Player.Spellbook.CastSpell(Slot, unit, false);
+                return ObjectHandler.Player.Spellbook.CastSpell(Slot, unit, false);
             }
             else
             {
-                return ObjectManager.Player.Spellbook.CastSpell(Slot, unit);
+                return ObjectHandler.Player.Spellbook.CastSpell(Slot, unit);
             }
         }
 
@@ -438,7 +438,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool Cast(bool packetCast = false)
         {
-            return CastOnUnit(ObjectManager.Player, packetCast);
+            return CastOnUnit(ObjectHandler.Player, packetCast);
         }
 
         public bool Cast(Vector2 fromPosition, Vector2 toPosition)
@@ -448,7 +448,7 @@ namespace LeagueSharp.Common
 
         public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
-            return Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
+            return Slot.IsReady() && ObjectHandler.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
         }
 
         /// <summary>
@@ -484,19 +484,19 @@ namespace LeagueSharp.Common
             }
             else if (packetCast)
             {
-                return ObjectManager.Player.Spellbook.CastSpell(Slot, position, false);
+                return ObjectHandler.Player.Spellbook.CastSpell(Slot, position, false);
             }
             else
             {
-                return ObjectManager.Player.Spellbook.CastSpell(Slot, position);
+                return ObjectHandler.Player.Spellbook.CastSpell(Slot, position);
             }
             return false;
         }
 
         private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
         {
-            ObjectManager.Player.Spellbook.CastSpell(slot, position, false);
-            ObjectManager.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
+            ObjectHandler.Player.Spellbook.CastSpell(slot, position, false);
+            ObjectHandler.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
         }
 
         /// <summary>
@@ -576,7 +576,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public float GetDamage(Obj_AI_Base target, int stage = 0)
         {
-            return (float) ObjectManager.Player.GetSpellDamage(target, Slot, stage);
+            return (float) ObjectHandler.Player.GetSpellDamage(target, Slot, stage);
         }
 
         /// <summary>
@@ -585,7 +585,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool IsKillable(Obj_AI_Base target, int stage = 0)
         {
-            return ObjectManager.Player.GetSpellDamage(target, Slot, stage) > target.Health;
+            return ObjectHandler.Player.GetSpellDamage(target, Slot, stage) > target.Health;
         }
 
         /// <summary>

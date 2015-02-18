@@ -50,7 +50,7 @@ namespace LeagueSharp.Common
             InitializeSpells();
 
             // Trigger LastCastedSpell
-            ObjectManager.Player.LastCastedspell();
+            ObjectHandler.Player.LastCastedspell();
 
             // Listen to required events
             Game.OnGameUpdate += Game_OnGameUpdate;

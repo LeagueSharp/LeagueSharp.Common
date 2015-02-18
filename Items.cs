@@ -37,7 +37,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool HasItem(string name, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Name == name);
+            return (hero ?? ObjectHandler.Player).InventoryItems.Any(slot => slot.Name == name);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool HasItem(int id, Obj_AI_Hero hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
+            return (hero ?? ObjectHandler.Player).InventoryItems.Any(slot => slot.Id == (ItemId)id);
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanUseItem(string name)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
+            foreach (var slot in ObjectHandler.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
+                var inst = ObjectHandler.Player.Spellbook.Spells.FirstOrDefault(spell =>
                     (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
                 return inst != null && inst.State == SpellState.Ready;
             }
@@ -68,9 +68,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanUseItem(int id)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectHandler.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
+                var inst = ObjectHandler.Player.Spellbook.Spells.FirstOrDefault(spell =>
                     (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
                 return inst != null && inst.State == SpellState.Ready;
             }
@@ -83,15 +83,15 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UseItem(string name, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
+            foreach (var slot in ObjectHandler.Player.InventoryItems.Where(slot => slot.Name == name))
             {
                 if (target != null)
                 {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
+                    return ObjectHandler.Player.Spellbook.CastSpell(slot.SpellSlot, target);
                 }
                 else
                 {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
+                    return ObjectHandler.Player.Spellbook.CastSpell(slot.SpellSlot);
                 }
             }
 
@@ -103,15 +103,15 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UseItem(int id, Obj_AI_Base target = null)
         {
-            foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+            foreach (var slot in ObjectHandler.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
                 if (target != null)
                 {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, target);
+                    return ObjectHandler.Player.Spellbook.CastSpell(slot.SpellSlot, target);
                 }
                 else
                 {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot);
+                    return ObjectHandler.Player.Spellbook.CastSpell(slot.SpellSlot);
                 }
             }
 
@@ -133,9 +133,9 @@ namespace LeagueSharp.Common
         {
             if (position != Vector3.Zero)
             {
-                foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
+                foreach (var slot in ObjectHandler.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
                 {
-                    return ObjectManager.Player.Spellbook.CastSpell(slot.SpellSlot, position);
+                    return ObjectHandler.Player.Spellbook.CastSpell(slot.SpellSlot, position);
                 }
             }
 
@@ -150,7 +150,7 @@ namespace LeagueSharp.Common
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             return (from wardId in wardIds
                     where CanUseItem(wardId)
-                    select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
+                    select ObjectHandler.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
                 .FirstOrDefault();
         }
 
@@ -176,7 +176,7 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    return ObjectManager.Player.InventoryItems.Where(slot =>
+                    return ObjectHandler.Player.InventoryItems.Where(slot =>
                         slot.Id == (ItemId)Id).Select(slot => slot.SpellSlot).ToList();
                 }
             }
@@ -199,7 +199,7 @@ namespace LeagueSharp.Common
 
             public bool IsInRange(Vector3 target)
             {
-                return ObjectManager.Player.ServerPosition.Distance(target, true) < RangeSqr;
+                return ObjectHandler.Player.ServerPosition.Distance(target, true) < RangeSqr;
             }
 
             public bool IsOwned(Obj_AI_Hero target = null)
@@ -234,7 +234,7 @@ namespace LeagueSharp.Common
 
             public void Buy()
             {
-                ObjectManager.Player.BuyItem((ItemId)Id);
+                ObjectHandler.Player.BuyItem((ItemId)Id);
             }
         }
     }
