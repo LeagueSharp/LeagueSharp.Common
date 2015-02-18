@@ -13,7 +13,7 @@ namespace LeagueSharp.Common
     {
         public static Obj_AI_Hero Player
         {
-            get { return ObjectHandler.Player; }
+            get { return ObjectManager.Player; }
         }
 
         private static readonly Dictionary<Type, Dictionary<int, GameObject>> gameObjects = new Dictionary<Type, Dictionary<int, GameObject>>();
