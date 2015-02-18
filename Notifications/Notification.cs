@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -110,30 +110,36 @@ namespace LeagueSharp.Common
         ///     Enters Notification's flashing mode
         /// </summary>
         /// <param name="interval">Flash Interval</param>
-        public void Flash(int interval = 0xFA)
+        public Notification Flash(int interval = 0xFA)
         {
             flashing = !flashing;
             if (flashing)
             {
                 flashInterval = interval;
             }
+
+            return this;
         }
 
         /// <summary>
         ///     Toggles the notification border
         /// </summary>
-        public void Border()
+        public Notification Border()
         {
             border = !border;
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the notification border toggle value
         /// </summary>
         /// <param name="value">bool value</param>
-        public void Border(bool value)
+        public Notification Border(bool value)
         {
             border = value;
+
+            return this;
         }
 
         #region Color Set
