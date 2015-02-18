@@ -110,9 +110,9 @@ namespace LeagueSharp.Common
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
-                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
+                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name) && missile.Target.IsValid<AttackableUnit>())
                 {
-                    FireAfterAttack(missile.SpellCaster, _lastTarget);
+                    FireAfterAttack(missile.SpellCaster, (AttackableUnit) missile.Target);
                 }
             }
         }
@@ -164,7 +164,7 @@ namespace LeagueSharp.Common
 
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null)
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
