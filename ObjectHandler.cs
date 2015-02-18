@@ -20,6 +20,7 @@ namespace LeagueSharp.Common
 
         static ObjectHandler()
         {
+            var i = 0;
             // All existing objects
             foreach (var obj in ObjectManager.Get<GameObject>())
             {
@@ -29,7 +30,14 @@ namespace LeagueSharp.Common
                     gameObjects.Add(type, new Dictionary<int, GameObject>());
                 }
 
-                gameObjects[type][obj.NetworkId] = obj;
+                var index = obj.NetworkId;
+                if (index == 0)
+                {
+                    index = i;
+                    i++;
+                }
+
+                gameObjects[type][index] = obj;
             }
 
             // Listen to events
