@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
         {
             if (sender is Obj_AI_Hero)
             {
-                var entry = new LastCastedSpellEntry(args.SData.Name, Utils.TickCount, ObjectHandler.Player);
+                var entry = new LastCastedSpellEntry(args.SData.Name, Utils.TickCount, ObjectManager.Player);
                 if (CastedSpells.ContainsKey(sender.NetworkId))
                 {
                     CastedSpells[sender.NetworkId] = entry;

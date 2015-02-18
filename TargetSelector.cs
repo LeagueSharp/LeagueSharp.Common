@@ -318,7 +318,7 @@ namespace LeagueSharp.Common
             IEnumerable<Obj_AI_Hero> ignoredChamps = null,
             Vector3? rangeCheckFrom = null)
         {
-            return GetTarget(ObjectHandler.Player, range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
+            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
         }
 
         private static bool IsValidTarget(Obj_AI_Base target,
@@ -328,7 +328,7 @@ namespace LeagueSharp.Common
             Vector3? rangeCheckFrom = null)
         {
             return target.IsValidTarget() &&
-                   target.Distance(rangeCheckFrom ?? ObjectHandler.Player.ServerPosition, true) <
+                   target.Distance(rangeCheckFrom ?? ObjectManager.Player.ServerPosition, true) <
                    Math.Pow(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range, 2) &&
                    !IsInvulnerable(target, damageType, ignoreShieldSpells);
         }

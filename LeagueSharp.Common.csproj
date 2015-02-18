@@ -72,16 +72,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>..\..\..\Desktop\LeagueSharp\System\clipper_library.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>..\..\..\Desktop\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\Desktop\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -118,7 +118,6 @@
     <Compile Include="Notifications.cs" />
     <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\Notification.cs" />
-    <Compile Include="ObjectHandler.cs" />
     <Compile Include="Orbwalking.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="Prediction.cs" />
