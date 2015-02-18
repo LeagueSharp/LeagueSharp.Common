@@ -148,27 +148,33 @@ namespace LeagueSharp.Common
         ///     Sets the notification text color
         /// </summary>
         /// <param name="color">System Drawing Color</param>
-        public void SetTextColor(Color color)
+        public Notification SetTextColor(Color color)
         {
             TextColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the notification box color
         /// </summary>
         /// <param name="color">System Drawing Color</param>
-        public void SetBoxColor(Color color)
+        public Notification SetBoxColor(Color color)
         {
             BoxColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+
+            return this;
         }
 
         /// <summary>
         ///     Sets the notification border color
         /// </summary>
         /// <param name="color">System Drawing Color</param>
-        public void SetBorderColor(Color color)
+        public Notification SetBorderColor(Color color)
         {
             BorderColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+
+            return this;
         }
 
         #endregion
