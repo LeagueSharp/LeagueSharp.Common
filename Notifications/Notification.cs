@@ -55,7 +55,8 @@ namespace LeagueSharp.Common
         /// </summary>
         /// <param name="text">Display Text</param>
         /// <param name="duration">Duration (-1 for Infinite)</param>
-        public Notification(string text, int duration = -0x1)
+        /// <param name="dispose">Auto Dispose after notification duration end</param>
+        public Notification(string text, int duration = -0x1, bool dispose = false)
         {
             // Setting GUID
             id = Guid.NewGuid().ToString("N");
@@ -64,6 +65,7 @@ namespace LeagueSharp.Common
             Text = text;
             state = NotificationState.Idle;
             border = true;
+            autoDispose = dispose;
 
             // Preload Text
             Font.PreloadText(text);
@@ -336,6 +338,11 @@ namespace LeagueSharp.Common
         /// </summary>
         private bool border;
 
+        /// <summary>
+        ///     Locally saved bool which indicates if notification will be disposed after finishing
+        /// </summary>
+        private readonly bool autoDispose;
+
         #endregion
 
         #region Required Functions
@@ -451,8 +458,11 @@ namespace LeagueSharp.Common
 
                     if (!flashing && duration > 0x0 && TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                     {
-                        Update = false;
-                        Draw = false;
+                        Update = Draw = false;
+                        if (autoDispose)
+                        {
+                            Dispose();
+                        }
 
                         Notifications.Free(handler);
 
@@ -495,8 +505,11 @@ namespace LeagueSharp.Common
                                 {
                                     if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                                     {
-                                        Update = false;
-                                        Draw = false;
+                                        Update = Draw = false;
+                                        if (autoDispose)
+                                        {
+                                            Dispose();
+                                        }
 
                                         Notifications.Free(handler);
 
@@ -535,8 +548,11 @@ namespace LeagueSharp.Common
                                 {
                                     if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                                     {
-                                        Update = false;
-                                        Draw = false;
+                                        Update = Draw = false;
+                                        if (autoDispose)
+                                        {
+                                            Dispose();
+                                        }
 
                                         Notifications.Free(handler);
 
@@ -726,8 +742,11 @@ namespace LeagueSharp.Common
 
                         Notifications.Free(handler);
 
-                        Draw = false;
-                        Update = false;
+                        Draw = Update = false;
+                        if (autoDispose)
+                        {
+                            Dispose();
+                        }
                         return;
                     }
                     clickTick = Utils.TickCount;
@@ -761,7 +780,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Safe disposal callback
         /// </summary>
-        /// <param name="safe">Is Finailized</param>
+        /// <param name="safe">Is Pre-Finailized / Safe (values not cleared by GC)</param>
         private void Dispose(bool safe)
         {
             if (Notifications.IsValidNotification(this))
