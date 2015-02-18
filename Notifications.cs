@@ -84,6 +84,20 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Adds a simple notification to the notification list
+        /// </summary>
+        /// <param name="text">Display Text</param>
+        /// <param name="duration">Duration (-1 for infinite)</param>
+        /// <param name="dispose">Dispose upon ending</param>
+        /// <returns></returns>
+        public static Notification AddNotification(string text, int duration = -0x1, bool dispose = true)
+        {
+            var notification = new Notification(text, duration, dispose);
+            NotificationsList.TryAdd(notification.GetId(), notification);
+            return notification;
+        }
+
+        /// <summary>
         ///     Removes a notification from the notification list
         /// </summary>
         /// <param name="notification">Notification Instance</param>
