@@ -110,9 +110,9 @@ namespace LeagueSharp.Common
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
-                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name) && missile.Target.IsValid<AttackableUnit>())
+                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
                 {
-                    FireAfterAttack(missile.SpellCaster, (AttackableUnit) missile.Target);
+                    FireAfterAttack(missile.SpellCaster, _lastTarget);
                 }
             }
         }
