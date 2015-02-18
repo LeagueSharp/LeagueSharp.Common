@@ -733,7 +733,7 @@ namespace LeagueSharp.Common
         {
             if (makeChampionUniq)
             {
-                name = ObjectHandler.Player.ChampionName + name;
+                name = ObjectManager.Player.ChampionName + name;
             }
 
             //Search in our own items
@@ -810,7 +810,7 @@ namespace LeagueSharp.Common
         {
             if (makeChampionUniq)
             {
-                name = ObjectHandler.Player.ChampionName + name;
+                name = ObjectManager.Player.ChampionName + name;
             }
 
             Name = name;

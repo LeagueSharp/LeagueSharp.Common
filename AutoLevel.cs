@@ -34,7 +34,7 @@ namespace LeagueSharp.Common
         private static List<SpellSlot> order = new List<SpellSlot>();
         private static float LastLeveled;
         private static float NextDelay;
-        private static readonly Obj_AI_Hero Player = ObjectHandler.Player;
+        private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         private static Random RandomNumber;
 
         public AutoLevel(IEnumerable<int> levels)

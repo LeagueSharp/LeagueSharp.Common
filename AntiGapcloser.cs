@@ -667,7 +667,7 @@ namespace LeagueSharp.Common
                             gapcloser =>
                                 gapcloser.SkillType == GapcloserType.Targeted ||
                                 (gapcloser.SkillType == GapcloserType.Skillshot &&
-                                 ObjectHandler.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
+                                 ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
             {
                 OnEnemyGapcloser(gapcloser);
             }
