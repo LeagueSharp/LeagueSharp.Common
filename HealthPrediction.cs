@@ -71,7 +71,7 @@ namespace LeagueSharp.Common
 
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectHandler.Player.Team || sender is Obj_AI_Hero ||
+            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero ||
                 !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
             {
                 return;

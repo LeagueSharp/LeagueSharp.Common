@@ -11,8 +11,7 @@ namespace LeagueSharp.Common
     {
         private static readonly Dictionary<Type, Dictionary<int, GameObject>> gameObjects =
             new Dictionary<Type, Dictionary<int, GameObject>>();
-        private static readonly Dictionary<Type, GameObjectType> TypeToGameObjectType = new Dictionary<Type, GameObjectType>(); 
-        
+
         static ObjectHandler()
         {
             // All existing objects
@@ -23,7 +22,6 @@ namespace LeagueSharp.Common
                 if (!gameObjects.ContainsKey(type))
                 {
                     gameObjects.Add(type, new Dictionary<int, GameObject>());
-                    TypeToGameObjectType.Add(type, obj.Type);
                 }
 
                 var index = obj.NetworkId;
@@ -52,7 +50,6 @@ namespace LeagueSharp.Common
             if (!gameObjects.ContainsKey(type))
             {
                 gameObjects.Add(type, new Dictionary<int, GameObject>());
-                TypeToGameObjectType.Add(type, sender.Type);
             }
 
             gameObjects[type][sender.NetworkId] = sender;
@@ -75,7 +72,7 @@ namespace LeagueSharp.Common
             {
                 if (type.IsAssignableFrom(key))
                 {
-                    found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid && TypeToGameObjectType[key] == o.Type).ConvertAll(o => (T)o));
+                    found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T)o));
                 }
             }
 
@@ -84,7 +81,15 @@ namespace LeagueSharp.Common
 
         public static T GetUnitByNetworkId<T>(int networkId) where T : GameObject, new()
         {
-            return ObjectManager.GetUnitByNetworkId<T>(networkId);
+            foreach (var dict in gameObjects.Values)
+            {
+                if (dict.ContainsKey(networkId) && dict[networkId].IsValid)
+                {
+                    return dict[networkId] as T;
+                }
+            }
+
+            return null;
         }
 
         public class GameObjectWrapper<T> : List<T> where T : GameObject, new()
