@@ -14,8 +14,8 @@ namespace LeagueSharp.Common
 
         static ObjectHandler()
         {
-            var i = 0;
             // All existing objects
+            var i = 0;
             foreach (var obj in ObjectManager.Get<GameObject>())
             {
                 var type = obj.GetType();
@@ -68,9 +68,12 @@ namespace LeagueSharp.Common
             var type = typeof(T);
             var found = new GameObjectWrapper<T>();
 
-            foreach (var key in gameObjects.Keys.FindAll(key => type.IsAssignableFrom(key)))
+            foreach (var key in gameObjects.Keys)
             {
-                found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T) o));
+                if (type.IsAssignableFrom(key))
+                {
+                    found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T) o));
+                }
             }
 
             return found;
@@ -78,9 +81,15 @@ namespace LeagueSharp.Common
 
         public static T GetUnitByNetworkId<T>(int networkId) where T : GameObject, new()
         {
-            return
-                (from dict in gameObjects.Values where dict.ContainsKey(networkId) select (T) dict[networkId])
-                    .FirstOrDefault(o => o.IsValid<T>());
+            foreach (var dict in gameObjects.Values)
+            {
+                if (dict.ContainsKey(networkId) && dict[networkId].IsValid)
+                {
+                    return dict[networkId] as T;
+                }
+            }
+
+            return null;
         }
 
         public class GameObjectWrapper<T> : List<T> where T : GameObject, new()
