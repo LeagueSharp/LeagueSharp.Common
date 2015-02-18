@@ -13,7 +13,7 @@ namespace LeagueSharp.Common
     {
         public static Obj_AI_Hero Player
         {
-            get { return ObjectManager.Player; }
+            get { return ObjectHandler.Player; }
         }
 
         private static readonly Dictionary<Type, Dictionary<int, GameObject>> gameObjects = new Dictionary<Type, Dictionary<int, GameObject>>();
@@ -70,6 +70,19 @@ namespace LeagueSharp.Common
             }
 
             return found;
+        }
+
+        public static T GetUnitByNetworkId<T>(int networkId) where T : GameObject, new()
+        {
+            foreach(var dict in gameObjects.Values)
+            {
+                if (dict.ContainsKey(networkId))
+                {
+                    return (T)dict[networkId];
+                }
+            }
+
+            return null;
         }
 
         public class GameObjectWrapper<T> : List<T> where T : GameObject, new()

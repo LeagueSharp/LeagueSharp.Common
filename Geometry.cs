@@ -38,7 +38,7 @@ namespace LeagueSharp.Common
         //Obj_AI_Base class extended methods:
         public static float Distance(Obj_AI_Base anotherUnit, bool squared = false)
         {
-            return ObjectManager.Player.Distance(anotherUnit, squared);
+            return ObjectHandler.Player.Distance(anotherUnit, squared);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static Vector3 To3D(this Vector2 v)
         {
-            return new Vector3(v.X, v.Y, ObjectManager.Player.ServerPosition.Z);
+            return new Vector3(v.X, v.Y, ObjectHandler.Player.ServerPosition.Z);
         }
 
         /// <summary>

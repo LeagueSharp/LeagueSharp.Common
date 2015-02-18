@@ -74,7 +74,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            if (checkTeam && unit.Team == ObjectManager.Player.Team)
+            if (checkTeam && unit.Team == ObjectHandler.Player.Team)
             {
                 return false;
             }
@@ -84,7 +84,7 @@ namespace LeagueSharp.Common
 
             return !(range < float.MaxValue) ||
                    !(Vector2.DistanceSquared(
-                       (@from.To2D().IsValid() ? @from : ObjectManager.Player.ServerPosition).To2D(),
+                       (@from.To2D().IsValid() ? @from : ObjectHandler.Player.ServerPosition).To2D(),
                        unitPosition.To2D()) > range * range);
         }
 
@@ -111,7 +111,7 @@ namespace LeagueSharp.Common
 
         public static bool IsReady(this SpellSlot slot, int t = 0)
         {
-            var s = ObjectManager.Player.Spellbook.GetSpell(slot);
+            var s = ObjectHandler.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
         }
 
@@ -378,7 +378,7 @@ namespace LeagueSharp.Common
         public static bool UnderTurret(this Vector3 position, bool enemyTurretsOnly)
         {
             return
-                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
+                ObjectHandler.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
 
         public static NavMeshCell ToNavMeshCell(this Vector3 position)
@@ -404,7 +404,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemiesInRange(float range)
         {
-            return ObjectManager.Player.CountEnemiesInRange(range);
+            return ObjectHandler.Player.CountEnemiesInRange(range);
         }
 
         /// <summary>
@@ -429,7 +429,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountAlliesInRange(float range)
         {
-            return ObjectManager.Player.CountAlliesInRange(range);
+            return ObjectHandler.Player.CountAlliesInRange(range);
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace LeagueSharp.Common
 
         public static List<T> GetObjects<T>(this Vector3 position, float range) where T : GameObject, new()
         {
-            return ObjectManager.Get<T>().Where(x => position.Distance(x.Position, true) < range * range).ToList();
+            return ObjectHandler.Get<T>().Where(x => position.Distance(x.Position, true) < range * range).ToList();
         }
 
         public static List<T> GetObjects<T>(string objectName, float range, Vector3 rangeCheckFrom = new Vector3())
@@ -483,10 +483,10 @@ namespace LeagueSharp.Common
         {
             if (rangeCheckFrom.Equals(Vector3.Zero))
             {
-                rangeCheckFrom = ObjectManager.Player.ServerPosition;
+                rangeCheckFrom = ObjectHandler.Player.ServerPosition;
             }
 
-            return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
+            return ObjectHandler.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
         public static bool IsMovementImpaired(this Obj_AI_Hero hero)
@@ -502,7 +502,7 @@ namespace LeagueSharp.Common
         public static bool InShop(this Obj_AI_Hero hero)
         {
             return hero.IsVisible &&
-                   ObjectManager.Get<Obj_Shop>()
+                   ObjectHandler.Get<Obj_Shop>()
                        .Any(s => s.Team == hero.Team && hero.Distance(s.Position, true) < 1562500); // 1250²
         }
 
@@ -554,7 +554,7 @@ namespace LeagueSharp.Common
                 fountainRange = 1102500; //1050 * 1050
             }
             return hero.IsVisible &&
-                   ObjectManager.Get<Obj_SpawnPoint>()
+                   ObjectHandler.Get<Obj_SpawnPoint>()
                        .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < fountainRange);
         }
 

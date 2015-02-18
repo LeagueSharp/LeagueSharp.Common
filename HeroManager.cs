@@ -47,7 +47,7 @@ namespace LeagueSharp.Common
 
         static HeroManager()
         {
-            AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
+            AllHeroes = ObjectHandler.Get<Obj_AI_Hero>().ToList();
             Allies = AllHeroes.FindAll(o => o.IsAlly);
             Enemies = AllHeroes.FindAll(o => o.IsEnemy);
         }

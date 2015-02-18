@@ -43,7 +43,7 @@ namespace LeagueSharp.Common
 
             static Game()
             {
-                foreach (var hq in ObjectManager.Get<Obj_HQ>().Where(hq => hq.IsValid))
+                foreach (var hq in ObjectHandler.Get<Obj_HQ>().Where(hq => hq.IsValid))
                 {
                     NexusList.Add(hq);
                 }
@@ -114,7 +114,7 @@ namespace LeagueSharp.Common
                 LeagueSharp.Game.OnGameProcessPacket += PacketHandler;
 
                 //Initializes ondash class:
-                ObjectManager.Player.IsDashing();
+                ObjectHandler.Player.IsDashing();
             }
 
             /// <summary>

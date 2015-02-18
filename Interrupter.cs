@@ -354,7 +354,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(e => e.IsValidTarget()))
+            foreach (var enemy in ObjectHandler.Get<Obj_AI_Hero>().Where(e => e.IsValidTarget()))
             {
                 foreach (var spell in
                     Spells.Where(
