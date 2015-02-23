@@ -272,7 +272,7 @@ namespace LeagueSharp.Common
         [Obsolete("Use IEnumerable<TSource>.Where() instead", false)]
         public static List<TSource> FindAll<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            return source.Where(predicate);
+            return source.Where(predicate).ToList();
         }
 
         public static T MaxOrDefault<T, R>(this IEnumerable<T> container, Func<T, R> valuingFoo) where R : IComparable
