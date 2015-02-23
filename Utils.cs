@@ -269,9 +269,10 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Retrieves all the elements that match the conditions defined by the specified predicate.
         /// </summary>
-        public static List<TSource> FindAll<TSource>(this IEnumerable<TSource> source, Predicate<TSource> match)
+        [Obsolete("Use IEnumerable<TSource>.Where() instead", false)]
+        public static List<TSource> FindAll<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            return (source as List<TSource> ?? source.ToList()).FindAll(match);
+            return source.Where(predicate);
         }
 
         public static T MaxOrDefault<T, R>(this IEnumerable<T> container, Func<T, R> valuingFoo) where R : IComparable
