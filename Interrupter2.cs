@@ -58,7 +58,7 @@ namespace LeagueSharp.Common
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
-        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
+        public static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
         private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
 
         public static event InterruptableTargetHandler OnInterruptableTarget;
@@ -181,7 +181,7 @@ namespace LeagueSharp.Common
                 if (CastingInterruptableSpell.ContainsKey(target.NetworkId))
                 {
                     // Return the args with spell end time
-                    return new InterruptableTargetEventArgs(
+                    return new InterruptableTargetEventArgs(CastingInterruptableSpell[target.NetworkId].Slot,
                         CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime, CastingInterruptableSpell[target.NetworkId].MovementInterrupts);
                 }
             }
@@ -191,19 +191,21 @@ namespace LeagueSharp.Common
 
         public class InterruptableTargetEventArgs
         {
-            public InterruptableTargetEventArgs(DangerLevel dangerLevel, float endTime, bool movementInterrupts)
+            public InterruptableTargetEventArgs(SpellSlot slot, DangerLevel dangerLevel, float endTime, bool movementInterrupts)
             {
+                Slot = slot;
                 DangerLevel = dangerLevel;
                 EndTime = endTime;
                 MovementInterrupts = movementInterrupts;
             }
 
+            public SpellSlot Slot { get; private set; }
             public DangerLevel DangerLevel { get; private set; }
             public float EndTime { get; private set; }
             public bool MovementInterrupts { get; private set; }
         }
 
-        private class InterruptableSpell
+        public class InterruptableSpell
         {
             public InterruptableSpell(SpellSlot slot, DangerLevel dangerLevel, bool movementInterrupts = true)
             {
