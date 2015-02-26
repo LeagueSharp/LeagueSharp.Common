@@ -74,10 +74,12 @@ namespace LeagueSharp.Common
         {
             return CursorPosT.GetCursorPos();
         }
+        
         public static bool IsKeyPressed(this Key key)
         {
             return Keyboard.IsKeyDown(key);
         }
+        
         public static string KeyToText(uint vKey)
         {
             /*A-Z */
@@ -228,7 +230,6 @@ namespace LeagueSharp.Common
             mode |= ENABLE_QUICK_EDIT_MODE;
             SetConsoleMode(handle, mode);
         }
-
         public static double NextDouble(this Random rng, double min, double max)
         {
             
@@ -310,8 +311,9 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
-
+            }
             var minElem = enumerator.Current;
             var minVal = valuingFoo(minElem);
 
