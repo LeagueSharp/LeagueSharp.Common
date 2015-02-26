@@ -24,7 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 #endregion
 
@@ -58,9 +57,8 @@ namespace LeagueSharp.Common
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
-        public static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; private set; }
-        public static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; private set; }
-
+        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
+        private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
         public static event InterruptableTargetHandler OnInterruptableTarget;
 
         private static void InitializeSpells()
@@ -110,10 +108,8 @@ namespace LeagueSharp.Common
             HeroManager.AllHeroes.ForEach(
                 hero =>
                 {
-                    if (CastingInterruptableSpell.ContainsKey(hero.NetworkId) &&
-                        !hero.Spellbook.IsCastingSpell &&
-                        !hero.Spellbook.IsChanneling &&
-                        !hero.Spellbook.IsCharging)
+                    if (CastingInterruptableSpell.ContainsKey(hero.NetworkId) && !hero.Spellbook.IsCastingSpell &&
+                        !hero.Spellbook.IsChanneling && !hero.Spellbook.IsCharging)
                     {
                         CastingInterruptableSpell.Remove(hero.NetworkId);
                     }
@@ -182,7 +178,8 @@ namespace LeagueSharp.Common
                 {
                     // Return the args with spell end time
                     return new InterruptableTargetEventArgs(
-                        CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime, CastingInterruptableSpell[target.NetworkId].MovementInterrupts);
+                        CastingInterruptableSpell[target.NetworkId].DangerLevel, target.Spellbook.CastEndTime,
+                        CastingInterruptableSpell[target.NetworkId].MovementInterrupts);
                 }
             }
 
