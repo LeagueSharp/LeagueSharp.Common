@@ -58,8 +58,8 @@ namespace LeagueSharp.Common
             Spellbook.OnStopCast += Spellbook_OnStopCast;
         }
 
-        private static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; set; }
-        private static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; set; }
+        public static Dictionary<string, List<InterruptableSpell>> InterruptableSpells { get; private set; }
+        public static Dictionary<int, InterruptableSpell> CastingInterruptableSpell { get; private set; }
 
         public static event InterruptableTargetHandler OnInterruptableTarget;
 
