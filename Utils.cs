@@ -61,7 +61,7 @@ namespace LeagueSharp.Common
         
         public static int TickCount
         {
-            get { return Environment.TickCount & int.MaxValue; }
+            get { return (int)(Game.ClockTime * 1000); }
         }
 
         /// <summary>
