@@ -699,7 +699,7 @@ namespace LeagueSharp.Common
                     new MenuItem("LaneClear", "LaneClear").SetShared().SetValue(new KeyBind('V', KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(1, KeyBindType.Press)));
+                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
                 Player = ObjectManager.Player;
