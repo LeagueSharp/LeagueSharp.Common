@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -29,7 +29,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Input;
 using SharpDX;
 
 #endregion
@@ -49,7 +48,9 @@ namespace LeagueSharp.Common
         WM_RBUTTONDOWN = 0x204,
         WM_RBUTTONUP = 0x205,
         WM_KEYDOWN = 0x0100,
-        WM_KEYUP = 0x101
+        WM_KEYUP = 0x101,
+        WM_XBUTTONUP = 0x20c,
+        WM_XBUTTONDOWN = 0x020b
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ namespace LeagueSharp.Common
     {
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
-
+        
         public static int TickCount
         {
             get { return Environment.TickCount & int.MaxValue; }
@@ -73,17 +74,12 @@ namespace LeagueSharp.Common
             return CursorPosT.GetCursorPos();
         }
 
-        public static bool IsKeyPressed(this Key key)
-        {
-            return Keyboard.IsKeyDown(key);
-        }
-
         public static string KeyToText(uint vKey)
         {
             /*A-Z */
             if (vKey >= 65 && vKey <= 90)
             {
-                return ((char)vKey).ToString();
+                return ((char) vKey).ToString();
             }
 
             /*F1-F12*/
@@ -148,14 +144,14 @@ namespace LeagueSharp.Common
 
         public static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length * sizeof(char)];
+            var bytes = new byte[str.Length * sizeof (char)];
             Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
-            var chars = new char[bytes.Length / sizeof(char)];
+            var chars = new char[bytes.Length / sizeof (char)];
             Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
@@ -191,7 +187,7 @@ namespace LeagueSharp.Common
                 var window_height = Console.WindowHeight;
                 Console.Clear();
             }
-            catch { }
+            catch {}
         }
 
         /// <summary>
@@ -231,6 +227,7 @@ namespace LeagueSharp.Common
 
         public static double NextDouble(this Random rng, double min, double max)
         {
+            
             return min + (rng.NextDouble() * (max - min));
         }
 
@@ -246,10 +243,10 @@ namespace LeagueSharp.Common
 
             private static void Game_OnWndProc(WndEventArgs args)
             {
-                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
+                if (args.Msg == (uint) WindowsMessages.WM_MOUSEMOVE)
                 {
-                    _posX = unchecked((short)args.LParam);
-                    _posY = unchecked((short)((long)args.LParam >> 16));
+                    _posX = unchecked((short) args.LParam);
+                    _posY = unchecked((short) ((long) args.LParam >> 16));
                 }
             }
 
@@ -284,10 +281,8 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
-            {
                 return default(T);
-            }
-
+            
             var maxElem = enumerator.Current;
             var maxVal = valuingFoo(maxElem);
 
@@ -309,9 +304,7 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
-            {
                 return default(T);
-            }
 
             var minElem = enumerator.Current;
             var minVal = valuingFoo(minElem);
