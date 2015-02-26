@@ -83,6 +83,8 @@
     <Reference Include="SharpDX.Direct3D9">
       <HintPath>..\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
+	<Reference Include="PresentationCore" />
+	<Reference Include="WindowsBase" />	
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Input;
 using SharpDX;
 
 #endregion
@@ -58,7 +59,7 @@ namespace LeagueSharp.Common
     {
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
-        
+
         public static int TickCount
         {
             get { return Environment.TickCount & int.MaxValue; }
@@ -70,6 +71,11 @@ namespace LeagueSharp.Common
         public static Vector2 GetCursorPos()
         {
             return CursorPosT.GetCursorPos();
+        }
+
+        public static bool IsKeyPressed(this Key key)
+        {
+            return Keyboard.IsKeyDown(key);
         }
 
         public static string KeyToText(uint vKey)
@@ -225,7 +231,6 @@ namespace LeagueSharp.Common
 
         public static double NextDouble(this Random rng, double min, double max)
         {
-            
             return min + (rng.NextDouble() * (max - min));
         }
 
@@ -279,8 +284,10 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
-            
+            }
+
             var maxElem = enumerator.Current;
             var maxVal = valuingFoo(maxElem);
 
@@ -302,7 +309,9 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
+            }
 
             var minElem = enumerator.Current;
             var minVal = valuingFoo(minElem);
