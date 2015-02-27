@@ -61,13 +61,8 @@ namespace LeagueSharp.Common
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
-        private static Stopwatch stopWatch = new Stopwatch();
+        private static Stopwatch stopWatch = Stopwatch.StartNew();
 
-        static Utils()
-        {            
-            stopWatch.Start();
-        }
-        
         public static int TickCount
         {
             get { return (int) stopWatch.ElapsedMilliseconds; }
