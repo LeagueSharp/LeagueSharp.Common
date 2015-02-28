@@ -30,7 +30,6 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Input;
-using System.Diagnostics;
 using SharpDX;
 
 #endregion
@@ -61,11 +60,9 @@ namespace LeagueSharp.Common
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
-        private static Stopwatch stopWatch = Stopwatch.StartNew();
-
         public static int TickCount
         {
-            get { return (int) stopWatch.ElapsedMilliseconds; }
+            get { return (int) DateTime.Now.TimeOfDay.TotalMilliseconds; }
         }
 
         /// <summary>
