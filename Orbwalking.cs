@@ -409,7 +409,6 @@ namespace LeagueSharp.Common
                     var r = new Random();
                     var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
                     if (BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
-                        Utils.TickCount - spldelay > Orbwalker._config.Item("splDelay").GetValue<Slider>().Value &&
                         Utils.TickCount - atkdelay > Orbwalker._config.Item("atkDelay").GetValue<Slider>().Value &&
                         Utils.TickCount - VirtualMouse.clickdelay > 
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
@@ -444,8 +443,6 @@ namespace LeagueSharp.Common
                 ResetAutoAttackTimer();
             }
         }
-
-        public static int spldelay;
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
@@ -553,7 +550,6 @@ namespace LeagueSharp.Common
                 fakeclicks.AddItem(new MenuItem("clickDelay", "Click Delay").SetValue(new Slider(200, 0, 2000)));
                 fakeclicks.AddItem(new MenuItem("randomDelay", "Random Delay").SetValue(new Slider(100, 0, 500)));
                 fakeclicks.AddItem(new MenuItem("atkDelay", "After Attack Delay").SetValue(new Slider(200, 0, 2000)));
-                fakeclicks.AddItem(new MenuItem("splDelay", "Whilst Casting Delay").SetValue(new Slider(200, 0, 2000)));
                 _config.AddSubMenu(fakeclicks);
 
                 /* Delay sliders */
