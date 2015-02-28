@@ -390,7 +390,7 @@ namespace LeagueSharp.Common
                     {
                         MoveToMouse.Combo = true;
                     }
-                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP || Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
                     {
                         MoveToMouse.Combo = false;
                     }
@@ -401,7 +401,7 @@ namespace LeagueSharp.Common
                     {
                         MoveToMouse.Combo = true;
                     }
-                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP || Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
                     {
                         MoveToMouse.Combo = false;
                     }
@@ -411,7 +411,7 @@ namespace LeagueSharp.Common
                     {
                         MoveToMouse.Combo = true;
                     }
-                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP || Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
                     {
                         MoveToMouse.Combo = false;
                     }
@@ -425,7 +425,7 @@ namespace LeagueSharp.Common
                     {
                        MoveToMouse.Mixed = true;
                     }
-                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP || Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
                     {
                        MoveToMouse.Mixed = false;
                     }
@@ -436,7 +436,7 @@ namespace LeagueSharp.Common
                     {
                        MoveToMouse.Mixed = true;
                     }
-                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP || Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
                     {
                        MoveToMouse.Mixed = false;
                     }
@@ -446,7 +446,7 @@ namespace LeagueSharp.Common
                     {
                        MoveToMouse.Mixed = true;
                     }
-                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP || Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
                     {
                        MoveToMouse.Mixed = false;
                     }
