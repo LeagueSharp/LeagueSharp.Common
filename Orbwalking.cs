@@ -449,7 +449,6 @@ namespace LeagueSharp.Common
 
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
-            spldelay = Utils.TickCount;
             try
             {
                 var spellName = Spell.SData.Name;
@@ -457,6 +456,7 @@ namespace LeagueSharp.Common
                 if (IsAutoAttackReset(spellName) && unit.IsMe)
                 {
                     Utility.DelayAction.Add(250, ResetAutoAttackTimer);
+                    spldelay = Utils.TickCount;
                 }
 
                 if (!IsAutoAttack(spellName))
@@ -467,6 +467,7 @@ namespace LeagueSharp.Common
                 if (unit.IsMe &&
                     (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
+                    spldelay = Utils.TickCount;
                     LastAATick = Utils.TickCount - Game.Ping / 2;
 
                     if (Spell.Target is Obj_AI_Base)
