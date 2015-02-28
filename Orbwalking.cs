@@ -191,6 +191,8 @@ namespace LeagueSharp.Common
             if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
+                public static int atkdelay;
+                atkdelay = Utils.TickCount;
             }
         }
 
@@ -406,6 +408,7 @@ namespace LeagueSharp.Common
                     var r = new Random();
                     var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
                     if (BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
+                        Utils.TickCount - atkdelay > 200 &&
                         Utils.TickCount - VirtualMouse.clickdelay > 
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
                     {
