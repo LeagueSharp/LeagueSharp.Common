@@ -444,8 +444,11 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static int spldelay;
+
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
+            spldelay = Utils.TickCount;
             try
             {
                 var spellName = Spell.SData.Name;
