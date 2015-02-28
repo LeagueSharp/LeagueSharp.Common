@@ -408,6 +408,7 @@ namespace LeagueSharp.Common
                     var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
                     if (Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
                         Environment.TickCount - VirtualMouse.clickdelay >
+                        Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value +
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
                     {
                         VirtualMouse.clickdelay = Utils.TickCount;
