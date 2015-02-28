@@ -409,7 +409,7 @@ namespace LeagueSharp.Common
                         Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value +
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
                     {
-                        VirtualMouse.clickdelay = Environment.TickCount;
+                        VirtualMouse.clickdelay = Utils.TickCount;
                         VirtualMouse.RightClick();
                     }
                     else
