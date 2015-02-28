@@ -25,7 +25,6 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using SharpDX;
 using Color = System.Drawing.Color;
 
