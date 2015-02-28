@@ -470,7 +470,7 @@ namespace LeagueSharp.Common
                         if (unit.IsMelee())
                         {
                             Utility.DelayAction.Add(
-                                unit.AttackCastDelay * 1000 + 40, () => FireAfterAttack(unit, _lastTarget));
+                                (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
                         }
                     }
                 }
@@ -689,7 +689,7 @@ namespace LeagueSharp.Common
                     {
                         var t = Player.AttackCastDelay * 1000 - 100 + Game.Ping / 2 +
                                 1000 * (int) Player.Distance(minion) / (int) GetMyProjectileSpeed();
-                        var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
+                        var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)t, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                         {
