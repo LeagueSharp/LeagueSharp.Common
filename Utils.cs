@@ -62,7 +62,7 @@ namespace LeagueSharp.Common
 
         public static int TickCount
         {
-            get { return (int)(DateTime.Now.Ticks / 10000d); }
+            get { return Environment.TickCount & int.MaxValue; }
         }
 
         /// <summary>
