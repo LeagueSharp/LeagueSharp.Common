@@ -718,7 +718,7 @@ namespace LeagueSharp.Common
                 /* Fake Clicks */
 
                 var fakeclicks = new Menu("Fake Clicks", "fakeClicks");
-                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickEnable", "Enable").SetValue(true));
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickEnable", "Enable").SetValue(false));
                 fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickDelay", "Click Delay").SetValue(new Slider(200, 0, 2000)));
                 fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("randomDelay", "Random Delay").SetValue(new Slider(100, 0, 500)));
                 _config.AddSubMenu(fakeclicks);
