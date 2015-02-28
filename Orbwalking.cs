@@ -131,7 +131,7 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
-            if (sender.IsMe)
+            if (sender.IsMe && sender.IsValid<Obj_SpellMissile>())
             {
                 spldelay = Utils.TickCount;
             }
