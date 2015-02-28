@@ -135,7 +135,6 @@ namespace LeagueSharp.Common
             {
                 spldelay = Utils.TickCount;
             }
-            }
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
