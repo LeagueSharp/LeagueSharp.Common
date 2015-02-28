@@ -26,11 +26,32 @@ using System;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    ///     This class offers real mouse clicks.
+    /// </summary>
+    public static class VirtualMouse
+    {
+        // import the necessary API function so .NET can marshall parameters appropriately
+        [DllImport("user32.dll")]
+        static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+        //data
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
+        private const int MOUSEEVENTF_RIGHTUP = 0x0010;
+        // simulates a click-and-release action of the right mouse button at its current position
+        public static void RightClick()
+        {
+            mouse_event(MOUSEEVENTF_RIGHTDOWN, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
+            mouse_event(MOUSEEVENTF_RIGHTUP, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
+        }
+        public static int clickdelay = 0;
+    }
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
     /// </summary>
@@ -379,6 +400,13 @@ namespace LeagueSharp.Common
 
                 if (CanMove(extraWindup))
                 {
+                    var r = new Random();
+                    int rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
+                    if (Orbwalker._config.Item("clickEnable").GetValue<bool>() && Environment.TickCount - VirtualMouse.clickdelay > Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value + Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
+                    {
+                        VirtualMouse.clickdelay = Environment.TickCount;
+                        VirtualMouse.RightClick();
+                    }
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }
             }
@@ -474,7 +502,7 @@ namespace LeagueSharp.Common
         public class Orbwalker
         {
             private const float LaneClearWaitTimeMod = 2f;
-            private static Menu _config;
+            public static Menu _config;
             private readonly Obj_AI_Hero Player;
             private Obj_AI_Base _forcedTarget;
             private OrbwalkingMode _mode = OrbwalkingMode.None;
@@ -513,6 +541,13 @@ namespace LeagueSharp.Common
                     new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(80, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
 
+
+                /* Fake Clicks */
+                var fakeclicks = new Menu("Fake Clicks", "fakeClicks");
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickEnable", "Enable").SetValue(false));
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickDelay", "Click Delay").SetValue(new Slider(200, 0, 2000)));
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("randomDelay", "Random Delay").SetValue(new Slider(100, 0, 500)));
+                _config.AddSubMenu(fakeclicks);
 
                 /*Load the menu*/
                 _config.AddItem(
