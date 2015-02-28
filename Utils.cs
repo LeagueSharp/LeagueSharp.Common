@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -49,7 +49,9 @@ namespace LeagueSharp.Common
         WM_RBUTTONDOWN = 0x204,
         WM_RBUTTONUP = 0x205,
         WM_KEYDOWN = 0x0100,
-        WM_KEYUP = 0x101
+        WM_KEYUP = 0x101,
+        WM_XBUTTONUP = 0x20c,
+        WM_XBUTTONDOWN = 0x020b
     }
 
     /// <summary>

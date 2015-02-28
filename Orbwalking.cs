@@ -26,11 +26,32 @@ using System;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    ///     This class offers real mouse clicks.
+    /// </summary>
+    public static class VirtualMouse
+    {
+        // import the necessary API function so .NET can marshall parameters appropriately
+        [DllImport("user32.dll")]
+        static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+        //data
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
+        private const int MOUSEEVENTF_RIGHTUP = 0x0010;
+        // simulates a click-and-release action of the right mouse button at its current position
+        public static void RightClick()
+        {
+            mouse_event(MOUSEEVENTF_RIGHTDOWN, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
+            mouse_event(MOUSEEVENTF_RIGHTUP, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
+        }
+        public static int clickdelay = 0;
+    }
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
     /// </summary>
@@ -103,6 +124,7 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
+            Game.OnWndProc += GameOnOnWndProc;
         }
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
@@ -192,6 +214,14 @@ namespace LeagueSharp.Common
         public static bool IsAutoAttackReset(string name)
         {
             return AttackResets.Contains(name.ToLower());
+        }
+
+        public static class MoveToMouse
+        {
+            public static bool Combo;
+            public static bool Mixed;
+            public static bool LastHit;
+            public static bool LaneClear;
         }
 
         /// <summary>
@@ -346,6 +376,154 @@ namespace LeagueSharp.Common
             LastMoveCommandPosition = point;
         }
 
+        private static void GameOnOnWndProc(WndEventArgs args)
+        {
+            var mtmouseKeyCombo = Orbwalker._config.Item("mtmouseKeyCombo").GetValue<StringList>().SelectedIndex;
+            var mtmouseKeyMixed = Orbwalker._config.Item("mtmouseKeyMixed").GetValue<StringList>().SelectedIndex;
+            var mtmouseKeyLastHit = Orbwalker._config.Item("mtmouseKeyLastHit").GetValue<StringList>().SelectedIndex;
+            var mtmouseKeyLaneClear = Orbwalker._config.Item("mtmouseKeyLaneClear").GetValue<StringList>().SelectedIndex;
+
+            switch (mtmouseKeyCombo)
+            {
+                case 0: //Left
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    {
+                        MoveToMouse.Combo = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    {
+                        MoveToMouse.Combo = false;
+                    }
+                    break;
+
+                case 1: //Middle
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    {
+                        MoveToMouse.Combo = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    {
+                        MoveToMouse.Combo = false;
+                    }
+                    break;
+                case 2: //Side Buttons
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    {
+                        MoveToMouse.Combo = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP && Orbwalker._config.Item("mtmouseEnableCombo").GetValue<bool>())
+                    {
+                        MoveToMouse.Combo = false;
+                    }
+                    break;
+            }
+
+            switch (mtmouseKeyMixed)
+            {
+                case 0: //Left
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    {
+                       MoveToMouse.Mixed = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    {
+                       MoveToMouse.Mixed = false;
+                    }
+                    break;
+
+                case 1: //Middle
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    {
+                       MoveToMouse.Mixed = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    {
+                       MoveToMouse.Mixed = false;
+                    }
+                    break;
+                case 2: //Side Buttons
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    {
+                       MoveToMouse.Mixed = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP && Orbwalker._config.Item("mtmouseEnableMixed").GetValue<bool>())
+                    {
+                       MoveToMouse.Mixed = false;
+                    }
+                    break;
+            }
+
+            switch (mtmouseKeyLastHit)
+            {
+                case 0: //Left
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableLastHit").GetValue<bool>())
+                    {
+                        MoveToMouse.LastHit = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP && Orbwalker._config.Item("mtmouseEnableLastHit").GetValue<bool>())
+                    {
+                        MoveToMouse.LastHit = false;
+                    }
+                    break;
+
+                case 1: //Middle
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableLastHit").GetValue<bool>())
+                    {
+                        MoveToMouse.LastHit = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP && Orbwalker._config.Item("mtmouseEnableLastHit").GetValue<bool>())
+                    {
+                        MoveToMouse.LastHit = false;
+                    }
+                    break;
+                case 2: //Side Buttons
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableLastHit").GetValue<bool>())
+                    {
+                        MoveToMouse.LastHit = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP && Orbwalker._config.Item("mtmouseEnableLastHit").GetValue<bool>())
+                    {
+                        MoveToMouse.LastHit = false;
+                    }
+                    break;
+            }
+
+            switch (mtmouseKeyLaneClear)
+            {
+                case 0: //Left
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableLaneClear").GetValue<bool>())
+                    {
+                        MoveToMouse.LaneClear = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP && Orbwalker._config.Item("mtmouseEnableLaneClear").GetValue<bool>())
+                    {
+                        MoveToMouse.LaneClear = false;
+                    }
+                    break;
+
+                case 1: //Middle
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableLaneClear").GetValue<bool>())
+                    {
+                        MoveToMouse.LaneClear = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_MBUTTONUP && Orbwalker._config.Item("mtmouseEnableLaneClear").GetValue<bool>())
+                    {
+                        MoveToMouse.LaneClear = false;
+                    }
+                    break;
+                case 2: //Side Buttons
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONDOWN && Orbwalker._config.Item("mtmouseEnableLaneClear").GetValue<bool>())
+                    {
+                        MoveToMouse.LaneClear = true;
+                    }
+                    if (args.Msg == (uint)WindowsMessages.WM_XBUTTONUP && Orbwalker._config.Item("mtmouseEnableLaneClear").GetValue<bool>())
+                    {
+                        MoveToMouse.LaneClear = false;
+                    }
+                    break;
+            }
+        }
+
         /// <summary>
         ///     Orbwalk a target while moving to Position.
         /// </summary>
@@ -379,6 +557,13 @@ namespace LeagueSharp.Common
 
                 if (CanMove(extraWindup))
                 {
+                    var r = new Random();
+                    int rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
+                    if (Orbwalker._config.Item("clickEnable").GetValue<bool>() && Environment.TickCount - VirtualMouse.clickdelay > Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value + Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
+                    {
+                        VirtualMouse.clickdelay = Environment.TickCount;
+                        VirtualMouse.RightClick();
+                    }
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }
             }
@@ -474,7 +659,7 @@ namespace LeagueSharp.Common
         public class Orbwalker
         {
             private const float LaneClearWaitTimeMod = 2f;
-            private static Menu _config;
+            public static Menu _config;
             private readonly Obj_AI_Hero Player;
             private Obj_AI_Base _forcedTarget;
             private OrbwalkingMode _mode = OrbwalkingMode.None;
@@ -514,6 +699,30 @@ namespace LeagueSharp.Common
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
 
 
+                /* Move to mouse */
+                var mtmouse = new Menu("Move to mouse", "mtmouse");
+                mtmouse.AddSubMenu(new Menu("Combo", "mtmouseCombo"));
+                mtmouse.SubMenu("mtmouseCombo").AddItem(new MenuItem("mtmouseEnableCombo", "Enabled").SetValue(false));
+                mtmouse.SubMenu("mtmouseCombo").AddItem(new MenuItem("mtmouseKeyCombo", "Mousebutton").SetValue(new StringList(new[] { "Left", "Middle", "Fourth" })));
+                mtmouse.AddSubMenu(new Menu("Mixed", "mtmouseMixed"));
+                mtmouse.SubMenu("mtmouseMixed").AddItem(new MenuItem("mtmouseEnableMixed", "Enabled").SetValue(false));
+                mtmouse.SubMenu("mtmouseMixed").AddItem(new MenuItem("mtmouseKeyMixed", "Mousebutton").SetValue(new StringList(new[] { "Left", "Middle", "Fourth" })));
+                mtmouse.AddSubMenu(new Menu("LastHit", "mtmouseLastHit"));
+                mtmouse.SubMenu("mtmouseLastHit").AddItem(new MenuItem("mtmouseEnableLastHit", "Enabled").SetValue(false));
+                mtmouse.SubMenu("mtmouseLastHit").AddItem(new MenuItem("mtmouseKeyLastHit", "Moussebutton").SetValue(new StringList(new[] { "Left", "Middle", "Fourth" })));
+                mtmouse.AddSubMenu(new Menu("LaneClear", "mtmouseLaneClear"));
+                mtmouse.SubMenu("mtmouseLaneClear").AddItem(new MenuItem("mtmouseEnableLaneClear", "Enabled").SetValue(false));
+                mtmouse.SubMenu("mtmouseLaneClear").AddItem(new MenuItem("mtmouseKeyLaneClear", "Mousebutton").SetValue(new StringList(new[] { "Left", "Middle", "Fourth" })));
+                _config.AddSubMenu(mtmouse);
+
+                /* Fake Clicks */
+
+                var fakeclicks = new Menu("Fake Clicks", "fakeClicks");
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickEnable", "Enable").SetValue(true));
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("clickDelay", "Click Delay").SetValue(new Slider(200, 0, 2000)));
+                fakeclicks.AddItem(new LeagueSharp.Common.MenuItem("randomDelay", "Random Delay").SetValue(new Slider(100, 0, 500)));
+                _config.AddSubMenu(fakeclicks);
+
                 /*Load the menu*/
                 _config.AddItem(
                     new MenuItem("LastHit", "Last hit").SetShared().SetValue(new KeyBind('X', KeyBindType.Press)));
@@ -551,22 +760,22 @@ namespace LeagueSharp.Common
                         return _mode;
                     }
 
-                    if (_config.Item("Orbwalk").GetValue<KeyBind>().Active)
+                    if (_config.Item("Orbwalk").GetValue<KeyBind>().Active || MoveToMouse.Combo)
                     {
                         return OrbwalkingMode.Combo;
                     }
 
-                    if (_config.Item("LaneClear").GetValue<KeyBind>().Active)
+                    if (_config.Item("LaneClear").GetValue<KeyBind>().Active || MoveToMouse.LaneClear)
                     {
                         return OrbwalkingMode.LaneClear;
                     }
 
-                    if (_config.Item("Farm").GetValue<KeyBind>().Active)
+                    if (_config.Item("Farm").GetValue<KeyBind>().Active || MoveToMouse.Mixed)
                     {
                         return OrbwalkingMode.Mixed;
                     }
 
-                    if (_config.Item("LastHit").GetValue<KeyBind>().Active)
+                    if (_config.Item("LastHit").GetValue<KeyBind>().Active || MoveToMouse.LastHit)
                     {
                         return OrbwalkingMode.LastHit;
                     }
