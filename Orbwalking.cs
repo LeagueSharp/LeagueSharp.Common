@@ -412,7 +412,10 @@ namespace LeagueSharp.Common
                         VirtualMouse.clickdelay = Environment.TickCount;
                         VirtualMouse.RightClick();
                     }
+                    else
+                    {
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
+                    }
                 }
             }
             catch (Exception e)
