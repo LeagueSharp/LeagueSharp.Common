@@ -131,12 +131,9 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
-            if (sender.IsMe && sender.IsValid<Obj_SpellMissile>())
-            {
-                spldelay = Utils.TickCount;
-            }
             if (sender.IsValid<Obj_SpellMissile>())
             {
+                spldelay = Utils.TickCount;
                 var missile = (Obj_SpellMissile) sender;
                 if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
                 {
