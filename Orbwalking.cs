@@ -441,7 +441,6 @@ namespace LeagueSharp.Common
         {
             if (spellbook.Owner.IsValid && spellbook.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
             {
-                spldelay = Utils.TickCount;
                 ResetAutoAttackTimer();
             }
         }
