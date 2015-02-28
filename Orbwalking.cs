@@ -366,7 +366,7 @@ namespace LeagueSharp.Common
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
             LastMoveCommandPosition = point;
         }
-        
+
         /// <summary>
         ///     Orbwalk a target while moving to Position.
         /// </summary>
