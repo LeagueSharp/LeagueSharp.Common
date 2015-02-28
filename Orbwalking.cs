@@ -409,6 +409,7 @@ namespace LeagueSharp.Common
                     var r = new Random();
                     var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
                     if (BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
+                        Utils.TickCount - spldelay > 1000 &&
                         Utils.TickCount - atkdelay > Orbwalker._config.Item("atkDelay").GetValue<Slider>().Value &&
                         Utils.TickCount - VirtualMouse.clickdelay > 
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
