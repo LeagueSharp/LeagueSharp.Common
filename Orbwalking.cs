@@ -49,8 +49,8 @@ namespace LeagueSharp.Common
         // simulates a click-and-release action of the right mouse button at its current position
         public static void RightClick()
         {
-            mouse_event(MOUSEEVENTF_RIGHTDOWN, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
-            mouse_event(MOUSEEVENTF_RIGHTUP, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
+            mouse_event(MOUSEEVENTF_RIGHTDOWN, Orbwalking.coordX, Orbwalking.coordY, 0, 0);
+            mouse_event(MOUSEEVENTF_RIGHTUP, Orbwalking.coordX, Orbwalking.coordY, 0, 0);
         }
     }
 
@@ -114,6 +114,8 @@ namespace LeagueSharp.Common
         public static bool Move = true;
         public static int LastMoveCommandT;
         public static Vector3 LastMoveCommandPosition = Vector3.Zero;
+        public static int coordX = (int)LastMoveCommandPosition.X;
+        public static int coordY = (int)LastMoveCommandPosition.Y;
         private static AttackableUnit _lastTarget;
         private static readonly Obj_AI_Hero Player;
         private static int _delay;
