@@ -943,7 +943,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.True,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 300, 475, 650 }[level] + 0.7 * source.FlatMagicDamageMod
+                                target.Type == GameObjectType.obj_AI_Hero ? new double[] { 300, 475, 650 }[level] + 0.7 * source.FlatMagicDamageMod : 1000 + 0.7 * source.FlatMagicDamageMod
                     },
                 });
 
