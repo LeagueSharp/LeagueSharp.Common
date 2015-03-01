@@ -42,6 +42,8 @@ namespace LeagueSharp.Common
         private const int MOUSEEVENTF_RIGHTUP = 0x0010;
         public static int clickdelay;
         public static bool disableOrbClick = false; //if set to true, orbwalker won't send right clicks - for other scripts
+        public static int coordX;
+        public static int coordY;
         // import the necessary API function so .NET can marshall parameters appropriately
         [DllImport("user32.dll")]
         private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
@@ -49,8 +51,8 @@ namespace LeagueSharp.Common
         // simulates a click-and-release action of the right mouse button at its current position
         public static void RightClick()
         {
-            mouse_event(MOUSEEVENTF_RIGHTDOWN, Orbwalking.coordX, Orbwalking.coordY, 0, 0);
-            mouse_event(MOUSEEVENTF_RIGHTUP, Orbwalking.coordX, Orbwalking.coordY, 0, 0);
+            mouse_event(MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
+            mouse_event(MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
         }
     }
 
@@ -114,8 +116,6 @@ namespace LeagueSharp.Common
         public static bool Move = true;
         public static int LastMoveCommandT;
         public static Vector3 LastMoveCommandPosition = Vector3.Zero;
-        public static int coordX = (int)LastMoveCommandPosition.X;
-        public static int coordY = (int)LastMoveCommandPosition.Y;
         private static AttackableUnit _lastTarget;
         private static readonly Obj_AI_Hero Player;
         private static int _delay;
@@ -409,7 +409,7 @@ namespace LeagueSharp.Common
                 {
                     var r = new Random();
                     var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
-                    if (!disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
+                    if (!VirtualMouse.disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
                         Utils.TickCount - atkdelay > Orbwalker._config.Item("atkDelay").GetValue<Slider>().Value &&
                         Utils.TickCount - VirtualMouse.clickdelay > 
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
