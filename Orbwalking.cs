@@ -41,6 +41,7 @@ namespace LeagueSharp.Common
         private const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
         private const int MOUSEEVENTF_RIGHTUP = 0x0010;
         public static int clickdelay;
+        public static bool disableOrbClick = false; //if set to true, orbwalker won't send right clicks - for other scripts
         // import the necessary API function so .NET can marshall parameters appropriately
         [DllImport("user32.dll")]
         private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
@@ -408,7 +409,7 @@ namespace LeagueSharp.Common
                 {
                     var r = new Random();
                     var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
-                    if (BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
+                    if (!disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
                         Utils.TickCount - atkdelay > Orbwalker._config.Item("atkDelay").GetValue<Slider>().Value &&
                         Utils.TickCount - VirtualMouse.clickdelay > 
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
