@@ -24,6 +24,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Forms;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -50,6 +52,53 @@ namespace LeagueSharp.Common
         WM_RBUTTONUP = 0x205,
         WM_KEYDOWN = 0x0100,
         WM_KEYUP = 0x101
+    }
+
+    public enum MouseEvents
+    {
+        MOUSEEVENTF_RIGHTDOWN = 0x0008,
+        MOUSEEVENTF_RIGHTUP = 0x0010,
+    }
+
+    public enum KeyboardEvents
+    {
+        KEYBDEVENTF_SHIFTVIRTUAL = 0x10,
+        KEYBDEVENTF_SHIFTSCANCODE = 0x2A,
+        KEYBDEVENTF_KEYDOWN = 0,
+        KEYBDEVENTF_KEYUP = 2
+    }
+
+    /// <summary>
+    ///     This class offers real mouse clicks.
+    /// </summary>
+    public static class VirtualMouse
+    {
+        public static int clickdelay;
+        public static int attkdelay;
+        public static bool disableOrbClick = false; //if set to true, orbwalker won't send right clicks - for other scripts
+        public static int coordX;
+        public static int coordY;
+
+        // mouse event
+        [DllImport("user32.dll")]
+        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+        // keyboard event
+        [DllImport("user32.dll", EntryPoint = "keybd_event", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern void keybd_event(byte vk, byte scan, int flags, int extrainfo);
+        // simulates a click-and-release action of the right mouse button at its current position
+        public static void RightClick()
+        {
+                mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
+                mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
+        }
+
+        public static void ShiftClick()
+        {
+            keybd_event((int)KeyboardEvents.KEYBDEVENTF_SHIFTVIRTUAL, (int)KeyboardEvents.KEYBDEVENTF_SHIFTSCANCODE, (int)KeyboardEvents.KEYBDEVENTF_KEYDOWN, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
+            Utility.DelayAction.Add(200, () => { keybd_event((int)KeyboardEvents.KEYBDEVENTF_SHIFTVIRTUAL, (int)KeyboardEvents.KEYBDEVENTF_SHIFTSCANCODE, (int)KeyboardEvents.KEYBDEVENTF_KEYUP, 0); });
+        }
     }
 
     /// <summary>
