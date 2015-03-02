@@ -1088,6 +1088,11 @@ namespace LeagueSharp.Common
                 {
                     _texture.Dispose();
                 }
+
+                if (!_originalTexture.IsDisposed)
+                {
+                    _originalTexture.Dispose();
+                }
             }
         }
 
