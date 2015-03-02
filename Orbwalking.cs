@@ -33,30 +33,6 @@ using Color = System.Drawing.Color;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    ///     This class offers real mouse clicks.
-    /// </summary>
-    public static class VirtualMouse
-    {
-        //data
-        private const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
-        private const int MOUSEEVENTF_RIGHTUP = 0x0010;
-        public static int clickdelay;
-        public static bool disableOrbClick = false; //if set to true, orbwalker won't send right clicks - for other scripts
-        public static int coordX;
-        public static int coordY;
-        // import the necessary API function so .NET can marshall parameters appropriately
-        [DllImport("user32.dll")]
-        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
-
-        // simulates a click-and-release action of the right mouse button at its current position
-        public static void RightClick()
-        {
-            mouse_event(MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
-            mouse_event(MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
-        }
-    }
-
-    /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
     /// </summary>
     public static class Orbwalking
@@ -393,8 +369,17 @@ namespace LeagueSharp.Common
 
                     if (!DisableNextAttack)
                     {
-                        Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-
+                        if (!VirtualMouse.disableOrbClick && Orbwalker._config.Item("shiftEnable").GetValue<bool>() && Orbwalker._config.Item("clickEnable").GetValue<bool>() && Utils.TickCount - VirtualMouse.attkdelay >
+                        Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value)
+                        {
+                            VirtualMouse.attkdelay = Utils.TickCount;
+                            VirtualMouse.ShiftClick();
+                            Utility.DelayAction.Add(50, () => { Player.IssueOrder(GameObjectOrder.AttackUnit, target); });
+                        }
+                        else
+                        {
+                            Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                        }
                         if (_lastTarget != null && _lastTarget.IsValid && _lastTarget != target)
                         {
                             LastAATick = Utils.TickCount + Game.Ping / 2;
@@ -421,7 +406,7 @@ namespace LeagueSharp.Common
                     }
                     else
                     {
-                    MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
+                        MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                     }
                 }
             }
@@ -553,6 +538,7 @@ namespace LeagueSharp.Common
                 fakeclicks.AddItem(new MenuItem("clickDelay", "Click Delay").SetValue(new Slider(200, 0, 2000)));
                 fakeclicks.AddItem(new MenuItem("randomDelay", "Random Delay").SetValue(new Slider(100, 0, 500)));
                 fakeclicks.AddItem(new MenuItem("atkDelay", "After Attack Delay").SetValue(new Slider(200, 0, 2000)));
+                fakeclicks.AddItem(new MenuItem("shiftEnable", "Draw red click before attack").SetValue(false));
                 _config.AddSubMenu(fakeclicks);
 
                 /* Delay sliders */
