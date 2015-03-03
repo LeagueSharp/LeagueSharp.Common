@@ -36,6 +36,7 @@ namespace LeagueSharp.Common
         private static float NextDelay;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         private static Random RandomNumber;
+        private static bool enabled;
 
         public AutoLevel(IEnumerable<int> levels)
         {
@@ -53,7 +54,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
+            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
             {
                 return;
             }
@@ -75,16 +76,14 @@ namespace LeagueSharp.Common
             return q + w + e + r;
         }
 
-        public static void Enabled(bool enabled)
+        public static void Enable()
         {
-            if (enabled)
-            {
-                Game.OnGameUpdate += Game_OnGameUpdate;
-            }
-            else
-            {
-                Game.OnGameUpdate -= Game_OnGameUpdate;
-            }
+            enabled = true;
+        }
+
+        public static void Disable()
+        {
+            enabled = false;
         }
 
         public static void UpdateSequence(IEnumerable<int> levels)
