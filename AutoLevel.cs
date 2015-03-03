@@ -29,7 +29,7 @@ using System.Collections.Generic;
 
 namespace LeagueSharp.Common
 {
-    static class AutoLevel
+    internal static class AutoLevel
     {
         private static List<SpellSlot> order = new List<SpellSlot>();
         private static float LastLeveled;
