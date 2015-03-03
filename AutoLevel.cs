@@ -39,17 +39,14 @@ namespace LeagueSharp.Common
 
         public AutoLevel(IEnumerable<int> levels)
         {
-            foreach (var level in levels)
-            {
-                order.Add((SpellSlot) level);
-            }
+            UpdateSequence(levels);
             RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
         public AutoLevel(List<SpellSlot> levels)
         {
-            order = levels;
+            UpdateSequence(levels);
             RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
@@ -88,6 +85,22 @@ namespace LeagueSharp.Common
             {
                 Game.OnGameUpdate -= Game_OnGameUpdate;
             }
+        }
+
+        public static void UpdateSequence(IEnumerable<int> levels)
+        {
+            order.Clear();
+
+            foreach (var level in levels)
+            {
+                order.Add((SpellSlot) level);
+            }
+        }
+
+        public static void UpdateSequence(List<SpellSlot> levels)
+        {
+            order.Clear();
+            order = levels;
         }
     }
 }
