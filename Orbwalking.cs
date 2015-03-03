@@ -393,8 +393,23 @@ namespace LeagueSharp.Common
                 if (CanMove(extraWindup))
                 {
                     var r = new Random();
-                    var rng = r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
-                    if (!VirtualMouse.disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
+                    var rng = 10 * r.Next(0, Orbwalker._config.Item("randomDelay").GetValue<Slider>().Value);
+
+                    if (Orbwalker._config.Item("forceEnable").GetValue<bool>())
+                    {
+                        if (!VirtualMouse.disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
+                        Utils.TickCount - atkdelay > Orbwalker._config.Item("atkDelay").GetValue<Slider>().Value &&
+                        Utils.TickCount - VirtualMouse.clickdelay >
+                        Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
+                        {
+                            VirtualMouse.coordX = (int)LastMoveCommandPosition.X;
+                            VirtualMouse.coordY = (int)LastMoveCommandPosition.Y;
+                            VirtualMouse.clickdelay = Utils.TickCount;
+                            VirtualMouse.RightClick();
+
+                        }
+                    }
+                    else if (!VirtualMouse.disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
                         Utils.TickCount - atkdelay > Orbwalker._config.Item("atkDelay").GetValue<Slider>().Value &&
                         Utils.TickCount - VirtualMouse.clickdelay > 
                         Orbwalker._config.Item("clickDelay").GetValue<Slider>().Value + rng)
@@ -539,6 +554,7 @@ namespace LeagueSharp.Common
                 fakeclicks.AddItem(new MenuItem("randomDelay", "Random Delay").SetValue(new Slider(100, 0, 500)));
                 fakeclicks.AddItem(new MenuItem("atkDelay", "After Attack Delay").SetValue(new Slider(200, 0, 2000)));
                 fakeclicks.AddItem(new MenuItem("shiftEnable", "Draw red click before attack").SetValue(false));
+                fakeclicks.AddItem(new MenuItem("forceEnable", "Use clicks to move").SetValue(false));
                 _config.AddSubMenu(fakeclicks);
 
                 /* Delay sliders */
