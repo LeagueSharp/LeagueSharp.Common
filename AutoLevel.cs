@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  AutoLevel.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -39,6 +39,18 @@ namespace LeagueSharp.Common
         private static Random RandomNumber;
         private static bool enabled;
         private static bool init;
+
+        public AutoLevel(IEnumerable<int> levels)
+        {
+            UpdateSequence(levels);
+            Init();
+        }
+
+        public AutoLevel(List<SpellSlot> levels)
+        {
+            UpdateSequence(levels);
+            Init();
+        }
 
         private static void Init()
         {
@@ -84,6 +96,11 @@ namespace LeagueSharp.Common
         public static void Disable()
         {
             enabled = false;
+        }
+
+        public static void Enabled(bool b)
+        {
+            enabled = b;
         }
 
         public static void UpdateSequence(IEnumerable<int> levels)
