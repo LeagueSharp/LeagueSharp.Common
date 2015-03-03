@@ -29,24 +29,16 @@ using System.Collections.Generic;
 
 namespace LeagueSharp.Common
 {
-    public class AutoLevel
+    internal static class AutoLevel
     {
         private static List<SpellSlot> order = new List<SpellSlot>();
         private static float LastLeveled;
         private static float NextDelay;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
-        private static Random RandomNumber;
+        private static readonly Random RandomNumber;
 
-        public AutoLevel(IEnumerable<int> levels)
+        static AutoLevel()
         {
-            UpdateSequence(levels);
-            RandomNumber = new Random(Utils.TickCount);
-            Game.OnGameUpdate += Game_OnGameUpdate;
-        }
-
-        public AutoLevel(List<SpellSlot> levels)
-        {
-            UpdateSequence(levels);
             RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
