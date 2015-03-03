@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
@@ -100,6 +101,16 @@ namespace LeagueSharp.Common
         {
             order.Clear();
             order = levels;
+        }
+
+        public static int[] GetSequence()
+        {
+            return order.Select(spell => (int) spell).ToArray();
+        }
+
+        public static List<SpellSlot> GetSeuqneceList()
+        {
+            return order;
         }
     }
 }
