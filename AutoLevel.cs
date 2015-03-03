@@ -38,17 +38,16 @@ namespace LeagueSharp.Common
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         private static Random RandomNumber;
         private static bool enabled;
+        private static bool init;
 
-        public AutoLevel(IEnumerable<int> levels)
+        private static void Init()
         {
-            UpdateSequence(levels);
-            RandomNumber = new Random(Utils.TickCount);
-            Game.OnGameUpdate += Game_OnGameUpdate;
-        }
+            if (init)
+            {
+                return;
+            }
 
-        public AutoLevel(List<SpellSlot> levels)
-        {
-            UpdateSequence(levels);
+            init = true;
             RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
@@ -89,8 +88,8 @@ namespace LeagueSharp.Common
 
         public static void UpdateSequence(IEnumerable<int> levels)
         {
+            Init();
             order.Clear();
-
             foreach (var level in levels)
             {
                 order.Add((SpellSlot) level);
@@ -99,6 +98,7 @@ namespace LeagueSharp.Common
 
         public static void UpdateSequence(List<SpellSlot> levels)
         {
+            Init();
             order.Clear();
             order = levels;
         }
@@ -108,7 +108,7 @@ namespace LeagueSharp.Common
             return order.Select(spell => (int) spell).ToArray();
         }
 
-        public static List<SpellSlot> GetSeuqneceList()
+        public static List<SpellSlot> GetSequenceList()
         {
             return order;
         }
