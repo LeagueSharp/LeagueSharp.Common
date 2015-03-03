@@ -41,7 +41,7 @@ namespace LeagueSharp.Common
         {
             foreach (var level in levels)
             {
-                order.Add((SpellSlot) (level - 1));
+                order.Add((SpellSlot) level);
             }
             RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
