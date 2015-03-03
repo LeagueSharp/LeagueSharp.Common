@@ -406,7 +406,6 @@ namespace LeagueSharp.Common
                             VirtualMouse.coordY = (int)LastMoveCommandPosition.Y;
                             VirtualMouse.clickdelay = Utils.TickCount;
                             VirtualMouse.RightClick();
-
                         }
                     }
                     else if (!VirtualMouse.disableOrbClick && BeforeAttack != null && Orbwalker._config.Item("clickEnable").GetValue<bool>() &&
