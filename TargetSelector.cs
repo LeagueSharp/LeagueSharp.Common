@@ -349,7 +349,7 @@ namespace LeagueSharp.Common
 
                 var damageType = (Damage.DamageType) Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
-                if (IsValidTarget(
+                if (_configMenu != null && IsValidTarget(
                     SelectedTarget, _configMenu.Item("ForceFocusSelected").GetValue<bool>() ? float.MaxValue : range,
                     type, ignoreShieldSpells, rangeCheckFrom))
                 {
