@@ -1,7 +1,7 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
- Copyright 2014 - 2014 LeagueSharp
+ Copyright 2014 - 2015 LeagueSharp
  AutoLevel.cs is part of LeagueSharp.Common.
  
  LeagueSharp.Common is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
@@ -36,27 +37,36 @@ namespace LeagueSharp.Common
         private static float NextDelay;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         private static Random RandomNumber;
+        private static bool enabled;
+        private static bool init;
 
         public AutoLevel(IEnumerable<int> levels)
         {
-            foreach (var level in levels)
-            {
-                order.Add((SpellSlot) (level - 1));
-            }
-            RandomNumber = new Random(Utils.TickCount);
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            UpdateSequence(levels);
+            Init();
         }
 
         public AutoLevel(List<SpellSlot> levels)
         {
-            order = levels;
+            UpdateSequence(levels);
+            Init();
+        }
+
+        private static void Init()
+        {
+            if (init)
+            {
+                return;
+            }
+
+            init = true;
             RandomNumber = new Random(Utils.TickCount);
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
+            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
             {
                 return;
             }
@@ -78,16 +88,46 @@ namespace LeagueSharp.Common
             return q + w + e + r;
         }
 
-        public static void Enabled(bool enabled)
+        public static void Enable()
         {
-            if (enabled)
+            enabled = true;
+        }
+
+        public static void Disable()
+        {
+            enabled = false;
+        }
+
+        public static void Enabled(bool b)
+        {
+            enabled = b;
+        }
+
+        public static void UpdateSequence(IEnumerable<int> levels)
+        {
+            Init();
+            order.Clear();
+            foreach (var level in levels)
             {
-                Game.OnGameUpdate += Game_OnGameUpdate;
+                order.Add((SpellSlot) level);
             }
-            else
-            {
-                Game.OnGameUpdate -= Game_OnGameUpdate;
-            }
+        }
+
+        public static void UpdateSequence(List<SpellSlot> levels)
+        {
+            Init();
+            order.Clear();
+            order = levels;
+        }
+
+        public static int[] GetSequence()
+        {
+            return order.Select(spell => (int) spell).ToArray();
+        }
+
+        public static List<SpellSlot> GetSequenceList()
+        {
+            return order;
         }
     }
 }
