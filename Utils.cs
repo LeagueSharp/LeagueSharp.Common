@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Input;
 using SharpDX;
 
 #endregion
@@ -51,6 +52,77 @@ namespace LeagueSharp.Common
         WM_KEYUP = 0x101
     }
 
+    public enum MouseEvents
+    {
+        MOUSEEVENTF_RIGHTDOWN = 0x0008,
+        MOUSEEVENTF_RIGHTUP = 0x0010,
+    }
+
+    public enum KeyboardEvents
+    {
+        KEYBDEVENTF_SHIFTVIRTUAL = 0x10,
+        KEYBDEVENTF_SHIFTSCANCODE = 0x2A,
+        KEYBDEVENTF_KEYDOWN = 0,
+        KEYBDEVENTF_KEYUP = 2
+    }
+
+    /// <summary>
+    ///     This class offers real mouse clicks.
+    /// </summary>
+    public static class VirtualMouse
+    {
+        public static int clickdelay;
+        public static int attkdelay;
+        public static bool disableOrbClick = false; //if set to true, orbwalker won't send right clicks - for other scripts
+        public static int coordX;
+        public static int coordY;
+
+        // mouse event
+        [DllImport("user32.dll")]
+        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+        // keyboard event
+        [DllImport("user32.dll", EntryPoint = "keybd_event", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern void keybd_event(byte vk, byte scan, int flags, int extrainfo);
+        // simulates a click-and-release action of the right mouse button at its current position
+        public static void RightClick()
+        {
+                mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
+                mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
+        }
+
+        public static void RightClick(Vector2 position)
+        {
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, (int)position.X, (int)position.Y, 0, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, (int)position.X, (int)position.Y, 0, 0);
+        }
+
+        public static void RightClick(Vector3 gamePosition)
+        {
+            RightClick(Drawing.WorldToScreen(gamePosition));
+        }
+
+        public static void ShiftClick()
+        {
+            keybd_event((int)KeyboardEvents.KEYBDEVENTF_SHIFTVIRTUAL, (int)KeyboardEvents.KEYBDEVENTF_SHIFTSCANCODE, (int)KeyboardEvents.KEYBDEVENTF_KEYDOWN, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
+            Utility.DelayAction.Add(200, () => { keybd_event((int)KeyboardEvents.KEYBDEVENTF_SHIFTVIRTUAL, (int)KeyboardEvents.KEYBDEVENTF_SHIFTSCANCODE, (int)KeyboardEvents.KEYBDEVENTF_KEYUP, 0); });
+        }
+
+        public static void ShiftClick(Vector2 position)
+        {
+            keybd_event((int)KeyboardEvents.KEYBDEVENTF_SHIFTVIRTUAL, (int)KeyboardEvents.KEYBDEVENTF_SHIFTSCANCODE, (int)KeyboardEvents.KEYBDEVENTF_KEYDOWN, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, (int)position.X, (int)position.Y, 0, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, (int)position.X, (int)position.Y, 0, 0);
+            Utility.DelayAction.Add(200, () => { keybd_event((int)KeyboardEvents.KEYBDEVENTF_SHIFTVIRTUAL, (int)KeyboardEvents.KEYBDEVENTF_SHIFTSCANCODE, (int)KeyboardEvents.KEYBDEVENTF_KEYUP, 0); });
+        }
+
+        public static void ShiftClick(Vector3 gamePosition)
+        {
+            ShiftClick(Drawing.WorldToScreen(gamePosition));
+        }
+    }
+
     /// <summary>
     ///     Non game related utilities.
     /// </summary>
@@ -58,7 +130,7 @@ namespace LeagueSharp.Common
     {
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
-        
+
         public static int TickCount
         {
             get { return Environment.TickCount & int.MaxValue; }
@@ -72,12 +144,17 @@ namespace LeagueSharp.Common
             return CursorPosT.GetCursorPos();
         }
 
+        public static bool IsKeyPressed(this Key key)
+        {
+            return Keyboard.IsKeyDown(key);
+        }
+
         public static string KeyToText(uint vKey)
         {
             /*A-Z */
             if (vKey >= 65 && vKey <= 90)
             {
-                return ((char) vKey).ToString();
+                return ((char)vKey).ToString();
             }
 
             /*F1-F12*/
@@ -142,14 +219,14 @@ namespace LeagueSharp.Common
 
         public static byte[] GetBytes(string str)
         {
-            var bytes = new byte[str.Length * sizeof (char)];
+            var bytes = new byte[str.Length * sizeof(char)];
             Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
         }
 
         public static string GetString(byte[] bytes)
         {
-            var chars = new char[bytes.Length / sizeof (char)];
+            var chars = new char[bytes.Length / sizeof(char)];
             Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
@@ -185,7 +262,7 @@ namespace LeagueSharp.Common
                 var window_height = Console.WindowHeight;
                 Console.Clear();
             }
-            catch {}
+            catch { }
         }
 
         /// <summary>
@@ -225,7 +302,6 @@ namespace LeagueSharp.Common
 
         public static double NextDouble(this Random rng, double min, double max)
         {
-            
             return min + (rng.NextDouble() * (max - min));
         }
 
@@ -241,10 +317,10 @@ namespace LeagueSharp.Common
 
             private static void Game_OnWndProc(WndEventArgs args)
             {
-                if (args.Msg == (uint) WindowsMessages.WM_MOUSEMOVE)
+                if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
                 {
-                    _posX = unchecked((short) args.LParam);
-                    _posY = unchecked((short) ((long) args.LParam >> 16));
+                    _posX = unchecked((short)args.LParam);
+                    _posY = unchecked((short)((long)args.LParam >> 16));
                 }
             }
 
@@ -279,8 +355,10 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
-            
+            }
+
             var maxElem = enumerator.Current;
             var maxVal = valuingFoo(maxElem);
 
@@ -302,7 +380,9 @@ namespace LeagueSharp.Common
         {
             var enumerator = container.GetEnumerator();
             if (!enumerator.MoveNext())
+            {
                 return default(T);
+            }
 
             var minElem = enumerator.Current;
             var minVal = valuingFoo(minElem);
@@ -319,6 +399,34 @@ namespace LeagueSharp.Common
             }
 
             return minElem;
+        }
+    }
+
+    public static class WeightedRandom
+    {
+        public static Random Random = new Random(Utils.TickCount);
+
+        public static int Next(int min, int max)
+        {
+            var list = new List<int>();
+            list.AddRange(Enumerable.Range(min, max));
+
+            var mean = list.Average();
+            var stdDev = list.StandardDeviation();
+
+            var v1 = Random.NextDouble();
+            var v2 = Random.NextDouble();
+
+            var randStdNormal = Math.Sqrt(-2.0 * Math.Log(v1)) *
+                         Math.Sin(2.0 * Math.PI * v2);
+            return (int)(mean + stdDev * randStdNormal);
+        }
+
+        public static double StandardDeviation(this IEnumerable<int> values)
+        {
+            var enumerable = values as int[] ?? values.ToArray();
+            var avg = enumerable.Average();
+            return Math.Sqrt(enumerable.Average(v => Math.Pow(v - avg, 2)));
         }
     }
 }
