@@ -321,6 +321,22 @@ namespace LeagueSharp.Common
             return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
         }
 
+        public static Obj_AI_Hero GetTargetNoCollision(Spell spell,
+            bool ignoreShield = true,
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
+        {
+            var t = GetTarget(ObjectManager.Player, spell.Range, 
+                spell.DamageType, ignoreShield, ignoredChamps, rangeCheckFrom);
+
+            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
+            {
+                return t;
+            }
+
+            return null;
+        }
+
         private static bool IsValidTarget(Obj_AI_Base target,
             float range,
             DamageType damageType,
