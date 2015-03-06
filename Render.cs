@@ -55,7 +55,9 @@ namespace LeagueSharp.Common
             Drawing.OnDraw += Drawing_OnDraw;
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
-            new Thread(PrepareObjects).Start();
+            var thread = new Thread(PrepareObjects);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
         }
 
         public static Device Device
@@ -141,11 +143,10 @@ namespace LeagueSharp.Common
                 {
                     Thread.Sleep(1);
                     _renderVisibleObjects =
-                        RenderObjects.ToArray()
-                            .Where(
-                                renderObject =>
-                                    renderObject.Visible && renderObject.Layer >= -5 && renderObject.Layer <= 5)
-                            .OrderBy(renderObject => renderObject.Layer)
+                        RenderObjects.Where(
+                                obj =>
+                                    obj.Visible && obj.HasValidLayer())
+                            .OrderBy(obj => obj.Layer)
                             .ToList();
                 }
                 catch (Exception e)
@@ -786,6 +787,11 @@ namespace LeagueSharp.Common
             public virtual void OnEndScene() {}
             public virtual void OnPreReset() {}
             public virtual void OnPostReset() {}
+
+            public bool HasValidLayer()
+            {
+                return Layer >= -5 && Layer <= 5;
+            }
         }
 
         public class Sprite : RenderObject
@@ -1081,6 +1087,11 @@ namespace LeagueSharp.Common
                 if (!_texture.IsDisposed)
                 {
                     _texture.Dispose();
+                }
+
+                if (!_originalTexture.IsDisposed)
+                {
+                    _originalTexture.Dispose();
                 }
             }
         }
