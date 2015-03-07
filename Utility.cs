@@ -588,7 +588,7 @@ namespace LeagueSharp.Common
 
             static DelayAction()
             {
-                Game.OnGameUpdate += GameOnOnGameUpdate;
+                Game.OnUpdate += GameOnOnGameUpdate;
             }
 
             private static void GameOnOnGameUpdate(EventArgs args)

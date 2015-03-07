@@ -61,7 +61,7 @@ namespace LeagueSharp.Common
 
             init = true;
             RandomNumber = new Random(Utils.TickCount);
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)

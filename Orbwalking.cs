@@ -528,7 +528,7 @@ namespace LeagueSharp.Common
 
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
                 Player = ObjectManager.Player;
-                Game.OnGameUpdate += GameOnOnGameUpdate;
+                Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
             }
 

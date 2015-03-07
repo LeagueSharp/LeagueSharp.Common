@@ -338,7 +338,7 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
         }
 
         [Obsolete("Use Interrupter2.OnInterruptableTarget", false)]

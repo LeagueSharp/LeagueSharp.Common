@@ -47,7 +47,7 @@ namespace LeagueSharp.Common
             _startTime = Utils.TickCount;
             _endTime = _startTime + _duration;
 
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
         }
 
         public float EndTime

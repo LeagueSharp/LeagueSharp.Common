@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
                     NexusList.Add(hq);
                 }
 
-                LeagueSharp.Game.OnGameUpdate += Game_OnGameUpdate;
+                LeagueSharp.Game.OnUpdate += Game_OnGameUpdate;
 
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
@@ -57,7 +57,7 @@ namespace LeagueSharp.Common
                 }
                 else
                 {
-                    LeagueSharp.Game.OnGameStart += Game_OnGameStart;
+                    LeagueSharp.Game.OnStart += Game_OnGameStart;
                 }
             }
 
@@ -88,7 +88,7 @@ namespace LeagueSharp.Common
             public static event OnGameLoaded OnGameLoad;
 
             /// <summary>
-            ///     OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
+            ///     OnGameEnd is getting called when the game ends. Same as Game.OnEnd but this one works :^).
             /// </summary>
             public static event OnGameEnded OnGameEnd;
 
@@ -111,7 +111,7 @@ namespace LeagueSharp.Common
 
             static Unit()
             {
-                LeagueSharp.Game.OnGameProcessPacket += PacketHandler;
+                LeagueSharp.Game.OnProcessPacket += PacketHandler;
 
                 //Initializes ondash class:
                 ObjectManager.Player.IsDashing();

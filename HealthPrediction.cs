@@ -41,7 +41,7 @@ namespace LeagueSharp.Common
         static HealthPrediction()
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 

@@ -363,7 +363,7 @@ namespace LeagueSharp.Common
             if (isRootMenu)
             {
                 CustomEvents.Game.OnGameEnd += delegate { SaveAll(); };
-                Game.OnGameEnd += delegate { SaveAll(); };
+                Game.OnEnd += delegate { SaveAll(); };
                 AppDomain.CurrentDomain.DomainUnload += delegate { SaveAll(); };
                 AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
             }

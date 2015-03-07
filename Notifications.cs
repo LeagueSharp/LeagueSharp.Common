@@ -39,7 +39,7 @@ namespace LeagueSharp.Common
 
         static Notifications()
         {
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
 
