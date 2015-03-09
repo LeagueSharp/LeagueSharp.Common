@@ -39,14 +39,14 @@ namespace LeagueSharp.Common
     public static class Global
     {
         internal static MemoryMappedFile MMFile;
-        internal static int MemoryCapacity = 1024 * 1024;
+        internal static int MemoryCapacity = 2 * 1024 * 1024;
         internal static int OffsetEntrySize = Marshal.SizeOf(typeof(OffsetEntry));
 
         static Global()
         {
             using (new CustomMutex(100))
             {
-                MMFile = MemoryMappedFile.CreateOrOpen("LSharpShared" + Process.GetCurrentProcess().Id, MemoryCapacity);
+                MMFile = MemoryMappedFile.CreateOrOpen("MemoryMappedFile" + Process.GetCurrentProcess().Id, MemoryCapacity);
             }
         }
 		
@@ -218,7 +218,7 @@ namespace LeagueSharp.Common
                             else
                             {
                                 var overwriteEntry = entry;
-                                entry.Type = EntryType.Invalid;
+                                overwriteEntry.Type = EntryType.Invalid;
                                 strm.WriteArray(
                                     thisOffset, ToByteArray(overwriteEntry, OffsetEntrySize), 0, OffsetEntrySize);
                             }
@@ -368,7 +368,7 @@ namespace LeagueSharp.Common
                                     return;
                                 }
                                 var overwriteEntry = entry;
-                                entry.Type = EntryType.Invalid;
+                                overwriteEntry.Type = EntryType.Invalid;
                                 strm.WriteArray(
                                     thisOffset, ToByteArray(overwriteEntry, OffsetEntrySize), 0, OffsetEntrySize);
                             }

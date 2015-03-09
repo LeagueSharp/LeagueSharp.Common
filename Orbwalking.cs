@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2015 LeagueSharp
@@ -23,7 +23,6 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -85,18 +84,7 @@ namespace LeagueSharp.Common
         };
 
         // Champs whose auto attacks can't be cancelled
-        private static readonly string[] NoCancelChamps =
-        {
-            "Kalista"
-        };
-
-        // Champs and their spells that won't get cancelled when moving
-        private static readonly Dictionary<string, string[]> NoInterruptSpells = new Dictionary<string, string[]>()
-        {
-            { "Varus", new[] { "VarusQ" } },
-            { "Lucian", new[] { "LucianR" } }
-        };
-
+        private static readonly string[] NoCancelChamps = { "Kalista" };
         public static int LastAATick;
         public static bool Attack = true;
         public static bool DisableNextAttack;
@@ -105,7 +93,7 @@ namespace LeagueSharp.Common
         public static Vector3 LastMoveCommandPosition = Vector3.Zero;
         private static AttackableUnit _lastTarget;
         private static readonly Obj_AI_Hero Player;
-        private static int _delay = 80;
+        private static int _delay;
         private static float _minDistance = 400;
         private static readonly Random _random = new Random(DateTime.Now.Millisecond);
 
@@ -119,12 +107,6 @@ namespace LeagueSharp.Common
 
         private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
-            // Deny InvalidCastException
-            if (sender is Obj_LampBulb)
-            {
-                return;
-            }
-
             if (sender.IsValid<Obj_SpellMissile>())
             {
                 var missile = (Obj_SpellMissile) sender;
@@ -182,7 +164,7 @@ namespace LeagueSharp.Common
 
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null)
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -263,7 +245,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetMyProjectileSpeed()
         {
-            return IsMelee(Player) ? float.MaxValue : Player.BasicAttack.MissileSpeed;
+            return IsMelee(Player) || Player.ChampionName == "Azir" ? float.MaxValue : Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -271,9 +253,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanAttack()
         {
-            if (LastAATick <= Environment.TickCount)
+            if (LastAATick <= Utils.TickCount)
             {
-                return Environment.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+                return Utils.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
             }
 
             return false;
@@ -284,11 +266,11 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            if (LastAATick <= Environment.TickCount)
+            if (LastAATick <= Utils.TickCount)
             {
-                return Move && NoCancelChamps.Contains(Player.ChampionName) ?
-                    (Environment.TickCount - LastAATick > 250) :
-                    (Environment.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
+                return Move && NoCancelChamps.Contains(Player.ChampionName)
+                    ? (Utils.TickCount - LastAATick > 250)
+                    : (Utils.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
             }
 
             return false;
@@ -320,17 +302,18 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (Environment.TickCount - LastMoveCommandT < _delay && !overrideTimer)
+            if (Utils.TickCount - LastMoveCommandT < _delay && !overrideTimer)
             {
                 return;
             }
 
-            LastMoveCommandT = Environment.TickCount;
+            LastMoveCommandT = Utils.TickCount;
 
             if (Player.ServerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Count() > 1)
                 {
+                    Player.IssueOrder((GameObjectOrder)10, Player.ServerPosition);
                     Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
                     LastMoveCommandPosition = Player.ServerPosition;
                 }
@@ -386,7 +369,7 @@ namespace LeagueSharp.Common
 
                         if (_lastTarget != null && _lastTarget.IsValid && _lastTarget != target)
                         {
-                            LastAATick = Environment.TickCount + Game.Ping / 2;
+                            LastAATick = Utils.TickCount + Game.Ping / 2;
                         }
 
                         _lastTarget = target;
@@ -437,20 +420,25 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                if (unit.IsMe && Spell.Target is Obj_AI_Base)
+                if (unit.IsMe &&
+                    (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
-                    LastAATick = Environment.TickCount - Game.Ping / 2;
-                    var target = (Obj_AI_Base) Spell.Target;
-                    if (target.IsValid)
+                    LastAATick = Utils.TickCount - Game.Ping / 2;
+                    
+                    if(Spell.Target is Obj_AI_Base)
                     {
-                        FireOnTargetSwitch(target);
-                        _lastTarget = target;
-                    }
+                        var target = (Obj_AI_Base)Spell.Target;
+                        if (target.IsValid)
+                        {
+                            FireOnTargetSwitch(target);
+                            _lastTarget = target;
+                        }
 
-                    if (unit.IsMelee())
-                    {
-                        Utility.DelayAction.Add(
-                            (int) (unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                        if (unit.IsMelee())
+                        {
+                            Utility.DelayAction.Add(
+                                (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                        }
                     }
                 }
 
@@ -487,11 +475,11 @@ namespace LeagueSharp.Common
         {
             private const float LaneClearWaitTimeMod = 2f;
             private static Menu _config;
+            private readonly Obj_AI_Hero Player;
             private Obj_AI_Base _forcedTarget;
             private OrbwalkingMode _mode = OrbwalkingMode.None;
             private Vector3 _orbwalkingPoint;
             private Obj_AI_Minion _prevMinion;
-            private readonly Obj_AI_Hero Player;
 
             public Orbwalker(Menu attachToMenu)
             {
@@ -512,7 +500,7 @@ namespace LeagueSharp.Common
                 /* Misc options */
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
-                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 150)));
+                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 _config.AddSubMenu(misc);
 
@@ -522,7 +510,7 @@ namespace LeagueSharp.Common
                     new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(80, 0, 200)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(
-                    new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(80, 0, 150)))
+                    new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(80, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
 
 
@@ -538,10 +526,15 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
-
+                _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
                 Player = ObjectManager.Player;
-                Game.OnGameUpdate += GameOnOnGameUpdate;
+                Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
+            }
+
+            public virtual bool InAutoAttackRange(AttackableUnit target)
+            {
+                return Orbwalking.InAutoAttackRange(target);
             }
 
             private int FarmDelay
@@ -628,7 +621,7 @@ namespace LeagueSharp.Common
                                 Player.GetAutoAttackDamage(minion));
             }
 
-            public AttackableUnit GetTarget()
+            public virtual AttackableUnit GetTarget()
             {
                 AttackableUnit result = null;
 
@@ -719,7 +712,12 @@ namespace LeagueSharp.Common
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
                 {
-                    result = ObjectManager.Get<Obj_AI_Minion>().Where(mob =>mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral).MaxOrDefault(mob => mob.MaxHealth);
+                    result =
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(
+                                mob =>
+                                    mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
+                            .MaxOrDefault(mob => mob.MaxHealth);
                     if (result != null)
                     {
                         return result;
@@ -747,7 +745,7 @@ namespace LeagueSharp.Common
                                 .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             let predHealth =
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
                             where
                                 predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon
@@ -755,7 +753,7 @@ namespace LeagueSharp.Common
 
                         if (result != null)
                         {
-                            _prevMinion = (Obj_AI_Minion)result;
+                            _prevMinion = (Obj_AI_Minion) result;
                         }
                     }
                 }
@@ -772,11 +770,10 @@ namespace LeagueSharp.Common
                         return;
                     }
 
-                    //Prevent canceling important channeled spells
-                    if (Player.IsChannelingImportantSpell())
+                    //Prevent canceling important spells
+                    if (Player.IsCastingInterruptableSpell(true))
                     {
-                        if (!NoInterruptSpells.ContainsKey(Player.ChampionName) || !NoInterruptSpells[Player.ChampionName].Contains(Player.LastCastedSpellName()))
-                            return;
+                        return;
                     }
 
                     var target = GetTarget();
@@ -803,7 +800,7 @@ namespace LeagueSharp.Common
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        ObjectManager.Get<Obj_AI_Hero>().Where(target => target.IsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetRealAutoAttackRange(target) + 65,

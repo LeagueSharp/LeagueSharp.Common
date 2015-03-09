@@ -49,7 +49,7 @@ namespace LeagueSharp.Common
                 var path = new List<Vector2> { sender.ServerPosition.To2D() };
                 path.AddRange(args.Path.ToList().To2D());
 
-                DetectedDashes[sender.NetworkId].StartTick = Environment.TickCount - Game.Ping / 2;
+                DetectedDashes[sender.NetworkId].StartTick = Utils.TickCount - Game.Ping / 2;
                 DetectedDashes[sender.NetworkId].Speed = args.Speed;
                 DetectedDashes[sender.NetworkId].StartPos = sender.ServerPosition.To2D();
                 DetectedDashes[sender.NetworkId].Unit = sender;
@@ -73,7 +73,7 @@ namespace LeagueSharp.Common
         {
             if (DetectedDashes.ContainsKey(unit.NetworkId))
             {
-                return DetectedDashes[unit.NetworkId].EndTick > Environment.TickCount;
+                return DetectedDashes[unit.NetworkId].EndTick > Utils.TickCount;
             }
             return false;
         }

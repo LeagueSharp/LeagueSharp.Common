@@ -113,7 +113,7 @@ namespace LeagueSharp.Common
                     return ChargedMinRange +
                            Math.Min(
                                ChargedMaxRange - ChargedMinRange,
-                               (Environment.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
+                               (Utils.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
                                ChargeDuration - 150);
                 }
 
@@ -132,7 +132,7 @@ namespace LeagueSharp.Common
             get
             {
                 return ObjectManager.Player.HasBuff(ChargedBuffName, true) ||
-                       Environment.TickCount - _chargedCastedT < 300 + Game.Ping;
+                       Utils.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
         }
 
@@ -203,10 +203,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public void StartCharging()
         {
-            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            if (!IsCharging && Utils.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
                 ObjectManager.Player.Spellbook.CastSpell(Slot);
-                _chargedReqSentT = Environment.TickCount;
+                _chargedReqSentT = Utils.TickCount;
             }
         }
 
@@ -215,16 +215,16 @@ namespace LeagueSharp.Common
         /// </summary>
         public void StartCharging(Vector3 position)
         {
-            if (!IsCharging && Environment.TickCount - _chargedReqSentT > 400 + Game.Ping)
+            if (!IsCharging && Utils.TickCount - _chargedReqSentT > 400 + Game.Ping)
             {
                 ObjectManager.Player.Spellbook.CastSpell(Slot, position);
-                _chargedReqSentT = Environment.TickCount;
+                _chargedReqSentT = Utils.TickCount;
             }
         }
         
         void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
-            if (sender.Owner.IsMe && Environment.TickCount - _chargedReqSentT < 3000)
+            if (sender.Owner.IsMe && Utils.TickCount - _chargedReqSentT < 3000)
             {
                 args.Process = false;
             }
@@ -237,7 +237,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            if ((Environment.TickCount - _chargedReqSentT > 500))
+            if ((Utils.TickCount - _chargedReqSentT > 500))
             {
                 if (IsCharging)
                 {
@@ -250,7 +250,7 @@ namespace LeagueSharp.Common
         {
             if (sender.IsMe && args.SData.Name == ChargedSpellName)
             {
-                _chargedCastedT = Environment.TickCount;
+                _chargedCastedT = Utils.TickCount;
             }
         }
 
@@ -260,7 +260,7 @@ namespace LeagueSharp.Common
             RangeCheckFrom = rangeCheckFrom;
         }
 
-        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1)
+        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1, CollisionableObjects[] collisionable = null)
         {
             return
                 Prediction.GetPrediction(
@@ -275,7 +275,9 @@ namespace LeagueSharp.Common
                         Collision = Collision,
                         Type = Type,
                         RangeCheckFrom = RangeCheckFrom,
-                        Aoe = aoe
+                        Aoe = aoe,
+                        CollisionObjects =
+                            collisionable ?? new[] { CollisionableObjects.Heroes, CollisionableObjects.Minions }
                     });
         }
 
@@ -295,9 +297,7 @@ namespace LeagueSharp.Common
 
         public float GetHitCount(HitChance hitChance = HitChance.High)
         {
-            return
-                (from hero in ObjectManager.Get<Obj_AI_Hero>() where hero.IsValidTarget() select GetPrediction(hero))
-                    .Count(prediction => prediction.Hitchance >= hitChance);
+            return HeroManager.Enemies.Select(e => GetPrediction(e)).Count(p => p.Hitchance >= hitChance);
         }
 
         private CastStates _cast(Obj_AI_Base unit,
@@ -326,7 +326,7 @@ namespace LeagueSharp.Common
                     return CastStates.OutOfRange;
                 }
 
-                LastCastAttemptT = Environment.TickCount;
+                LastCastAttemptT = Utils.TickCount;
 
                 if (packetCast)
                 {
@@ -374,7 +374,7 @@ namespace LeagueSharp.Common
                 return CastStates.LowHitChance;
             }
 
-            LastCastAttemptT = Environment.TickCount;
+            LastCastAttemptT = Utils.TickCount;
 
             if (IsChargedSpell)
             {
@@ -413,7 +413,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            LastCastAttemptT = Environment.TickCount;
+            LastCastAttemptT = Utils.TickCount;
 
             if (packetCast)
             {
@@ -469,7 +469,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            LastCastAttemptT = Environment.TickCount;
+            LastCastAttemptT = Utils.TickCount;
 
             if (IsChargedSpell)
             {

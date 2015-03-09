@@ -52,6 +52,7 @@ namespace LeagueSharp.Common
     /// <summary>
     ///     This class allows you to easily interrupt interruptable spells like Katarina's ult.
     /// </summary>
+    [Obsolete("Use Interrupter2", false)]
     public static class Interrupter
     {
         public static List<InterruptableSpell> Spells = new List<InterruptableSpell>();
@@ -337,9 +338,10 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
         }
 
+        [Obsolete("Use Interrupter2.OnInterruptableTarget", false)]
         public static event OnPossibleToInterruptH OnPossibleToInterrupt;
 
         private static void FireOnInterruptable(Obj_AI_Hero unit, InterruptableSpell spell)
@@ -361,7 +363,7 @@ namespace LeagueSharp.Common
                              String.Equals(
                                  enemy.LastCastedspell().Name, spell.SpellName,
                                  StringComparison.CurrentCultureIgnoreCase) &&
-                             Environment.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                             Utils.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
                             (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true))))
                 {
                     FireOnInterruptable(enemy, spell);
@@ -369,6 +371,7 @@ namespace LeagueSharp.Common
             }
         }
 
+        
         public static bool IsChannelingImportantSpell(this Obj_AI_Hero unit)
         {
             return
@@ -378,12 +381,12 @@ namespace LeagueSharp.Common
                         ((unit.LastCastedspell() != null &&
                             String.Equals(
                                 unit.LastCastedspell().Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase) &&
-                            Environment.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
+                            Utils.TickCount - unit.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
                         (spell.BuffName != null && unit.HasBuff(spell.BuffName, true)) ||
                         (unit.IsMe &&
                             LastCastedSpell.LastCastPacketSent != null &&
                             LastCastedSpell.LastCastPacketSent.Slot == spell.Slot &&
-                            Environment.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
+                            Utils.TickCount - LastCastedSpell.LastCastPacketSent.Tick < 150 + Game.Ping)));
         }
     }
 }

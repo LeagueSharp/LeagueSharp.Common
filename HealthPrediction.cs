@@ -41,21 +41,21 @@ namespace LeagueSharp.Common
         static HealthPrediction()
         {
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Environment.TickCount - LastTick <= 60 * 1000)
+            if (Utils.TickCount - LastTick <= 60 * 1000)
             {
                 return;
             }
             ActiveAttacks.ToList()
-                .Where(pair => pair.Value.StartTick < Environment.TickCount - 60000)
+                .Where(pair => pair.Value.StartTick < Utils.TickCount - 60000)
                 .ToList()
                 .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-            LastTick = Environment.TickCount;
+            LastTick = Utils.TickCount;
         }
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
             ActiveAttacks.Remove(sender.NetworkId);
 
             var attackData = new PredictedDamage(
-                sender, target, Environment.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
+                sender, target, Utils.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
                 (float) sender.GetAutoAttackDamage(target, true));
@@ -104,7 +104,7 @@ namespace LeagueSharp.Common
                     var landTime = attack.StartTick + attack.Delay +
                                    1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
 
-                    if (Environment.TickCount < landTime - delay && landTime < Environment.TickCount + time)
+                    if (Utils.TickCount < landTime - delay && landTime < Utils.TickCount + time)
                     {
                         attackDamage = attack.Damage;
                     }
@@ -126,16 +126,16 @@ namespace LeagueSharp.Common
             foreach (var attack in ActiveAttacks.Values)
             {
                 var n = 0;
-                if (Environment.TickCount - 100 <= attack.StartTick + attack.AnimationTime &&
+                if (Utils.TickCount - 100 <= attack.StartTick + attack.AnimationTime &&
                     attack.Target.IsValidTarget(float.MaxValue, false) &&
                     attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var fromT = attack.StartTick;
-                    var toT = Environment.TickCount + time;
+                    var toT = Utils.TickCount + time;
 
                     while (fromT < toT)
                     {
-                        if (fromT >= Environment.TickCount &&
+                        if (fromT >= Utils.TickCount &&
                             (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
                         {
                             n++;

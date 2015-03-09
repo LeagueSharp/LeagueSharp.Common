@@ -1616,7 +1616,7 @@ namespace LeagueSharp.Common
 
                             int duration = teleportMethod.GetDuration(args);
                             Type type = teleportMethod.Type;
-                            int time = Environment.TickCount;
+                            int time = Utils.TickCount;
 
                             RecallDataByNetworkId[result.UnitNetworkId] = new TeleportData
                             {
@@ -1633,7 +1633,7 @@ namespace LeagueSharp.Common
                     }
                     else
                     {
-                        bool shorter = Environment.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
+                        bool shorter = Utils.TickCount - RecallDataByNetworkId[result.UnitNetworkId].Start <
                                        RecallDataByNetworkId[result.UnitNetworkId].Duration - ErrorGap;
                         result.Status = shorter ? Status.Abort : Status.Finish;
                         result.Type = RecallDataByNetworkId[result.UnitNetworkId].Type;

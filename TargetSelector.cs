@@ -96,8 +96,8 @@ namespace LeagueSharp.Common
                 return;
             }
             _selectedTargetObjAiHero =
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
+                HeroManager.Enemies
+                    .FindAll(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
                     .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
         }
 
@@ -215,8 +215,7 @@ namespace LeagueSharp.Common
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
             autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
 
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
-                )
+            foreach (var enemy in HeroManager.Enemies)
             {
                 config.AddItem(
                     new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
@@ -243,8 +242,7 @@ namespace LeagueSharp.Common
             {
                 return;
             }
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != ObjectManager.Player.Team)
-                )
+            foreach (var enemy in HeroManager.Enemies)
             {
                 _configMenu.Item("TargetSelector" + enemy.ChampionName + "Priority")
                     .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
@@ -323,6 +321,22 @@ namespace LeagueSharp.Common
             return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
         }
 
+        public static Obj_AI_Hero GetTargetNoCollision(Spell spell,
+            bool ignoreShield = true,
+            IEnumerable<Obj_AI_Hero> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
+        {
+            var t = GetTarget(ObjectManager.Player, spell.Range, 
+                spell.DamageType, ignoreShield, ignoredChamps, rangeCheckFrom);
+
+            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
+            {
+                return t;
+            }
+
+            return null;
+        }
+
         private static bool IsValidTarget(Obj_AI_Base target,
             float range,
             DamageType damageType,
@@ -351,7 +365,7 @@ namespace LeagueSharp.Common
 
                 var damageType = (Damage.DamageType) Enum.Parse(typeof(Damage.DamageType), type.ToString());
 
-                if (IsValidTarget(
+                if (_configMenu != null && IsValidTarget(
                     SelectedTarget, _configMenu.Item("ForceFocusSelected").GetValue<bool>() ? float.MaxValue : range,
                     type, ignoreShieldSpells, rangeCheckFrom))
                 {
@@ -366,8 +380,8 @@ namespace LeagueSharp.Common
                 }
 
                 var targets =
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
+                    HeroManager.Enemies
+                        .FindAll(
                             hero =>
                                 ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) &&
                                 IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom));
@@ -391,7 +405,7 @@ namespace LeagueSharp.Common
                                         hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:
-                        return targets.FirstOrDefault(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
+                        return targets.Find(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
 
                     case TargetingMode.AutoPriority:
                         return
