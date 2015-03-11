@@ -213,7 +213,7 @@ namespace LeagueSharp.Common
                 new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
             config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
-            autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
+            autoPriorityItem.ValueChanged += AutoPriorityItemValueChanged;
 
             foreach (var enemy in HeroManager.Enemies)
             {
@@ -236,7 +236,7 @@ namespace LeagueSharp.Common
                     .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
         }
 
-        private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
+        private static void AutoPriorityItemValueChanged(object sender, OnValueChangeEventArgs e)
         {
             if (!e.GetNewValue<bool>())
             {
