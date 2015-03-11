@@ -16,12 +16,7 @@ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 #region
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 #endregion
 
 namespace LeagueSharp.Common
@@ -33,23 +28,23 @@ namespace LeagueSharp.Common
 
         #endregion Interface definitions
 
-        public static InterfaceType GetInterface<InterfaceType>() where InterfaceType : class
+        public static TInterfaceType GetInterface<TInterfaceType>() where TInterfaceType : class
         {
             try
             {
-                return new ChannelFactory<InterfaceType>(new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + typeof(InterfaceType).Name)).CreateChannel();
+                return new ChannelFactory<TInterfaceType>(new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + typeof(TInterfaceType).Name)).CreateChannel();
             }
             catch (Exception e)
             {
-                throw new Exception("Failed to connect to assembly pipe for Common.Shared communication. The targetted assembly may not be loaded yet. Desired interface: " + typeof(InterfaceType).Name, e);
+                throw new Exception("Failed to connect to assembly pipe for Common.Shared communication. The targetted assembly may not be loaded yet. Desired interface: " + typeof(TInterfaceType).Name, e);
             }
         }
 
-        public static ServiceHost ShareInterface<ImplementationType>(bool open = true)
+        public static ServiceHost ShareInterface<TImplementationType>(bool open = true)
         {
-            ServiceHost host = new ServiceHost(typeof(ImplementationType), new Uri("net.pipe://localhost"));
+            ServiceHost host = new ServiceHost(typeof(TImplementationType), new Uri("net.pipe://localhost"));
 
-            host.AddServiceEndpoint(typeof(ImplementationType).GetInterfaces()[0], new NetNamedPipeBinding(), typeof(ImplementationType).GetInterfaces()[0].Name);
+            host.AddServiceEndpoint(typeof(TImplementationType).GetInterfaces()[0], new NetNamedPipeBinding(), typeof(TImplementationType).GetInterfaces()[0].Name);
 
             if (open)
             {
