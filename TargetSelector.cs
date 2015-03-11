@@ -282,9 +282,8 @@ namespace LeagueSharp.Common
             }
 
             // Sivir's Spell Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SpellShield"))
             {
-                // TODO: Get exact Sivir's Spell Shield buff name
                 return true;
             }
 
