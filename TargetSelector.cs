@@ -326,12 +326,12 @@ namespace LeagueSharp.Common
             IEnumerable<Obj_AI_Hero> ignoredChamps = null,
             Vector3? rangeCheckFrom = null)
         {
-            var t = GetTarget(ObjectManager.Player, spell.Range, 
+            var target = GetTarget(ObjectManager.Player, spell.Range, 
                 spell.DamageType, ignoreShield, ignoredChamps, rangeCheckFrom);
 
-            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
+            if (spell.Collision && spell.GetPrediction(target).Hitchance != HitChance.Collision)
             {
-                return t;
+                return target;
             }
 
             return null;
