@@ -35,8 +35,23 @@ namespace LeagueSharp.Common
     public static class Config
     {
         private static string _leagueSharpDirectory;
+        private static string _appDataDirectory;
         private static byte _showMenuHotkey;
         private static byte _showMenuToggleHotkey;
+
+        public static string AppDataDirectory
+        {
+            get
+            {
+                if (_appDataDirectory == null)
+                {
+                    _appDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                        "LeagueSharp" + Environment.UserName.GetHashCode().ToString("X"));
+                }
+
+                return _appDataDirectory;
+            }
+        }
 
         public static string LeagueSharpDirectory
         {

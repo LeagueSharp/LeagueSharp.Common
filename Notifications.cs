@@ -330,8 +330,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return System.IO.Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "Notifications");
+                return System.IO.Path.Combine(Config.AppDataDirectory, "Notifications");
             }
         }
 
