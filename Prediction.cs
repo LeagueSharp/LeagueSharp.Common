@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Dispatcher;
 using System.Text.RegularExpressions;
 using SharpDX;
 
@@ -434,6 +435,34 @@ namespace LeagueSharp.Common
             return (result - Game.Time);
         }
 
+        internal static Tuple<Vector2, Vector2, bool> PCutPath(this List<Vector2> path, float distance)
+        {
+            var Distance = distance;
+            for (var i = 0; i < path.Count - 1; i++)
+            {
+                var dist = path[i].Distance(path[i + 1]);
+                if (dist > Distance)
+                {
+                    return new Tuple<Vector2, Vector2, bool>(path[i] + Distance * (path[i + 1] - path[i]).Normalized(), path[i], true);
+                }
+                Distance -= dist;
+            }
+            return new Tuple<Vector2, Vector2, bool>(path.Last(), path.Last(), false);
+        }
+
+        internal static Tuple<Vector2, Vector2, bool> CalcPositionOnPath(List<Vector2> path, float moveSpeed, float missileSpeed, Vector2 from, float delay, int iterations)
+        {
+            var lp = new Tuple<Vector2, Vector2, bool>(Vector2.Zero, Vector2.Zero, false);
+            for (int i = 0; i < iterations; i++)
+            {
+                var distance = moveSpeed * (delay + from.Distance(lp.Item1) / missileSpeed);
+                var p2 = path.PCutPath(distance);
+                lp = p2;
+            }
+
+            return lp;
+        }
+
         internal static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
         {
             speed = (Math.Abs(speed - (-1)) < float.Epsilon) ? input.Unit.MoveSpeed : speed;
@@ -452,85 +481,42 @@ namespace LeagueSharp.Common
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed == float.MaxValue)
             {
                 var tDistance = input.Delay * speed - input.RealRadius;
 
-                for (var i = 0; i < path.Count - 1; i++)
+                return new PredictionOutput
                 {
-                    var a = path[i];
-                    var b = path[i + 1];
-                    var d = a.Distance(b);
-
-                    if (d >= tDistance)
-                    {
-                        var direction = (b - a).Normalized();
-
-                        var cp = a + direction * tDistance;
-                        var p = a +
-                                direction *
-                                ((i == path.Count - 2)
-                                    ? Math.Min(tDistance + input.RealRadius, d)
-                                    : (tDistance + input.RealRadius));
-
-                        return new PredictionOutput
-                        {
-                            Input = input,
-                            CastPosition = cp.To3D(),
-                            UnitPosition = p.To3D(),
-                            Hitchance =
-                                PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High
-                        };
-                    }
-
-                    tDistance -= d;
-                }
+                    Input = input,
+                    CastPosition = path.PCutPath(tDistance).Item1.To3D(),
+                    UnitPosition = path.PCutPath(tDistance + input.RealRadius).Item1.To3D(),
+                    Hitchance =
+                        PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High
+                };
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed - input.RealRadius &&
-                Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed != float.MaxValue)
             {
-                path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
-                var tT = 0f;
-                for (var i = 0; i < path.Count - 1; i++)
+                var path2 = new List<Vector2>();
+                path2.AddRange(path);
+                path2[0] = path[0] + input.RealRadius * (path[0] - path[1]);
+
+                var pp = CalcPositionOnPath(path, speed, input.Speed, input.From.To2D(), input.Delay, 6);
+                var cpp = CalcPositionOnPath(path2, speed, input.Speed, input.From.To2D(), input.Delay, 6);
+
+
+
+                if (cpp.Item3)
                 {
-                    var a = path[i];
-                    var b = path[i + 1];
-                    var tB = a.Distance(b) / speed;
-                    var direction = (b - a).Normalized();
-                    a = a - speed * tT * direction;
-                    var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
-                    var t = (float) sol[0];
-                    var pos = (Vector2) sol[1];
-
-                    if (pos.IsValid() && t >= tT && t <= tT + tB)
+                    return new PredictionOutput
                     {
-                        var p = pos + input.RealRadius * direction;
-
-                        if (input.Type == SkillshotType.SkillshotLine)
-                        {
-                            var alpha = (input.From.To2D() - p).AngleBetween(a - b);
-                            if (alpha > 30 && alpha < 180 - 30)
-                            {
-                                var beta = (float) Math.Asin(input.RealRadius / p.Distance(input.From));
-                                var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
-                                var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
-
-                                pos = cp1.Distance(pos, true) < cp2.Distance(pos, true) ? cp1 : cp2;
-                            }
-                        }
-
-                        return new PredictionOutput
-                        {
-                            Input = input,
-                            CastPosition = pos.To3D(),
-                            UnitPosition = p.To3D(),
-                            Hitchance =
-                                PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High
-                        };
-                    }
-                    tT += tB;
+                        Input = input,
+                        CastPosition = cpp.Item1.To3D(),
+                        UnitPosition = pp.Item1.To3D(),
+                        Hitchance =
+                            PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High
+                    };   
                 }
             }
 
