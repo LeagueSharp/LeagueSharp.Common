@@ -62,10 +62,7 @@ namespace LeagueSharp.Common
                     try
                     {
                         _leagueSharpDirectory =
-                            Process.GetCurrentProcess()
-                                .Modules.Cast<ProcessModule>()
-                                .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                .FileName;
+                            AppDomain.CurrentDomain.BaseDirectory;
                         _leagueSharpDirectory =
                             Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
                     }
