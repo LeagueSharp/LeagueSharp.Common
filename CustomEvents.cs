@@ -43,6 +43,11 @@ namespace LeagueSharp.Common
 
             static Game()
             {
+                Utility.DelayAction.Add(0, Initialize);
+            }
+
+            public static void Initialize()
+            {
                 foreach (var hq in ObjectManager.Get<Obj_HQ>().Where(hq => hq.IsValid))
                 {
                     NexusList.Add(hq);
