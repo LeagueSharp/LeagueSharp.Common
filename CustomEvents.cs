@@ -38,6 +38,7 @@ namespace LeagueSharp.Common
 
             public delegate void OnGameLoaded(EventArgs args);
 
+            private static readonly List<Delegate> NotifiedSubscribers = new List<Delegate>();
             private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
             private static bool _endGameCalled;
 
@@ -53,12 +54,13 @@ namespace LeagueSharp.Common
                     NexusList.Add(hq);
                 }
 
-                LeagueSharp.Game.OnUpdate += Game_OnGameUpdate;
-
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
                     //Otherwise the .ctor didn't return yet and no callback will occur
-                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs()));
+                    Utility.DelayAction.Add(500, () =>
+                    {
+                        Game_OnGameStart(new EventArgs());
+                    });
                 }
                 else
                 {
@@ -68,6 +70,18 @@ namespace LeagueSharp.Common
 
             private static void Game_OnGameUpdate(EventArgs args)
             {
+                if (OnGameLoad != null)
+                {
+                    foreach (var subscriber in OnGameLoad.GetInvocationList()
+                        .Where(s => !NotifiedSubscribers.Contains(s)))
+                    {
+                        NotifiedSubscribers.Add(subscriber);
+                        subscriber.DynamicInvoke(new EventArgs());
+                    }
+
+                    Console.WriteLine(NotifiedSubscribers.Count);
+                }
+
                 if (NexusList.Count == 0 || _endGameCalled)
                 {
                     return;
@@ -99,8 +113,11 @@ namespace LeagueSharp.Common
 
             private static void Game_OnGameStart(EventArgs args)
             {
+                LeagueSharp.Game.OnUpdate += Game_OnGameUpdate;
+
                 if (OnGameLoad != null)
                 {
+                    NotifiedSubscribers.AddRange(OnGameLoad.GetInvocationList());
                     OnGameLoad(new EventArgs());
                 }
             }
