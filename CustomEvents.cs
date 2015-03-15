@@ -78,8 +78,6 @@ namespace LeagueSharp.Common
                         NotifiedSubscribers.Add(subscriber);
                         subscriber.DynamicInvoke(new EventArgs());
                     }
-
-                    Console.WriteLine(NotifiedSubscribers.Count);
                 }
 
                 if (NexusList.Count == 0 || _endGameCalled)
