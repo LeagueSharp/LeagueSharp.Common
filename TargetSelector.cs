@@ -381,7 +381,7 @@ namespace LeagueSharp.Common
                     Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out Mode);
                 }
                 
-                Mode == TargetingMode.LessCast;
+                Mode = TargetingMode.LessCast;
 
                 var targets =
                     HeroManager.Enemies
