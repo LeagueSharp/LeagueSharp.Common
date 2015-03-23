@@ -22,6 +22,7 @@
 
 #region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
@@ -46,6 +47,15 @@ namespace LeagueSharp.Common
         public static List<Obj_AI_Hero> Enemies { get; private set; }
 
         static HeroManager()
+        {
+            if (Game.Mode == GameMode.Running)
+            {
+                Game_OnStart(new EventArgs());
+            }
+            Game.OnStart += Game_OnStart;
+        }
+
+        static void Game_OnStart(EventArgs args)
         {
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
             Allies = AllHeroes.FindAll(o => o.IsAlly);
