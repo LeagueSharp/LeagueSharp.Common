@@ -134,6 +134,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetPriority(Obj_AI_Hero hero)
         {
+            return 1;
             var p = 1;
             if (_configMenu != null && _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") != null)
             {
