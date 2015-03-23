@@ -134,7 +134,6 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetPriority(Obj_AI_Hero hero)
         {
-            return 1;
             var p = 1;
             if (_configMenu != null && _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") != null)
             {
@@ -158,7 +157,6 @@ namespace LeagueSharp.Common
 
         private static int GetPriorityFromDb(string championName)
         {
-            return 1;
             string[] p1 =
             {
                 "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
@@ -374,26 +372,12 @@ namespace LeagueSharp.Common
                     return SelectedTarget;
                 }
 
-                //HACK: fix TS someone...
-                var enemies =
-                    HeroManager.Enemies
-                        .FindAll(
-                            hero =>
-                                ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) &&
-                                IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom));
-
-                return
-                    enemies.MaxOrDefault(hero => 
-                        champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) * GetPriority(hero));
-
                 if (_configMenu != null && _configMenu.Item("TargetingMode") != null &&
                     Mode == TargetingMode.AutoPriority)
                 {
                     var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
                     Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out Mode);
                 }
-                
-                Mode = TargetingMode.LessCast;
 
                 var targets =
                     HeroManager.Enemies
