@@ -158,6 +158,7 @@ namespace LeagueSharp.Common
 
         private static int GetPriorityFromDb(string championName)
         {
+            return 1;
             string[] p1 =
             {
                 "Alistar", "Amumu", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
@@ -379,6 +380,8 @@ namespace LeagueSharp.Common
                     var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
                     Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out Mode);
                 }
+                
+                Mode == TargetingMode.LessCast;
 
                 var targets =
                     HeroManager.Enemies
