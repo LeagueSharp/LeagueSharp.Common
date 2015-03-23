@@ -374,6 +374,18 @@ namespace LeagueSharp.Common
                     return SelectedTarget;
                 }
 
+                //HACK: fix TS someone...
+                var enemies =
+                    HeroManager.Enemies
+                        .FindAll(
+                            hero =>
+                                ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) &&
+                                IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom));
+
+                return
+                    enemies.MaxOrDefault(hero => 
+                        champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) * GetPriority(hero));
+
                 if (_configMenu != null && _configMenu.Item("TargetingMode") != null &&
                     Mode == TargetingMode.AutoPriority)
                 {
