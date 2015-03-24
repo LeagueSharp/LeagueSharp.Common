@@ -142,7 +142,7 @@ namespace LeagueSharp.Common
                 var fileName = Path.Combine(MenuSettings.MenuConfigPath, name + ".bin");
                 if (File.Exists(fileName))
                 {
-                    return Global.Deserialize<Dictionary<string, byte[]>>(File.ReadAllBytes(fileName));
+                    return Utils.Deserialize<Dictionary<string, byte[]>>(File.ReadAllBytes(fileName));
                 }
             }
             catch (Exception e)
@@ -159,13 +159,19 @@ namespace LeagueSharp.Common
             {
                 Directory.CreateDirectory(MenuSettings.MenuConfigPath);
                 var fileName = Path.Combine(MenuSettings.MenuConfigPath, name + ".bin");
-                File.WriteAllBytes(fileName, Global.Serialize(entries));
+                File.WriteAllBytes(fileName, Utils.Serialize(entries));
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
         }
+    }
+
+    public static class MenuGlobals
+    {
+        public static bool DrawMenu = true;
+        public static List<string> MenuState = new List<string>();
     }
 
     internal static class MenuSettings
@@ -176,7 +182,7 @@ namespace LeagueSharp.Common
         static MenuSettings()
         {
             Game.OnWndProc += Game_OnWndProc;
-            _drawTheMenu = Global.Read<bool>("DrawMenu", true);
+            _drawTheMenu = MenuGlobals.DrawMenu;
         }
 
         internal static bool DrawMenu
@@ -185,7 +191,7 @@ namespace LeagueSharp.Common
             set
             {
                 _drawTheMenu = value;
-                Global.Write("DrawMenu", value);
+                MenuGlobals.DrawMenu = value;
             }
         }
 
@@ -406,7 +412,7 @@ namespace LeagueSharp.Common
                     return _cachedMenuCount;
                 }
 
-                var globalMenuList = Global.Read<List<string>>("MenuState");
+                var globalMenuList = MenuGlobals.MenuState;
                 var i = 0;
                 var result = 0;
 
@@ -690,7 +696,7 @@ namespace LeagueSharp.Common
             List<string> globalMenuList;
             uniqueId = assemblyName + "." + Name;
 
-            globalMenuList = Global.Read<List<string>>("MenuState", true);
+            globalMenuList = MenuGlobals.MenuState;
 
             if (globalMenuList == null)
             {
@@ -703,14 +709,14 @@ namespace LeagueSharp.Common
 
             globalMenuList.Add(uniqueId);
 
-            Global.Write<List<string>>("MenuState", globalMenuList);
+            MenuGlobals.MenuState = globalMenuList;
         }
 
         private void UnloadMenuState()
         {
-            var globalMenuList = Global.Read<List<string>>("MenuState");
+            var globalMenuList = MenuGlobals.MenuState;
             globalMenuList.Remove(uniqueId);
-            Global.Write<List<string>>("MenuState", globalMenuList);
+            MenuGlobals.MenuState = globalMenuList;
         }
 
         public MenuItem AddItem(MenuItem item)
@@ -995,8 +1001,8 @@ namespace LeagueSharp.Common
                 {
                     switch (ValueType)
                     {
-                        case MenuValueType.KeyBind:
-                            var savedKeyValue = (KeyBind) (object) Global.Deserialize<T>(readBytes);
+                        case MenuValueType.KeyBind:               
+                            var savedKeyValue = (KeyBind)(object) Utils.Deserialize<T>(readBytes);
                             if (savedKeyValue.Type == KeyBindType.Press)
                             {
                                 savedKeyValue.Active = false;
@@ -1005,14 +1011,14 @@ namespace LeagueSharp.Common
                             break;
 
                         case MenuValueType.Circle:
-                            var savedCircleValue = (Circle) (object) Global.Deserialize<T>(readBytes);
+                            var savedCircleValue = (Circle)(object) Utils.Deserialize<T>(readBytes);
                             var newCircleValue = (Circle) (object) newValue;
                             savedCircleValue.Radius = newCircleValue.Radius;
                             newValue = (T) (object) savedCircleValue;
                             break;
 
                         case MenuValueType.Slider:
-                            var savedSliderValue = (Slider) (object) Global.Deserialize<T>(readBytes);
+                            var savedSliderValue = (Slider)(object) Utils.Deserialize<T>(readBytes);
                             var newSliderValue = (Slider) (object) newValue;
                             if (savedSliderValue.MinValue == newSliderValue.MinValue &&
                                 savedSliderValue.MaxValue == newSliderValue.MaxValue)
@@ -1022,7 +1028,7 @@ namespace LeagueSharp.Common
                             break;
 
                         case MenuValueType.StringList:
-                            var savedListValue = (StringList) (object) Global.Deserialize<T>(readBytes);
+                            var savedListValue = (StringList)(object) Utils.Deserialize<T>(readBytes);
                             var newListValue = (StringList) (object) newValue;
                             if (savedListValue.SList.SequenceEqual(newListValue.SList))
                             {
@@ -1031,7 +1037,7 @@ namespace LeagueSharp.Common
                             break;
 
                         default:
-                            newValue = Global.Deserialize<T>(readBytes);
+                            newValue = Utils.Deserialize<T>(readBytes);
                             break;
                     }
                 }
@@ -1066,7 +1072,7 @@ namespace LeagueSharp.Common
                 _value = newValue;
             }
             _valueSet = true;
-            _serialized = Global.Serialize(_value);
+            _serialized = Utils.Serialize(_value);
             return this;
         }
 
