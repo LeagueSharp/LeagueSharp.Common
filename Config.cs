@@ -46,7 +46,7 @@ namespace LeagueSharp.Common
                 if (_appDataDirectory == null)
                 {
                     _appDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                        "LeagueSharp" + Environment.UserName.GetHashCode().ToString("X"));
+                        "LS" + Environment.UserName.GetHashCode().ToString("X"));
                 }
 
                 return _appDataDirectory;
