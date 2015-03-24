@@ -71,7 +71,7 @@ namespace LeagueSharp.Common
         {
             "jarvanivcataclysmattack", "monkeykingdoubleattack",
             "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
-            "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
+            "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer"
         };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
@@ -80,7 +80,7 @@ namespace LeagueSharp.Common
             "caitlynheadshotmissile", "frostarrow", "garenslash2",
             "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", "quinnwenhanced", "renektonexecute",
             "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
-            "xenzhaothrust3"
+            "xenzhaothrust3", "viktorqbuff"
         };
 
         // Champs whose auto attacks can't be cancelled
