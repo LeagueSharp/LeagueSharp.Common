@@ -1733,7 +1733,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 80, 130, 180, 230, 280 }[level] + 0.5 * source.FlatMagicDamageMod
+                                new double[] { 80, 120, 160, 200, 240  }[level] + 0.5 * source.FlatMagicDamageMod
                     },
                     //R - per blade
                     new DamageSpell
@@ -3687,7 +3687,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 40, 60, 80, 100, 120 }[level] + 0.4 * source.FlatMagicDamageMod +
+                                new double[] { 55, 75, 95, 115, 135 }[level] + 0.4 * source.FlatMagicDamageMod +
                                 0.065 * source.MaxMana
                     },
                     //W
@@ -3729,7 +3729,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 4, 6, 8, 10, 12 }[level] + (source.FlatMagicDamageMod / 100)) / 100 *
+                                (new double[] { 4, 5.5, 7, 8.5, 10 }[level] + (source.FlatMagicDamageMod / 100)) / 100 *
                                 target.MaxHealth
                     },
                     //W - Aoe per second
@@ -3891,7 +3891,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 80, 125, 170, 215, 260 }[level] + 0.75 * source.FlatMagicDamageMod
+                                new double[] { 50, 65, 80, 95, 110 }[level] + 0.75 * source.FlatMagicDamageMod + new double[] { 4, 5.5, 7, 8.5, 10 }[level] / 100 * target.MaxHealth
                     },
                 });
 
