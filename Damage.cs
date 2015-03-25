@@ -760,6 +760,20 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
+                "Bard", new List<DamageSpell>
+                {
+                    //Q
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        DamageType = DamageType.Magical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] { 80, 120, 160, 200, 240 }[level] + 0.50 * source.FlatMagicDamageMod
+                    },
+                });
+
+            Spells.Add(
                 "Brand", new List<DamageSpell>
                 {
                     //Q
