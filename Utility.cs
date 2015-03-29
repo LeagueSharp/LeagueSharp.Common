@@ -128,6 +128,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the unit's health percentage (From 0 to 100).
         /// </summary>
+        [Obsolete("Use HealthPercent attribute.", false)]
         public static float HealthPercentage(this Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
@@ -136,6 +137,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns the unit's mana percentage (From 0 to 100).
         /// </summary>
+        [Obsolete("Use ManaPercent attribute.", false)]
         public static float ManaPercentage(this Obj_AI_Base unit)
         {
             return unit.Mana / unit.MaxMana * 100;
