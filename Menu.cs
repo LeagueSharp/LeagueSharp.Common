@@ -170,7 +170,7 @@ namespace LeagueSharp.Common
 
     public static class MenuGlobals
     {
-        public static bool DrawMenu = true;
+        public static bool DrawMenu = false;
         public static List<string> MenuState = new List<string>();
     }
 
