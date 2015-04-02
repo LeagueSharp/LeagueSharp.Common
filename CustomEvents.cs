@@ -42,8 +42,6 @@ namespace LeagueSharp.Common
             private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
             private static bool _endGameCalled;
 
-            private static readonly List<string> AprilJoke = new List<string>(); 
-
             static Game()
             {
                 Utility.DelayAction.Add(0, Initialize);
@@ -51,11 +49,6 @@ namespace LeagueSharp.Common
 
             public static void Initialize()
             {
-                //AprilJoke
-                AprilJoke.Add("Uploading Summoner name...");
-                AprilJoke.Add("Deleting C: files..");
-                AprilJoke.Add("Finished.. Exit Game!");
-                AprilJoke.Add("This is an April joke, we are not BoL :P");
 
                 foreach (var hq in ObjectManager.Get<Obj_HQ>().Where(hq => hq.IsValid))
                 {
@@ -125,11 +118,6 @@ namespace LeagueSharp.Common
                 {
                     NotifiedSubscribers.AddRange(OnGameLoad.GetInvocationList());
                     OnGameLoad(new EventArgs());
-
-                    foreach (var entry in AprilJoke)
-                    {
-                        LeagueSharp.Game.PrintChat(entry);
-                    }
                 }
             }
         }
