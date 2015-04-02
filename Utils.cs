@@ -317,11 +317,12 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void EnableConsoleEditMode()
         {
+            /*
             int mode;
             var handle = GetStdHandle(STD_INPUT_HANDLE);
             GetConsoleMode(handle, out mode);
             mode |= ENABLE_QUICK_EDIT_MODE;
-            SetConsoleMode(handle, mode);
+            SetConsoleMode(handle, mode);*/
         }
 
         public static double NextDouble(this Random rng, double min, double max)
