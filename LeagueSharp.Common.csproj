@@ -110,7 +110,6 @@
     <Compile Include="Dash.cs" />
     <Compile Include="Data\ItemData.cs" />
     <Compile Include="Data\MasteryData.cs" />
-    <Compile Include="DynamicInitializer.cs" />
     <Compile Include="GamePacket.cs" />
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="HeroManager.cs" />
