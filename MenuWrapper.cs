@@ -386,7 +386,17 @@ namespace LeagueSharp.Common
             var prefix = "";
             if (fullName)
             {
-                prefix = string.Format("{0}.{1}", menu.MenuHandle.Name, prefix);
+                if (menu.MenuHandle != null)
+                {
+                    prefix = string.Format("{0}.{1}", menu.MenuHandle.DisplayName, prefix);
+
+                    var currentPartent = menu.Parent;
+                    while (currentPartent != null && currentPartent.MenuHandle != null)
+                    {
+                        prefix = string.Format("{0}.{1}", currentPartent.MenuHandle.DisplayName, prefix);
+                        currentPartent = currentPartent.Parent;
+                    }
+                }
             }
             return Regex.Replace(prefix + name.ToLower(), @"\s+", "_");
         }
