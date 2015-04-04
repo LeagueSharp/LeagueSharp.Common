@@ -155,6 +155,23 @@ namespace LeagueSharp.Common
             return (T)binForm.Deserialize(memStream);
         }
 
+        public static byte FixVirtualKey(byte key)
+        {
+            switch (key)
+            {
+                case 160:
+                    return 0x10;
+                case 161:
+                    return 0x10;
+                case 162:
+                    return 0x11;
+                case 163:
+                    return 0x11;
+            }
+
+            return key;
+        }
+
         public static int TickCount
         {
             get { return Environment.TickCount & int.MaxValue; }

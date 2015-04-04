@@ -53,53 +53,10 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static string LeagueSharpDirectory
-        {
-            get
-            {
-                if (_leagueSharpDirectory == null)
-                {
-                    try
-                    {
-                        _leagueSharpDirectory =
-                            AppDomain.CurrentDomain.BaseDirectory;
-                        _leagueSharpDirectory =
-                            Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
-                    }
-                    catch (Exception ee)
-                    {
-                        Console.WriteLine(@"Could not resolve LeagueSharp directory: " + ee);
-                        _leagueSharpDirectory = Directory.GetCurrentDirectory();
-                    }
-                }
-
-                return _leagueSharpDirectory;
-            }
-        }
-
         public static string SelectedLanguage
         {
             get
             {
-                var configFile = Path.Combine(LeagueSharpDirectory, "config.xml");
-                try
-                {
-                    if (File.Exists(configFile))
-                    {
-                        var config = new XmlDocument();
-                        config.Load(configFile);
-
-                        if (config.DocumentElement != null && config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage") != null)
-                        {
-                            return config.DocumentElement.SelectSingleNode("/Config/SelectedLanguage").InnerText;
-                        }
-                    }
-                }
-                catch (Exception ee)
-                {
-                    Console.WriteLine(ee.ToString());
-                }
-
                 return "";
             }
         }
@@ -110,7 +67,19 @@ namespace LeagueSharp.Common
             {
                 if (_showMenuHotkey == 0)
                 {
-                    _showMenuHotkey = GetHotkey("ShowMenuPress", 16);
+                    try
+                    {
+                        _showMenuHotkey = (byte)Sandbox.SandboxConfig.MenuKey;
+                        _showMenuHotkey = _showMenuHotkey == 0 ? (byte)16 : _showMenuHotkey;
+                        _showMenuHotkey = Utils.FixVirtualKey(_showMenuHotkey);
+                        Console.WriteLine(@"Menu press key set to {0}", _showMenuHotkey);
+                    }
+                    catch
+                    {
+                        _showMenuHotkey = 16;
+                        Console.WriteLine(@"Could not get the menu press key");
+                    }
+
                 }
 
                 return _showMenuHotkey;
@@ -123,40 +92,22 @@ namespace LeagueSharp.Common
             {
                 if (_showMenuToggleHotkey == 0)
                 {
-                    _showMenuToggleHotkey = GetHotkey("ShowMenuToggle", 120);
+                    try
+                    {
+                        _showMenuToggleHotkey = (byte) Sandbox.SandboxConfig.MenuToggleKey;
+                        _showMenuToggleHotkey = _showMenuToggleHotkey == 0 ? (byte)120 : _showMenuToggleHotkey;
+                        _showMenuToggleHotkey = Utils.FixVirtualKey(_showMenuToggleHotkey);
+                        Console.WriteLine(@"Menu toggle key set to {0}", _showMenuToggleHotkey);
+                    }
+                    catch
+                    {
+                        _showMenuToggleHotkey = 120;
+                        Console.WriteLine(@"Could not get the menu toggle key");
+                    }
                 }
 
                 return _showMenuToggleHotkey;
             }
-        }
-
-        public static byte GetHotkey(string name, byte defaultValue)
-        {
-            var configFile = Path.Combine(LeagueSharpDirectory, "config.xml");
-            try
-            {
-                if (File.Exists(configFile))
-                {
-                    var config = new XmlDocument();
-                    config.Load(configFile);
-                    var node = config.DocumentElement.SelectSingleNode("/Config/Hotkeys/SelectedHotkeys");
-                    foreach (var b in from XmlElement element in node.ChildNodes
-                        where element.ChildNodes.Cast<XmlElement>().Any(e => e.Name == "Name" && e.InnerText == name)
-                        select element.ChildNodes.Cast<XmlElement>().FirstOrDefault(e => e.Name == "HotkeyInt")
-                        into b
-                        where b != null
-                        select b)
-                    {
-                        return byte.Parse(b.InnerText);
-                    }
-                }
-            }
-            catch (Exception ee)
-            {
-                Console.WriteLine(ee.ToString());
-            }
-
-            return defaultValue;
         }
     }
 }
