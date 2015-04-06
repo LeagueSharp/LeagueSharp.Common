@@ -241,7 +241,7 @@ namespace LeagueSharp.Common
             {
                 if (IsCharging)
                 {
-                    Cast(new Vector2(args.EndPosition.X, args.EndPosition.Y));
+                    Cast(args.StartPosition.To2D());
                 }
             }
         }
