@@ -266,116 +266,101 @@ namespace LeagueSharp.Common
 
         public class BoolLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public BoolLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public bool Value
             {
-                get { return menu.GetBool(name); }
-                set { menu.MenuHandle.Item(GetName(menu, name)).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<bool>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public BoolLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class CircleLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public CircleLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public Circle Value
             {
-                get { return menu.GetCircle(name); }
-                set { menu.MenuHandle.Item(GetName(menu, name)).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<Circle>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public CircleLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class KeyBindLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public KeyBindLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public KeyBind Value
             {
-                get { return menu.GetKeyBind(name); }
-                set { menu.MenuHandle.Item(GetName(menu, name)).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<KeyBind>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public KeyBindLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class SliderLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public SliderLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public Slider Value
             {
-                get { return menu.GetSlider(name); }
-                set { menu.MenuHandle.Item(GetName(menu, name)).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<Slider>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public SliderLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class StringListLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public StringListLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public StringList Value
             {
-                get { return menu.GetStringList(name); }
-                set { menu.MenuHandle.Item(GetName(menu, name)).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<StringList>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public StringListLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
