@@ -257,7 +257,7 @@ namespace LeagueSharp.Common
             if (ft)
             {
                 //Increase the delay due to the latency and server tick:
-                input.Delay += Game.Ping / 2000f + 0.05f;
+                input.Delay += Game.Ping / 2000f + 0.06f;
 
                 if (input.Aoe)
                 {
@@ -296,7 +296,7 @@ namespace LeagueSharp.Common
             //Check if the unit position is in range
             if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
             {
-                if (result.Hitchance == HitChance.High &&
+                if (result.Hitchance >= HitChance.High &&
                     input.RangeCheckFrom.Distance(input.Unit.Position, true) >
                     Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
                 {
@@ -348,7 +348,7 @@ namespace LeagueSharp.Common
                 //Mid air:
                 var dashPred = GetPositionOnPath(
                     input, new List<Vector2> { input.Unit.ServerPosition.To2D(), dashData.Path.Last() }, dashData.Speed);
-                if (dashPred.Hitchance == HitChance.High)
+                if (dashPred.Hitchance >= HitChance.High)
                 {
                     dashPred.CastPosition = dashPred.UnitPosition;
                     dashPred.Hitchance = HitChance.Dashing;
