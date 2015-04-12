@@ -714,7 +714,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 3089, 3157 },
+            Into = new[] { 3089, 3157, 3285 },
             InStore = true,
             FlatMagicDamageMod = 80f,
             Tags = new[] { "SpellDamage" },
@@ -5768,7 +5768,27 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
+        #region Luden's Echo
 
+        public static Item Luden's_Echo = new Item
+        {
+            Name = "Luden's Echo",
+            GoldBase = 650g,
+            GoldPrice = 3100g,
+            GoldSell = 2170,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1058, 3113 },
+            InStore = true,
+            PercentMovementSpeedMod = 0.07f,
+            FlatMagicDamageMod = 120f,
+            Tags = new[] { "Attack", "SpellDamage", "NonbootsMovement", "OnHit" },
+            Id = 3285
+        };
+
+        #endregion
+        
         #endregion
     }
 }
