@@ -185,11 +185,6 @@ namespace LeagueSharp.Common
             return CursorPosT.GetCursorPos();
         }
 
-        public static bool IsKeyPressed(this Key key)
-        {
-            return Keyboard.IsKeyDown(key);
-        }
-
         public static string KeyToText(uint vKey)
         {
             /*A-Z */

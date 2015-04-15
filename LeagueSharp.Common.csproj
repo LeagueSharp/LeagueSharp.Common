@@ -80,7 +80,6 @@
     <Reference Include="LeagueSharp.Sandbox">
       <HintPath>..\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="SharpDX">
       <HintPath>..\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
