@@ -331,7 +331,7 @@ namespace LeagueSharp.Common
                 ChampionName = "Vayne",
                 IsActive =
                     (source, target) =>
-                        (from buff in target.Buffs where buff.DisplayName == "VayneSilverDebuff" select buff.Count)
+                        (from buff in target.Buffs where buff.Name == "vaynesilvereddebuff" select buff.Count)
                             .FirstOrDefault() == 2,
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
             };
