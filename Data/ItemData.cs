@@ -283,7 +283,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1028 },
-            Into = new[] { 3068, 3143, 3116, 3083, 3084, 3022 },
+            Into = new[] { 3083, 3143, 3116, 3022, 3084 },
             InStore = true,
             FlatHPPoolMod = 380f,
             Tags = new[] { "Health" },
@@ -323,7 +323,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 3001, 3135, 3027, 3029, 3089, 3116, 3124, 3188, 3090, 3003, 3007 },
+            Into = new[] { 3001, 3135, 3027, 3029, 3089, 3116, 3124, 3090, 3003, 3007, 3286 },
             InStore = true,
             FlatMagicDamageMod = 40f,
             Tags = new[] { "SpellDamage" },
@@ -363,12 +363,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into =
-                new[]
-                {
-                    2051, 2049, 3067, 3044, 3211, 3010, 3105, 3801, 3136, 2045, 3185, 3102, 3071, 3083, 3084, 3022, 3056,
-                    1011, 3709, 3717, 3721, 3725
-                },
+            Into = new[] { 1011, 2049, 2045, 2051, 3010, 3022, 3044, 3067, 3105, 3211, 3751, 3071, 3801, 3084, 3102, 3136 },
             InStore = true,
             FlatHPPoolMod = 150f,
             Tags = new[] { "Health" },
@@ -388,7 +383,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 3047, 1031, 3191, 3024, 3082, 3159, 2053, 3075 },
+            Into = new[] { 3047, 1031, 3191, 3024, 3082, 3075, 2053 },
             InStore = true,
             FlatArmorMod = 15f,
             Tags = new[] { "Armor" },
@@ -409,7 +404,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1029 },
-            Into = new[] { 3068, 3026, 3075 },
+            Into = new[] { 3075, 3068, 3026 },
             InStore = true,
             FlatArmorMod = 40f,
             Tags = new[] { "Armor" },
@@ -449,7 +444,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 1053, 3044, 3134, 3155, 3077, 3035, 3154, 3144, 3122, 3141, 3159 },
+            Into = new[] { 1053, 3044, 3134, 3155, 3077, 3035, 3154, 3141, 3144, 3122, 3159 },
             InStore = true,
             FlatPhysicalDamageMod = 10f,
             Tags = new[] { "Damage", "Lane" },
@@ -694,7 +689,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1033 },
-            Into = new[] { 3001, 3026, 3512 },
+            Into = new[] { 3001, 3026, 3112, 3512 },
             InStore = true,
             FlatSpellBlockMod = 45f,
             Tags = new[] { "SpellBlock" },
@@ -714,7 +709,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 3089, 3157 },
+            Into = new[] { 3089, 3157, 3285 },
             InStore = true,
             FlatMagicDamageMod = 80f,
             Tags = new[] { "SpellDamage" },
@@ -1082,7 +1077,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1006, 1029 },
             Into = new[] { 3056, 3512 },
             InStore = true,
-            FlatArmorMod = 30f,
+            FlatArmorMod = 40f,
             Tags = new[] { "Armor", "HealthRegen", "NonbootsMovement" },
             Id = 2053
         };
@@ -1518,9 +1513,9 @@ namespace LeagueSharp.Common.Data
         public static Item Chalice_of_Harmony = new Item
         {
             Name = "Chalice of Harmony",
-            GoldBase = 140,
-            GoldPrice = 1000,
-            GoldSell = 700,
+            GoldBase = 40,
+            GoldPrice = 900,
+            GoldSell = 630,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -1885,7 +1880,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1028 },
-            Into = new[] { 3187, 3401, 3065, 3190, 3050, 3056, 3709, 3717, 3721, 3725 },
+            Into = new[] { 3187, 3190, 3401, 3065, 3050, 3056 },
             InStore = true,
             FlatHPPoolMod = 200f,
             Tags = new[] { "CooldownReduction", "Health" },
@@ -1905,7 +1900,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 1031, 1011 },
+            From = new[] { 1031, 3751 },
             InStore = true,
             FlatHPPoolMod = 450f,
             FlatArmorMod = 45f,
@@ -2102,12 +2097,7 @@ namespace LeagueSharp.Common.Data
             PercentMovementSpeedMod = 0.08f,
             PercentAttackSpeedMod = 0.3f,
             FlatCritChanceMod = 0.1f,
-            Tags =
-                new[]
-                {
-                    "AttackSpeed", "CriticalStrike", "Damage", "Health", "Mana", "NonbootsMovement", "OnHit",
-                    "SpellDamage"
-                },
+            Tags = new[] { "AttackSpeed", "CriticalStrike", "Damage", "Health", "Mana", "NonbootsMovement", "OnHit", "SpellDamage" },
             Id = 3078
         };
 
@@ -2549,7 +2539,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1052 },
-            Into = new[] { 3174, 3092, 3115, 3188, 3290, 3165, 3152, 3060, 3023, 3708, 3716, 3720, 3724 },
+            Into = new[] { 3174, 3092, 3115, 3290, 3165, 3152, 3060, 3023, 3708, 3716, 3720, 3724 },
             InStore = true,
             FlatMagicDamageMod = 30f,
             Tags = new[] { "CooldownReduction", "SpellDamage" },
@@ -2606,13 +2596,13 @@ namespace LeagueSharp.Common.Data
         public static Item Orb_of_Winter = new Item
         {
             Name = "Orb of Winter",
-            GoldBase = 850,
-            GoldPrice = 2210,
-            GoldSell = 1547,
+            GoldBase = 990,
+            GoldPrice = 2200,
+            GoldSell = 1540,
             Purchasable = true,
             Stacks = 1,
-            Depth = 2,
-            From = new[] { 1006, 1006, 1033, 1033 },
+            Depth = 3,
+            From = new[] { 1006, 1006, 1057 },
             InStore = true,
             FlatSpellBlockMod = 70f,
             Tags = new[] { "HealthRegen", "SpellBlock" },
@@ -2633,7 +2623,7 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 1052 },
-            Into = new[] { 3023, 3290, 3100, 3504 },
+            Into = new[] { 3023, 3290, 3100, 3285, 3286, 3504 },
             InStore = true,
             FlatMagicDamageMod = 30f,
             Tags = new[] { "NonbootsMovement", "SpellDamage" },
@@ -2764,28 +2754,6 @@ namespace LeagueSharp.Common.Data
             FlatMagicDamageMod = 40f,
             Tags = new[] { "AttackSpeed", "Damage", "LifeSteal", "OnHit", "SpellDamage", "SpellVamp" },
             Id = 3124
-        };
-
-        #endregion
-
-        #region Deathfire Grasp
-
-        [Obsolete("Deathfire Grasp has been removed from the gamefiles and will be removed from ItemData.")]
-        public static Item Deathfire_Grasp = new Item
-        {
-            Name = "Deathfire Grasp",
-            Range = 750f,
-            GoldBase = 680,
-            GoldPrice = 3100,
-            GoldSell = 2170,
-            Purchasable = true,
-            Stacks = 1,
-            Depth = 3,
-            From = new[] { 1058, 3108 },
-            InStore = true,
-            FlatMagicDamageMod = 120f,
-            Tags = new[] { "SpellDamage", "CooldownReduction", "Active" },
-            Id = 3128
         };
 
         #endregion
@@ -2951,12 +2919,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 30f,
             FlatCritChanceMod = 0.15f,
-            Tags =
-                new[]
-                {
-                    "Active", "ArmorPenetration", "AttackSpeed", "CooldownReduction", "CriticalStrike", "Damage",
-                    "NonbootsMovement"
-                },
+            Tags = new[] { "Active", "ArmorPenetration", "AttackSpeed", "CooldownReduction", "CriticalStrike", "Damage", "NonbootsMovement" },
             Id = 3142
         };
 
@@ -3245,30 +3208,6 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Feral Flare
-
-        [Obsolete("Feral Flare has been removed from the gamefiles and will be removed from ItemData.")]
-        public static Item Feral_Flare = new Item
-        {
-            Name = "Feral Flare",
-            Range = 600f,
-            GoldBase = 1800,
-            GoldPrice = 1800,
-            GoldSell = 1430,
-            Group = "GoldBase",
-            Stacks = 1,
-            Depth = 4,
-            From = new[] { 3154 },
-            SpecialRecipe = 3154,
-            InStore = false,
-            FlatPhysicalDamageMod = 12f,
-            PercentAttackSpeedMod = 0.3f,
-            Tags = new[] { "Damage", "AttackSpeed", "OnHit" },
-            Id = 3160
-        };
-
-        #endregion
-
         #region Morellonomicon
 
         public static Item Morellonomicon = new Item
@@ -3285,79 +3224,6 @@ namespace LeagueSharp.Common.Data
             FlatMagicDamageMod = 80f,
             Tags = new[] { "CooldownReduction", "ManaRegen", "SpellDamage" },
             Id = 3165
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Purchasable = true,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3166
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace1 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3167
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace2 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3168
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace3 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            Into = new[] { 3175, 3410, 3416, 3422, 3455 },
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3169
         };
 
         #endregion
@@ -3380,24 +3246,6 @@ namespace LeagueSharp.Common.Data
             FlatSpellBlockMod = 50f,
             Tags = new[] { "Armor", "SpellBlock", "SpellDamage", "Tenacity" },
             Id = 3170
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace4 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3171
         };
 
         #endregion
@@ -3429,7 +3277,7 @@ namespace LeagueSharp.Common.Data
         public static Item Athenes_Unholy_Grail = new Item
         {
             Name = "Athene's Unholy Grail",
-            GoldBase = 880,
+            GoldBase = 980,
             GoldPrice = 2700,
             GoldSell = 1890,
             Purchasable = true,
@@ -3441,26 +3289,6 @@ namespace LeagueSharp.Common.Data
             FlatSpellBlockMod = 25f,
             Tags = new[] { "CooldownReduction", "ManaRegen", "SpellBlock", "SpellDamage" },
             Id = 3174
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_KhaZix = new Item
-        {
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 2,
-            From = new[] { 3169 },
-            SpecialRecipe = 3169,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3175
         };
 
         #endregion
@@ -3568,27 +3396,6 @@ namespace LeagueSharp.Common.Data
             FlatArmorMod = 25f,
             Tags = new[] { "Active", "Armor", "CooldownReduction", "Health", "Mana", "Stealth", "Vision" },
             Id = 3187
-        };
-
-        #endregion
-
-        #region Blackfire Torch
-
-        public static Item Blackfire_Torch = new Item
-        {
-            Name = "Blackfire Torch",
-            Range = 750f,
-            GoldBase = 970,
-            GoldPrice = 2650,
-            GoldSell = 1855,
-            Purchasable = true,
-            Stacks = 1,
-            Depth = 3,
-            From = new[] { 1026, 3108 },
-            InStore = true,
-            FlatMagicDamageMod = 80f,
-            Tags = new[] { "Active", "CooldownReduction", "SpellDamage" },
-            Id = 3188
         };
 
         #endregion
@@ -3748,7 +3555,7 @@ namespace LeagueSharp.Common.Data
         public static Item Mikaels_Crucible = new Item
         {
             Name = "Mikael's Crucible",
-            GoldBase = 850,
+            GoldBase = 950,
             GoldPrice = 2450,
             GoldSell = 1715,
             Purchasable = true,
@@ -4513,6 +4320,48 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
+        #region Luden's Echo
+
+        public static Item Ludens_Echo = new Item
+        {
+            Name = "Luden's Echo",
+            GoldBase = 650,
+            GoldPrice = 3100,
+            GoldSell = 2170,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1058, 3113 },
+            InStore = true,
+            FlatMagicDamageMod = 120f,
+            PercentMovementSpeedMod = 0.07f,
+            Tags = new[] { "NonbootsMovement", "OnHit", "SpellDamage" },
+            Id = 3285
+        };
+
+        #endregion
+
+        #region Luden's Echo
+
+        public static Item Ludens_Echo2 = new Item
+        {
+            Name = "Luden's Echo",
+            GoldBase = 1090,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 1026, 3113 },
+            InStore = true,
+            FlatMagicDamageMod = 100f,
+            PercentMovementSpeedMod = 0.07f,
+            Tags = new[] { "NonbootsMovement", "OnHit", "SpellDamage" },
+            Id = 3286
+        };
+
+        #endregion
+
         #region Twin Shadows
 
         public static Item Twin_Shadows2 = new Item
@@ -4772,446 +4621,6 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace5 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Purchasable = true,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3405
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace6 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3406
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace7 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3407
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace8 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3408
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace9 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3409
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_KhaZix1 = new Item
-        {
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 2,
-            From = new[] { 3169 },
-            SpecialRecipe = 3169,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3410
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace10 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Purchasable = true,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3411
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace11 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3412
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace12 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3413
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace13 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3414
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace14 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3415
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_KhaZix2 = new Item
-        {
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 2,
-            From = new[] { 3169 },
-            SpecialRecipe = 3169,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3416
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace15 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Purchasable = true,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3417
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace16 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3418
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace17 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3419
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace18 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3420
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace19 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3421
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_KhaZix3 = new Item
-        {
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 2,
-            From = new[] { 3169 },
-            SpecialRecipe = 3169,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3422
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace20 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Purchasable = true,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3450
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace21 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3451
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace22 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3452
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace23 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3453
-        };
-
-        #endregion
-
-        #region Bonetooth Necklace
-
-        public static Item Bonetooth_Necklace24 = new Item
-        {
-            Name = "Bonetooth Necklace",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 1,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3454
-        };
-
-        #endregion
-
-        #region Head of Kha'Zix
-
-        public static Item Head_of_KhaZix4 = new Item
-        {
-            Name = "Head of Kha'Zix",
-            Range = 600f,
-            Group = "RelicBase",
-            Stacks = 1,
-            Depth = 2,
-            From = new[] { 3169 },
-            SpecialRecipe = 3169,
-            InStore = false,
-            HideFromAll = true,
-            RequiredChampion = "Rengar",
-            Tags = new[] { "Active", "Trinket", "Vision" },
-            Id = 3455
-        };
-
-        #endregion
-
         #region Golden Transcendence
 
         public static Item Golden_Transcendence = new Item
@@ -5281,8 +4690,8 @@ namespace LeagueSharp.Common.Data
             Depth = 3,
             From = new[] { 2053, 1057 },
             InStore = true,
-            FlatArmorMod = 50f,
-            FlatSpellBlockMod = 50f,
+            FlatArmorMod = 60f,
+            FlatSpellBlockMod = 60f,
             Tags = new[] { "Armor", "HealthRegen", "NonbootsMovement", "SpellBlock" },
             Id = 3512
         };
@@ -5369,22 +4778,22 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Stalker's Blade Enchantment: Juggernaut
+        #region Bami's Cinder Stalkers Blade Enchantment Cinderhulk
 
-        public static Item Stalkers_Blade_Enchantment_Juggernaut = new Item
+        public static Item Bamis_Cinder_Stalkers_Blade_Enchantment_Cinderhulk = new Item
         {
-            Name = "Stalker's Blade Enchantment: Juggernaut",
-            GoldBase = 150,
+            Name = "Bami's Cinder Stalkers Blade Enchantment Cinderhulk",
+            GoldBase = 400,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3706, 3067, 1028 },
+            From = new[] { 3706, 3751 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
+            Tags = new[] { "Health", "Jungle" },
             Id = 3709
         };
 
@@ -5516,22 +4925,22 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Skirmisher's Sabre Enchantment: Juggernaut
+        #region Bami's Cinder Skirmishers Sabre Enchantment Cinderhulk
 
-        public static Item Skirmishers_Sabre_Enchantment_Juggernaut = new Item
+        public static Item Bamis_Cinder_Skirmishers_Sabre_Enchantment_Cinderhulk = new Item
         {
-            Name = "Skirmisher's Sabre Enchantment: Juggernaut",
-            GoldBase = 150,
+            Name = "Bami's Cinder Skirmishers Sabre Enchantment Cinderhulk",
+            GoldBase = 400,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3715, 3067, 1028 },
+            From = new[] { 3715, 3751 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
+            Tags = new[] { "Health", "Jungle" },
             Id = 3717
         };
 
@@ -5600,22 +5009,22 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Poacher's Knife Enchantment: Juggernaut
+        #region Bami's Cinder Poachers Knife Enchantment Cinderhulk
 
-        public static Item Poachers_Knife_Enchantment_Juggernaut = new Item
+        public static Item Bamis_Cinder_Poachers_Knife_Enchantment_Cinderhulk = new Item
         {
-            Name = "Poacher's Knife Enchantment: Juggernaut",
-            GoldBase = 150,
+            Name = "Bami's Cinder Poachers Knife Enchantment Cinderhulk",
+            GoldBase = 400,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3711, 3067, 1028 },
+            From = new[] { 3711, 3751 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
+            Tags = new[] { "Health", "Jungle" },
             Id = 3721
         };
 
@@ -5684,22 +5093,22 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Ranger's Trailblazer Enchantment: Juggernaut
+        #region Bami's Cinder Rangers Trailblazer Enchantment Cinderhulk
 
-        public static Item Rangers_Trailblazer_Enchantment_Juggernaut = new Item
+        public static Item Bamis_Cinder_Rangers_Trailblazer_Enchantment_Cinderhulk = new Item
         {
-            Name = "Ranger's Trailblazer Enchantment: Juggernaut",
-            GoldBase = 150,
+            Name = "Bami's Cinder Rangers Trailblazer Enchantment Cinderhulk",
+            GoldBase = 400,
             GoldPrice = 2250,
             GoldSell = 1575,
             Purchasable = true,
             Group = "JungleItems",
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3713, 3067, 1028 },
+            From = new[] { 3713, 3751 },
             InStore = true,
             HideFromAll = true,
-            Tags = new[] { "CooldownReduction", "Health", "Jungle", "Tenacity" },
+            Tags = new[] { "Health", "Jungle" },
             Id = 3725
         };
 
@@ -5726,6 +5135,27 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
+        #region Bami's Cinder
+
+        public static Item Bamis_Cinder = new Item
+        {
+            Name = "Bami's Cinder",
+            GoldBase = 600,
+            GoldPrice = 1000,
+            GoldSell = 700,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1028 },
+            Into = new[] { 3068, 3709, 3717, 3721, 3725 },
+            InStore = true,
+            FlatHPPoolMod = 300f,
+            Tags = new[] { "Health" },
+            Id = 3751
+        };
+
+        #endregion
+
         #region Righteous Glory
 
         public static Item Righteous_Glory = new Item
@@ -5739,7 +5169,7 @@ namespace LeagueSharp.Common.Data
             Depth = 3,
             From = new[] { 3010, 3801 },
             InStore = true,
-            FlatHPPoolMod = 500f,
+            FlatHPPoolMod = 650f,
             FlatMPPoolMod = 300f,
             Tags = new[] { "Active", "Health", "HealthRegen", "Mana", "NonbootsMovement", "Slow" },
             Id = 3800
@@ -5767,7 +5197,6 @@ namespace LeagueSharp.Common.Data
         };
 
         #endregion
-
 
         #endregion
     }
