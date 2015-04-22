@@ -284,7 +284,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "TwistedFate",
-                IsActive = (source, target) => (source.HasBuff("Pick A Card Blue")),
+                IsActive = (source, target) => (source.HasBuff("bluecardpreattack")),
                 GetDamage =
                     (source, target) =>
                         (float) source.GetSpellDamage(target, SpellSlot.W) -
@@ -297,7 +297,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "TwistedFate",
-                IsActive = (source, target) => (source.HasBuff("CardMasterStackParticle")),
+                IsActive = (source, target) => (source.HasBuff("cardmasterstackparticle")),
                 GetDamage = (source, target) => (float) source.GetSpellDamage(target, SpellSlot.E),
             };
             AttackPassives.Add(p);
