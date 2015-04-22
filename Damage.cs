@@ -150,7 +150,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Corki",
-                IsActive = (source, target) => (source.HasBuff("RapidReload")),
+                IsActive = (source, target) => (source.HasBuff("rapidreload")),
                 GetDamage =
                     (source, target) => ((float) 0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
@@ -236,7 +236,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Nasus",
-                IsActive = (source, target) => (source.HasBuff("SiphoningStrike")),
+                IsActive = (source, target) => (source.HasBuff("NasusQ")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
@@ -248,7 +248,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Orianna",
-                IsActive = (source, target) => (source.HasBuff("OrianaSpellSword")),
+                IsActive = (source, target) => (source.HasBuff("orianaspellsword")),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -267,7 +267,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Teemo",
-                IsActive = (source, target) => (source.HasBuff("Toxic Attack")),
+                IsActive = (source, target) => (source.HasBuff("ToxicShot")),
                 GetDamage =
                     (source, target) =>
                         ((float)
@@ -321,7 +321,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Vayne",
-                IsActive = (source, target) => (source.HasBuff("VayneTumble")),
+                IsActive = (source, target) => (source.HasBuff("vaynetumblebonus")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
@@ -344,7 +344,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Ziggs",
-                IsActive = (source, target) => (source.HasBuff("ziggsShortFuse")),
+                IsActive = (source, target) => (source.HasBuff("ziggsshortfuse")),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -3033,7 +3033,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 (from buff in ObjectManager.Player.Buffs
-                                    where buff.DisplayName == "NasusQStacks"
+                                    where buff.Name == "nasusqstacks"
                                     select buff.Count).FirstOrDefault() + new double[] { 30, 50, 70, 90, 110 }[level]
                     },
                     //E - Initial
