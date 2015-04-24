@@ -266,6 +266,9 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
+            if(!Move)
+                return false;
+                
             if (LastAATick <= Utils.TickCount)
             {
                 return Move && NoCancelChamps.Contains(Player.ChampionName)
