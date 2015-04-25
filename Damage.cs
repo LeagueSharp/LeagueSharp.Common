@@ -1102,7 +1102,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage = (source, target, level) =>
                         {
-                            if (target.IsMinion)
+                            if (target is Obj_AI_Minion)
                             {
                                 return Math.Min(
                                     new double[] { 300, 400, 500, 600, 700 }[level],
