@@ -46,6 +46,7 @@ namespace LeagueSharp.Common
         private static readonly List<RenderObject> RenderObjects = new List<RenderObject>();
         private static List<RenderObject> _renderVisibleObjects = new List<RenderObject>();
         private static bool _cancelThread;
+        private static readonly object RenderObjectsLock = new object();
 
         static Render()
         {
@@ -126,13 +127,19 @@ namespace LeagueSharp.Common
         public static RenderObject Add(this RenderObject renderObject, int layer = int.MaxValue)
         {
             renderObject.Layer = layer != int.MaxValue ? layer : renderObject.Layer;
-            RenderObjects.Add(renderObject);
+            lock (RenderObjectsLock)
+            {
+                RenderObjects.Add(renderObject);
+            }
             return renderObject;
         }
 
         public static void Remove(this RenderObject renderObject)
         {
-            RenderObjects.Remove(renderObject);
+            lock (RenderObjectsLock)
+            {
+                RenderObjects.Remove(renderObject);
+            }
         }
 
         private static void PrepareObjects()
@@ -142,12 +149,13 @@ namespace LeagueSharp.Common
                 try
                 {
                     Thread.Sleep(1);
-                    _renderVisibleObjects =
-                        RenderObjects.Where(
-                                obj =>
-                                    obj.Visible && obj.HasValidLayer())
-                            .OrderBy(obj => obj.Layer)
-                            .ToList();
+                    lock (RenderObjectsLock)
+                    {
+                        _renderVisibleObjects =
+                            RenderObjects.Where(obj => obj.Visible && obj.HasValidLayer())
+                                .OrderBy(obj => obj.Layer)
+                                .ToList();
+                    }
                 }
                 catch (Exception e)
                 {
