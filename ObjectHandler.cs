@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LeagueSharp.Common
 {
@@ -9,7 +8,7 @@ namespace LeagueSharp.Common
         "only use it if you know what you are doing!", false)]
     public class ObjectHandler
     {
-        private static readonly Dictionary<Type, Dictionary<int, GameObject>> gameObjects =
+        private static readonly Dictionary<Type, Dictionary<int, GameObject>> GameObjects =
             new Dictionary<Type, Dictionary<int, GameObject>>();
 
         static ObjectHandler()
@@ -19,9 +18,9 @@ namespace LeagueSharp.Common
             foreach (var obj in ObjectManager.Get<GameObject>())
             {
                 var type = obj.GetType();
-                if (!gameObjects.ContainsKey(type))
+                if (!GameObjects.ContainsKey(type))
                 {
-                    gameObjects.Add(type, new Dictionary<int, GameObject>());
+                    GameObjects.Add(type, new Dictionary<int, GameObject>());
                 }
 
                 var index = obj.NetworkId;
@@ -31,7 +30,7 @@ namespace LeagueSharp.Common
                     i++;
                 }
 
-                gameObjects[type][index] = obj;
+                GameObjects[type][index] = obj;
             }
 
             // Listen to events
@@ -47,17 +46,17 @@ namespace LeagueSharp.Common
         private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
         {
             var type = sender.GetType();
-            if (!gameObjects.ContainsKey(type))
+            if (!GameObjects.ContainsKey(type))
             {
-                gameObjects.Add(type, new Dictionary<int, GameObject>());
+                GameObjects.Add(type, new Dictionary<int, GameObject>());
             }
 
-            gameObjects[type][sender.NetworkId] = sender;
+            GameObjects[type][sender.NetworkId] = sender;
         }
 
         private static void Obj_AI_Base_OnDelete(GameObject sender, EventArgs args)
         {
-            foreach (var dictionary in gameObjects.Values)
+            foreach (var dictionary in GameObjects.Values)
             {
                 dictionary.Remove(sender.NetworkId);
             }
@@ -68,11 +67,11 @@ namespace LeagueSharp.Common
             var type = typeof(T);
             var found = new GameObjectWrapper<T>();
 
-            foreach (var key in gameObjects.Keys)
+            foreach (var key in GameObjects.Keys)
             {
                 if (type.IsAssignableFrom(key))
                 {
-                    found.AddRange(gameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T)o));
+                    found.AddRange(GameObjects[key].Values.FindAll(o => o.IsValid<T>()).ConvertAll(o => (T)o));
                 }
             }
 
@@ -81,7 +80,7 @@ namespace LeagueSharp.Common
 
         public static T GetUnitByNetworkId<T>(int networkId) where T : GameObject, new()
         {
-            foreach (var dict in gameObjects.Values)
+            foreach (var dict in GameObjects.Values)
             {
                 if (dict.ContainsKey(networkId) && dict[networkId].IsValid)
                 {

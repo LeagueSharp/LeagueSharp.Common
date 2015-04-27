@@ -32,13 +32,13 @@ namespace LeagueSharp.Common
 {
     public class AutoLevel
     {
-        private static List<SpellSlot> order = new List<SpellSlot>();
-        private static float LastLeveled;
-        private static float NextDelay;
+        private static List<SpellSlot> _order = new List<SpellSlot>();
+        private static float _lastLeveled;
+        private static float _nextDelay;
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
-        private static Random RandomNumber;
-        private static bool enabled;
-        private static bool init;
+        private static Random _randomNumber;
+        private static bool _enabled;
+        private static bool _init;
 
         public AutoLevel(IEnumerable<int> levels)
         {
@@ -54,26 +54,26 @@ namespace LeagueSharp.Common
 
         private static void Init()
         {
-            if (init)
+            if (_init)
             {
                 return;
             }
 
-            init = true;
-            RandomNumber = new Random(Utils.TickCount);
+            _init = true;
+            _randomNumber = new Random(Utils.TickCount);
             Game.OnUpdate += Game_OnGameUpdate;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
+            if (!_enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - _lastLeveled < _nextDelay)
             {
                 return;
             }
 
-            NextDelay = RandomNumber.Next(750);
-            LastLeveled = Utils.TickCount;
-            var spell = order[GetTotalPoints()];
+            _nextDelay = _randomNumber.Next(750);
+            _lastLeveled = Utils.TickCount;
+            var spell = _order[GetTotalPoints()];
             Player.Spellbook.LevelSpell(spell);
         }
 
@@ -90,44 +90,44 @@ namespace LeagueSharp.Common
 
         public static void Enable()
         {
-            enabled = true;
+            _enabled = true;
         }
 
         public static void Disable()
         {
-            enabled = false;
+            _enabled = false;
         }
 
         public static void Enabled(bool b)
         {
-            enabled = b;
+            _enabled = b;
         }
 
         public static void UpdateSequence(IEnumerable<int> levels)
         {
             Init();
-            order.Clear();
+            _order.Clear();
             foreach (var level in levels)
             {
-                order.Add((SpellSlot) level);
+                _order.Add((SpellSlot) level);
             }
         }
 
         public static void UpdateSequence(List<SpellSlot> levels)
         {
             Init();
-            order.Clear();
-            order = levels;
+            _order.Clear();
+            _order = levels;
         }
 
         public static int[] GetSequence()
         {
-            return order.Select(spell => (int) spell).ToArray();
+            return _order.Select(spell => (int) spell).ToArray();
         }
 
         public static List<SpellSlot> GetSequenceList()
         {
-            return order;
+            return _order;
         }
     }
 }

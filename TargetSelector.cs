@@ -213,7 +213,7 @@ namespace LeagueSharp.Common
                 new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
             config.AddItem(new MenuItem("Sep", "").SetShared());
             var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
-            autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
+            autoPriorityItem.ValueChanged += AutoPriorityItemValueChanged;
 
             foreach (var enemy in HeroManager.Enemies)
             {
@@ -236,7 +236,7 @@ namespace LeagueSharp.Common
                     .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
         }
 
-        private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
+        private static void AutoPriorityItemValueChanged(object sender, OnValueChangeEventArgs e)
         {
             if (!e.GetNewValue<bool>())
             {
@@ -282,9 +282,8 @@ namespace LeagueSharp.Common
             }
 
             // Sivir's Spell Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SpellShield"))
             {
-                // TODO: Get exact Sivir's Spell Shield buff name
                 return true;
             }
 
@@ -326,12 +325,12 @@ namespace LeagueSharp.Common
             IEnumerable<Obj_AI_Hero> ignoredChamps = null,
             Vector3? rangeCheckFrom = null)
         {
-            var t = GetTarget(ObjectManager.Player, spell.Range, 
+            var target = GetTarget(ObjectManager.Player, spell.Range, 
                 spell.DamageType, ignoreShield, ignoredChamps, rangeCheckFrom);
 
-            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
+            if (spell.Collision && spell.GetPrediction(target).Hitchance != HitChance.Collision)
             {
-                return t;
+                return target;
             }
 
             return null;
