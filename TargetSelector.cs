@@ -445,7 +445,7 @@ namespace LeagueSharp.Common
     /// </summary>
     public class LockedTargetSelector
     {
-        private static Obj_AI_Hero _lastTarget;
+        public static Obj_AI_Hero _lastTarget;
         private static TargetSelector.DamageType _lastDamageType;
 
         public static Obj_AI_Hero GetTarget(float range,
