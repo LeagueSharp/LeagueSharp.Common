@@ -147,12 +147,27 @@ namespace LeagueSharp.Common
         /// </summary>
         public static InventorySlot GetWardSlot()
         {
+            var wardNames = new[] { "Warding Totem (Trinket)", "Greater Totem (Trinket)", "Greater Stealth Totem (Trinket)", "Ruby Sightstone", "Sightstone", "Stealth Ward" };
+            foreach (var name in wardNames)
+            {
+                var id = Player.InventoryItems.FirstOrDefault(slot => slot.DisplayName == name);
+                if (id.IsValidSlot() && Player.Spellbook.CanUseSpell(id.SpellSlot) == SpellState.Ready)
+                {
+                    return id;
+                }
+            }
+            return null;
+        }
+        /*public static InventorySlot GetWardSlot()
+        {
             var wardIds = new[] { 3340, 3350, 3361, 3154, 2045, 2049, 2050, 2044 };
             return (from wardId in wardIds
                     where CanUseItem(wardId)
                     select ObjectManager.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
                 .FirstOrDefault();
-        }
+        }*/
+        
+        
 
         public class Item
         {
