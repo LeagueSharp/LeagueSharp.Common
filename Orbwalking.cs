@@ -101,20 +101,7 @@ namespace LeagueSharp.Common
         {
             Player = ObjectManager.Player;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
-            GameObject.OnCreate += Obj_SpellMissile_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
-        }
-
-        private static void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
-        {
-            if (sender.IsValid<Obj_SpellMissile>())
-            {
-                var missile = (Obj_SpellMissile) sender;
-                if (missile.SpellCaster.IsValid<Obj_AI_Hero>() && IsAutoAttack(missile.SData.Name))
-                {
-                    FireAfterAttack(missile.SpellCaster, _lastTarget);
-                }
-            }
         }
 
         /// <summary>
@@ -427,8 +414,8 @@ namespace LeagueSharp.Common
                     (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
                     LastAATick = Utils.TickCount - Game.Ping / 2;
-                    
-                    if(Spell.Target is Obj_AI_Base)
+
+                    if (Spell.Target is Obj_AI_Base)
                     {
                         var target = (Obj_AI_Base)Spell.Target;
                         if (target.IsValid)
@@ -436,12 +423,10 @@ namespace LeagueSharp.Common
                             FireOnTargetSwitch(target);
                             _lastTarget = target;
                         }
-
-                        if (unit.IsMelee())
-                        {
-                            Utility.DelayAction.Add(
-                                (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
-                        }
+                        
+                        //Trigger it for ranged until the missiles catch normal attacks again!
+                        Utility.DelayAction.Add(
+                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
                     }
                 }
 
