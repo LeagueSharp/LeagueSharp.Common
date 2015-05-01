@@ -2002,7 +2002,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 140, 220, 300 }[level] + 0.6 * source.FlatMagicDamageMod
+                                new double[] { 60, 140, 220, 300 }[source.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
+                                0.6 * source.FlatMagicDamageMod
                     },
                 });
 
