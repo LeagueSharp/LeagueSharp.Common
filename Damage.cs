@@ -1933,7 +1933,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 25, 30, 35 }[level] + 0.1 * source.FlatPhysicalDamageMod
+                                new double[] { 25, 35, 45 }[level] +
+                                new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + 0.1 * source.FlatPhysicalDamageMod
                     },
                     //R - Max
                     new DamageSpell
