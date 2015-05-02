@@ -3694,8 +3694,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 55, 75, 95, 115, 135 }[level] + 0.55 * source.FlatMagicDamageMod +
-                                0.065 * source.MaxMana
+                                new double[] { 65, 90, 115, 140, 165 }[level] + 0.55 * source.FlatMagicDamageMod +
+                                new double[]{2, 2.5, 3, 3.5, 4}[level] / 100 * source.MaxMana
                     },
                     //W
                     new DamageSpell
@@ -3705,7 +3705,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 new double[] { 65, 95, 125, 155, 185 }[level] + 0.4 * source.FlatMagicDamageMod +
-                                0.045 * source.MaxMana
+                                0.025 * source.MaxMana
                     },
                     //E
                     new DamageSpell
