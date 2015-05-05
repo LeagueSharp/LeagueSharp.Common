@@ -364,12 +364,6 @@ namespace LeagueSharp.Common
                     if (!DisableNextAttack)
                     {
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-
-                        if (_lastTarget != null && _lastTarget.IsValid && _lastTarget.NetworkId != target.NetworkId)
-                        {
-                            LastAATick = Utils.TickCount + Game.Ping / 2;
-                        }
-
                         _lastTarget = target;
                         return;
                     }
