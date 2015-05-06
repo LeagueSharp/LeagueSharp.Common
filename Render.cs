@@ -124,9 +124,9 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static RenderObject Add(this RenderObject renderObject, float layer = int.MaxValue)
+        public static RenderObject Add(this RenderObject renderObject, float layer = float.MaxValue)
         {
-            renderObject.Layer = layer != float.MaxValue ? layer : renderObject.Layer;
+            renderObject.Layer = !layer.Equals(float.MaxValue) ? layer : renderObject.Layer;
             lock (RenderObjectsLock)
             {
                 RenderObjects.Add(renderObject);
@@ -781,7 +781,7 @@ namespace LeagueSharp.Common
             public delegate bool VisibleConditionDelegate(RenderObject sender);
 
             private bool _visible = true;
-            public float Layer;
+            public float Layer = 0.0f;
             public VisibleConditionDelegate VisibleCondition;
 
             public bool Visible
