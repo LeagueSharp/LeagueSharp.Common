@@ -95,12 +95,14 @@ namespace LeagueSharp.Common
         private static readonly Obj_AI_Hero Player;
         private static int _delay;
         private static float _minDistance = 400;
+        private static bool _missileLaunched;
         private static readonly Random _random = new Random(DateTime.Now.Millisecond);
 
         static Orbwalking()
         {
             Player = ObjectManager.Player;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 
@@ -255,10 +257,16 @@ namespace LeagueSharp.Common
         {
             if(!Move)
                 return false;
+
+            if (_missileLaunched)
+            {
+                return true;
+            }
                 
+
             if (LastAATick <= Utils.TickCount)
             {
-                return Move && NoCancelChamps.Contains(Player.ChampionName)
+                return NoCancelChamps.Contains(Player.ChampionName)
                     ? (Utils.TickCount - LastAATick > 250)
                     : (Utils.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
             }
@@ -286,7 +294,7 @@ namespace LeagueSharp.Common
             return LastMoveCommandPosition;
         }
 
-        private static void MoveTo(Vector3 position,
+        public static void MoveTo(Vector3 position,
             float holdAreaRadius = 0,
             bool overrideTimer = false,
             bool useFixedDistance = true,
@@ -356,12 +364,6 @@ namespace LeagueSharp.Common
                     if (!DisableNextAttack)
                     {
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-
-                        if (_lastTarget != null && _lastTarget.IsValid && _lastTarget != target)
-                        {
-                            LastAATick = Utils.TickCount + Game.Ping / 2;
-                        }
-
                         _lastTarget = target;
                         return;
                     }
@@ -394,6 +396,15 @@ namespace LeagueSharp.Common
             }
         }
 
+        private static void MissileClient_OnCreate(GameObject sender, EventArgs args)
+        {
+            var missile = sender as MissileClient;
+            if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name))
+            {
+                _missileLaunched = true;
+            }
+        }
+
         private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
         {
             try
@@ -414,6 +425,7 @@ namespace LeagueSharp.Common
                     (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
                     LastAATick = Utils.TickCount - Game.Ping / 2;
+                    _missileLaunched = false;
 
                     if (Spell.Target is Obj_AI_Base)
                     {
