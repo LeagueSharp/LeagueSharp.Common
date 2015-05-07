@@ -1104,11 +1104,14 @@ namespace LeagueSharp.Common
                         {
                             if (target is Obj_AI_Minion)
                             {
-                                return Math.Min(
+                              return Math.Max
+                                   (Math.Min(
                                     new double[] { 300, 400, 500, 600, 700 }[level],
-                                    new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health);
+                                    new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health),
+                                    new double[] { 80, 130, 180, 230, 280 }[level]);
                             }
-                            return Math.Max(
+                             else
+                             return Math.Max(
                                 new double[] { 80, 130, 180, 230, 280 }[level],
                                 new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health);
                         }
@@ -1933,7 +1936,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 25, 30, 35 }[level] + 0.1 * source.FlatPhysicalDamageMod
+                                new double[] { 25, 35, 45 }[level] +
+                                new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + 0.1 * source.FlatPhysicalDamageMod
                     },
                     //R - Max
                     new DamageSpell
@@ -2001,7 +2005,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 140, 220, 300 }[level] + 0.6 * source.FlatMagicDamageMod
+                                new double[] { 60, 140, 220, 300 }[source.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
+                                0.6 * source.FlatMagicDamageMod
                     },
                 });
 
