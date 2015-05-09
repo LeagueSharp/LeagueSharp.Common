@@ -242,12 +242,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanAttack()
         {
-            if (LastAATick <= Utils.TickCount)
-            {
-                return Utils.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
-            }
-
-            return false;
+            return Utils.TickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
 
         /// <summary>
@@ -255,23 +250,17 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            if(!Move)
+            if (!Move)
+            {
                 return false;
-
+            }
+               
             if (_missileLaunched)
             {
                 return true;
             }
-                
-
-            if (LastAATick <= Utils.TickCount)
-            {
-                return NoCancelChamps.Contains(Player.ChampionName)
-                    ? (Utils.TickCount - LastAATick > 250)
-                    : (Utils.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
-            }
-
-            return false;
+             
+            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.TickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
         }
 
         public static void SetMovementDelay(int delay)
