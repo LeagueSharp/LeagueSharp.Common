@@ -82,7 +82,23 @@ namespace LeagueSharp.Common
             PassiveDamage p;
 
             #region PassiveDamages
-
+			
+            #region Diana
+            p = new PassiveDamage
+            {
+                ChampionName = "Diana",
+                IsActive = (source, target) => (source.HasBuff("DianaPassiveMarker") && source.HasBuff("dianaarcready")),
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Magical,
+								new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[source.Level - 1]
+								+(float)0.8d * source.FlatMagicDamageMod),
+            };
+            AttackPassives.Add(p);
+            #endregion
+			
             #region Aatrox
 
             p = new PassiveDamage
