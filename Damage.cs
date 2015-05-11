@@ -99,7 +99,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
             #endregion
 			
-            #region Pantheon ((target.Health / target.MaxHealth < 0.15) ? 2 : 1)
+            #region Pantheon
             p = new PassiveDamage
             {
                 ChampionName = "Pantheon",
