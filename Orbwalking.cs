@@ -250,10 +250,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            if (!Move)
+            /*if (!Move)
             {
                 return false;
-            }
+            }*/
                
             if (_missileLaunched)
             {
@@ -358,7 +358,7 @@ namespace LeagueSharp.Common
                     }
                 }
 
-                if (CanMove(extraWindup))
+                if (CanMove(extraWindup) && Move)
                 {
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }
