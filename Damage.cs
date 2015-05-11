@@ -98,6 +98,21 @@ namespace LeagueSharp.Common
             };
             AttackPassives.Add(p);
             #endregion
+			
+            #region Pantheon ((target.Health / target.MaxHealth < 0.15) ? 2 : 1)
+            p = new PassiveDamage
+            {
+                ChampionName = "Pantheon",
+                IsActive = (source, target) => (target.Health / target.MaxHealth < 0.15),
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Physical,
+                                1d  * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+            };
+            AttackPassives.Add(p);
+            #endregion
             
             #region Aatrox
 
