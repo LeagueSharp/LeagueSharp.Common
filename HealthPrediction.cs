@@ -47,15 +47,15 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Utils.TickCount - LastTick <= 60 * 1000)
+            if (Utils.GameTimeTickCount - LastTick <= 60 * 1000)
             {
                 return;
             }
             ActiveAttacks.ToList()
-                .Where(pair => pair.Value.StartTick < Utils.TickCount - 60000)
+                .Where(pair => pair.Value.StartTick < Utils.GameTimeTickCount - 60000)
                 .ToList()
                 .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-            LastTick = Utils.TickCount;
+            LastTick = Utils.GameTimeTickCount;
         }
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
             ActiveAttacks.Remove(sender.NetworkId);
 
             var attackData = new PredictedDamage(
-                sender, target, Utils.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
+                sender, target, Utils.GameTimeTickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
                 (float) sender.GetAutoAttackDamage(target, true));
@@ -104,7 +104,7 @@ namespace LeagueSharp.Common
                     var landTime = attack.StartTick + attack.Delay +
                                    1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
 
-                    if (Utils.TickCount < landTime - delay && landTime < Utils.TickCount + time)
+                    if (Utils.GameTimeTickCount < landTime - delay && landTime < Utils.GameTimeTickCount + time)
                     {
                         attackDamage = attack.Damage;
                     }
@@ -126,16 +126,16 @@ namespace LeagueSharp.Common
             foreach (var attack in ActiveAttacks.Values)
             {
                 var n = 0;
-                if (Utils.TickCount - 100 <= attack.StartTick + attack.AnimationTime &&
+                if (Utils.GameTimeTickCount - 100 <= attack.StartTick + attack.AnimationTime &&
                     attack.Target.IsValidTarget(float.MaxValue, false) &&
                     attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var fromT = attack.StartTick;
-                    var toT = Utils.TickCount + time;
+                    var toT = Utils.GameTimeTickCount + time;
 
                     while (fromT < toT)
                     {
-                        if (fromT >= Utils.TickCount &&
+                        if (fromT >= Utils.GameTimeTickCount &&
                             (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
                         {
                             n++;

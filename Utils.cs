@@ -172,6 +172,11 @@ namespace LeagueSharp.Common
             return key;
         }
 
+        public static int GameTimeTickCount
+        {
+            get { return (int)(Game.Time * 1000); }
+        }
+
         public static int TickCount
         {
             get { return Environment.TickCount & int.MaxValue; }

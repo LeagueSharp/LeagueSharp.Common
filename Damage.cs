@@ -82,7 +82,7 @@ namespace LeagueSharp.Common
             PassiveDamage p;
 
             #region PassiveDamages
-			
+
             #region Diana
             p = new PassiveDamage
             {
@@ -93,12 +93,12 @@ namespace LeagueSharp.Common
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
-								new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[source.Level - 1]
-								+(float)0.8d * source.FlatMagicDamageMod),
+                                new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[source.Level - 1]
+                                +(float)0.8d * source.FlatMagicDamageMod),
             };
             AttackPassives.Add(p);
             #endregion
-			
+            
             #region Aatrox
 
             p = new PassiveDamage
@@ -188,6 +188,23 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
+			
+			#region JarvanIV
+			
+            p = new PassiveDamage
+            {
+                ChampionName = "JarvanIV",
+                IsActive = (source, target) => (!target.HasBuff("jarvanivmartialcadencecheck")),
+                GetDamage =
+                    (source, target) =>
+                        ((float)
+                            source.CalcDamage(
+                                target, DamageType.Physical,
+                                0.1d * (source.Health))),
+            };
+            AttackPassives.Add(p);
+			
+			#endregion
 
             #region Jinx
 
@@ -1120,14 +1137,13 @@ namespace LeagueSharp.Common
                         {
                             if (target is Obj_AI_Minion)
                             {
-                              return Math.Max
-                                   (Math.Min(
+                                return Math.Min(
                                     new double[] { 300, 400, 500, 600, 700 }[level],
-                                    new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health),
-                                    new double[] { 80, 130, 180, 230, 280 }[level]);
+                                    Math.Max(
+                                        new double[] { 80, 130, 180, 230, 280 }[level],
+                                        new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health));
                             }
-                             else
-                             return Math.Max(
+                            return Math.Max(
                                 new double[] { 80, 130, 180, 230, 280 }[level],
                                 new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health);
                         }
