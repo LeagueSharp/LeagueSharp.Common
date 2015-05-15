@@ -352,6 +352,8 @@ namespace LeagueSharp.Common
 
                     if (!DisableNextAttack)
                     {
+                        LastAATick = Utils.TickCount + Game.Ping + 70 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
+                        _missileLaunched = false;
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                         _lastTarget = target;
                         return;
