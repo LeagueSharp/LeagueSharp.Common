@@ -354,7 +354,7 @@ namespace LeagueSharp.Common
                     {
                         if (!NoCancelChamps.Contains(Player.ChampionName))
                         {
-                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 70 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
+                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             _missileLaunched = false;    
                         }
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
