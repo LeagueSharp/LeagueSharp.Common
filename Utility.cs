@@ -49,7 +49,7 @@ namespace LeagueSharp.Common
             }
 
             const float angle = 90;
-            return source.Direction.To2D().AngleBetween((target.Position - source.Position).To2D()) < angle;
+            return source.Direction.To2D().Perpendicular().AngleBetween((target.Position - source.Position).To2D()) < angle;
         }
 
         /// <summary>
