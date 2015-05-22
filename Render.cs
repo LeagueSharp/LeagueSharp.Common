@@ -612,8 +612,6 @@ namespace LeagueSharp.Common
             public delegate Vector2 PositionDelegate();
 
             private readonly SharpDX.Direct3D9.Line _line;
-            private Vector2 _end;
-            private Vector2 _start;
             private int _width;
             public ColorBGRA Color;
 
@@ -622,21 +620,27 @@ namespace LeagueSharp.Common
                 _line = new SharpDX.Direct3D9.Line(Device);
                 Width = width;
                 Color = color;
-                _start = start;
-                _end = end;
+                Start = start;
+                End = end;
+                Game.OnUpdate += GameOnOnUpdate;
             }
 
-            public Vector2 Start
+            private void GameOnOnUpdate(EventArgs args)
             {
-                get { return StartPositionUpdate != null ? StartPositionUpdate() : _start; }
-                set { _start = value; }
+                if (StartPositionUpdate != null)
+                {
+                    Start = StartPositionUpdate();
+                }
+
+                if (EndPositionUpdate != null)
+                {
+                    End = EndPositionUpdate();
+                }
             }
 
-            public Vector2 End
-            {
-                get { return EndPositionUpdate != null ? EndPositionUpdate() : _end; }
-                set { _end = value; }
-            }
+            public Vector2 Start { get; set; }
+
+            public Vector2 End { get; set; }
 
             public PositionDelegate StartPositionUpdate { get; set; }
             public PositionDelegate EndPositionUpdate { get; set; }
@@ -686,6 +690,7 @@ namespace LeagueSharp.Common
                 {
                     _line.Dispose();
                 }
+                Game.OnUpdate -= GameOnOnUpdate;
             }
         }
 
@@ -694,8 +699,6 @@ namespace LeagueSharp.Common
             public delegate Vector2 PositionDelegate();
 
             private readonly SharpDX.Direct3D9.Line _line;
-            private int _x;
-            private int _y;
             public ColorBGRA Color;
 
             public Rectangle(int x, int y, int width, int height, ColorBGRA color)
@@ -706,33 +709,22 @@ namespace LeagueSharp.Common
                 Height = height;
                 Color = color;
                 _line = new SharpDX.Direct3D9.Line(Device) { Width = height };
+                Game.OnUpdate += Game_OnUpdate;
             }
 
-            public int X
+            private void Game_OnUpdate(EventArgs args)
             {
-                get
+                if (PositionUpdate != null)
                 {
-                    if (PositionUpdate != null)
-                    {
-                        return (int) PositionUpdate().X;
-                    }
-                    return _x;
+                    Vector2 pos = PositionUpdate();
+                    X = (int) pos.X;
+                    Y = (int) pos.Y;
                 }
-                set { _x = value; }
             }
 
-            public int Y
-            {
-                get
-                {
-                    if (PositionUpdate != null)
-                    {
-                        return (int) PositionUpdate().Y;
-                    }
-                    return _y;
-                }
-                set { _y = value; }
-            }
+            public int X { get; set; }
+
+            public int Y { get; set; }
 
             public int Width { get; set; }
             public int Height { get; set; }
@@ -773,6 +765,7 @@ namespace LeagueSharp.Common
                 {
                     _line.Dispose();
                 }
+                Game.OnUpdate -= Game_OnUpdate;
             }
         }
 
@@ -815,31 +808,44 @@ namespace LeagueSharp.Common
             private Texture _originalTexture;
             private Vector2 _scale = new Vector2(1, 1);
             private Texture _texture;
-            private int _x;
-            private int _y;
 
-            public Sprite(Bitmap bitmap, Vector2 position)
+            private Sprite()
+            {
+                Game.OnUpdate += Game_OnUpdate;
+            }
+
+            private void Game_OnUpdate(EventArgs args)
+            {
+                if (PositionUpdate != null)
+                {
+                    Vector2 pos = PositionUpdate();
+                    X = (int) pos.X;
+                    Y = (int) pos.Y;
+                }
+            }
+
+            public Sprite(Bitmap bitmap, Vector2 position) : this()
             {
                 UpdateTextureBitmap(bitmap, position);
             }
 
-            public Sprite(BaseTexture texture, Vector2 position)
+            public Sprite(BaseTexture texture, Vector2 position) : this()
             {
                 UpdateTextureBitmap(
                     (Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)), position);
             }
 
-            public Sprite(Stream stream, Vector2 position)
+            public Sprite(Stream stream, Vector2 position) : this()
             {
                 UpdateTextureBitmap(new Bitmap(stream), position);
             }
 
-            public Sprite(byte[] bytesArray, Vector2 position)
+            public Sprite(byte[] bytesArray, Vector2 position) : this()
             {
                 UpdateTextureBitmap((Bitmap) Image.FromStream(new MemoryStream(bytesArray)), position);
             }
 
-            public Sprite(string fileLocation, Vector2 position)
+            public Sprite(string fileLocation, Vector2 position) : this()
             {
                 if (!File.Exists((fileLocation)))
                 {
@@ -849,31 +855,9 @@ namespace LeagueSharp.Common
                 UpdateTextureBitmap(new Bitmap(fileLocation), position);
             }
 
-            public int X
-            {
-                get
-                {
-                    if (PositionUpdate != null)
-                    {
-                        return (int) PositionUpdate().X;
-                    }
-                    return _x;
-                }
-                set { _x = value; }
-            }
+            public int X { get; set; }
 
-            public int Y
-            {
-                get
-                {
-                    if (PositionUpdate != null)
-                    {
-                        return (int) PositionUpdate().Y;
-                    }
-                    return _y;
-                }
-                set { _y = value; }
-            }
+            public int Y { get; set; }
 
             public Bitmap Bitmap { get; set; }
 
@@ -1087,6 +1071,7 @@ namespace LeagueSharp.Common
 
             public override void Dispose()
             {
+                Game.OnUpdate -= Game_OnUpdate;
                 if (!_sprite.IsDisposed)
                 {
                     _sprite.Dispose();
@@ -1113,10 +1098,11 @@ namespace LeagueSharp.Common
 
             public delegate string TextDelegate();
 
-            private string _text;
             private Font _textFont;
             private int _x;
             private int _y;
+            private int _xCalculated;
+            private int _yCalculated;
             public bool Centered = false;
             public Vector2 Offset;
             public bool OutLined = false;
@@ -1124,7 +1110,12 @@ namespace LeagueSharp.Common
             public TextDelegate TextUpdate;
             public Obj_AI_Base Unit;
 
-            public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri")
+            private Text()
+            {
+                Game.OnUpdate += Game_OnUpdate;
+            }
+
+            public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri") : this()
             {
                 Color = color;
                 this.text = text;
@@ -1144,6 +1135,7 @@ namespace LeagueSharp.Common
             }
 
             public Text(string text, Vector2 position, int size, ColorBGRA color, string fontName = "Calibri")
+                : this()
             {
                 Color = color;
                 this.text = text;
@@ -1168,6 +1160,7 @@ namespace LeagueSharp.Common
                 int size,
                 ColorBGRA color,
                 string fontName = "Calibri")
+                : this()
             {
                 Unit = unit;
                 Color = color;
@@ -1191,6 +1184,7 @@ namespace LeagueSharp.Common
             }
 
             public Text(int x, int y, string text, int size, ColorBGRA color, string fontName = "Calibri")
+                : this()
             {
                 Color = color;
                 this.text = text;
@@ -1210,6 +1204,7 @@ namespace LeagueSharp.Common
             }
 
             public Text(Vector2 position, string text, int size, ColorBGRA color, string fontName = "Calibri")
+                : this()
             {
                 Color = color;
                 this.text = text;
@@ -1237,52 +1232,50 @@ namespace LeagueSharp.Common
                 }
             }
 
+            private void Game_OnUpdate(EventArgs args)
+            {
+                var dx = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Width / 2 : 0;
+                if (PositionUpdate != null)
+                {
+                    _xCalculated = (int) (PositionUpdate().X + dx);
+                }
+                else
+                {
+                    _xCalculated = _x + dx;
+                }
+
+                var dy = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Height / 2 : 0;
+                if (PositionUpdate != null)
+                {
+                    _yCalculated = (int) PositionUpdate().Y + dy;
+                }
+                else
+                {
+                    _yCalculated = _y + dy;
+                }
+
+                if (TextUpdate != null)
+                {
+                    text = TextUpdate();
+                }
+            }
+
             public int X
             {
-                get
-                {
-                    var dx = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Width / 2 : 0;
-
-                    if (PositionUpdate != null)
-                    {
-                        return (int) PositionUpdate().X + dx;
-                    }
-
-                    return _x + dx;
-                }
+                get { return _xCalculated; }
                 set { _x = value; }
             }
 
             public int Y
             {
-                get
-                {
-                    var dy = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Height / 2 : 0;
-
-                    if (PositionUpdate != null)
-                    {
-                        return (int) PositionUpdate().Y + dy;
-                    }
-                    return _y + dy;
-                }
+                get { return _yCalculated; }
                 set { _y = value; }
             }
 
             public int Width { get; set; }
             public ColorBGRA Color { get; set; }
 
-            public string text
-            {
-                get
-                {
-                    if (TextUpdate != null)
-                    {
-                        return TextUpdate();
-                    }
-                    return _text;
-                }
-                set { _text = value; }
-            }
+            public string text { get; set; }
 
             public override void OnEndScene()
             {
@@ -1330,6 +1323,7 @@ namespace LeagueSharp.Common
 
             public override void Dispose()
             {
+                Game.OnUpdate -= Game_OnUpdate;
                 if (!_textFont.IsDisposed)
                 {
                     _textFont.Dispose();
