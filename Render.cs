@@ -1234,24 +1234,28 @@ namespace LeagueSharp.Common
 
             private void Game_OnUpdate(EventArgs args)
             {
-                var dx = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Width / 2 : 0;
-                if (PositionUpdate != null)
+                if (_textFont != null && !_textFont.IsDisposed && !string.IsNullOrEmpty(text))
                 {
-                    _xCalculated = (int) (PositionUpdate().X + dx);
-                }
-                else
-                {
-                    _xCalculated = _x + dx;
-                }
+                    var textSize = _textFont.MeasureText(null, text, FontDrawFlags.Center);
+                    var dx = Centered ? - textSize.Width / 2 : 0;
+                    if (PositionUpdate != null)
+                    {
+                        _xCalculated = (int)(PositionUpdate().X + dx);
+                    }
+                    else
+                    {
+                        _xCalculated = _x + dx;
+                    }
 
-                var dy = Centered ? -_textFont.MeasureText(null, text, FontDrawFlags.Center).Height / 2 : 0;
-                if (PositionUpdate != null)
-                {
-                    _yCalculated = (int) PositionUpdate().Y + dy;
-                }
-                else
-                {
-                    _yCalculated = _y + dy;
+                    var dy = Centered ? -textSize.Height / 2 : 0;
+                    if (PositionUpdate != null)
+                    {
+                        _yCalculated = (int)PositionUpdate().Y + dy;
+                    }
+                    else
+                    {
+                        _yCalculated = _y + dy;
+                    }
                 }
 
                 if (TextUpdate != null)
