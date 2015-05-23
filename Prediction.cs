@@ -972,7 +972,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    internal class StoredPath
+    public class StoredPath
     {
         public List<Vector2> Path;
         public int Tick;
@@ -998,7 +998,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    internal static class PathTracker
+    public static class PathTracker
     {
         private const double MaxTime = 1.5d;
         private static readonly Dictionary<int, List<StoredPath>> StoredPaths = new Dictionary<int, List<StoredPath>>();
