@@ -407,7 +407,7 @@ namespace LeagueSharp.Common
 
             sprite.Begin();
 
-            var textDimension = Font.MeasureText(sprite, Text, 0x0);
+            var textDimension = Font.MeasureText(sprite, Text);
             var finalText = Text;
 
             if (textDimension.Width + 0x5 > line.Width)
@@ -415,7 +415,7 @@ namespace LeagueSharp.Common
                 for (var i = Text.Length; i > 0x0; --i)
                 {
                     var text = Text.Substring(0x0, i);
-                    var textWidth = Font.MeasureText(sprite, text, 0x0).Width;
+                    var textWidth = Font.MeasureText(sprite, text).Width;
 
                     if (textWidth + 0x5 > line.Width)
                     {
@@ -427,7 +427,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            textDimension = Font.MeasureText(sprite, finalText, 0x0);
+            textDimension = Font.MeasureText(sprite, finalText);
 
             var rectangle = new Rectangle((int) position.X, (int) position.Y, (int) line.Width, 0x19);
 
@@ -575,7 +575,7 @@ namespace LeagueSharp.Common
                         BoxColor.A = 0xFF;
                         BorderColor.A = 0xFF;
 
-                        var textDimension = Font.MeasureText(sprite, Text, 0x0);
+                        var textDimension = Font.MeasureText(sprite, Text);
                         if (textDimension.Width + 0x10 > line.Width)
                         {
                             var extra = textDimension.Width - 0xB4;

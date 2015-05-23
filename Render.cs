@@ -29,10 +29,12 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 using Font = SharpDX.Direct3D9.Font;
+using Rectangle = SharpDX.Rectangle;
 
 #endregion
 
@@ -1236,7 +1238,7 @@ namespace LeagueSharp.Common
             {
                 if (_textFont != null && !_textFont.IsDisposed && !string.IsNullOrEmpty(text))
                 {
-                    var textSize = _textFont.MeasureText(null, text, FontDrawFlags.Center);
+                    var textSize = _textFont.MeasureText(text);
                     var dx = Centered ? - textSize.Width / 2 : 0;
                     if (PositionUpdate != null)
                     {
@@ -1333,6 +1335,35 @@ namespace LeagueSharp.Common
                     _textFont.Dispose();
                 }
             }
+        }
+    }
+
+    public static class FontExtension
+    {
+        private static readonly Dictionary<FontDescription, Dictionary<string, Rectangle>> Widths = new Dictionary<FontDescription, Dictionary<string, Rectangle>>();
+
+        public static Rectangle MeasureText(this Font font, Sprite sprite, string text)
+        {
+            Dictionary<string, Rectangle> rectangles;
+            if (!Widths.TryGetValue(font.Description, out rectangles))
+            {
+                rectangles = new Dictionary<string, Rectangle>();
+                Widths[font.Description] = rectangles;
+            }
+
+            Rectangle rectangle;
+            if (rectangles.TryGetValue(text, out rectangle))
+            {
+                return rectangle;
+            }
+            rectangle = font.MeasureText(sprite, text, 0);
+            rectangles[text] = rectangle;
+            return rectangle;
+        }
+
+        public static Rectangle MeasureText(this Font font, string text)
+        {
+            return font.MeasureText(null, text);
         }
     }
 }

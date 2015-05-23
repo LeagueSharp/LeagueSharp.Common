@@ -484,7 +484,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width + 25;
+                return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width + 25;
             }
         }
 
@@ -898,7 +898,7 @@ namespace LeagueSharp.Common
                 {
                     var slVal = GetValue<StringList>();
                     var max =
-                        slVal.SList.Select(v => MenuDrawHelper.Font.MeasureText(null, v, FontDrawFlags.Left).Width + 25)
+                        slVal.SList.Select(v => MenuDrawHelper.Font.MeasureText(v).Width + 25)
                             .Concat(new[] { 0 })
                             .Max();
 
@@ -909,11 +909,11 @@ namespace LeagueSharp.Common
                 {
                     var val = GetValue<KeyBind>();
                     extra +=
-                        MenuDrawHelper.Font.MeasureText(null, " (" + Utils.KeyToText(val.Key) + ")", FontDrawFlags.Left)
+                        MenuDrawHelper.Font.MeasureText(" (" + Utils.KeyToText(val.Key) + ")")
                             .Width;
                 }
 
-                return MenuDrawHelper.Font.MeasureText(null, MultiLanguage._(DisplayName), FontDrawFlags.Left).Width +
+                return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width +
                        Height * 2 + 10 + extra;
             }
         }
