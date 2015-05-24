@@ -331,6 +331,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
+        [Obsolete("Use Obj_AI_Base.HasBuff")]
         public static bool HasBuff(this Obj_AI_Base unit,
             string buffName,
             bool dontUseDisplayName = false,

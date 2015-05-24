@@ -374,7 +374,7 @@ namespace LeagueSharp.Common
                                  enemy.LastCastedspell().Name, spell.SpellName,
                                  StringComparison.CurrentCultureIgnoreCase) &&
                              Utils.TickCount - enemy.LastCastedSpellT() < 350 + spell.ExtraDuration) ||
-                            (spell.BuffName != null && enemy.HasBuff(spell.BuffName, true))))
+                            (!string.IsNullOrEmpty(spell.BuffName) && enemy.HasBuff(spell.BuffName))))
                 {
                     FireOnInterruptable(enemy, spell);
                 }
