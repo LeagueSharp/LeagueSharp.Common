@@ -1236,33 +1236,30 @@ namespace LeagueSharp.Common
 
             private void Game_OnUpdate(EventArgs args)
             {
-                if (_textFont != null && !_textFont.IsDisposed && !string.IsNullOrEmpty(text))
+                if (Visible)
                 {
-                    var textSize = _textFont.MeasureText(text);
-                    var dx = Centered ? - textSize.Width / 2 : 0;
-                    if (PositionUpdate != null)
+                    if (TextUpdate != null)
                     {
-                        _xCalculated = (int)(PositionUpdate().X + dx);
-                    }
-                    else
-                    {
-                        _xCalculated = _x + dx;
+                        text = TextUpdate();
                     }
 
-                    var dy = Centered ? -textSize.Height / 2 : 0;
-                    if (PositionUpdate != null)
+                    if (!string.IsNullOrEmpty(text))
                     {
-                        _yCalculated = (int)PositionUpdate().Y + dy;
-                    }
-                    else
-                    {
-                        _yCalculated = _y + dy;
-                    }
-                }
+                        var dx = Centered ? -Width / 2 : 0;
+                        var dy = Centered ? -Height / 2 : 0;
 
-                if (TextUpdate != null)
-                {
-                    text = TextUpdate();
+                        if (PositionUpdate != null)
+                        {
+                            Vector2 pos = PositionUpdate();
+                            _xCalculated = (int)pos.X + dx;
+                            _yCalculated = (int)pos.Y + dy;
+                        }
+                        else
+                        {
+                            _xCalculated = _x + dx;
+                            _yCalculated = _y + dy;
+                        }
+                    }
                 }
             }
 
@@ -1278,10 +1275,26 @@ namespace LeagueSharp.Common
                 set { _y = value; }
             }
 
-            public int Width { get; set; }
+            public int Width { get; private set; }
+            public int Height { get; private set; }
+
             public ColorBGRA Color { get; set; }
 
-            public string text { get; set; }
+            private string _text;
+            public string text
+            {
+                get { return _text; }
+                set
+                {
+                    if (value != _text && _textFont != null && !_textFont.IsDisposed && !string.IsNullOrEmpty(value))
+                    {
+                        SharpDX.Rectangle size = _textFont.MeasureText(null, value, 0);
+                        Width = size.Width;
+                        Height = size.Height;
+                    }
+                    _text = value;
+                }
+            }
 
             public override void OnEndScene()
             {
@@ -1340,15 +1353,15 @@ namespace LeagueSharp.Common
 
     public static class FontExtension
     {
-        private static readonly Dictionary<FontDescription, Dictionary<string, Rectangle>> Widths = new Dictionary<FontDescription, Dictionary<string, Rectangle>>();
+        private static readonly Dictionary<Font, Dictionary<string, Rectangle>> Widths = new Dictionary<Font, Dictionary<string, Rectangle>>();
 
         public static Rectangle MeasureText(this Font font, Sprite sprite, string text)
         {
             Dictionary<string, Rectangle> rectangles;
-            if (!Widths.TryGetValue(font.Description, out rectangles))
+            if (!Widths.TryGetValue(font, out rectangles))
             {
                 rectangles = new Dictionary<string, Rectangle>();
-                Widths[font.Description] = rectangles;
+                Widths[font] = rectangles;
             }
 
             Rectangle rectangle;
