@@ -1243,36 +1243,49 @@ namespace LeagueSharp.Common
                         text = TextUpdate();
                     }
 
-                    if (!string.IsNullOrEmpty(text))
+                    if (PositionUpdate != null && !string.IsNullOrEmpty(text))
                     {
-                        var dx = Centered ? -Width / 2 : 0;
-                        var dy = Centered ? -Height / 2 : 0;
-
-                        if (PositionUpdate != null)
-                        {
-                            Vector2 pos = PositionUpdate();
-                            _xCalculated = (int)pos.X + dx;
-                            _yCalculated = (int)pos.Y + dy;
-                        }
-                        else
-                        {
-                            _xCalculated = _x + dx;
-                            _yCalculated = _y + dy;
-                        }
+                        Vector2 pos = PositionUpdate();
+                        _xCalculated = (int)pos.X + XOffset;
+                        _yCalculated = (int)pos.Y + YOffset;
                     }
                 }
             }
 
             public int X
             {
-                get { return _xCalculated; }
+                get
+                {
+                    if (PositionUpdate != null)
+                    {
+                        return _xCalculated;
+                    }
+                    return _x + XOffset;
+                }
                 set { _x = value; }
             }
 
             public int Y
             {
-                get { return _yCalculated; }
+                get
+                {
+                    if (PositionUpdate != null)
+                    {
+                        return _yCalculated;
+                    }
+                    return _y + YOffset;
+                }
                 set { _y = value; }
+            }
+
+            private int XOffset
+            {
+                get { return Centered ? -Width / 2 : 0; }
+            }
+
+            private int YOffset
+            {
+                get { return Centered ? -Height / 2 : 0; }
             }
 
             public int Width { get; private set; }
