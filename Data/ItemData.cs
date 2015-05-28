@@ -2952,7 +2952,7 @@ namespace LeagueSharp.Common.Data
         public static Item Bilgewater_Cutlass = new Item
         {
             Name = "Bilgewater Cutlass",
-            Range = 450f,
+            Range = 550f,
             GoldBase = 240,
             GoldPrice = 1400,
             GoldSell = 980,
@@ -3060,14 +3060,14 @@ namespace LeagueSharp.Common.Data
         public static Item Blade_of_the_Ruined_King = new Item
         {
             Name = "Blade of the Ruined King",
-            Range = 450f,
+            Range = 550f,
             GoldBase = 900,
             GoldPrice = 3200,
             GoldSell = 2240,
             Purchasable = true,
             Stacks = 1,
             Depth = 4,
-            From = new[] { 1042, 3144, 1042 },
+            From = new[] { 3144, 1043 },
             InStore = true,
             FlatPhysicalDamageMod = 25f,
             PercentAttackSpeedMod = 0.4f,
