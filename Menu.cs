@@ -357,6 +357,7 @@ namespace LeagueSharp.Common
         public List<MenuItem> Items = new List<MenuItem>();
         public string Name;
         public Menu Parent;
+        public static Dictionary<string, Menu> RootMenus = new Dictionary<string, Menu>(); 
         private string uniqueId;
 
         public Menu(string displayName, string name, bool isRootMenu = false)
@@ -371,6 +372,23 @@ namespace LeagueSharp.Common
                 Game.OnEnd += delegate { SaveAll(); };
                 AppDomain.CurrentDomain.DomainUnload += delegate { SaveAll(); };
                 AppDomain.CurrentDomain.ProcessExit += delegate { SaveAll(); };
+
+                var rootName = Assembly.GetCallingAssembly().GetName().Name + "." + name;
+
+                if (RootMenus.ContainsKey(rootName))
+                {
+                    throw new ArgumentException("Root Menu [" + rootName + "] with the same name exists", "name");
+                }
+
+                RootMenus.Add(rootName, this);
+            }
+        }
+
+        ~Menu()
+        {
+            if (RootMenus.ContainsKey(Name))
+            {
+                RootMenus.Remove(Name);
             }
         }
 
