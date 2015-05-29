@@ -24,9 +24,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
+using System.Resources;
+using System.Web.Script.Serialization;
+using LeagueSharp.Common.Properties;
 
 #endregion
 
@@ -34,48 +34,37 @@ namespace LeagueSharp.Common
 {
     public static class MultiLanguage
     {
-        public static Dictionary<string, string> Translations = new Dictionary<string, string>();
+        private static Dictionary<string, string> Translations = new Dictionary<string, string>();
 
-       /* public static readonly XmlSerializer Serializer = new XmlSerializer(
-            typeof(TranslatedEntry[]), new XmlRootAttribute { ElementName = "entries" });
-        */
         static MultiLanguage()
         {
-            //LoadLanguage(Config.SelectedLanguage);
+            LoadLanguage(Config.SelectedLanguage);
         }
 
         public static string _(string textToTranslate)
         {
             return Translations.ContainsKey(textToTranslate) ? Translations[textToTranslate] : textToTranslate;
         }
-        /*
-        public static bool LoadLanguage(string name)
+      
+        public static bool LoadLanguage(string languageName)
         {
-            var filePath = Path.Combine(Config.LeagueSharpDirectory, "translations", name + ".xml");
-
-            if (!File.Exists(filePath))
-            {
-                return false;
-            }
-
             try
             {
-                Translations =
-                    ((TranslatedEntry[]) Serializer.Deserialize(File.OpenRead(filePath))).ToDictionary(
-                        i => i.TextToTranslate, i => i.TranslatedText);
+                var languageStrings = new ResourceManager("LeagueSharp.Common.Properties.Resources", typeof(Resources).Assembly).GetString(languageName + "Json");
+                
+                if (String.IsNullOrEmpty(languageStrings))
+                {
+                    return false;
+                }
+
+                Translations = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(languageStrings);
                 return true;
             }
-            catch (Exception ee)
+            catch (Exception ex)
             {
-                Console.WriteLine(ee.ToString());
+                Console.WriteLine(ex.ToString());
                 return false;
             }
-        }*/
-
-        public class TranslatedEntry
-        {
-            [XmlAttribute] public string TextToTranslate;
-            [XmlAttribute] public string TranslatedText;
         }
     }
 }

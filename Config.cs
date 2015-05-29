@@ -38,6 +38,7 @@ namespace LeagueSharp.Common
         private static string _appDataDirectory;
         private static byte _showMenuHotkey;
         private static byte _showMenuToggleHotkey;
+        private static string _selectedLanguage;
 
         public static string AppDataDirectory
         {
@@ -57,6 +58,22 @@ namespace LeagueSharp.Common
         {
             get
             {
+                /*
+                if (_selectedLanguage == null)
+                {
+                    try
+                    {
+                        _selectedLanguage = Sandbox.SandboxConfig.SelectedLanguage;
+                    }
+                    catch (Exception)
+                    {
+                        _selectedLanguage = "";
+                        Console.WriteLine(@"Could not get the menu press key");
+                    }   
+                }
+
+                return _selectedLanguage;
+               */
                 return "";
             }
         }
