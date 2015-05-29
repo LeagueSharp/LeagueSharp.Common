@@ -161,7 +161,7 @@ namespace LeagueSharp.Common
 
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
-            return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall"));
+            return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall") && buff.Type == BuffType.Aura);
         }
 
         public static bool IsOnScreen(this Vector3 position)
