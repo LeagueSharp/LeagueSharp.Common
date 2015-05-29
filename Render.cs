@@ -29,7 +29,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
@@ -1112,48 +1111,33 @@ namespace LeagueSharp.Common
             public TextDelegate TextUpdate;
             public Obj_AI_Base Unit;
 
-            private Text()
+            private Text(string text, string fontName, int size, ColorBGRA color)
             {
+                _textFont = new Font(
+                    Device,
+                    new FontDescription
+                    {
+                        FaceName = fontName,
+                        Height = size,
+                        OutputPrecision = FontPrecision.Default,
+                        Quality = FontQuality.Default
+                    });
+                Color = color;
+                this.text = text;
                 Game.OnUpdate += Game_OnUpdate;
             }
 
-            public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri") : this()
+            public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri") : this(text, fontName, size, color)
             {
-                Color = color;
-                this.text = text;
-
                 _x = x;
                 _y = y;
-
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = fontName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
             }
 
             public Text(string text, Vector2 position, int size, ColorBGRA color, string fontName = "Calibri")
-                : this()
+                : this(text, fontName, size, color)
             {
-                Color = color;
-                this.text = text;
-
                 _x = (int) position.X;
                 _y = (int) position.Y;
-
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = fontName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
             }
 
             public Text(string text,
@@ -1162,65 +1146,29 @@ namespace LeagueSharp.Common
                 int size,
                 ColorBGRA color,
                 string fontName = "Calibri")
-                : this()
+                : this(text, fontName, size, color)
             {
                 Unit = unit;
-                Color = color;
-                this.text = text;
                 Offset = offset;
 
                 var pos = unit.HPBarPosition + offset;
 
                 _x = (int) pos.X;
                 _y = (int) pos.Y;
-
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = fontName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
             }
 
             public Text(int x, int y, string text, int size, ColorBGRA color, string fontName = "Calibri")
-                : this()
+                : this(text, fontName, size, color)
             {
-                Color = color;
-                this.text = text;
-
                 _x = x;
                 _y = y;
-
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = fontName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
             }
 
             public Text(Vector2 position, string text, int size, ColorBGRA color, string fontName = "Calibri")
-                : this()
+                : this(text, fontName, size, color)
             {
-                Color = color;
-                this.text = text;
                 _x = (int) position.X;
                 _y = (int) position.Y;
-                _textFont = new Font(
-                    Device,
-                    new FontDescription
-                    {
-                        FaceName = fontName,
-                        Height = size,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality = FontQuality.Default
-                    });
             }
 
             public FontDescription TextFontDescription
@@ -1246,8 +1194,8 @@ namespace LeagueSharp.Common
                     if (PositionUpdate != null && !string.IsNullOrEmpty(text))
                     {
                         Vector2 pos = PositionUpdate();
-                        _xCalculated = (int)pos.X + XOffset;
-                        _yCalculated = (int)pos.Y + YOffset;
+                        _xCalculated = (int) pos.X + XOffset;
+                        _yCalculated = (int) pos.Y + YOffset;
                     }
                 }
             }
@@ -1304,6 +1252,7 @@ namespace LeagueSharp.Common
                         SharpDX.Rectangle size = _textFont.MeasureText(null, value, 0);
                         Width = size.Width;
                         Height = size.Height;
+                        _textFont.PreloadText(value);
                     }
                     _text = value;
                 }
