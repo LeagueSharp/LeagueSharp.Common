@@ -254,12 +254,12 @@ namespace LeagueSharp.Common
             {
                 return false;
             }
-               
-            if (_missileLaunched)
+
+            if (_missileLaunched && Orbwalker.missilecheck)
             {
                 return true;
             }
-             
+
             return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
         }
 
@@ -355,7 +355,7 @@ namespace LeagueSharp.Common
                         if (!NoCancelChamps.Contains(Player.ChampionName))
                         {
                             LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
-                            _missileLaunched = false;    
+                            _missileLaunched = false;
                         }
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                         _lastTarget = target;
@@ -429,7 +429,7 @@ namespace LeagueSharp.Common
                             FireOnTargetSwitch(target);
                             _lastTarget = target;
                         }
-                        
+
                         //Trigger it for ranged until the missiles catch normal attacks again!
                         Utility.DelayAction.Add(
                             (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
@@ -498,6 +498,8 @@ namespace LeagueSharp.Common
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 _config.AddSubMenu(misc);
 
+                /* Missile check */
+                _config.AddItem(new MenuItem("missilecheck", "Use Missile Check").SetShared().SetValue(true));
 
                 /* Delay sliders */
                 _config.AddItem(
@@ -534,6 +536,11 @@ namespace LeagueSharp.Common
             private int FarmDelay
             {
                 get { return _config.Item("FarmDelay").GetValue<Slider>().Value; }
+            }
+
+            public static bool missilecheck
+            {
+                get { return _config.Item("missilecheck").GetValue<bool>(); }
             }
 
             public OrbwalkingMode ActiveMode
@@ -737,13 +744,13 @@ namespace LeagueSharp.Common
                         result = (from minion in
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
-                            let predHealth =
-                                HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
-                            where
-                                predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
-                                Math.Abs(predHealth - minion.Health) < float.Epsilon
-                            select minion).MaxOrDefault(m => m.Health);
+                                  let predHealth =
+                                      HealthPrediction.LaneClearHealthPrediction(
+                                          minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                  where
+                                      predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
+                                      Math.Abs(predHealth - minion.Health) < float.Epsilon
+                                  select minion).MaxOrDefault(m => m.Health);
 
                         if (result != null)
                         {

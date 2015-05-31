@@ -5274,7 +5274,7 @@ namespace LeagueSharp.Common
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:
                     var d = target.Health * .2f * 3f;
-                    return (target.CanMove || target.HasBuff("slow", true)) ? d : d * 2;
+                    return (target.CanMove || target.HasBuff("slow")) ? d : d * 2;
             }
             return 1d;
         }
