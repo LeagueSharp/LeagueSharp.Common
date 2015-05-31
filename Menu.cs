@@ -778,7 +778,7 @@ namespace LeagueSharp.Common
         }
     }
 
-    internal enum MenuValueType
+    public enum MenuValueType
     {
         None,
         Boolean,
@@ -828,7 +828,7 @@ namespace LeagueSharp.Common
         internal bool Interacting;
         public string Name;
         public Menu Parent;
-        internal MenuValueType ValueType;
+        public MenuValueType ValueType;
 
         public MenuItem(string name, string displayName, bool makeChampionUniq = false)
         {
