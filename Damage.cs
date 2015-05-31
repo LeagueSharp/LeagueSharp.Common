@@ -1160,6 +1160,57 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
+                "Ekko", new List<DamageSpell>
+                 {
+                    // Q - Outgoing
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        DamageType = DamageType.Magical,
+                        Damage = 
+                            (source, target, level) => 
+                                new double[] { 60, 75, 90, 105, 120 }[level] + 0.2 * source.FlatMagicDamageMod
+                    },
+                    // Q - Incoming
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        Stage = 1,
+                        DamageType = DamageType.Magical,
+                        Damage = 
+                            (source, target, level) =>
+                                new double[] { 60, 85, 110, 135, 160 }[level] + 0.6 * source.FlatMagicDamageMod
+                    },
+                    // W
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.W,
+                        DamageType = DamageType.Magical,
+                        Damage = 
+                            (source, target, level) =>  
+                                new double[] { 150, 195, 240, 285, 330 }[level] + 0.8 * source.FlatMagicDamageMod
+                    },
+                    // E
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.E,
+                        DamageType = DamageType.Magical,
+                        Damage = 
+                            (source, target, level) => 
+                                new double[] { 50, 80, 110, 140, 170 }[level] + 0.2 * source.FlatMagicDamageMod
+                    },
+                    // R
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.R,
+                        DamageType = DamageType.Magical,
+                        Damage = 
+                            (source, target, level) => 
+                                new double[] { 200, 350, 500 }[level] + 1.3 * source.FlatMagicDamageMod    
+                    }
+                 });
+
+            Spells.Add(
                 "Elise", new List<DamageSpell>
                 {
                     //Q - Human
