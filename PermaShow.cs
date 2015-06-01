@@ -20,18 +20,14 @@
 
 #endregion
 
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.Common;
-using LeagueSharp;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
 
-namespace PermaShow
+namespace LeagueSharp.Common
 {
 
     /// <summary>
@@ -48,11 +44,10 @@ namespace PermaShow
         {
             public String DisplayName { get; set; }
             public MenuItem Item { get; set; }
-            public MenuValueType ItemType { get; set; }
+            internal MenuValueType ItemType { get; set; }
             public SharpDX.Color Color { get; set; }
         }
 
-        public static Sprite Sprite;
         public static Font Text;
 
         static PermaShow()
@@ -135,24 +130,20 @@ namespace PermaShow
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
         {
             Text.Dispose();
-            Sprite.Dispose();
         }
 
         private static void DrawingOnOnPostReset(EventArgs args)
         {
             Text.OnResetDevice();
-            Sprite.OnResetDevice();
         }
 
         private static void DrawingOnOnPreReset(EventArgs args)
         {
             Text.OnLostDevice();
-            Sprite.OnLostDevice();
         }
 
         public static void PrepareDrawing()
         {
-            Sprite = new Sprite(Drawing.Direct3DDevice);
             Text = new Font(
                 Drawing.Direct3DDevice,
                 new FontDescription
