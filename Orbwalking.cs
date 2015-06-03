@@ -524,9 +524,9 @@ namespace LeagueSharp.Common
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
                 _config.AddItem(
-                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('Z', KeyBindType.Press)));
+                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('Z', KeyBindType.Toggle)));
 
-                _config.Item("Freeze").Permashow("Freeze", false, SharpDX.Color.White);
+                _config.Item("Freeze").Permashow("Freeze", true, SharpDX.Color.White);
 
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
                 Player = ObjectManager.Player;
