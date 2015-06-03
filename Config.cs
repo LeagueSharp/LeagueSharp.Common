@@ -58,23 +58,24 @@ namespace LeagueSharp.Common
         {
             get
             {
-                /*
                 if (_selectedLanguage == null)
                 {
                     try
                     {
                         _selectedLanguage = Sandbox.SandboxConfig.SelectedLanguage;
+                        if(_selectedLanguage == "Traditional-Chinese")
+                        {
+                            _selectedLanguage = "Chinese";
+                        }
                     }
                     catch (Exception)
                     {
                         _selectedLanguage = "";
-                        Console.WriteLine(@"Could not get the menu press key");
+                        Console.WriteLine(@"Could not get the menu language");
                     }   
                 }
 
                 return _selectedLanguage;
-               */
-                return "";
             }
         }
 
