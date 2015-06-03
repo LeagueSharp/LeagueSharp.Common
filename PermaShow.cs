@@ -33,11 +33,15 @@ namespace LeagueSharp.Common
     /// <summary>
     ///     The PermaShow class allows you to add important things to permashow easily.
     /// </summary>
-    /// 
+
 
     public static class PermaShow
     {
 
+        /// <summary>
+        ///    List of items for PermaShow
+        /// </summary>
+      
         public static List<PermaShowItem> PermaShowItems = new List<PermaShowItem>();
 
         public class PermaShowItem
@@ -48,13 +52,28 @@ namespace LeagueSharp.Common
             public SharpDX.Color Color { get; set; }
         }
 
+        /// <summary>
+        ///    Position where the text will start from  
+        /// </summary>
+
+        private static readonly int XStart = (int)((200f / 1366f) * Drawing.Width);
+        private static readonly int YStart = (int)((16f / 768f) * Drawing.Height);
+
         public static Font Text;
+
+        /// <summary>
+        ///    Constructor
+        /// </summary>
 
         static PermaShow()
         {
             CustomEvents.Game.OnGameLoad += OnLoad;
         }
 
+        /// <summary>
+        ///    Initialization and subscribe to events
+        /// </summary>
+        
         static void OnLoad(EventArgs args)
         {
             PrepareDrawing();
@@ -64,7 +83,6 @@ namespace LeagueSharp.Common
             AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
-
 
 
         private static void Drawing_OnEndScene(EventArgs args)
@@ -81,22 +99,22 @@ namespace LeagueSharp.Common
                 switch (permaitem.Item.ValueType)
                 {
                     case MenuValueType.Boolean:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<bool>(), 200, 16 * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<bool>(), XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.Slider:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Slider>().Value, 200, 16 * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Slider>().Value, XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.KeyBind:
-                        Text.DrawText(null, permaitem.DisplayName + ": ( " + permaitem.Item.GetValue<KeyBind>().Active + " ) - " + (permaitem.Item.GetValue<KeyBind>().Type), 200, 16 * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": ( " + permaitem.Item.GetValue<KeyBind>().Active + " ) - " + (permaitem.Item.GetValue<KeyBind>().Type), XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.StringList:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<StringList>().SelectedValue, permaitem.Item.DisplayName.Length, 16 * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<StringList>().SelectedValue, XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.Color:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<System.Drawing.Color>(), permaitem.Item.DisplayName.Length, 16 * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<System.Drawing.Color>(), XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.Integer:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<int>(), permaitem.Item.DisplayName.Length, 16 * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<int>(), XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.None:
                         break;
@@ -106,6 +124,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        ///    Adds a menuitem to PermaShow, can be used without any arguements or with. The bool can be set to false to remove the item from permashow. The color by default is White.
+        /// </summary>
+        
         public static void Permashow(this MenuItem item, String customdisplayname = null, bool enabled = true, SharpDX.Color? col = null)
         {
 
@@ -142,6 +164,7 @@ namespace LeagueSharp.Common
             Text.OnLostDevice();
         }
 
+ 
         public static void PrepareDrawing()
         {
             Text = new Font(
@@ -149,7 +172,7 @@ namespace LeagueSharp.Common
                 new FontDescription
                 {
                     FaceName = "Calibri",
-                    Height = 16,
+                    Height = YStart,
                     OutputPrecision = FontPrecision.Default,
                     Quality = FontQuality.Default,
                 });

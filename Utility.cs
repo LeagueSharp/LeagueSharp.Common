@@ -153,6 +153,15 @@ namespace LeagueSharp.Common
             return target.BaseAttackDamage + target.FlatPhysicalDamageMod;
         }
 
+        /// <summary>
+        ///     Checks if the unit is a Hero or Champion
+        /// </summary>
+        public static bool IsChampion(this Obj_AI_Base unit)
+        {
+            var hero = unit as Obj_AI_Hero;
+            return hero != null && hero.IsValid;
+        }
+
         public static bool IsChampion(this Obj_AI_Base unit, string championName)
         {
             var hero = unit as Obj_AI_Hero;
