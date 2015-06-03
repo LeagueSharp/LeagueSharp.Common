@@ -610,7 +610,7 @@ namespace LeagueSharp.Common
             {
                 for (var i = ActionList.Count - 1; i >= 0; i--)
                 {
-                    if (ActionList[i].Time <= Utils.TickCount)
+                    if (ActionList[i].Time <= Utils.GameTimeTickCount)
                     {
                         try
                         {
@@ -643,7 +643,7 @@ namespace LeagueSharp.Common
 
                 public Action(int time, Callback callback)
                 {
-                    Time = time + Utils.TickCount;
+                    Time = time + Utils.GameTimeTickCount;
                     CallbackObject = callback;
                 }
             }
