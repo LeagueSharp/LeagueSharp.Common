@@ -43,6 +43,7 @@ namespace LeagueSharp.Common
 
         public static string _(string textToTranslate)
         {
+            textToTranslate = textToTranslate.ToLower();
             return Translations.ContainsKey(textToTranslate) ? Translations[textToTranslate] : textToTranslate;
         }
       
