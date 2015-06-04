@@ -668,18 +668,17 @@ namespace LeagueSharp.Common
                                     2 *
                                     (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod));
 
-                    if (FreezeActive)
-                    {
-                        MinionList = MinionList.Where(HealthPrediction.HasMinionAggro);
-                    }
-
                     foreach (var minion in MinionList)
                     {
                          var FreezeDamage = Player.GetAutoAttackDamage(minion, false) * (_config.Item("FreezeHealth").GetValue<Slider>().Value / 100f);
-
                         var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 * (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
+
+                        if (FreezeActive && predHealth.Equals(minion.Health))
+                        {
+                            continue;
+                        }
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                         {
