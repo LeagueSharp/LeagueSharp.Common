@@ -534,7 +534,7 @@ namespace LeagueSharp.Common
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
                 _config.AddItem(
-                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('Z', KeyBindType.Toggle)));
+                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('S', KeyBindType.Toggle)));
 
                 _config.Item("Freeze").Permashow(_config.Item("PermaShow").GetValue<bool>(), "Freeze");
 
