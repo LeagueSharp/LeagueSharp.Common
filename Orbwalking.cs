@@ -496,7 +496,7 @@ namespace LeagueSharp.Common
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
-                misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetShared().SetValue(new Slider(50, 1)));
+                misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetShared().SetValue(new Slider(50, 50)));
                 misc.AddItem(new MenuItem("PermaShow", "PermaShow").SetShared().SetValue(true)).ValueChanged += (s, args) => {
                     if (args.GetNewValue<bool>())
                     {
@@ -658,16 +658,25 @@ namespace LeagueSharp.Common
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
-                    foreach (var minion in
+                    var FreezeActive = _config.Item("Freeze").GetValue<KeyBind>().Active && ActiveMode != OrbwalkingMode.LaneClear;
+                    var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
                                     minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     minion.Health <
                                     2 *
-                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
-                        )
+                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod));
+
+                    if (FreezeActive)
                     {
+                        MinionList = MinionList.Where(HealthPrediction.HasMinionAggro);
+                    }
+
+                    foreach (var minion in MinionList)
+                    {
+                         var FreezeDamage = Player.GetAutoAttackDamage(minion, false) * (_config.Item("FreezeHealth").GetValue<Slider>().Value / 100f);
+
                         var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 * (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
@@ -679,7 +688,7 @@ namespace LeagueSharp.Common
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= (_config.Item("Freeze").GetValue<KeyBind>().Active ? Player.GetAutoAttackDamage(minion, false) * (_config.Item("FreezeHealth").GetValue<Slider>().Value / 100f) : Player.GetAutoAttackDamage(minion, true)))
+                            if (predHealth > 0 && predHealth <= (FreezeActive ? FreezeDamage : Player.GetAutoAttackDamage(minion, true)))
                             {
                                 return minion;
                             }

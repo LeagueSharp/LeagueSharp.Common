@@ -149,6 +149,11 @@ namespace LeagueSharp.Common
             return unit.Health - predictedDamage;
         }
 
+        public static bool HasMinionAggro(Obj_AI_Minion minion)
+        {
+            return ActiveAttacks.Values.Any(m => (m.Source is Obj_AI_Minion) && m.Target == minion);
+        }
+
         private class PredictedDamage
         {
             public readonly float AnimationTime;
