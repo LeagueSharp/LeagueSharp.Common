@@ -105,7 +105,7 @@ namespace LeagueSharp.Common
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Slider>().Value, XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.KeyBind:
-                        Text.DrawText(null, permaitem.DisplayName + ": ( " + permaitem.Item.GetValue<KeyBind>().Active + " ) - " + (permaitem.Item.GetValue<KeyBind>().Type), XStart, YStart * index, permaitem.Color);
+                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<KeyBind>().Active + " - " + (permaitem.Item.GetValue<KeyBind>().Type), XStart, YStart * index, permaitem.Color);
                         break;
                     case MenuValueType.StringList:
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<StringList>().SelectedValue, XStart, YStart * index, permaitem.Color);
@@ -125,21 +125,21 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///    Adds a menuitem to PermaShow, can be used without any arguements or with. The bool can be set to false to remove the item from permashow. The color by default is White.
+        ///    Adds a menuitem to PermaShow, can be used without any arguements or with if you want to customize. The bool can be set to false to remove the item from permashow. 
+        ///    When removing, you can simply set the bool parameter to false and everything else can be null. The color by default is White.
         /// </summary>
-        
-        public static void Permashow(this MenuItem item, String customdisplayname = null, bool enabled = true, SharpDX.Color? col = null)
+
+        public static void Permashow(this MenuItem item, bool enabled = true, String customdisplayname = null, SharpDX.Color? col = null)
         {
 
-            if (enabled)
+            if (enabled && !PermaShowItems.Any(x => x.Item == item))
             {
                 String DispName = customdisplayname != null ? customdisplayname : item.DisplayName;
                 SharpDX.Color? color = col != null ? col : new ColorBGRA(255, 255, 255, 255);
-
                 PermaShowItems.Add(new PermaShowItem { DisplayName = DispName, Item = item, ItemType = item.ValueType, Color = (SharpDX.Color)color });
             }
 
-            else
+            else if (!enabled)
             {
                 var itemtoremove = PermaShowItems.FirstOrDefault(x => x.Item == item);
                 if (itemtoremove != null)

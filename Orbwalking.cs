@@ -497,6 +497,16 @@ namespace LeagueSharp.Common
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetShared().SetValue(new Slider(50, 1)));
+                misc.AddItem(new MenuItem("PermaShow", "PermaShow").SetShared().SetValue(true)).ValueChanged += (s, args) => {
+                    if (args.GetNewValue<bool>())
+                    {
+                        _config.Item("Freeze").Permashow(true, "Freeze");
+                    }
+                    else
+                    {
+                        _config.Item("Freeze").Permashow(false);
+                    }
+                };
                 _config.AddSubMenu(misc);
 
                 /* Missile check */
@@ -526,9 +536,11 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                    new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('Z', KeyBindType.Toggle)));
 
-                _config.Item("Freeze").Permashow("Freeze", true, SharpDX.Color.White);
+                _config.Item("Freeze").Permashow(_config.Item("PermaShow").GetValue<bool>(), "Freeze");
 
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
+
+
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
