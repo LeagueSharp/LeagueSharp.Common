@@ -80,17 +80,13 @@ namespace LeagueSharp.Common
         static PermaShow()
         {
             CreateMenu();
-            CustomEvents.Game.OnGameLoad += OnLoad;
-        }
-
-        /// <summary>
-        ///    Initialization and subscribe to events
-        /// </summary>
-        
-        private static void OnLoad(EventArgs args)
-        {
             BoxPosition = GetPosition();
             PrepareDrawing();
+        }
+
+
+        private static void Sub()
+        {
             Drawing.OnPreReset += DrawingOnPreReset;
             Drawing.OnPostReset += DrawingOnOnPostReset;
             Drawing.OnDraw += Drawing_OnEndScene;
@@ -99,9 +95,23 @@ namespace LeagueSharp.Common
             Game.OnWndProc += OnWndProc;
         }
 
+        private static void Unsub()
+        {
+            Drawing.OnPreReset -= DrawingOnPreReset;
+            Drawing.OnPostReset -= DrawingOnOnPostReset;
+            Drawing.OnDraw -= Drawing_OnEndScene;
+            AppDomain.CurrentDomain.DomainUnload -= CurrentDomainOnDomainUnload;
+            AppDomain.CurrentDomain.ProcessExit -= CurrentDomainOnDomainUnload;
+            Game.OnWndProc -= OnWndProc;
+        }
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
+            if (!PermaShowItems.Any())
+            {
+                Unsub();
+            }
+
             if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
             {
                 return;
@@ -112,19 +122,22 @@ namespace LeagueSharp.Common
             foreach (var permaitem in PermaShowItems)
             {
                 var index = PermaShowItems.IndexOf(permaitem);
-                var baseposition = new Vector2(BoxPosition.X - 80, BoxPosition.Y);
+                var baseposition = new Vector2(BoxPosition.X - 90, BoxPosition.Y);
+                var endpos = new Vector2(BoxPosition.X + 90, baseposition.Y + (Text.Description.Height * 1.3f * index));
                 var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
                 switch (permaitem.Item.ValueType)
                 {
                     case MenuValueType.Boolean:
-                        DrawRect(itempos, permaitem.Item.GetValue<bool>(), (int) (permaitem.Item.NeededWidth * 0.9f), Text.Description.Height);
+                        DrawBox(endpos, permaitem.Item.GetValue<bool>());
+                       // DrawRect(itempos, permaitem.Item.GetValue<bool>(), (int) (permaitem.Item.NeededWidth), Text.Description.Height);
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<bool>(), (int)itempos.X, (int)itempos.Y, permaitem.Color);
                         break;
                     case MenuValueType.Slider:
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Slider>().Value, (int)itempos.X, (int)itempos.Y, permaitem.Color);
                         break;
                     case MenuValueType.KeyBind:
-                        DrawRect(itempos, permaitem.Item.GetValue<KeyBind>().Active, (int)(permaitem.Item.NeededWidth * 0.7f), Text.Description.Height);
+                        DrawBox(endpos, permaitem.Item.GetValue<KeyBind>().Active);
+                      //  DrawRect(itempos, permaitem.Item.GetValue<KeyBind>().Active, (int)(permaitem.Item.NeededWidth * 0.95f), Text.Description.Height);
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<KeyBind>().Active + " - " + (permaitem.Item.GetValue<KeyBind>().Type), (int)itempos.X, (int)itempos.Y, permaitem.Color);
                         break;
                     case MenuValueType.StringList:
@@ -154,9 +167,12 @@ namespace LeagueSharp.Common
 
         public static void Permashow(this MenuItem item, bool enabled = true, String customdisplayname = null, SharpDX.Color? col = null)
         {
-
             if (enabled && !PermaShowItems.Any(x => x.Item == item))
             {
+                if (!PermaShowItems.Any())
+                {
+                    Sub();
+                }
                 String DispName = customdisplayname != null ? customdisplayname : item.DisplayName;
                 SharpDX.Color? color = col != null ? col : new ColorBGRA(255, 255, 255, 255);
                 PermaShowItems.Add(new PermaShowItem { DisplayName = DispName, Item = item, ItemType = item.ValueType, Color = (SharpDX.Color)color });
@@ -168,6 +184,10 @@ namespace LeagueSharp.Common
                 if (itemtoremove != null)
                 {
                     PermaShowItems.Remove(itemtoremove);
+                    if (!PermaShowItems.Any())
+                    {
+                        Unsub();
+                    }
                 }
             }
         }
@@ -220,7 +240,7 @@ namespace LeagueSharp.Common
         {
             Vector2 pos = Utils.GetCursorPos();
             return ((pos.X >= BoxPosition.X - 100) && pos.X <= (BoxPosition.X + 100) &&
-                pos.Y >= BoxPosition.Y && pos.Y <= (BoxPosition.Y + PermaShowItems.Count() * (Text.Description.Height * 1.3f)));
+                pos.Y >= BoxPosition.Y && pos.Y <= (BoxPosition.Y + PermaShowItems.Count() * (Text.Description.Height)));
         }
 
         /// <summary>
@@ -275,6 +295,29 @@ namespace LeagueSharp.Common
             var col = Color.Black;
 
             BoxLine.Draw(positions, new ColorBGRA(col.B, col.G, col.R, 0.4f));
+
+            BoxLine.End();
+        }
+
+        /// <summary>
+        ///     Draw area where text will be drawn
+        /// </summary>
+        private static void DrawBox(Vector2 pos, bool ison)
+        {
+
+            BoxLine.Width = 20;
+
+            BoxLine.Begin();
+
+            var positions = new[]
+            {
+                new Vector2(pos.X, pos.Y),
+                new Vector2(pos.X, pos.Y + (Text.Description.Height * 1.2f))
+            };
+
+            var col = ison ? Color.DarkGreen : Color.Red;
+
+            BoxLine.Draw(positions, col);
 
             BoxLine.End();
         }
