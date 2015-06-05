@@ -821,7 +821,7 @@ namespace LeagueSharp.Common
         private bool _isShared;
         private byte[] _serialized;
         private object _value;
-        private bool _valueSet;
+        internal bool _valueSet;
         private bool _visible;
         private string _configName;
         public string DisplayName;
