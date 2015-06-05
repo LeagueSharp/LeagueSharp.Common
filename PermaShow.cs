@@ -42,10 +42,9 @@ namespace LeagueSharp.Common
         ///    List of items for PermaShow
         /// </summary>
       
-        public static List<PermaShowItem> PermaShowItems = new List<PermaShowItem>();
+        private static List<PermaShowItem> PermaShowItems = new List<PermaShowItem>();
         
-
-        public class PermaShowItem
+        private class PermaShowItem
         {
             public String DisplayName { get; set; }
             public MenuItem Item { get; set; }
@@ -64,7 +63,7 @@ namespace LeagueSharp.Common
         ///   Drawing tools
         /// </summary>
         /// 
-        public static Font Text;
+        private static Font Text;
         private static Line BoxLine;
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace LeagueSharp.Common
         ///    Initialization and subscribe to events
         /// </summary>
         
-        static void OnLoad(EventArgs args)
+        private static void OnLoad(EventArgs args)
         {
             BoxPosition = GetPosition();
             PrepareDrawing();
