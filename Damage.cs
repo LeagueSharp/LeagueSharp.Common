@@ -1953,7 +1953,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new[] { 25, 42.5, 60, 77.5, 95 }[level] + 0.25 * source.FlatMagicDamageMod
+                                new[] { 25, 40, 55, 70, 85, 100 }[level] + 0.25 * source.FlatMagicDamageMod
                     },
 
                     //E
