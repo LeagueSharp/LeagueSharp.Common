@@ -41,8 +41,10 @@ namespace LeagueSharp.Common
         {
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            Drawing.OnPostReset += Drawing_OnPostReset;
+            Drawing.OnPreReset += Drawing_OnPreReset;
             Game.OnWndProc += Game_OnWndProc;
-
+            
             if (!Directory.Exists(Path))
             {
                 Directory.CreateDirectory(Path);
@@ -62,6 +64,22 @@ namespace LeagueSharp.Common
             foreach (var notification in NotificationsList)
             {
                 notification.Value.OnDraw();
+            }
+        }
+
+        private static void Drawing_OnPreReset(EventArgs args)
+        {
+            foreach (var notification in NotificationsList)
+            {
+                notification.Value.OnPreReset();
+            }
+        }
+
+        private static void Drawing_OnPostReset(EventArgs args)
+        {
+            foreach (var notification in NotificationsList)
+            {
+                notification.Value.OnPostReset();
             }
         }
 

@@ -30,6 +30,16 @@ namespace LeagueSharp.Common
         void OnDraw();
 
         /// <summary>
+        ///    Gets called before resetting the device
+        /// </summary>
+        void OnPreReset();
+
+        /// <summary>
+        ///     Gets called after resetting the device
+        /// </summary>
+        void OnPostReset();
+
+        /// <summary>
         ///     Gets called when Game -> Tick happens and updates the game.
         /// </summary>
         void OnUpdate();

@@ -430,7 +430,7 @@ namespace LeagueSharp.Common
             textDimension = Font.MeasureText(sprite, finalText);
 
             var rectangle = new Rectangle((int) position.X, (int) position.Y, (int) line.Width, 0x19);
-
+           
             Font.DrawText(
                 sprite, finalText, rectangle.TopLeft.X + (rectangle.Width - textDimension.Width) / 0x2,
                 rectangle.TopLeft.Y + (rectangle.Height - textDimension.Height) / 0x2, TextColor);
@@ -438,6 +438,20 @@ namespace LeagueSharp.Common
             sprite.End();
 
             #endregion
+        }
+
+        public void OnPreReset()
+        {
+            Font.OnLostDevice();
+            line.OnLostDevice();
+            sprite.OnLostDevice();
+        }
+
+        public void OnPostReset()
+        {
+            line.OnResetDevice();
+            Font.OnResetDevice();
+            sprite.OnResetDevice();
         }
 
         /// <summary>
@@ -796,8 +810,11 @@ namespace LeagueSharp.Common
                 BoxColor = new ColorBGRA();
                 BorderColor = new ColorBGRA();
 
+                Font.Dispose();
                 Font = null;
 
+                line.Dispose();
+                sprite.Dispose();
                 Draw = false;
                 Update = false;
 
