@@ -131,6 +131,9 @@ namespace LeagueSharp.Common
         {
             get
             {
+                if (!Slot.IsReady())
+                    return false;
+                    
                 return ObjectManager.Player.HasBuff(ChargedBuffName) ||
                        Utils.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
