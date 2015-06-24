@@ -332,8 +332,6 @@ namespace LeagueSharp.Common
         
         private static float ScaleValue(float value, Direction direction)
         {
-            Console.WriteLine(YFactor);
-            
             var returnvalue = direction == Direction.X ? value * XFactor : value * YFactor;
             return returnvalue;
         }
