@@ -31,7 +31,7 @@ namespace LeagueSharp.Common
 {
 
     /// <summary>
-    ///     The PermaShow class allows you to add important things to permashow easily.
+    ///     The PermaShow class allows you to add important items to permashow easily.
     /// </summary>
 
 
@@ -46,18 +46,23 @@ namespace LeagueSharp.Common
         
         private class PermaShowItem
         {
-            public String DisplayName { get; set; }
+            public string DisplayName { get; set; }
             public MenuItem Item { get; set; }
             internal MenuValueType ItemType { get; set; }
             public SharpDX.Color Color { get; set; }
         }
 
         /// <summary>
-        ///    Position where the text will start from  
+        ///    Positioning
         /// </summary>
 
         private static Vector2 DefaultPosition = new Vector2(Drawing.Width - (0.79f * Drawing.Width), Drawing.Height - (0.98f * Drawing.Height));
         private static Vector2 BoxPosition;
+
+        private static float XFactor = Drawing.Height / 768f;
+        private static float YFactor = Drawing.Width / 1366f;
+
+        private static float PermaShowWidth = 200f;
 
         /// <summary>
         ///   Drawing tools
@@ -73,8 +78,9 @@ namespace LeagueSharp.Common
         private static Menu placetosave;
         private static bool Dragging;
 
+  
         /// <summary>
-        ///    Constructor.
+        ///    Constructor
         /// </summary>
 
         static PermaShow()
@@ -107,11 +113,6 @@ namespace LeagueSharp.Common
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            if (!PermaShowItems.Any())
-            {
-                Unsub();
-            }
-
             if (Drawing.Direct3DDevice == null || Drawing.Direct3DDevice.IsDisposed)
             {
                 return;
@@ -119,17 +120,18 @@ namespace LeagueSharp.Common
 
             PermaArea();
 
+            var halfwidth = 0.9f * (PermaShowWidth / 2);
+
             foreach (var permaitem in PermaShowItems)
             {
                 var index = PermaShowItems.IndexOf(permaitem);
-                var baseposition = new Vector2(BoxPosition.X - 90, BoxPosition.Y);
-                var endpos = new Vector2(BoxPosition.X + 90, baseposition.Y + (Text.Description.Height * 1.3f * index));
+                var baseposition = new Vector2(BoxPosition.X - ScaleValue(halfwidth, Direction.X), BoxPosition.Y + ScaleValue(2, Direction.Y));
+                var endpos = new Vector2(BoxPosition.X + ScaleValue(halfwidth, Direction.X), baseposition.Y + (Text.Description.Height * 1.3f * index));
                 var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
                 switch (permaitem.Item.ValueType)
                 {
                     case MenuValueType.Boolean:
                         DrawBox(endpos, permaitem.Item.GetValue<bool>());
-                       // DrawRect(itempos, permaitem.Item.GetValue<bool>(), (int) (permaitem.Item.NeededWidth), Text.Description.Height);
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<bool>(), (int)itempos.X, (int)itempos.Y, permaitem.Color);
                         break;
                     case MenuValueType.Slider:
@@ -137,7 +139,6 @@ namespace LeagueSharp.Common
                         break;
                     case MenuValueType.KeyBind:
                         DrawBox(endpos, permaitem.Item.GetValue<KeyBind>().Active);
-                      //  DrawRect(itempos, permaitem.Item.GetValue<KeyBind>().Active, (int)(permaitem.Item.NeededWidth * 0.95f), Text.Description.Height);
                         Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<KeyBind>().Active + " - " + (permaitem.Item.GetValue<KeyBind>().Type), (int)itempos.X, (int)itempos.Y, permaitem.Color);
                         break;
                     case MenuValueType.StringList:
@@ -239,7 +240,7 @@ namespace LeagueSharp.Common
         private static bool MouseOverArea()
         {
             Vector2 pos = Utils.GetCursorPos();
-            return ((pos.X >= BoxPosition.X - 100) && pos.X <= (BoxPosition.X + 100) &&
+            return ((pos.X >= BoxPosition.X - (PermaShowWidth / 2f)) && pos.X <= (BoxPosition.X + (PermaShowWidth / 2f)) &&
                 pos.Y >= BoxPosition.Y && pos.Y <= (BoxPosition.Y + PermaShowItems.Count() * (Text.Description.Height)));
         }
 
@@ -280,7 +281,7 @@ namespace LeagueSharp.Common
         private static void PermaArea()
         {
 
-            BoxLine.Width = 200;
+            BoxLine.Width = ScaleValue(PermaShowWidth, Direction.X);
 
             BoxLine.Begin();
 
@@ -300,12 +301,12 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Draw area where text will be drawn
+        ///     Colored box to indicate booleans true or false with green and red respectively
         /// </summary>
         private static void DrawBox(Vector2 pos, bool ison)
         {
 
-            BoxLine.Width = 20;
+            BoxLine.Width = ScaleValue(20, Direction.X);
 
             BoxLine.Begin();
 
@@ -322,21 +323,19 @@ namespace LeagueSharp.Common
             BoxLine.End();
         }
 
-        /// <summary>
-        ///    Draw red/green rectangle based on bool value
-        /// </summary>
-        private static void DrawRect(Vector2 pos, bool on, int width, int height)
+
+        private enum Direction
         {
-            BoxLine.Width = 1;
-            var position = new Vector2(pos.X - 5, pos.Y);
-            BoxLine.Begin();
-            BoxLine.Draw(new[] {
-            new Vector2(position.X, position.Y),
-            new Vector2(position.X + width, position.Y),
-            new Vector2(position.X + width, position.Y + height),
-            new Vector2(position.X, position.Y + height),
-            new Vector2(position.X, position.Y), }, on ? SharpDX.Color.Green : SharpDX.Color.Red);
-            BoxLine.End();
+           X,
+           Y
+        }
+        
+        private static float ScaleValue(float value, Direction direction)
+        {
+            Console.WriteLine(YFactor);
+            
+            var returnvalue = direction == Direction.X ? value * XFactor : value * YFactor;
+            return returnvalue;
         }
 
         /// <summary>
@@ -344,12 +343,14 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void PrepareDrawing()
         {
+            int fontsize = (int) (ScaleValue(15, Direction.Y));
+
             Text = new Font(
                 Drawing.Direct3DDevice,
                 new FontDescription
                 {
                     FaceName = "Tahoma",
-                    Height = (int) (15f / 768f * (Drawing.Height)),
+                    Height = (int)fontsize < 15 ? 15 : fontsize,
                     OutputPrecision = FontPrecision.Default,
                     Quality = FontQuality.Default,
                 });

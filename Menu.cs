@@ -384,6 +384,27 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static MenuItem GetValueGlobally(string Assemblyname, string menuname, string itemname, string submenu = null)
+        {
+
+            var menu = RootMenus.FirstOrDefault(x => x.Key == Assemblyname + "." + menuname).Value;
+
+            if (submenu != null)
+            {
+                menu = menu.SubMenu(submenu);
+            }
+
+            var menuitem = menu.Item(itemname);
+
+            return menuitem;
+        }
+
+        public static Menu GetMenu(string Assemblyname, string menuname)
+        { 
+            Menu menu = RootMenus.FirstOrDefault(x => x.Key == Assemblyname + "." + menuname).Value;
+            return menu;
+        }
+
         ~Menu()
         {
             if (RootMenus.ContainsKey(Name))
