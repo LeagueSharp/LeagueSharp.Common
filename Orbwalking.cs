@@ -23,6 +23,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using Color = System.Drawing.Color;
@@ -474,6 +475,7 @@ namespace LeagueSharp.Common
             private OrbwalkingMode _mode = OrbwalkingMode.None;
             private Vector3 _orbwalkingPoint;
             private Obj_AI_Minion _prevMinion;
+            public static List<Orbwalker> Instances = new List<Orbwalker>();
 
             public Orbwalker(Menu attachToMenu)
             {
@@ -544,6 +546,7 @@ namespace LeagueSharp.Common
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
+                Instances.Add(this);
             }
 
             public virtual bool InAutoAttackRange(AttackableUnit target)
