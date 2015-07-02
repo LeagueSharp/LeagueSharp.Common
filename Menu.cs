@@ -405,6 +405,14 @@ namespace LeagueSharp.Common
             return menu;
         }
 
+        public static void SendMessage(uint key, WindowsMessages message)
+        {
+            foreach (var menu in RootMenus)
+            {
+                menu.Value.OnReceiveMessage(message, Utils.GetCursorPos(), key);
+            }
+        }
+
         ~Menu()
         {
             if (RootMenus.ContainsKey(Name))
