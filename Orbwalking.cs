@@ -90,6 +90,7 @@ namespace LeagueSharp.Common
         public static bool Attack = true;
         public static bool DisableNextAttack;
         public static bool Move = true;
+        public static bool ForcePosition;
         public static int LastMoveCommandT;
         public static Vector3 LastMoveCommandPosition = Vector3.Zero;
         private static AttackableUnit _lastTarget;
@@ -623,11 +624,22 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
+            ///     Forces the orbwalker to move to set orbwalking point.
+            /// </summary>
+            public void ForceOrbwalkingPosition(bool b)
+            {
+                ForcePosition = b;
+            }
+
+            /// <summary>
             ///     Forces the orbwalker to move to that point while orbwalking (Game.CursorPos by default).
             /// </summary>
             public void SetOrbwalkingPoint(Vector3 point)
             {
-                _orbwalkingPoint = point;
+                if (ForcePosition)
+                {
+                    _orbwalkingPoint = point;
+                }
             }
 
             private bool ShouldWait()
@@ -806,11 +818,17 @@ namespace LeagueSharp.Common
                         return;
                     }
 
+                    if (ForcePosition && !_orbwalkingPoint.To2D().IsValid())
+                    {
+                        return;
+                    }
+
                     var target = GetTarget();
                     Orbwalk(
-                        target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                        target, (ForcePosition ? _orbwalkingPoint : Game.CursorPos),
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         _config.Item("HoldPosRadius").GetValue<Slider>().Value);
+
                 }
                 catch (Exception e)
                 {
