@@ -3298,6 +3298,7 @@ namespace LeagueSharp.Common.Data
         public static Item Odyns_Veil = new Item
         {
             Name = "Odyn's Veil",
+            Range = 525,
             GoldBase = 800,
             GoldPrice = 2500,
             GoldSell = 1750,
