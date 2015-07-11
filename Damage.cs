@@ -190,6 +190,26 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Kalista
+
+            if (!Game.Version.Contains("5.12"))
+            {
+                Console.WriteLine("added kalista");
+                p = new PassiveDamage
+                {
+                    ChampionName = "Kalista",
+                    IsActive = (source, target) => true,
+                    GetDamage =
+                        (source, target) =>
+                            ((float)
+                                 - source.CalcDamage(
+                                    target, DamageType.Physical,
+                                    0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
+                };
+                AttackPassives.Add(p);
+            }
+            #endregion
+
             #region Katarina
 
             p = new PassiveDamage
