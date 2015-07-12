@@ -194,7 +194,6 @@ namespace LeagueSharp.Common
 
             if (!Game.Version.Contains("5.12"))
             {
-                Console.WriteLine("added kalista");
                 p = new PassiveDamage
                 {
                     ChampionName = "Kalista",
