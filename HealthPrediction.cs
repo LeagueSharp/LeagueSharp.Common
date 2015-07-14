@@ -36,7 +36,6 @@ namespace LeagueSharp.Common
     public class HealthPrediction
     {
         private static readonly Dictionary<int, PredictedDamage> ActiveAttacks = new Dictionary<int, PredictedDamage>();
-        private static int LastTick;
 
         static HealthPrediction()
         {
@@ -47,15 +46,10 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Utils.GameTimeTickCount - LastTick <= 3000)
-            {
-                return;
-            }
             ActiveAttacks.ToList()
                 .Where(pair => pair.Value.StartTick < Utils.GameTimeTickCount - 3000)
                 .ToList()
                 .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-            LastTick = Utils.GameTimeTickCount;
         }
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
@@ -71,20 +65,23 @@ namespace LeagueSharp.Common
 
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero ||
-                !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
+            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero
+                || !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
             {
                 return;
             }
 
-            var target = (Obj_AI_Base) args.Target;
+            var target = (Obj_AI_Base)args.Target;
             ActiveAttacks.Remove(sender.NetworkId);
 
             var attackData = new PredictedDamage(
-                sender, target, Utils.GameTimeTickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
+                sender,
+                target,
+                Utils.GameTimeTickCount - Game.Ping / 2,
+                sender.AttackCastDelay * 1000,
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
-                sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
-                (float) sender.GetAutoAttackDamage(target, true));
+                sender.IsMelee() ? int.MaxValue : (int)args.SData.MissileSpeed,
+                (float)sender.GetAutoAttackDamage(target, true));
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
