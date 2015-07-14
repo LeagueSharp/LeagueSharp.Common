@@ -47,12 +47,12 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Utils.GameTimeTickCount - LastTick <= 60 * 1000)
+            if (Utils.GameTimeTickCount - LastTick <= 3000)
             {
                 return;
             }
             ActiveAttacks.ToList()
-                .Where(pair => pair.Value.StartTick < Utils.GameTimeTickCount - 60000)
+                .Where(pair => pair.Value.StartTick < Utils.GameTimeTickCount - 3000)
                 .ToList()
                 .ForEach(pair => ActiveAttacks.Remove(pair.Key));
             LastTick = Utils.GameTimeTickCount;
