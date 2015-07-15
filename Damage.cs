@@ -5514,7 +5514,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            return CalcPhysicalDamage(source, target, result * k - reduction);
+            return CalcPhysicalDamage(source, target, (result - reduction) * k);
         }
 
         /// <summary>
@@ -5671,7 +5671,7 @@ namespace LeagueSharp.Common
             var damage = DamageReductionMod(
                 source,
                 target,
-                PassivePercentMod(source, target, value) * amount,
+                Math.Round((float)(PassivePercentMod(source, target, value) * amount)), 
                 DamageType.Magical) + PassiveFlatMod(source, target);
 
             if (Math.Round(damage) - damage < 0.07)
@@ -5718,16 +5718,8 @@ namespace LeagueSharp.Common
             var damage = DamageReductionMod(
                 source,
                 target,
-                PassivePercentMod(source, target, value) * amount,
+                Math.Round((float)(PassivePercentMod(source,target, value) * amount - 0.2)),
                 DamageType.Physical) + PassiveFlatMod(source, target);
-            if (Math.Round(damage) - damage < 0.07)
-            {
-                damage -= Math.Abs((Math.Round(damage) - damage) * 2);
-            }
-            else if (damage + 0.15 > (int)damage + 1)
-            {
-                damage += 0.3f;
-            }
 
             // Take into account the percent passives, flat passives and damage reduction.
             return damage;
