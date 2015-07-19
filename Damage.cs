@@ -117,7 +117,8 @@ namespace LeagueSharp.Common
 
             p = new PassiveDamage
                     {
-                        ChampionName = "Alistar", IsActive = (source, target) => (source.HasBuff("Trample")),
+                        ChampionName = "Alistar",
+                        IsActive = (source, target) => (source.HasBuff("alistartrample")),
                         GetDamage =
                             (source, target) =>
                             ((float)
@@ -134,7 +135,7 @@ namespace LeagueSharp.Common
 
             p = new PassiveDamage
                     {
-                        ChampionName = "Caitlyn", IsActive = (source, target) => (source.HasBuff("CaitlynHeadshotReady")),
+                        ChampionName = "Caitlyn", IsActive = (source, target) => (source.HasBuff("caitlynheadshot")),
                         GetDamage =
                             (source, target) =>
                             ((float)
@@ -151,7 +152,7 @@ namespace LeagueSharp.Common
 
             p = new PassiveDamage
                     {
-                        ChampionName = "Draven", IsActive = (source, target) => (source.HasBuff("dravenspinning")),
+                        ChampionName = "Draven", IsActive = (source, target) => (source.HasBuff("DravenSpinning")),
                         GetDamage =
                             (source, target) =>
                             ((float)
@@ -181,10 +182,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
                     {
                         ChampionName = "Gnar",
-                        IsActive =
-                            (source, target) =>
-                            (from buff in target.Buffs where buff.DisplayName == "GnarWProc" select buff.Count)
-                                .FirstOrDefault() == 2,
+                        IsActive = (source, target) => (target.GetBuffCount("gnarwproc") == 2),
                         GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
                     };
             AttackPassives.Add(p);
@@ -232,7 +230,7 @@ namespace LeagueSharp.Common
 
             p = new PassiveDamage
                     {
-                        ChampionName = "Katarina", IsActive = (source, target) => (target.HasBuff("KataQMark1")),
+                        ChampionName = "Katarina", IsActive = (source, target) => (target.HasBuff("katarinaqmark")),
                         GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
                     };
             AttackPassives.Add(p);
@@ -255,7 +253,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
                     {
                         ChampionName = "MissFortune",
-                        IsActive = (source, target) => (source.HasBuff("MissFortunePassive")),
+                        IsActive = (source, target) => (source.HasBuff("missfortunepassive")),
                         GetDamage =
                             (source, target) =>
                             (float)
@@ -310,7 +308,7 @@ namespace LeagueSharp.Common
                              source.CalcDamage(
                                  target,
                                  DamageType.Physical,
-                                 new double[]
+                                 new[]
                                      {
                                          0.2, 0.2, 0.25, 0.25, 0.25, 0.3, 0.3, 0.3, 0.35, 0.35, 0.35, 0.4, 0.4, 0.4, 0.45,
                                          0.45, 0.45, 0.5
@@ -5334,6 +5332,8 @@ namespace LeagueSharp.Common
                         return 20 + 8 * source.Level;
                     }
 
+                    if (target.GetBuffCount("gnarw") == 2)
+
                     if (challengingSmite != null)
 
                     {
@@ -5391,13 +5391,14 @@ namespace LeagueSharp.Common
             bool includePassive = false)
         {
             double result = source.TotalAttackDamage;
-            var k = 1d;
-            var reduction = 0d;
 
             if (!includePassive)
             {
-                return CalcPhysicalDamage(source, target, result * k - reduction);
+                return CalcPhysicalDamage(source, target, result);
             }
+
+            var k = 1d;
+            var reduction = 0d;
 
             var hero = source as Obj_AI_Hero;
             if (hero != null)
@@ -5650,7 +5651,7 @@ namespace LeagueSharp.Common
 
         private static double CalcMagicDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
-            var magicResist = Math.Round(target.SpellBlock);
+            var magicResist = target.SpellBlock;
 
             // Penetration can't reduce magic resist below 0.
             double value;
@@ -5671,17 +5672,8 @@ namespace LeagueSharp.Common
             var damage = DamageReductionMod(
                 source,
                 target,
-                Math.Round((float)(PassivePercentMod(source, target, value) * amount)), 
+                PassivePercentMod(source, target, value) * amount,
                 DamageType.Magical) + PassiveFlatMod(source, target);
-
-            if (Math.Round(damage) - damage < 0.07)
-            {
-                damage -= Math.Abs((Math.Round(damage) - damage) * 2);
-            }
-            else if (damage + 0.15 > (int)damage + 1)
-            {
-                damage += 0.3f;
-            }
 
             return damage;
         }
@@ -5699,7 +5691,7 @@ namespace LeagueSharp.Common
             }
 
             // Penetration can't reduce armor below 0.
-            var armor = Math.Round(target.Armor);
+            var armor = target.Armor;
 
             double value;
             if (armor < 0)
@@ -5718,7 +5710,7 @@ namespace LeagueSharp.Common
             var damage = DamageReductionMod(
                 source,
                 target,
-                Math.Round((float)(PassivePercentMod(source,target, value) * amount - 0.2)),
+                PassivePercentMod(source, target, value) * amount,
                 DamageType.Physical) + PassiveFlatMod(source, target);
 
             // Take into account the percent passives, flat passives and damage reduction.
