@@ -180,8 +180,8 @@ namespace LeagueSharp.Common
             var minionCount = 0;
             var startPos = ObjectManager.Player.ServerPosition.To2D();
 
-            var posiblePositions = new List<Vector2>();
-            posiblePositions.AddRange(minionPositions);
+            var possiblePositions = new List<Vector2>();
+            possiblePositions.AddRange(minionPositions);
 
             var max = minionPositions.Count;
             for (var i = 0; i < max; i++)
@@ -190,12 +190,12 @@ namespace LeagueSharp.Common
                 {
                     if (minionPositions[j] != minionPositions[i])
                     {
-                        posiblePositions.Add((minionPositions[j] + minionPositions[i]) / 2);
+                        possiblePositions.Add((minionPositions[j] + minionPositions[i]) / 2);
                     }
                 }
             }
 
-            foreach (var pos in posiblePositions)
+            foreach (var pos in possiblePositions)
             {
                 if (pos.Distance(startPos, true) <= range * range)
                 {
