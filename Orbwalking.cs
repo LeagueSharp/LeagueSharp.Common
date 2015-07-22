@@ -748,12 +748,11 @@ namespace LeagueSharp.Common
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                    mob.IsValidTarget() && InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
+                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) && mob.CharData.BaseSkinName != "gangplankbarrel")
                             .MaxOrDefault(mob => mob.MaxHealth);
                     if (result != null)
                     {
-                        var kappa = (Obj_AI_Base)result;
-                        return kappa.CharData.BaseSkinName != "gangplankbarrel" ? result : null;
+                        return result;
                     }
                 }
 
@@ -775,7 +774,7 @@ namespace LeagueSharp.Common
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.CharData.BaseSkinName != "gangplankbarrel")
                                   let predHealth =
                                       HealthPrediction.LaneClearHealthPrediction(
                                           minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
