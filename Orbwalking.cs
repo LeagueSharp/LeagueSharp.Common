@@ -32,6 +32,8 @@ using Color = System.Drawing.Color;
 
 namespace LeagueSharp.Common
 {
+    using SharpDX.Direct3D9;
+
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
     /// </summary>
@@ -750,7 +752,8 @@ namespace LeagueSharp.Common
                             .MaxOrDefault(mob => mob.MaxHealth);
                     if (result != null)
                     {
-                        return result;
+                        var kappa = (Obj_AI_Base)result;
+                        return kappa.CharData.BaseSkinName != "gangplankbarrel" ? result : null;
                     }
                 }
 
