@@ -255,11 +255,13 @@ namespace LeagueSharp.Common
                     new[]
                     {
                         //T1
-                        new Vector4(-x, 0f, -x, 1.0f), new Vector4(), new Vector4(-x, 0f, x, 1.0f), new Vector4(),
+                        new Vector4(-x, 0f, -x, 1.0f), new Vector4(), 
+                        new Vector4(-x, 0f, x, 1.0f), new Vector4(),
                         new Vector4(x, 0f, -x, 1.0f), new Vector4(),
 
                         //T2
-                        new Vector4(x, 0f, x, 1.0f), new Vector4(), new Vector4(-x, 0f, x, 1.0f), new Vector4(),
+                        new Vector4(-x, 0f, x, 1.0f), new Vector4(),
+                        new Vector4(x, 0f, x, 1.0f), new Vector4(),
                         new Vector4(x, 0f, -x, 1.0f), new Vector4()
                     });
                 _vertices.Unlock();
