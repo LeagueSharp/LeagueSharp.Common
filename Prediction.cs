@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SharpDX;
@@ -112,6 +113,11 @@ namespace LeagueSharp.Common
         ///     The unit that the prediction will made for.
         /// </summary>
         public Obj_AI_Base Unit = ObjectManager.Player;
+
+        /// <summary>
+        ///     Source unit for the prediction 
+        /// </summary>
+        public Obj_AI_Base Source = ObjectManager.Player;
 
         /// <summary>
         ///     Set to true to increase the prediction radius by the unit bounding radius.
@@ -207,6 +213,31 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Prediction
     {
+        private static readonly string[] ExcludedChampions = new string[] { "Xerath", };
+        private static int _option = 0; 
+
+        static Prediction()
+        {
+            if (ExcludedChampions.Contains(ObjectManager.Player.ChampionName))
+            {
+                _option = 2;
+                Console.WriteLine(@"Champions with charged spells cannot be used with the new prediction (temporary)");
+                Notifications.AddNotification("Champion (Xerath) with charged spells cannot be used with the new prediction (temporary)", 4000);
+
+                return; 
+            }
+
+            var menu = new Menu("Prediction Settings", "predictionsettings", true);
+            menu.AddItem(new MenuItem("method", "Prediction Method", true).SetShared().SetValue(new StringList(new[] { "Updated Prediction (Best)", "Updated Prediction (Decent)", "Old Prediction" }))).ValueChanged +=
+                (sender, args) =>
+                {
+                    var n = args.GetNewValue<StringList>();
+                    _option = n.SelectedIndex;
+                    Notifications.AddNotification(string.Format("Prediction mode changed to {0} [{1}]", n.SelectedValue, _option), 4000);
+                };
+            menu.AddToMainMenu();
+        }
+
         public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay)
         {
             return GetPrediction(new PredictionInput { Unit = unit, Delay = delay });
@@ -220,6 +251,11 @@ namespace LeagueSharp.Common
         public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay, float radius, float speed)
         {
             return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, Radius = radius, Speed = speed });
+        }
+
+        public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay, float radius, float speed, int method)
+        {
+            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, Radius = radius, Speed = speed }, method);
         }
 
         public static PredictionOutput GetPrediction(Obj_AI_Base unit,
@@ -240,13 +276,18 @@ namespace LeagueSharp.Common
                     });
         }
 
-        public static PredictionOutput GetPrediction(PredictionInput input)
+        public static PredictionOutput GetPrediction(PredictionInput input, int method = 0)
         {
-            return GetPrediction(input, true, true);
+            return GetPrediction(input, true, true, method);
         }
 
-        internal static PredictionOutput GetPrediction(PredictionInput input, bool ft, bool checkCollision)
+        internal static PredictionOutput GetPrediction(PredictionInput input, bool ft, bool checkCollision, int method = 0)
         {
+            if (method == 0)
+            {
+                method = _option;
+            }
+
             PredictionOutput result = null;
 
             if (!input.Unit.IsValidTarget(float.MaxValue, false))
@@ -290,7 +331,21 @@ namespace LeagueSharp.Common
             //Normal prediction
             if (result == null)
             {
-                result = GetStandardPrediction(input);
+                switch (method)
+                {
+                    // Alternative updated prediction 
+                    case 1:
+                        result = GetUpdatedPrediction2(input);
+                        break;
+                    // Old prediction 
+                    case 2:
+                        result = GetStandardPrediction(input);
+                        break;
+                    // Default updated prediction 
+                    default:
+                        result = GetUpdatedPrediction(input);
+                        break;
+                }
             }
 
             //Check if the unit position is in range
@@ -309,6 +364,8 @@ namespace LeagueSharp.Common
                     result.Hitchance = HitChance.OutOfRange;
                 }
 
+                /* This does not need to be handled for the updated predictions, but left as a reference. 
+
                 if (input.RangeCheckFrom.Distance(result.CastPosition, true) > Math.Pow(input.Range, 2))
                 {
                     if (result.Hitchance != HitChance.OutOfRange)
@@ -321,7 +378,7 @@ namespace LeagueSharp.Common
                     {
                         result.Hitchance = HitChance.OutOfRange;
                     }
-                }
+                }*/
             }
 
             //Check for collision
@@ -405,6 +462,7 @@ namespace LeagueSharp.Common
             };
         }
 
+        [Obsolete("Use GetUpdatedPrediction instead.")]
         internal static PredictionOutput GetStandardPrediction(PredictionInput input)
         {
             var speed = input.Unit.MoveSpeed;
@@ -421,6 +479,74 @@ namespace LeagueSharp.Common
 
             return result;
         }
+
+        internal static PredictionOutput GetUpdatedPrediction(PredictionInput input)
+        {
+            if (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            {
+                input.Speed = 90000;
+            }
+
+            var toTarget = Vector3.Normalize(input.Unit.ServerPosition - input.From);
+            var targetVelocity = CalculateVelocity(input.Unit.ServerPosition, input.Unit.Path.LastOrDefault(), input.Unit.MoveSpeed);
+
+            var a = Vector3.Dot(targetVelocity, targetVelocity) - (input.Speed * input.Speed);
+            var b = 2 * Vector3.Dot(targetVelocity, toTarget);
+            var c = Vector3.Dot(toTarget, toTarget);
+
+            var p = -b / (2 * a);
+            var q = (float)Math.Sqrt((b * b) - 4 * a * c) / (2 * a);
+
+            var theorem1 = p - q;
+            var theorem2 = p + q;
+            var t = (theorem1 > theorem2 && theorem2 > 0) ? theorem2 : theorem1;
+
+            return new PredictionOutput()
+            {
+                CastPosition = input.Unit.ServerPosition + targetVelocity * (t + input.Delay),
+                UnitPosition = input.Unit.ServerPosition,
+                Hitchance = HitChance.VeryHigh
+            };
+        }
+
+        internal static PredictionOutput GetUpdatedPrediction2(PredictionInput input)
+        {
+            if (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            {
+                input.Speed = 90000;
+            }
+
+            var targetVelocity = CalculateVelocity(input.Unit.ServerPosition, input.Unit.Path.LastOrDefault(), input.Unit.MoveSpeed);
+            var position = input.Unit.ServerPosition - input.From;
+            var cross = Vector3.Cross(position, targetVelocity);
+            var discriminant = input.Speed * input.Speed * position.LengthSquared() - cross.LengthSquared();
+
+            if (discriminant < 0.0f)
+            {
+                return new PredictionOutput
+                {
+                    CastPosition = input.Unit.ServerPosition,
+                    UnitPosition = input.Unit.ServerPosition,
+                    Hitchance = HitChance.VeryHigh
+                };
+            }
+            var time = (Math.Sqrt(discriminant) + Vector3.Dot(position, targetVelocity)) / (input.Speed * input.Speed - targetVelocity.LengthSquared());
+            return new PredictionOutput()
+            {
+                CastPosition = input.Unit.ServerPosition + targetVelocity * (float) time,
+                UnitPosition = input.Unit.ServerPosition,
+                Hitchance = HitChance.VeryHigh
+            };
+        }
+
+        internal static Vector3 CalculateVelocity(Vector3 start, Vector3 end, float speed)
+        {
+            var vector = end - start;
+            var d = (float)Math.Sqrt(Vector3.Dot(vector, vector));
+
+            return vector / d * speed;
+        }
+
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
@@ -698,6 +824,8 @@ namespace LeagueSharp.Common
                             bestCandidateHits = hits;
                         }
                     }
+
+                    bestCandidate = bestCandidate + input.From.To2D();
 
                     if (bestCandidateHits > 1 && input.From.To2D().Distance(bestCandidate, true) > 50 * 50)
                     {
