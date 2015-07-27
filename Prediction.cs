@@ -503,7 +503,7 @@ namespace LeagueSharp.Common
 
             return new PredictionOutput()
             {
-                CastPosition = input.Unit.ServerPosition + targetVelocity * (t),
+                CastPosition = input.Unit.ServerPosition + targetVelocity * (t + input.Delay),
                 UnitPosition = input.Unit.ServerPosition,
                 Hitchance = HitChance.VeryHigh
             };
