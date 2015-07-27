@@ -364,9 +364,9 @@ namespace LeagueSharp.Common
                     result.Hitchance = HitChance.OutOfRange;
                 }
 
-                /* This does not need to be handled for the updated predictions, but left as a reference. 
+                /* This does not need to be handled for the updated predictions, but left as a reference.*/ 
 
-                if (input.RangeCheckFrom.Distance(result.CastPosition, true) > Math.Pow(input.Range, 2))
+                if (method == 0 && input.RangeCheckFrom.Distance(result.CastPosition, true) > Math.Pow(input.Range, 2))
                 {
                     if (result.Hitchance != HitChance.OutOfRange)
                     {
@@ -378,7 +378,7 @@ namespace LeagueSharp.Common
                     {
                         result.Hitchance = HitChance.OutOfRange;
                     }
-                }*/
+                }
             }
 
             //Check for collision
