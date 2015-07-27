@@ -220,7 +220,7 @@ namespace LeagueSharp.Common
         {
             if (ExcludedChampions.Contains(ObjectManager.Player.ChampionName))
             {
-                _option = 2;
+                _option = 0;
                 Console.WriteLine(@"Champions with charged spells cannot be used with the new prediction (temporary)");
                 Notifications.AddNotification("Champion (Xerath) with charged spells cannot be used with the new prediction (temporary)", 4000);
 
@@ -228,7 +228,7 @@ namespace LeagueSharp.Common
             }
 
             var menu = new Menu("Prediction Settings", "predictionsettings", true);
-            menu.AddItem(new MenuItem("method", "Prediction Method", true).SetShared().SetValue(new StringList(new[] { "Updated Prediction (Best)", "Updated Prediction (Decent)", "Old Prediction" }))).ValueChanged +=
+            menu.AddItem(new MenuItem("predictionmethod", "Prediction Method").SetShared().SetValue(new StringList(new[] { "Old Prediction" , "Updated Prediction (Best)", "Updated Prediction (Decent)"}))).ValueChanged +=
                 (sender, args) =>
                 {
                     var n = args.GetNewValue<StringList>();
@@ -333,13 +333,13 @@ namespace LeagueSharp.Common
             {
                 switch (method)
                 {
-                    // Alternative updated prediction 
-                    case 1:
-                        result = GetUpdatedPrediction2(input);
-                        break;
                     // Old prediction 
-                    case 2:
+                    case 0:
                         result = GetStandardPrediction(input);
+                        break;
+                    // Alternative updated prediction 
+                    case 2:
+                        result = GetUpdatedPrediction2(input);
                         break;
                     // Default updated prediction 
                     default:
