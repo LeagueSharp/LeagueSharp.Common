@@ -331,7 +331,7 @@ namespace LeagueSharp.Common
             //Normal prediction
             if (result == null)
             {
-                switch (method)
+                switch (predictionmethod)
                 {
                     // Old prediction 
                     case 0:
