@@ -262,6 +262,12 @@ namespace LeagueSharp.Common
         {
             var result = new List<Vector2>();
             var Distance = distance;
+            if (distance < 0)
+            {
+                path[0] = path[0] + distance * (path[1] - path[0]).Normalized();
+                return path;
+            }
+            
             for (var i = 0; i < path.Count - 1; i++)
             {
                 var dist = path[i].Distance(path[i + 1]);

@@ -298,7 +298,7 @@ namespace LeagueSharp.Common
             if (ft)
             {
                 //Increase the delay due to the latency and server tick:
-                input.Delay += Game.Ping / 2000f + 0.06f;
+                input.Delay += Game.Ping / 2000f + 0.07f;
 
                 if (input.Aoe)
                 {
@@ -617,7 +617,11 @@ namespace LeagueSharp.Common
             if (pLength >= input.Delay * speed - input.RealRadius &&
                 Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
-                path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
+                path = path.CutPath(input.Delay * speed - input.RealRadius);
+                var distanceToTarget = input.From.Distance(input.Unit.ServerPosition);
+                var m = distanceToTarget > input.Unit.BoundingRadius ?  distanceToTarget / (distanceToTarget - input.Unit.BoundingRadius) : 1;
+                var sp = m * input.Speed;
+
                 var tT = 0f;
                 for (var i = 0; i < path.Count - 1; i++)
                 {
@@ -626,7 +630,7 @@ namespace LeagueSharp.Common
                     var tB = a.Distance(b) / speed;
                     var direction = (b - a).Normalized();
                     a = a - speed * tT * direction;
-                    var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
+                    var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), sp, tT);
                     var t = (float) sol[0];
                     var pos = (Vector2) sol[1];
 
@@ -634,10 +638,10 @@ namespace LeagueSharp.Common
                     {
                         var p = pos + input.RealRadius * direction;
 
-                        if (input.Type == SkillshotType.SkillshotLine && false)
+                        if (input.Type == SkillshotType.SkillshotLine && true)
                         {
                             var alpha = (input.From.To2D() - p).AngleBetween(a - b);
-                            if (alpha > 30 && alpha < 180 - 30)
+                            if (alpha > 50 && alpha < 180 - 50)
                             {
                                 var beta = (float) Math.Asin(input.RealRadius / p.Distance(input.From));
                                 var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
