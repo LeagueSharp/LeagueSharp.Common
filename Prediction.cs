@@ -504,13 +504,11 @@ namespace LeagueSharp.Common
             var theorem2 = p + q;
             var t = (theorem1 > theorem2 && theorem2 > 0) ? theorem2 : theorem1;
 
-            var castPosition = input.Unit.ServerPosition + targetVelocity * (t + input.Delay);
-
-            return new PredictionOutput
+            return new PredictionOutput()
             {
-                CastPosition = castPosition,
+                CastPosition = input.Unit.ServerPosition + targetVelocity * (t + input.Delay),
                 UnitPosition = input.Unit.ServerPosition,
-                Hitchance = float.IsNaN(castPosition.X) || float.IsNaN(castPosition.Y) ? HitChance.Impossible : HitChance.VeryHigh)
+                Hitchance = HitChance.VeryHigh
             };
         }
 
