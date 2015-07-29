@@ -795,6 +795,9 @@ namespace LeagueSharp.Common
 
             private void GameOnOnGameUpdate(EventArgs args)
             {
+
+                var unit = (Obj_AI_Base)Hud.SelectedUnit;
+                Console.WriteLine(unit.BaseSkinName);
                 try
                 {
                     if (ActiveMode == OrbwalkingMode.None)
