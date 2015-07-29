@@ -235,6 +235,9 @@ namespace LeagueSharp.Common
                     _option = n.SelectedIndex;
                     Notifications.AddNotification(string.Format("Prediction mode changed to {0} [{1}]", n.SelectedValue, _option), 4000);
                 };
+
+            _option = menu.Item("predictionmethod").GetValue<StringList>().SelectedIndex;
+
             menu.AddToMainMenu();
         }
 
