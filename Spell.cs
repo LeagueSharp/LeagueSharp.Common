@@ -309,6 +309,11 @@ namespace LeagueSharp.Common
             bool exactHitChance = false,
             int minTargets = -1)
         {
+            if (unit == null)
+            {
+                return CastStates.NotCasted;
+            }
+
             //Spell not ready.
             if (!Slot.IsReady())
             {
