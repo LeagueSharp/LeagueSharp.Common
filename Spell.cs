@@ -63,7 +63,7 @@ namespace LeagueSharp.Common
             DamageType = damageType;
 
             // Default values
-            MinHitChance = HitChance.VeryHigh;
+            MinHitChance = HitChance.High;
         }
 
         public string ChargedBuffName { get; set; }
