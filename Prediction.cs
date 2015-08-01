@@ -434,6 +434,9 @@ namespace LeagueSharp.Common
 
                 if (input.Type == SkillshotType.SkillshotLine)
                 {
+                    if (PathTracker.GetCurrentPath(input.Unit).Time < 0.1d || input.Unit.IsWindingUp)
+                        result.Hitchance = HitChance.VeryHigh;
+                    else
                     if (PathTracker.GetAngle(input.From, input.Unit) < 32)
                         result.Hitchance = HitChance.VeryHigh;
 
