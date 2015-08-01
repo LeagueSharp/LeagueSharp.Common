@@ -5352,8 +5352,6 @@ namespace LeagueSharp.Common
                         return 20 + 8 * source.Level;
                     }
 
-                    if (target.GetBuffCount("gnarw") == 2)
-
                     if (challengingSmite != null)
 
                     {
