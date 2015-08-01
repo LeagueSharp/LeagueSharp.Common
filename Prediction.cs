@@ -440,7 +440,7 @@ namespace LeagueSharp.Common
                 }
                 else if (input.Type == SkillshotType.SkillshotCircle)
                 {
-                    if (input.Delay < 0.35 && (PathTracker.GetCurrentPath(input.Unit).Time < 0.1d || input.Unit.IsWindingUp))
+                    if (PathTracker.GetCurrentPath(input.Unit).Time < 0.1d || input.Unit.IsWindingUp)
                         result.Hitchance = HitChance.VeryHigh;
                 }
 
