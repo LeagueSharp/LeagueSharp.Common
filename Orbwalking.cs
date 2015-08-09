@@ -299,13 +299,14 @@ namespace LeagueSharp.Common
 
             LastMoveCommandT = Utils.GameTimeTickCount;
 
-            if (Player.ServerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
+            var playerPosition = Player.ServerPosition;
+
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
-                if (Player.Path.Count() > 1)
+                if (Player.Path.Length > 0)
                 {
-                    Player.IssueOrder((GameObjectOrder)10, Player.ServerPosition);
-                    Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
-                    LastMoveCommandPosition = Player.ServerPosition;
+                    Player.IssueOrder(GameObjectOrder.Stop, playerPosition);
+                    LastMoveCommandPosition = playerPosition;
                 }
                 return;
             }
@@ -313,22 +314,18 @@ namespace LeagueSharp.Common
             var point = position;
             if (useFixedDistance)
             {
-                point = Player.ServerPosition +
-                        (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance) *
-                        (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                point = playerPosition.Extend(
+                    position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
             }
             else
             {
                 if (randomizeMinDistance)
                 {
-                    point = Player.ServerPosition +
-                            (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance *
-                            (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                    point = playerPosition.Extend(position, (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance);
                 }
-                else if (Player.ServerPosition.Distance(position) > _minDistance)
+                else if (playerPosition.Distance(position) > _minDistance)
                 {
-                    point = Player.ServerPosition +
-                            _minDistance * (position.To2D() - Player.ServerPosition.To2D()).Normalized().To3D();
+                    point = playerPosition.Extend(position, _minDistance);
                 }
             }
 
@@ -505,17 +502,7 @@ namespace LeagueSharp.Common
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
-                misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetShared().SetValue(new Slider(50, 50)));
-                misc.AddItem(new MenuItem("PermaShow", "PermaShow").SetShared().SetValue(true)).ValueChanged += (s, args) => {
-                    if (args.GetNewValue<bool>())
-                    {
-                        _config.Item("Freeze").Permashow(true, "Freeze");
-                    }
-                    else
-                    {
-                        _config.Item("Freeze").Permashow(false);
-                    }
-                };
+
                 _config.AddSubMenu(misc);
 
                 /* Missile check */
@@ -541,11 +528,6 @@ namespace LeagueSharp.Common
 
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
-
-                _config.AddItem(
-                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('H', KeyBindType.Toggle)));
-
-                _config.Item("Freeze").Permashow(_config.Item("PermaShow").GetValue<bool>(), "Freeze");
 
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
 
@@ -668,7 +650,6 @@ namespace LeagueSharp.Common
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
-                    var FreezeActive = _config.Item("Freeze").GetValue<KeyBind>().Active && (ActiveMode != OrbwalkingMode.LaneClear);
                     var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
@@ -680,15 +661,9 @@ namespace LeagueSharp.Common
 
                     foreach (var minion in MinionList)
                     {
-                        var FreezeDamage = Player.GetAutoAttackDamage(minion, false) * (_config.Item("FreezeHealth").GetValue<Slider>().Value / 100f);
                         var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 * (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
-
-                        if (FreezeActive && predHealth.Equals(minion.Health))
-                        {
-                            continue;
-                        }
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                         {
@@ -697,7 +672,7 @@ namespace LeagueSharp.Common
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= (FreezeActive ? FreezeDamage : Player.GetAutoAttackDamage(minion, true)))
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
                             }
@@ -849,7 +824,7 @@ namespace LeagueSharp.Common
                 {
                     Render.Circle.DrawCircle(
                         Player.Position, _config.Item("HoldPosRadius").GetValue<Slider>().Value,
-                        _config.Item("HoldZone").GetValue<Circle>().Color);
+                        _config.Item("HoldZone").GetValue<Circle>().Color, 5, true);
                 }
 
             }
