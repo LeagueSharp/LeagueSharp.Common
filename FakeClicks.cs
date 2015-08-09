@@ -134,7 +134,14 @@ namespace LeagueSharp.Common
         /// </param>
         private static void BeforeSpellCast(Spellbook s, SpellbookCastSpellEventArgs args)
         {
-            if (args.Target.Position.Distance(player.Position) >= 5f)
+            var target = args.Target;
+
+            if (target == null)
+            {
+                return;
+            }
+
+            if (target.Position.Distance(player.Position) >= 5f)
             {
                 Hud.ShowClick(ClickType.Attack, args.Target.Position);
             }
