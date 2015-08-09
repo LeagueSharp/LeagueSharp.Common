@@ -491,7 +491,7 @@ namespace LeagueSharp.Common
             if (pLength >= input.Delay * speed - input.RealRadius &&
                 Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
-                path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
+                path = path.CutPath(input.Delay * speed - input.RealRadius);
                 var tT = 0f;
                 for (var i = 0; i < path.Count - 1; i++)
                 {
