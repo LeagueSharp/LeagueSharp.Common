@@ -104,6 +104,7 @@ namespace LeagueSharp.Common
         static Orbwalking()
         {
             Player = ObjectManager.Player;
+            FakeClicks.Initiate();
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
