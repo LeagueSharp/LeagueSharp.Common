@@ -82,7 +82,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     The root menu.
         /// </summary>
-        private static readonly Menu root = new Menu("FakeClicks", "Fake Clicks", true);
+        private static readonly Menu root = new Menu("FakeClicks", "Fake Clicks");
 
         #endregion
 
@@ -222,7 +222,8 @@ namespace LeagueSharp.Common
             root.AddItem(new MenuItem("Enable", "Enable").SetValue(true));
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))
                 .SetValue(new StringList(new[] { "Evade, No Cursor Position", "Cursor Position, No Evade" }));
-            root.AddToMainMenu();
+
+            CommonMenu.Config.AddSubMenu(root);
 
             player = ObjectManager.Player;
 

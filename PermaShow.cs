@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D9;
-using Font = SharpDX.Direct3D9.Font;
 
 namespace LeagueSharp.Common
 {
@@ -38,18 +37,24 @@ namespace LeagueSharp.Common
     public static class PermaShow
     {
 
+        private static bool subbed;
         /// <summary>
         ///    List of items for PermaShow
         /// </summary>
-      
+
         private static List<PermaShowItem> PermaShowItems = new List<PermaShowItem>();
-        
-        private class PermaShowItem
+
+        public class PermaShowItem
         {
             public string DisplayName { get; set; }
             public MenuItem Item { get; set; }
             internal MenuValueType ItemType { get; set; }
-            public SharpDX.Color Color { get; set; }
+            public Color Color { get; set; }
+
+            /// <summary>
+            ///    This is a bool MenuItem used to control the item's visibility from your an assembly.
+            /// </summary>
+            public MenuItem Controller { get; set; }
         }
 
         /// <summary>
@@ -78,7 +83,7 @@ namespace LeagueSharp.Common
         private static Menu placetosave;
         private static bool Dragging;
 
-  
+
         /// <summary>
         ///    Constructor
         /// </summary>
@@ -93,6 +98,7 @@ namespace LeagueSharp.Common
 
         private static void Sub()
         {
+            subbed = true;
             Drawing.OnPreReset += DrawingOnPreReset;
             Drawing.OnPostReset += DrawingOnOnPostReset;
             Drawing.OnDraw += Drawing_OnEndScene;
@@ -103,6 +109,7 @@ namespace LeagueSharp.Common
 
         private static void Unsub()
         {
+            subbed = false;
             Drawing.OnPreReset -= DrawingOnPreReset;
             Drawing.OnPostReset -= DrawingOnOnPostReset;
             Drawing.OnDraw -= Drawing_OnEndScene;
@@ -124,39 +131,61 @@ namespace LeagueSharp.Common
 
             foreach (var permaitem in PermaShowItems)
             {
-                var index = PermaShowItems.IndexOf(permaitem);
-                var baseposition = new Vector2(BoxPosition.X - ScaleValue(halfwidth, Direction.X), BoxPosition.Y + ScaleValue(2, Direction.Y));
-                var endpos = new Vector2(BoxPosition.X + ScaleValue(halfwidth, Direction.X), baseposition.Y + (Text.Description.Height * 1.3f * index));
-                var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
-                switch (permaitem.Item.ValueType)
+                if (permaitem.Controller != null && !permaitem.Controller.GetValue<bool>())
                 {
-                    case MenuValueType.Boolean:
-                        DrawBox(endpos, permaitem.Item.GetValue<bool>());
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<bool>(), (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.Slider:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Slider>().Value, (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.KeyBind:
-                        DrawBox(endpos, permaitem.Item.GetValue<KeyBind>().Active);
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<KeyBind>().Active + " - " + (permaitem.Item.GetValue<KeyBind>().Type), (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.StringList:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<StringList>().SelectedValue, (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.Color:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<System.Drawing.Color>(), (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.Circle:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Circle>().Color, (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.Integer:
-                        Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<int>(), (int)itempos.X, (int)itempos.Y, permaitem.Color);
-                        break;
-                    case MenuValueType.None:
-                        break;
-                    default:
-                        break;
+                    PermaShowItems.Remove(permaitem);
+                    if (!PermaShowItems.Any())
+                    {
+                        Unsub();
+                        return;
+                    }
+                    continue;
+                }
+                    var index = PermaShowItems.IndexOf(permaitem);
+                    var baseposition = new Vector2(BoxPosition.X - ScaleValue(halfwidth, Direction.X),
+                        BoxPosition.Y + ScaleValue(2, Direction.Y));
+                    var endpos = new Vector2(BoxPosition.X + ScaleValue(halfwidth, Direction.X),
+                        baseposition.Y + (Text.Description.Height * 1.3f * index));
+                    var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
+                    switch (permaitem.Item.ValueType)
+                    {
+                        case MenuValueType.Boolean:
+                            DrawBox(endpos, permaitem.Item.GetValue<bool>());
+                            Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<bool>(),
+                                (int)itempos.X, (int)itempos.Y, permaitem.Color);
+                            break;
+                        case MenuValueType.Slider:
+                            Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Slider>().Value,
+                                (int)itempos.X, (int)itempos.Y, permaitem.Color);
+                            break;
+                        case MenuValueType.KeyBind:
+                            DrawBox(endpos, permaitem.Item.GetValue<KeyBind>().Active);
+                            Text.DrawText(null,
+                                permaitem.DisplayName + ": " + permaitem.Item.GetValue<KeyBind>().Active + " - " +
+                                (permaitem.Item.GetValue<KeyBind>().Type), (int)itempos.X, (int)itempos.Y,
+                                permaitem.Color);
+                            break;
+                        case MenuValueType.StringList:
+                            Text.DrawText(null,
+                                permaitem.DisplayName + ": " + permaitem.Item.GetValue<StringList>().SelectedValue,
+                                (int)itempos.X, (int)itempos.Y, permaitem.Color);
+                            break;
+                        case MenuValueType.Color:
+                            Text.DrawText(null,
+                                permaitem.DisplayName + ": " + permaitem.Item.GetValue<System.Drawing.Color>(),
+                                (int)itempos.X, (int)itempos.Y, permaitem.Color);
+                            break;
+                        case MenuValueType.Circle:
+                            Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<Circle>().Color,
+                                (int)itempos.X, (int)itempos.Y, permaitem.Color);
+                            break;
+                        case MenuValueType.Integer:
+                            Text.DrawText(null, permaitem.DisplayName + ": " + permaitem.Item.GetValue<int>(),
+                                (int)itempos.X, (int)itempos.Y, permaitem.Color);
+                            break;
+                        case MenuValueType.None:
+                            break;
+                    
                 }
             }
         }
@@ -166,17 +195,17 @@ namespace LeagueSharp.Common
         ///    When removing, you can simply set the bool parameter to false and everything else can be null. The default color is White.
         /// </summary>
 
-        public static void Permashow(this MenuItem item, bool enabled = true, String customdisplayname = null, SharpDX.Color? col = null)
+        public static void Permashow(this MenuItem item, bool enabled = true, String customdisplayname = null, Color? col = null)
         {
-            if (enabled && !PermaShowItems.Any(x => x.Item == item))
+            if (enabled && PermaShowItems.All(x => x.Item != item))
             {
                 if (!PermaShowItems.Any())
                 {
                     Sub();
                 }
-                String DispName = customdisplayname != null ? customdisplayname : item.DisplayName;
-                SharpDX.Color? color = col != null ? col : new ColorBGRA(255, 255, 255, 255);
-                PermaShowItems.Add(new PermaShowItem { DisplayName = DispName, Item = item, ItemType = item.ValueType, Color = (SharpDX.Color)color });
+                string dispName = customdisplayname ?? item.DisplayName;
+                Color? color = col ?? new ColorBGRA(255, 255, 255, 255);
+                PermaShowItems.Add(new PermaShowItem { DisplayName = dispName, Item = item, ItemType = item.ValueType, Color = (Color)color });
             }
 
             else if (!enabled)
@@ -190,6 +219,50 @@ namespace LeagueSharp.Common
                         Unsub();
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        ///    Adds a menuitem to PermaShow along with a controller MenuItem to control the visibility of this item.
+        /// </summary>
+        /// 
+        public static MenuItem Permashow(this MenuItem item, MenuItem controlleritem, string customdisplayname = null, Color? col = null)
+        {
+            bool enabled = item.GetValue<bool>();
+            if (enabled && PermaShowItems.All(x => x.Item != item))
+            {
+                if (!PermaShowItems.Any() && !subbed)
+                {
+                    Sub();
+                }
+                string dispName = customdisplayname ?? item.DisplayName;
+                Color? color = col ?? new ColorBGRA(255, 255, 255, 255);
+                PermaShowItems.Add(new PermaShowItem { DisplayName = dispName, Item = item, ItemType = item.ValueType, Color = (Color)color, Controller = controlleritem });
+            }
+            return item;
+        }
+
+        public static void Add(PermaShowItem permaitem)
+        {
+            if (!PermaShowItems.Contains(permaitem))
+            {
+                PermaShowItems.Add(permaitem);
+            }
+            else
+            {
+                throw new Exception("PermaShow: This item already exists");
+            }
+        }
+
+        public static void Remove(PermaShowItem permaitem)
+        {
+            if (PermaShowItems.Contains(permaitem))
+            {
+                PermaShowItems.Remove(permaitem);
+            }
+            else
+            {
+                throw new Exception("PermaShow: The item you are trying to remove is non-existent.");
             }
         }
 
@@ -249,11 +322,26 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void CreateMenu()
         {
-            placetosave = new Menu("PermaShow", "Permashow", true);
+            placetosave = new Menu("PermaShow", "Permashow");
+            MenuItem enablepermashow = new MenuItem("disablepermashow", "Enable PermaShow").SetValue(true);
+            placetosave.AddItem(enablepermashow);
             var xvalue = new MenuItem("X", "X").SetValue(new Slider((int)DefaultPosition.X, 0, Drawing.Width));
             var yvalue = new MenuItem("Y", "Y").SetValue(new Slider((int)DefaultPosition.Y, 0, Drawing.Height));
             placetosave.AddItem(xvalue);
             placetosave.AddItem(yvalue);
+            CommonMenu.Config.AddSubMenu(placetosave);
+
+            enablepermashow.ValueChanged += (sender, args) =>
+            {
+                if (args.GetNewValue<bool>() && !subbed)
+                {
+                    Sub();
+                }
+                else if (!args.GetNewValue<bool>())
+                {
+                    Unsub();
+                }
+            };
         }
 
         /// <summary>
@@ -272,7 +360,7 @@ namespace LeagueSharp.Common
         /// </summary>
         private static Vector2 GetPosition()
         {
-            return new Vector2((float) placetosave.Item("X").GetValue<Slider>().Value, (float) placetosave.Item("Y").GetValue<Slider>().Value);
+            return new Vector2(placetosave.Item("X").GetValue<Slider>().Value, placetosave.Item("Y").GetValue<Slider>().Value);
         }
 
         /// <summary>
@@ -286,7 +374,7 @@ namespace LeagueSharp.Common
             BoxLine.Begin();
 
             var pos = BoxPosition;
-            
+
             var positions = new[]
             {
                 new Vector2(pos.X, pos.Y),
@@ -326,10 +414,10 @@ namespace LeagueSharp.Common
 
         private enum Direction
         {
-           X,
-           Y
+            X,
+            Y
         }
-        
+
         private static float ScaleValue(float value, Direction direction)
         {
             var returnvalue = direction == Direction.X ? value * XFactor : value * YFactor;
@@ -341,16 +429,16 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void PrepareDrawing()
         {
-            int fontsize = (int) (ScaleValue(15, Direction.Y));
+            int fontsize = (int)(ScaleValue(15, Direction.Y));
 
             Text = new Font(
                 Drawing.Direct3DDevice,
                 new FontDescription
                 {
                     FaceName = "Tahoma",
-                    Height = (int)fontsize < 15 ? 15 : fontsize,
+                    Height = fontsize < 15 ? 15 : fontsize,
                     OutputPrecision = FontPrecision.Default,
-                    Quality = FontQuality.Default,
+                    Quality = FontQuality.Default
                 });
 
             BoxLine = new Line(Drawing.Direct3DDevice) { Width = 1 };

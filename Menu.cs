@@ -41,6 +41,16 @@ using Rectangle = SharpDX.Rectangle;
 
 namespace LeagueSharp.Common
 {
+    internal class CommonMenu
+    {
+        internal static Menu Config = new Menu("LeagueSharp.Common", "LeagueSharp.Common", true);
+
+        static CommonMenu()
+        {
+            Config.AddToMainMenu();
+        }
+    }
+
     [Serializable]
     public struct Circle
     {
