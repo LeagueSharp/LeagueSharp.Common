@@ -143,7 +143,7 @@ namespace LeagueSharp.Common
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius; }
+            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius - 15 : Radius - 15; }
         }
     }
 
