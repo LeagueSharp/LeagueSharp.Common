@@ -296,7 +296,20 @@ namespace LeagueSharp.Common
             if (unit.IsVisible)
             {
                 result.Add(unit.ServerPosition.To2D());
-                result.AddRange(unit.Path.Select(point => point.To2D()));
+                var path = unit.Path;
+                if (path.Length > 0)
+                {
+                    var first = path[0].To2D();
+                    if (first.Distance(result[0], true) > 40)
+                    {
+                        result.Add(first);    
+                    }
+                    
+                    for (int i = 1; i < path.Length; i++)
+                    {
+                        result.Add(path[i].To2D());
+                    }    
+                }
             }
             else if (WaypointTracker.StoredPaths.ContainsKey(unit.NetworkId))
             {
