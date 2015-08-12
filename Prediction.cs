@@ -620,6 +620,8 @@ namespace LeagueSharp.Common
 
                     if (pos.IsValid() && t >= tT && t <= tT + tB)
                     {
+                        if (pos.Distance(b, true) < 20)
+                            break;
                         var p = pos + input.RealRadius * direction;
 
                         if (input.Type == SkillshotType.SkillshotLine && false)
