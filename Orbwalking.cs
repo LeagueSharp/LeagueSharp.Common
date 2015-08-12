@@ -357,11 +357,6 @@ namespace LeagueSharp.Common
                         {
                             LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             _missileLaunched = false;
-                            
-                            if (ObjectManager.Player.Distance(target) > GetRealAutoAttackRange(target) - 75)
-                            {
-                                LastAATick = Utils.GameTimeTickCount;
-                            }
                         }
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                         _lastTarget = target;
