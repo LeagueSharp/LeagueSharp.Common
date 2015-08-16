@@ -33,6 +33,10 @@ namespace LeagueSharp.Common
     {
         #region Static Fields
 
+        public static bool Enabled
+        {
+            get { return root.Item("Enable").IsActive(); }
+        }
         /// <summary>
         ///     If the user is attacking
         ///     Currently used for the second style of fake clicks
@@ -103,7 +107,7 @@ namespace LeagueSharp.Common
             var t = target as Obj_AI_Hero;
             if (t != null && unit.IsMe)
             {
-                Hud.ShowClick(ClickType.Move, RandomizePosition(t.Position));
+                ShowClick(RandomizePosition(t.Position), ClickType.Move);
             }
         }
 
@@ -118,7 +122,7 @@ namespace LeagueSharp.Common
         {
             if (root.Item("Click Mode").GetValue<StringList>().SelectedIndex == 1)
             {
-                Hud.ShowClick(ClickType.Attack, RandomizePosition(args.Target.Position));
+                ShowClick(RandomizePosition(args.Target.Position), ClickType.Attack);
                 attacking = true;
             }
         }
@@ -143,7 +147,7 @@ namespace LeagueSharp.Common
 
             if (target.Position.Distance(player.Position) >= 5f)
             {
-                Hud.ShowClick(ClickType.Attack, args.Target.Position);
+               ShowClick(args.Target.Position, ClickType.Attack);
             }
         }
 
@@ -167,11 +171,11 @@ namespace LeagueSharp.Common
                 lastEndpoint = args.Path.LastOrDefault();
                 if (!attacking)
                 {
-                    Hud.ShowClick(ClickType.Move, Game.CursorPos);
+                    ShowClick(Game.CursorPos, ClickType.Move);
                 }
                 else
                 {
-                    Hud.ShowClick(ClickType.Attack, Game.CursorPos);
+                    ShowClick(Game.CursorPos, ClickType.Attack);
                 }
 
                 lastTime = Game.Time;
@@ -201,11 +205,11 @@ namespace LeagueSharp.Common
                 vect.Z = player.Position.Z;
                 if (args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AttackTo)
                 {
-                    Hud.ShowClick(ClickType.Attack, RandomizePosition(vect));
+                    ShowClick(RandomizePosition(vect), ClickType.Attack);
                 }
                 else
                 {
-                    Hud.ShowClick(ClickType.Move, vect);
+                    ShowClick(vect, ClickType.Move);
                 }
 
                 lastOrderTime = Game.Time;
@@ -232,6 +236,16 @@ namespace LeagueSharp.Common
             Spellbook.OnCastSpell += BeforeSpellCast;
             Orbwalking.AfterAttack += AfterAttack;
             Obj_AI_Base.OnIssueOrder += OnIssueOrder;
+        }
+
+        private static void ShowClick(Vector3 position, ClickType type)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+
+            Hud.ShowClick(type, position);
         }
 
         /// <summary>
