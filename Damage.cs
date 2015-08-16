@@ -506,23 +506,23 @@ namespace LeagueSharp.Common
                                     new double[] { 40, 65, 90, 115, 140 }[level]
                                     + 0.35 * source.FlatMagicDamageMod
                             },
-                        //W => Magic Damage to the Same Target
+                        //W => First FF to target
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 64, 104, 144, 184, 224 }[level]
-                                    + 0.64 * source.FlatMagicDamageMod
+                                    new double[] { 40, 65, 90, 115, 140 }[level]
+                                    + 0.4 * source.FlatMagicDamageMod
                             },
-                        //W => 1 FF
+                        //W => Additional FF to already FF target
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.4 * source.FlatMagicDamageMod
+                                    new double[] { 12, 19.5, 27, 34.5, 42 }[level]
+                                    + 0.12 * source.FlatMagicDamageMod
                             },
                         //E
                         new DamageSpell
@@ -531,7 +531,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 95, 130, 165, 200 }[level]
-                                    + 0.35 * source.FlatMagicDamageMod
+                                    + 0.50 * source.FlatMagicDamageMod
                             },
                         //R, per dash
                         new DamageSpell
