@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -30,6 +30,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.RightsManagement;
 using LeagueSharp.Common.Properties;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -207,16 +208,15 @@ namespace LeagueSharp.Common
 
         public static string MenuConfigPath
         {
-            get
-            {
-                return Path.Combine(Config.AppDataDirectory, "MenuConfig");
-            }
+            get { return Path.Combine(Config.AppDataDirectory, "MenuConfig"); }
         }
 
         public static int MenuItemWidth
         {
             get { return 160; }
         }
+
+        public static int MenuFontSize { get; set; }
 
         public static int MenuItemHeight
         {
@@ -250,7 +250,7 @@ namespace LeagueSharp.Common
 
     internal static class MenuDrawHelper
     {
-        internal static Font Font;
+        internal static Font Font, FontBold;
 
         static MenuDrawHelper()
         {
@@ -259,8 +259,19 @@ namespace LeagueSharp.Common
                 new FontDescription
                 {
                     FaceName = "Tahoma",
-                    Height = 14,
+                    Height = 13,
                     OutputPrecision = FontPrecision.Default,
+                    Quality = FontQuality.Antialiased
+                });
+
+            FontBold = new Font(
+                Drawing.Direct3DDevice,
+                new FontDescription
+                {
+                    FaceName = "Tahoma",
+                    Height = 13,
+                    OutputPrecision = FontPrecision.Default,
+                    Weight = FontWeight.Bold,
                     Quality = FontQuality.Antialiased
                 });
 
@@ -276,16 +287,23 @@ namespace LeagueSharp.Common
                 Font.Dispose();
                 Font = null;
             }
+            if (FontBold != null)
+            {
+                FontBold.Dispose();
+                FontBold = null;
+            }
         }
 
         private static void DrawingOnOnPostReset(EventArgs args)
         {
             Font.OnResetDevice();
+            FontBold.OnResetDevice();
         }
 
         private static void Drawing_OnPreReset(EventArgs args)
         {
             Font.OnLostDevice();
+            FontBold.OnLostDevice();
         }
 
         internal static void DrawBox(Vector2 position,
@@ -312,18 +330,15 @@ namespace LeagueSharp.Common
         {
             DrawBox(position, item.Height, item.Height, on ? Color.Green : Color.Red, 1, Color.Black);
             var s = on ? "On" : "Off";
-            Font.DrawText(
-                null, s,
-                new Rectangle(
-                    (int) (item.Position.X + item.Width - item.Height), (int) item.Position.Y, item.Height, item.Height),
-                FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
+            Font.DrawText(null, s,
+                new Rectangle((int) (item.Position.X + item.Width - item.Height), (int) item.Position.Y, item.Height,
+                    item.Height), FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
         }
 
         internal static void DrawArrow(string s, Vector2 position, MenuItem item, Color color)
         {
             DrawBox(position, item.Height, item.Height, Color.Blue, 1, color);
-            Font.DrawText(
-                null, s, new Rectangle((int) (position.X), (int) item.Position.Y, item.Height, item.Height),
+            Font.DrawText(null, s, new Rectangle((int) (position.X), (int) item.Position.Y, item.Height, item.Height),
                 FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
         }
 
@@ -342,8 +357,8 @@ namespace LeagueSharp.Common
             bool drawText)
         {
             width = (width > 0 ? width : item.Width);
-            var percentage = 100 * (value - min) / (max - min);
-            var x = position.X + 3 + (percentage * (width - 3)) / 100;
+            var percentage = 100*(value - min)/(max - min);
+            var x = position.X + 3 + (percentage*(width - 3))/100;
             Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.Yellow);
 
             if (drawText)
@@ -367,7 +382,7 @@ namespace LeagueSharp.Common
         public List<MenuItem> Items = new List<MenuItem>();
         public string Name;
         public Menu Parent;
-        public static Dictionary<string, Menu> RootMenus = new Dictionary<string, Menu>(); 
+        public static Dictionary<string, Menu> RootMenus = new Dictionary<string, Menu>();
         private string uniqueId;
 
         public Menu(string displayName, string name, bool isRootMenu = false)
@@ -394,7 +409,8 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static MenuItem GetValueGlobally(string Assemblyname, string menuname, string itemname, string submenu = null)
+        public static MenuItem GetValueGlobally(string Assemblyname, string menuname, string itemname,
+            string submenu = null)
         {
 
             var menu = RootMenus.FirstOrDefault(x => x.Key == Assemblyname + "." + menuname).Value;
@@ -410,7 +426,7 @@ namespace LeagueSharp.Common
         }
 
         public static Menu GetMenu(string Assemblyname, string menuname)
-        { 
+        {
             Menu menu = RootMenus.FirstOrDefault(x => x.Key == Assemblyname + "." + menuname).Value;
             return menu;
         }
@@ -475,14 +491,14 @@ namespace LeagueSharp.Common
 
                 foreach (var item in globalMenuList)
                 {
-                    if(item == uniqueId)
+                    if (item == uniqueId)
                     {
                         result = i;
                         break;
                     }
                     i++;
                 }
-                
+
                 _cachedMenuCount = result;
                 _cachedMenuCountT = Utils.TickCount;
                 return result;
@@ -495,7 +511,7 @@ namespace LeagueSharp.Common
             {
                 if (IsRootMenu || Parent == null)
                 {
-                    return MenuSettings.BasePosition + MenuCount * new Vector2(0, MenuSettings.MenuItemHeight);
+                    return MenuSettings.BasePosition + MenuCount*new Vector2(0, MenuSettings.MenuItemHeight);
                 }
 
                 return Parent.MyBasePosition;
@@ -518,7 +534,7 @@ namespace LeagueSharp.Common
                 }
 
                 return new Vector2(0, MyBasePosition.Y) + new Vector2(xOffset, 0) +
-                       YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
+                       YLevel*new Vector2(0, MenuSettings.MenuItemHeight);
             }
         }
 
@@ -526,9 +542,9 @@ namespace LeagueSharp.Common
         {
             get
             {
-                var result = Children.Select(item => item.NeededWidth).Concat(new[] { 0 }).Max();
+                var result = Children.Select(item => item.NeededWidth).Concat(new[] {0}).Max();
 
-                return Items.Select(item => item.NeededWidth).Concat(new[] { result }).Max();
+                return Items.Select(item => item.NeededWidth).Concat(new[] {result}).Max();
             }
         }
 
@@ -539,10 +555,7 @@ namespace LeagueSharp.Common
 
         internal int NeededWidth
         {
-            get
-            {
-                return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width + 25;
-            }
+            get { return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width + 25; }
         }
 
         internal int Height
@@ -612,7 +625,7 @@ namespace LeagueSharp.Common
             {
                 if (cursorPos.X - MenuSettings.BasePosition.X < MenuSettings.MenuItemWidth)
                 {
-                    var n = (int) (cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
+                    var n = (int) (cursorPos.Y - MenuSettings.BasePosition.Y)/MenuSettings.MenuItemHeight;
                     if (MenuCount != n)
                     {
                         foreach (var schild in Children)
@@ -682,11 +695,10 @@ namespace LeagueSharp.Common
                     ? MenuSettings.ActiveBackgroundColor
                     : MenuSettings.BackgroundColor, 1, Color.Black);
 
-            MenuDrawHelper.Font.DrawText(
-                null, MultiLanguage._(DisplayName), new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
-                FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
-            MenuDrawHelper.Font.DrawText(
-                null, ">", new Rectangle((int) Position.X - 5, (int) Position.Y, Width, Height),
+            MenuDrawHelper.Font.DrawText(null, MultiLanguage._(DisplayName),
+                new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height), FontDrawFlags.VerticalCenter,
+                new ColorBGRA(255, 255, 255, 255));
+            MenuDrawHelper.Font.DrawText(null, ">", new Rectangle((int) Position.X - 5, (int) Position.Y, Width, Height),
                 FontDrawFlags.Right | FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
 
             //Draw the menu submenus
@@ -854,6 +866,12 @@ namespace LeagueSharp.Common
         }
     }
 
+    public enum TextFontStyle
+    {
+        Standard,
+        Bold
+    }
+
     public class MenuItem
     {
         private bool _dontSave;
@@ -867,17 +885,26 @@ namespace LeagueSharp.Common
         internal bool Interacting;
         public string Name;
         public Menu Parent;
+        public TextFontStyle TextFontStyle;
+        public ColorBGRA TextFontColor;
+        public int MenuFontSize;
         internal MenuValueType ValueType;
 
-        public MenuItem(string name, string displayName, bool makeChampionUniq = false)
+        public MenuItem(string name, string displayName, bool makeChampionUniq = false,
+            TextFontStyle textFontStyle = TextFontStyle.Standard, Color color = default(Color))
         {
             if (makeChampionUniq)
             {
                 name = ObjectManager.Player.ChampionName + name;
             }
+            var colorR = color == default(Color) ? 255 : color.R;
+            var colorG = color == default(Color) ? 255 : color.G;
+            var colorB = color == default(Color) ? 255 : color.B;
 
             Name = name;
             DisplayName = displayName;
+            TextFontStyle = textFontStyle;
+            TextFontColor = new ColorBGRA(colorR, colorG, colorB, 255);
             _configName = Assembly.GetCallingAssembly().GetName().Name +
                           Assembly.GetCallingAssembly().GetType().GUID;
         }
@@ -936,7 +963,7 @@ namespace LeagueSharp.Common
                 }
 
                 return new Vector2(0, MyBasePosition.Y) + new Vector2(xOffset, 0) +
-                       YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
+                       YLevel*new Vector2(0, MenuSettings.MenuItemHeight);
             }
         }
 
@@ -956,7 +983,7 @@ namespace LeagueSharp.Common
                     var slVal = GetValue<StringList>();
                     var max =
                         slVal.SList.Select(v => MenuDrawHelper.Font.MeasureText(v).Width + 25)
-                            .Concat(new[] { 0 })
+                            .Concat(new[] {0})
                             .Max();
 
                     extra += max;
@@ -971,7 +998,7 @@ namespace LeagueSharp.Common
                 }
 
                 return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width +
-                       Height * 2 + 10 + extra;
+                       Height*2 + 10 + extra;
             }
         }
 
@@ -1058,8 +1085,8 @@ namespace LeagueSharp.Common
                 {
                     switch (ValueType)
                     {
-                        case MenuValueType.KeyBind:               
-                            var savedKeyValue = (KeyBind)(object) Utils.Deserialize<T>(readBytes);
+                        case MenuValueType.KeyBind:
+                            var savedKeyValue = (KeyBind) (object) Utils.Deserialize<T>(readBytes);
                             if (savedKeyValue.Type == KeyBindType.Press)
                             {
                                 savedKeyValue.Active = false;
@@ -1068,14 +1095,14 @@ namespace LeagueSharp.Common
                             break;
 
                         case MenuValueType.Circle:
-                            var savedCircleValue = (Circle)(object) Utils.Deserialize<T>(readBytes);
+                            var savedCircleValue = (Circle) (object) Utils.Deserialize<T>(readBytes);
                             var newCircleValue = (Circle) (object) newValue;
                             savedCircleValue.Radius = newCircleValue.Radius;
                             newValue = (T) (object) savedCircleValue;
                             break;
 
                         case MenuValueType.Slider:
-                            var savedSliderValue = (Slider)(object) Utils.Deserialize<T>(readBytes);
+                            var savedSliderValue = (Slider) (object) Utils.Deserialize<T>(readBytes);
                             var newSliderValue = (Slider) (object) newValue;
                             if (savedSliderValue.MinValue == newSliderValue.MinValue &&
                                 savedSliderValue.MaxValue == newSliderValue.MaxValue)
@@ -1085,7 +1112,7 @@ namespace LeagueSharp.Common
                             break;
 
                         case MenuValueType.StringList:
-                            var savedListValue = (StringList)(object) Utils.Deserialize<T>(readBytes);
+                            var savedListValue = (StringList) (object) Utils.Deserialize<T>(readBytes);
                             var newListValue = (StringList) (object) newValue;
                             if (savedListValue.SList.SequenceEqual(newListValue.SList))
                             {
@@ -1191,7 +1218,7 @@ namespace LeagueSharp.Common
                         message == WindowsMessages.WM_LBUTTONDOWN && !Interacting && IsInside(cursorPos))
                     {
                         var val = GetValue<Slider>();
-                        var t = val.MinValue + ((cursorPos.X - Position.X) * (val.MaxValue - val.MinValue)) / Width;
+                        var t = val.MinValue + ((cursorPos.X - Position.X)*(val.MaxValue - val.MinValue))/Width;
                         val.Value = (int) t;
                         SetValue(val);
                     }
@@ -1255,7 +1282,7 @@ namespace LeagueSharp.Common
                         val.Active = !val.Active;
                         SetValue(val);
                     }
-                    else if (cursorPos.X - Position.X > Width - 2 * Height)
+                    else if (cursorPos.X - Position.X > Width - 2*Height)
                     {
                         var c = GetValue<Circle>();
                         ColorPicker.Load(
@@ -1363,7 +1390,7 @@ namespace LeagueSharp.Common
                             : (slVal.SelectedIndex + 1);
                         SetValue(slVal);
                     }
-                    else if (cursorPos.X > Position.X + Width - 2 * Height)
+                    else if (cursorPos.X > Position.X + Width - 2*Height)
                     {
                         slVal.SelectedIndex = slVal.SelectedIndex == 0
                             ? slVal.SList.Length - 1
@@ -1379,6 +1406,7 @@ namespace LeagueSharp.Common
         {
             MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
             var s = MultiLanguage._(DisplayName);
+
 
             switch (ValueType)
             {
@@ -1420,7 +1448,7 @@ namespace LeagueSharp.Common
                 case MenuValueType.Circle:
                     var circleVal = GetValue<Circle>();
                     MenuDrawHelper.DrawBox(
-                        Position + new Vector2(Width - Height * 2, 0), Height, Height, circleVal.Color, 1, Color.Black);
+                        Position + new Vector2(Width - Height*2, 0), Height, Height, circleVal.Color, 1, Color.Black);
                     MenuDrawHelper.DrawOnOff(
                         circleVal.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
                     break;
@@ -1430,19 +1458,28 @@ namespace LeagueSharp.Common
 
                     var t = slVal.SList[slVal.SelectedIndex];
 
-                    MenuDrawHelper.DrawArrow("<", Position + new Vector2(Width - Height * 2, 0), this, Color.Black);
+                    MenuDrawHelper.DrawArrow("<", Position + new Vector2(Width - Height*2, 0), this, Color.Black);
                     MenuDrawHelper.DrawArrow(">", Position + new Vector2(Width - Height, 0), this, Color.Black);
 
                     MenuDrawHelper.Font.DrawText(
                         null, MultiLanguage._(t),
-                        new Rectangle((int) Position.X - 5 - 2 * Height, (int) Position.Y, Width, Height),
+                        new Rectangle((int) Position.X - 5 - 2*Height, (int) Position.Y, Width, Height),
                         FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
                     break;
             }
 
-            MenuDrawHelper.Font.DrawText(
-                null, s, new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
-                FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
+            Font font;
+            switch (TextFontStyle)
+            {
+                case TextFontStyle.Bold:
+                    font = MenuDrawHelper.FontBold;
+                    break;
+                default:
+                    font = MenuDrawHelper.Font;
+                    break;
+            }
+            font.DrawText(null, s, new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
+                FontDrawFlags.VerticalCenter, TextFontColor);
         }
     }
 
@@ -1489,8 +1526,8 @@ namespace LeagueSharp.Common
                 (Render.Rectangle)
                     new Render.Rectangle(X + 375, Y + 44, 54, 80, new ColorBGRA(255, 255, 255, 255)).Add(0);
 
-            LuminositySlider = new CPSlider(285 - Resources.CPActiveSlider.Width / 3, 35, 248);
-            AlphaSlider = new CPSlider(350 - Resources.CPActiveSlider.Width / 3, 35, 248);
+            LuminositySlider = new CPSlider(285 - Resources.CPActiveSlider.Width/3, 35, 248);
+            AlphaSlider = new CPSlider(350 - Resources.CPActiveSlider.Width/3, 35, 248);
 
             Game.OnWndProc += Game_OnWndProc;
         }
@@ -1569,10 +1606,10 @@ namespace LeagueSharp.Common
             SHue = ((HSLColor) color).Hue;
             SSaturation = ((HSLColor) color).Saturation;
 
-            LuminositySlider.Percent = (float) SColor.Luminosity / 100f;
-            AlphaSlider.Percent = color.A / 255f;
-            X = (Drawing.Width - BackgroundSprite.Width) / 2;
-            Y = (Drawing.Height - BackgroundSprite.Height) / 2;
+            LuminositySlider.Percent = (float) SColor.Luminosity/100f;
+            AlphaSlider.Percent = color.A/255f;
+            X = (Drawing.Width - BackgroundSprite.Width)/2;
+            Y = (Drawing.Height - BackgroundSprite.Height)/2;
 
             Visible = true;
             UpdateLuminosityBitmap(color);
@@ -1673,7 +1710,7 @@ namespace LeagueSharp.Common
                     LuminityBitmap.SetPixel(x, y, color);
                 }
 
-                color.Luminosity += 100d / LuminityBitmap.Height;
+                color.Luminosity += 100d/LuminityBitmap.Height;
             }
 
             if (LuminitySprite != null)
@@ -1698,7 +1735,7 @@ namespace LeagueSharp.Common
                     OpacityBitmap.SetPixel(x, y, color);
                 }
 
-                color.Luminosity += 40d / LuminityBitmap.Height;
+                color.Luminosity += 40d/LuminityBitmap.Height;
             }
 
             if (OpacitySprite != null)
@@ -1720,8 +1757,8 @@ namespace LeagueSharp.Common
 
             SColor.Hue = SHue;
             SColor.Saturation = SSaturation;
-            SColor.Luminosity = (LuminositySlider.Percent * 100d);
-            var r = Color.FromArgb(((int) (AlphaSlider.Percent * 255)), SColor);
+            SColor.Luminosity = (LuminositySlider.Percent*100d);
+            var r = Color.FromArgb(((int) (AlphaSlider.Percent*255)), SColor);
             PreviewRectangle.Color = new ColorBGRA(r.R, r.G, r.B, r.A);
             UpdateOpacityBitmap(r);
             FireOnChangeColor(r);
@@ -1788,8 +1825,8 @@ namespace LeagueSharp.Common
                 {
                     ActiveSprite.Y = sY;
                     InactiveSprite.Y = sY;
-                    ActiveSprite.Y = sY + (int) (Percent * Height);
-                    InactiveSprite.Y = sY + (int) (Percent * Height);
+                    ActiveSprite.Y = sY + (int) (Percent*Height);
+                    InactiveSprite.Y = sY + (int) (Percent*Height);
                 }
                 get { return _y + Y; }
             }
@@ -1812,10 +1849,10 @@ namespace LeagueSharp.Common
             private void UpdatePercent()
             {
                 var pos = Utils.GetCursorPos();
-                Percent = (pos.Y - Resources.CPActiveSlider.Height / 2 - sY) / Height;
+                Percent = (pos.Y - Resources.CPActiveSlider.Height/2 - sY)/Height;
                 UpdateColor();
-                ActiveSprite.Y = sY + (int) (Percent * Height);
-                InactiveSprite.Y = sY + (int) (Percent * Height);
+                ActiveSprite.Y = sY + (int) (Percent*Height);
+                InactiveSprite.Y = sY + (int) (Percent*Height);
             }
 
             public void OnWndProc(WndEventArgs args)
@@ -1856,7 +1893,10 @@ namespace LeagueSharp.Common
             private double hue = 1.0;
             private double luminosity = 1.0;
             private double saturation = 1.0;
-            public HSLColor() {}
+
+            public HSLColor()
+            {
+            }
 
             public HSLColor(Color color)
             {
@@ -1877,20 +1917,20 @@ namespace LeagueSharp.Common
 
             public double Hue
             {
-                get { return hue * scale; }
-                set { hue = CheckRange(value / scale); }
+                get { return hue*scale; }
+                set { hue = CheckRange(value/scale); }
             }
 
             public double Saturation
             {
-                get { return saturation * scale; }
-                set { saturation = CheckRange(value / scale); }
+                get { return saturation*scale; }
+                set { saturation = CheckRange(value/scale); }
             }
 
             public double Luminosity
             {
-                get { return luminosity * scale; }
-                set { luminosity = CheckRange(value / scale); }
+                get { return luminosity*scale; }
+                set { luminosity = CheckRange(value/scale); }
             }
 
             private double CheckRange(double value)
@@ -1939,30 +1979,30 @@ namespace LeagueSharp.Common
                     else
                     {
                         var temp2 = GetTemp2(hslColor);
-                        var temp1 = 2.0 * hslColor.luminosity - temp2;
+                        var temp1 = 2.0*hslColor.luminosity - temp2;
 
-                        r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0 / 3.0);
+                        r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0/3.0);
                         g = GetColorComponent(temp1, temp2, hslColor.hue);
-                        b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
+                        b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0/3.0);
                     }
                 }
-                return Color.FromArgb((int) (255 * r), (int) (255 * g), (int) (255 * b));
+                return Color.FromArgb((int) (255*r), (int) (255*g), (int) (255*b));
             }
 
             private static double GetColorComponent(double temp1, double temp2, double temp3)
             {
                 temp3 = MoveIntoRange(temp3);
-                if (temp3 < 1.0 / 6.0)
+                if (temp3 < 1.0/6.0)
                 {
-                    return temp1 + (temp2 - temp1) * 6.0 * temp3;
+                    return temp1 + (temp2 - temp1)*6.0*temp3;
                 }
                 if (temp3 < 0.5)
                 {
                     return temp2;
                 }
-                if (temp3 < 2.0 / 3.0)
+                if (temp3 < 2.0/3.0)
                 {
-                    return temp1 + ((temp2 - temp1) * ((2.0 / 3.0) - temp3) * 6.0);
+                    return temp1 + ((temp2 - temp1)*((2.0/3.0) - temp3)*6.0);
                 }
                 return temp1;
             }
@@ -1985,11 +2025,11 @@ namespace LeagueSharp.Common
                 double temp2;
                 if (hslColor.luminosity < 0.5) //<=??
                 {
-                    temp2 = hslColor.luminosity * (1.0 + hslColor.saturation);
+                    temp2 = hslColor.luminosity*(1.0 + hslColor.saturation);
                 }
                 else
                 {
-                    temp2 = hslColor.luminosity + hslColor.saturation - (hslColor.luminosity * hslColor.saturation);
+                    temp2 = hslColor.luminosity + hslColor.saturation - (hslColor.luminosity*hslColor.saturation);
                 }
                 return temp2;
             }
@@ -1998,7 +2038,7 @@ namespace LeagueSharp.Common
             {
                 var hslColor = new HSLColor
                 {
-                    hue = color.GetHue() / 360.0,
+                    hue = color.GetHue()/360.0,
                     luminosity = color.GetBrightness(),
                     saturation = color.GetSaturation()
                 };
