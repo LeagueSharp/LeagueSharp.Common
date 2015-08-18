@@ -886,25 +886,20 @@ namespace LeagueSharp.Common
         public string Name;
         public Menu Parent;
         public TextFontStyle TextFontStyle;
-        public ColorBGRA TextFontColor;
         public int MenuFontSize;
         internal MenuValueType ValueType;
 
         public MenuItem(string name, string displayName, bool makeChampionUniq = false,
-            TextFontStyle textFontStyle = TextFontStyle.Standard, Color color = default(Color))
+            TextFontStyle textFontStyle = TextFontStyle.Standard)
         {
             if (makeChampionUniq)
             {
                 name = ObjectManager.Player.ChampionName + name;
             }
-            var colorR = color == default(Color) ? 255 : color.R;
-            var colorG = color == default(Color) ? 255 : color.G;
-            var colorB = color == default(Color) ? 255 : color.B;
 
             Name = name;
             DisplayName = displayName;
             TextFontStyle = textFontStyle;
-            TextFontColor = new ColorBGRA(colorR, colorG, colorB, 255);
             _configName = Assembly.GetCallingAssembly().GetName().Name +
                           Assembly.GetCallingAssembly().GetType().GUID;
         }
@@ -1478,8 +1473,14 @@ namespace LeagueSharp.Common
                     font = MenuDrawHelper.Font;
                     break;
             }
-            font.DrawText(null, s, new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
-                FontDrawFlags.VerticalCenter, TextFontColor);
+            font.DrawText(
+                null,
+                s,
+                new Rectangle((int)Position.X + 5, (int)Position.Y, Width, Height),
+                FontDrawFlags.VerticalCenter,
+                TextFontStyle == TextFontStyle.Bold
+                    ? new ColorBGRA(255, 255, 0, 255)
+                    : new ColorBGRA(255, 255, 255, 255));
         }
     }
 
