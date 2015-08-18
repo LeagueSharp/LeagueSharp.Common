@@ -57,7 +57,8 @@ namespace LeagueSharp.Common
         Minions,
         Heroes,
         YasuoWall,
-        Walls
+        Walls,
+        Allies
     }
 
     public class PredictionInput
@@ -910,6 +911,26 @@ namespace LeagueSharp.Common
                                 }
                             }
                             break;
+                            
+                        case CollisionableObjects.Allies:
+                            foreach (var hero in
+                                HeroManager.Allies.FindAll(
+                                    hero =>
+                                       Vector3.Distance(ObjectManager.Player.ServerPosition, hero.ServerPosition) <= Math.Min(input.Range + input.Radius + 100, 2000))
+                                )
+                            {
+                                input.Unit = hero;
+                                var prediction = Prediction.GetPrediction(input, false, false);
+                                if (
+                                    prediction.UnitPosition.To2D()
+                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                {
+                                    result.Add(hero);
+                                }
+                            }
+                            break;
+                            
 
                         case CollisionableObjects.Walls:
                             var step = position.Distance(input.From) / 20;

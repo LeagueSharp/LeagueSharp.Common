@@ -125,6 +125,12 @@ namespace LeagueSharp.Common
                 return;
             }
 
+            if (!placetosave.Item("enablepermashow").GetValue<bool>())
+            {
+                Unsub();
+                return;
+            }
+
             PermaArea();
 
             var halfwidth = 0.9f * (PermaShowWidth / 2);
@@ -323,7 +329,7 @@ namespace LeagueSharp.Common
         private static void CreateMenu()
         {
             placetosave = new Menu("PermaShow", "Permashow");
-            MenuItem enablepermashow = new MenuItem("disablepermashow", "Enable PermaShow").SetValue(true);
+            MenuItem enablepermashow = new MenuItem("enablepermashow", "Enable PermaShow").SetValue(true);
             placetosave.AddItem(enablepermashow);
             var xvalue = new MenuItem("X", "X").SetValue(new Slider((int)DefaultPosition.X, 0, Drawing.Width));
             var yvalue = new MenuItem("Y", "Y").SetValue(new Slider((int)DefaultPosition.Y, 0, Drawing.Height));
