@@ -216,7 +216,7 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static void Initiate()
+        public static void Initialize()
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
