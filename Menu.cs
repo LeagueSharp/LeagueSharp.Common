@@ -768,7 +768,7 @@ namespace LeagueSharp.Common
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
                     new StringList(new[] { "Tahoma", "Segoe UI", "Calibri" }, 0)));
-            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(14, 13, 20)));
+            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 13, 20)));
             root.AddItem(new MenuItem("FontInfo", "Press F5 after your change", false, MenuItemFontStyle.Standard, 
                 MenuItemFontColor.Yellow));
 
