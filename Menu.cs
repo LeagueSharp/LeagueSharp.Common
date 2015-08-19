@@ -24,14 +24,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using System.Security.RightsManagement;
 using LeagueSharp.Common.Properties;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -49,6 +45,7 @@ namespace LeagueSharp.Common
 
         static CommonMenu()
         {
+            FakeClicks.Initiate();
             Config.AddToMainMenu();
         }
     }
@@ -385,7 +382,7 @@ namespace LeagueSharp.Common
         public Menu Parent;
         public static Dictionary<string, Menu> RootMenus = new Dictionary<string, Menu>();
         private string uniqueId;
-        public static readonly Menu root = new Menu("Menu", "Menu Settings");
+        public static readonly Menu root = new Menu("Menu Settings", "Menu Settings");
 
         public Menu(string displayName, string name, bool isRootMenu = false)
         {
@@ -754,25 +751,25 @@ namespace LeagueSharp.Common
 
         public void AddToMainMenu()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
             InitMenuState(Assembly.GetCallingAssembly().GetName().Name);
             AppDomain.CurrentDomain.DomainUnload += (sender, args) => UnloadMenuState();
             Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static Menu()
         {
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
                     new StringList(new[] { "Tahoma", "Segoe UI", "Calibri" }, 0)));
             root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 13, 20)));
-            var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
+            var qualities =
+                Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
+            root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
-                new MenuItem("FontQuality", "Font Quality").SetValue(
-                    new StringList(qualities, 4)));
-            root.AddItem(new MenuItem("FontInfo", "Press F5 after your change", false, MenuItemFontStyle.Standard, 
-                MenuItemFontColor.Yellow));
+                new MenuItem(
+                    "FontInfo", "Press F5 after your change", false, MenuItemFontStyle.Standard,
+                    MenuItemFontColor.Yellow));
             CommonMenu.Config.AddSubMenu(root);
         }
 
