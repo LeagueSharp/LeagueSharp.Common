@@ -32,6 +32,11 @@
                         LeagueSharp.Hacks.ZoomHack = args.GetNewValue<bool>();
                     };
 
+                menu.AddItem(
+                    new MenuItem(
+                        "ZoomHackInfo", "Note: ZoomHack may be unsafe!", false, MenuItemFontStyle.Standard,
+                        MenuItemFontColor.Red));
+
                 var tower = menu.AddItem(new MenuItem("TowerHack", "Show Tower Ranges").SetValue(false));
                 tower.SetValue(LeagueSharp.Hacks.TowerRanges);
                 tower.ValueChanged +=
