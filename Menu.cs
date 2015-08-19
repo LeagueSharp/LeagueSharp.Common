@@ -45,6 +45,7 @@ namespace LeagueSharp.Common
 
         static CommonMenu()
         {
+            Hacks.Initialize();
             FakeClicks.Initialize();
             Config.AddToMainMenu();
         }

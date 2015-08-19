@@ -112,6 +112,7 @@
     <Compile Include="Data\MasteryData.cs" />
     <Compile Include="FakeClicks.cs" />
     <Compile Include="GamePacket.cs" />
+    <Compile Include="Hacks.cs" />
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="HeroManager.cs" />
     <Compile Include="Interrupter.cs" />
