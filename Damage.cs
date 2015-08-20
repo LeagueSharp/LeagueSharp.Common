@@ -1114,8 +1114,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.7 * source.FlatPhysicalDamageMod
+                                    new[] { 20, 40, 60, 80, 100 }[level]
+                                    + new double[] { 1.0, 1.1, 1.2, 1.3, 1.4 }[level]
+                                    * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * 0.5
                             },
                         //Q - Blade
                         new DamageSpell
@@ -1123,8 +1124,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new[] { 105, 157.5, 210, 262.5, 315 }[level]
-                                    + 1.05 * source.FlatPhysicalDamageMod
+                                    new[] { 20, 40, 60, 80, 100 }[level]
+                                    + new double[] { 1.0, 1.1, 1.2, 1.3, 1.4 }[level]
+                                    * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //W
                         new DamageSpell
@@ -1132,8 +1134,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 20, 40, 60, 80, 100 }[level] / 100
-                                    * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    1.4 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //R 
                         new DamageSpell
