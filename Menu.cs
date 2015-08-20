@@ -389,7 +389,7 @@ namespace LeagueSharp.Common
         private int _cachedMenuCountT;
         private bool _visible;
         public List<Menu> Children = new List<Menu>();
-        public Color Color;
+        public SharpDX.Color Color;
         public string DisplayName;
         public bool IsRootMenu;
         public List<MenuItem> Items = new List<MenuItem>();
@@ -415,13 +415,13 @@ namespace LeagueSharp.Common
             string name,
             bool isRootMenu = false,
             FontStyle style = FontStyle.Regular,
-            Color? color = null)
+            SharpDX.Color? color = null)
         {
             DisplayName = displayName;
             Name = name;
             IsRootMenu = isRootMenu;
             Style = style;
-            Color = color ?? Color.White;
+            Color = color ?? SharpDX.Color.White;
 
             if (isRootMenu)
             {
@@ -726,7 +726,7 @@ namespace LeagueSharp.Common
                 Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
                     ? MenuSettings.ActiveBackgroundColor
-                    : MenuSettings.BackgroundColor, 1, Color.Black);
+                    : MenuSettings.BackgroundColor, 1, System.Drawing.Color.Black);
 
             MenuDrawHelper.Font.DrawText(
                 null, MultiLanguage._(DisplayName), new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
