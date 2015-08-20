@@ -730,10 +730,10 @@ namespace LeagueSharp.Common
 
             MenuDrawHelper.Font.DrawText(
                 null, MultiLanguage._(DisplayName), new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
-                FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
+                FontDrawFlags.VerticalCenter, Color);
             MenuDrawHelper.Font.DrawText(
                 null, ">", new Rectangle((int) Position.X - 5, (int) Position.Y, Width, Height),
-                FontDrawFlags.Right | FontDrawFlags.VerticalCenter, new ColorBGRA(255, 255, 255, 255));
+                FontDrawFlags.Right | FontDrawFlags.VerticalCenter, Color);
 
             //Draw the menu submenus
             foreach (var child in Children.Where(child => child.Visible))
