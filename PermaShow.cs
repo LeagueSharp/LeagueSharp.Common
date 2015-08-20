@@ -335,7 +335,7 @@ namespace LeagueSharp.Common
             var yvalue = new MenuItem("Y", "Y").SetValue(new Slider((int)DefaultPosition.Y, 0, Drawing.Height));
             placetosave.AddItem(xvalue);
             placetosave.AddItem(yvalue);
-            CommonMenu.Config.AddSubMenu(placetosave);
+            CommonMenu.Config.SubMenu("Menu Settings").AddSubMenu(placetosave);
 
             enablepermashow.ValueChanged += (sender, args) =>
             {
