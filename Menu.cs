@@ -1491,7 +1491,7 @@ namespace LeagueSharp.Common
             Font font;
             switch (FontStyle)
             {
-                case FontStyle.Regular:
+                case FontStyle.Bold:
                     font = MenuDrawHelper.FontBold;
                     break;
                 default:
