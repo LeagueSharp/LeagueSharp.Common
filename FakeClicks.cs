@@ -223,7 +223,7 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameLoad(EventArgs args)
         {
-            root.AddItem(new MenuItem("Enable", "Enable").SetValue(true));
+            root.AddItem(new MenuItem("Enable", "Enable").SetValue(false));
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))
                 .SetValue(new StringList(new[] { "Evade, No Cursor Position", "Cursor Position, No Evade" }));
 
