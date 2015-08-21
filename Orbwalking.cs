@@ -357,7 +357,12 @@ namespace LeagueSharp.Common
                             LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             _missileLaunched = false;
                         }
-                        Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+
+                        if (!Player.IssueOrder(GameObjectOrder.AttackUnit, target))
+                        {
+                            ResetAutoAttackTimer();
+                        }
+
                         _lastTarget = target;
                         return;
                     }

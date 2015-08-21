@@ -408,21 +408,19 @@ namespace LeagueSharp.Common
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
-                new MenuItem("FontInfo", "Press F5 after your change", false, FontStyle.Regular, SharpDX.Color.Yellow));
+                new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(FontStyle.Bold, SharpDX.Color.Yellow));
             CommonMenu.Config.AddSubMenu(root);
         }
 
         public Menu(string displayName,
             string name,
-            bool isRootMenu = false,
-            FontStyle style = FontStyle.Regular,
-            SharpDX.Color? color = null)
+            bool isRootMenu = false)
         {
             DisplayName = displayName;
             Name = name;
             IsRootMenu = isRootMenu;
-            Style = style;
-            Color = color ?? SharpDX.Color.White;
+            Style = FontStyle.Regular;
+            Color = SharpDX.Color.White;
 
             if (isRootMenu)
             {
@@ -440,6 +438,14 @@ namespace LeagueSharp.Common
 
                 RootMenus.Add(rootName, this);
             }
+        }
+
+        public Menu SetFontStyle(FontStyle fontStyle = FontStyle.Regular, SharpDX.Color? fontColor = null)
+        {
+            Style = fontStyle;
+            Color = fontColor ?? SharpDX.Color.White;
+
+            return this;
         }
 
         internal int XLevel
@@ -919,9 +925,7 @@ namespace LeagueSharp.Common
 
         public MenuItem(string name,
             string displayName,
-            bool makeChampionUniq = false,
-            FontStyle fontStyle = FontStyle.Regular,
-            SharpDX.Color? fontColor = null)
+            bool makeChampionUniq = false)
         {
             if (makeChampionUniq)
             {
@@ -930,9 +934,17 @@ namespace LeagueSharp.Common
 
             Name = name;
             DisplayName = displayName;
+            FontStyle = FontStyle.Regular;
+            FontColor = SharpDX.Color.White;
+            _configName = Assembly.GetCallingAssembly().GetName().Name + Assembly.GetCallingAssembly().GetType().GUID;
+        }
+
+        public MenuItem SetFontStyle(FontStyle fontStyle = FontStyle.Regular, SharpDX.Color? fontColor = null)
+        {
             FontStyle = fontStyle;
             FontColor = fontColor ?? SharpDX.Color.White;
-            _configName = Assembly.GetCallingAssembly().GetName().Name + Assembly.GetCallingAssembly().GetType().GUID;
+
+            return this;
         }
 
         internal string SaveFileName
@@ -1492,14 +1504,14 @@ namespace LeagueSharp.Common
             Font font;
             switch (FontStyle)
             {
-                case FontStyle.Regular:
+                case FontStyle.Bold:
                     font = MenuDrawHelper.FontBold;
                     break;
                 default:
                     font = MenuDrawHelper.Font;
                     break;
             }
-            Console.WriteLine(FontColor.ToString());
+
             font.DrawText(
                 null, s, new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
                 FontDrawFlags.VerticalCenter, FontColor);

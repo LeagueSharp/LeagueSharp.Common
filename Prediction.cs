@@ -431,6 +431,17 @@ namespace LeagueSharp.Common
             {
                 //input.Delay /= 2;
                 speed /= 1.5f;
+
+                if (input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone)
+                {
+                    return new PredictionOutput
+                    {
+                        Input = input,
+                        CastPosition = input.Unit.ServerPosition,
+                        UnitPosition = input.Unit.ServerPosition,
+                        Hitchance = HitChance.VeryHigh
+                    };
+                }
             }
 
             var result = GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
