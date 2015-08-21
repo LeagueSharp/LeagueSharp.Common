@@ -32,6 +32,8 @@ using SharpDX;
 
 namespace LeagueSharp.Common
 {
+
+
     public enum HitChance
     {
         Immobile = 8,
@@ -208,7 +210,18 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Prediction
     {
-        public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay)
+        internal static void Initialize()
+        {
+            CustomEvents.Game.OnGameLoad += eventArgs =>
+            {
+                var menu = new Menu("Prediction", "Prediction");
+                var slider = new MenuItem("PredMaxRange", "Max Range %").SetValue(new Slider(100, 70, 100));
+                menu.AddItem(slider);
+                CommonMenu.Config.AddSubMenu(menu);
+            };
+        }
+
+    public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay)
         {
             return GetPrediction(new PredictionInput { Unit = unit, Delay = delay });
         }
@@ -285,6 +298,10 @@ namespace LeagueSharp.Common
                 if (remainingImmobileT >= 0d)
                 {
                     result = GetImmobilePrediction(input, remainingImmobileT);
+                }
+                else
+                {
+                    input.Range = input.Range * CommonMenu.Config.Item("PredMaxRange").GetValue<Slider>().Value / 100f;
                 }
             }
 
