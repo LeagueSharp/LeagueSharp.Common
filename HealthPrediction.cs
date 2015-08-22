@@ -137,7 +137,7 @@ namespace LeagueSharp.Common
                         {
                             n++;
                         }
-                        fromT += (int) attack.AnimationTime;
+                        fromT += (int)attack.AnimationTime;
                     }
                 }
                 predictedDamage += n * attack.Damage;
