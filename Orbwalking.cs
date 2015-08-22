@@ -657,7 +657,7 @@ namespace LeagueSharp.Common
                                     minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     minion.Health <
                                     2 *
-                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod));
+                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)).OrderByDescending(minion => minion.MaxHealth);
 
                     foreach (var minion in MinionList)
                     {
