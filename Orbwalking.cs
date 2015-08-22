@@ -35,6 +35,58 @@ namespace LeagueSharp.Common
     using SharpDX.Direct3D9;
 
     /// <summary>
+    /// This is a copy paste from HealthPrediction.cs 
+    /// </summary>
+    public static class MinionAggro
+    {
+        public static void Game_OnGameUpdate(EventArgs args)
+        {
+            ActiveAttacks.ToList()
+                .Where(pair => pair.Value.StartTick < Utils.GameTimeTickCount - 3000)
+                .ToList()
+                .ForEach(pair => ActiveAttacks.Remove(pair.Key));
+        }
+        public class PredictedDamage
+        {
+            public readonly float AnimationTime;
+
+            public readonly float Damage;
+            public readonly float Delay;
+            public readonly int ProjectileSpeed;
+            public readonly Obj_AI_Base Source;
+            public readonly int StartTick;
+            public readonly Obj_AI_Base Target;
+
+            public PredictedDamage(Obj_AI_Base source,
+                Obj_AI_Base target,
+                int startTick,
+                float delay,
+                float animationTime,
+                int projectileSpeed,
+                float damage)
+            {
+                Source = source;
+                Target = target;
+                StartTick = startTick;
+                Delay = delay;
+                ProjectileSpeed = projectileSpeed;
+                Damage = damage;
+                AnimationTime = animationTime;
+            }
+        }
+
+        public static readonly Dictionary<int, PredictedDamage> activeAttacks = new Dictionary<int, PredictedDamage>();
+
+        public static Dictionary<int, PredictedDamage> ActiveAttacks
+        {
+            get
+            {
+                return activeAttacks;
+            }
+        }
+    }
+
+    /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
     /// </summary>
     public static class Orbwalking
@@ -652,12 +704,15 @@ namespace LeagueSharp.Common
                 {
                     var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                    minion.Health <
-                                    2 *
-                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)).OrderByDescending(minion => minion.MaxHealth);
+                        .Where(
+                            minion =>
+                            minion.IsValidTarget()
+                            && InAutoAttackRange(minion)
+                            && minion.Health < 2 * (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod)
+                        )
+                        .OrderBy(cannonMinion => cannonMinion.CharData.BaseSkinName.Contains("Siege"))
+                        .OrderBy(minionAggro => MinionAggro.ActiveAttacks.Count())
+                        .OrderByDescending(minionHealth => minionHealth.Health);
 
                     foreach (var minion in MinionList)
                     {
