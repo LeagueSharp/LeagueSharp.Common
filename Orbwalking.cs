@@ -33,6 +33,7 @@ using Color = System.Drawing.Color;
 namespace LeagueSharp.Common
 {
     using SharpDX.Direct3D9;
+    using LeagueSharp.Common;
 
     /// <summary>
     /// This is a copy paste from HealthPrediction.cs 
