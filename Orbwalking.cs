@@ -669,7 +669,7 @@ namespace LeagueSharp.Common
                                 1000 * (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true, true))
+                        if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                         {
                             if (predHealth <= 0)
                             {

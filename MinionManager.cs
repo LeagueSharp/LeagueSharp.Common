@@ -108,10 +108,10 @@ namespace LeagueSharp.Common
             return GetMinions(ObjectManager.Player.ServerPosition, range, type, team, order);
         }
 
-        public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false, bool includePets = false)
+        public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
         {
             var name = minion.BaseSkinName.ToLower();
-            return name.Contains("minion") || name.Contains("bilge") || name.Contains("bw_") || (includeWards && (name.Contains("ward") || name.Contains("trinket"))) || (includePets && (name.Contains("h-28g") || name.Contains("voidling") || name.Contains("robotbuddy") || name.Contains("jack") || name.Contains("seed")));
+            return name.Contains("minion") || name.Contains("bilge") || name.Contains("bw_") || (includeWards && (name.Contains("ward") || name.Contains("trinket")));
         }
 
         /// <summary>
