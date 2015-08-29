@@ -921,6 +921,8 @@ namespace LeagueSharp.Common
         public int MenuFontSize;
         public string Name;
         public Menu Parent;
+        public bool ShowItem;
+        public int Tag;
         internal MenuValueType ValueType;
 
         public MenuItem(string name,
@@ -936,6 +938,8 @@ namespace LeagueSharp.Common
             DisplayName = displayName;
             FontStyle = FontStyle.Regular;
             FontColor = SharpDX.Color.White;
+            ShowItem = true;
+            Tag = 0;
             _configName = Assembly.GetCallingAssembly().GetName().Name + Assembly.GetCallingAssembly().GetType().GUID;
         }
 
@@ -943,6 +947,20 @@ namespace LeagueSharp.Common
         {
             FontStyle = fontStyle;
             FontColor = fontColor ?? SharpDX.Color.White;
+
+            return this;
+        }
+        
+        public MenuItem Show(bool showItem = true)
+        {
+            this.ShowItem = showItem;
+
+            return this;
+        }
+        
+        public MenuItem SetTag(int tag = 0)
+        {
+            this.Tag = tag;
 
             return this;
         }
@@ -959,7 +977,7 @@ namespace LeagueSharp.Common
 
         internal bool Visible
         {
-            get { return MenuSettings.DrawMenu && _visible; }
+            get { return MenuSettings.DrawMenu && _visible && ShowItem; }
             set { _visible = value; }
         }
 
@@ -972,7 +990,8 @@ namespace LeagueSharp.Common
                     return 0;
                 }
 
-                return Parent.YLevel + Parent.Children.Count + Parent.Items.TakeWhile(test => test.Name != Name).Count();
+                return Parent.YLevel + Parent.Children.Count + 
+                       Parent.Items.TakeWhile(test => test.Name != Name).Count(c => c.ShowItem);
             }
         }
 
