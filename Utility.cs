@@ -477,7 +477,7 @@ namespace LeagueSharp.Common
         public static int CountAlliesInRange(this Vector3 point, float range)
         {
             return HeroManager.Allies
-                .Count(x => x.IsValidTarget(range, false, point));
+                .Count(x => !x.IsMe && x.IsValidTarget(range, false, point));
         }
 
         public static List<Obj_AI_Hero> GetAlliesInRange(this Obj_AI_Base unit, float range)
@@ -489,7 +489,7 @@ namespace LeagueSharp.Common
         {
             return
                 HeroManager.Allies
-                    .FindAll(x => point.Distance(x.ServerPosition, true) <= range * range);
+                    .FindAll(x => !x.IsMe && point.Distance(x.ServerPosition, true) <= range * range);
         }
 
         public static List<Obj_AI_Hero> GetEnemiesInRange(this Obj_AI_Base unit, float range)
