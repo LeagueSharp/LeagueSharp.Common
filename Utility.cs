@@ -468,28 +468,39 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountAlliesInRange(this Obj_AI_Base unit, float range)
         {
-            return unit.ServerPosition.CountAlliesInRange(range);
+            return unit.ServerPosition.CountAlliesInRange(range, unit);
         }
 
         /// <summary>
-        ///     Counts the allies in the range of the Point.
+        ///     Counts the allies in the range of the Point. 
         /// </summary>
-        public static int CountAlliesInRange(this Vector3 point, float range)
+        public static int CountAlliesInRange(this Vector3 point, float range, Obj_AI_Base originalunit = null)
         {
-            return HeroManager.Allies
-                .Count(x => !x.IsMe && x.IsValidTarget(range, false, point));
+            if (originalunit != null)
+            {
+                return HeroManager.Allies
+                    .Count(x => x.NetworkId != originalunit.NetworkId && x.IsValidTarget(range, false, point));
+            }
+                return HeroManager.Allies
+                 .Count(x => x.IsValidTarget(range, false, point));
         }
 
         public static List<Obj_AI_Hero> GetAlliesInRange(this Obj_AI_Base unit, float range)
         {
-            return GetAlliesInRange(unit.ServerPosition, range);
+            return GetAlliesInRange(unit.ServerPosition, range, unit);
         }
 
-        public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range)
+        public static List<Obj_AI_Hero> GetAlliesInRange(this Vector3 point, float range, Obj_AI_Base originalunit = null)
         {
+            if (originalunit != null)
+            {
+                return
+                    HeroManager.Allies
+                        .FindAll(x => x.NetworkId != originalunit.NetworkId && point.Distance(x.ServerPosition, true) <= range*range);
+            }
             return
-                HeroManager.Allies
-                    .FindAll(x => !x.IsMe && point.Distance(x.ServerPosition, true) <= range * range);
+                   HeroManager.Allies
+                       .FindAll(x => point.Distance(x.ServerPosition, true) <= range * range);
         }
 
         public static List<Obj_AI_Hero> GetEnemiesInRange(this Obj_AI_Base unit, float range)
