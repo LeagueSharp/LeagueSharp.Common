@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2015 LeagueSharp
@@ -1762,11 +1762,11 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
-        #region Zeke's Harbinger
+        #region Zeke's Herald
 
-        public static Item Zekes_Harbinger = new Item
+        public static Item Zekes_Herald = new Item
         {
-            Name = "Zeke's Harbinger",
+            Name = "Zeke's Herald",
             GoldBase = 480,
             GoldPrice = 2300,
             GoldSell = 1610,
