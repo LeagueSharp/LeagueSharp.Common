@@ -1482,7 +1482,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 25, 40, 55, 70 }[level]
-                                    + 0.3 * source.FlatMagicDamageMod
+                                    + 0.35 * source.FlatMagicDamageMod
                             },
                         //W - Per attack
                         new DamageSpell
@@ -1491,7 +1491,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 20, 30, 40, 50 }[level]
-                                    + 0.25 * source.FlatMagicDamageMod
+                                    + 0.3 * source.FlatMagicDamageMod
                             },
                         //E
                         new DamageSpell
@@ -1696,7 +1696,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 50, 80, 110, 140 }[level]
-                                    + new double[] { 8, 9, 10, 11, 12 }[level] / 100 * target.MaxHealth
+                                    + 8 / 100 * target.MaxHealth
                                     + 0.3 * source.FlatMagicDamageMod
                             },
                         //E
