@@ -86,6 +86,12 @@ namespace LeagueSharp.Common
             "xenzhaothrust3", "viktorqbuff"
         };
 
+        // Wards
+        private static readonly string[] Wards = 
+        {
+            "sightward", "visionward"
+        };
+
         // Champs whose auto attacks can't be cancelled
         private static readonly string[] NoCancelChamps = { "Kalista" };
         public static int LastAATick;
@@ -192,6 +198,16 @@ namespace LeagueSharp.Common
         public static bool IsMelee(this Obj_AI_Base unit)
         {
             return unit.CombatType == GameObjectCombatType.Melee;
+        }
+
+        /// <summary>
+        ///     Returns true if the unit is a ward
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public static bool IsWard(Obj_AI_Base unit)
+        {
+            return Wards.Contains(unit.Name.ToLower());
         }
 
         /// <summary>
@@ -508,6 +524,7 @@ namespace LeagueSharp.Common
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
+                misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
 
                 _config.AddSubMenu(misc);
 
@@ -660,7 +677,8 @@ namespace LeagueSharp.Common
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) && 
+                                    (_config.Item("AttackWards").GetValue<bool>() || !IsWard(minion)) &&
                                     minion.Health <
                                     2 *
                                     (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
