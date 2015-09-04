@@ -367,7 +367,6 @@ namespace LeagueSharp.Common
                         if (!Player.IssueOrder(GameObjectOrder.AttackUnit, target))
                         {
                             //ResetAutoAttackTimer();
-                            Console.WriteLine(@"If you see this message pm iMeh :^) " + Environment.TickCount);
                         }
 
                         _lastTarget = target;
