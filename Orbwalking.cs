@@ -374,7 +374,7 @@ namespace LeagueSharp.Common
                             _missileLaunched = false;
 
                             var d = GetRealAutoAttackRange(target) - 65;
-                            if (Player.Distance(target, true) > d * d)
+                            if (Player.Distance(target, true) > d * d && !Player.IsMelee)
                             {
                                 LastAATick = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             }
@@ -678,10 +678,7 @@ namespace LeagueSharp.Common
                             .Where(
                                 minion =>
                                     minion.IsValidTarget() && InAutoAttackRange(minion) && 
-                                    (_config.Item("AttackWards").GetValue<bool>() || !IsWard(minion)) &&
-                                    minion.Health <
-                                    2 *
-                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
+                                    (_config.Item("AttackWards").GetValue<bool>() || !IsWard(minion)))
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -690,7 +687,7 @@ namespace LeagueSharp.Common
                     foreach (var minion in MinionList)
                     {
                         var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
+                                1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
