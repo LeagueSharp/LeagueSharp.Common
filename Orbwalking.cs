@@ -358,7 +358,7 @@ namespace LeagueSharp.Common
                             _missileLaunched = false;
 
                             var d = GetRealAutoAttackRange(target) - 65;
-                            if (Player.Distance(target, true) > d * d)
+                            if (Player.Distance(target, true) > d * d && !Player.IsMelee)
                             {
                                 LastAATick = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             }
