@@ -42,23 +42,6 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
-            MissileClient.OnDelete += MissileClient_OnDelete;
-        }
-
-        static void MissileClient_OnDelete(GameObject sender, EventArgs args)
-        {
-            var missile = sender as MissileClient;
-            if (missile != null)
-            {
-                var casterNetworkId = missile.SpellCaster.NetworkId;
-                foreach (var activeAttack in ActiveAttacks)
-                {
-                    if (activeAttack.Key == casterNetworkId)
-                    {
-                        ActiveAttacks[casterNetworkId].StartTick = 0;
-                    }
-                }
-            }
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -116,7 +99,7 @@ namespace LeagueSharp.Common
                     attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var landTime = attack.StartTick + attack.Delay +
-                                   1000 * (unit.Distance(attack.Source) - attack.Source.BoundingRadius) / attack.ProjectileSpeed + delay;
+                                   1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
 
                     if (Utils.GameTimeTickCount < landTime - delay && landTime < Utils.GameTimeTickCount + time)
                     {
@@ -150,7 +133,7 @@ namespace LeagueSharp.Common
                     while (fromT < toT)
                     {
                         if (fromT >= Utils.GameTimeTickCount &&
-                            (fromT + attack.Delay + (unit.Distance(attack.Source) - attack.Source.BoundingRadius) / attack.ProjectileSpeed < toT))
+                            (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
                         {
                             n++;
                         }
@@ -172,12 +155,12 @@ namespace LeagueSharp.Common
         {
             public readonly float AnimationTime;
 
-            public float Damage { get; private set; }
-            public float Delay { get; private set; }
-            public int ProjectileSpeed { get; private set; }
-            public Obj_AI_Base Source { get; private set; }
-            public int StartTick { get; internal set; }
-            public Obj_AI_Base Target { get; private set; }
+            public readonly float Damage;
+            public readonly float Delay;
+            public readonly int ProjectileSpeed;
+            public readonly Obj_AI_Base Source;
+            public readonly int StartTick;
+            public readonly Obj_AI_Base Target;
 
             public PredictedDamage(Obj_AI_Base source,
                 Obj_AI_Base target,
