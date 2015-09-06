@@ -86,12 +86,6 @@ namespace LeagueSharp.Common
             "xenzhaothrust3", "viktorqbuff"
         };
 
-        // Wards
-        private static readonly string[] Wards = 
-        {
-            "sightward", "visionward"
-        };
-
         // Champs whose auto attacks can't be cancelled
         private static readonly string[] NoCancelChamps = { "Kalista" };
         public static int LastAATick;
@@ -207,9 +201,9 @@ namespace LeagueSharp.Common
         /// <returns></returns>
         public static bool IsWard(Obj_AI_Base unit)
         {
-            return Wards.Contains(unit.Name.ToLower());
+            return (unit.MaxHealth == 1 || unit.MaxHealth == 2 || unit.MaxHealth == 3 || unit.MaxHealth == 5) && unit.CharData.BaseSkinName != "gangplankbarrel";
         }
-
+ 
         /// <summary>
         ///     Returns true if the spellname is an auto-attack.
         /// </summary>
