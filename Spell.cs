@@ -588,6 +588,26 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Returns the amount of the mana at the spell.
+        /// </summary>
+        public float ManaCost
+        {
+            get { return ObjectManager.Player.Spellbook.GetSpell(Slot).ManaCost; }
+        }
+
+        /// <summary>
+        ///     Returns the cooldown value of the spell.
+        /// </summary>
+        public float Cooldown
+        {
+            get
+            {
+                var coolDown = ObjectManager.Player.Spellbook.GetSpell(Slot).CooldownExpires;
+                return Game.Time < coolDown ? coolDown - Game.Time : 0;
+            }
+        }
+
+        /// <summary>
         ///     Gets the damage that the skillshot will deal to the target using the damage lib and returns if the target is
         ///     killable or not.
         /// </summary>
