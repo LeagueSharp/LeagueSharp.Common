@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2015 LeagueSharp
@@ -317,9 +317,9 @@ namespace LeagueSharp.Common.Data
         public static Item Blasting_Wand = new Item
         {
             Name = "Blasting Wand",
-            GoldBase = 860,
-            GoldPrice = 860,
-            GoldSell = 602,
+            GoldBase = 850,
+            GoldPrice = 850,
+            GoldSell = 595,
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
@@ -584,7 +584,7 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
-            Into = new[] { 3108, 3191, 3057, 3136, 3135, 3145, 3113, 3090, 3116, 3151, 3041 },
+            Into = new[] { 3108, 3191, 3057, 3136, 3135, 3145, 3113, 3090, 3116, 3151, 3041, 3089 },
             InStore = true,
             FlatMagicDamageMod = 20f,
             Tags = new[] { "SpellDamage" },
@@ -703,15 +703,15 @@ namespace LeagueSharp.Common.Data
         public static Item Needlessly_Large_Rod = new Item
         {
             Name = "Needlessly Large Rod",
-            GoldBase = 1600,
-            GoldPrice = 1600,
-            GoldSell = 1120,
+            GoldBase = 1250,
+            GoldPrice = 1250,
+            GoldSell = 875,
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
             Into = new[] { 3089, 3157, 3285 },
             InStore = true,
-            FlatMagicDamageMod = 80f,
+            FlatMagicDamageMod = 60f,
             Tags = new[] { "SpellDamage" },
             Id = 1058
         };
@@ -1210,17 +1210,17 @@ namespace LeagueSharp.Common.Data
         public static Item Archangels_Staff = new Item
         {
             Name = "Archangel's Staff",
-            GoldBase = 1120,
-            GoldPrice = 2700,
-            GoldSell = 1890,
+            GoldBase = 1030,
+            GoldPrice = 3000,
+            GoldSell = 2100,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3070, 1026 },
+            From = new[] { 3070, 1058 },
             Into = new[] { 3040 },
             InStore = true,
             FlatMPPoolMod = 250f,
-            FlatMagicDamageMod = 60f,
+            FlatMagicDamageMod = 80f,
             Tags = new[] { "Mana", "ManaRegen", "SpellDamage" },
             Id = 3003
         };
@@ -1492,15 +1492,15 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Rod of Ages",
             GoldBase = 740,
-            GoldPrice = 2800,
-            GoldSell = 1960,
+            GoldPrice = 2700,
+            GoldSell = 1890,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3010, 1026 },
             InStore = true,
-            FlatHPPoolMod = 450f,
-            FlatMPPoolMod = 450f,
+            FlatHPPoolMod = 300f,
+            FlatMPPoolMod = 400f,
             FlatMagicDamageMod = 60f,
             Tags = new[] { "Health", "HealthRegen", "Mana", "ManaRegen", "SpellDamage" },
             Id = 3027
@@ -1606,7 +1606,7 @@ namespace LeagueSharp.Common.Data
             SpecialRecipe = 3003,
             InStore = false,
             FlatMPPoolMod = 1000f,
-            FlatMagicDamageMod = 60f,
+            FlatMagicDamageMod = 80f,
             Tags = new[] { "Active" },
             Id = 3040
         };
@@ -1767,16 +1767,18 @@ namespace LeagueSharp.Common.Data
         public static Item Zekes_Herald = new Item
         {
             Name = "Zeke's Herald",
-            GoldBase = 800,
-            GoldPrice = 2450,
-            GoldSell = 1715,
+            GoldBase = 480,
+            GoldPrice = 2300,
+            GoldSell = 1610,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3067, 1053 },
+            From = new[] { 1052, 3024, 1052 },
             InStore = true,
-            FlatHPPoolMod = 250f,
-            Tags = new[] { "Aura", "CooldownReduction", "Damage", "Health", "LifeSteal" },
+			FlatMPPoolMod = 250f,
+			FlatMagicDamageMod = 50f,
+			FlatArmorMod = 35f,
+            Tags = new[] { "Aura", "CooldownReduction", "Damage", "Health" },
             Id = 3050
         };
 
@@ -2234,13 +2236,13 @@ namespace LeagueSharp.Common.Data
         public static Item Rabadons_Deathcap = new Item
         {
             Name = "Rabadon's Deathcap",
-            GoldBase = 840,
-            GoldPrice = 3300,
-            GoldSell = 2310,
+            GoldBase = 935,
+            GoldPrice = 3500,
+            GoldSell = 1450,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
-            From = new[] { 1026, 1058 },
+            From = new[] { 1026, 1058, 1052 },
             InStore = true,
             FlatMagicDamageMod = 120f,
             Tags = new[] { "SpellDamage" },
@@ -2254,13 +2256,13 @@ namespace LeagueSharp.Common.Data
         public static Item Wooglets_Witchcap = new Item
         {
             Name = "Wooglet's Witchcap",
-            GoldBase = 1045,
-            GoldPrice = 3540,
-            GoldSell = 2478,
+            GoldBase = 1050,
+            GoldPrice = 3500,
+            GoldSell = 2450,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3191, 1026, 1052 },
+            From = new[] { 3191, 1058 },
             InStore = true,
             FlatArmorMod = 45f,
             FlatMagicDamageMod = 100f,
@@ -2657,16 +2659,16 @@ namespace LeagueSharp.Common.Data
         public static Item Nashors_Tooth = new Item
         {
             Name = "Nashor's Tooth",
-            GoldBase = 850,
-            GoldPrice = 2920,
-            GoldSell = 2044,
+            GoldBase = 930,
+            GoldPrice = 3000,
+            GoldSell = 2100,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3101, 3108 },
             InStore = true,
-            FlatMagicDamageMod = 60f,
-            PercentAttackSpeedMod = 0.5f,
+            FlatMagicDamageMod = 80f,
+            PercentAttackSpeedMod = 0.4f,
             Tags = new[] { "AttackSpeed", "CooldownReduction", "OnHit", "SpellDamage" },
             Id = 3115
         };
@@ -2678,13 +2680,13 @@ namespace LeagueSharp.Common.Data
         public static Item Rylais_Crystal_Scepter = new Item
         {
             Name = "Rylai's Crystal Scepter",
-            GoldBase = 605,
-            GoldPrice = 2900,
-            GoldSell = 2030,
+            GoldBase = 315,
+            GoldPrice = 3000,
+            GoldSell = 2100,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 1026, 1052, 1011 },
+            From = new[] { 1058, 1052, 1011 },
             InStore = true,
             FlatHPPoolMod = 400f,
             FlatMagicDamageMod = 100f,
@@ -2784,15 +2786,15 @@ namespace LeagueSharp.Common.Data
         public static Item Void_Staff = new Item
         {
             Name = "Void Staff",
-            GoldBase = 1000,
-            GoldPrice = 2295,
+            GoldBase = 1215,
+            GoldPrice = 2500,
             GoldSell = 1607,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
             From = new[] { 1026, 1052 },
             InStore = true,
-            FlatMagicDamageMod = 70f,
+            FlatMagicDamageMod = 80f,
             Tags = new[] { "MagicPenetration", "SpellDamage" },
             Id = 3135
         };
@@ -2804,9 +2806,9 @@ namespace LeagueSharp.Common.Data
         public static Item Haunting_Guise = new Item
         {
             Name = "Haunting Guise",
-            GoldBase = 650,
-            GoldPrice = 1485,
-            GoldSell = 1040,
+            GoldBase = 665,
+            GoldPrice = 1500,
+            GoldSell = 1050,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -3019,16 +3021,16 @@ namespace LeagueSharp.Common.Data
         public static Item Liandrys_Torment = new Item
         {
             Name = "Liandry's Torment",
-            GoldBase = 980,
-            GoldPrice = 2900,
-            GoldSell = 2030,
+            GoldBase = 650,
+            GoldPrice = 3000,
+            GoldSell = 2100,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3136, 1052 },
+            From = new[] { 3136, 1026 },
             InStore = true,
             FlatHPPoolMod = 300f,
-            FlatMagicDamageMod = 50f,
+            FlatMagicDamageMod = 80f,
             Tags = new[] { "Health", "MagicPenetration", "SpellDamage" },
             Id = 3151
         };
@@ -3150,15 +3152,15 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Zhonya's Hourglass",
             GoldBase = 500,
-            GoldPrice = 3300,
-            GoldSell = 2310,
+            GoldPrice = 3000,
+            GoldSell = 2100,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3191, 1058 },
             InStore = true,
             FlatArmorMod = 50f,
-            FlatMagicDamageMod = 120f,
+            FlatMagicDamageMod = 100f,
             Tags = new[] { "Active", "Armor", "SpellDamage" },
             Id = 3157
         };
@@ -3213,13 +3215,13 @@ namespace LeagueSharp.Common.Data
         public static Item Morellonomicon = new Item
         {
             Name = "Morellonomicon",
-            GoldBase = 880,
+            GoldBase = 445,
             GoldPrice = 2300,
             GoldSell = 1610,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3108, 3114 },
+            From = new[] { 3108, 3114, 1052 },
             InStore = true,
             FlatMagicDamageMod = 80f,
             Tags = new[] { "CooldownReduction", "ManaRegen", "SpellDamage" },
@@ -3277,13 +3279,13 @@ namespace LeagueSharp.Common.Data
         public static Item Athenes_Unholy_Grail = new Item
         {
             Name = "Athene's Unholy Grail",
-            GoldBase = 980,
+            GoldBase = 545,
             GoldPrice = 2700,
             GoldSell = 1890,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3108, 3028 },
+            From = new[] { 3108, 3028, 1052 },
             InStore = true,
             FlatMagicDamageMod = 60f,
             FlatSpellBlockMod = 25f,
@@ -4327,15 +4329,15 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Luden's Echo",
             GoldBase = 650,
-            GoldPrice = 3100,
-            GoldSell = 2170,
+            GoldPrice = 3000,
+            GoldSell = 2100,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 1058, 3113 },
             InStore = true,
-            FlatMagicDamageMod = 120f,
-            PercentMovementSpeedMod = 0.07f,
+            FlatMagicDamageMod = 100f,
+            PercentMovementSpeedMod = 0.1f,
             Tags = new[] { "NonbootsMovement", "OnHit", "SpellDamage" },
             Id = 3285
         };
