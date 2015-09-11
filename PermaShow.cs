@@ -262,6 +262,11 @@ namespace LeagueSharp.Common
 
 		private static void OnWndProc(WndEventArgs args)
 		{
+			if (MenuSettings.ShowingMenu)
+			{
+				return;
+			}
+
 			if (Dragging)
 			{
 				BoxPosition = Utils.GetCursorPos();
