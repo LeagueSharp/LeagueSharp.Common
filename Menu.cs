@@ -187,7 +187,6 @@ namespace LeagueSharp.Common
 
     internal static class MenuSettings
     {
-	    internal static bool ShowingMenu;
         public static Vector2 BasePosition = new Vector2(10, 10);
         private static bool _drawTheMenu;
 
@@ -239,13 +238,11 @@ namespace LeagueSharp.Common
             if ((args.Msg == (uint) WindowsMessages.WM_KEYUP || args.Msg == (uint) WindowsMessages.WM_KEYDOWN) &&
                 args.WParam == Config.ShowMenuPressKey)
             {
-	            ShowingMenu = true;
                 DrawMenu = args.Msg == (uint) WindowsMessages.WM_KEYDOWN;
             }
 
             if (args.Msg == (uint) WindowsMessages.WM_KEYUP && args.WParam == Config.ShowMenuToggleKey)
             {
-	            ShowingMenu = false;
                 DrawMenu = !DrawMenu;
             }
         }
