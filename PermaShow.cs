@@ -65,8 +65,19 @@ namespace LeagueSharp.Common
 		private static float XFactor = Drawing.Height / 768f;
 		private static float YFactor = Drawing.Width / 1366f;
 
-		private static float PermaShowWidth = 200f;
-		private static float SmallBoxWidth = 40;
+
+		private static float DefaultPermaShowWidth = 230f;
+		private static float DefaultSmallBoxWidth = 45f;
+
+		private static float PermaShowWidth
+		{
+			get { return placetosave.Item("bwidth").GetValue<Slider>().Value; }
+		}
+
+		private static float SmallBoxWidth
+		{
+			get { return placetosave.Item("swidth").GetValue<Slider>().Value; }
+		}
 
 		/// <summary>
 		///   Drawing tools
@@ -264,6 +275,7 @@ namespace LeagueSharp.Common
 		{
 			if (MenuSettings.DrawMenu)
 			{
+				Dragging = false;
 				return;
 			}
 
@@ -304,8 +316,29 @@ namespace LeagueSharp.Common
 			placetosave.AddItem(enablepermashow);
 			var xvalue = new MenuItem("X", "X").SetValue(new Slider((int)DefaultPosition.X, 0, Drawing.Width));
 			var yvalue = new MenuItem("Y", "Y").SetValue(new Slider((int)DefaultPosition.Y, 0, Drawing.Height));
+			xvalue.ShowItem = false;
+			yvalue.ShowItem = false;
 			placetosave.AddItem(xvalue);
 			placetosave.AddItem(yvalue);
+
+			var bigwidth = new MenuItem("bwidth", "Width").SetValue(new Slider((int)DefaultPermaShowWidth, 100, 400));
+			var smallwidth = new MenuItem("swidth", "Indicator Width").SetValue(new Slider((int)DefaultSmallBoxWidth, 30, 90));
+
+			placetosave.AddItem(bigwidth);
+			placetosave.AddItem(smallwidth);
+
+			var def = new MenuItem("defaults", "Default").SetValue(false);
+			def.ValueChanged += (sender, args) =>
+			{
+				if (args.GetNewValue<bool>())
+				{
+					bigwidth.SetValue(new Slider((int) DefaultPermaShowWidth, 100, 400));
+					smallwidth.SetValue(new Slider((int) DefaultSmallBoxWidth, 30, 90));
+				}
+			};
+
+			placetosave.AddItem(def);
+
 			CommonMenu.Config.AddSubMenu(placetosave);
 
 			enablepermashow.ValueChanged += (sender, args) =>
