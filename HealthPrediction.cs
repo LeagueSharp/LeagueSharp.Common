@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
         static void MissileClient_OnDelete(GameObject sender, EventArgs args)
         {
             var missile = sender as MissileClient;
-            if (missile != null)
+            if (missile != null && missile.SpellCaster != null)
             {
                 var casterNetworkId = missile.SpellCaster.NetworkId;
                 foreach (var activeAttack in ActiveAttacks)
