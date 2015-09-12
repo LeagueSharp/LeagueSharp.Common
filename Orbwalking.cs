@@ -528,6 +528,7 @@ namespace LeagueSharp.Common
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
+                misc.AddItem(new MenuItem("SupportMode", "Support mode").SetShared().SetValue(false));
 
                 _config.AddSubMenu(misc);
 
@@ -673,7 +674,7 @@ namespace LeagueSharp.Common
                 }
 
                 /*Killable Minion*/
-                if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
+                if (ActiveMode == OrbwalkingMode.LaneClear || (ActiveMode == OrbwalkingMode.Mixed && !_config.Item("SupportMode").GetValue<bool>()) ||
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
                     var MinionList =
