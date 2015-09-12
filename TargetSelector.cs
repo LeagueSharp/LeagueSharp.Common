@@ -208,7 +208,7 @@ namespace LeagueSharp.Common
             _configMenu = config;
             config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
             config.AddItem(
-                new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false));
+                new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false)).Permashow();
             config.AddItem(
                 new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
             config.AddItem(new MenuItem("Sep", "").SetShared());

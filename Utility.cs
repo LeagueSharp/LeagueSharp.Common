@@ -101,7 +101,7 @@ namespace LeagueSharp.Common
             return spell != null && spell.Slot != SpellSlot.Unknown && t == 0
                 ? spell.State == SpellState.Ready
                 : (spell.State == SpellState.Ready ||
-                   (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
+                   (spell.State == (SpellState) 32 && (spell.CooldownExpires - Game.Time) <= t / 1000f));
         }
 
         public static bool IsReady(this Spell spell, int t = 0)
