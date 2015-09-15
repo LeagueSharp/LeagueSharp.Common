@@ -781,8 +781,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    45
-                                    + new double[]
+                                          new double[]
                                           {
                                               50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130,
                                               140, 150, 160, 170
