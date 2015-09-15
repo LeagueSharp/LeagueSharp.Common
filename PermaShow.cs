@@ -65,9 +65,8 @@ namespace LeagueSharp.Common
 		private static float XFactor = Drawing.Height / 768f;
 		private static float YFactor = Drawing.Width / 1366f;
 
-
-		private static float DefaultPermaShowWidth = 230f;
-		private static float DefaultSmallBoxWidth = 45f;
+		private static float DefaultPermaShowWidth = 375f;
+		private static float DefaultSmallBoxWidth = 70f;
 
 		private static float PermaShowWidth
 		{
@@ -444,17 +443,19 @@ namespace LeagueSharp.Common
 		/// </summary>
 		private static void PrepareDrawing()
 		{
-			int fontsize = (int)(ScaleValue(15, Direction.Y));
-
-			Text = new Font(
-				Drawing.Direct3DDevice,
-				new FontDescription
-				{
-					FaceName = "Tahoma",
-					Height = fontsize < 15 ? 15 : fontsize,
-					OutputPrecision = FontPrecision.Default,
-					Quality = FontQuality.Default
-				});
+		    Text = new Font(
+		        Drawing.Direct3DDevice,
+		        new FontDescription
+		            {
+		                FaceName = CommonMenu.Config.Item("FontName").GetValue<StringList>().SelectedValue,
+		                Height = CommonMenu.Config.Item("FontSize").GetValue<Slider>().Value,
+		                OutputPrecision = FontPrecision.Default,
+		                Quality =
+		                    (FontQuality)
+		                    Enum.Parse(
+		                        typeof(FontQuality),
+		                        CommonMenu.Config.Item("FontQuality").GetValue<StringList>().SelectedValue)
+		            });
 
 			sprite = new Sprite(Drawing.Direct3DDevice);
 			BoxLine = new Line(Drawing.Direct3DDevice) { Width = 1 };
