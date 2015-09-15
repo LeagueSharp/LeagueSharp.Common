@@ -89,6 +89,13 @@ namespace LeagueSharp.Common
             "xenzhaothrust3", "viktorqbuff"
         };
 
+        // Special "minions" that dont have the word "minion", "seige", or "super" in their name but grant gold.
+        private static readonly string[] PetsnTraps =
+        {
+            "gangplankbarrel", "elisespiderling", "malzaharvoidling", "kalistaspawn", "annietibbers", "teemomushroom", "shacobox",
+            "zyrathornplant", "zyragraspingplant", "heimertyellow", "heimertblue", "yorickspectralghoul", "yorickdecayedghoul", "yorickravenousghoul"
+        };
+
         // Wards
         private static readonly string[] Wards = 
         {
@@ -211,6 +218,16 @@ namespace LeagueSharp.Common
         public static bool IsWard(Obj_AI_Base unit)
         {
             return Wards.Contains(unit.Name.ToLower());
+        }
+
+        /// <summary>
+        ///     Returns true if the unit is a trap or pet
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public static bool IsPetorTrap(Obj_AI_Base unit)
+        {
+            return PetsnTraps.Contains(unit.CharData.BaseSkinName.ToLower());
         }
 
         /// <summary>
@@ -528,6 +545,7 @@ namespace LeagueSharp.Common
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(0, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
+                misc.AddItem(new MenuItem("AttackPetsnTraps", "Auto attack pets & traps").SetShared().SetValue(false));
 
                 _config.AddSubMenu(misc);
 
@@ -681,7 +699,8 @@ namespace LeagueSharp.Common
                             .Where(
                                 minion =>
                                     minion.IsValidTarget() && InAutoAttackRange(minion) && 
-                                    (_config.Item("AttackWards").GetValue<bool>() || !IsWard(minion)))
+                                    (_config.Item("AttackWards").GetValue<bool>() || !IsWard(minion)) &&
+                                    (_config.Item("AttackPetsnTraps").GetValue<bool>() || !IsPetorTrap(minion)))
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -756,7 +775,8 @@ namespace LeagueSharp.Common
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) && mob.CharData.BaseSkinName != "gangplankbarrel")
+                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
+                                    (_config.Item("AttackPetsnTraps").GetValue<bool>() || !IsPetorTrap(mob)))
                             .MaxOrDefault(mob => mob.MaxHealth);
                     if (result != null)
                     {
@@ -782,7 +802,8 @@ namespace LeagueSharp.Common
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.CharData.BaseSkinName != "gangplankbarrel")
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && 
+                                              (_config.Item("AttackPetsnTraps").GetValue<bool>() || !IsPetorTrap(minion)))
                                   let predHealth =
                                       HealthPrediction.LaneClearHealthPrediction(
                                           minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
