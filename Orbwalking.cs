@@ -723,6 +723,16 @@ namespace LeagueSharp.Common
                     }
                 }
 
+                /*Champions*/
+                if (ActiveMode != OrbwalkingMode.LastHit)
+                {
+                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
+                    if (target.IsValidTarget())
+                    {
+                        return target;
+                    }
+                }
+
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
                 {
@@ -772,16 +782,6 @@ namespace LeagueSharp.Common
                         {
                             _prevMinion = (Obj_AI_Minion)result;
                         }
-                    }
-                }
-
-                /*Champions*/
-                if (ActiveMode != OrbwalkingMode.LastHit && result == null)
-                {
-                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget())
-                    {
-                        return target;
                     }
                 }
 
