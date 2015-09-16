@@ -785,7 +785,7 @@ namespace LeagueSharp.Common
                                           {
                                               50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130,
                                               140, 150, 160, 170
-                                          }[((Obj_AI_Hero)source).Level - 1]
+                                          }[((Obj_AI_Hero)source).Level - ((Obj_AI_Hero)source).SpellTrainingPoints - 1]
                                     + 0.6 * source.FlatMagicDamageMod
                             },
                         //E
