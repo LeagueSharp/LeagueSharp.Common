@@ -1400,7 +1400,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 125, 175, 225, 275 }[level]
-                                    + 0.75 * source.FlatMagicDamageMod
+                                    + 0.75 * source.FlatMagicDamageMod + 0.5 * source.FlatPhysicalDamageMod
                             },
                         //R
                         new DamageSpell
@@ -1557,6 +1557,14 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 20, 45, 70, 95, 120 }[level]
                                     + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                            },
+                        //E
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.E, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 60, 90, 160, 120, 180 }[level]
                             },
                         //R - per cannonball
                         new DamageSpell
