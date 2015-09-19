@@ -781,11 +781,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                          new double[]
-                                          {
-                                              50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130,
-                                              140, 150, 160, 170
-                                          }[((Obj_AI_Hero)source).Level - 1]
+                                    new double[] { 55, 60, 75, 80, 90 }[level]
                                     + 0.6 * source.FlatMagicDamageMod
                             },
                         //E
@@ -1401,6 +1397,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 75, 125, 175, 225, 275 }[level]
                                     + 0.75 * source.FlatMagicDamageMod
+                                    + 0.5 * source.FlatPhysicalDamageMod
                             },
                         //R
                         new DamageSpell
