@@ -506,13 +506,16 @@ namespace LeagueSharp.Common
                 var drawings = new Menu("Drawings", "drawings");
                 drawings.AddItem(
                     new MenuItem("AACircle", "AACircle").SetShared()
-                        .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
+                        .SetValue(new Circle(true, Color.FromArgb(155, 255, 255, 0))));
                 drawings.AddItem(
                     new MenuItem("AACircle2", "Enemy AA circle").SetShared()
-                        .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
+                        .SetValue(new Circle(false, Color.FromArgb(155, 255, 255, 0))));
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone").SetShared()
-                        .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
+                        .SetValue(new Circle(false, Color.FromArgb(155, 255, 255, 0))));
+                drawings.AddItem(
+                    new MenuItem("AALineWidth", "Line Width")).SetShared()
+                        .SetValue(new Slider(2, 1, 6));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -834,7 +837,8 @@ namespace LeagueSharp.Common
                 {
                     Render.Circle.DrawCircle(
                         Player.Position, GetRealAutoAttackRange(null) + 65,
-                        _config.Item("AACircle").GetValue<Circle>().Color);
+                        _config.Item("AACircle").GetValue<Circle>().Color,
+                        _config.Item("AALineWidth").GetValue<Slider>().Value);
                 }
 
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
@@ -844,7 +848,8 @@ namespace LeagueSharp.Common
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target),
-                            _config.Item("AACircle2").GetValue<Circle>().Color);
+                            _config.Item("AACircle2").GetValue<Circle>().Color, 
+                            _config.Item("AALineWidth").GetValue<Slider>().Value);
                     }
                 }
 
@@ -852,7 +857,8 @@ namespace LeagueSharp.Common
                 {
                     Render.Circle.DrawCircle(
                         Player.Position, _config.Item("HoldPosRadius").GetValue<Slider>().Value,
-                        _config.Item("HoldZone").GetValue<Circle>().Color, 5, true);
+                        _config.Item("HoldZone").GetValue<Circle>().Color,
+                        _config.Item("AALineWidth").GetValue<Slider>().Value, true);
                 }
 
             }
