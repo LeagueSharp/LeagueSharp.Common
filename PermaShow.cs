@@ -62,21 +62,21 @@ namespace LeagueSharp.Common
 
 		private static Vector2 BoxPosition;
 
-		private static float XFactor = Drawing.Height / 768f;
-		private static float YFactor = Drawing.Width / 1366f;
+		private static readonly float XFactor = Drawing.Width / 1366f;
+		private static readonly float YFactor = Drawing.Height / 768f;
 
 
-		private static float DefaultPermaShowWidth = 230f;
-		private static float DefaultSmallBoxWidth = 45f;
+		private static readonly float DefaultPermaShowWidth = 270f;
+		private static readonly float DefaultSmallBoxWidth = 45f;
 
 		private static float PermaShowWidth
 		{
-			get { return placetosave.Item("bwidth").GetValue<Slider>().Value; }
+			get { return ScaleValue(placetosave.Item("bwidth").GetValue<Slider>().Value, Direction.X); }
 		}
 
 		private static float SmallBoxWidth
 		{
-			get { return placetosave.Item("swidth").GetValue<Slider>().Value; }
+			get { return ScaleValue(placetosave.Item("swidth").GetValue<Slider>().Value, Direction.X); }
 		}
 
 		/// <summary>
@@ -144,18 +144,19 @@ namespace LeagueSharp.Common
 
 			PermaArea();
 
-			var halfwidth = 0.9f * (PermaShowWidth / 2);
+			var halfwidth = 0.95f * (PermaShowWidth / 2);
 
 			foreach (var permaitem in PermaShowItems)
 			{
 				var index = PermaShowItems.IndexOf(permaitem);
-				var baseposition = new Vector2(BoxPosition.X - ScaleValue(halfwidth, Direction.X),
+				var baseposition = new Vector2(BoxPosition.X - halfwidth,
 					BoxPosition.Y + ScaleValue(2, Direction.Y));
 				var endpos = new Vector2(BoxPosition.X + (PermaShowWidth / 2) - SmallBoxWidth / 2,
 					baseposition.Y + (Text.Description.Height * 1.3f * index));
+				var realendpos = new Vector2(BoxPosition.X + (PermaShowWidth / 2), baseposition.Y + (Text.Description.Height * 1.3f * index));
 				var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
 
-				int textpos = (int)(endpos.X - ScaleValue(SmallBoxWidth, Direction.X) * 0.35);
+				int textpos = (int)(realendpos.X - (SmallBoxWidth / 1.2));
 				switch (permaitem.Item.ValueType)
 				{
 					case MenuValueType.Boolean:
@@ -187,7 +188,7 @@ namespace LeagueSharp.Common
 							(int)itempos.X, (int)itempos.Y, permaitem.Color);
 						var dimen = Text.MeasureText(sprite, permaitem.Item.GetValue<StringList>().SelectedValue);
 						Text.DrawText(null, permaitem.Item.GetValue<StringList>().SelectedValue,
-							(int) (endpos.X - dimen.Width * 0.5f), (int)itempos.Y, permaitem.Color);
+							(int) (realendpos.X - dimen.Width), (int)itempos.Y, permaitem.Color);
 						break;
 					case MenuValueType.Integer:
 						Text.DrawText(null, permaitem.DisplayName + ":",
@@ -384,7 +385,7 @@ namespace LeagueSharp.Common
 		private static void PermaArea()
 		{
 
-			BoxLine.Width = ScaleValue(PermaShowWidth, Direction.X);
+			BoxLine.Width = PermaShowWidth;
 
 			BoxLine.Begin();
 
@@ -409,7 +410,7 @@ namespace LeagueSharp.Common
 		private static void DrawBox(Vector2 pos, bool ison)
 		{
 
-			BoxLine.Width = ScaleValue(SmallBoxWidth, Direction.X);
+			BoxLine.Width = SmallBoxWidth;
 
 			BoxLine.Begin();
 
