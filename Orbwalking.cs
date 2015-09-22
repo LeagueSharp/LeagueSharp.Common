@@ -207,7 +207,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the auto-attack range.
+        ///     Returns the auto-attack range of local player with respect to the target.
         /// </summary>
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
@@ -219,10 +219,19 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        /// <summary>
-        ///     Returns true if the target is in auto-attack range.
-        /// </summary>
-        public static bool InAutoAttackRange(AttackableUnit target)
+		/// <summary>
+		///     Returns the auto-attack range of the target.
+		/// </summary>
+		public static float GetAttackRange(Obj_AI_Hero target)
+		{
+			var result = target.AttackRange + target.BoundingRadius;
+			return result;
+		}
+
+		/// <summary>
+		///     Returns true if the target is in auto-attack range.
+		/// </summary>
+		public static bool InAutoAttackRange(AttackableUnit target)
         {
             if (!target.IsValidTarget())
             {
@@ -513,8 +522,9 @@ namespace LeagueSharp.Common
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("AttackPetsnTraps", "Auto attack pets & traps").SetShared().SetValue(true));
+				misc.AddItem(new MenuItem("Smallminionsprio", "Jungle clear small first").SetShared().SetValue(false));
 
-                _config.AddSubMenu(misc);
+				_config.AddSubMenu(misc);
 
                 /* Missile check */
                 _config.AddItem(new MenuItem("MissileCheck", "Use Missile Check").SetShared().SetValue(true));
@@ -736,13 +746,16 @@ namespace LeagueSharp.Common
                 /*Jungle minions*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
                 {
-                    result =
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                mob =>
-                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) && mob.CharData.BaseSkinName != "gangplankbarrel")
-                            .MaxOrDefault(mob => mob.MaxHealth);
-                    if (result != null)
+	                var jminions =
+		                ObjectManager.Get<Obj_AI_Minion>()
+			                .Where(
+				                mob =>
+					                mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
+					                mob.CharData.BaseSkinName != "gangplankbarrel");
+       
+				    result = _config.Item("Smallminionsprio").GetValue<bool>() ? jminions.MinOrDefault(mob => mob.MaxHealth) : jminions.MaxOrDefault(mob => mob.MaxHealth);
+
+					if (result != null)
                     {
                         return result;
                     }
@@ -830,7 +843,7 @@ namespace LeagueSharp.Common
                         HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
-                            target.Position, GetRealAutoAttackRange(target) + 65,
+                            target.Position, GetAttackRange(target),
                             _config.Item("AACircle2").GetValue<Circle>().Color);
                     }
                 }

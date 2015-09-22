@@ -151,7 +151,7 @@ namespace LeagueSharp.Common
 				var index = PermaShowItems.IndexOf(permaitem);
 				var baseposition = new Vector2(BoxPosition.X - ScaleValue(halfwidth, Direction.X),
 					BoxPosition.Y + ScaleValue(2, Direction.Y));
-				var endpos = new Vector2(BoxPosition.X + ScaleValue(halfwidth * 0.85f, Direction.X),
+				var endpos = new Vector2(BoxPosition.X + (PermaShowWidth / 2) - SmallBoxWidth / 2,
 					baseposition.Y + (Text.Description.Height * 1.3f * index));
 				var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
 
@@ -187,7 +187,7 @@ namespace LeagueSharp.Common
 							(int)itempos.X, (int)itempos.Y, permaitem.Color);
 						var dimen = Text.MeasureText(sprite, permaitem.Item.GetValue<StringList>().SelectedValue);
 						Text.DrawText(null, permaitem.Item.GetValue<StringList>().SelectedValue,
-							textpos - (int)(dimen.Width / 1.5f), (int)itempos.Y, permaitem.Color);
+							(int) (endpos.X - dimen.Width * 0.5f), (int)itempos.Y, permaitem.Color);
 						break;
 					case MenuValueType.Integer:
 						Text.DrawText(null, permaitem.DisplayName + ":",
@@ -419,7 +419,7 @@ namespace LeagueSharp.Common
 				new Vector2(pos.X, pos.Y + (Text.Description.Height*1.2f))
 			};
 
-			var col = ison ? Color.DarkGreen : Color.Red;
+			var col = ison ? Color.DarkGreen : Color.DarkRed;
 			col.A = 150;
 			BoxLine.Draw(positions, col);
 

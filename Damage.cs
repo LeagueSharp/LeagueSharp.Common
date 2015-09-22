@@ -5866,13 +5866,13 @@ namespace LeagueSharp.Common
             if (source is Obj_AI_Turret)
             {
                 //Siege minions receive 70% damage from turrets
-                if (SiegeMinionList.Contains(target.BaseSkinName))
+                if (SiegeMinionList.Contains(target.CharData.BaseSkinName))
                 {
                     amount *= 0.7d;
                 }
 
                 //Normal minions take 114% more damage from towers.
-                else if (NormalMinionList.Contains(target.BaseSkinName))
+                else if (NormalMinionList.Contains(target.CharData.BaseSkinName))
                 {
                     amount *= 1.14285714285714d;
                 }
