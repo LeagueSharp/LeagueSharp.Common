@@ -43,6 +43,15 @@ namespace LeagueSharp.Common
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             MissileClient.OnDelete += MissileClient_OnDelete;
+            //Obj_AI_Base.OnDoCast += Obj_AI_Base_OnDoCast;
+        }
+
+        private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (ActiveAttacks.ContainsKey(sender.NetworkId) && sender.IsMelee)
+            {
+                ActiveAttacks[sender.NetworkId].Processed = true;
+            }
         }
 
         static void MissileClient_OnDelete(GameObject sender, EventArgs args)
@@ -55,7 +64,7 @@ namespace LeagueSharp.Common
                 {
                     if (activeAttack.Key == casterNetworkId)
                     {
-                        ActiveAttacks[casterNetworkId].StartTick = 0;
+                        ActiveAttacks[casterNetworkId].Processed = true;
                     }
                 }
             }
@@ -112,7 +121,7 @@ namespace LeagueSharp.Common
             foreach (var attack in ActiveAttacks.Values)
             {
                 var attackDamage = 0f;
-                if (attack.Source.IsValidTarget(float.MaxValue, false) &&
+                if (!attack.Processed && attack.Source.IsValidTarget(float.MaxValue, false) &&
                     attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var landTime = attack.StartTick + attack.Delay +
@@ -178,6 +187,7 @@ namespace LeagueSharp.Common
             public Obj_AI_Base Source { get; private set; }
             public int StartTick { get; internal set; }
             public Obj_AI_Base Target { get; private set; }
+            public bool Processed { get; internal set; }
 
             public PredictedDamage(Obj_AI_Base source,
                 Obj_AI_Base target,
