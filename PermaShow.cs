@@ -144,23 +144,26 @@ namespace LeagueSharp.Common
 
 			PermaArea();
 
-			var halfwidth = 0.95f * (PermaShowWidth / 2);
+			var halfwidth = 0.96f * (PermaShowWidth / 2);
+
+			var baseposition = new Vector2(BoxPosition.X - halfwidth, BoxPosition.Y);
+
+			var boxx = BoxPosition.X + (PermaShowWidth / 2) - (SmallBoxWidth/  2);
 
 			foreach (var permaitem in PermaShowItems)
 			{
 				var index = PermaShowItems.IndexOf(permaitem);
-				var baseposition = new Vector2(BoxPosition.X - halfwidth,
-					BoxPosition.Y + ScaleValue(2, Direction.Y));
-				var endpos = new Vector2(BoxPosition.X + (PermaShowWidth / 2) - SmallBoxWidth / 2,
-					baseposition.Y + (Text.Description.Height * 1.3f * index));
-				var realendpos = new Vector2(BoxPosition.X + (PermaShowWidth / 2), baseposition.Y + (Text.Description.Height * 1.3f * index));
-				var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.3f * index));
+				var boxpos = new Vector2(boxx,
+					baseposition.Y + (Text.Description.Height * 1.2f * index));
+				var endpos = new Vector2(BoxPosition.X + (PermaShowWidth / 2), baseposition.Y + (Text.Description.Height * 1.2f * index));
+				var itempos = new Vector2(baseposition.X, baseposition.Y + (Text.Description.Height * 1.2f * index));
 
-				int textpos = (int)(realendpos.X - (SmallBoxWidth / 1.2));
+				int textpos = (int) (endpos.X - (SmallBoxWidth / 1.2f));
+
 				switch (permaitem.Item.ValueType)
 				{
 					case MenuValueType.Boolean:
-						DrawBox(endpos, permaitem.Item.GetValue<bool>());
+						DrawBox(boxpos, permaitem.Item.GetValue<bool>());
 						Text.DrawText(null, permaitem.DisplayName + ":",
 							(int)itempos.X, (int)itempos.Y, permaitem.Color);
 						Text.DrawText(null, permaitem.Item.GetValue<bool>().ToString(),
@@ -173,13 +176,13 @@ namespace LeagueSharp.Common
 							textpos, (int)itempos.Y, permaitem.Color);
 						break;
 					case MenuValueType.KeyBind:
-						DrawBox(endpos, permaitem.Item.GetValue<KeyBind>().Active);
+						DrawBox(boxpos, permaitem.Item.GetValue<KeyBind>().Active);
 						Text.DrawText(null,
 							permaitem.DisplayName + ":", (int)itempos.X, (int)itempos.Y,
 							permaitem.Color);
 
 						Text.DrawText(null,
-							permaitem.Item.GetValue<KeyBind>().Active.ToString(), textpos, (int)(endpos.Y),
+							permaitem.Item.GetValue<KeyBind>().Active.ToString(), textpos, (int)(boxpos.Y),
 							permaitem.Color);
 						break;
 					case MenuValueType.StringList:
@@ -188,7 +191,7 @@ namespace LeagueSharp.Common
 							(int)itempos.X, (int)itempos.Y, permaitem.Color);
 						var dimen = Text.MeasureText(sprite, permaitem.Item.GetValue<StringList>().SelectedValue);
 						Text.DrawText(null, permaitem.Item.GetValue<StringList>().SelectedValue,
-							(int) (realendpos.X - dimen.Width), (int)itempos.Y, permaitem.Color);
+							(int) (textpos + dimen.Width < endpos.X ? textpos : endpos.X - dimen.Width), (int)itempos.Y, permaitem.Color);
 						break;
 					case MenuValueType.Integer:
 						Text.DrawText(null, permaitem.DisplayName + ":",
@@ -274,7 +277,7 @@ namespace LeagueSharp.Common
 
 		private static void OnWndProc(WndEventArgs args)
 		{
-			if (MenuSettings.DrawMenu)
+			if (MenuSettings.DrawMenu || !placetosave.Item("moveable").GetValue<bool>())
 			{
 				Dragging = false;
 				return;
@@ -325,9 +328,13 @@ namespace LeagueSharp.Common
 			var bigwidth = new MenuItem("bwidth", "Width").SetValue(new Slider((int)DefaultPermaShowWidth, 100, 400));
 			var smallwidth = new MenuItem("swidth", "Indicator Width").SetValue(new Slider((int)DefaultSmallBoxWidth, 30, 90));
 
+			var moveable = new MenuItem("moveable", "Moveable").SetValue(true);
+
+			placetosave.AddItem(moveable);
 			placetosave.AddItem(bigwidth);
 			placetosave.AddItem(smallwidth);
 
+			
 			var def = new MenuItem("defaults", "Default").SetValue(false);
 			def.ValueChanged += (sender, args) =>
 			{
@@ -394,7 +401,7 @@ namespace LeagueSharp.Common
 			var positions = new[]
 			{
 				new Vector2(pos.X, pos.Y),
-				new Vector2(pos.X, pos.Y + PermaShowItems.Count*(Text.Description.Height*1.3f))
+				new Vector2(pos.X, pos.Y + PermaShowItems.Count*(Text.Description.Height*1.2f))
 			};
 
 			var col = Color.Black;
