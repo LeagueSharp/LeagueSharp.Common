@@ -81,7 +81,7 @@ namespace LeagueSharp.Common
         {
             if (DetectedDashes.ContainsKey(unit.NetworkId) && unit.Path.Length != 0)
             {
-                return DetectedDashes[unit.NetworkId].EndTick > Utils.TickCount;
+                return DetectedDashes[unit.NetworkId].EndTick != 0;
             }
             return false;
         }
