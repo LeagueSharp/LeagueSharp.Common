@@ -406,7 +406,7 @@ namespace LeagueSharp.Common
                             source.CalcDamage(
                                 target,
                                 DamageType.Magical,
-                                (float)0.5d * source.FlatMagicDamageMod + source.BaseAttackDamage + source.FlatPhysicalDamageMod
+                                (float)0.5d * source.FlatMagicDamageMod
                                 + new float[]
                                       { 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 110, 130, 150, 170, 190, 210 }[
                                           source.Level - 1]),

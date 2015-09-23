@@ -102,11 +102,13 @@ namespace LeagueSharp.Common
         private static int _delay;
         private static float _minDistance = 400;
         private static bool _missileLaunched;
+        private static string _championName;
         private static readonly Random _random = new Random(DateTime.Now.Millisecond);
 
         static Orbwalking()
         {
             Player = ObjectManager.Player;
+            _championName = Player.ChampionName;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
@@ -249,7 +251,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetMyProjectileSpeed()
         {
-            return IsMelee(Player) || Player.ChampionName == "Azir" ? float.MaxValue : Player.BasicAttack.MissileSpeed;
+            return IsMelee(Player) || _championName == "Azir" || _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -275,7 +277,13 @@ namespace LeagueSharp.Common
                 return true;
             }
 
-            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
+            var localExtraWindup = 0;
+            if(_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
+            {
+                localExtraWindup = 200;
+            }
+
+            return NoCancelChamps.Contains(_championName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
         }
 
         public static void SetMovementDelay(int delay)
@@ -364,7 +372,7 @@ namespace LeagueSharp.Common
 
                     if (!DisableNextAttack)
                     {
-                        if (!NoCancelChamps.Contains(Player.ChampionName))
+                        if (!NoCancelChamps.Contains(_championName))
                         {
                             LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             _missileLaunched = false;
@@ -419,6 +427,7 @@ namespace LeagueSharp.Common
             if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name))
             {
                 _missileLaunched = true;
+                FireAfterAttack(missile.SpellCaster, missile.Target as AttackableUnit);
             }
         }
 
@@ -453,9 +462,11 @@ namespace LeagueSharp.Common
                             _lastTarget = target;
                         }
 
-                        //Trigger it for ranged until the missiles catch normal attacks again!
-                        Utility.DelayAction.Add(
-                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                        if(unit.IsMelee)
+                        {
+                            Utility.DelayAction.Add(
+                                (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
+                        }
                     }
                 }
 
@@ -696,7 +707,7 @@ namespace LeagueSharp.Common
                             {
                                 FireOnNonKillableMinion(minion);
                             }
-
+                            
                             if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
