@@ -5460,11 +5460,12 @@ namespace LeagueSharp.Common
                     result += d;
                 }
 
+                /*
                 // Arcane blade
                 if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 132 && m.Points == 1))
                 {
                     reduction -= CalcMagicDamage(hero, target, 0.05 * hero.FlatMagicDamageMod);
-                }
+                }*/
             }
 
             var targetHero = target as Obj_AI_Hero;
