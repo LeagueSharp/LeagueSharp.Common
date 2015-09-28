@@ -5522,7 +5522,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            return CalcPhysicalDamage(source, target, (result - reduction) * k) -5;
+            return CalcPhysicalDamage(source, target, (result - reduction) * k);
         }
 
         /// <summary>
