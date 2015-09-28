@@ -112,7 +112,16 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
+            //Obj_AI_Base.OnDoCast += OnDoCast; //#TODO: Uncomment on patch 5.19
         }
+
+        /*private static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe && args.SData.IsAutoAttack())
+            {
+                ResetAutoAttackTimer();
+            }
+        }*/
 
         /// <summary>
         ///     This event is fired before the player auto attacks.
@@ -394,7 +403,7 @@ namespace LeagueSharp.Common
                     }
                 }
 
-                if (CanMove(extraWindup))
+                if ((!CanAttack() || !target.IsValidTarget()) && CanMove(extraWindup))
                 {
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }
