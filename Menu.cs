@@ -1349,7 +1349,7 @@ namespace LeagueSharp.Common
                     break;
                 case MenuValueType.KeyBind:
 
-                    if (!MenuGUI.IsChatOpen)
+                    if (!MenuGUI.IsChatOpen && !MenuGUI.IsShopOpen)
                     {
                         switch (message)
                         {
