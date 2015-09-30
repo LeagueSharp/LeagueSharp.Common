@@ -386,7 +386,7 @@ namespace LeagueSharp.Common
 
                         if (!Player.IssueOrder(GameObjectOrder.AttackUnit, target))
                         {
-                            //ResetAutoAttackTimer();
+                            ResetAutoAttackTimer();
                         }
 
                         _lastTarget = target;
