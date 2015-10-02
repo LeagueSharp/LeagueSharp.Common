@@ -312,7 +312,7 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (Utils.GameTimeTickCount - LastMoveCommandT < _delay && !overrideTimer)
+            if (Utils.GameTimeTickCount - LastMoveCommandT < _delay + _random.Next(0, 15) && !overrideTimer)
             {
                 return;
             }
@@ -554,7 +554,6 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                     new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(30, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
-
 
                 /*Load the menu*/
                 _config.AddItem(
