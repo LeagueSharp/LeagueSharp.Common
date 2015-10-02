@@ -312,7 +312,7 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (Utils.GameTimeTickCount - LastMoveCommandT < _delay + _random.Next(0, 15) && !overrideTimer)
+            if (Utils.GameTimeTickCount - LastMoveCommandT < (70 + Math.Min(60, Game.Ping)) && !overrideTimer)
             {
                 return;
             }
@@ -327,25 +327,34 @@ namespace LeagueSharp.Common
                 {
                     Player.IssueOrder(GameObjectOrder.Stop, playerPosition);
                     LastMoveCommandPosition = playerPosition;
+                    LastMoveCommandT -= 70;
                 }
                 return;
             }
 
             var point = position;
-            if (useFixedDistance)
+
+            if(Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.Extend(
-                    position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
+                point = playerPosition.Extend(position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
             }
-            else
+
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1)
             {
-                if (randomizeMinDistance)
+                var movePath = Player.GetPath(point);
+
+                if(movePath.Length > 1)
                 {
-                    point = playerPosition.Extend(position, (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance);
-                }
-                else if (playerPosition.Distance(position) > _minDistance)
-                {
-                    point = playerPosition.Extend(position, _minDistance);
+                    var v1 = currentPath[1] - currentPath[0];
+                    var v2 = movePath[1] - movePath[0];
+                    var angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
+
+                    if ((angle < 10 && distance < 500*500) || distance < 50*50)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -372,16 +381,13 @@ namespace LeagueSharp.Common
 
                     if (!DisableNextAttack)
                     {
-                        if (!NoCancelChamps.Contains(_championName))
-                        {
-                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
-                            _missileLaunched = false;
+                        LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
+                        _missileLaunched = false;
 
-                            var d = GetRealAutoAttackRange(target) - 65;
-                            if (Player.Distance(target, true) > d * d && !Player.IsMelee)
-                            {
-                                LastAATick = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
-                            }
+                        var d = GetRealAutoAttackRange(target) - 65;
+                        if (Player.Distance(target, true) > d * d && !Player.IsMelee)
+                        {
+                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                         }
 
                         if (!Player.IssueOrder(GameObjectOrder.AttackUnit, target))
@@ -389,6 +395,7 @@ namespace LeagueSharp.Common
                             ResetAutoAttackTimer();
                         }
 
+                        LastMoveCommandT = 0;
                         _lastTarget = target;
                         return;
                     }
