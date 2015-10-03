@@ -68,14 +68,8 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            if (unit == null
-                || !unit.IsValid
-                || unit.IsDead
-                || !unit.IsVisible
-                || !unit.IsTargetable
-                || unit.IsInvulnerable
-                || HeroManager.Allies.Any(
-                    ally => ally.HasBuff("PoppydiTarget") && !ally.IsMe && ((Obj_AI_Hero)unit).ChampionName == "Poppy"))
+            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
+                unit.IsInvulnerable)
             {
                 return false;
             }
