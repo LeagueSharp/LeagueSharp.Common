@@ -263,6 +263,13 @@ namespace LeagueSharp.Common
                 return true;
             }
 
+            // Poppy's Diplomatic Immunity (R)
+            if (target.HasBuff("DiplomaticImmunity") && !ObjectManager.Player.HasBuff("poppyulttargetmark"))
+            {
+                //TODO: Get the actual target mark buff name
+                return true;
+            }
+
             if (ignoreShields)
             {
                 return false;
