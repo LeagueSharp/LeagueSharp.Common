@@ -263,6 +263,13 @@ namespace LeagueSharp.Common
                 return true;
             }
 
+            // Poppy's Diplomatic Immunity (R)
+            if (HeroManager.Allies.Any(
+                ally => ally.HasBuff("PoppydiTarget") && !ally.IsMe && ((Obj_AI_Hero)target).Name == "Poppy"))
+            {
+                return true;
+            }
+
             if (ignoreShields)
             {
                 return false;
