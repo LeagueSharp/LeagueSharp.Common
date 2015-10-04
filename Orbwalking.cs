@@ -340,7 +340,7 @@ namespace LeagueSharp.Common
             }
 
             var currentPath = Player.GetWaypoints();
-            if (currentPath.Count > 1)
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -714,7 +714,7 @@ namespace LeagueSharp.Common
                                 1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>()) ))
+                        if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>()) ))
                         {
                             if (predHealth <= 0)
                             {
@@ -808,7 +808,7 @@ namespace LeagueSharp.Common
                                       ObjectManager.Get<Obj_AI_Minion>()
                                           .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
-                                          (_config.Item("AttackPetsnTraps").GetValue<bool>() || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
+                                          (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")
                                   let predHealth =
                                       HealthPrediction.LaneClearHealthPrediction(
