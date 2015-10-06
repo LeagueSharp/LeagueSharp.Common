@@ -27,9 +27,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using LeagueSharp.Common.Properties;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -50,44 +48,6 @@ namespace LeagueSharp.Common
             Prediction.Initialize();
             Hacks.Initialize();
             FakeClicks.Initialize();
-
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            try
-            {
-                using (var c = new WebClient())
-                {
-                    var rawVersion =
-                        c.DownloadString(
-                            "https://raw.githubusercontent.com/LeagueSharp/LeagueSharp.Common/master/Properties/AssemblyInfo.cs");
-                    var match =
-                        new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match
-                            (rawVersion);
-
-                    if (match.Success)
-                    {
-                        var gitVersion =
-                            new System.Version(
-                                string.Format(
-                                    "{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2], match.Groups[3],
-                                    match.Groups[4]));
-
-                        if (gitVersion != version)
-                        {
-                            Config.AddItem(new MenuItem("CommonVersion", "Version: " + version + " (Outdated)"))
-                                .SetFontStyle(FontStyle.Regular, SharpDX.Color.Red);
-                        }
-                        else
-                        {
-                            Config.AddItem(new MenuItem("CommonVersion", "Version: " + version))
-                                .SetFontStyle(FontStyle.Regular, SharpDX.Color.Green);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
             Config.AddToMainMenu();
         }
     }
@@ -448,12 +408,13 @@ namespace LeagueSharp.Common
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
-                new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(
-                    FontStyle.Bold, SharpDX.Color.Yellow));
+                new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(FontStyle.Bold, SharpDX.Color.Yellow));
             CommonMenu.Config.AddSubMenu(root);
         }
 
-        public Menu(string displayName, string name, bool isRootMenu = false)
+        public Menu(string displayName,
+            string name,
+            bool isRootMenu = false)
         {
             DisplayName = displayName;
             Name = name;
@@ -477,6 +438,14 @@ namespace LeagueSharp.Common
 
                 RootMenus.Add(rootName, this);
             }
+        }
+
+        public Menu SetFontStyle(FontStyle fontStyle = FontStyle.Regular, SharpDX.Color? fontColor = null)
+        {
+            Style = fontStyle;
+            Color = fontColor ?? SharpDX.Color.White;
+
+            return this;
         }
 
         internal int XLevel
@@ -622,14 +591,6 @@ namespace LeagueSharp.Common
                     }
                 }
             }
-        }
-
-        public Menu SetFontStyle(FontStyle fontStyle = FontStyle.Regular, SharpDX.Color? fontColor = null)
-        {
-            Style = fontStyle;
-            Color = fontColor ?? SharpDX.Color.White;
-
-            return this;
         }
 
         public static MenuItem GetValueGlobally(string Assemblyname,
@@ -964,7 +925,9 @@ namespace LeagueSharp.Common
         public int Tag;
         internal MenuValueType ValueType;
 
-        public MenuItem(string name, string displayName, bool makeChampionUniq = false)
+        public MenuItem(string name,
+            string displayName,
+            bool makeChampionUniq = false)
         {
             if (makeChampionUniq)
             {
@@ -978,6 +941,28 @@ namespace LeagueSharp.Common
             ShowItem = true;
             Tag = 0;
             _configName = Assembly.GetCallingAssembly().GetName().Name + Assembly.GetCallingAssembly().GetType().GUID;
+        }
+
+        public MenuItem SetFontStyle(FontStyle fontStyle = FontStyle.Regular, SharpDX.Color? fontColor = null)
+        {
+            FontStyle = fontStyle;
+            FontColor = fontColor ?? SharpDX.Color.White;
+
+            return this;
+        }
+        
+        public MenuItem Show(bool showItem = true)
+        {
+            this.ShowItem = showItem;
+
+            return this;
+        }
+        
+        public MenuItem SetTag(int tag = 0)
+        {
+            this.Tag = tag;
+
+            return this;
         }
 
         internal string SaveFileName
@@ -1005,7 +990,7 @@ namespace LeagueSharp.Common
                     return 0;
                 }
 
-                return Parent.YLevel + Parent.Children.Count +
+                return Parent.YLevel + Parent.Children.Count + 
                        Parent.Items.TakeWhile(test => test.Name != Name).Count(c => c.ShowItem);
             }
         }
@@ -1072,28 +1057,6 @@ namespace LeagueSharp.Common
         internal int Height
         {
             get { return MenuSettings.MenuItemHeight; }
-        }
-
-        public MenuItem SetFontStyle(FontStyle fontStyle = FontStyle.Regular, SharpDX.Color? fontColor = null)
-        {
-            FontStyle = fontStyle;
-            FontColor = fontColor ?? SharpDX.Color.White;
-
-            return this;
-        }
-
-        public MenuItem Show(bool showItem = true)
-        {
-            ShowItem = showItem;
-
-            return this;
-        }
-
-        public MenuItem SetTag(int tag = 0)
-        {
-            Tag = tag;
-
-            return this;
         }
 
         public event EventHandler<OnValueChangeEventArgs> ValueChanged;
