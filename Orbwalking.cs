@@ -251,7 +251,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float GetMyProjectileSpeed()
         {
-            return IsMelee(Player) || _championName == "Azir" || _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
+            return IsMelee(Player) || _championName == "Azir" || _championName == "Velkoz" || _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -560,7 +560,7 @@ namespace LeagueSharp.Common
                 /* Delay sliders */
                 _config.AddItem(
                     new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(80, 0, 200)));
-                _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
+                _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(30, 0, 200)));
                 _config.AddItem(
                     new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(30, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
