@@ -52,33 +52,41 @@ namespace LeagueSharp.Common
             FakeClicks.Initialize();
 
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            using (var c = new WebClient())
+            try
             {
-                var rawVersion =
-                    c.DownloadString(
-                        "https://raw.githubusercontent.com/LeagueSharp/LeagueSharp.Common/master/Properties/AssemblyInfo.cs");
-                var match =
-                    new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match(
-                        rawVersion);
-
-                if (match.Success)
+                using (var c = new WebClient())
                 {
-                    var gitVersion =
-                        new System.Version(
-                            string.Format(
-                                "{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2], match.Groups[3], match.Groups[4]));
+                    var rawVersion =
+                        c.DownloadString(
+                            "https://raw.githubusercontent.com/LeagueSharp/LeagueSharp.Common/master/Properties/AssemblyInfo.cs");
+                    var match =
+                        new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match
+                            (rawVersion);
 
-                    if (gitVersion != version)
+                    if (match.Success)
                     {
-                        Config.AddItem(new MenuItem("CommonVersion", "Version: " + version + " (Outdated)"))
-                            .SetFontStyle(FontStyle.Regular, SharpDX.Color.Red);
-                    }
-                    else
-                    {
-                        Config.AddItem(new MenuItem("CommonVersion", "Version: " + version))
-                            .SetFontStyle(FontStyle.Regular, SharpDX.Color.Green);
+                        var gitVersion =
+                            new System.Version(
+                                string.Format(
+                                    "{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2], match.Groups[3],
+                                    match.Groups[4]));
+
+                        if (gitVersion != version)
+                        {
+                            Config.AddItem(new MenuItem("CommonVersion", "Version: " + version + " (Outdated)"))
+                                .SetFontStyle(FontStyle.Regular, SharpDX.Color.Red);
+                        }
+                        else
+                        {
+                            Config.AddItem(new MenuItem("CommonVersion", "Version: " + version))
+                                .SetFontStyle(FontStyle.Regular, SharpDX.Color.Green);
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
             Config.AddToMainMenu();
         }
