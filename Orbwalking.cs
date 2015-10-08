@@ -233,7 +233,7 @@ namespace LeagueSharp.Common
 		/// <summary>
 		///     Returns true if the target is in auto-attack range.
 		/// </summary>
-		public static bool InAutoAttackRange(AttackableUnit target)
+		public static bool InAutoAttackRange(AttackableUnit target, float extra = 0f)
         {
             if (!target.IsValidTarget())
             {
@@ -243,7 +243,7 @@ namespace LeagueSharp.Common
             return
                 Vector2.DistanceSquared(
                     (target is Obj_AI_Base) ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
-                    Player.ServerPosition.To2D()) <= myRange * myRange;
+                    Player.ServerPosition.To2D()) <= myRange * myRange + extra * extra;
         }
 
         /// <summary>
@@ -586,9 +586,9 @@ namespace LeagueSharp.Common
                 Instances.Add(this);
             }
 
-            public virtual bool InAutoAttackRange(AttackableUnit target)
+            public virtual bool InAutoAttackRange(AttackableUnit target, float extra = 0f)
             {
-                return Orbwalking.InAutoAttackRange(target);
+                return Orbwalking.InAutoAttackRange(target, extra);
             }
 
             private int FarmDelay
@@ -730,7 +730,7 @@ namespace LeagueSharp.Common
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget, 150f))
                 {
                     return _forcedTarget;
                 }
@@ -764,7 +764,7 @@ namespace LeagueSharp.Common
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget())
+                    if (target.IsValidTarget() && InAutoAttackRange(target, 150f))
                     {
                         return target;
                     }
