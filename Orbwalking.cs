@@ -351,12 +351,12 @@ namespace LeagueSharp.Common
                 }
             }
             
-            if (Utils.GameTimeTickCount - LastMoveCommandT < (70 + Math.Min(60, Game.Ping)) && !overrideTimer && angle < 45)
+            if (Utils.GameTimeTickCount - LastMoveCommandT < (70 + Math.Min(60, Game.Ping)) && !overrideTimer && angle < 60)
             {
                 return;
             }
 
-            if(angle >= 45 && Utils.GameTimeTickCount - LastMoveCommandT < 60)
+            if(angle >= 60 && Utils.GameTimeTickCount - LastMoveCommandT < 60)
             {
                 return;
             }
