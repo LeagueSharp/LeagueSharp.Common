@@ -312,13 +312,6 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
-            if (Utils.GameTimeTickCount - LastMoveCommandT < (70 + Math.Min(60, Game.Ping)) && !overrideTimer)
-            {
-                return;
-            }
-
-            LastMoveCommandT = Utils.GameTimeTickCount;
-
             var playerPosition = Player.ServerPosition;
 
             if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
@@ -327,7 +320,7 @@ namespace LeagueSharp.Common
                 {
                     Player.IssueOrder(GameObjectOrder.Stop, playerPosition);
                     LastMoveCommandPosition = playerPosition;
-                    LastMoveCommandT -= 70;
+                    LastMoveCommandT = Utils.GameTimeTickCount - 70;
                 }
                 return;
             }
@@ -338,7 +331,7 @@ namespace LeagueSharp.Common
             {
                 point = playerPosition.Extend(position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
             }
-
+            var angle = 0f;
             var currentPath = Player.GetWaypoints();
             if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
@@ -348,7 +341,7 @@ namespace LeagueSharp.Common
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    var angle = v1.AngleBetween(v2.To2D());
+                    angle = v1.AngleBetween(v2.To2D());
                     var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500*500) || distance < 50*50)
@@ -357,9 +350,20 @@ namespace LeagueSharp.Common
                     }
                 }
             }
+            
+            if (Utils.GameTimeTickCount - LastMoveCommandT < (70 + Math.Min(60, Game.Ping)) && !overrideTimer && angle < 45)
+            {
+                return;
+            }
+
+            if(angle >= 45 && Utils.GameTimeTickCount - LastMoveCommandT < 60)
+            {
+                return;
+            }
 
             Player.IssueOrder(GameObjectOrder.MoveTo, point);
             LastMoveCommandPosition = point;
+            LastMoveCommandT = Utils.GameTimeTickCount;
         }
 
         /// <summary>
@@ -688,7 +692,7 @@ namespace LeagueSharp.Common
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null)
+                    if (target != null && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -764,7 +768,7 @@ namespace LeagueSharp.Common
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget())
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
