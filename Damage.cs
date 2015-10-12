@@ -348,7 +348,7 @@ namespace LeagueSharp.Common
                               source.CalcDamage(
                                   target,
                                   DamageType.Physical,
-                                  (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+                                  (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) - 10f,
                     };
             AttackPassives.Add(p);
 
