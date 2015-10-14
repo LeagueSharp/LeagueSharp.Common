@@ -2516,40 +2516,6 @@ namespace LeagueSharp.Common
                     });
 
             Spells.Add(
-                "Kindred",
-                new List<DamageSpell>
-                    {
-                        //Q
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.Q, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 60, 90, 120, 150, 180}[level]
-                                    + (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * 0.2f
-                            },
-                        //W
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.W, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 25, 30, 35, 40, 45 }[level]
-                                    + (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * 0.4f
-                            },
-                        //E
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.E, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 80, 110, 140, 170, 200 }[level]
-                                    + (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * 0.2f
-                                    + target.MaxHealth * 0.05f
-                            },
-                    });
-
-            Spells.Add(
                 "LeBlanc",
                 new List<DamageSpell>
                     {
