@@ -72,12 +72,19 @@ namespace LeagueSharp.Common
         //Spells that are not attacks even if they have the "attack" word in their name.
         private static readonly string[] NoAttacks =
         {
-            "volleyattack", "volleyattackwithsound", "jarvanivcataclysmattack", "monkeykingdoubleattack",
-            "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
-            "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer", "sivirwattackbounce", "asheqattacknoonhit",
-            "elisespiderlingbasicattack", "heimertyellowbasicattack", "heimertyellowbasicattack2", "heimertbluebasicattack",
-            "annietibbersbasicattack", "annietibbersbasicattack2", "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
-            "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack", "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3"
+            "volleyattack", "volleyattackwithsound", "jarvanivcataclysmattack",
+            "monkeykingdoubleattack", "shyvanadoubleattack",
+            "shyvanadoubleattackdragon", "zyragraspingplantattack",
+            "zyragraspingplantattack2", "zyragraspingplantattackfire",
+            "zyragraspingplantattack2fire", "viktorpowertransfer",
+            "sivirwattackbounce", "asheqattacknoonhit",
+            "elisespiderlingbasicattack", "heimertyellowbasicattack",
+            "heimertyellowbasicattack2", "heimertbluebasicattack",
+            "annietibbersbasicattack", "annietibbersbasicattack2",
+            "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
+            "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
+            "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
+            "kindredwolfBasicAttack", "kindredbasicattackoverridelightbombfinal"
         };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
