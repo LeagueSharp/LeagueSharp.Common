@@ -48,6 +48,7 @@ namespace LeagueSharp.Common
             Prediction.Initialize();
             Hacks.Initialize();
             FakeClicks.Initialize();
+
             Config.AddToMainMenu();
         }
     }
@@ -235,13 +236,13 @@ namespace LeagueSharp.Common
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
-            if ((args.Msg == (uint) WindowsMessages.WM_KEYUP || args.Msg == (uint) WindowsMessages.WM_KEYDOWN) &&
+            if ((args.Msg == (uint)WindowsMessages.WM_KEYUP || args.Msg == (uint)WindowsMessages.WM_KEYDOWN) &&
                 args.WParam == Config.ShowMenuPressKey)
             {
-                DrawMenu = args.Msg == (uint) WindowsMessages.WM_KEYDOWN;
+                DrawMenu = args.Msg == (uint)WindowsMessages.WM_KEYDOWN;
             }
 
-            if (args.Msg == (uint) WindowsMessages.WM_KEYUP && args.WParam == Config.ShowMenuToggleKey)
+            if (args.Msg == (uint)WindowsMessages.WM_KEYUP && args.WParam == Config.ShowMenuToggleKey)
             {
                 DrawMenu = !DrawMenu;
             }
@@ -341,7 +342,7 @@ namespace LeagueSharp.Common
             Font.DrawText(
                 null, s,
                 new Rectangle(
-                    (int) (item.Position.X + item.Width - item.Height), (int) item.Position.Y, item.Height, item.Height),
+                    (int)(item.Position.X + item.Width - item.Height), (int)item.Position.Y, item.Height, item.Height),
                 FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
         }
 
@@ -349,7 +350,7 @@ namespace LeagueSharp.Common
         {
             DrawBox(position, item.Height, item.Height, Color.Blue, 1, color);
             Font.DrawText(
-                null, s, new Rectangle((int) (position.X), (int) item.Position.Y, item.Height, item.Height),
+                null, s, new Rectangle((int)(position.X), (int)item.Position.Y, item.Height, item.Height),
                 FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
         }
 
@@ -376,9 +377,33 @@ namespace LeagueSharp.Common
             {
                 Font.DrawText(
                     null, value.ToString(),
-                    new Rectangle((int) position.X - 5, (int) position.Y, item.Width, item.Height),
+                    new Rectangle((int)position.X - 5, (int)position.Y, item.Width, item.Height),
                     FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
             }
+        }
+
+        internal static void DrawToolTip_Button(Vector2 position, MenuItem item)
+        {
+            DrawBox(position, item.Height, item.Height, Color.Black, 1, Color.LightSlateGray);
+            var s = "?";
+            Font.DrawText(
+                null, s,
+                new Rectangle(
+                    (int)(item.Position.X + item.Width), (int)item.Position.Y, item.Height, item.Height),
+                FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
+        }
+
+        internal static void DrawToolTip_Text(Vector2 position, MenuItem item, SharpDX.Color? TextColor = null)
+        {
+
+            DrawBox(new Vector2(position.X + item.Height + 5, position.Y - 3), (int)Font.MeasureText(item.Tooltip).Width + 8, item.Height, Color.Black, 1, Color.LightSlateGray);
+
+            var s = item.Tooltip;
+            Font.DrawText(
+                null, s,
+                new Rectangle(
+                    (int)(item.Position.X + item.Width + item.Height + 8), (int)item.Position.Y - 3, Font.MeasureText(item.Tooltip).Width + 8, item.Height),
+                FontDrawFlags.VerticalCenter, TextColor ?? SharpDX.Color.White);
         }
     }
 
@@ -407,6 +432,9 @@ namespace LeagueSharp.Common
             root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 13, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
+            root.AddItem(
+                new MenuItem("LeagueSharp.Common.TooltipDuration", "Tooltips Duration").SetValue(
+                    new Slider(1500, 0, 5000)));
             root.AddItem(
                 new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(FontStyle.Bold, SharpDX.Color.Yellow));
             CommonMenu.Config.AddSubMenu(root);
@@ -527,11 +555,11 @@ namespace LeagueSharp.Common
 
                 if (Parent != null)
                 {
-                    xOffset = (int) (Parent.Position.X + Parent.Width);
+                    xOffset = (int)(Parent.Position.X + Parent.Width);
                 }
                 else
                 {
-                    xOffset = (int) MyBasePosition.X;
+                    xOffset = (int)MyBasePosition.X;
                 }
 
                 return new Vector2(0, MyBasePosition.Y) + new Vector2(xOffset, 0) +
@@ -639,7 +667,7 @@ namespace LeagueSharp.Common
 
         internal void Game_OnWndProc(WndEventArgs args)
         {
-            OnReceiveMessage((WindowsMessages) args.Msg, Utils.GetCursorPos(), args.WParam);
+            OnReceiveMessage((WindowsMessages)args.Msg, Utils.GetCursorPos(), args.WParam);
         }
 
         internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
@@ -665,7 +693,7 @@ namespace LeagueSharp.Common
             {
                 if (cursorPos.X - MenuSettings.BasePosition.X < MenuSettings.MenuItemWidth)
                 {
-                    var n = (int) (cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
+                    var n = (int)(cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
                     if (MenuCount != n)
                     {
                         foreach (var schild in Children)
@@ -736,10 +764,10 @@ namespace LeagueSharp.Common
                     : MenuSettings.BackgroundColor, 1, System.Drawing.Color.Black);
 
             MenuDrawHelper.Font.DrawText(
-                null, MultiLanguage._(DisplayName), new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
+                null, MultiLanguage._(DisplayName), new Rectangle((int)Position.X + 5, (int)Position.Y, Width, Height),
                 FontDrawFlags.VerticalCenter, Color);
             MenuDrawHelper.Font.DrawText(
-                null, ">", new Rectangle((int) Position.X - 5, (int) Position.Y, Width, Height),
+                null, ">", new Rectangle((int)Position.X - 5, (int)Position.Y, Width, Height),
                 FontDrawFlags.Right | FontDrawFlags.VerticalCenter, Color);
 
             //Draw the menu submenus
@@ -896,12 +924,12 @@ namespace LeagueSharp.Common
 
         public T GetOldValue<T>()
         {
-            return (T) _oldValue;
+            return (T)_oldValue;
         }
 
         public T GetNewValue<T>()
         {
-            return (T) _newValue;
+            return (T)_newValue;
         }
     }
 
@@ -924,6 +952,18 @@ namespace LeagueSharp.Common
         public bool ShowItem;
         public int Tag;
         internal MenuValueType ValueType;
+        public string Tooltip;
+
+        public int TooltipDuration
+        {
+            get
+            {
+                return CommonMenu.Config.Item("LeagueSharp.Common.TooltipDuration").GetValue<Slider>().Value;
+            }
+        }
+
+        public SharpDX.Color TooltipColor;
+        internal bool DrawingTooltip;
 
         public MenuItem(string name,
             string displayName,
@@ -950,14 +990,21 @@ namespace LeagueSharp.Common
 
             return this;
         }
-        
+
+        public MenuItem SetTooltip(string tooltip, SharpDX.Color? tooltipColor = null)
+        {
+            Tooltip = tooltip;
+            TooltipColor = tooltipColor ?? SharpDX.Color.White;
+            return this;
+        }
+
         public MenuItem Show(bool showItem = true)
         {
             this.ShowItem = showItem;
 
             return this;
         }
-        
+
         public MenuItem SetTag(int tag = 0)
         {
             this.Tag = tag;
@@ -990,7 +1037,7 @@ namespace LeagueSharp.Common
                     return 0;
                 }
 
-                return Parent.YLevel + Parent.Children.Count + 
+                return Parent.YLevel + Parent.Children.Count +
                        Parent.Items.TakeWhile(test => test.Name != Name).Count(c => c.ShowItem);
             }
         }
@@ -1016,7 +1063,7 @@ namespace LeagueSharp.Common
 
                 if (Parent != null)
                 {
-                    xOffset = (int) (Parent.Position.X + Parent.Width);
+                    xOffset = (int)(Parent.Position.X + Parent.Width);
                 }
 
                 return new Vector2(0, MyBasePosition.Y) + new Vector2(xOffset, 0) +
@@ -1075,7 +1122,7 @@ namespace LeagueSharp.Common
 
         public T GetValue<T>()
         {
-            return (T) _value;
+            return (T)_value;
         }
 
         public bool IsActive()
@@ -1138,37 +1185,37 @@ namespace LeagueSharp.Common
                     switch (ValueType)
                     {
                         case MenuValueType.KeyBind:
-                            var savedKeyValue = (KeyBind) (object) Utils.Deserialize<T>(readBytes);
+                            var savedKeyValue = (KeyBind)(object)Utils.Deserialize<T>(readBytes);
                             if (savedKeyValue.Type == KeyBindType.Press)
                             {
                                 savedKeyValue.Active = false;
                             }
-                            newValue = (T) (object) savedKeyValue;
+                            newValue = (T)(object)savedKeyValue;
                             break;
 
                         case MenuValueType.Circle:
-                            var savedCircleValue = (Circle) (object) Utils.Deserialize<T>(readBytes);
-                            var newCircleValue = (Circle) (object) newValue;
+                            var savedCircleValue = (Circle)(object)Utils.Deserialize<T>(readBytes);
+                            var newCircleValue = (Circle)(object)newValue;
                             savedCircleValue.Radius = newCircleValue.Radius;
-                            newValue = (T) (object) savedCircleValue;
+                            newValue = (T)(object)savedCircleValue;
                             break;
 
                         case MenuValueType.Slider:
-                            var savedSliderValue = (Slider) (object) Utils.Deserialize<T>(readBytes);
-                            var newSliderValue = (Slider) (object) newValue;
+                            var savedSliderValue = (Slider)(object)Utils.Deserialize<T>(readBytes);
+                            var newSliderValue = (Slider)(object)newValue;
                             if (savedSliderValue.MinValue == newSliderValue.MinValue &&
                                 savedSliderValue.MaxValue == newSliderValue.MaxValue)
                             {
-                                newValue = (T) (object) savedSliderValue;
+                                newValue = (T)(object)savedSliderValue;
                             }
                             break;
 
                         case MenuValueType.StringList:
-                            var savedListValue = (StringList) (object) Utils.Deserialize<T>(readBytes);
-                            var newListValue = (StringList) (object) newValue;
+                            var savedListValue = (StringList)(object)Utils.Deserialize<T>(readBytes);
+                            var newListValue = (StringList)(object)newValue;
                             if (savedListValue.SList.SequenceEqual(newListValue.SList))
                             {
-                                newValue = (T) (object) savedListValue;
+                                newValue = (T)(object)savedListValue;
                             }
                             break;
 
@@ -1227,7 +1274,7 @@ namespace LeagueSharp.Common
 
         internal bool IsInside(Vector2 position)
         {
-            return Utils.IsUnderRectangle(position, Position.X, Position.Y, Width, Height);
+            return Utils.IsUnderRectangle(position, Position.X, Position.Y, !String.IsNullOrEmpty(this.Tooltip) ? Width + Height : Width, Height);
         }
 
         internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
@@ -1251,6 +1298,11 @@ namespace LeagueSharp.Common
                         return;
                     }
 
+                    if (cursorPos.X > Position.X + Width)
+                    {
+                        break;
+                    }
+
                     if (cursorPos.X > Position.X + Width - Height)
                     {
                         SetValue(!GetValue<bool>());
@@ -1266,12 +1318,17 @@ namespace LeagueSharp.Common
                         return;
                     }
 
+                    if (cursorPos.X > Position.X + Width)
+                    {
+                        break;
+                    }
+
                     if (message == WindowsMessages.WM_MOUSEMOVE && Interacting ||
                         message == WindowsMessages.WM_LBUTTONDOWN && !Interacting && IsInside(cursorPos))
                     {
                         var val = GetValue<Slider>();
                         var t = val.MinValue + ((cursorPos.X - Position.X) * (val.MaxValue - val.MinValue)) / Width;
-                        val.Value = (int) t;
+                        val.Value = (int)t;
                         SetValue(val);
                     }
 
@@ -1304,6 +1361,11 @@ namespace LeagueSharp.Common
                         return;
                     }
 
+                    if (cursorPos.X > Position.X + Width)
+                    {
+                        break;
+                    }
+
                     if (cursorPos.X > Position.X + Width - Height)
                     {
                         var c = GetValue<Color>();
@@ -1326,6 +1388,11 @@ namespace LeagueSharp.Common
                     if (!IsInside(cursorPos))
                     {
                         return;
+                    }
+
+                    if (cursorPos.X > Position.X + Width)
+                    {
+                        break;
                     }
 
                     if (cursorPos.X - Position.X > Width - Height)
@@ -1409,6 +1476,12 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
+
+                    if (cursorPos.X > Position.X + Width)
+                    {
+                        break;
+                    }
+
                     if (cursorPos.X > Position.X + Width - Height)
                     {
                         var val = GetValue<KeyBind>();
@@ -1425,13 +1498,20 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
+
                     if (message != WindowsMessages.WM_LBUTTONDOWN)
                     {
                         return;
                     }
+
                     if (!IsInside(cursorPos))
                     {
                         return;
+                    }
+
+                    if (cursorPos.X > Position.X + Width)
+                    {
+                        break;
                     }
 
                     var slVal = GetValue<StringList>();
@@ -1452,6 +1532,40 @@ namespace LeagueSharp.Common
 
                     break;
             }
+
+            if (message != WindowsMessages.WM_LBUTTONDOWN)
+            {
+                return;
+            }
+
+            if (!Visible)
+            {
+                return;
+            }
+
+            if (!IsInside(cursorPos))
+            {
+                return;
+            }
+
+            if (cursorPos.X > Position.X + Width && cursorPos.X < Position.X + Width + Height)
+            {
+                ShowTooltip();
+            }
+
+        }
+
+        public void ShowTooltip_Notification()
+        {
+            var notif = new Notification(this.Tooltip).SetTextColor(System.Drawing.Color.White);
+            Notifications.AddNotification(notif);
+            Utility.DelayAction.Add(this.TooltipDuration, () => notif.Dispose());
+        }
+        public void ShowTooltip()
+        {
+            DrawingTooltip = true;
+            Utility.DelayAction.Add(this.TooltipDuration, () => DrawingTooltip = false);
+
         }
 
         internal void Drawing_OnDraw()
@@ -1459,6 +1573,12 @@ namespace LeagueSharp.Common
             MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
             var s = MultiLanguage._(DisplayName);
 
+            MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
+
+            if (DrawingTooltip)
+            {
+                MenuDrawHelper.DrawToolTip_Text(new Vector2(Position.X + Width, Position.Y), this, TooltipColor);
+            }
 
             switch (ValueType)
             {
@@ -1487,7 +1607,7 @@ namespace LeagueSharp.Common
                 case MenuValueType.Integer:
                     var intVal = GetValue<int>();
                     MenuDrawHelper.Font.DrawText(
-                        null, intVal.ToString(), new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
+                        null, intVal.ToString(), new Rectangle((int)Position.X + 5, (int)Position.Y, Width, Height),
                         FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
                     break;
 
@@ -1515,9 +1635,14 @@ namespace LeagueSharp.Common
 
                     MenuDrawHelper.Font.DrawText(
                         null, MultiLanguage._(t),
-                        new Rectangle((int) Position.X - 5 - 2 * Height, (int) Position.Y, Width, Height),
+                        new Rectangle((int)Position.X - 5 - 2 * Height, (int)Position.Y, Width, Height),
                         FontDrawFlags.VerticalCenter | FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
                     break;
+            }
+
+            if (!String.IsNullOrEmpty(this.Tooltip))
+            {
+                MenuDrawHelper.DrawToolTip_Button(new Vector2(Position.X + Width, Position.Y), this);
             }
 
             Font font;
@@ -1532,7 +1657,7 @@ namespace LeagueSharp.Common
             }
 
             font.DrawText(
-                null, s, new Rectangle((int) Position.X + 5, (int) Position.Y, Width, Height),
+                null, s, new Rectangle((int)Position.X + 5, (int)Position.Y, Width, Height),
                 FontDrawFlags.VerticalCenter, FontColor);
         }
     }
@@ -1571,10 +1696,10 @@ namespace LeagueSharp.Common
             UpdateLuminosityBitmap(Color.White, true);
             UpdateOpacityBitmap(Color.White, true);
 
-            BackgroundSprite = (Render.Sprite) new Render.Sprite(Resources.CPForm, new Vector2(X, Y)).Add(1);
+            BackgroundSprite = (Render.Sprite)new Render.Sprite(Resources.CPForm, new Vector2(X, Y)).Add(1);
 
-            LuminitySprite = (Render.Sprite) new Render.Sprite(LuminityBitmap, new Vector2(X + 285, Y + 40)).Add(0);
-            OpacitySprite = (Render.Sprite) new Render.Sprite(OpacityBitmap, new Vector2(X + 349, Y + 40)).Add(0);
+            LuminitySprite = (Render.Sprite)new Render.Sprite(LuminityBitmap, new Vector2(X + 285, Y + 40)).Add(0);
+            OpacitySprite = (Render.Sprite)new Render.Sprite(OpacityBitmap, new Vector2(X + 349, Y + 40)).Add(0);
 
             PreviewRectangle =
                 (Render.Rectangle)
@@ -1657,10 +1782,10 @@ namespace LeagueSharp.Common
         {
             OnChangeColor = onSelectcolor;
             SColor = color;
-            SHue = ((HSLColor) color).Hue;
-            SSaturation = ((HSLColor) color).Saturation;
+            SHue = ((HSLColor)color).Hue;
+            SSaturation = ((HSLColor)color).Saturation;
 
-            LuminositySlider.Percent = (float) SColor.Luminosity / 100f;
+            LuminositySlider.Percent = (float)SColor.Luminosity / 100f;
             AlphaSlider.Percent = color.A / 255f;
             X = (Drawing.Width - BackgroundSprite.Width) / 2;
             Y = (Drawing.Height - BackgroundSprite.Height) / 2;
@@ -1692,7 +1817,7 @@ namespace LeagueSharp.Common
             LuminositySlider.OnWndProc(args);
             AlphaSlider.OnWndProc(args);
 
-            if (args.Msg == (uint) WindowsMessages.WM_LBUTTONDOWN)
+            if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
                 var pos = Utils.GetCursorPos();
 
@@ -1722,12 +1847,12 @@ namespace LeagueSharp.Common
                     UpdateColor();
                 }
             }
-            else if (args.Msg == (uint) WindowsMessages.WM_LBUTTONUP)
+            else if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP)
             {
                 _moving = false;
                 _selecting = false;
             }
-            else if (args.Msg == (uint) WindowsMessages.WM_MOUSEMOVE)
+            else if (args.Msg == (uint)WindowsMessages.WM_MOUSEMOVE)
             {
                 if (_selecting)
                 {
@@ -1741,8 +1866,8 @@ namespace LeagueSharp.Common
                 if (_moving)
                 {
                     var pos = Utils.GetCursorPos();
-                    X += (int) (pos.X - _prevPos.X);
-                    Y += (int) (pos.Y - _prevPos.Y);
+                    X += (int)(pos.X - _prevPos.X);
+                    Y += (int)(pos.Y - _prevPos.Y);
                 }
                 _prevPos = Utils.GetCursorPos();
             }
@@ -1803,16 +1928,16 @@ namespace LeagueSharp.Common
             if (_selecting)
             {
                 var pos = Utils.GetCursorPos();
-                var color = BackgroundSprite.Bitmap.GetPixel((int) pos.X - X, (int) pos.Y - Y);
-                SHue = ((HSLColor) color).Hue;
-                SSaturation = ((HSLColor) color).Saturation;
+                var color = BackgroundSprite.Bitmap.GetPixel((int)pos.X - X, (int)pos.Y - Y);
+                SHue = ((HSLColor)color).Hue;
+                SSaturation = ((HSLColor)color).Saturation;
                 UpdateLuminosityBitmap(color);
             }
 
             SColor.Hue = SHue;
             SColor.Saturation = SSaturation;
             SColor.Luminosity = (LuminositySlider.Percent * 100d);
-            var r = Color.FromArgb(((int) (AlphaSlider.Percent * 255)), SColor);
+            var r = Color.FromArgb(((int)(AlphaSlider.Percent * 255)), SColor);
             PreviewRectangle.Color = new ColorBGRA(r.R, r.G, r.B, r.A);
             UpdateOpacityBitmap(r);
             FireOnChangeColor(r);
@@ -1879,8 +2004,8 @@ namespace LeagueSharp.Common
                 {
                     ActiveSprite.Y = sY;
                     InactiveSprite.Y = sY;
-                    ActiveSprite.Y = sY + (int) (Percent * Height);
-                    InactiveSprite.Y = sY + (int) (Percent * Height);
+                    ActiveSprite.Y = sY + (int)(Percent * Height);
+                    InactiveSprite.Y = sY + (int)(Percent * Height);
                 }
                 get { return _y + Y; }
             }
@@ -1905,15 +2030,15 @@ namespace LeagueSharp.Common
                 var pos = Utils.GetCursorPos();
                 Percent = (pos.Y - Resources.CPActiveSlider.Height / 2 - sY) / Height;
                 UpdateColor();
-                ActiveSprite.Y = sY + (int) (Percent * Height);
-                InactiveSprite.Y = sY + (int) (Percent * Height);
+                ActiveSprite.Y = sY + (int)(Percent * Height);
+                InactiveSprite.Y = sY + (int)(Percent * Height);
             }
 
             public void OnWndProc(WndEventArgs args)
             {
                 switch (args.Msg)
                 {
-                    case (uint) WindowsMessages.WM_LBUTTONDOWN:
+                    case (uint)WindowsMessages.WM_LBUTTONDOWN:
                         var pos = Utils.GetCursorPos();
                         if (Utils.IsUnderRectangle(pos, sX, sY, Width, Height + Resources.CPActiveSlider.Height))
                         {
@@ -1923,13 +2048,13 @@ namespace LeagueSharp.Common
                             UpdatePercent();
                         }
                         break;
-                    case (uint) WindowsMessages.WM_MOUSEMOVE:
+                    case (uint)WindowsMessages.WM_MOUSEMOVE:
                         if (Moving)
                         {
                             UpdatePercent();
                         }
                         break;
-                    case (uint) WindowsMessages.WM_LBUTTONUP:
+                    case (uint)WindowsMessages.WM_LBUTTONUP:
                         Moving = false;
                         ActiveSprite.Visible = Moving;
                         InactiveSprite.Visible = !Moving;
@@ -1947,7 +2072,7 @@ namespace LeagueSharp.Common
             private double hue = 1.0;
             private double luminosity = 1.0;
             private double saturation = 1.0;
-            public HSLColor() {}
+            public HSLColor() { }
 
             public HSLColor(Color color)
             {
@@ -2037,7 +2162,7 @@ namespace LeagueSharp.Common
                         b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
                     }
                 }
-                return Color.FromArgb((int) (255 * r), (int) (255 * g), (int) (255 * b));
+                return Color.FromArgb((int)(255 * r), (int)(255 * g), (int)(255 * b));
             }
 
             private static double GetColorComponent(double temp1, double temp2, double temp3)
