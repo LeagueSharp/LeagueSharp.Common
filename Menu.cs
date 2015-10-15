@@ -222,7 +222,7 @@ namespace LeagueSharp.Common
 
         public static int MenuItemHeight
         {
-            get { return 30; }
+            get { return 32; }
         }
 
         public static Color BackgroundColor
@@ -232,7 +232,7 @@ namespace LeagueSharp.Common
 
         public static Color ActiveBackgroundColor
         {
-            get { return Color.DimGray; }
+            get { return Color.FromArgb(0, 37, 53); }
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
@@ -338,8 +338,8 @@ namespace LeagueSharp.Common
 
         internal static void DrawOnOff(bool on, Vector2 position, MenuItem item)
         {
-            DrawBox(position, item.Height, item.Height, on ? Color.Green : Color.Red, 1, Color.Black);
-            var s = on ? "On" : "Off";
+            DrawBox(position, item.Height, item.Height, on ? Color.FromArgb(1, 169, 234) : Color.FromArgb(37, 37, 37), 1, Color.Black);
+            var s = on ? "ON" : "OFF";
             Font.DrawText(
                 null, s,
                 new Rectangle(
@@ -372,7 +372,9 @@ namespace LeagueSharp.Common
             width = (width > 0 ? width : item.Width);
             var percentage = 100 * (value - min) / (max - min);
             var x = position.X + 3 + (percentage * (width - 3)) / 100;
-            Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.Yellow);
+            var x2D = 3 + (percentage * (width - 3)) / 100;
+            Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.FromArgb(0, 74, 103));
+            DrawBox(new Vector2(position.X, position.Y), x2D - 2, item.Height, Color.FromArgb(0, 37, 53), 0, Color.Black);
 
             if (drawText)
             {
@@ -429,8 +431,8 @@ namespace LeagueSharp.Common
         {
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
-                    new StringList(new[] { "Tahoma", "Segoe UI", "Calibri" }, 0)));
-            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 13, 20)));
+                    new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" }, 0)));
+            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(12, 12, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
@@ -1095,7 +1097,7 @@ namespace LeagueSharp.Common
                 if (ValueType == MenuValueType.KeyBind)
                 {
                     var val = GetValue<KeyBind>();
-                    extra += MenuDrawHelper.Font.MeasureText(" (" + Utils.KeyToText(val.Key) + ")").Width;
+                    extra += MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(val.Key) + "]").Width;
                 }
 
                 return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width + Height * 2 + 10 + extra;
@@ -1581,6 +1583,17 @@ namespace LeagueSharp.Common
                 MenuDrawHelper.DrawToolTip_Text(new Vector2(Position.X + Width, Position.Y), this, TooltipColor);
             }
 
+            Font font;
+            switch (FontStyle)
+            {
+                case FontStyle.Bold:
+                    font = MenuDrawHelper.FontBold;
+                    break;
+                default:
+                    font = MenuDrawHelper.Font;
+                    break;
+            }
+
             switch (ValueType)
             {
                 case MenuValueType.Boolean:
@@ -1594,13 +1607,16 @@ namespace LeagueSharp.Common
 
                 case MenuValueType.KeyBind:
                     var val = GetValue<KeyBind>();
-                    s += " (" + Utils.KeyToText(val.Key) + ")";
+                    //s += " (" + Utils.KeyToText(val.Key) + ")";
 
                     if (Interacting)
                     {
                         s = MultiLanguage._("Press new key");
                     }
 
+                    int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
+                    int y = (int)Position.Y;
+                    font.DrawText(null, "[" + Utils.KeyToText(val.Key) + "]", new Rectangle(x, (int)Position.Y, Width, Height), FontDrawFlags.VerticalCenter, new ColorBGRA(1, 169, 234, 255));
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
 
                     break;
@@ -1644,17 +1660,6 @@ namespace LeagueSharp.Common
             if (!String.IsNullOrEmpty(this.Tooltip))
             {
                 MenuDrawHelper.DrawToolTip_Button(new Vector2(Position.X + Width, Position.Y), this);
-            }
-
-            Font font;
-            switch (FontStyle)
-            {
-                case FontStyle.Bold:
-                    font = MenuDrawHelper.FontBold;
-                    break;
-                default:
-                    font = MenuDrawHelper.Font;
-                    break;
             }
 
             font.DrawText(
