@@ -221,7 +221,7 @@ namespace LeagueSharp.Common
 
         public static int MenuItemHeight
         {
-            get { return 30; }
+            get { return 40; }
         }
 
         public static Color BackgroundColor
@@ -231,7 +231,7 @@ namespace LeagueSharp.Common
 
         public static Color ActiveBackgroundColor
         {
-            get { return Color.DimGray; }
+            get { return Color.FromArgb(0, 37, 53); }
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
@@ -337,8 +337,8 @@ namespace LeagueSharp.Common
 
         internal static void DrawOnOff(bool on, Vector2 position, MenuItem item)
         {
-            DrawBox(position, item.Height, item.Height, on ? Color.Green : Color.Red, 1, Color.Black);
-            var s = on ? "On" : "Off";
+            DrawBox(position, item.Height, item.Height, on ? Color.FromArgb(1, 186, 253) : Color.FromArgb(37, 37, 37), 1, Color.Black);
+            var s = on ? "ON" : "OFF";
             Font.DrawText(
                 null, s,
                 new Rectangle(
@@ -371,7 +371,8 @@ namespace LeagueSharp.Common
             width = (width > 0 ? width : item.Width);
             var percentage = 100 * (value - min) / (max - min);
             var x = position.X + 3 + (percentage * (width - 3)) / 100;
-            Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.Yellow);
+            Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.FromArgb(0, 74, 103));
+            DrawBox(new Vector2(x, position.Y), (int)x, (int)position.Y + item.Height, Color.FromArgb(0, 37, 53), 0, Color.Black);
 
             if (drawText)
             {
@@ -428,7 +429,7 @@ namespace LeagueSharp.Common
         {
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
-                    new StringList(new[] { "Tahoma", "Segoe UI", "Calibri" }, 0)));
+                    new StringList(new[] { "Segoe UI", "Tahoma", "Calibri" }, 0)));
             root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 13, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
