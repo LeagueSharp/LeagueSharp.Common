@@ -337,7 +337,7 @@ namespace LeagueSharp.Common
 
         internal static void DrawOnOff(bool on, Vector2 position, MenuItem item)
         {
-            DrawBox(position, item.Height, item.Height, on ? Color.FromArgb(1, 186, 253) : Color.FromArgb(37, 37, 37), 1, Color.Black);
+            DrawBox(position, item.Height, item.Height, on ? Color.FromArgb(1, 169, 234) : Color.FromArgb(37, 37, 37), 1, Color.Black);
             var s = on ? "ON" : "OFF";
             Font.DrawText(
                 null, s,
@@ -430,8 +430,8 @@ namespace LeagueSharp.Common
         {
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
-                    new StringList(new[] { "Calibri", "Tahoma", "Segoe UI" }, 0)));
-            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(11, 11, 20)));
+                    new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" }, 0)));
+            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(12, 12, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
