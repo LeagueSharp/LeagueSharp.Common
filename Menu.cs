@@ -221,7 +221,7 @@ namespace LeagueSharp.Common
 
         public static int MenuItemHeight
         {
-            get { return 40; }
+            get { return 32; }
         }
 
         public static Color BackgroundColor
@@ -372,7 +372,7 @@ namespace LeagueSharp.Common
             var percentage = 100 * (value - min) / (max - min);
             var x = position.X + 3 + (percentage * (width - 3)) / 100;
             Drawing.DrawLine(x, position.Y + 2, x, position.Y + item.Height, 2, Color.FromArgb(0, 74, 103));
-            DrawBox(new Vector2(x, position.Y), (int)x, (int)position.Y + item.Height, Color.FromArgb(0, 37, 53), 0, Color.Black);
+            DrawBox(new Vector2(position.X, position.Y), (int)x, (int)position.Y + item.Height, Color.FromArgb(0, 37, 53), 0, Color.Black);
 
             if (drawText)
             {
