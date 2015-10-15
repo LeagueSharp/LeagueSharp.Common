@@ -430,8 +430,8 @@ namespace LeagueSharp.Common
         {
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
-                    new StringList(new[] { "Segoe UI", "Tahoma", "Calibri" }, 0)));
-            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 13, 20)));
+                    new StringList(new[] { "Calibri", "Tahoma", "Segoe UI" }, 0)));
+            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(11, 11, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
@@ -1613,7 +1613,7 @@ namespace LeagueSharp.Common
                         s = MultiLanguage._("Press new key");
                     }
 
-                    int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 15;
+                    int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
                     int y = (int)Position.Y;
                     font.DrawText(null, "[" + Utils.KeyToText(val.Key) + "]", new Rectangle(x, (int)Position.Y, Width, Height), FontDrawFlags.VerticalCenter, new ColorBGRA(1, 169, 234, 255));
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
