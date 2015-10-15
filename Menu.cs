@@ -1096,7 +1096,7 @@ namespace LeagueSharp.Common
                 if (ValueType == MenuValueType.KeyBind)
                 {
                     var val = GetValue<KeyBind>();
-                    extra += MenuDrawHelper.Font.MeasureText(" (" + Utils.KeyToText(val.Key) + ")").Width;
+                    extra += MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(val.Key) + "]").Width;
                 }
 
                 return MenuDrawHelper.Font.MeasureText(MultiLanguage._(DisplayName)).Width + Height * 2 + 10 + extra;
@@ -1582,6 +1582,17 @@ namespace LeagueSharp.Common
                 MenuDrawHelper.DrawToolTip_Text(new Vector2(Position.X + Width, Position.Y), this, TooltipColor);
             }
 
+            Font font;
+            switch (FontStyle)
+            {
+                case FontStyle.Bold:
+                    font = MenuDrawHelper.FontBold;
+                    break;
+                default:
+                    font = MenuDrawHelper.Font;
+                    break;
+            }
+
             switch (ValueType)
             {
                 case MenuValueType.Boolean:
@@ -1595,13 +1606,16 @@ namespace LeagueSharp.Common
 
                 case MenuValueType.KeyBind:
                     var val = GetValue<KeyBind>();
-                    s += " (" + Utils.KeyToText(val.Key) + ")";
+                    //s += " (" + Utils.KeyToText(val.Key) + ")";
 
                     if (Interacting)
                     {
                         s = MultiLanguage._("Press new key");
                     }
 
+                    int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width;
+                    int y = (int)Position.Y;
+                    font.DrawText(null, "[" + Utils.KeyToText(val.Key) + "]", x, y, new ColorBGRA(1, 169, 234, 255));//Color.FromArgb(1, 169, 234));
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
 
                     break;
@@ -1645,17 +1659,6 @@ namespace LeagueSharp.Common
             if (!String.IsNullOrEmpty(this.Tooltip))
             {
                 MenuDrawHelper.DrawToolTip_Button(new Vector2(Position.X + Width, Position.Y), this);
-            }
-
-            Font font;
-            switch (FontStyle)
-            {
-                case FontStyle.Bold:
-                    font = MenuDrawHelper.FontBold;
-                    break;
-                default:
-                    font = MenuDrawHelper.Font;
-                    break;
             }
 
             font.DrawText(
