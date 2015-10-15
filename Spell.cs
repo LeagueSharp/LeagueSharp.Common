@@ -44,7 +44,8 @@ namespace LeagueSharp.Common
             OutOfRange,
             Collision,
             NotEnoughTargets,
-            LowHitChance
+            LowHitChance,
+            PreventFlood,
         }
 
         private int _chargedCastedT;
@@ -154,6 +155,17 @@ namespace LeagueSharp.Common
         {
             get { return !_rangeCheckFrom.To2D().IsValid() ? ObjectManager.Player.ServerPosition : _rangeCheckFrom; }
             set { _rangeCheckFrom = value; }
+        }
+
+        internal static void Initialize()
+        {
+            CustomEvents.Game.OnGameLoad += eventArgs =>
+            {
+                var menu = new Menu("CastFunction", "CastFunction");
+                var slider = new MenuItem("LimitCastingAttempts", "Limit Casting Attempts").SetValue(true);
+                menu.AddItem(slider);
+                CommonMenu.Config.AddSubMenu(menu);
+            };
         }
 
         public void SetTargetted(float delay,
@@ -334,6 +346,12 @@ namespace LeagueSharp.Common
                     return CastStates.OutOfRange;
                 }
 
+                //Prevent flood
+                if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+                {
+                    return CastStates.PreventFlood;
+                }
+
                 LastCastAttemptT = Utils.TickCount;
 
                 if (packetCast)
@@ -382,6 +400,12 @@ namespace LeagueSharp.Common
                 return CastStates.LowHitChance;
             }
 
+            //Prevent flood
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return CastStates.PreventFlood;
+            }
+
             LastCastAttemptT = Utils.TickCount;
 
             if (IsChargedSpell)
@@ -416,7 +440,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool CastOnUnit(Obj_AI_Base unit, bool packetCast = false)
         {
-            if (!Slot.IsReady() || From.Distance(unit.ServerPosition, true) > RangeSqr)
+            if (!Slot.IsReady() || From.Distance(unit.ServerPosition, true) > RangeSqr || (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping))))
             {
                 return false;
             }
@@ -473,6 +497,12 @@ namespace LeagueSharp.Common
         public bool Cast(Vector3 position, bool packetCast = false)
         {
             if (!Slot.IsReady())
+            {
+                return false;
+            }
+
+            //Prevent flood
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
             {
                 return false;
             }
