@@ -1613,8 +1613,8 @@ namespace LeagueSharp.Common
                         s = MultiLanguage._("Press new key");
                     }
 
-                    int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width;
-                    int y = (int)Position.Y;
+                    int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "] ").Width;
+                    int y = (int)Position.Y + (Height/2);
                     font.DrawText(null, "[" + Utils.KeyToText(val.Key) + "]", x, y, new ColorBGRA(1, 169, 234, 255));//Color.FromArgb(1, 169, 234));
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
 
