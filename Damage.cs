@@ -682,8 +682,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 55, 85, 115, 145, 175 }[level]
-                                    + 0.5 * source.FlatMagicDamageMod * (target.HasBuff("chilled") ? 2 : 1)
+                                    (new double[] { 55, 85, 115, 145, 175 }[level]
+                                    + 0.5 * source.FlatMagicDamageMod) * (target.HasBuff("chilled") ? 2 : 1)
                             },
                         //R - per second
                         new DamageSpell
