@@ -203,8 +203,11 @@ namespace LeagueSharp.Common
             return p4.Contains(championName) ? 4 : 1;
         }
 
-        public static void AddToMenu(Menu config)
+
+        internal static void Initialize()
         {
+            Menu config = new Menu("Target Selector", "TargetSelector");
+
             _configMenu = config;
             config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
             config.AddItem(
@@ -234,6 +237,13 @@ namespace LeagueSharp.Common
             config.AddItem(
                 new MenuItem("TargetingMode", "Target Mode").SetShared()
                     .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
+
+            CommonMenu.Config.AddSubMenu(config);
+        }
+
+        public static void AddToMenu(Menu config)
+        {
+            config.AddItem(new MenuItem("Alert", "----Use TS in Common Menu----"));
         }
 
         private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)

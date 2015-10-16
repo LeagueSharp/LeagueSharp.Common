@@ -22,9 +22,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D9;
+using Color = SharpDX.Color;
+using Font = SharpDX.Direct3D9.Font;
 
 namespace LeagueSharp.Common
 {
@@ -452,18 +455,37 @@ namespace LeagueSharp.Common
 		/// </summary>
 		private static void PrepareDrawing()
 		{
+
+		    string FontName;
+		    int FontHeight;
+		    FontQuality Quality;
+		    try
+		    {
+		        FontName = CommonMenu.Config.Item("FontName").GetValue<StringList>().SelectedValue;
+		        FontHeight = CommonMenu.Config.Item("FontSize").GetValue<Slider>().Value;
+		        Quality = (FontQuality)
+		            Enum.Parse(
+		                typeof (FontQuality),
+		                CommonMenu.Config.Item("FontQuality").GetValue<StringList>().SelectedValue);
+		    }
+
+		    catch (Exception e)
+		    {
+		        Console.WriteLine("Common Menu not initialized yet. Resorting to Default Settings");
+                FontName = "Tahoma";
+                FontHeight = 13;
+                Quality = FontQuality.Default;
+            }
+
+
 		    Text = new Font(
 		        Drawing.Direct3DDevice,
 		        new FontDescription
 		            {
-		                FaceName = CommonMenu.Config.Item("FontName").GetValue<StringList>().SelectedValue,
-		                Height = CommonMenu.Config.Item("FontSize").GetValue<Slider>().Value,
+		                FaceName = FontName,
+		                Height = FontHeight,
 		                OutputPrecision = FontPrecision.Default,
-		                Quality =
-		                    (FontQuality)
-		                    Enum.Parse(
-		                        typeof(FontQuality),
-		                        CommonMenu.Config.Item("FontQuality").GetValue<StringList>().SelectedValue)
+		                Quality = Quality,
 		            });
 
 			sprite = new Sprite(Drawing.Direct3DDevice);
