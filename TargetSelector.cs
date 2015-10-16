@@ -73,6 +73,27 @@ namespace LeagueSharp.Common
         private static Menu _configMenu;
         private static Obj_AI_Hero _selectedTargetObjAiHero;
 
+        private static bool UsingCustom;
+
+        public static bool CustomTS
+        {
+            get { return UsingCustom; }
+            set
+            {
+                UsingCustom = value;
+                if (value)
+                {
+                    Game.OnWndProc -= GameOnOnWndProc;
+                    Drawing.OnDraw -= DrawingOnOnDraw;
+                }
+                else
+                {
+                    Game.OnWndProc += GameOnOnWndProc;
+                    Drawing.OnDraw += DrawingOnOnDraw;
+                }
+            }
+        }
+
         #endregion
 
         #region EventArgs
