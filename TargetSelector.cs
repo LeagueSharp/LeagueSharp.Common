@@ -206,39 +206,45 @@ namespace LeagueSharp.Common
 
         internal static void Initialize()
         {
-            Menu config = new Menu("Target Selector", "TargetSelector");
-
-            _configMenu = config;
-            config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
-            config.AddItem(
-                new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false)).Permashow();
-            config.AddItem(
-                new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
-            config.AddItem(new MenuItem("Sep", "").SetShared());
-            var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
-            autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
-
-            foreach (var enemy in HeroManager.Enemies)
+            CustomEvents.Game.OnGameLoad += args =>
             {
-                config.AddItem(
-                    new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
-                        .SetValue(
-                            new Slider(
-                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
-                if (autoPriorityItem.GetValue<bool>())
-                {
-                    config.Item("TargetSelector" + enemy.ChampionName + "Priority")
-                        .SetValue(
-                            new Slider(
-                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
-                }
-            }
-            config.AddItem(autoPriorityItem);
-            config.AddItem(
-                new MenuItem("TargetingMode", "Target Mode").SetShared()
-                    .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
+                Menu config = new Menu("Target Selector", "TargetSelector");
 
-            CommonMenu.Config.AddSubMenu(config);
+                _configMenu = config;
+
+                config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+                config.AddItem(
+                    new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false))
+                    .Permashow();
+                config.AddItem(
+                    new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
+                config.AddItem(new MenuItem("Sep", "").SetShared());
+                var autoPriorityItem =
+                    new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
+                autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
+
+                foreach (var enemy in HeroManager.Enemies)
+                {
+                    config.AddItem(
+                        new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
+                            .SetValue(
+                                new Slider(
+                                    autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
+                    if (autoPriorityItem.GetValue<bool>())
+                    {
+                        config.Item("TargetSelector" + enemy.ChampionName + "Priority")
+                            .SetValue(
+                                new Slider(
+                                    autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
+                    }
+                }
+                config.AddItem(autoPriorityItem);
+                config.AddItem(
+                    new MenuItem("TargetingMode", "Target Mode").SetShared()
+                        .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
+
+                CommonMenu.Config.AddSubMenu(config);
+            };
         }
 
         public static void AddToMenu(Menu config)

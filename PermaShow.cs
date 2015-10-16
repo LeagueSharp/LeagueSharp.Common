@@ -455,7 +455,6 @@ namespace LeagueSharp.Common
 		/// </summary>
 		private static void PrepareDrawing()
 		{
-
 		    string FontName;
 		    int FontHeight;
 		    FontQuality Quality;
@@ -471,7 +470,7 @@ namespace LeagueSharp.Common
 
 		    catch (Exception e)
 		    {
-		        Console.WriteLine("Common Menu not initialized yet. Resorting to Default Settings");
+		        Console.WriteLine("Common Menu not initialized yet. Resorting to Default Settings " + e);
                 FontName = "Tahoma";
                 FontHeight = 13;
                 Quality = FontQuality.Default;
