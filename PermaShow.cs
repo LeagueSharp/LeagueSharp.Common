@@ -69,7 +69,7 @@ namespace LeagueSharp.Common
 		private static readonly float YFactor = Drawing.Height / 768f;
 
 
-		private static readonly float DefaultPermaShowWidth = 270f;
+		private static readonly float DefaultPermaShowWidth = 155f;
 		private static readonly float DefaultSmallBoxWidth = 45f;
 
 		private static float PermaShowWidth

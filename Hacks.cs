@@ -16,7 +16,8 @@
                         LeagueSharp.Hacks.DisableDrawings = args.GetNewValue<bool>();
                     };
 
-                var say = menu.AddItem(new MenuItem("SayHack", "Disable L# Send Chat").SetValue(false));
+                var say = menu.AddItem(new MenuItem("SayHack", "Disable L# Send Chat").SetValue(false)
+                    .SetTooltip("Block Game.Say from Assemblies"));
                 say.SetValue(LeagueSharp.Hacks.DisableSay);
                 say.ValueChanged +=
                     delegate(object sender, OnValueChangeEventArgs args)
