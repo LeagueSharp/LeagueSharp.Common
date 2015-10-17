@@ -1320,11 +1320,6 @@ namespace LeagueSharp.Common
                         return;
                     }
 
-                    if (cursorPos.X > Position.X + Width)
-                    {
-                        break;
-                    }
-
                     if (message == WindowsMessages.WM_MOUSEMOVE && Interacting ||
                         message == WindowsMessages.WM_LBUTTONDOWN && !Interacting && IsInside(cursorPos))
                     {
