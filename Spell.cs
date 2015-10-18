@@ -162,7 +162,8 @@ namespace LeagueSharp.Common
             CustomEvents.Game.OnGameLoad += eventArgs =>
             {
                 var menu = new Menu("CastFunction", "CastFunction");
-                var slider = new MenuItem("LimitCastingAttempts", "Limit Casting Attempts").SetValue(true);
+                var slider = new MenuItem("LimitCastingAttempts", "Limit Casting Attempts").SetValue(true)
+                    .SetTooltip("Prevent Cast Flooding");
                 menu.AddItem(slider);
                 CommonMenu.Config.AddSubMenu(menu);
             };

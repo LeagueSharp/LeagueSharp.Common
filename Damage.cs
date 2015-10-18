@@ -676,14 +676,14 @@ namespace LeagueSharp.Common
                                     new double[] { 60, 90, 120, 150, 180 }[level] * 2
                                     + 1 * source.FlatMagicDamageMod
                             },
-                        //E - not chilled targets - TODO
+                        //E
                         new DamageSpell
                             {
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 55, 85, 115, 145, 175 }[level]
-                                    + 0.5 * source.FlatMagicDamageMod
+                                    (new double[] { 55, 85, 115, 145, 175 }[level]
+                                    + 0.5 * source.FlatMagicDamageMod) * (target.HasBuff("chilled") ? 2 : 1)
                             },
                         //R - per second
                         new DamageSpell

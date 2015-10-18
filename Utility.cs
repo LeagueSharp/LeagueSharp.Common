@@ -357,6 +357,18 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Returns if the unit has the specified buff in the indicated amount of time
+        /// </summary>
+        public static bool HasBuffIn(this Obj_AI_Base unit, string displayName, float tickCount, bool includePing = true)
+        { 
+            return
+                unit.Buffs.Any(
+                    buff =>
+                        buff.IsValid && buff.DisplayName == displayName &&
+                        buff.EndTime - Game.Time > tickCount - (includePing ? (Game.Ping/2000f) : 0));
+        }
+ 
+        /// <summary>
         ///     Returns if the unit has the buff and it is active
         /// </summary>
         [Obsolete("Use Obj_AI_Base.HasBuff")]

@@ -45,6 +45,7 @@ namespace LeagueSharp.Common
 
         static CommonMenu()
         {
+            TargetSelector.Initialize();
             Prediction.Initialize();
             Hacks.Initialize();
             FakeClicks.Initialize();
@@ -387,25 +388,33 @@ namespace LeagueSharp.Common
 
         internal static void DrawToolTip_Button(Vector2 position, MenuItem item)
         {
-            DrawBox(position, item.Height, item.Height, Color.Black, 1, Color.LightSlateGray);
-            var s = "?";
-            Font.DrawText(
-                null, s,
-                new Rectangle(
-                    (int)(item.Position.X + item.Width), (int)item.Position.Y, item.Height, item.Height),
-                FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
+            if (item.ValueType == MenuValueType.Circle || item.ValueType == MenuValueType.StringList)
+            {
+                return;
+            }
+
+            var s = "(?)";
+            Font.DrawText(null, s,
+                new Rectangle((int) (item.Position.X + item.Width) - 69, (int) item.Position.Y + 8, item.Height,
+                    item.Height), FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
         }
 
         internal static void DrawToolTip_Text(Vector2 position, MenuItem item, SharpDX.Color? TextColor = null)
         {
+            if (item.ValueType == MenuValueType.Circle || item.ValueType == MenuValueType.StringList)
+            {
+                return;
+            }
 
-            DrawBox(new Vector2(position.X + item.Height + 5, position.Y - 3), (int)Font.MeasureText(item.Tooltip).Width + 8, item.Height, Color.Black, 1, Color.LightSlateGray);
+            DrawBox(new Vector2(position.X + item.Height - 28, position.Y + 1),
+                (int) Font.MeasureText(item.Tooltip).Width + 8, item.Height, Color.Black, 1, Color.Black);
 
             var s = item.Tooltip;
             Font.DrawText(
                 null, s,
                 new Rectangle(
-                    (int)(item.Position.X + item.Width + item.Height + 8), (int)item.Position.Y - 3, Font.MeasureText(item.Tooltip).Width + 8, item.Height),
+                    (int) (item.Position.X + item.Width - 33 + item.Height + 8), (int) item.Position.Y - 3,
+                    Font.MeasureText(item.Tooltip).Width + 8, item.Height + 8),
                 FontDrawFlags.VerticalCenter, TextColor ?? SharpDX.Color.White);
         }
     }
@@ -759,7 +768,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
+            // Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
             MenuDrawHelper.DrawBox(
                 Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
@@ -1282,6 +1291,21 @@ namespace LeagueSharp.Common
 
         internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
         {
+            if (message == WindowsMessages.WM_MOUSEMOVE)
+            {
+                if (Visible && IsInside(cursorPos))
+                {
+                    if (cursorPos.X > Position.X + Width - 67 && cursorPos.X < Position.X + Width - 67 + Height + 8)
+                    {
+                        ShowTooltip();
+                    }
+                }
+                else
+                {
+                    ShowTooltip(true);
+                }
+            }
+
             switch (ValueType)
             {
                 case MenuValueType.Boolean:
@@ -1319,11 +1343,6 @@ namespace LeagueSharp.Common
                     {
                         Interacting = false;
                         return;
-                    }
-
-                    if (cursorPos.X > Position.X + Width)
-                    {
-                        break;
                     }
 
                     if (message == WindowsMessages.WM_MOUSEMOVE && Interacting ||
@@ -1535,40 +1554,23 @@ namespace LeagueSharp.Common
 
                     break;
             }
-
-            if (message != WindowsMessages.WM_LBUTTONDOWN)
-            {
-                return;
-            }
-
-            if (!Visible)
-            {
-                return;
-            }
-
-            if (!IsInside(cursorPos))
-            {
-                return;
-            }
-
-            if (cursorPos.X > Position.X + Width && cursorPos.X < Position.X + Width + Height)
-            {
-                ShowTooltip();
-            }
-
         }
 
         public void ShowTooltip_Notification()
         {
-            var notif = new Notification(this.Tooltip).SetTextColor(System.Drawing.Color.White);
-            Notifications.AddNotification(notif);
-            Utility.DelayAction.Add(this.TooltipDuration, () => notif.Dispose());
+            if (!string.IsNullOrEmpty(this.Tooltip))
+            {
+                var notif = new Notification(this.Tooltip).SetTextColor(Color.White);
+                Notifications.AddNotification(notif);
+                Utility.DelayAction.Add(this.TooltipDuration, () => notif.Dispose());
+            }
         }
-        public void ShowTooltip()
+        public void ShowTooltip(bool hide = false)
         {
-            DrawingTooltip = true;
-            Utility.DelayAction.Add(this.TooltipDuration, () => DrawingTooltip = false);
-
+            if (!string.IsNullOrEmpty(this.Tooltip))
+            {
+                DrawingTooltip = !hide;
+            }
         }
 
         internal void Drawing_OnDraw()
@@ -1667,6 +1669,8 @@ namespace LeagueSharp.Common
                 FontDrawFlags.VerticalCenter, FontColor);
         }
     }
+
+
 
     public static class ColorPicker
     {
