@@ -350,7 +350,7 @@ namespace LeagueSharp.Common
 
         internal static void DrawArrow(string s, Vector2 position, MenuItem item, Color color)
         {
-            DrawBox(position, item.Height, item.Height, Color.Blue, 1, color);
+            DrawBox(position, item.Height, item.Height, Color.FromArgb(0, 37, 53), 1, color);
             Font.DrawText(
                 null, s, new Rectangle((int)(position.X), (int)item.Position.Y, item.Height, item.Height),
                 FontDrawFlags.VerticalCenter | FontDrawFlags.Center, new ColorBGRA(255, 255, 255, 255));
@@ -388,20 +388,23 @@ namespace LeagueSharp.Common
 
         internal static void DrawToolTip_Button(Vector2 position, MenuItem item)
         {
-            if (item.ValueType == MenuValueType.Circle || item.ValueType == MenuValueType.StringList)
+            if (item.ValueType == MenuValueType.StringList)
             {
                 return;
             }
 
-            var s = "(?)";
+            var s = "[?]";
+            int x = (int) item.Position.X + item.Width - item.Height - Font.MeasureText(s).Width - 7;
+
             Font.DrawText(null, s,
-                new Rectangle((int) (item.Position.X + item.Width) - 69, (int) item.Position.Y + 8, item.Height,
-                    item.Height), FontDrawFlags.Right, new ColorBGRA(255, 255, 255, 255));
+                new Rectangle(x, (int)item.Position.Y, item.Width, item.Height),
+                    FontDrawFlags.VerticalCenter,
+                        new ColorBGRA(255, 255, 255, 255));
         }
 
         internal static void DrawToolTip_Text(Vector2 position, MenuItem item, SharpDX.Color? TextColor = null)
         {
-            if (item.ValueType == MenuValueType.Circle || item.ValueType == MenuValueType.StringList)
+            if (item.ValueType == MenuValueType.StringList)
             {
                 return;
             }
@@ -441,11 +444,11 @@ namespace LeagueSharp.Common
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
                     new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" }, 0)));
-            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(12, 12, 20)));
+            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(14, 12, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
-                new MenuItem("LeagueSharp.Common.TooltipDuration", "Tooltips Duration").SetValue(
+                new MenuItem("LeagueSharp.Common.TooltipDuration", "Tooltip Notification Duration").SetValue(
                     new Slider(1500, 0, 5000)));
             root.AddItem(
                 new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(FontStyle.Bold, SharpDX.Color.Yellow));
@@ -1617,7 +1620,7 @@ namespace LeagueSharp.Common
                     }
 
                     int x = (int)Position.X + Width - Height - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
-                    int y = (int)Position.Y;
+
                     font.DrawText(null, "[" + Utils.KeyToText(val.Key) + "]", new Rectangle(x, (int)Position.Y, Width, Height), FontDrawFlags.VerticalCenter, new ColorBGRA(1, 169, 234, 255));
                     MenuDrawHelper.DrawOnOff(val.Active, new Vector2(Position.X + Width - Height, Position.Y), this);
 
@@ -1649,8 +1652,8 @@ namespace LeagueSharp.Common
 
                     var t = slVal.SList[slVal.SelectedIndex];
 
-                    MenuDrawHelper.DrawArrow("<", Position + new Vector2(Width - Height * 2, 0), this, Color.Black);
-                    MenuDrawHelper.DrawArrow(">", Position + new Vector2(Width - Height, 0), this, Color.Black);
+                    MenuDrawHelper.DrawArrow("<<", Position + new Vector2(Width - Height * 2, 0), this, Color.Black);
+                    MenuDrawHelper.DrawArrow(">>", Position + new Vector2(Width - Height, 0), this, Color.Black);
 
                     MenuDrawHelper.Font.DrawText(
                         null, MultiLanguage._(t),
