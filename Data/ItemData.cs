@@ -4618,7 +4618,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3097, 3067 },
             InStore = true,
             FlatHPPoolMod = 500f,
-            Tags = new[] { "CooldownReduction", "GoldPer", "Health", "HealthRegen" },
+            Tags = new[] { "Active", "CooldownReduction", "GoldPer", "Health", "HealthRegen" },
             Id = 3401
         };
 
