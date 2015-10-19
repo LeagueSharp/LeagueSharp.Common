@@ -2351,7 +2351,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 3301 },
             Into = new[] { 3069 },
             InStore = true,
-            Tags = new[] { "Active", "GoldPer", "HealthRegen", "ManaRegen", "NonbootsMovement" },
+            Tags = new[] { "GoldPer", "HealthRegen", "ManaRegen", "NonbootsMovement" },
             Id = 3096
         };
 
@@ -2395,7 +2395,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3092 },
             InStore = true,
             FlatMagicDamageMod = 10f,
-            Tags = new[] { "Active", "GoldPer", "ManaRegen", "SpellDamage" },
+            Tags = new[] { "GoldPer", "ManaRegen", "SpellDamage" },
             Id = 3098
         };
 
