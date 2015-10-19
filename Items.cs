@@ -30,8 +30,12 @@ using SharpDX;
 
 namespace LeagueSharp.Common
 {
+    using System;
+
     public static class Items
     {
+        public static int LastCastAttemptT { get; set; }
+
         /// <summary>
         /// Returns true if the hero has the item.
         /// </summary>
@@ -83,6 +87,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UseItem(string name, Obj_AI_Base target = null)
         {
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return false;
+            }
+
+            LastCastAttemptT = Utils.TickCount;
+
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
                 if (target != null)
@@ -103,6 +114,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UseItem(int id, Obj_AI_Base target = null)
         {
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return false;
+            }
+
+            LastCastAttemptT = Utils.TickCount;
+
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
                 if (target != null)
@@ -131,6 +149,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool UseItem(int id, Vector3 position)
         {
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return false;
+            }
+
+            LastCastAttemptT = Utils.TickCount;
+
             if (position != Vector3.Zero)
             {
                 foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
