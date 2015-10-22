@@ -4401,27 +4401,20 @@ namespace LeagueSharp.Common
                                     new double[] { 80, 125, 170, 215, 260 }[level] 
                                     + 0.7 * source.FlatMagicDamageMod
                             },
-                        //W - Devour - Enemy champion
+                        //W - Devour 
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
-                                    (source, target, level) =>
+                                    (source, target, level) => target is Obj_AI_Minion ?  
+                                    new double[] { 400, 450, 500, 550, 600 }[level] :
                                     new double[] { 0.20, 0.23, 0.26, 0.29, 0.32 }[level]
                                     * 0.02 * source.FlatMagicDamageMod / 100 * target.MaxHealth
-                            },
-                        //W - Devour - Minion Monster
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 400, 450, 500, 550, 600 }[level]
                             },
                         //W - Regugitate
                         new DamageSpell
                             {
-                                Slot = SpellSlot.W, Stage = 2, DamageType = DamageType.Magical,
+                                Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 150, 200, 250, 300 }[level]

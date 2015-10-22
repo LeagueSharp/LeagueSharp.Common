@@ -288,6 +288,13 @@ namespace LeagueSharp.Common
 
         public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
+            //Kindred's Lamb's Respite(R)
+
+            if (target.HasBuff("kindrednodeathbuff"))
+            {
+                return true;
+            }
+
             // Tryndamere's Undying Rage (R)
             if (target.HasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
             {
