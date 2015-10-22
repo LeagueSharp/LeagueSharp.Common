@@ -228,7 +228,7 @@ namespace LeagueSharp.Common
 
         public static Color BackgroundColor
         {
-            get { return Color.FromArgb(200, Color.Black); }
+            get { return Color.FromArgb(Menu.root.Item("BackgroundAlpha").GetValue<Slider>().Value, Color.Black); }
         }
 
         public static Color ActiveBackgroundColor
@@ -441,10 +441,11 @@ namespace LeagueSharp.Common
 
         static Menu()
         {
+            root.AddItem(new MenuItem("BackgroundAlpha", "Background Opacity")).SetValue(new Slider(165, 55, 255));
             root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
                     new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" }, 0)));
-            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(14, 12, 20)));
+            root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 12, 20)));
             var qualities = Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray();
             root.AddItem(new MenuItem("FontQuality", "Font Quality").SetValue(new StringList(qualities, 4)));
             root.AddItem(
@@ -771,7 +772,7 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            // Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
+            Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
             MenuDrawHelper.DrawBox(
                 Position, Width, Height,
                 (Children.Count > 0 && Children[0].Visible || Items.Count > 0 && Items[0].Visible)
@@ -1578,7 +1579,6 @@ namespace LeagueSharp.Common
 
         internal void Drawing_OnDraw()
         {
-            MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
             var s = MultiLanguage._(DisplayName);
 
             MenuDrawHelper.DrawBox(Position, Width, Height, MenuSettings.BackgroundColor, 1, Color.Black);
