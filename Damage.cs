@@ -177,6 +177,20 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Ekko
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Ekko",
+                IsActive = (source, target) => (target.GetBuffCount("EkkoStacks") == 3),
+                GetDamage = (source, target) =>
+                 (float) source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.FlatMagicDamageMod * 0.8)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+
             #region Gnar
 
             p = new PassiveDamage
