@@ -31,21 +31,39 @@ using LeagueSharp;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Provides cached heroes.
+    /// </summary>
     public class HeroManager
     {
+
         /// <summary>
-        ///     A list containing all heroes in the current match
+        /// Gets all heroes.
         /// </summary>
+        /// <value>
+        /// All heroes.
+        /// </value>
         public static List<Obj_AI_Hero> AllHeroes { get; private set; }
+
         /// <summary>
-        ///     A list containing only ally heroes in the current match
+        /// Gets the allies.
         /// </summary>
+        /// <value>
+        /// The allies.
+        /// </value>
         public static List<Obj_AI_Hero> Allies { get; private set; }
+
         /// <summary>
-        ///     A list containing only enemy heroes in the current match
+        /// Gets the enemies.
         /// </summary>
+        /// <value>
+        /// The enemies.
+        /// </value>
         public static List<Obj_AI_Hero> Enemies { get; private set; }
 
+        /// <summary>
+        /// Initializes static members of the <see cref="HeroManager"/> class. 
+        /// </summary>
         static HeroManager()
         {
             if (Game.Mode == GameMode.Running)
@@ -55,6 +73,10 @@ namespace LeagueSharp.Common
             Game.OnStart += Game_OnStart;
         }
 
+        /// <summary>
+        /// Fired when the game starts.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         static void Game_OnStart(EventArgs args)
         {
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();

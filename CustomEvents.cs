@@ -30,23 +30,54 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Provides custom events.
+    /// </summary>
     public static class CustomEvents
     {
+        /// <summary>
+        /// Provides custom events regarding the game.
+        /// </summary>
         public class Game
         {
+            /// <summary>
+            /// The delegate for <see cref="Game.OnGameEnd"/>
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             public delegate void OnGameEnded(EventArgs args);
 
+            /// <summary>
+            /// The delegate for <see cref="Game.OnGameLoad"/>
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             public delegate void OnGameLoaded(EventArgs args);
 
+            /// <summary>
+            /// The notified subscribers
+            /// </summary>
             private static readonly List<Delegate> NotifiedSubscribers = new List<Delegate>();
+
+            /// <summary>
+            /// The nexus list
+            /// </summary>
             private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
+
+            /// <summary>
+            /// The end game called
+            /// </summary>
             private static bool _endGameCalled;
 
+            /// <summary>
+            /// Initializes static members of the <see cref="Game"/> class. 
+            /// </summary>
             static Game()
             {
                 Utility.DelayAction.Add(0, Initialize);
             }
 
+            /// <summary>
+            /// Initializes this instance.
+            /// </summary>
             public static void Initialize()
             {
 
@@ -69,6 +100,10 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Fired when the game updates.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private static void Game_OnGameUpdate(EventArgs args)
             {
                 if (OnGameLoad != null)
@@ -99,17 +134,22 @@ namespace LeagueSharp.Common
                 }
             }
 
+
             /// <summary>
-            ///     OnGameLoad is getting called when you get ingame (doesn't matter if started or restarted while game is already
-            ///     running) and when reloading an assembly
+            /// Occurs when the game loads. This will be fired if the game is already loaded.
             /// </summary>
             public static event OnGameLoaded OnGameLoad;
 
+
             /// <summary>
-            ///     OnGameEnd is getting called when the game ends. Same as Game.OnEnd but this one works :^).
+            /// Occurs when the game ends. This is meant as a better replacement to <see cref="LeagueSharp.Game.OnEnd"/>.
             /// </summary>
             public static event OnGameEnded OnGameEnd;
 
+            /// <summary>
+            /// Fired when the game is started.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private static void Game_OnGameStart(EventArgs args)
             {
                 LeagueSharp.Game.OnUpdate += Game_OnGameUpdate;
@@ -122,14 +162,35 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Provides custom events regarding units.
+        /// </summary>
         public class Unit
         {
+            /// <summary>
+            /// The delegate for <see cref="Unit.OnDash"/>
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="args">The arguments.</param>
             public delegate void OnDashed(Obj_AI_Base sender, Dash.DashItem args);
 
+            /// <summary>
+            /// The delegate for <see cref="Unit.OnLevelUp"/>
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="args">The <see cref="OnLevelUpEventArgs"/> instance containing the event data.</param>
             public delegate void OnLeveledUp(Obj_AI_Base sender, OnLevelUpEventArgs args);
 
+            /// <summary>
+            /// The delegate for <see cref="Unit.OnLevelUpSpell"/>
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="args">The <see cref="OnLevelUpSpellEventArgs"/> instance containing the event data.</param>
             public delegate void OnLeveledUpSpell(Obj_AI_Base sender, OnLevelUpSpellEventArgs args);
 
+            /// <summary>
+            /// Initializes static members of the <see cref="Unit"/> class. 
+            /// </summary>
             static Unit()
             {
                 LeagueSharp.Game.OnProcessPacket += PacketHandler;
@@ -139,22 +200,31 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
-            ///     OnLevelUpSpell gets called after you leveled a spell
+            /// Occurs when the player levels up a spell.
             /// </summary>
             public static event OnLeveledUpSpell OnLevelUpSpell;
 
+            /// <summary>
+            /// Handles packets.
+            /// </summary>
+            /// <param name="args">The <see cref="GamePacketEventArgs"/> instance containing the event data.</param>
             private static void PacketHandler(GamePacketEventArgs args) {}
 
             /// <summary>
-            ///     Gets called when a unit gets a level up
+            /// Occurs when a unit levels up.
             /// </summary>
             public static event OnLeveledUp OnLevelUp;
 
             /// <summary>
-            ///     OnDash is getting called when a unit dashes.
+            /// Occurs when a unit dashes.
             /// </summary>
             public static event OnDashed OnDash;
 
+            /// <summary>
+            /// Triggers the on dash.
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="args">The arguments.</param>
             public static void TriggerOnDash(Obj_AI_Base sender, Dash.DashItem args)
             {
                 var dashHandler = OnDash;
@@ -164,17 +234,45 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// The event arguments for the <see cref="Unit.OnLevelUp"/> event.
+            /// </summary>
             public class OnLevelUpEventArgs : EventArgs
             {
+                /// <summary>
+                /// The new level
+                /// </summary>
                 public int NewLevel;
+
+                /// <summary>
+                /// The remaining points
+                /// </summary>
                 public int RemainingPoints;
             }
 
+            /// <summary>
+            /// The event arguments for the <see cref="Unit.OnLevelUpSpell"/> event.
+            /// </summary>
             public class OnLevelUpSpellEventArgs : EventArgs
             {
+                /// <summary>
+                /// The remainingpoints
+                /// </summary>
                 public int Remainingpoints;
+
+                /// <summary>
+                /// The spell identifier
+                /// </summary>
                 public int SpellId;
+
+                /// <summary>
+                /// The spell level
+                /// </summary>
                 public int SpellLevel;
+
+                /// <summary>
+                /// Initializes a new instance of the <see cref="OnLevelUpSpellEventArgs"/> class.
+                /// </summary>
                 internal OnLevelUpSpellEventArgs() {}
             }
         }

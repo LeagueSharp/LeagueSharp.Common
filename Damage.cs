@@ -30,69 +30,160 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Gets the damage done to a target.
+    /// </summary>
+    /// <param name="source">The source.</param>
+    /// <param name="target">The target.</param>
+    /// <param name="level">The level.</param>
+    /// <returns></returns>
     public delegate double SpellDamageDelegate(Obj_AI_Base source, Obj_AI_Base target, int level);
 
+    /// <summary>
+    /// Represents a spell that deals damage.
+    /// </summary>
     public class DamageSpell
     {
+        /// <summary>
+        /// The calculated damage
+        /// </summary>
         public double CalculatedDamage;
 
+        /// <summary>
+        /// The damage delegate
+        /// </summary>
         public SpellDamageDelegate Damage;
 
+        /// <summary>
+        /// The damage type
+        /// </summary>
         public Damage.DamageType DamageType;
 
+        /// <summary>
+        /// The slot
+        /// </summary>
         public SpellSlot Slot;
 
+        /// <summary>
+        /// The stage
+        /// </summary>
         public int Stage;
     }
 
+    /// <summary>
+    /// Calculates damage to units.
+    /// </summary>
     public static class Damage
     {
+        /// <summary>
+        /// Represents items that deal damage.
+        /// </summary>
         public enum DamageItems
         {
+            /// <summary>
+            /// The hexgun
+            /// </summary>
             Hexgun,
 
+            /// <summary>
+            /// The DFG
+            /// </summary>
             Dfg,
 
+            /// <summary>
+            /// The botrk
+            /// </summary>
             Botrk,
 
+            /// <summary>
+            /// The bilgewater
+            /// </summary>
             Bilgewater,
 
+            /// <summary>
+            /// The tiamat
+            /// </summary>
             Tiamat,
 
+            /// <summary>
+            /// The hydra
+            /// </summary>
             Hydra,
 
+            /// <summary>
+            /// The black fire torch
+            /// </summary>
             BlackFireTorch,
 
+            /// <summary>
+            /// The oding veils
+            /// </summary>
             OdingVeils,
 
+            /// <summary>
+            /// The frost queen claim
+            /// </summary>
             FrostQueenClaim,
 
+            /// <summary>
+            /// The liandrys torment
+            /// </summary>
             LiandrysTorment,
         }
 
+        /// <summary>
+        /// The type of damage.
+        /// </summary>
         public enum DamageType
         {
+            /// <summary>
+            /// Physical damage. (AD)
+            /// </summary>
             Physical,
 
+            /// <summary>
+            /// Magical damage. (AP)
+            /// </summary>
             Magical,
 
+            /// <summary>
+            /// True damage
+            /// </summary>
             True
         }
 
+        /// <summary>
+        /// Represnets summoner spells that deal damage.
+        /// </summary>
         public enum SummonerSpell
         {
+            /// <summary>
+            /// The ignite spell.
+            /// </summary>
             Ignite,
 
+            /// <summary>
+            /// The smite spell.
+            /// </summary>
             Smite,
         }
 
+        /// <summary>
+        /// The spells
+        /// </summary>
         public static Dictionary<string, List<DamageSpell>> Spells =
             new Dictionary<string, List<DamageSpell>>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>
+        /// The attack passives
+        /// </summary>
         private static readonly List<PassiveDamage> AttackPassives = new List<PassiveDamage>();
 
         //attack passives are handled in the orbwalker, it will be changed in the future :^)
 
+        /// <summary>
+        /// Initializes static members of the <see cref="Damage"/> class. 
+        /// </summary>
         static Damage()
         {
             //Add the passive damages
@@ -5399,6 +5490,13 @@ namespace LeagueSharp.Common
             #endregion
         }
 
+        /// <summary>
+        /// Gets the summoner spell damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="summonerSpell">The summoner spell.</param>
+        /// <returns></returns>
         public static double GetSummonerSpellDamage(
             this Obj_AI_Hero source,
             Obj_AI_Base target,
@@ -5439,6 +5537,13 @@ namespace LeagueSharp.Common
             return 0d;
         }
 
+        /// <summary>
+        /// Gets the item damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
         public static double GetItemDamage(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems item)
         {
             switch (item)
@@ -5474,6 +5579,13 @@ namespace LeagueSharp.Common
             return 1d;
         }
 
+        /// <summary>
+        /// Gets the automatic attack damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="includePassive">if set to <c>true</c> [include passive].</param>
+        /// <returns></returns>
         public static double GetAutoAttackDamage(
             this Obj_AI_Base source,
             Obj_AI_Base target,
@@ -5654,6 +5766,13 @@ namespace LeagueSharp.Common
             return GetComboDamage(source, target, spellCombo) > target.Health;
         }
 
+        /// <summary>
+        /// Gets the damage spell.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="spellName">Name of the spell.</param>
+        /// <returns></returns>
         public static DamageSpell GetDamageSpell(this Obj_AI_Base source, Obj_AI_Base target, string spellName)
         {
             if (Orbwalking.IsAutoAttack(spellName))
@@ -5676,6 +5795,14 @@ namespace LeagueSharp.Common
             return null;
         }
 
+        /// <summary>
+        /// Gets the damage spell.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="slot">The slot.</param>
+        /// <param name="stage">The stage.</param>
+        /// <returns></returns>
         public static DamageSpell GetDamageSpell(
             this Obj_AI_Hero source,
             Obj_AI_Base target,
@@ -5704,18 +5831,41 @@ namespace LeagueSharp.Common
             return null;
         }
 
+        /// <summary>
+        /// Gets the spell damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="spellName">Name of the spell.</param>
+        /// <returns></returns>
         public static double GetSpellDamage(this Obj_AI_Base source, Obj_AI_Base target, string spellName)
         {
             var spell = GetDamageSpell(source, target, spellName);
             return spell != null ? spell.CalculatedDamage : 0d;
         }
 
+        /// <summary>
+        /// Gets the spell damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="slot">The slot.</param>
+        /// <param name="stage">The stage.</param>
+        /// <returns></returns>
         public static double GetSpellDamage(this Obj_AI_Hero source, Obj_AI_Base target, SpellSlot slot, int stage = 0)
         {
             var spell = GetDamageSpell(source, target, slot, stage);
             return spell != null ? spell.CalculatedDamage : 0d;
         }
 
+        /// <summary>
+        /// Calculates the damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="damageType">Type of the damage.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns></returns>
         public static double CalcDamage(
             this Obj_AI_Base source,
             Obj_AI_Base target,
@@ -5739,6 +5889,13 @@ namespace LeagueSharp.Common
             return Math.Max(damage, 0d);
         }
 
+        /// <summary>
+        /// Calculates the magic damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns></returns>
         private static double CalcMagicDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
             var magicResist = target.SpellBlock;
@@ -5768,6 +5925,13 @@ namespace LeagueSharp.Common
             return damage;
         }
 
+        /// <summary>
+        /// Calculates the physical damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns></returns>
         private static double CalcPhysicalDamage(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
             double armorPenetrationPercent = source.PercentArmorPenetrationMod;
@@ -5807,6 +5971,14 @@ namespace LeagueSharp.Common
             return damage;
         }
 
+        /// <summary>
+        /// Gets the damage reduction modifier.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="amount">The amount.</param>
+        /// <param name="damageType">Type of the damage.</param>
+        /// <returns></returns>
         private static double DamageReductionMod(
             Obj_AI_Base source,
             Obj_AI_Base target,
@@ -5937,6 +6109,13 @@ namespace LeagueSharp.Common
             return amount;
         }
 
+        /// <summary>
+        /// Gets the passive percent modifier.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="amount">The amount.</param>
+        /// <returns></returns>
         private static double PassivePercentMod(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
             var SiegeMinionList = new List<string> { "Red_Minion_MechCannon", "Blue_Minion_MechCannon" };
@@ -6013,6 +6192,12 @@ namespace LeagueSharp.Common
             return amount;
         }
 
+        /// <summary>
+        /// Gets the passive flat modifier.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns></returns>
         private static double PassiveFlatMod(Obj_AI_Base source, Obj_AI_Base target)
         {
             var value = 0d;
@@ -6059,16 +6244,40 @@ namespace LeagueSharp.Common
             return value;
         }
 
+        /// <summary>
+        /// Represents a damage spell that only occurs with a passive.
+        /// </summary>
         internal class PassiveDamage
         {
+            /// <summary>
+            /// Gets the damage dealts to the unit.
+            /// </summary>
+            /// <param name="source">The source.</param>
+            /// <param name="target">The target.</param>
+            /// <returns></returns>
             public delegate float GetDamageD(Obj_AI_Hero source, Obj_AI_Base target);
 
+            /// <summary>
+            /// Gets whether this instance is active.
+            /// </summary>
+            /// <param name="source">The source.</param>
+            /// <param name="target">The target.</param>
+            /// <returns></returns>
             public delegate bool IsActiveD(Obj_AI_Hero source, Obj_AI_Base target);
 
+            /// <summary>
+            /// The champion name
+            /// </summary>
             public string ChampionName = "";
 
+            /// <summary>
+            /// The get damage delegate.
+            /// </summary>
             public GetDamageD GetDamage;
 
+            /// <summary>
+            /// The is active delegate.
+            /// </summary>
             public IsActiveD IsActive;
         }
     }

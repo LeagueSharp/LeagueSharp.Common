@@ -32,14 +32,42 @@ using System.Xml;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Gets information about the L# system.
+    /// </summary>
     public static class Config
     {
+        /// <summary>
+        /// The league sharp directory
+        /// </summary>
         private static string _leagueSharpDirectory;
+
+        /// <summary>
+        /// The app data directory
+        /// </summary>
         private static string _appDataDirectory;
+
+        /// <summary>
+        /// The show menu hotkey
+        /// </summary>
         private static byte _showMenuHotkey;
+
+        /// <summary>
+        /// The show menu toggle hotkey
+        /// </summary>
         private static byte _showMenuToggleHotkey;
+
+        /// <summary>
+        /// The selected language
+        /// </summary>
         private static string _selectedLanguage;
 
+        /// <summary>
+        /// Gets the application data directory.
+        /// </summary>
+        /// <value>
+        /// The application data directory.
+        /// </value>
         public static string AppDataDirectory
         {
             get
@@ -54,6 +82,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Gets the selected language.
+        /// </summary>
+        /// <value>
+        /// The selected language.
+        /// </value>
         public static string SelectedLanguage
         {
             get
@@ -79,6 +113,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Gets the show menu press key.
+        /// </summary>
+        /// <value>
+        /// The show menu press key.
+        /// </value>
         public static byte ShowMenuPressKey
         {
             get
@@ -104,6 +144,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Gets the show menu toggle key.
+        /// </summary>
+        /// <value>
+        /// The show menu toggle key.
+        /// </value>
         public static byte ShowMenuToggleKey
         {
             get

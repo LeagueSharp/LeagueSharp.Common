@@ -1,7 +1,13 @@
 ﻿namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Adds hacks to the menu.
+    /// </summary>
     internal class Hacks
     {
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         internal static void Initialize()
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
