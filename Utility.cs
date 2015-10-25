@@ -126,6 +126,15 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        /// Returns the unit's ability power
+        /// </summary>
+        /// 
+        public static float AbilityPower(this Obj_AI_Base @base)
+        {
+            return @base.FlatMagicDamageMod + (@base.PercentMagicDamageMod * @base.FlatMagicDamageMod);
+        }
+
+        /// <summary>
         ///     Returns the unit's health percentage (From 0 to 100).
         /// </summary>
         [Obsolete("Use HealthPercent attribute.", false)]
