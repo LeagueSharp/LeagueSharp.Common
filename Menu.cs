@@ -1620,7 +1620,7 @@ namespace LeagueSharp.Common
 
                     var x = !string.IsNullOrEmpty(this.Tooltip)
                         ? (int) Position.X + Width - Height -
-                          font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 25
+                          font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 35
                         : (int) Position.X + Width - Height -
                           font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
 
