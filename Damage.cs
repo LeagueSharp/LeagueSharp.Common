@@ -4650,7 +4650,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    Utility.GetVenomStacks(target)
+                                    target.GetVenomStacks()
                                     * (new double[] { 15, 20, 25, 30, 35 }[level]
                                        + 0.2 * source.AbilityPower()
                                        + 0.25 * source.FlatPhysicalDamageMod)

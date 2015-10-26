@@ -552,7 +552,7 @@ namespace LeagueSharp.Common
             return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
-        public static int GetVenomStacks(Obj_AI_Base target)
+        public static int GetVenomStacks(this Obj_AI_Base target)
         {
             for (var i = 1; i < 7; i++)
             {
