@@ -552,12 +552,12 @@ namespace LeagueSharp.Common
             return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
-        public static int GetVenomStacks(this Obj_AI_Base source, Obj_AI_Base target)
+        public static int GetVenomStacks(Obj_AI_Base target)
         {
             for (var i = 1; i < 7; i++)
             {
                 if (ObjectManager.Get<Obj_GeneralParticleEmitter>()
-                        .Any(e => e.Position.Distance(target.ServerPosition) <= 55 &&
+                        .Any(e => e.Position.Distance(target.ServerPosition) <= 70 &&
                                   e.Name == "twitch_poison_counter_0" + i + ".troy"))
                 {
                     return i;
