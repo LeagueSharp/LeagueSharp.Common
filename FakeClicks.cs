@@ -27,16 +27,23 @@ using SharpDX;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    ///     The program.
+    ///     Simulates clicks.
     /// </summary>
     internal static class FakeClicks
     {
         #region Static Fields
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="FakeClicks"/> is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// </value>
         public static bool Enabled
         {
             get { return root.Item("Enable").IsActive(); }
         }
+
         /// <summary>
         ///     If the user is attacking
         ///     Currently used for the second style of fake clicks
@@ -216,11 +223,18 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         public static void Initialize()
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
+        /// <summary>
+        /// Fired when the game loads.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Game_OnGameLoad(EventArgs args)
         {
             root.AddItem(new MenuItem("Enable", "Enable").SetValue(false));
@@ -238,6 +252,11 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnIssueOrder += OnIssueOrder;
         }
 
+        /// <summary>
+        /// Shows the click.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="type">The type.</param>
         private static void ShowClick(Vector3 position, ClickType type)
         {
             if (!Enabled)

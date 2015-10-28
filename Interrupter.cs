@@ -30,22 +30,67 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Delegate for the event <see cref="Interrupter.OnPossibleToInterrupt"/>
+    /// </summary>
+    /// <param name="unit">The unit.</param>
+    /// <param name="spell">The spell.</param>
     public delegate void OnPossibleToInterruptH(Obj_AI_Hero unit, InterruptableSpell spell);
 
+    /// <summary>
+    /// The danger level.
+    /// </summary>
     public enum InterruptableDangerLevel
     {
+        /// <summary>
+        /// The low
+        /// </summary>
         Low,
+
+        /// <summary>
+        /// The medium
+        /// </summary>
         Medium,
+
+        /// <summary>
+        /// The high
+        /// </summary>
         High,
     }
 
+    /// <summary>
+    /// Represents an interruptable spell.
+    /// </summary>
     public struct InterruptableSpell
     {
+        /// <summary>
+        /// The buff name
+        /// </summary>
         public string BuffName;
+
+        /// <summary>
+        /// The champion name
+        /// </summary>
         public string ChampionName;
+
+        /// <summary>
+        /// The danger level
+        /// </summary>
         public InterruptableDangerLevel DangerLevel;
+
+        /// <summary>
+        /// The extra duration
+        /// </summary>
         public int ExtraDuration;
+
+        /// <summary>
+        /// The slot
+        /// </summary>
         public SpellSlot Slot;
+
+        /// <summary>
+        /// The spell name
+        /// </summary>
         public string SpellName;
     }
 
@@ -55,8 +100,14 @@ namespace LeagueSharp.Common
     [Obsolete("Use Interrupter2", false)]
     public static class Interrupter
     {
+        /// <summary>
+        /// The spells
+        /// </summary>
         public static List<InterruptableSpell> Spells = new List<InterruptableSpell>();
 
+        /// <summary>
+        /// Initializes static members of the <see cref="Interrupter"/> class. 
+        /// </summary>
         static Interrupter()
         {
             #region Varus
@@ -354,6 +405,11 @@ namespace LeagueSharp.Common
         [Obsolete("Use Interrupter2.OnInterruptableTarget", false)]
         public static event OnPossibleToInterruptH OnPossibleToInterrupt;
 
+        /// <summary>
+        /// Fires the on interruptable event.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="spell">The spell.</param>
         private static void FireOnInterruptable(Obj_AI_Hero unit, InterruptableSpell spell)
         {
             if (OnPossibleToInterrupt != null)
@@ -362,6 +418,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the game updates.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Game_OnGameUpdate(EventArgs args)
         {
             foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(e => e.IsValidTarget()))
@@ -381,7 +441,11 @@ namespace LeagueSharp.Common
             }
         }
 
-        
+        /// <summary>
+        /// Determines whether the unit is channeling an important spell.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <returns></returns>
         public static bool IsChannelingImportantSpell(this Obj_AI_Hero unit)
         {
             return
