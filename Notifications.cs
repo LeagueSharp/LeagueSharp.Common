@@ -34,9 +34,15 @@ namespace LeagueSharp.Common
 {
     public class Notifications
     {
+        /// <summary>
+        /// The notifications list
+        /// </summary>
         private static readonly ConcurrentDictionary<string, INotification> NotificationsList =
             new ConcurrentDictionary<string, INotification>();
 
+        /// <summary>
+        /// Initializes static members of the <see cref="Notifications"/> class.
+        /// </summary>
         static Notifications()
         {
             Game.OnUpdate += Game_OnGameUpdate;
@@ -51,6 +57,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the game recieves a window event.
+        /// </summary>
+        /// <param name="args">The <see cref="WndEventArgs"/> instance containing the event data.</param>
         private static void Game_OnWndProc(WndEventArgs args)
         {
             foreach (var notification in NotificationsList)
@@ -59,6 +69,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the game is drawn.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Drawing_OnDraw(EventArgs args)
         {
             foreach (var notification in NotificationsList)
@@ -67,6 +81,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired before the DirectX device is reset.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Drawing_OnPreReset(EventArgs args)
         {
             foreach (var notification in NotificationsList)
@@ -75,6 +93,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the DirectX device is reset.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Drawing_OnPostReset(EventArgs args)
         {
             foreach (var notification in NotificationsList)
@@ -83,6 +105,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the game updates.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Game_OnGameUpdate(EventArgs args)
         {
             foreach (var notification in NotificationsList)
@@ -92,7 +118,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Adds a notification to the notification list
+        /// Adds a notification to the notification list
         /// </summary>
         /// <param name="notification">Notification Instance</param>
         /// <returns>Boolean</returns>
@@ -102,12 +128,12 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Adds a simple notification to the notification list
+        /// Adds a simple notification to the notification list
         /// </summary>
         /// <param name="text">Display Text</param>
         /// <param name="duration">Duration (-1 for infinite)</param>
         /// <param name="dispose">Dispose upon ending</param>
-        /// <returns></returns>
+        /// <returns>Notification.</returns>
         public static Notification AddNotification(string text, int duration = -0x1, bool dispose = true)
         {
             var notification = new Notification(text, duration, dispose);
@@ -116,7 +142,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Removes a notification from the notification list
+        /// Removes a notification from the notification list
         /// </summary>
         /// <param name="notification">Notification Instance</param>
         /// <returns>Boolean</returns>
@@ -127,7 +153,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Removes a notification from the notification list
+        /// Removes a notification from the notification list
         /// </summary>
         /// <param name="id">Notification GUID</param>
         /// <param name="notification">Notification Instance</param>
@@ -138,7 +164,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Validates if a notification currently exists inside the list.
+        /// Validates if a notification currently exists inside the list.
         /// </summary>
         /// <param name="notification">Notification Instance</param>
         /// <returns>Boolean</returns>
@@ -148,17 +174,17 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Validates if a notification currently exists inside the list.
+        /// Validates if a notification currently exists inside the list.
         /// </summary>
         /// <param name="id">Notification GUID</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if the specified identifier is a valid notification; otherwise, <c>false</c>.</returns>
         public static bool IsValidNotification(string id)
         {
             return NotificationsList.ContainsKey(id);
         }
 
         /// <summary>
-        ///     Removes a notification from the notification list
+        /// Removes a notification from the notification list
         /// </summary>
         /// <param name="id">Notification GUID</param>
         /// <returns>Boolean</returns>
@@ -171,7 +197,7 @@ namespace LeagueSharp.Common
         #region Memory
 
         /// <summary>
-        ///     Reserves a location slot for a GUID
+        /// Reserves a location slot for a GUID
         /// </summary>
         /// <param name="id">GUID</param>
         /// <param name="old">Old Slot</param>
@@ -207,7 +233,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Frees a location slot
+        /// Frees a location slot
         /// </summary>
         /// <param name="stream">FileStream Handler</param>
         /// <returns>Boolean</returns>
@@ -224,7 +250,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the next free location
+        /// Returns the next free location
         /// </summary>
         /// <returns>Location</returns>
         public static int GetLocation()
@@ -283,6 +309,11 @@ namespace LeagueSharp.Common
             return array[array.Count - 0x1] + 0x1E;
         }
 
+        /// <summary>
+        /// Gets the location.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>System.Int32.</returns>
         public static int GetLocation(FileStream stream)
         {
             var i = stream.Name;
@@ -294,7 +325,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Validates if current position is first in line
+        /// Validates if current position is first in line
         /// </summary>
         /// <param name="position">Position</param>
         /// <returns>Boolean</returns>
@@ -344,6 +375,10 @@ namespace LeagueSharp.Common
             return true;
         }
 
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>The path.</value>
         private static string Path
         {
             get
