@@ -290,7 +290,7 @@ namespace LeagueSharp.Common
         {
             //Kindred's Lamb's Respite(R)
 
-            if (target.HasBuff("kindrednodeathbuff"))
+            if (target.HasBuff("kindredrnodeathbuff") && target.HealthPercent <= 10)
             {
                 return true;
             }

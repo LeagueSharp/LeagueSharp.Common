@@ -74,12 +74,20 @@ namespace LeagueSharp.Common
                 return false;
             }
 
+            var @base = unit as Obj_AI_Base;
+            if (@base != null)
+            {
+                if (@base.HasBuff("kindredrnodeathbuff") && @base.HealthPercent <= 10)
+                {
+                    return false;
+                }
+            }
+
             if (checkTeam && unit.Team == ObjectManager.Player.Team)
             {
                 return false;
             }
 
-            var @base = unit as Obj_AI_Base;
             var unitPosition = @base != null ? @base.ServerPosition : unit.Position;
 
             return !(range < float.MaxValue) ||
