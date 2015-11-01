@@ -32,7 +32,6 @@ using Color = System.Drawing.Color;
 
 namespace LeagueSharp.Common
 {
-    using SharpDX.Direct3D9;
 
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
@@ -96,6 +95,11 @@ namespace LeagueSharp.Common
             /// The orbwalker will only attack the target.
             /// </summary>
             Combo,
+
+            /// <summary>
+            /// The orbwalker will be will only move.
+            /// </summary>
+            CustomMode,
 
             /// <summary>
             /// The orbwalker does nothing.
@@ -871,6 +875,20 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
+            /// Registers the Custom Mode of the Orbwalker. Useful for adding a flee mode and such.
+            /// </summary>
+            /// <param name="name">The name of the mode in the menu. Ex. Flee</param>
+            /// <param name="key">The default key for this mode.</param>
+            public virtual void RegisterCustomMode(string name, uint key)
+            {
+                if (_config.Item("CustomMode") == null)
+                {
+                    _config.AddItem(
+                        new MenuItem("CustomMode", name).SetShared().SetValue(new KeyBind(key, KeyBindType.Press)));
+                }
+            }
+
+            /// <summary>
             /// Gets or sets the active mode.
             /// </summary>
             /// <value>The active mode.</value>
@@ -901,6 +919,11 @@ namespace LeagueSharp.Common
                     if (_config.Item("LastHit").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.LastHit;
+                    }
+
+                    if (_config.Item("CustomMode") != null &&_config.Item("CustomMode").GetValue<KeyBind>().Active)
+                    {
+                        return OrbwalkingMode.CustomMode;
                     }
 
                     return OrbwalkingMode.None;
