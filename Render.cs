@@ -40,15 +40,33 @@ using Rectangle = SharpDX.Rectangle;
 namespace LeagueSharp.Common
 {
     /// <summary>
-    ///     The render class allows you to draw stuff using SharpDX easier.
+    /// The render class allows you to draw stuff using SharpDX easier.
     /// </summary>
     public static class Render
     {
+        /// <summary>
+        /// The render objects
+        /// </summary>
         private static readonly List<RenderObject> RenderObjects = new List<RenderObject>();
+
+        /// <summary>
+        /// The visible render objects.
+        /// </summary>
         private static List<RenderObject> _renderVisibleObjects = new List<RenderObject>();
+
+        /// <summary>
+        /// <c>true</c> if the thread should be canceled.
+        /// </summary>
         private static bool _cancelThread;
+
+        /// <summary>
+        /// The render objects lock
+        /// </summary>
         private static readonly object RenderObjectsLock = new object();
 
+        /// <summary>
+        /// Initializes static members of the <see cref="Render"/> class.
+        /// </summary>
         static Render()
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
@@ -62,16 +80,30 @@ namespace LeagueSharp.Common
             thread.Start();
         }
 
+        /// <summary>
+        /// Gets the device.
+        /// </summary>
+        /// <value>The device.</value>
         public static Device Device
         {
             get { return Drawing.Direct3DDevice; }
         }
 
+        /// <summary>
+        /// Determines if the point is on the screen.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns><c>true</c> if the point is on the screen, <c>false</c> otherwise.</returns>
         public static bool OnScreen(Vector2 point)
         {
             return point.X > 0 && point.Y > 0 && point.X < Drawing.Width && point.Y < Drawing.Height;
         }
 
+        /// <summary>
+        /// Fired when the current domain is unloaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
         {
             _cancelThread = true;
@@ -81,6 +113,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired after the DirectX device is reset.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void DrawingOnOnPostReset(EventArgs args)
         {
             foreach (var renderObject in RenderObjects)
@@ -89,6 +125,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired before the DirectX device is reset.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void DrawingOnOnPreReset(EventArgs args)
         {
             foreach (var renderObject in RenderObjects)
@@ -97,6 +137,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the game is drawn.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Drawing_OnDraw(EventArgs args)
         {
             if (Device == null || Device.IsDisposed)
@@ -110,6 +154,10 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Fired when the scene ends, and everything has been rendered.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Drawing_OnEndScene(EventArgs args)
         {
             if (Device == null || Device.IsDisposed)
@@ -125,6 +173,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Adds the specified layer.
+        /// </summary>
+        /// <param name="renderObject">The render object.</param>
+        /// <param name="layer">The layer.</param>
+        /// <returns>RenderObject.</returns>
         public static RenderObject Add(this RenderObject renderObject, float layer = float.MaxValue)
         {
             renderObject.Layer = !layer.Equals(float.MaxValue) ? layer : renderObject.Layer;
@@ -135,6 +189,10 @@ namespace LeagueSharp.Common
             return renderObject;
         }
 
+        /// <summary>
+        /// Removes the specified render object.
+        /// </summary>
+        /// <param name="renderObject">The render object.</param>
         public static void Remove(this RenderObject renderObject)
         {
             lock (RenderObjectsLock)
@@ -143,6 +201,9 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Prepares the objects.
+        /// </summary>
         private static void PrepareObjects()
         {
             while (!_cancelThread)
@@ -165,16 +226,54 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Draws circles.
+        /// </summary>
         public class Circle : RenderObject
         {
+            /// <summary>
+            /// The vertices
+            /// </summary>
             private static VertexBuffer _vertices;
+
+            /// <summary>
+            /// The vertex elements
+            /// </summary>
             private static VertexElement[] _vertexElements;
+
+            /// <summary>
+            /// The vertex declaration
+            /// </summary>
             private static VertexDeclaration _vertexDeclaration;
+
+            /// <summary>
+            /// The sprite effect
+            /// </summary>
             private static Effect _effect;
+
+            /// <summary>
+            /// The technique
+            /// </summary>
             private static EffectHandle _technique;
+
+            /// <summary>
+            /// <c>true</c> if this instanced initialized.
+            /// </summary>
             private static bool _initialized;
+
+            /// <summary>
+            /// The offset
+            /// </summary>
             private static Vector3 _offset = new Vector3(0, 0, 0);
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Circle"/> class.
+            /// </summary>
+            /// <param name="unit">The unit.</param>
+            /// <param name="radius">The radius.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="zDeep">if set to <c>true</c> [z deep].</param>
             public Circle(GameObject unit, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -184,6 +283,15 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Circle"/> class.
+            /// </summary>
+            /// <param name="unit">The unit.</param>
+            /// <param name="offset">The offset.</param>
+            /// <param name="radius">The radius.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="zDeep">if set to <c>true</c> [z deep].</param>
             public Circle(GameObject unit, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -194,6 +302,15 @@ namespace LeagueSharp.Common
                 Offset = offset;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Circle"/> class.
+            /// </summary>
+            /// <param name="position">The position.</param>
+            /// <param name="offset">The offset.</param>
+            /// <param name="radius">The radius.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="zDeep">if set to <c>true</c> [z deep].</param>
             public Circle(Vector3 position, Vector3 offset, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -204,6 +321,14 @@ namespace LeagueSharp.Common
                 Offset = offset;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Circle"/> class.
+            /// </summary>
+            /// <param name="position">The position.</param>
+            /// <param name="radius">The radius.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="zDeep">if set to <c>true</c> [z deep].</param>
             public Circle(Vector3 position, float radius, Color color, int width = 1, bool zDeep = false)
             {
                 Color = color;
@@ -213,19 +338,55 @@ namespace LeagueSharp.Common
                 ZDeep = zDeep;
             }
 
+            /// <summary>
+            /// Gets or sets the position.
+            /// </summary>
+            /// <value>The position.</value>
             public Vector3 Position { get; set; }
+
+            /// <summary>
+            /// Gets or sets the unit.
+            /// </summary>
+            /// <value>The unit.</value>
             public GameObject Unit { get; set; }
+
+            /// <summary>
+            /// Gets or sets the radius.
+            /// </summary>
+            /// <value>The radius.</value>
             public float Radius { get; set; }
+
+            /// <summary>
+            /// Gets or sets the color.
+            /// </summary>
+            /// <value>The color.</value>
             public Color Color { get; set; }
+
+            /// <summary>
+            /// Gets or sets the width.
+            /// </summary>
+            /// <value>The width.</value>
             public int Width { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether to enable depth buffering.
+            /// </summary>
+            /// <value><c>true</c> if depth buffering enabled; otherwise, <c>false</c>.</value>
             public bool ZDeep { get; set; }
 
+            /// <summary>
+            /// Gets or sets the offset.
+            /// </summary>
+            /// <value>The offset.</value>
             public Vector3 Offset
             {
                 get { return _offset; }
                 set { _offset = value; }
             }
 
+            /// <summary>
+            /// Called when the circle is drawn.
+            /// </summary>
             public override void OnDraw()
             {
                 try
@@ -245,6 +406,9 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Creates the vertexes.
+            /// </summary>
             public static void CreateVertexes()
             {
                 const float x = 6000f;
@@ -524,6 +688,10 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Handles the <see cref="E:PreReset" /> event.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private static void OnPreReset(EventArgs args)
             {
                 if (_effect != null && !_effect.IsDisposed)
@@ -532,6 +700,10 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Handles the <see cref="E:PostReset" /> event.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private static void OnPostReset(EventArgs args)
             {
                 if (_effect != null && !_effect.IsDisposed)
@@ -540,6 +712,11 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Disposes the circle.
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
             private static void Dispose(object sender, EventArgs e)
             {
                 if (_effect != null && !_effect.IsDisposed)
@@ -558,6 +735,14 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Draws the circle.
+            /// </summary>
+            /// <param name="position">The position.</param>
+            /// <param name="radius">The radius.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="zDeep">if set to <c>true</c> the circle will be drawn with depth buffering.</param>
             public static void DrawCircle(Vector3 position, float radius, Color color, int width = 5, bool zDeep = false)
             {
                 try
@@ -610,14 +795,39 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Draws lines.
+        /// </summary>
         public class Line : RenderObject
         {
+            /// <summary>
+            /// Delegate to get the position of the line.
+            /// </summary>
+            /// <returns>Vector2.</returns>
             public delegate Vector2 PositionDelegate();
 
+            /// <summary>
+            /// The DirectX line
+            /// </summary>
             private readonly SharpDX.Direct3D9.Line _line;
+
+            /// <summary>
+            /// The width
+            /// </summary>
             private int _width;
+
+            /// <summary>
+            /// The color
+            /// </summary>
             public ColorBGRA Color;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Line"/> class.
+            /// </summary>
+            /// <param name="start">The start.</param>
+            /// <param name="end">The end.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="color">The color.</param>
             public Line(Vector2 start, Vector2 end, int width, ColorBGRA color)
             {
                 _line = new SharpDX.Direct3D9.Line(Device);
@@ -628,6 +838,10 @@ namespace LeagueSharp.Common
                 Game.OnUpdate += GameOnOnUpdate;
             }
 
+            /// <summary>
+            /// Games the on on update.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private void GameOnOnUpdate(EventArgs args)
             {
                 if (StartPositionUpdate != null)
@@ -641,13 +855,34 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Gets or sets the start.
+            /// </summary>
+            /// <value>The start.</value>
             public Vector2 Start { get; set; }
 
+            /// <summary>
+            /// Gets or sets the end.
+            /// </summary>
+            /// <value>The end.</value>
             public Vector2 End { get; set; }
 
+            /// <summary>
+            /// Gets or sets the delegate that sets the start position.
+            /// </summary>
+            /// <value>The start position update.</value>
             public PositionDelegate StartPositionUpdate { get; set; }
+
+            /// <summary>
+            /// Gets or sets the delegate that gets the end position.
+            /// </summary>
+            /// <value>The end position update.</value>
             public PositionDelegate EndPositionUpdate { get; set; }
 
+            /// <summary>
+            /// Gets or sets the width.
+            /// </summary>
+            /// <value>The width.</value>
             public int Width
             {
                 get { return _width; }
@@ -658,6 +893,9 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Called when the scene has ended.
+            /// </summary>
             public override void OnEndScene()
             {
                 try
@@ -677,16 +915,25 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Called before the DirectX device is reset.
+            /// </summary>
             public override void OnPreReset()
             {
                 _line.OnLostDevice();
             }
 
+            /// <summary>
+            /// Called after the DirectX is reset.
+            /// </summary>
             public override void OnPostReset()
             {
                 _line.OnResetDevice();
             }
 
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
             public override void Dispose()
             {
                 if (!_line.IsDisposed)
@@ -697,13 +944,35 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Draws a Rectangle.
+        /// </summary>
         public class Rectangle : RenderObject
         {
+            /// <summary>
+            /// Delegate to get the position of the rectangle.
+            /// </summary>
+            /// <returns>Vector2.</returns>
             public delegate Vector2 PositionDelegate();
 
+            /// <summary>
+            /// The DirectX line
+            /// </summary>
             private readonly SharpDX.Direct3D9.Line _line;
+
+            /// <summary>
+            /// The color of the rectangle
+            /// </summary>
             public ColorBGRA Color;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Rectangle"/> class.
+            /// </summary>
+            /// <param name="x">The x.</param>
+            /// <param name="y">The y.</param>
+            /// <param name="width">The width.</param>
+            /// <param name="height">The height.</param>
+            /// <param name="color">The color.</param>
             public Rectangle(int x, int y, int width, int height, ColorBGRA color)
             {
                 X = x;
@@ -715,6 +984,10 @@ namespace LeagueSharp.Common
                 Game.OnUpdate += Game_OnUpdate;
             }
 
+            /// <summary>
+            /// Fired when the game is updated.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private void Game_OnUpdate(EventArgs args)
             {
                 if (PositionUpdate != null)
@@ -725,14 +998,39 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Gets or sets the x.
+            /// </summary>
+            /// <value>The x.</value>
             public int X { get; set; }
 
+            /// <summary>
+            /// Gets or sets the y.
+            /// </summary>
+            /// <value>The y.</value>
             public int Y { get; set; }
 
+            /// <summary>
+            /// Gets or sets the width.
+            /// </summary>
+            /// <value>The width.</value>
             public int Width { get; set; }
+
+            /// <summary>
+            /// Gets or sets the height.
+            /// </summary>
+            /// <value>The height.</value>
             public int Height { get; set; }
+
+            /// <summary>
+            /// Gets or sets the delegate that gets the position.
+            /// </summary>
+            /// <value>The position update.</value>
             public PositionDelegate PositionUpdate { get; set; }
 
+            /// <summary>
+            /// Called when [end scene].
+            /// </summary>
             public override void OnEndScene()
             {
                 try
@@ -752,16 +1050,25 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Called before the DirectX device is reset.
+            /// </summary>
             public override void OnPreReset()
             {
                 _line.OnLostDevice();
             }
 
+            /// <summary>
+            /// Called after the DirectX device is reset.
+            /// </summary>
             public override void OnPostReset()
             {
                 _line.OnResetDevice();
             }
 
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
             public override void Dispose()
             {
                 if (!_line.IsDisposed)
@@ -772,51 +1079,142 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// A base class that renders objects.
+        /// </summary>
         public class RenderObject : IDisposable
         {
+            /// <summary>
+            /// Delegate that gets if the object is visible.
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <returns><c>true</c> if the object is visible, <c>false</c> otherwise.</returns>
             public delegate bool VisibleConditionDelegate(RenderObject sender);
 
+            /// <summary>
+            /// <c>true</c> if the render object is visible
+            /// </summary>
             private bool _visible = true;
+
+            /// <summary>
+            /// The layer
+            /// </summary>
             public float Layer = 0.0f;
+
+            /// <summary>
+            /// The visible condition delegate.
+            /// </summary>
             public VisibleConditionDelegate VisibleCondition;
 
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="RenderObject"/> is visible.
+            /// </summary>
+            /// <value><c>true</c> if visible; otherwise, <c>false</c>.</value>
             public bool Visible
             {
                 get { return VisibleCondition != null ? VisibleCondition(this) : _visible; }
                 set { _visible = value; }
             }
 
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
             public virtual void Dispose() {}
+
+            /// <summary>
+            /// Called when the render object is drawn.
+            /// </summary>
             public virtual void OnDraw() {}
+
+            /// <summary>
+            /// Called when the scene has ended..
+            /// </summary>
             public virtual void OnEndScene() {}
+            /// <summary>
+
+            /// Called before the DirectX device is reset.
+            /// </summary>
             public virtual void OnPreReset() {}
+
+            /// <summary>
+            /// Called after the DirectX device is reset.
+            /// </summary>
             public virtual void OnPostReset() {}
 
+            /// <summary>
+            /// Determines whether this instace has a valid layer.
+            /// </summary>
+            /// <returns><c>true</c> if has a valid layer; otherwise, <c>false</c>.</returns>
             public bool HasValidLayer()
             {
                 return Layer >= -5 && Layer <= 5;
             }
         }
 
+        /// <summary>
+        /// Draws a sprite image.
+        /// </summary>
         public class Sprite : RenderObject
         {
+            /// <summary>
+            /// Delegate for when the sprite is reset.
+            /// </summary>
+            /// <param name="sprite">The sprite.</param>
             public delegate void OnResetting(Sprite sprite);
 
+            /// <summary>
+            /// Delegate that gets the position of the sprite.
+            /// </summary>
+            /// <returns>Vector2.</returns>
             public delegate Vector2 PositionDelegate();
 
+            /// <summary>
+            /// The DirectX sprite
+            /// </summary>
             private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
+
+            /// <summary>
+            /// The color of the sprite.
+            /// </summary>
             private ColorBGRA _color = SharpDX.Color.White;
+
+            /// <summary>
+            /// The crop of the sprite.
+            /// </summary>
             private SharpDX.Rectangle? _crop;
+
+            /// <summary>
+            /// <c>true</c> if the sprite is hidden.
+            /// </summary>
             private bool _hide;
+
+            /// <summary>
+            /// The original texture
+            /// </summary>
             private Texture _originalTexture;
+
+            /// <summary>
+            /// The scale
+            /// </summary>
             private Vector2 _scale = new Vector2(1, 1);
+
+            /// <summary>
+            /// The texture
+            /// </summary>
             private Texture _texture;
 
+            /// <summary>
+            /// Prevents a default instance of the <see cref="Sprite"/> class from being created.
+            /// </summary>
             private Sprite()
             {
                 Game.OnUpdate += Game_OnUpdate;
             }
 
+            /// <summary>
+            /// Fired when the game is updated.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private void Game_OnUpdate(EventArgs args)
             {
                 if (PositionUpdate != null)
@@ -827,27 +1225,52 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Sprite"/> class.
+            /// </summary>
+            /// <param name="bitmap">The bitmap.</param>
+            /// <param name="position">The position.</param>
             public Sprite(Bitmap bitmap, Vector2 position) : this()
             {
                 UpdateTextureBitmap(bitmap, position);
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Sprite"/> class.
+            /// </summary>
+            /// <param name="texture">The texture.</param>
+            /// <param name="position">The position.</param>
             public Sprite(BaseTexture texture, Vector2 position) : this()
             {
                 UpdateTextureBitmap(
                     (Bitmap) Image.FromStream(BaseTexture.ToStream(texture, ImageFileFormat.Bmp)), position);
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Sprite"/> class.
+            /// </summary>
+            /// <param name="stream">The stream.</param>
+            /// <param name="position">The position.</param>
             public Sprite(Stream stream, Vector2 position) : this()
             {
                 UpdateTextureBitmap(new Bitmap(stream), position);
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Sprite"/> class.
+            /// </summary>
+            /// <param name="bytesArray">The bytes array.</param>
+            /// <param name="position">The position.</param>
             public Sprite(byte[] bytesArray, Vector2 position) : this()
             {
                 UpdateTextureBitmap((Bitmap) Image.FromStream(new MemoryStream(bytesArray)), position);
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Sprite"/> class.
+            /// </summary>
+            /// <param name="fileLocation">The file location.</param>
+            /// <param name="position">The position.</param>
             public Sprite(string fileLocation, Vector2 position) : this()
             {
                 if (!File.Exists((fileLocation)))
@@ -858,27 +1281,55 @@ namespace LeagueSharp.Common
                 UpdateTextureBitmap(new Bitmap(fileLocation), position);
             }
 
+            /// <summary>
+            /// Gets or sets the x.
+            /// </summary>
+            /// <value>The x.</value>
             public int X { get; set; }
 
+            /// <summary>
+            /// Gets or sets the y.
+            /// </summary>
+            /// <value>The y.</value>
             public int Y { get; set; }
 
+            /// <summary>
+            /// Gets or sets the bitmap.
+            /// </summary>
+            /// <value>The bitmap.</value>
             public Bitmap Bitmap { get; set; }
 
+            /// <summary>
+            /// Gets the width.
+            /// </summary>
+            /// <value>The width.</value>
             public int Width
             {
                 get { return (int) (Bitmap.Width * _scale.X); }
             }
 
+            /// <summary>
+            /// Gets the height.
+            /// </summary>
+            /// <value>The height.</value>
             public int Height
             {
                 get { return (int) (Bitmap.Height * _scale.Y); }
             }
 
+            /// <summary>
+            /// Gets the size.
+            /// </summary>
+            /// <value>The size.</value>
             public Vector2 Size
             {
                 get { return new Vector2(Bitmap.Width, Bitmap.Height); }
             }
 
+            /// <summary>
+            /// Gets or sets the position.
+            /// </summary>
+            /// <value>The position.</value>
             public Vector2 Position
             {
                 set
@@ -890,24 +1341,51 @@ namespace LeagueSharp.Common
                 get { return new Vector2(X, Y); }
             }
 
+            /// <summary>
+            /// Gets or sets the delegate that gets the position.
+            /// </summary>
+            /// <value>The position update.</value>
             public PositionDelegate PositionUpdate { get; set; }
 
+            /// <summary>
+            /// Gets or sets the scale.
+            /// </summary>
+            /// <value>The scale.</value>
             public Vector2 Scale
             {
                 set { _scale = value; }
                 get { return _scale; }
             }
 
+            /// <summary>
+            /// Gets or sets the rotation.
+            /// </summary>
+            /// <value>The rotation.</value>
             public float Rotation { set; get; }
 
+            /// <summary>
+            /// Gets or sets the color.
+            /// </summary>
+            /// <value>The color.</value>
             public ColorBGRA Color
             {
                 set { _color = value; }
                 get { return _color; }
             }
 
+            /// <summary>
+            /// Occurs when the sprite is reset.
+            /// </summary>
             public event OnResetting OnReset;
 
+            /// <summary>
+            /// Crops the sprite.
+            /// </summary>
+            /// <param name="x">The x.</param>
+            /// <param name="y">The y.</param>
+            /// <param name="w">The width.</param>
+            /// <param name="h">The height.</param>
+            /// <param name="scale">if set to <c>true</c>, crops with the scale.</param>
             public void Crop(int x, int y, int w, int h, bool scale = false)
             {
                 _crop = new SharpDX.Rectangle(x, y, w, h);
@@ -919,6 +1397,11 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Crops the sprite.
+            /// </summary>
+            /// <param name="rect">The rectangle.</param>
+            /// <param name="scale">if set to <c>true</c>, crops with the scale.</param>
             public void Crop(SharpDX.Rectangle rect, bool scale = false)
             {
                 _crop = rect;
@@ -931,16 +1414,25 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Shows this instance.
+            /// </summary>
             public void Show()
             {
                 _hide = false;
             }
 
+            /// <summary>
+            /// Hides this instance.
+            /// </summary>
             public void Hide()
             {
                 _hide = true;
             }
 
+            /// <summary>
+            /// Resets this instance.
+            /// </summary>
             public void Reset()
             {
                 UpdateTextureBitmap(
@@ -952,26 +1444,45 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Makes the sprite black and white.
+            /// </summary>
             public void GrayScale()
             {
                 SetSaturation(0.0f);
             }
 
+            /// <summary>
+            /// Fades this instance. (Saturation is 1/2)
+            /// </summary>
             public void Fade()
             {
                 SetSaturation(0.5f);
             }
 
+            /// <summary>
+            /// Complements this instance.
+            /// </summary>
             public void Complement()
             {
                 SetSaturation(-1.0f);
             }
 
+            /// <summary>
+            /// Sets the saturation.
+            /// </summary>
+            /// <param name="saturiation">The saturiation.</param>
             public void SetSaturation(float saturiation)
             {
                 UpdateTextureBitmap(SaturateBitmap(Bitmap, saturiation));
             }
 
+            /// <summary>
+            /// Saturates the bitmap.
+            /// </summary>
+            /// <param name="original">The original image.</param>
+            /// <param name="saturation">The saturation.</param>
+            /// <returns>Bitmap.</returns>
             private static Bitmap SaturateBitmap(Image original, float saturation)
             {
                 const float rWeight = 0.3086f;
@@ -1014,6 +1525,11 @@ namespace LeagueSharp.Common
                 return newBitmap;
             }
 
+            /// <summary>
+            /// Updates the texture bitmap.
+            /// </summary>
+            /// <param name="newBitmap">The new bitmap.</param>
+            /// <param name="position">The position.</param>
             public void UpdateTextureBitmap(Bitmap newBitmap, Vector2 position = new Vector2())
             {
                 if (position.IsValid())
@@ -1037,6 +1553,10 @@ namespace LeagueSharp.Common
                 }
             }
 
+
+            /// <summary>
+            /// Called when the scene has ended.
+            /// </summary>
             public override void OnEndScene()
             {
                 try
@@ -1062,16 +1582,26 @@ namespace LeagueSharp.Common
                 }
             }
 
+
+            /// <summary>
+            /// Called before the DirectX device is reset..
+            /// </summary>
             public override void OnPreReset()
             {
                 _sprite.OnLostDevice();
             }
 
+            /// <summary>
+            /// Called after the DirectX device is reset.
+            /// </summary>
             public override void OnPostReset()
             {
                 _sprite.OnResetDevice();
             }
 
+            /// <summary>
+            /// Disposes this instance.
+            /// </summary>
             public override void Dispose()
             {
                 Game.OnUpdate -= Game_OnUpdate;
@@ -1093,26 +1623,84 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Object used to draw text on the screen.
+        /// Object used to draw text on the screen.
         /// </summary>
         public class Text : RenderObject
         {
+            /// <summary>
+            /// Delegate that gets the position of the text.
+            /// </summary>
+            /// <returns>Vector2.</returns>
             public delegate Vector2 PositionDelegate();
 
+            /// <summary>
+            /// Delegate that gets the text.
+            /// </summary>
+            /// <returns>System.String.</returns>
             public delegate string TextDelegate();
 
+            /// <summary>
+            /// The DirectX text font
+            /// </summary>
             private Font _textFont;
+
+            /// <summary>
+            /// The x
+            /// </summary>
             private int _x;
+
+            /// <summary>
+            /// The y
+            /// </summary>
             private int _y;
+
+            /// <summary>
+            /// The calculated x
+            /// </summary>
             private int _xCalculated;
+
+            /// <summary>
+            /// The calculated y
+            /// </summary>
             private int _yCalculated;
+
+            /// <summary>
+            /// <c>true</c> if the text should be centered at the position.
+            /// </summary>
             public bool Centered = false;
+
+            /// <summary>
+            /// The offset
+            /// </summary>
             public Vector2 Offset;
+
+            /// <summary>
+            /// <c>true</c> if the text should have an outline.
+            /// </summary>
             public bool OutLined = false;
+
+            /// <summary>
+            /// The delegate that updates the position of the text.
+            /// </summary>
             public PositionDelegate PositionUpdate;
+
+            /// <summary>
+            /// The delegate that updates the text.
+            /// </summary>
             public TextDelegate TextUpdate;
+
+            /// <summary>
+            /// The unit
+            /// </summary>
             public Obj_AI_Base Unit;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Text"/> class.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <param name="fontName">Name of the font.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="color">The color.</param>
             private Text(string text, string fontName, int size, ColorBGRA color)
             {
                 _textFont = new Font(
@@ -1129,12 +1717,29 @@ namespace LeagueSharp.Common
                 Game.OnUpdate += Game_OnUpdate;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Text"/> class.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <param name="x">The x.</param>
+            /// <param name="y">The y.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="fontName">Name of the font.</param>
             public Text(string text, int x, int y, int size, ColorBGRA color, string fontName = "Calibri") : this(text, fontName, size, color)
             {
                 _x = x;
                 _y = y;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Text"/> class.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <param name="position">The position.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="fontName">Name of the font.</param>
             public Text(string text, Vector2 position, int size, ColorBGRA color, string fontName = "Calibri")
                 : this(text, fontName, size, color)
             {
@@ -1142,6 +1747,15 @@ namespace LeagueSharp.Common
                 _y = (int) position.Y;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Text"/> class.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <param name="unit">The unit.</param>
+            /// <param name="offset">The offset.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="fontName">Name of the font.</param>
             public Text(string text,
                 Obj_AI_Base unit,
                 Vector2 offset,
@@ -1159,6 +1773,15 @@ namespace LeagueSharp.Common
                 _y = (int) pos.Y;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Text"/> class.
+            /// </summary>
+            /// <param name="x">The x.</param>
+            /// <param name="y">The y.</param>
+            /// <param name="text">The text.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="fontName">Name of the font.</param>
             public Text(int x, int y, string text, int size, ColorBGRA color, string fontName = "Calibri")
                 : this(text, fontName, size, color)
             {
@@ -1166,6 +1789,14 @@ namespace LeagueSharp.Common
                 _y = y;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Text"/> class.
+            /// </summary>
+            /// <param name="position">The position.</param>
+            /// <param name="text">The text.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="color">The color.</param>
+            /// <param name="fontName">Name of the font.</param>
             public Text(Vector2 position, string text, int size, ColorBGRA color, string fontName = "Calibri")
                 : this(text, fontName, size, color)
             {
@@ -1173,6 +1804,10 @@ namespace LeagueSharp.Common
                 _y = (int) position.Y;
             }
 
+            /// <summary>
+            /// Gets or sets the text font description.
+            /// </summary>
+            /// <value>The text font description.</value>
             public FontDescription TextFontDescription
             {
                 get { return _textFont.Description; }
@@ -1184,6 +1819,10 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Game_s the on update.
+            /// </summary>
+            /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
             private void Game_OnUpdate(EventArgs args)
             {
                 if (Visible)
@@ -1202,6 +1841,10 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Gets or sets the x.
+            /// </summary>
+            /// <value>The x.</value>
             public int X
             {
                 get
@@ -1215,6 +1858,10 @@ namespace LeagueSharp.Common
                 set { _x = value; }
             }
 
+            /// <summary>
+            /// Gets or sets the y.
+            /// </summary>
+            /// <value>The y.</value>
             public int Y
             {
                 get
@@ -1228,22 +1875,51 @@ namespace LeagueSharp.Common
                 set { _y = value; }
             }
 
+            /// <summary>
+            /// Gets the x offset.
+            /// </summary>
+            /// <value>The x offset.</value>
             private int XOffset
             {
                 get { return Centered ? -Width / 2 : 0; }
             }
 
+            /// <summary>
+            /// Gets the y offset.
+            /// </summary>
+            /// <value>The y offset.</value>
             private int YOffset
             {
                 get { return Centered ? -Height / 2 : 0; }
             }
 
+            /// <summary>
+            /// Gets the width.
+            /// </summary>
+            /// <value>The width.</value>
             public int Width { get; private set; }
+
+            /// <summary>
+            /// Gets the height.
+            /// </summary>
+            /// <value>The height.</value>
             public int Height { get; private set; }
 
+            /// <summary>
+            /// Gets or sets the color.
+            /// </summary>
+            /// <value>The color.</value>
             public ColorBGRA Color { get; set; }
 
+            /// <summary>
+            /// The text
+            /// </summary>
             private string _text;
+
+            /// <summary>
+            /// Gets or sets the text.
+            /// </summary>
+            /// <value>The text.</value>
             public string text
             {
                 get { return _text; }
@@ -1260,6 +1936,9 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Called when the scene has ended.
+            /// </summary>
             public override void OnEndScene()
             {
                 try
@@ -1294,16 +1973,25 @@ namespace LeagueSharp.Common
                 }
             }
 
+            /// <summary>
+            /// Called before the DirectX device is reset.
+            /// </summary>
             public override void OnPreReset()
             {
                 _textFont.OnLostDevice();
             }
 
+            /// <summary>
+            /// Called after the DirectX device has been reset.
+            /// </summary>
             public override void OnPostReset()
             {
                 _textFont.OnResetDevice();
             }
 
+            /// <summary>
+            /// Disposes this instance.
+            /// </summary>
             public override void Dispose()
             {
                 Game.OnUpdate -= Game_OnUpdate;
@@ -1315,10 +2003,23 @@ namespace LeagueSharp.Common
         }
     }
 
+    /// <summary>
+    /// Provides extensions for fonts.
+    /// </summary>
     public static class FontExtension
     {
+        /// <summary>
+        /// The widths
+        /// </summary>
         private static readonly Dictionary<Font, Dictionary<string, Rectangle>> Widths = new Dictionary<Font, Dictionary<string, Rectangle>>();
 
+        /// <summary>
+        /// Measures the text.
+        /// </summary>
+        /// <param name="font">The font.</param>
+        /// <param name="sprite">The sprite.</param>
+        /// <param name="text">The text.</param>
+        /// <returns>Rectangle.</returns>
         public static Rectangle MeasureText(this Font font, Sprite sprite, string text)
         {
             Dictionary<string, Rectangle> rectangles;
@@ -1338,6 +2039,12 @@ namespace LeagueSharp.Common
             return rectangle;
         }
 
+        /// <summary>
+        /// Measures the text.
+        /// </summary>
+        /// <param name="font">The font.</param>
+        /// <param name="text">The text.</param>
+        /// <returns>Rectangle.</returns>
         public static Rectangle MeasureText(this Font font, string text)
         {
             return font.MeasureText(null, text);
