@@ -26,6 +26,9 @@ using System.ServiceModel.Description;
 
 namespace LeagueSharp.Common
 {
+    /// <summary>
+    /// Helps share an instance of a class across assemblies.
+    /// </summary>
     public static class Shared
     {
         #region Interface definitions
@@ -33,6 +36,12 @@ namespace LeagueSharp.Common
 
         #endregion Interface definitions
 
+        /// <summary>
+        /// Gets the interface.
+        /// </summary>
+        /// <typeparam name="InterfaceType">The type of the interface type.</typeparam>
+        /// <returns>InterfaceType.</returns>
+        /// <exception cref="Exception">Failed to connect to assembly pipe for Common.Shared communication. The targetted assembly may not be loaded yet. Desired interface:  + typeof(InterfaceType).Name</exception>
         public static InterfaceType GetInterface<InterfaceType>() where InterfaceType : class
         {
             try
@@ -45,6 +54,12 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        /// Shares the interface.
+        /// </summary>
+        /// <typeparam name="ImplementationType">The type of the implementation type.</typeparam>
+        /// <param name="open">if set to <c>true</c> [open].</param>
+        /// <returns>ServiceHost.</returns>
         public static ServiceHost ShareInterface<ImplementationType>(bool open = true)
         {
             ServiceHost host = new ServiceHost(typeof(ImplementationType), new Uri("net.pipe://localhost"));
