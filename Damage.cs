@@ -1214,19 +1214,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new[] { 20, 40, 60, 80, 100 }[level]
-                                    + new double[] { 1.0, 1.1, 1.2, 1.3, 1.4 }[level]
-                                    * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * 0.5
-                            },
-                        //Q - Blade
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new[] { 20, 40, 60, 80, 100 }[level]
-                                    + new double[] { 1.0, 1.1, 1.2, 1.3, 1.4 }[level]
-                                    * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    new[] { 40, 70, 100, 130, 160 }[level] +
+                                   (new [] { 0.5, 1.1, 1.2, 1.3, 1.4 }[level] * source.TotalAttackDamage)
                             },
                         //W
                         new DamageSpell
@@ -1234,7 +1223,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    1.4 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                        source.TotalAttackDamage + (0.4 * source.TotalAttackDamage)
                             },
                         //R 
                         new DamageSpell
@@ -1242,8 +1231,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.True,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 100, 200, 300 }[level]
-                                    + 0.75 * source.FlatPhysicalDamageMod
+                                    new double[] { 100, 200, 300 }[level] + 0.75 * source.FlatPhysicalDamageMod
                             },
                     });
 
@@ -4741,7 +4729,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    target.GetVenomStacks()
+                                    (from buff in target.Buffs
+                                     where buff.DisplayName.ToLower() == "twitchdeadlyvenom"
+                                     select buff.Count).FirstOrDefault()
                                     * (new double[] { 15, 20, 25, 30, 35 }[level]
                                        + 0.2 * source.AbilityPower()
                                        + 0.25 * source.FlatPhysicalDamageMod)

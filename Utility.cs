@@ -560,21 +560,6 @@ namespace LeagueSharp.Common
             return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
-        internal static int GetVenomStacks(this Obj_AI_Base target)
-        {
-            for (var i = 1; i < 7; i++)
-            {
-                if (ObjectManager.Get<Obj_GeneralParticleEmitter>()
-                        .Any(e => e.Position.Distance(target.ServerPosition) <= 70 &&
-                                  e.Name == "twitch_poison_counter_0" + i + ".troy"))
-                {
-                    return i;
-                }
-            }
-
-            return 0;
-        }
-
         public static bool IsMovementImpaired(this Obj_AI_Hero hero)
         {
             return hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
