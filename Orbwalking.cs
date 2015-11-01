@@ -97,7 +97,7 @@ namespace LeagueSharp.Common
             Combo,
 
             /// <summary>
-            /// The orbwalker will be will only move.
+            /// The orbwalker will only move.
             /// </summary>
             CustomMode,
 
