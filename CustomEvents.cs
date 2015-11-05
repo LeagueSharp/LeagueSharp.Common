@@ -112,7 +112,14 @@ namespace LeagueSharp.Common
                         .Where(s => !NotifiedSubscribers.Contains(s)))
                     {
                         NotifiedSubscribers.Add(subscriber);
-                        subscriber.DynamicInvoke(new EventArgs());
+                        try
+                        {
+                            subscriber.DynamicInvoke(new EventArgs());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                     }
                 }
 
@@ -156,8 +163,19 @@ namespace LeagueSharp.Common
 
                 if (OnGameLoad != null)
                 {
-                    NotifiedSubscribers.AddRange(OnGameLoad.GetInvocationList());
-                    OnGameLoad(new EventArgs());
+                    foreach (var subscriber in OnGameLoad.GetInvocationList()
+                        .Where(s => !NotifiedSubscribers.Contains(s)))
+                    {
+                        NotifiedSubscribers.Add(subscriber);
+                        try
+                        {
+                            subscriber.DynamicInvoke(new EventArgs());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
                 }
             }
         }
