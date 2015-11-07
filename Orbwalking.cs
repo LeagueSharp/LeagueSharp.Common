@@ -179,6 +179,11 @@ namespace LeagueSharp.Common
         public static bool Move = true;
 
         /// <summary>
+        /// The tick the most recent attack command was sent.
+        /// </summary>
+        public static int LastAttackCommandT;
+
+        /// <summary>
         /// The tick the most recent move command was sent.
         /// </summary>
         public static int LastMoveCommandT;
@@ -416,7 +421,7 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack && !Player.Spellbook.IsCastingSpell && !Player.IsDashing() && !Player.IsStunned;
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
 
         /// <summary>
@@ -565,6 +570,11 @@ namespace LeagueSharp.Common
             bool useFixedDistance = true,
             bool randomizeMinDistance = true)
         {
+            if (Utils.GameTimeTickCount - LastAttackCommandT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return;
+            }
+
             try
             {
                 if (target.IsValidTarget() && CanAttack())
@@ -576,23 +586,15 @@ namespace LeagueSharp.Common
                     {
                         if (!NoCancelChamps.Contains(_championName))
                         {
-                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             _missileLaunched = false;
-
-                            var d = GetRealAutoAttackRange(target) - 65;
-                            if (Player.Distance(target, true) > d * d && !Player.IsMelee)
-                            {
-                                LastAATick = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
-                            }
                         }
 
-                        if (!Player.IssueOrder(GameObjectOrder.AttackUnit, target))
+                        if(Player.IssueOrder(GameObjectOrder.AttackUnit, target))
                         {
-                            ResetAutoAttackTimer();
+                            LastAttackCommandT = Utils.GameTimeTickCount;
+                            _lastTarget = target;
                         }
-
-                        LastMoveCommandT = 0;
-                        _lastTarget = target;
+                        
                         return;
                     }
                 }
@@ -613,7 +615,6 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
-            Console.WriteLine("AA RESET");
             LastAATick = 0;
         }
 
@@ -694,6 +695,7 @@ namespace LeagueSharp.Common
                 {
                     LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
                     _missileLaunched = false;
+                    LastMoveCommandT = 0;
 
                     if (Spell.Target is Obj_AI_Base)
                     {
