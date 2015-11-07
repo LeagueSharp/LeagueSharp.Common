@@ -655,6 +655,11 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Base_OnDoCast_Delayed(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (IsAutoAttackReset(args.SData.Name))
+            {
+                ResetAutoAttackTimer();
+            }
+
             FireAfterAttack(sender, args.Target as AttackableUnit);
             _missileLaunched = true;
         }
@@ -669,11 +674,6 @@ namespace LeagueSharp.Common
             try
             {
                 var spellName = Spell.SData.Name;
-
-                if (IsAutoAttackReset(spellName) && unit.IsMe)
-                {
-                    Utility.DelayAction.Add(250, ResetAutoAttackTimer);
-                }
 
                 if (!IsAutoAttack(spellName))
                 {
