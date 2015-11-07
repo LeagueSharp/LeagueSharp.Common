@@ -115,7 +115,7 @@ namespace LeagueSharp.Common
             "dariusnoxiantacticsonh", "fioraflurry", "garenq",
             "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane", "lucianq",
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
-            "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+            "gangplankqwrapper", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
             "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq",
             "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave"
         };
@@ -613,6 +613,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
+            Console.WriteLine("AA RESET");
             LastAATick = 0;
         }
 
@@ -636,7 +637,7 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if(sender.IsMe && IsAutoAttack(args.SData.Name))
+            if(sender.IsMe)
             {
                 if(Game.Ping <= 30) //First world problems kappa
                 {
@@ -660,8 +661,11 @@ namespace LeagueSharp.Common
                 ResetAutoAttackTimer();
             }
 
-            FireAfterAttack(sender, args.Target as AttackableUnit);
-            _missileLaunched = true;
+            if(IsAutoAttack(args.SData.Name))
+            {
+                FireAfterAttack(sender, args.Target as AttackableUnit);
+                _missileLaunched = true;
+            }
         }
 
         /// <summary>
@@ -674,6 +678,11 @@ namespace LeagueSharp.Common
             try
             {
                 var spellName = Spell.SData.Name;
+
+                if (unit.IsMe && IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
+                {
+                    ResetAutoAttackTimer();
+                }
 
                 if (!IsAutoAttack(spellName))
                 {
