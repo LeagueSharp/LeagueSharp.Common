@@ -5932,6 +5932,27 @@ namespace LeagueSharp.Common
                 armorPenetrationPercent = 1d;
             }
 
+            // Turrets too.
+            if (source is Obj_AI_Turret)
+            {
+                armorPenetrationFlat = 0d;
+                armorPenetrationPercent = 1d;
+            }
+
+            if (source is Obj_AI_Turret)
+            {
+                if (target is Obj_AI_Minion)
+                {
+                    amount *= 1.25;
+                    if (target.CharData.BaseSkinName.EndsWith("MinionSiege"))
+                    {
+                        amount *= 0.7;
+                    }
+
+                    return amount;
+                }
+            }
+
             // Penetration can't reduce armor below 0.
             var armor = target.Armor;
 
