@@ -1162,14 +1162,14 @@ namespace LeagueSharp.Common
                                     + 0.5 * source.AbilityPower()
                                     + 0.5 * source.FlatPhysicalDamageMod
                             },
-                        //W
+                        //W per sec
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    new double[] { 30, 45, 60, 75, 90 }[level]
+                                    + 0.2 * source.AbilityPower()
                             },
                         //E
                         new DamageSpell
@@ -1186,9 +1186,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 100, 180, 260 }[level]
+                                    new double[] { 100, 130, 160 }[level]
                                     + 0.3 * source.AbilityPower()
-                                    + new double[] { 20, 30, 40 }[level] / 100
+                                    + new double[] { 20, 50, 80 }[level] / 100
                                     * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //R - Big missile
@@ -1197,9 +1197,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 150, 270, 390 }[level]
+                                    new double[] { 150, 195, 240 }[level]
                                     + 0.45 * source.AbilityPower()
-                                    + new double[] { 30, 40, 60 }[level] / 100
+                                    + new double[] { 30, 75, 120 }[level] / 100
                                     * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                     });
@@ -1818,7 +1818,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 90, 120, 150, 180 }[level]
+                                    new double[] { 60, 80, 100, 120, 140 }[level]
                                     + 0.75 * source.FlatPhysicalDamageMod
                             },
                         //Q
@@ -1827,7 +1827,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 120, 180, 240, 300, 360 }[level]
+                                    new double[] { 90, 155, 220, 285, 350 }[level]
                                     + 1.50 * source.FlatPhysicalDamageMod
                             },
                         //W
