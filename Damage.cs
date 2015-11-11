@@ -3111,7 +3111,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 50, 75, 125 }[level]
+                                    0.75 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                                     + 0.2 * source.AbilityPower()
                             },
                     });
