@@ -573,7 +573,7 @@ namespace LeagueSharp.Common
             bool exactHitChance = false,
             int minTargets = -1)
         {
-            if (unit == null)
+            if (unit == null || MenuGUI.IsShopOpen || MenuGUI.IsChatOpen)
             {
                 return CastStates.NotCasted;
             }
@@ -700,6 +700,11 @@ namespace LeagueSharp.Common
                 return false;
             }
 
+            if (MenuGUI.IsShopOpen || MenuGUI.IsChatOpen)
+            {
+                return false;
+            }
+
             LastCastAttemptT = Utils.TickCount;
 
             if (packetCast)
@@ -753,6 +758,10 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the spell was sucessfully casted, <c>false</c> otherwise.</returns>
         public bool Cast(Vector3 fromPosition, Vector3 toPosition)
         {
+            if (MenuGUI.IsShopOpen || MenuGUI.IsChatOpen)
+            {
+                return false;
+            }
             return Slot.IsReady() && ObjectManager.Player.Spellbook.CastSpell(Slot, fromPosition, toPosition);
         }
 
@@ -764,6 +773,10 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the spell was casted successfully, <c>false</c> otherwise.</returns>
         public bool Cast(Vector2 position, bool packetCast = false)
         {
+            if (MenuGUI.IsShopOpen || MenuGUI.IsChatOpen)
+            {
+                return false;
+            }
             return Cast(position.To3D(), packetCast);
         }
 
@@ -831,10 +844,19 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the spell was successfully casted, <c>false</c> otherwise.</returns>
         public bool CastIfHitchanceEquals(Obj_AI_Base unit, HitChance hitChance, bool packetCast = false)
         {
+            //Prevent flood
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return false;
+            }
             var currentHitchance = MinHitChance;
             MinHitChance = hitChance;
             var castResult = _cast(unit, packetCast, false, false);
             MinHitChance = currentHitchance;
+            if (castResult == CastStates.SuccessfullyCasted)
+            {
+                LastCastAttemptT = Utils.TickCount;
+            }
             return castResult == CastStates.SuccessfullyCasted;
         }
 
@@ -847,7 +869,16 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the spell was successfully casted, <c>false</c> otherwise.</returns>
         public bool CastIfWillHit(Obj_AI_Base unit, int minTargets = 5, bool packetCast = false)
         {
+            //Prevent flood
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return false;
+            }
             var castResult = _cast(unit, packetCast, true, false, minTargets);
+            if (castResult == CastStates.SuccessfullyCasted)
+            {
+                LastCastAttemptT = Utils.TickCount;
+            }
             return castResult == CastStates.SuccessfullyCasted;
         }
 
@@ -1109,8 +1140,25 @@ namespace LeagueSharp.Common
         /// <returns>CastStates.</returns>
         public CastStates CastOnBestTarget(float extraRange = 0, bool packetCast = false, bool aoe = false)
         {
+            //Prevent flood
+            if (CommonMenu.Config.Item("LimitCastingAttempts").GetValue<bool>() && Utils.TickCount - LastCastAttemptT < (70 + Math.Min(60, Game.Ping)))
+            {
+                return CastStates.PreventFlood;
+            }
+
+            if (MenuGUI.IsShopOpen || MenuGUI.IsChatOpen)
+            {
+                return CastStates.NotCasted;
+            }
+
             var target = GetTarget(extraRange);
-            return target != null ? Cast(target, packetCast, aoe) : CastStates.NotCasted;
+            if (target != null)
+            {
+                LastCastAttemptT = Utils.TickCount;
+                return Cast(target, packetCast, aoe);
+            }
+
+            return CastStates.NotCasted;
         }
     }
 }
