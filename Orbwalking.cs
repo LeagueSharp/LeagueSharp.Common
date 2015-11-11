@@ -112,7 +112,7 @@ namespace LeagueSharp.Common
         /// </summary>
         private static readonly string[] AttackResets =
         {
-            "dariusnoxiantacticsonh", "fioraflurry", "garenq",
+            "dariusnoxiantacticsonh", "fioraflurry", "garenq","gravesmove",
             "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane", "lucianq",
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
             "gangplankqwrapper", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
