@@ -2493,7 +2493,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 2,
             From = new[] { 3086, 2015 },
-            Into = new[] { },
             InStore = true,
             FlatCritChanceMod = 0.1f,
             Id = 3094
@@ -2970,8 +2969,6 @@ namespace LeagueSharp.Common.Data
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
-            From = new[] { },
-            Into = new[] { },
             InStore = true,
             FlatPhysicalDamageMod = 25f,
             Tags = new[] { "ArmorPenetration", "CooldownReduction", "Damage" },
@@ -3973,7 +3970,7 @@ namespace LeagueSharp.Common.Data
 
         #region Oracle Alteration
 
-        public static Item Oracle Alteration = new Item
+        public static Item Oracle_Alteration = new Item
         {
             Name = "Oracle Alteration",
             Range = 600f,
@@ -4141,8 +4138,6 @@ namespace LeagueSharp.Common.Data
             Group = "JungleItems",
             Stacks = 1,
             Depth = 2,
-            From = new[] { },
-            Into = new[] { },
             InStore = true,
             Tags = new[] { "Damage", "HealthRegen", "Jungle", "ManaRegen", "OnHit" },
             Id = 3711
