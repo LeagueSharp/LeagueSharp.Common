@@ -6386,7 +6386,7 @@ namespace LeagueSharp.Common
             if (Game.Version.Contains("5.22"))
             {
                 //SAVAGERY: BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
-                if (target is Obj_AI_Minion)
+                if (target is Obj_AI_Minion && hero != null)
                 {
                     Mastery Savagery = hero.GetMastery(Cunning.Savagery);
                     if (Savagery != null && Savagery.IsActive())
@@ -6396,7 +6396,7 @@ namespace LeagueSharp.Common
                 }
 
                 //Fervorofbattle: STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
-                if (targetHero != null)
+                if (targetHero != null && hero != null)
                 {
                     Mastery Fervor = hero.GetMastery(Ferocity.FervorofBattle);
                     if (Fervor != null && Fervor.IsActive())
@@ -6424,7 +6424,7 @@ namespace LeagueSharp.Common
             if (Game.Version.Contains("5.22"))
             {
                 //Tough Skin DIRT OFF YOUR SHOULDERS You take 2 less damage from champion and monster basic attacks
-                if (targetHero != null)
+                if (targetHero != null && (source is Obj_AI_Hero || source is Obj_AI_Minion))
                 {
                     Mastery Toughskin = targetHero.GetMastery(Resolve.ToughSkin);
                     if (Toughskin != null && Toughskin.IsActive())
