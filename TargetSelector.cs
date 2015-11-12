@@ -456,7 +456,7 @@ namespace LeagueSharp.Common
                                         hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:
-                        return targets.Find(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
+                        return targets.MinOrDefault(hero => hero.Distance(Game.CursorPos, true));
 
                     case TargetingMode.AutoPriority:
                         return
