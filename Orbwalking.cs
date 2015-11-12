@@ -97,11 +97,6 @@ namespace LeagueSharp.Common
             Combo,
 
             /// <summary>
-            /// The orbwalker will perform the combo, without moving.
-            /// </summary>
-            StillCombo,
-
-            /// <summary>
             /// The orbwalker will only move.
             /// </summary>
             CustomMode,
