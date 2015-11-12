@@ -194,12 +194,12 @@ namespace LeagueSharp.Common
             #region Aatrox
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Aatrox",
-                        IsActive =
+            {
+                ChampionName = "Aatrox",
+                IsActive =
                             (source, target) => (source.HasBuff("AatroxWPower") && source.HasBuff("AatroxWONHPowerBuff")),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
-                    };
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -207,17 +207,17 @@ namespace LeagueSharp.Common
             #region Alistar
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Alistar",
-                        IsActive = (source, target) => (source.HasBuff("alistartrample")),
-                        GetDamage =
+            {
+                ChampionName = "Alistar",
+                IsActive = (source, target) => (source.HasBuff("alistartrample")),
+                GetDamage =
                             (source, target) =>
                             ((float)
                              source.CalcDamage(
                                  target,
                                  DamageType.Magical,
                                  6d + source.Level + (0.1d * source.AbilityPower()))),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -225,16 +225,16 @@ namespace LeagueSharp.Common
             #region Caitlyn
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Caitlyn", IsActive = (source, target) => (source.HasBuff("caitlynheadshot")),
-                        GetDamage =
+            {
+                ChampionName = "Caitlyn", IsActive = (source, target) => (source.HasBuff("caitlynheadshot")),
+                GetDamage =
                             (source, target) =>
                             ((float)
                              source.CalcDamage(
                                  target,
                                  DamageType.Physical,
                                  1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -242,16 +242,16 @@ namespace LeagueSharp.Common
             #region Draven
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Draven", IsActive = (source, target) => (source.HasBuff("DravenSpinning")),
-                        GetDamage =
+            {
+                ChampionName = "Draven", IsActive = (source, target) => (source.HasBuff("DravenSpinning")),
+                GetDamage =
                             (source, target) =>
                             ((float)
                              source.CalcDamage(
                                  target,
                                  DamageType.Physical,
                                  0.45d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -259,11 +259,11 @@ namespace LeagueSharp.Common
             #region Corki
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Corki", IsActive = (source, target) => (source.HasBuff("rapidreload")),
-                        GetDamage =
+            {
+                ChampionName = "Corki", IsActive = (source, target) => (source.HasBuff("rapidreload")),
+                GetDamage =
                             (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -275,7 +275,7 @@ namespace LeagueSharp.Common
                 ChampionName = "Ekko",
                 IsActive = (source, target) => (target.GetBuffCount("EkkoStacks") == 3),
                 GetDamage = (source, target) =>
-                 (float) source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.AbilityPower() * 0.8)),
+                 (float)source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.AbilityPower() * 0.8)),
             };
             AttackPassives.Add(p);
 
@@ -285,11 +285,11 @@ namespace LeagueSharp.Common
             #region Gnar
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Gnar",
-                        IsActive = (source, target) => (target.GetBuffCount("gnarwproc") == 2),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
-                    };
+            {
+                ChampionName = "Gnar",
+                IsActive = (source, target) => (target.GetBuffCount("gnarwproc") == 2),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -6421,13 +6421,16 @@ namespace LeagueSharp.Common
 
             // Defensive masteries:
 
-            //Tough Skin DIRT OFF YOUR SHOULDERS You take 2 less damage from champion and monster basic attacks
-            if (false && targetHero != null)
+            if (Game.Version.Contains("5.22"))
             {
-                Mastery Toughskin = targetHero.GetMastery(Resolve.ToughSkin);
-                if (Toughskin != null && Toughskin.IsActive())
+                //Tough Skin DIRT OFF YOUR SHOULDERS You take 2 less damage from champion and monster basic attacks
+                if (targetHero != null)
                 {
-
+                    Mastery Toughskin = targetHero.GetMastery(Resolve.ToughSkin);
+                    if (Toughskin != null && Toughskin.IsActive())
+                    {
+                        value -= 2;
+                    }
                 }
             }
 
