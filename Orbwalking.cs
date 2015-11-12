@@ -844,6 +844,7 @@ namespace LeagueSharp.Common
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("AttackPetsnTraps", "Auto attack pets & traps").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("Smallminionsprio", "Jungle clear small first").SetShared().SetValue(false));
+                misc.AddItem(new MenuItem("FocusMinionsOverTurrets", "Focus minions over objectives").SetShared().SetValue(new KeyBind('N', KeyBindType.Toggle)));
 
                 _config.AddSubMenu(misc);
 
@@ -1079,7 +1080,7 @@ namespace LeagueSharp.Common
                 }
 
                 /* turrets / inhibitors / nexus */
-                if (ActiveMode == OrbwalkingMode.LaneClear)
+                if (ActiveMode == OrbwalkingMode.LaneClear && !_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active)
                 {
                     /* turrets */
                     foreach (var turret in
@@ -1240,7 +1241,7 @@ namespace LeagueSharp.Common
                         _config.Item("HoldZone").GetValue<Circle>().Color,
                         _config.Item("AALineWidth").GetValue<Slider>().Value, true);
                 }
-
+                _config.Item("FocusMinionsOverTurrets").Permashow(_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active);
             }
         }
     }
