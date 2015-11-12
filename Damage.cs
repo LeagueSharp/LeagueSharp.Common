@@ -297,16 +297,16 @@ namespace LeagueSharp.Common
             #region Jinx
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Jinx", IsActive = (source, target) => (source.HasBuff("JinxQ")),
-                        GetDamage =
+            {
+                ChampionName = "Jinx", IsActive = (source, target) => (source.HasBuff("JinxQ")),
+                GetDamage =
                             (source, target) =>
                             ((float)
                              source.CalcDamage(
                                  target,
                                  DamageType.Physical,
                                  0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -316,16 +316,16 @@ namespace LeagueSharp.Common
             if (!Game.Version.Contains("5.12"))
             {
                 p = new PassiveDamage
-                        {
-                            ChampionName = "Kalista", IsActive = (source, target) => true,
-                            GetDamage =
+                {
+                    ChampionName = "Kalista", IsActive = (source, target) => true,
+                    GetDamage =
                                 (source, target) =>
                                 ((float)
                                  -source.CalcDamage(
                                      target,
                                      DamageType.Physical,
                                      0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-                        };
+                };
                 AttackPassives.Add(p);
             }
 
@@ -334,10 +334,10 @@ namespace LeagueSharp.Common
             #region Katarina
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Katarina", IsActive = (source, target) => (target.HasBuff("katarinaqmark")),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
-                    };
+            {
+                ChampionName = "Katarina", IsActive = (source, target) => (target.HasBuff("katarinaqmark")),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -345,10 +345,10 @@ namespace LeagueSharp.Common
             #region KogMaw
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "KogMaw", IsActive = (source, target) => (source.HasBuff("KogMawBioArcaneBarrage")),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
-                    };
+            {
+                ChampionName = "KogMaw", IsActive = (source, target) => (source.HasBuff("KogMawBioArcaneBarrage")),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -356,17 +356,17 @@ namespace LeagueSharp.Common
             #region MissFortune
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "MissFortune",
-                        IsActive = (source, target) => (source.HasBuff("missfortunepassive")),
-                        GetDamage =
+            {
+                ChampionName = "MissFortune",
+                IsActive = (source, target) => (source.HasBuff("missfortunepassive")),
+                GetDamage =
                             (source, target) =>
                             (float)
                             source.CalcDamage(
                                 target,
                                 DamageType.Magical,
                                 (float)0.06 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -374,10 +374,10 @@ namespace LeagueSharp.Common
             #region Nasus
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Nasus", IsActive = (source, target) => (source.HasBuff("NasusQ")),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
-                    };
+            {
+                ChampionName = "Nasus", IsActive = (source, target) => (source.HasBuff("NasusQ")),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -385,9 +385,9 @@ namespace LeagueSharp.Common
             #region Orianna
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Orianna", IsActive = (source, target) => (source.HasBuff("orianaspellsword")),
-                        GetDamage =
+            {
+                ChampionName = "Orianna", IsActive = (source, target) => (source.HasBuff("orianaspellsword")),
+                GetDamage =
                             (source, target) =>
                             (float)
                             source.CalcDamage(
@@ -396,7 +396,7 @@ namespace LeagueSharp.Common
                                 (float)0.15 * source.AbilityPower()
                                 + new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 }[
                                     source.Level - 1]),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -404,10 +404,10 @@ namespace LeagueSharp.Common
             #region Riven
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Riven",
-                        IsActive = (source, target) => source.GetBuffCount("rivenpassiveaaboost") > 0,
-                        GetDamage =
+            {
+                ChampionName = "Riven",
+                IsActive = (source, target) => source.GetBuffCount("rivenpassiveaaboost") > 0,
+                GetDamage =
                             (source, target) =>
                             ((float)
                              source.CalcDamage(
@@ -419,7 +419,7 @@ namespace LeagueSharp.Common
                                          0.45, 0.45, 0.5
                                      }[source.Level - 1]
                                  * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -427,16 +427,16 @@ namespace LeagueSharp.Common
             #region Teemo
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Teemo", IsActive = (source, target) => (source.HasBuff("ToxicShot")),
-                        GetDamage =
+            {
+                ChampionName = "Teemo", IsActive = (source, target) => (source.HasBuff("ToxicShot")),
+                GetDamage =
                             (source, target) =>
                             ((float)
                              source.CalcDamage(
                                  target,
                                  DamageType.Magical,
                                  source.Spellbook.GetSpell(SpellSlot.E).Level * 10 + source.AbilityPower() * 0.3)),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -444,9 +444,9 @@ namespace LeagueSharp.Common
             #region TwistedFate
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "TwistedFate", IsActive = (source, target) => (source.HasBuff("bluecardpreattack")),
-                        GetDamage =
+            {
+                ChampionName = "TwistedFate", IsActive = (source, target) => (source.HasBuff("bluecardpreattack")),
+                GetDamage =
                             (source, target) =>
                             (float)source.GetSpellDamage(target, SpellSlot.W)
                             - (float)
@@ -454,15 +454,15 @@ namespace LeagueSharp.Common
                                   target,
                                   DamageType.Physical,
                                   (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) - 10f,
-                    };
+            };
             AttackPassives.Add(p);
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "TwistedFate",
-                        IsActive = (source, target) => (source.HasBuff("cardmasterstackparticle")),
-                        GetDamage = (source, target) => (float)source.GetSpellDamage(target, SpellSlot.E),
-                    };
+            {
+                ChampionName = "TwistedFate",
+                IsActive = (source, target) => (source.HasBuff("cardmasterstackparticle")),
+                GetDamage = (source, target) => (float)source.GetSpellDamage(target, SpellSlot.E),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -470,10 +470,10 @@ namespace LeagueSharp.Common
             #region Varus
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Varus", IsActive = (source, target) => (source.HasBuff("VarusW")),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
-                    };
+            {
+                ChampionName = "Varus", IsActive = (source, target) => (source.HasBuff("VarusW")),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -481,21 +481,21 @@ namespace LeagueSharp.Common
             #region Vayne
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Vayne", IsActive = (source, target) => (source.HasBuff("vaynetumblebonus")),
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
-                    };
+            {
+                ChampionName = "Vayne", IsActive = (source, target) => (source.HasBuff("vaynetumblebonus")),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
+            };
             AttackPassives.Add(p);
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Vayne",
-                        IsActive =
+            {
+                ChampionName = "Vayne",
+                IsActive =
                             (source, target) =>
                             (from buff in target.Buffs where buff.Name == "vaynesilvereddebuff" select buff.Count)
                                 .FirstOrDefault() == 2,
-                        GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
-                    };
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -503,9 +503,9 @@ namespace LeagueSharp.Common
             #region Viktor
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Viktor", IsActive = (source, target) => (source.HasBuff("viktorpowertransferreturn")),
-                        GetDamage =
+            {
+                ChampionName = "Viktor", IsActive = (source, target) => (source.HasBuff("viktorpowertransferreturn")),
+                GetDamage =
                             (source, target) =>
                             (float)
                             source.CalcDamage(
@@ -515,7 +515,7 @@ namespace LeagueSharp.Common
                                 + new float[]
                                       { 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 110, 130, 150, 170, 190, 210 }[
                                           source.Level - 1]),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -523,9 +523,9 @@ namespace LeagueSharp.Common
             #region Ziggs
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Ziggs", IsActive = (source, target) => (source.HasBuff("ziggsshortfuse")),
-                        GetDamage =
+            {
+                ChampionName = "Ziggs", IsActive = (source, target) => (source.HasBuff("ziggsshortfuse")),
+                GetDamage =
                             (source, target) =>
                             (float)
                             source.CalcDamage(
@@ -535,7 +535,7 @@ namespace LeagueSharp.Common
                                 + new float[]
                                       { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
                                           source.Level - 1]),
-                    };
+            };
             AttackPassives.Add(p);
 
             #endregion
@@ -1162,15 +1162,27 @@ namespace LeagueSharp.Common
                                     + 0.5 * source.AbilityPower()
                                     + 0.5 * source.FlatPhysicalDamageMod
                             },
-                        //W per sec
+                        //W 
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 30, 45, 60, 75, 90 }[level]
+                                    new double[] { 60, 90, 120, 150, 180 }[level]
+                                    + 0.4 * source.AbilityPower() 
+                            },
+
+                        //W - Burn
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.W, DamageType = DamageType.Magical, Stage = 1,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 30, 45, 60, 75, 90 }[level] + (1.5 * source.FlatPhysicalDamageMod)
                                     + 0.2 * source.AbilityPower()
                             },
+
+
                         //E
                         new DamageSpell
                             {
@@ -1828,7 +1840,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 90, 155, 220, 285, 350 }[level]
-                                    + 1.50 * source.FlatPhysicalDamageMod
+                                    + new double[] { 0.4, 0.6, 0.8, 1, 1.2 }[level] * source.FlatPhysicalDamageMod
                             },
                         //W
                         new DamageSpell
@@ -2606,7 +2618,7 @@ namespace LeagueSharp.Common
                                         return 0;
                                     }
                             },
-                    }); 
+                    });
 
             Spells.Add(
                 "Kindred",
@@ -3655,10 +3667,12 @@ namespace LeagueSharp.Common
                             {
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
-                                    (source, target, level) =>
-                                    new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.65 * source.FlatPhysicalDamageMod
-                                    + 0.5 * source.AbilityPower()
+                                    (source, target, level) => {
+                                        double damage = (new double[] { 20, 45, 70, 95, 120}[level] + (new double[] { 0.7, 0.75, 0.8, 0.85, 0.9 }[level] * source.TotalAttackDamage)
+                                        + 0.35 * source.AbilityPower());
+                                        damage += damage * ((100 - target.HealthPercent) / 100);
+                                        return damage;
+                                    }
                             },
                         //E
                         new DamageSpell
@@ -3674,10 +3688,7 @@ namespace LeagueSharp.Common
                             {
                                 Slot = SpellSlot.R, DamageType = DamageType.Physical,
                                 Damage =
-                                    (source, target, level) =>
-                                    (new double[] { 100, 150, 200 }[level]
-                                     + 0.5 * source.FlatPhysicalDamageMod)
-                                    * ((target.MaxHealth - target.Health) / target.MaxHealth + 1)
+                                    (source, target, level) => source.TotalAttackDamage
                             },
                     });
 
@@ -5693,19 +5704,104 @@ namespace LeagueSharp.Common
                     reduction += f;
                 }
 
-                // Block
-                // + Reduces incoming damage from champion basic attacks by 1 / 2
-                if (hero != null)
+                if (Game.Version.Contains("5.21"))
                 {
-                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
-                    if (mastery != null && mastery.Points >= 1)
+                    // Block
+                    // + Reduces incoming damage from champion basic attacks by 1 / 2
+                    if (hero != null)
                     {
-                        reduction += 1 * mastery.Points;
+                        var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                        if (mastery != null && mastery.Points >= 1)
+                        {
+                            reduction += 1 * mastery.Points;
+                        }
                     }
                 }
             }
 
             return CalcPhysicalDamage(source, target, (result - reduction) * k);
+        }
+
+        internal static Mastery GetMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
+        {
+            var mastery = @hero.Masteries.FirstOrDefault(m => m.Page == page && m.Id == id);
+            return mastery;
+        }
+
+        internal static Mastery GetMastery(this Obj_AI_Hero hero, Ferocity ferocity)
+        {
+            return GetMastery(hero, MasteryPage.Offense, (int)ferocity);
+        }
+
+        internal static Mastery GetMastery(this Obj_AI_Hero hero, Cunning cunning)
+        {
+            return GetMastery(hero, MasteryPage.Defense, (int)cunning);
+        }
+
+        internal static Mastery GetMastery(this Obj_AI_Hero hero, Resolve resolve)
+        {
+            return GetMastery(hero, MasteryPage.Utility, (int)resolve);
+        }
+
+        internal static bool IsActive(this Mastery mastery)
+        {
+            return mastery.Points >= 1;
+        }
+
+        internal static bool IsMoveImpaired(this Obj_AI_Hero hero)
+        {
+            return hero.HasBuffOfType(BuffType.Fear) || hero.HasBuffOfType(BuffType.Slow) || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                   hero.HasBuffOfType(BuffType.Taunt);
+        }
+
+        internal enum Ferocity
+        {
+            Fury = 65,
+            Sorcery = 68,
+            DoubleEdgedSword = 81,
+            Vampirism = 97,
+            NaturalTalent = 100,
+            Feast = 82,
+            BountyHunter = 113,
+            Oppresor = 114,
+            BatteringBlows = 129,
+            PiercingThoughts = 132,
+            WarlordsBloodlust = 145,
+            FervorofBattle = 146,
+            DeathFireTouch = 137
+        }
+
+        internal enum Cunning
+        {
+            Wanderer = 65,
+            Savagery = 66,
+            RunicAffinity = 81,
+            SecretStash = 82,
+            Meditation = 98,
+            Merciless = 97,
+            Bandit = 114,
+            DangerousGAme = 115,
+            Precision = 129,
+            Intelligence = 130,
+            StormraidersSurge = 145,
+            ThunderlordsDecree = 146,
+            WindspeakerBlessing = 147
+        }
+        
+        internal enum Resolve
+        {
+            Recovery = 65,
+            Unyielding = 66,
+            Explorer = 81,
+            ToughSkin = 82,
+            RunicArmor = 97,
+            VeteransScar = 98,
+            Insight = 113,
+            Swiftness = 129,
+            LegendaryGuardian = 130,
+            GraspoftheUndying = 145,
+            StrengthoftheAges = 146,
+            BondofStones = 147
         }
 
         /// <summary>
@@ -6009,6 +6105,26 @@ namespace LeagueSharp.Common
             var targetHero = target as Obj_AI_Hero;
             if (targetHero != null)
             {
+
+                //Damage Reduction Masteries
+
+                //DAMAGE REDUCTION 4 %, doubling to 8 % when near at least one allied champion
+                //IN THIS TOGETHER 8 % of the damage that the nearest allied champion would take is dealt to you instead.This can't bring you below 15% health.
+                Mastery BondofStones = targetHero.GetMastery(Resolve.BondofStones);
+                if (BondofStones != null && BondofStones.IsActive())
+                {
+                    bool closebyenemies = HeroManager.Enemies.Any(x => x.NetworkId != target.NetworkId && x.Distance(target) <= 500); //500 is not the real value
+                    if (closebyenemies)
+                    {
+                        amount /= 1.08d;
+                    }
+                    else
+                    {
+                        amount /= 1.04d;
+                    }
+                }
+                
+
                 // Items:
 
                 // Doran's Shield
@@ -6024,9 +6140,7 @@ namespace LeagueSharp.Common
                 // + Alistar removes all crowd control effects from himself, then gains additional attack damage and takes 70% reduced physical and magic damage for 7 seconds.
                 if (target.HasBuff("Ferocious Howl"))
                 {
-                    Console.WriteLine(amount);
                     amount *= 0.3d;
-                    Console.WriteLine(amount);
                 }
 
                 // Tantrum
@@ -6114,7 +6228,6 @@ namespace LeagueSharp.Common
                     amount *= 0.5d;
                 }
             }
-
             return amount;
         }
 
@@ -6157,44 +6270,100 @@ namespace LeagueSharp.Common
             {
                 // Offensive masteries:
 
-                // Double-Edged Sword:
-                // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
-                // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (Game.Version.Contains("5.22"))
                 {
-                    amount *= hero.IsMelee() ? 1.02d : 1.015d;
-                }
-
-                // Havoc:
-                // + Increases damage by 3%.
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 146 && m.Points == 1))
-                {
-                    amount *= 1.03d;
-                }
-
-                // Executioner
-                // + Increases damage dealt to champions below 20 / 35 / 50% by 5%. 
-                if (targetHero != null)
-                {
-                    var mastery = hero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Offense && m.Id == 100);
-                    if (mastery != null && mastery.Points >= 1
-                        && target.Health / target.MaxHealth <= 0.05d + 0.15d * mastery.Points)
+                    //INCREASED DAMAGE FROM ABILITIES 0.4/0.8/1.2/1.6/2%
+                    Mastery sorcery = hero.GetMastery(Ferocity.Sorcery);
+                    if (sorcery != null && sorcery.IsActive())
                     {
-                        amount *= 1.05d;
+                        amount *= 1 + ((new double[] { 0.4, 0.8, 1.2, 1.6, 2.0 }[sorcery.Points]) / 100);
+                    }
+
+                    //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
+                    //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                    Mastery DoubleEdgedSword = hero.GetMastery(Ferocity.DoubleEdgedSword);
+                    if (DoubleEdgedSword != null && DoubleEdgedSword.IsActive())
+                    {
+                        amount *= hero.IsMelee() ? 1.03 : 1.02;
+                    }
+
+                    //Bounty Hunter: TAKING NAMES You gain a permanent 1 % damage increase for each unique enemy champion you kill
+                    Mastery BountyHunter = hero.GetMastery(Ferocity.BountyHunter);
+                    if (BountyHunter != null && BountyHunter.IsActive())
+                    {
+                        //We need a hero.UniqueChampionsKilled or both the sender and the target for ChampionKilled OnNotify Event
+                        // amount += amount * Math.Min(hero.ChampionsKilled, 5);
+                    }
+
+                    //Opressor: KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
+                    Mastery Opressor = hero.GetMastery(Ferocity.Sorcery);
+                    if (Opressor != null && Opressor.IsActive() && targetHero.IsMoveImpaired())
+                    {
+                        amount *= 1.025;
+                    }
+
+                    //Merciless DAMAGE AMPLIFICATION 1 / 2 / 3 / 4 / 5 % increased damage to champions below 40 % health
+                    if (targetHero != null)
+                    {
+                        Mastery Merciless = hero.GetMastery(Cunning.Merciless);
+                        if (Merciless != null && Merciless.IsActive() && targetHero.HealthPercent < 40)
+                        {
+                            amount *= 1 + ((new double[] { 1, 2, 3, 4, 5 }[Merciless.Points]) / 100);
+                        }
+                    }
+
+                    //Thunderlord's Decree: RIDE THE LIGHTNING Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.2 bonus attack damage)(+0.1 ability power) magic damage in an area around them
+                    if (false) // Need a good way to check if it is 3rd attack (Use OnProcessSpell/SpellBook.OnCast if have to)
+                    {
+                        Mastery Thunder = hero.GetMastery(Cunning.ThunderlordsDecree);
+                        if (Thunder != null && Thunder.IsActive())
+                        {
+                            // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
+                        }
                     }
                 }
-            }
 
-            if (targetHero != null)
-            {
-                // Defensive masteries:
-
-                // Double edge sword:
-                // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
-                // + Ranged champions: You deal and take 1.5% increased damage from all sources.
-                if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                if (Game.Version.Contains("5.21"))
                 {
-                    amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                    // Double-Edged Sword:
+                    // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
+                    // + Ranged champions: You deal and take 1.5% increased damage from all sources. 
+                    if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                    {
+                        amount *= hero.IsMelee() ? 1.02d : 1.015d;
+                    }
+
+                    // Havoc:
+                    // + Increases damage by 3%.
+                    if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 146 && m.Points == 1))
+                    {
+                        amount *= 1.03d;
+                    }
+
+                    // Executioner
+                    // + Increases damage dealt to champions below 20 / 35 / 50% by 5%. 
+                    if (targetHero != null)
+                    {
+                        var mastery = hero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Offense && m.Id == 100);
+                        if (mastery != null && mastery.Points >= 1
+                            && target.Health / target.MaxHealth <= 0.05d + 0.15d * mastery.Points)
+                        {
+                            amount *= 1.05d;
+                        }
+                    }
+                }
+
+                if (targetHero != null)
+                {
+                    // Defensive masteries:
+
+                    // Double edge sword:
+                    // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
+                    // + Ranged champions: You deal and take 1.5% increased damage from all sources.
+                    if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                    {
+                        amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                    }
                 }
             }
 
@@ -6214,39 +6383,76 @@ namespace LeagueSharp.Common
             var targetHero = target as Obj_AI_Hero;
 
             // Offensive masteries:
-
-            // Butcher
-            // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
-            if (hero != null && target is Obj_AI_Minion)
+            if (Game.Version.Contains("5.22"))
             {
-                if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 68 && m.Points == 1))
+                //SAVAGERY: BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
+                if (target is Obj_AI_Minion)
                 {
-                    value += 2d;
+                    Mastery Savagery = hero.GetMastery(Cunning.Savagery);
+                    if (Savagery != null && Savagery.IsActive())
+                    {
+                        value += (new double[] { 1, 2, 3, 4, 5 }[Savagery.Points]);
+                    }
+                }
+
+                //Fervorofbattle: STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
+                if (targetHero != null)
+                {
+                    Mastery Fervor = hero.GetMastery(Ferocity.FervorofBattle);
+                    if (Fervor != null && Fervor.IsActive())
+                    {
+                        value += (new double[] { 1.6, 3.2, 4.8, 6.4, 8 }[hero.Level]) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                    }
+                }
+            }
+
+            if (Game.Version.Contains("5.21"))
+            {
+                // Butcher
+                // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
+                if (hero != null && target is Obj_AI_Minion)
+                {
+                    if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 68 && m.Points == 1))
+                    {
+                        value += 2d;
+                    }
                 }
             }
 
             // Defensive masteries:
 
-            // Tough Skin
-            // + Reduces damage taken from neutral monsters by 1 / 2
-            if (source is Obj_AI_Minion && targetHero != null && source.Team == GameObjectTeam.Neutral)
+            //Tough Skin DIRT OFF YOUR SHOULDERS You take 2 less damage from champion and monster basic attacks
+            if (false && targetHero != null)
             {
-                var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
-                if (mastery != null && mastery.Points >= 1)
+                Mastery Toughskin = targetHero.GetMastery(Resolve.ToughSkin);
+                if (Toughskin != null && Toughskin.IsActive())
                 {
-                    value -= 1 * mastery.Points;
+
                 }
             }
 
-            // Unyielding
-            // + Melee - Reduces all incoming damage from champions by 2
-            // + Ranged - Reduces all incoming damage from champions by 1
-            if (hero != null && targetHero != null)
-            {
-                var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
-                if (mastery != null && mastery.Points == 1)
+            if (Game.Version.Contains("5.21")) {
+                // Tough Skin
+                // + Reduces damage taken from neutral monsters by 1 / 2
+                if (source is Obj_AI_Minion && targetHero != null && source.Team == GameObjectTeam.Neutral)
                 {
-                    value -= targetHero.IsMelee() ? 2 : 1;
+                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
+                    if (mastery != null && mastery.Points >= 1)
+                    {
+                        value -= 1 * mastery.Points;
+                    }
+                }
+
+                // Unyielding
+                // + Melee - Reduces all incoming damage from champions by 2
+                // + Ranged - Reduces all incoming damage from champions by 1
+                if (hero != null && targetHero != null)
+                {
+                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
+                    if (mastery != null && mastery.Points == 1)
+                    {
+                        value -= targetHero.IsMelee() ? 2 : 1;
+                    }
                 }
             }
 
