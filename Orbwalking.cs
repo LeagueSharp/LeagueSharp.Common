@@ -97,6 +97,11 @@ namespace LeagueSharp.Common
             Combo,
 
             /// <summary>
+            /// The orbwalker will perform the combo, without moving.
+            /// </summary>
+            StillCombo,
+
+            /// <summary>
             /// The orbwalker will only move.
             /// </summary>
             CustomMode,
@@ -453,7 +458,7 @@ namespace LeagueSharp.Common
             }
 
             var localExtraWindup = 0;
-            if(_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
+            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
             {
                 localExtraWindup = 200;
             }
@@ -526,7 +531,7 @@ namespace LeagueSharp.Common
 
             var point = position;
 
-            if(Player.Distance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
                 point = playerPosition.Extend(position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
             }
@@ -536,26 +541,26 @@ namespace LeagueSharp.Common
             {
                 var movePath = Player.GetPath(point);
 
-                if(movePath.Length > 1)
+                if (movePath.Length > 1)
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
                     angle = v1.AngleBetween(v2.To2D());
                     var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
-                    if ((angle < 10 && distance < 500*500) || distance < 50*50)
+                    if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
                         return;
                     }
                 }
             }
-            
+
             if (Utils.GameTimeTickCount - LastMoveCommandT < (70 + Math.Min(60, Game.Ping)) && !overrideTimer && angle < 60)
             {
                 return;
             }
 
-            if(angle >= 60 && Utils.GameTimeTickCount - LastMoveCommandT < 60)
+            if (angle >= 60 && Utils.GameTimeTickCount - LastMoveCommandT < 60)
             {
                 return;
             }
@@ -600,12 +605,12 @@ namespace LeagueSharp.Common
                             _missileLaunched = false;
                         }
 
-                        if(Player.IssueOrder(GameObjectOrder.AttackUnit, target))
+                        if (Player.IssueOrder(GameObjectOrder.AttackUnit, target))
                         {
                             LastAttackCommandT = Utils.GameTimeTickCount;
                             _lastTarget = target;
                         }
-                        
+
                         return;
                     }
                 }
@@ -649,9 +654,9 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if(sender.IsMe)
+            if (sender.IsMe)
             {
-                if(Game.Ping <= 30) //First world problems kappa
+                if (Game.Ping <= 30) //First world problems kappa
                 {
                     Utility.DelayAction.Add(30, () => Obj_AI_Base_OnDoCast_Delayed(sender, args));
                     return;
@@ -673,7 +678,7 @@ namespace LeagueSharp.Common
                 ResetAutoAttackTimer();
             }
 
-            if(IsAutoAttack(args.SData.Name))
+            if (IsAutoAttack(args.SData.Name))
             {
                 FireAfterAttack(sender, args.Target as AttackableUnit);
                 _missileLaunched = true;
@@ -862,6 +867,9 @@ namespace LeagueSharp.Common
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
+                _config.AddItem(
+                    new MenuItem("StillCombo", "Combo without moving").SetShared().SetValue(new KeyBind('Z', KeyBindType.Press)));
+
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
@@ -928,6 +936,11 @@ namespace LeagueSharp.Common
                         return OrbwalkingMode.Combo;
                     }
 
+                    if (_config.Item("StillCombo").GetValue<KeyBind>().Active)
+                    {
+                        return OrbwalkingMode.Combo;
+                    }
+
                     if (_config.Item("LaneClear").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.LaneClear;
@@ -943,7 +956,7 @@ namespace LeagueSharp.Common
                         return OrbwalkingMode.LastHit;
                     }
 
-                    if (_config.Item("CustomMode") != null &&_config.Item("CustomMode").GetValue<KeyBind>().Active)
+                    if (_config.Item("CustomMode") != null && _config.Item("CustomMode").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.CustomMode;
                     }
@@ -1041,16 +1054,16 @@ namespace LeagueSharp.Common
                     foreach (var minion in MinionList)
                     {
                         var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
+                                1000 * (int)Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>()) ))
+                        if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())))
                         {
                             if (predHealth <= 0)
                             {
                                 FireOnNonKillableMinion(minion);
                             }
-                            
+
                             if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
@@ -1149,7 +1162,7 @@ namespace LeagueSharp.Common
                                       predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                       Math.Abs(predHealth - minion.Health) < float.Epsilon
                                   select minion).MaxOrDefault(m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
-                        
+
                         if (result != null)
                         {
                             _prevMinion = (Obj_AI_Minion)result;
@@ -1172,6 +1185,9 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
+
+                    //Block movement if StillCombo is used
+                    Move = !_config.Item("StillCombo").GetValue<KeyBind>().Active;
 
                     //Prevent canceling important spells
                     if (Player.IsCastingInterruptableSpell(true))
@@ -1212,7 +1228,7 @@ namespace LeagueSharp.Common
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target),
-                            _config.Item("AACircle2").GetValue<Circle>().Color, 
+                            _config.Item("AACircle2").GetValue<Circle>().Color,
                             _config.Item("AALineWidth").GetValue<Slider>().Value);
                     }
                 }
