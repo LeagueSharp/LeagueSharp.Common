@@ -421,9 +421,16 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves" && Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1000 &&
-                Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
-                return true;
+            if (Player.ChampionName == "Graves" && Game.Version.Contains("5.22"))
+            {
+                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1000 && Attack)
+                {
+                    if (Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
+                    {
+                        return true;
+                    }
+                }
+            }
 
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
