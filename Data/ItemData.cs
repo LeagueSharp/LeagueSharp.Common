@@ -947,7 +947,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 2015
         };
         #endregion
@@ -1247,7 +1246,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 2301
         };
 
@@ -1265,7 +1263,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 2302
         };
 
@@ -1283,7 +1280,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 2303
         };
 
@@ -1669,7 +1665,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3033
         };
 
@@ -1687,7 +1682,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3034
         };
 
@@ -1725,7 +1719,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3306
         };
 
@@ -1935,7 +1928,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3052
         };
 
@@ -1953,7 +1945,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3053
         };
 
@@ -2505,7 +2496,6 @@ namespace LeagueSharp.Common.Data
             Into = new[] { },
             InStore = true,
             FlatCritChanceMod = 0.1f,
-            Tags = new[] { },
             Id = 3094
         };
 
@@ -2926,7 +2916,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3123
         };
 
@@ -2965,7 +2954,6 @@ namespace LeagueSharp.Common.Data
             Stacks = 1,
             Depth = 1,
             InStore = true,
-            Tags = new[] { },
             Id = 3133
         };
 
