@@ -864,7 +864,7 @@ namespace LeagueSharp.Common
                     new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("StillCombo", "Combo without moving").SetShared().SetValue(new KeyBind('Z', KeyBindType.Press)));
+                    new MenuItem("StillCombo", "Combo without moving").SetShared().SetValue(new KeyBind('M', KeyBindType.Press)));
 
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
