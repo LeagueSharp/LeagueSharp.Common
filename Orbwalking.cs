@@ -1080,7 +1080,7 @@ namespace LeagueSharp.Common
                 }
 
                 /* turrets / inhibitors / nexus */
-                if (ActiveMode == OrbwalkingMode.LaneClear && !_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active)
+                if (ActiveMode == OrbwalkingMode.LaneClear && (!_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active || !MinionManager.GetMinions(ObjectManager.Player.Position, GetRealAutoAttackRange(ObjectManager.Player)).Any()))
                 {
                     /* turrets */
                     foreach (var turret in
