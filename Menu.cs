@@ -58,7 +58,6 @@ namespace LeagueSharp.Common
             Prediction.Initialize();
             Hacks.Initialize();
             FakeClicks.Initialize();
-            Spell.Initialize();
 
             Config.AddToMainMenu();
         }

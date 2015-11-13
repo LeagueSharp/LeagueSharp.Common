@@ -422,12 +422,12 @@ namespace LeagueSharp.Common
         public static bool CanAttack()
         {
             if (Player.ChampionName == "Graves" && (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1000 && Attack))
-            {
-                if (Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
                 {
-                    return true;
+                    if (Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
+                    {
+                        return true;
+                    }
                 }
-            }
 
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
@@ -806,6 +806,11 @@ namespace LeagueSharp.Common
             public static List<Orbwalker> Instances = new List<Orbwalker>();
 
             /// <summary>
+            /// The name of the CustomMode if it is set.
+            /// </summary>
+            private string CustomModeName;
+            /// <summary>
+            
             /// Initializes a new instance of the <see cref="Orbwalker"/> class.
             /// </summary>
             /// <param name="attachToMenu">The menu the orbwalker should attach to.</param>
@@ -901,14 +906,16 @@ namespace LeagueSharp.Common
             /// <summary>
             /// Registers the Custom Mode of the Orbwalker. Useful for adding a flee mode and such.
             /// </summary>
-            /// <param name="name">The name of the mode in the menu. Ex. Flee</param>
+            /// <param name="name">The name of the mode Ex. "Myassembly.FleeMode" </param>
+            /// <param name="displayname">The name of the mode in the menu. Ex. Flee</param>
             /// <param name="key">The default key for this mode.</param>
-            public virtual void RegisterCustomMode(string name, uint key)
+            public virtual void RegisterCustomMode(string name, string displayname, uint key)
             {
-                if (_config.Item("CustomMode") == null)
+                CustomModeName = name;
+                if (_config.Item(name) == null)
                 {
                     _config.AddItem(
-                        new MenuItem("CustomMode", name).SetShared().SetValue(new KeyBind(key, KeyBindType.Press)));
+                        new MenuItem(name, displayname).SetShared().SetValue(new KeyBind(key, KeyBindType.Press)));
                 }
             }
 
@@ -950,7 +957,7 @@ namespace LeagueSharp.Common
                         return OrbwalkingMode.LastHit;
                     }
 
-                    if (_config.Item("CustomMode") != null && _config.Item("CustomMode").GetValue<KeyBind>().Active)
+                    if (_config.Item(CustomModeName) != null && _config.Item(CustomModeName).GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.CustomMode;
                     }
