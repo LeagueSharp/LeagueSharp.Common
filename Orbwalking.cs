@@ -421,14 +421,11 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves" && Game.Version.Contains("5.22"))
+            if (Player.ChampionName == "Graves" && (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1000 && Attack))
             {
-                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1000 && Attack)
+                if (Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
                 {
-                    if (Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -838,6 +835,7 @@ namespace LeagueSharp.Common
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("AttackPetsnTraps", "Auto attack pets & traps").SetShared().SetValue(true));
+                misc.AddItem(new MenuItem("AttackBarrel", "Auto attack gangplank barrel").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("Smallminionsprio", "Jungle clear small first").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("FocusMinionsOverTurrets", "Focus minions over objectives").SetShared().SetValue(new KeyBind('M', KeyBindType.Toggle)));
 
@@ -1053,7 +1051,8 @@ namespace LeagueSharp.Common
                                 1000 * (int)Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())))
+                        if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() && 
+                            minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())))
                         {
                             if (predHealth <= 0)
                             {
@@ -1061,6 +1060,20 @@ namespace LeagueSharp.Common
                             }
 
                             if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
+                            {
+                                return minion;
+                            }
+                        }
+
+                        if (minion.Team == GameObjectTeam.Neutral && (_config.Item("AttackBarrel").GetValue<bool>() && 
+                            minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered))
+                        {
+                            if (predHealth <= 0)
+                            {
+                                FireOnNonKillableMinion(minion);
+                            }
+
+                            if (predHealth > 0 && minion.Health < 2)
                             {
                                 return minion;
                             }
