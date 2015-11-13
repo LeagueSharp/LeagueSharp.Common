@@ -1075,12 +1075,7 @@ namespace LeagueSharp.Common
                         if (minion.Team == GameObjectTeam.Neutral && (_config.Item("AttackBarrel").GetValue<bool>() && 
                             minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered))
                         {
-                            if (predHealth <= 0)
-                            {
-                                FireOnNonKillableMinion(minion);
-                            }
-
-                            if (predHealth > 0 && minion.Health < 2)
+                            if (minion.Health < 2)
                             {
                                 return minion;
                             }
