@@ -6092,13 +6092,22 @@ namespace LeagueSharp.Common
         {
             if (source is Obj_AI_Hero)
             {
-                // Summoners:
-
                 // Exhaust:
                 // + Exhausts target enemy champion, reducing their Movement Speed and Attack Speed by 30%, their Armor and Magic Resist by 10, and their damage dealt by 40% for 2.5 seconds.
                 if (source.HasBuff("Exhaust"))
                 {
-                    amount /= 0.4d;
+                    amount *= 0.6d;
+                }
+
+                // Lament
+                // + Phantom Dancer reduces all damage dealt to attacker (if he's attack you) by 12%
+                if (source.HasBuff("itemphantomdancerdebuff"))
+                {
+                    var caster = source.GetBuff("itemphantomdancerdebuff").Caster;
+                    if (caster.NetworkId == target.NetworkId)
+                    {
+                        amount *= 0.88d;
+                    }
                 }
             }
 
@@ -6116,11 +6125,11 @@ namespace LeagueSharp.Common
                     bool closebyenemies = HeroManager.Enemies.Any(x => x.NetworkId != target.NetworkId && x.Distance(target) <= 500); //500 is not the real value
                     if (closebyenemies)
                     {
-                        amount /= 1.08d;
+                        amount *= 0.92d;
                     }
                     else
                     {
-                        amount /= 1.04d;
+                        amount *= 0.96d;
                     }
                 }
                 
