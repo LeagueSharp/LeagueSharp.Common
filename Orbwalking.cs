@@ -373,9 +373,12 @@ namespace LeagueSharp.Common
             if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
-                if (aiBase != null && aiBase.HasBuff("caitlynyordletrapinternal"))
+                if (aiBase != null && Player.ChampionName == "Caitlyn")
                 {
-                    result += 650;
+                    if (aiBase.HasBuff("caitlynyordletrapinternal"))
+                    {
+                        result += 650;
+                    }
                 }
 
                 return result + target.BoundingRadius;
@@ -428,13 +431,13 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves" && (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1000 && Attack))
+            if (Player.ChampionName == "Graves" && Attack)
+            {
+                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1500 && Player.HasBuff("GravesBasicAttackAmmo1"))
                 {
-                    if (Player.HasBuff("GravesBasicAttackAmmo1") || Player.HasBuff("GravesBasicAttackAmmo2"))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
+            }
 
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
