@@ -372,8 +372,15 @@ namespace LeagueSharp.Common
             var result = Player.AttackRange + Player.BoundingRadius;
             if (target.IsValidTarget())
             {
+                var aiBase = target as Obj_AI_Base;
+                if (aiBase != null && aiBase.HasBuff("caitlynyordletrapinternal"))
+                {
+                    result += 650;
+                }
+
                 return result + target.BoundingRadius;
             }
+        
             return result;
         }
 
