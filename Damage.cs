@@ -2564,9 +2564,10 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 120, 160 }[level] * 2
-                                    + 0.5 * source.FlatPhysicalDamageMod
-                                    + 0.3 * source.AbilityPower()
+                                    (new double[] { 70, 110, 150 }[level]
+                                    + 0.65 * source.FlatPhysicalDamageMod
+                                    + 0.25 * source.AbilityPower()) * 
+                                    (target.HealthPercent < 25 ? 3 : (target.HealthPercent < 50 ? 2 : 1))
                             },
                     });
 
