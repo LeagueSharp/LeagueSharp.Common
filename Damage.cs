@@ -86,6 +86,11 @@ namespace LeagueSharp.Common
             Hexgun,
 
             /// <summary>
+            /// The Dfg
+            /// </summary>
+            Dfg,
+
+            /// <summary>
             /// The botrk
             /// </summary>
             Botrk,
