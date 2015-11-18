@@ -194,18 +194,28 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the specified minion is minion; otherwise, <c>false</c>.</returns>
         public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
         {
-            var name = minion.CharData.BaseSkinName.ToLower();
-            return name.Contains("minion") || includeWards && IsWard(name);
+            return minion.CharData.BaseSkinName.Contains("Minion") || includeWards && IsWard(minion);
         }
 
         /// <summary>
         /// Determines whether the specified base skin name is ward.
         /// </summary>
-        /// <param name="baseSkinName">Name of the base skin.</param>
+        /// <param name="baseSkinName">Name of the base skin. Should be lowercase.</param>
         /// <returns><c>true</c> if the specified base skin name is ward; otherwise, <c>false</c>.</returns>
+        [System.Obsolete("Use IsWard(Obj_AI_Minion)")]
         public static bool IsWard(string baseSkinName)
         {
-            return baseSkinName.Contains("ward") || baseSkinName.Contains("trinket");
+            return baseSkinName.Contains("ward");
+        }
+        
+        /// <summary>
+        /// Determines whether the specified minion is a valid attackable ward.
+        /// </summary>
+        /// <param name="minion">The minion you want to check for</param>
+        /// <returns><c>true</c> if the given minion is a valid attackable ward, otherwise returns <c>false</c>.</returns>
+        public static bool IsWard(Obj_AI_Minion minion)
+        {
+            return minion.CharData.BaseSkinName.Contains("Ward") && minion.IsHPBarRendered;
         }
 
         /// <summary>
