@@ -456,6 +456,34 @@ namespace LeagueSharp.Common
                                   (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) - 10f,
             };
             AttackPassives.Add(p);
+            
+            p = new PassiveDamage
+            {
+                ChampionName = "TwistedFate", IsActive = (source, target) => (source.HasBuff("redcardpreattack")),
+                GetDamage =
+                            (source, target) =>
+                            (float)source.GetSpellDamage(target, SpellSlot.W, 2)
+                            - (float)
+                              source.CalcDamage(
+                                  target,
+                                  DamageType.Physical,
+                                  (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) - 10f,
+            };
+            AttackPassives.Add(p);
+            
+            p = new PassiveDamage
+            {
+                ChampionName = "TwistedFate", IsActive = (source, target) => (source.HasBuff("goldcardpreattack")),
+                GetDamage =
+                            (source, target) =>
+                            (float)source.GetSpellDamage(target, SpellSlot.W, 3)
+                            - (float)
+                              source.CalcDamage(
+                                  target,
+                                  DamageType.Physical,
+                                  (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) - 10f,
+            };
+            AttackPassives.Add(p);
 
             p = new PassiveDamage
             {
