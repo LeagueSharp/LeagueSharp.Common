@@ -4889,7 +4889,7 @@ namespace LeagueSharp.Common
                             {
                                 Slot = SpellSlot.W, DamageType = DamageType.True,
                                 Damage =
-                                    (source, target, level) => CalcPhysicalDamage(source, target, new double[] { 40, 60, 80, 100, 120 }[level]) + (new double[] { 6, 7.5, 9, 10.5, 12 }[level] / 100) * target.MaxHealth
+                                    (source, target, level) => Math.Max(new double[] { 40, 60, 80, 100, 120 }[level], (new double[] { 6, 7.5, 9, 10.5, 12 }[level] / 100) * target.MaxHealth)
                             },
             
                         //E

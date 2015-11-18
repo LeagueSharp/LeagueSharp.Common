@@ -242,7 +242,7 @@ namespace LeagueSharp.Common
                     case MenuValueType.KeyBind:
                         DrawBox(boxpos, permaitem.Item.GetValue<KeyBind>().Active);
                         Text.DrawText(null,
-                            permaitem.DisplayName + ":", (int)itempos.X, (int)itempos.Y,
+                            permaitem.DisplayName + " [" + Utils.KeyToText(permaitem.Item.GetValue<KeyBind>().Key) + "] :", (int)itempos.X, (int)itempos.Y,
                             permaitem.Color);
 
                         Text.DrawText(null,
