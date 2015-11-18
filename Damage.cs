@@ -600,7 +600,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.4 * source.AbilityPower()
                             },
                         //Q Return
                         new DamageSpell
@@ -609,7 +609,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.4 * source.AbilityPower()
                             },
                         //W => First FF to target
                         new DamageSpell
@@ -1034,15 +1034,6 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 30, 70, 110, 150, 190 }[level]
                                     + new double[] { 1.3, 1.4, 1.5, 1.6, 1.7 }[level] * (source.TotalAttackDamage)
-                            },
-                        //W
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.W, DamageType = DamageType.Magical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 80, 130, 180, 230, 280 }[level]
-                                    + 0.6 * source.AbilityPower()
                             },
                         //E
                         new DamageSpell
