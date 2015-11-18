@@ -194,7 +194,7 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the specified minion is minion; otherwise, <c>false</c>.</returns>
         public static bool IsMinion(Obj_AI_Minion minion, bool includeWards = false)
         {
-            return minion.CharData.BaseSkinName.Contains("Minion") || includeWards && IsWard(minion);
+            return minion.Name.Contains("Minion") || includeWards && IsWard(minion);
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the given minion is a valid attackable ward, otherwise returns <c>false</c>.</returns>
         public static bool IsWard(Obj_AI_Minion minion)
         {
-            return minion.CharData.BaseSkinName.Contains("Ward") && minion.IsHPBarRendered;
+            return minion.Name.Contains("Ward") && minion.IsHPBarRendered;
         }
 
         /// <summary>
