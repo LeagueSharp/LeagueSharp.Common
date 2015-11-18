@@ -194,6 +194,11 @@ namespace LeagueSharp.Common
         /// The keybind must be pressed to be enabled.
         /// </summary>
         Press
+        
+        /// <summary>
+        /// 2 keybinds in 1: 1 for press, 1 for toggle
+        /// </summary>
+        Both
     }
 
     /// <summary>
@@ -211,6 +216,11 @@ namespace LeagueSharp.Common
         /// The key
         /// </summary>
         public uint Key;
+        
+        /// <summary>
+        /// The 2nd Key
+        /// </summary>
+        public uint Key2;
 
         /// <summary>
         /// The key bind type
@@ -228,6 +238,14 @@ namespace LeagueSharp.Common
             Key = key;
             Active = defaultValue;
             Type = type;
+        }
+        
+        public KeyBind (uint presskey, uint togglekey, KeyBindType type = Both, bool defaultValue = false)
+        {
+            Key = presskey;
+            Key2 = togglekey;
+            Type = type;
+            Active = defaultValue;
         }
     }
 
@@ -2146,7 +2164,7 @@ namespace LeagueSharp.Common
                                 var val = GetValue<KeyBind>();
                                 if (key == val.Key)
                                 {
-                                    if (val.Type == KeyBindType.Press)
+                                    if (val.Type == KeyBindType.Press || val.Type == KeyBindType.Both)
                                     {
                                         if (!val.Active)
                                         {
@@ -2161,7 +2179,7 @@ namespace LeagueSharp.Common
                                 var val2 = GetValue<KeyBind>();
                                 if (key == val2.Key)
                                 {
-                                    if (val2.Type == KeyBindType.Press)
+                                    if (val2.Type == KeyBindType.Press || key.Type == KeyBindType.Both)
                                     {
                                         val2.Active = false;
                                         SetValue(val2);
@@ -2171,6 +2189,11 @@ namespace LeagueSharp.Common
                                         val2.Active = !val2.Active;
                                         SetValue(val2);
                                     }
+                                }
+                                if (key.Type == KeyBindType.Both && key == val2.Key2)
+                                {
+                                    val2.Active = !val2.Active;
+                                    SetValue(val2);
                                 }
                                 break;
                         }
