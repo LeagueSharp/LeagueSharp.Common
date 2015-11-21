@@ -1528,6 +1528,7 @@ namespace LeagueSharp.Common
                     Angle = angle;
                     Radius = radius;
                     _quality = quality;
+                    UpdatePolygon();
                 }
 
                 /// <summary>
