@@ -34,16 +34,6 @@ namespace LeagueSharp.Common
 {
     public class TargetSelector
     {
-        #region Main
-
-        static TargetSelector()
-        {
-            Game.OnWndProc += GameOnOnWndProc;
-            Drawing.OnDraw += DrawingOnOnDraw;
-        }
-
-        #endregion
-
         #region Enum
 
         public enum DamageType
@@ -265,6 +255,9 @@ namespace LeagueSharp.Common
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
 
                 CommonMenu.Config.AddSubMenu(config);
+
+                Game.OnWndProc += GameOnOnWndProc;
+                Drawing.OnDraw += DrawingOnOnDraw;
             };
         }
 
