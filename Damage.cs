@@ -3436,12 +3436,15 @@ namespace LeagueSharp.Common
                             {
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
-                                    (source, target, level) =>
-                                    (new double[] { 4, 20, 50, 90 }[
+                                    (source, target, level) => {
+                                     var dmg = (new double[] { 4, 20, 50, 90 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
                                      + 0.36 * source.AbilityPower()
                                      + 0.75 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))
-                                    * ((target.MaxHealth - target.Health) / target.MaxHealth * 1.5 + 1)
+                                    * ((target.MaxHealth - target.Health) / target.MaxHealth * 1.5 + 1);
+                                        dmg *= target.HasBuff("nidaleepassivehunted") ? 1.33 : 1.0;
+                                        return dmg;
+                                    }
                             },
                         //W - human
                         new DamageSpell
