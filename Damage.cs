@@ -332,21 +332,20 @@ namespace LeagueSharp.Common
 
             #region Kalista
 
-            if (!Game.Version.Contains("5.12"))
+            p = new PassiveDamage
             {
-                p = new PassiveDamage
-                {
-                    ChampionName = "Kalista", IsActive = (source, target) => true,
-                    GetDamage =
+                ChampionName = "Kalista",
+                IsActive = (source, target) => true,
+                GetDamage =
                                 (source, target) =>
                                 ((float)
                                  -source.CalcDamage(
                                      target,
                                      DamageType.Physical,
                                      0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-                };
-                AttackPassives.Add(p);
-            }
+            };
+            AttackPassives.Add(p);
+            
 
             #endregion
 
@@ -5690,10 +5689,10 @@ namespace LeagueSharp.Common
                     result += d;
                 }
 
-                //Savagery
-                if(target is Obj_AI_Minion)
+                //SAVAGERY: BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
+                if (target is Obj_AI_Minion)
                 {
-                    var savagery = hero.GetMastery(MasteryPage.Cunning, 66);
+                    var savagery = hero.GetMastery(Cunning.Savagery);
                     if(savagery != null)
                     {
                         result += savagery.Points;
@@ -5721,7 +5720,7 @@ namespace LeagueSharp.Common
             return CalcPhysicalDamage(source, target, (result - reduction) * k);
         }
 
-        internal static Mastery GetMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
+        internal static Mastery FindMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
         {
             var mastery = @hero.Masteries.FirstOrDefault(m => m.Page == page && m.Id == id);
             return mastery;
@@ -5729,17 +5728,17 @@ namespace LeagueSharp.Common
 
         internal static Mastery GetMastery(this Obj_AI_Hero hero, Ferocity ferocity)
         {
-            return GetMastery(hero, MasteryPage.Offense, (int)ferocity);
+            return FindMastery(hero, MasteryPage.Offense, (int)ferocity);
         }
 
         internal static Mastery GetMastery(this Obj_AI_Hero hero, Cunning cunning)
         {
-            return GetMastery(hero, MasteryPage.Defense, (int)cunning);
+            return FindMastery(hero, MasteryPage.Defense, (int)cunning);
         }
 
         internal static Mastery GetMastery(this Obj_AI_Hero hero, Resolve resolve)
         {
-            return GetMastery(hero, MasteryPage.Utility, (int)resolve);
+            return FindMastery(hero, MasteryPage.Utility, (int)resolve);
         }
 
         internal static bool IsActive(this Mastery mastery)
@@ -6278,70 +6277,68 @@ namespace LeagueSharp.Common
             {
                 // Offensive masteries:
 
-                if (Game.Version.Contains("5.22"))
+                //INCREASED DAMAGE FROM ABILITIES 0.4/0.8/1.2/1.6/2%
+                Mastery sorcery = hero.GetMastery(Ferocity.Sorcery);
+                if (sorcery != null && sorcery.IsActive())
                 {
-                    //INCREASED DAMAGE FROM ABILITIES 0.4/0.8/1.2/1.6/2%
-                    Mastery sorcery = hero.GetMastery(Ferocity.Sorcery);
-                    if (sorcery != null && sorcery.IsActive())
-                    {
-                        amount *= 1 + ((new double[] { 0.4, 0.8, 1.2, 1.6, 2.0 }[sorcery.Points]) / 100);
-                    }
+                    amount *= 1 + ((new double[] { 0.4, 0.8, 1.2, 1.6, 2.0 }[sorcery.Points]) / 100);
+                }
 
-                    //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
-                    //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
-                    Mastery DoubleEdgedSword = hero.GetMastery(Ferocity.DoubleEdgedSword);
-                    if (DoubleEdgedSword != null && DoubleEdgedSword.IsActive())
-                    {
-                        amount *= hero.IsMelee() ? 1.03 : 1.02;
-                    }
+                //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
+                //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                Mastery DoubleEdgedSword = hero.GetMastery(Ferocity.DoubleEdgedSword);
+                if (DoubleEdgedSword != null && DoubleEdgedSword.IsActive())
+                {
+                    amount *= hero.IsMelee() ? 1.03 : 1.02;
+                }
 
-                    //Bounty Hunter: TAKING NAMES You gain a permanent 1 % damage increase for each unique enemy champion you kill
-                    Mastery BountyHunter = hero.GetMastery(Ferocity.BountyHunter);
-                    if (BountyHunter != null && BountyHunter.IsActive())
-                    {
-                        //We need a hero.UniqueChampionsKilled or both the sender and the target for ChampionKilled OnNotify Event
-                        // amount += amount * Math.Min(hero.ChampionsKilled, 5);
-                    }
+                /* Bounty Hunter: TAKING NAMES You gain a permanent 1 % damage increase for each unique enemy champion you kill
+                Mastery BountyHunter = hero.GetMastery(Ferocity.BountyHunter);
+                if (BountyHunter != null && BountyHunter.IsActive())
+                {
+                    //We need a hero.UniqueChampionsKilled or both the sender and the target for ChampionKilled OnNotify Event
+                    // amount += amount * Math.Min(hero.ChampionsKilled, 5);
+                } */
 
-                    //Opressor: KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
-                    Mastery Opressor = hero.GetMastery(Ferocity.Sorcery);
-                    if (Opressor != null && Opressor.IsActive() && targetHero.IsMoveImpaired())
-                    {
-                        amount *= 1.025;
-                    }
+                //Opressor: KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
+                Mastery Opressor = hero.GetMastery(Ferocity.Sorcery);
+                if (Opressor != null && Opressor.IsActive() && targetHero.IsMoveImpaired())
+                {
+                    amount *= 1.025;
+                }
 
-                    //Merciless DAMAGE AMPLIFICATION 1 / 2 / 3 / 4 / 5 % increased damage to champions below 40 % health
-                    if (targetHero != null)
+                //Merciless DAMAGE AMPLIFICATION 1 / 2 / 3 / 4 / 5 % increased damage to champions below 40 % health
+                if (targetHero != null)
+                {
+                    Mastery Merciless = hero.GetMastery(Cunning.Merciless);
+                    if (Merciless != null && Merciless.IsActive() && targetHero.HealthPercent < 40)
                     {
-                        Mastery Merciless = hero.GetMastery(Cunning.Merciless);
-                        if (Merciless != null && Merciless.IsActive() && targetHero.HealthPercent < 40)
-                        {
-                            amount *= 1 + ((new double[] { 1, 2, 3, 4, 5 }[Merciless.Points]) / 100);
-                        }
-                    }
-
-                    //Thunderlord's Decree: RIDE THE LIGHTNING Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.2 bonus attack damage)(+0.1 ability power) magic damage in an area around them
-                    if (false) // Need a good way to check if it is 3rd attack (Use OnProcessSpell/SpellBook.OnCast if have to)
-                    {
-                        Mastery Thunder = hero.GetMastery(Cunning.ThunderlordsDecree);
-                        if (Thunder != null && Thunder.IsActive())
-                        {
-                            // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
-                        }
+                        amount *= 1 + ((new double[] { 1, 2, 3, 4, 5 }[Merciless.Points]) / 100);
                     }
                 }
 
-                if (targetHero != null)
+                //Thunderlord's Decree: RIDE THE LIGHTNING Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.2 bonus attack damage)(+0.1 ability power) magic damage in an area around them
+                if (false) // Need a good way to check if it is 3rd attack (Use OnProcessSpell/SpellBook.OnCast if have to)
                 {
-                    // Defensive masteries:
-
-                    // Double edge sword:
-                    // + Melee champions: You deal 2% increase damage from all sources, but take 1% increase damage from all sources.
-                    // + Ranged champions: You deal and take 1.5% increased damage from all sources.
-                    if (targetHero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 65 && m.Points == 1))
+                    Mastery Thunder = hero.GetMastery(Cunning.ThunderlordsDecree);
+                    if (Thunder != null && Thunder.IsActive())
                     {
-                        amount *= targetHero.IsMelee() ? 1.01d : 1.015d;
+                        // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
                     }
+                }
+            }
+
+            if (targetHero != null)
+            {
+                // Defensive masteries:
+
+                // Double edge sword:
+                //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
+                //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
+                var des = targetHero.GetMastery(Ferocity.DoubleEdgedSword);
+                if (des != null && des.IsActive())
+                {
+                    amount *= targetHero.IsMelee() ? 1.015d : 1.02d;
                 }
             }
 
@@ -6359,87 +6356,33 @@ namespace LeagueSharp.Common
             var value = 0d;
             var hero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
-
             // Offensive masteries:
-            if (Game.Version.Contains("5.22"))
-            {
-                //SAVAGERY: BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
-                if (target is Obj_AI_Minion && hero != null)
-                {
-                    Mastery Savagery = hero.GetMastery(Cunning.Savagery);
-                    if (Savagery != null && Savagery.IsActive())
-                    {
-                        value += (new double[] { 1, 2, 3, 4, 5 }[Savagery.Points]);
-                    }
-                }
 
-                //Fervorofbattle: STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
-                if (targetHero != null && hero != null)
-                {
-                    Mastery Fervor = hero.GetMastery(Ferocity.FervorofBattle);
-                    if (Fervor != null && Fervor.IsActive())
-                    {
-                        value += (new double[] { 1.6, 3.2, 4.8, 6.4, 8 }[hero.Level]) * hero.GetBuffCount("MasteryOnHitDamageStacker");
-                    }
-                }
-            }
-
-            if (Game.Version.Contains("5.21"))
+            //Fervor of Battle: STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
+            if (targetHero != null && hero != null)
             {
-                // Butcher
-                // + Basic attacks and single target abilities do 2 bonus damage to minions and monsters. 
-                if (hero != null && target is Obj_AI_Minion)
+                Mastery Fervor = hero.GetMastery(Ferocity.FervorofBattle);
+                if (Fervor != null && Fervor.IsActive())
                 {
-                    if (hero.Masteries.Any(m => m.Page == MasteryPage.Offense && m.Id == 68 && m.Points == 1))
-                    {
-                        value += 2d;
-                    }
+                    value += (new double[] { 1.6, 3.2, 4.8, 6.4, 8 }[hero.Level]) * hero.GetBuffCount("MasteryOnHitDamageStacker");
                 }
             }
 
             // Defensive masteries:
 
-            if (Game.Version.Contains("5.22"))
+            //Tough Skin DIRT OFF YOUR SHOULDERS You take 2 less damage from champion and monster basic attacks
+            if (targetHero != null && (source is Obj_AI_Hero || source is Obj_AI_Minion))
             {
-                //Tough Skin DIRT OFF YOUR SHOULDERS You take 2 less damage from champion and monster basic attacks
-                if (targetHero != null && (source is Obj_AI_Hero || source is Obj_AI_Minion))
+                Mastery Toughskin = targetHero.GetMastery(Resolve.ToughSkin);
+                if (Toughskin != null && Toughskin.IsActive())
                 {
-                    Mastery Toughskin = targetHero.GetMastery(Resolve.ToughSkin);
-                    if (Toughskin != null && Toughskin.IsActive())
-                    {
-                        value -= 2;
-                    }
-                }
-            }
-
-            if (Game.Version.Contains("5.21")) {
-                // Tough Skin
-                // + Reduces damage taken from neutral monsters by 1 / 2
-                if (source is Obj_AI_Minion && targetHero != null && source.Team == GameObjectTeam.Neutral)
-                {
-                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
-                    if (mastery != null && mastery.Points >= 1)
-                    {
-                        value -= 1 * mastery.Points;
-                    }
-                }
-
-                // Unyielding
-                // + Melee - Reduces all incoming damage from champions by 2
-                // + Ranged - Reduces all incoming damage from champions by 1
-                if (hero != null && targetHero != null)
-                {
-                    var mastery = targetHero.Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
-                    if (mastery != null && mastery.Points == 1)
-                    {
-                        value -= targetHero.IsMelee() ? 2 : 1;
-                    }
+                    value -= 2;
                 }
             }
 
             return value;
         }
-
+ 
         /// <summary>
         /// Represents a damage spell that only occurs with a passive.
         /// </summary>
