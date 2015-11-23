@@ -6304,7 +6304,7 @@ namespace LeagueSharp.Common
                 } */
 
                 //Opressor: KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
-                Mastery Opressor = hero.GetMastery(Ferocity.Sorcery);
+                Mastery Opressor = hero.GetMastery(Ferocity.Oppresor);
                 if (Opressor != null && Opressor.IsActive() && targetHero.IsMoveImpaired())
                 {
                     amount *= 1.025;
