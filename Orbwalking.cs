@@ -369,7 +369,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
-            var result = Player.AttackRange + Player.BoundingRadius;
+            var result = 550f + Player.BoundingRadius;
             if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
@@ -394,7 +394,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetAttackRange(Obj_AI_Hero target)
         {
-            var result = target.AttackRange + target.BoundingRadius;
+            var result = 550f + target.BoundingRadius;
             return result;
         }
 
