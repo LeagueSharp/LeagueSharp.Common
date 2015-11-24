@@ -369,11 +369,6 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
-            if(ObjectManager.Player.ChampionName == "Ryze")
-            {
-                return 615f; 
-            }
-            
             var result = Player.AttackRange + Player.BoundingRadius;
             if (target.IsValidTarget())
             {
@@ -399,11 +394,6 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetAttackRange(Obj_AI_Hero target)
         {
-            if(ObjectManager.Player.ChampionName == "Ryze")
-            {
-                return 615f; 
-            }
-            
             var result = target.AttackRange + target.BoundingRadius;
             return result;
         }
