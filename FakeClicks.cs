@@ -53,7 +53,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     The delta t for click frequency
         /// </summary>
-        private static readonly float deltaT = .2f;
+        private static readonly float deltaT = 0.15f;
 
         /// <summary>
         ///     The last direction of the player
