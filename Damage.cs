@@ -6281,11 +6281,12 @@ namespace LeagueSharp.Common
                 // Offensive masteries:
 
                 //INCREASED DAMAGE FROM ABILITIES 0.4/0.8/1.2/1.6/2%
+                /*
                 Mastery sorcery = hero.GetMastery(Ferocity.Sorcery);
                 if (sorcery != null && sorcery.IsActive())
                 {
                     amount *= 1 + ((new double[] { 0.4, 0.8, 1.2, 1.6, 2.0 }[sorcery.Points]) / 100);
-                }
+                } /*
 
                 //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
                 //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
