@@ -397,8 +397,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetAttackRange(Obj_AI_Hero target)
         {
-            var result = target.AttackRange + target.BoundingRadius;
-            return result;
+            return target.AttackRange + target.BoundingRadius;
         }
 
         /// <summary>
@@ -415,7 +414,7 @@ namespace LeagueSharp.Common
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    (target is Obj_AI_Base) ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
+                    (target as Obj_AI_Base)?.ServerPosition.To2D() ?? target.Position.To2D(),
                     Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
@@ -425,7 +424,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetMyProjectileSpeed()
         {
-            return IsMelee(Player) || _championName == "Azir" || _championName == "Velkoz" || _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
+            return Player.IsMelee || _championName == "Azir" || _championName == "Velkoz" || _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -434,12 +433,9 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves" && Attack)
-            {
-                return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1500 && Player.HasBuff("GravesBasicAttackAmmo1");
-            }
-
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25
+                   >= LastAATick + (_championName != "Graves" ? Player.AttackDelay * 1000 : 1500) && Attack
+                   && (_championName != "Graves" || Player.HasBuff("GravesBasicAttackAmmo1"));
         }
 
         /// <summary>
@@ -459,11 +455,7 @@ namespace LeagueSharp.Common
                 return true;
             }
 
-            var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
-            {
-                localExtraWindup = 200;
-            }
+            var localExtraWindup = _championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")) ? 200 : 0;
 
             return NoCancelChamps.Contains(_championName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
         }
@@ -1131,7 +1123,7 @@ namespace LeagueSharp.Common
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && this.InAutoAttackRange(mob)
+                                mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob)
                                 && mob.CharData.BaseSkinName != "gangplankbarrel");
 
                     result = _config.Item("Smallminionsprio").GetValue<bool>()

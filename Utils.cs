@@ -295,10 +295,15 @@ namespace LeagueSharp.Common
             }
         }
 
-        [Obsolete("Use Console.Clear()")]
+        // TODO: Look at it in the future.
         public static void ClearConsole()
         {
-            Console.Clear();
+            try
+            {
+                var window_height = Console.WindowHeight;
+                Console.Clear();
+            }
+            catch { }
         }
 
         /// <summary>
