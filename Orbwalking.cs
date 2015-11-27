@@ -112,12 +112,17 @@ namespace LeagueSharp.Common
         /// </summary>
         private static readonly string[] AttackResets =
         {
-            "dariusnoxiantacticsonh", "fioraflurry", "garenq","gravesmove",
-            "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane", "lucianq",
-            "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
-            "gangplankqwrapper", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
-            "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq",
-            "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism", "IllaoiW"
+            "dariusnoxiantacticsonh", "fioraflurry", "garenq",
+            "gravesmove", "hecarimrapidslash", "jaxempowertwo",
+            "jaycehypercharge", "leonashieldofdaybreak", "luciane",
+            "lucianq", "monkeykingdoubleattack", "mordekaisermaceofspades",
+            "nasusq", "nautiluspiercinggaze", "netherblade",
+            "gangplankqwrapper", "poppydevastatingblow", "powerfist",
+            "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+            "sivirw", "takedown", "talonnoxiandiplomacy",
+            "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+            "xenzhaocombotarget", "yorickspectral", "reksaiq",
+            "itemtitanichydracleave", "masochism", "illaoiw"
         };
 
 
@@ -126,19 +131,20 @@ namespace LeagueSharp.Common
         /// </summary>
         private static readonly string[] NoAttacks =
         {
-            "volleyattack", "volleyattackwithsound", "jarvanivcataclysmattack",
-            "monkeykingdoubleattack", "shyvanadoubleattack",
-            "shyvanadoubleattackdragon", "zyragraspingplantattack",
-            "zyragraspingplantattack2", "zyragraspingplantattackfire",
-            "zyragraspingplantattack2fire", "viktorpowertransfer",
-            "sivirwattackbounce", "asheqattacknoonhit",
+            "volleyattack", "volleyattackwithsound",
+            "jarvanivcataclysmattack", "monkeykingdoubleattack",
+            "shyvanadoubleattack", "shyvanadoubleattackdragon",
+            "zyragraspingplantattack", "zyragraspingplantattack2",
+            "zyragraspingplantattackfire", "zyragraspingplantattack2fire",
+            "viktorpowertransfer", "sivirwattackbounce", "asheqattacknoonhit",
             "elisespiderlingbasicattack", "heimertyellowbasicattack",
             "heimertyellowbasicattack2", "heimertbluebasicattack",
             "annietibbersbasicattack", "annietibbersbasicattack2",
             "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
             "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
             "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
-            "kindredwolfbasicattack", "kindredbasicattackoverridelightbombfinal"
+            "kindredwolfbasicattack",
+            "kindredbasicattackoverridelightbombfinal"
         };
 
 
@@ -148,9 +154,10 @@ namespace LeagueSharp.Common
         private static readonly string[] Attacks =
         {
             "caitlynheadshotmissile", "frostarrow", "garenslash2",
-            "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", "quinnwenhanced", "renektonexecute",
-            "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
-            "xenzhaothrust3", "viktorqbuff"
+            "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike",
+            "quinnwenhanced", "renektonexecute", "renektonsuperexecute",
+            "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust",
+            "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff"
         };
 
         /// <summary>
@@ -204,11 +211,6 @@ namespace LeagueSharp.Common
         private static readonly Obj_AI_Hero Player;
 
         /// <summary>
-        /// The delay
-        /// </summary>
-        private static int _delay;
-
-        /// <summary>
         /// The minimum distance
         /// </summary>
         private static float _minDistance = 400;
@@ -221,7 +223,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// The champion name
         /// </summary>
-        private static string _championName;
+        private static readonly string _championName;
 
         /// <summary>
         /// The random
@@ -346,9 +348,10 @@ namespace LeagueSharp.Common
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <returns><c>true</c> if the specified unit is melee; otherwise, <c>false</c>.</returns>
+      //[Obsolete("Use the Obj_AI_Base.IsMelee property")]
         public static bool IsMelee(this Obj_AI_Base unit)
         {
-            return unit.CombatType == GameObjectCombatType.Melee;
+            return unit.IsMelee;
         }
 
         /// <summary>
@@ -433,12 +436,7 @@ namespace LeagueSharp.Common
         {
             if (Player.ChampionName == "Graves" && Attack)
             {
-                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1500 && Player.HasBuff("GravesBasicAttackAmmo1"))
-                {
-                    return true;
-                }
-
-                return false;
+                return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + 1500 && Player.HasBuff("GravesBasicAttackAmmo1");
             }
 
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
@@ -468,15 +466,6 @@ namespace LeagueSharp.Common
             }
 
             return NoCancelChamps.Contains(_championName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
-        }
-
-        /// <summary>
-        /// Sets the movement delay.
-        /// </summary>
-        /// <param name="delay">The delay.</param>
-        public static void SetMovementDelay(int delay)
-        {
-            _delay = delay;
         }
 
         /// <summary>
@@ -821,8 +810,8 @@ namespace LeagueSharp.Common
             /// The name of the CustomMode if it is set.
             /// </summary>
             private string CustomModeName;
-            /// <summary>
             
+            /// <summary>
             /// Initializes a new instance of the <see cref="Orbwalker"/> class.
             /// </summary>
             /// <param name="attachToMenu">The menu the orbwalker should attach to.</param>
@@ -901,7 +890,7 @@ namespace LeagueSharp.Common
             /// Gets the farm delay.
             /// </summary>
             /// <value>The farm delay.</value>
-            private int FarmDelay
+            private static int FarmDelay
             {
                 get { return _config.Item("FarmDelay").GetValue<Slider>().Value; }
             }
@@ -1026,7 +1015,7 @@ namespace LeagueSharp.Common
                         .Any(
                             minion =>
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
-                                InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
+                                InAutoAttackRange(minion) && MinionManager.IsMinion(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
                                 Player.GetAutoAttackDamage(minion));
@@ -1084,13 +1073,12 @@ namespace LeagueSharp.Common
                             }
                         }
 
-                        if (minion.Team == GameObjectTeam.Neutral && (_config.Item("AttackBarrel").GetValue<bool>() && 
-                            minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered))
+                        if (minion.Team == GameObjectTeam.Neutral
+                            && (_config.Item("AttackBarrel").GetValue<bool>()
+                            && minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered)
+                            && minion.Health < 2)
                         {
-                            if (minion.Health < 2)
-                            {
-                                return minion;
-                            }
+                            return minion;
                         }
                     }
                 }
@@ -1175,7 +1163,7 @@ namespace LeagueSharp.Common
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
                                           .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                          (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
+                                          (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")
                                   let predHealth =
@@ -1217,10 +1205,9 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-
-                    var target = GetTarget();
+                    
                     Orbwalk(
-                        target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                        GetTarget(), (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         Math.Max(_config.Item("HoldPosRadius").GetValue<Slider>().Value, 30));
                 }
@@ -1247,7 +1234,7 @@ namespace LeagueSharp.Common
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
+                        HeroManager.Enemies.Where(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target),

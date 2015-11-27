@@ -6321,6 +6321,7 @@ namespace LeagueSharp.Common
                     }
                 }
 
+                /*
                 //Thunderlord's Decree: RIDE THE LIGHTNING Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.2 bonus attack damage)(+0.1 ability power) magic damage in an area around them
                 if (false) // Need a good way to check if it is 3rd attack (Use OnProcessSpell/SpellBook.OnCast if have to)
                 {
@@ -6330,6 +6331,7 @@ namespace LeagueSharp.Common
                         // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
                     }
                 }
+                */
             }
 
             if (targetHero != null)

@@ -202,7 +202,7 @@ namespace LeagueSharp.Common
         /// </summary>
         /// <param name="baseSkinName">Name of the base skin. Should be lowercase.</param>
         /// <returns><c>true</c> if the specified base skin name is ward; otherwise, <c>false</c>.</returns>
-        [System.Obsolete("Use IsWard(Obj_AI_Minion)")]
+        [Obsolete("Use IsWard(Obj_AI_Minion)")]
         public static bool IsWard(string baseSkinName)
         {
             return baseSkinName.Contains("ward");
@@ -382,7 +382,7 @@ namespace LeagueSharp.Common
         /// </summary>
         /// <param name="allValues">All values.</param>
         /// <returns>List&lt;List&lt;Vector2&gt;&gt;.</returns>
-        private static List<List<Vector2>> GetCombinations(List<Vector2> allValues)
+        private static IEnumerable<List<Vector2>> GetCombinations(IReadOnlyCollection<Vector2> allValues)
         {
             var collection = new List<List<Vector2>>();
             for (var counter = 0; counter < (1 << allValues.Count); ++counter)

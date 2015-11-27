@@ -48,7 +48,7 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
-            MissileClient.OnDelete += MissileClient_OnDelete;
+            GameObject.OnDelete += MissileClient_OnDelete;
             Obj_AI_Base.OnDoCast += Obj_AI_Base_OnDoCast;
         }
 
@@ -236,7 +236,7 @@ namespace LeagueSharp.Common
             /// <value>
             /// The damage.
             /// </value>
-            public float Damage { get; private set; }
+            public float Damage { get; }
 
             /// <summary>
             /// Gets or sets the delay.
@@ -244,7 +244,7 @@ namespace LeagueSharp.Common
             /// <value>
             /// The delay.
             /// </value>
-            public float Delay { get; private set; }
+            public float Delay { get; }
 
             /// <summary>
             /// Gets or sets the projectile speed.
@@ -252,7 +252,7 @@ namespace LeagueSharp.Common
             /// <value>
             /// The projectile speed.
             /// </value>
-            public int ProjectileSpeed { get; private set; }
+            public int ProjectileSpeed { get; }
 
             /// <summary>
             /// Gets or sets the source.
@@ -260,7 +260,7 @@ namespace LeagueSharp.Common
             /// <value>
             /// The source.
             /// </value>
-            public Obj_AI_Base Source { get; private set; }
+            public Obj_AI_Base Source { get; }
 
             /// <summary>
             /// Gets or sets the start tick.
@@ -268,7 +268,7 @@ namespace LeagueSharp.Common
             /// <value>
             /// The start tick.
             /// </value>
-            public int StartTick { get; internal set; }
+            public int StartTick { get; }
 
             /// <summary>
             /// Gets or sets the target.
@@ -276,7 +276,7 @@ namespace LeagueSharp.Common
             /// <value>
             /// The target.
             /// </value>
-            public Obj_AI_Base Target { get; private set; }
+            public Obj_AI_Base Target { get; }
 
             /// <summary>
             /// Gets or sets a value indicating whether this <see cref="PredictedDamage"/> is processed.

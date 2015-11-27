@@ -444,9 +444,9 @@ namespace LeagueSharp.Common
                     case TargetingMode.Closest:
                         return
                             targets.MinOrDefault(
-                                hero =>
-                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).Distance(
-                                        hero.ServerPosition, true));
+                                hero => (rangeCheckFrom ?? champion.ServerPosition).Distance(
+                                    hero.ServerPosition,
+                                    true));
 
                     case TargetingMode.NearMouse:
                         return targets.MinOrDefault(hero => hero.Distance(Game.CursorPos, true));
@@ -470,6 +470,8 @@ namespace LeagueSharp.Common
                                 hero =>
                                     champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) *
                                     GetPriority(hero));
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
             catch (Exception e)
@@ -490,13 +492,10 @@ namespace LeagueSharp.Common
     public class LockedTargetSelector
     {
         public static Obj_AI_Hero _lastTarget;
+
         private static TargetSelector.DamageType _lastDamageType;
 
-        public static Obj_AI_Hero GetTarget(float range,
-            TargetSelector.DamageType damageType,
-            bool ignoreShield = true,
-            IEnumerable<Obj_AI_Hero> ignoredChamps = null,
-            Vector3? rangeCheckFrom = null)
+        public static Obj_AI_Hero GetTarget(float range, TargetSelector.DamageType damageType, bool ignoreShield = true, IEnumerable<Obj_AI_Hero> ignoredChamps = null, Vector3? rangeCheckFrom = null)
         {
             if (_lastTarget == null || !_lastTarget.IsValidTarget() || _lastDamageType != damageType)
             {
