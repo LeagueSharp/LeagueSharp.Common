@@ -2203,6 +2203,28 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
+        #region Titanic Hydra (Melee Only)
+
+        public static Titanic_Hydra_Melee_Only = new Item
+        {
+            Name = "Titanic Hydra (Melee Only)",
+            Range = 385f,
+            GoldBase = 750,
+            GoldPrice = 3600,
+            GoldSell = 2520,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3077, 1028, 3052 },
+            InStore = true,
+            FlatHPPoolMod = 450f,
+            FlatPhysicalDamageMod = 50f,
+            Tags = new[] { "Active", "Damage", "Health", "HealthRegen", "OnHit" },
+            Id = 3053
+        };
+
+        #endregion
+
         #region Thornmail
 
         public static Item Thornmail = new Item
