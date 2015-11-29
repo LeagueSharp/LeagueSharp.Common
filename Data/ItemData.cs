@@ -2220,7 +2220,7 @@ namespace LeagueSharp.Common.Data
             FlatHPPoolMod = 450f,
             FlatPhysicalDamageMod = 50f,
             Tags = new[] { "Active", "Damage", "Health", "HealthRegen", "OnHit" },
-            Id = 3053
+            Id = 3748
         };
 
         #endregion
