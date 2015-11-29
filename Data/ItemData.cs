@@ -2205,7 +2205,7 @@ namespace LeagueSharp.Common.Data
 
         #region Titanic Hydra (Melee Only)
 
-        public static Titanic_Hydra_Melee_Only = new Item
+        public static Item Titanic_Hydra_Melee_Only = new Item
         {
             Name = "Titanic Hydra (Melee Only)",
             Range = 385f,
