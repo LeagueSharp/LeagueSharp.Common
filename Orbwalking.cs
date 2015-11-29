@@ -1210,7 +1210,10 @@ namespace LeagueSharp.Common
                     }
 
                     //Block movement if StillCombo is used
-                    Move = !_config.Item("StillCombo").GetValue<KeyBind>().Active;
+                    if (_config.Item("StillCombo").GetValue<KeyBind>().Active)
+                    {
+                        Move = false;
+                    }
 
                     //Prevent canceling important spells
                     if (Player.IsCastingInterruptableSpell(true))
