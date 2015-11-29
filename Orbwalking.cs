@@ -122,7 +122,7 @@ namespace LeagueSharp.Common
 
 
         /// <summary>
-        /// Spells that are not attacks even if they have the "attack" word in their name.
+        /// Spells that are not autoattacks even if they have the "attack" word in their name.
         /// </summary>
         private static readonly string[] NoAttacks =
         {
@@ -131,7 +131,7 @@ namespace LeagueSharp.Common
             "shyvanadoubleattackdragon", "zyragraspingplantattack",
             "zyragraspingplantattack2", "zyragraspingplantattackfire",
             "zyragraspingplantattack2fire", "viktorpowertransfer",
-            "sivirwattackbounce", "asheqattacknoonhit",
+            "sivirwattackbounce", "asheqattacknoonhit", "garenqattack"
             "elisespiderlingbasicattack", "heimertyellowbasicattack",
             "heimertyellowbasicattack2", "heimertbluebasicattack",
             "annietibbersbasicattack", "annietibbersbasicattack2",
