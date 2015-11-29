@@ -880,6 +880,8 @@ namespace LeagueSharp.Common
 
                 _config.AddItem(
                     new MenuItem("StillCombo", "Combo without moving").SetShared().SetValue(new KeyBind('N', KeyBindType.Press)));
+                _config.Item("StillCombo").ValueChanged +=
+                    (sender, args) => { Move = !args.GetNewValue<KeyBind>().Active; };
 
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
@@ -1208,9 +1210,6 @@ namespace LeagueSharp.Common
                     {
                         return;
                     }
-
-                    //Block movement if StillCombo is used
-                    Move = !_config.Item("StillCombo").GetValue<KeyBind>().Active;
 
                     //Prevent canceling important spells
                     if (Player.IsCastingInterruptableSpell(true))
