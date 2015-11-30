@@ -5781,7 +5781,7 @@ namespace LeagueSharp.Common
             Meditation = 98,
             Merciless = 97,
             Bandit = 114,
-            DangerousGAme = 115,
+            DangerousGame = 115,
             Precision = 129,
             Intelligence = 130,
             StormraidersSurge = 145,
@@ -6118,7 +6118,7 @@ namespace LeagueSharp.Common
 
                 //Damage Reduction Masteries
 
-                //DAMAGE REDUCTION 4 %, doubling to 8 % when near at least one allied champion
+                //DAMAGE REDUCTION 2 %, increasing to 8 % when near at least one allied champion
                 //IN THIS TOGETHER 8 % of the damage that the nearest allied champion would take is dealt to you instead.This can't bring you below 15% health.
                 Mastery BondofStones = targetHero.GetMastery(Resolve.BondofStones);
                 if (BondofStones != null && BondofStones.IsActive())
@@ -6130,7 +6130,7 @@ namespace LeagueSharp.Common
                     }
                     else
                     {
-                        amount *= 0.96d;
+                        amount *= 0.98d;
                     }
                 }
                 
