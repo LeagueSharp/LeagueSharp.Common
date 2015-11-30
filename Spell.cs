@@ -428,7 +428,7 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="SpellbookUpdateChargedSpellEventArgs"/> instance containing the event data.</param>
         void Spellbook_OnUpdateChargedSpell(Spellbook sender, SpellbookUpdateChargedSpellEventArgs args)
         {
-            if (sender.Owner.IsMe && Utils.TickCount - _chargedReqSentT < 3000)
+            if (sender.Owner.IsMe && Utils.TickCount - _chargedReqSentT < 3000 && args.ReleaseCast)
             {
                 args.Process = false;
             }
@@ -794,8 +794,9 @@ namespace LeagueSharp.Common
         /// <param name="releaseCast">if set to <c>true</c> [release cast].</param>
         private static void ShootChargedSpell(SpellSlot slot, Vector3 position, bool releaseCast = true)
         {
-            ObjectManager.Player.Spellbook.CastSpell(slot, position, false);
+            position.Z = NavMesh.GetHeightForPosition(position.X, position.Y);
             ObjectManager.Player.Spellbook.UpdateChargedSpell(slot, position, releaseCast, false);
+            ObjectManager.Player.Spellbook.CastSpell(slot, position, false);
         }
 
         /// <summary>
