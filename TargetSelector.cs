@@ -98,6 +98,13 @@ namespace LeagueSharp.Common
                     _selectedTargetObjAiHero.Position, 150, _configMenu.Item("SelTColor").GetValue<Circle>().Color, 7,
                     true);
             }
+
+            var a =  (_configMenu.Item("ForceFocusSelectedK").GetValue<KeyBind>().Active ||
+                      _configMenu.Item("ForceFocusSelectedK2").GetValue<KeyBind>().Active) && 
+                      _configMenu.Item("ForceFocusSelectedKeys").GetValue<bool>();
+
+            _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
+            _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
         }
 
         private static void GameOnOnWndProc(WndEventArgs args)
@@ -223,15 +230,27 @@ namespace LeagueSharp.Common
 
                 _configMenu = config;
 
-                config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
-                config.AddItem(
-                    new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false))
-                    .Permashow();
-                config.AddItem(
-                    new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
-                config.AddItem(new MenuItem("Sep", "").SetShared());
+                Menu focusMenu = new Menu("Focus Target Settings", "FocusTargetSettings");
+
+                focusMenu.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+                focusMenu.AddItem(
+                    new MenuItem("SelTColor", "Focus selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false));
+                focusMenu.AddItem(new MenuItem("sep", ""));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelectedKeys", "Enable only attack selected Keys").SetShared().SetValue(false));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelectedK", "Only attack selected Key"))
+                    .SetValue(new KeyBind(32, KeyBindType.Press));
+                focusMenu.AddItem(
+                    new MenuItem("ForceFocusSelectedK2", "Only attack selected Key 2"))
+                    .SetValue(new KeyBind(32, KeyBindType.Press));
+
+                config.AddSubMenu(focusMenu);
+
                 var autoPriorityItem =
-                    new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
+                    new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false).SetTooltip("5 = Highest Priority");
                 autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
 
                 foreach (var enemy in HeroManager.Enemies)
@@ -414,6 +433,17 @@ namespace LeagueSharp.Common
                     type, ignoreShieldSpells, rangeCheckFrom))
                 {
                     return SelectedTarget;
+                }
+
+                if (_configMenu != null && IsValidTarget(
+                    SelectedTarget, _configMenu.Item("ForceFocusSelectedKeys").GetValue<bool>() ? float.MaxValue : range,
+                    type, ignoreShieldSpells, rangeCheckFrom))
+                {
+                    if (_configMenu.Item("ForceFocusSelectedK").GetValue<KeyBind>().Active ||
+                        _configMenu.Item("ForceFocusSelectedK2").GetValue<KeyBind>().Active)
+                    {
+                        return SelectedTarget;
+                    }
                 }
 
                 if (_configMenu != null && _configMenu.Item("TargetingMode") != null &&

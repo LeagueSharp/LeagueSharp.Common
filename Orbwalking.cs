@@ -1098,7 +1098,7 @@ namespace LeagueSharp.Common
                 }
 
                 //Forced target
-                if (ActiveMode == OrbwalkingMode.Combo && _forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
