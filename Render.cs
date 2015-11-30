@@ -679,13 +679,14 @@ namespace LeagueSharp.Common
 
                 _technique = _effect.GetTechnique(0);
 
-                if (!_initialized)
+                if (_initialized)
                 {
-                    _initialized = true;
-                    Drawing.OnPreReset += OnPreReset;
-                    Drawing.OnPreReset += OnPostReset;
-                    AppDomain.CurrentDomain.DomainUnload += Dispose;
+                    return;
                 }
+                _initialized = true;
+                Drawing.OnPreReset += OnPreReset;
+                Drawing.OnPreReset += OnPostReset;
+                AppDomain.CurrentDomain.DomainUnload += Dispose;
             }
 
             /// <summary>
@@ -1174,11 +1175,6 @@ namespace LeagueSharp.Common
             private readonly SharpDX.Direct3D9.Sprite _sprite = new SharpDX.Direct3D9.Sprite(Device);
 
             /// <summary>
-            /// The color of the sprite.
-            /// </summary>
-            private ColorBGRA _color = SharpDX.Color.White;
-
-            /// <summary>
             /// The crop of the sprite.
             /// </summary>
             private SharpDX.Rectangle? _crop;
@@ -1192,11 +1188,6 @@ namespace LeagueSharp.Common
             /// The original texture
             /// </summary>
             private Texture _originalTexture;
-
-            /// <summary>
-            /// The scale
-            /// </summary>
-            private Vector2 _scale = new Vector2(1, 1);
 
             /// <summary>
             /// The texture
@@ -1273,12 +1264,10 @@ namespace LeagueSharp.Common
             /// <param name="position">The position.</param>
             public Sprite(string fileLocation, Vector2 position) : this()
             {
-                if (!File.Exists((fileLocation)))
+                if (File.Exists(fileLocation))
                 {
-                    return;
+                    UpdateTextureBitmap(new Bitmap(fileLocation), position);
                 }
-
-                UpdateTextureBitmap(new Bitmap(fileLocation), position);
             }
 
             /// <summary>
@@ -1305,7 +1294,7 @@ namespace LeagueSharp.Common
             /// <value>The width.</value>
             public int Width
             {
-                get { return (int) (Bitmap.Width * _scale.X); }
+                get { return (int) (Bitmap.Width * Scale.X); }
             }
 
             /// <summary>
@@ -1314,7 +1303,7 @@ namespace LeagueSharp.Common
             /// <value>The height.</value>
             public int Height
             {
-                get { return (int) (Bitmap.Height * _scale.Y); }
+                get { return (int) (Bitmap.Height * Scale.Y); }
             }
 
             /// <summary>
@@ -1351,11 +1340,7 @@ namespace LeagueSharp.Common
             /// Gets or sets the scale.
             /// </summary>
             /// <value>The scale.</value>
-            public Vector2 Scale
-            {
-                set { _scale = value; }
-                get { return _scale; }
-            }
+            public Vector2 Scale { set; get; } = new Vector2(1, 1);
 
             /// <summary>
             /// Gets or sets the rotation.
@@ -1367,11 +1352,7 @@ namespace LeagueSharp.Common
             /// Gets or sets the color.
             /// </summary>
             /// <value>The color.</value>
-            public ColorBGRA Color
-            {
-                set { _color = value; }
-                get { return _color; }
-            }
+            public ColorBGRA Color { set; get; } = SharpDX.Color.White;
 
             /// <summary>
             /// Occurs when the sprite is reset.
@@ -1393,7 +1374,7 @@ namespace LeagueSharp.Common
                 if (scale)
                 {
                     _crop = new SharpDX.Rectangle(
-                        (int) (_scale.X * x), (int) (_scale.Y * y), (int) (_scale.X * w), (int) (_scale.Y * h));
+                        (int) (Scale.X * x), (int) (Scale.Y * y), (int) (Scale.X * w), (int) (Scale.Y * h));
                 }
             }
 
@@ -1409,8 +1390,8 @@ namespace LeagueSharp.Common
                 if (scale)
                 {
                     _crop = new SharpDX.Rectangle(
-                        (int) (_scale.X * rect.X), (int) (_scale.Y * rect.Y), (int) (_scale.X * rect.Width),
-                        (int) (_scale.Y * rect.Height));
+                        (int) (Scale.X * rect.X), (int) (Scale.Y * rect.Y), (int) (Scale.X * rect.Width),
+                        (int) (Scale.Y * rect.Height));
                 }
             }
 
@@ -1571,7 +1552,7 @@ namespace LeagueSharp.Common
                     var nMatrix = (Matrix.Scaling(Scale.X, Scale.Y, 0)) * Matrix.RotationZ(Rotation) *
                                   Matrix.Translation(Position.X, Position.Y, 0);
                     _sprite.Transform = nMatrix;
-                    _sprite.Draw(_texture, _color, _crop);
+                    _sprite.Draw(_texture, Color, _crop);
                     _sprite.Transform = matrix;
                     _sprite.End();
                 }

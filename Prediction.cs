@@ -720,6 +720,7 @@ namespace LeagueSharp.Common
                             break;
                         var p = pos + input.RealRadius * direction;
 
+                        /*
                         if (input.Type == SkillshotType.SkillshotLine && false)
                         {
                             var alpha = (input.From.To2D() - p).AngleBetween(a - b);
@@ -732,6 +733,7 @@ namespace LeagueSharp.Common
                                 pos = cp1.Distance(pos, true) < cp2.Distance(pos, true) ? cp1 : cp2;
                             }
                         }
+                        */
 
                         return new PredictionOutput
                         {

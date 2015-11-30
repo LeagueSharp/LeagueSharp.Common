@@ -30,7 +30,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Input;
 using SharpDX;
 
 #endregion
@@ -129,11 +128,11 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Utils
     {
-        private const int STD_INPUT_HANDLE = -10;
-        private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
+        // private const int STD_INPUT_HANDLE = -10;
+        // private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
         // Convert an object to a byte array
-        internal static byte[] Serialize(Object obj)
+        internal static byte[] Serialize(object obj)
         {
             if (obj == null)
             {
@@ -167,9 +166,9 @@ namespace LeagueSharp.Common
                     return 0x11;
                 case 163:
                     return 0x11;
+                default:
+                    return key;
             }
-
-            return key;
         }
 
         public static int GameTimeTickCount
@@ -296,6 +295,7 @@ namespace LeagueSharp.Common
             }
         }
 
+        // TODO: Look at it in the future.
         public static void ClearConsole()
         {
             try
@@ -320,6 +320,8 @@ namespace LeagueSharp.Common
             return BitConverter.ToString(new[] { bit });
         }
 
+        /*
+
         [DllImport("kernel32.dll")]
         private static extern bool SetConsoleMode(IntPtr hConsoleHandle, int mode);
 
@@ -328,6 +330,8 @@ namespace LeagueSharp.Common
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetStdHandle(int handle);
+
+        */
 
         /// <summary>
         ///     Allows text in the console to be selected and copied.
