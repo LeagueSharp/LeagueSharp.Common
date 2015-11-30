@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -441,7 +442,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Orbwalker.AttackSpeedDelay * 1000 && Attack;
         }
 
         /// <summary>
@@ -883,11 +884,64 @@ namespace LeagueSharp.Common
                 _config.Item("StillCombo").ValueChanged +=
                     (sender, args) => { Move = !args.GetNewValue<KeyBind>().Active; };
 
+                var menuAttackSpeed = new Menu("Attack Speed Limiter", "AttackSpeedLimiter");
+                {
+                    menuAttackSpeed.AddItem(
+                        new MenuItem("AttackSpeedLimiter.Enabled", "Enabled").SetShared().SetValue(false))
+                        .Permashow(true, "Orbwalker | Attack Speed Limiter", SharpDX.Color.Aqua);
+                    menuAttackSpeed.AddItem(
+                        new MenuItem("AttackSpeedLimiter.MaxAttackSpeed", "Limit Attack Speed [Recommend: 2150]:")
+                            .SetShared().SetValue(new Slider(2150, 650, 3500)));
+                    menuAttackSpeed.AddItem(
+                        new MenuItem("AttackSpeedLimiter.LimitWhen", "Limit:").SetShared()
+                            .SetValue(new StringList(new[] { "If I'm moving / kite mode", "Everytime" }, 0)));
+                    menuAttackSpeed.AddItem(
+                        new MenuItem("AttackSpeedLimiter.Load", "Load Recommended Settings:").SetShared()
+                            .SetValue(false));
+                    _config.AddSubMenu(menuAttackSpeed);
+                }
+
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
                 Instances.Add(this);
             }
+
+            /// <summary>
+            /// Returning Attack Speed Delay
+            /// </summary>
+            public static float AttackSpeedDelay
+            {
+                get
+                {
+                    if (!_config.Item("AttackSpeedLimiter.Enabled").GetValue<bool>())
+                    {
+                        return ObjectManager.Player.AttackDelay;
+                    }
+
+                    var speed = (float)_config.Item("AttackSpeedLimiter.MaxAttackSpeed").GetValue<Slider>().Value;
+
+                    switch (_config.Item("AttackSpeedLimiter.LimitWhen").GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0:
+                            {
+                                return ObjectManager.Player.Path.Count() != 0
+                                    ? ObjectManager.Player.AttackDelay > 1000 / speed
+                                        ? ObjectManager.Player.AttackDelay
+                                        : 1000 / speed
+                                    : ObjectManager.Player.AttackDelay;
+                            }
+                        case 1:
+                            {
+                                return ObjectManager.Player.AttackDelay > 1000 / speed
+                                    ? ObjectManager.Player.AttackDelay
+                                    : 1000 / speed;
+                            }
+                    }
+                    return ObjectManager.Player.AttackDelay;
+                }
+            }
+
 
             /// <summary>
             /// Determines if a target is in auto attack range.
@@ -1030,7 +1084,7 @@ namespace LeagueSharp.Common
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
+                                    minion, (int)((AttackSpeedDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
                                 Player.GetAutoAttackDamage(minion));
             }
 
@@ -1166,7 +1220,7 @@ namespace LeagueSharp.Common
                         if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
-                                _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
+                                _prevMinion, (int)((AttackSpeedDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
                             if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
@@ -1182,7 +1236,7 @@ namespace LeagueSharp.Common
                                           minion.CharData.BaseSkinName != "gangplankbarrel")
                                   let predHealth =
                                       HealthPrediction.LaneClearHealthPrediction(
-                                          minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                          minion, (int)((AttackSpeedDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
                                   where
                                       predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                       Math.Abs(predHealth - minion.Health) < float.Epsilon
