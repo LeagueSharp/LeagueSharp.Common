@@ -913,7 +913,7 @@ namespace LeagueSharp.Common
                 {
                     if (!_config.Item("AttackSpeedLimiter.Enabled").GetValue<bool>())
                     {
-                        return Player.AttackDelay;
+                        return ObjectManager.Player.AttackDelay;
                     }
 
                     var speed = (float)_config.Item("AttackSpeedLimiter.MaxAttackSpeed").GetValue<Slider>().Value;
@@ -922,20 +922,20 @@ namespace LeagueSharp.Common
                     {
                         case 0:
                             {
-                                return Player.Path.Count() != 0
-                                    ? Player.AttackDelay > 1000 / speed
-                                        ? Player.AttackDelay
+                                return ObjectManager.Player.Path.Count() != 0
+                                    ? ObjectManager.Player.AttackDelay > 1000 / speed
+                                        ? ObjectManager.Player.AttackDelay
                                         : 1000 / speed
-                                    : Player.AttackDelay;
+                                    : ObjectManager.Player.AttackDelay;
                             }
                         case 1:
                             {
-                                return Player.AttackDelay > 1000 / speed
-                                    ? Player.AttackDelay
+                                return ObjectManager.Player.AttackDelay > 1000 / speed
+                                    ? ObjectManager.Player.AttackDelay
                                     : 1000 / speed;
                             }
                     }
-                    return Player.AttackDelay;
+                    return ObjectManager.Player.AttackDelay;
                 }
             }
 
