@@ -895,9 +895,6 @@ namespace LeagueSharp.Common
                     menuAttackSpeed.AddItem(
                         new MenuItem("AttackSpeedLimiter.LimitWhen", "Limit:").SetShared()
                             .SetValue(new StringList(new[] { "If I'm moving / kite mode", "Everytime" }, 0)));
-                    menuAttackSpeed.AddItem(
-                        new MenuItem("AttackSpeedLimiter.Load", "Load Recommended Settings:").SetShared()
-                            .SetValue(false));
                     _config.AddSubMenu(menuAttackSpeed);
                 }
 
@@ -916,7 +913,7 @@ namespace LeagueSharp.Common
                 {
                     if (!_config.Item("AttackSpeedLimiter.Enabled").GetValue<bool>())
                     {
-                        return ObjectManager.Player.AttackDelay;
+                        return Player.AttackDelay;
                     }
 
                     var speed = (float)_config.Item("AttackSpeedLimiter.MaxAttackSpeed").GetValue<Slider>().Value;
@@ -925,20 +922,20 @@ namespace LeagueSharp.Common
                     {
                         case 0:
                             {
-                                return ObjectManager.Player.Path.Count() != 0
-                                    ? ObjectManager.Player.AttackDelay > 1000 / speed
-                                        ? ObjectManager.Player.AttackDelay
+                                return Player.Path.Count() != 0
+                                    ? Player.AttackDelay > 1000 / speed
+                                        ? Player.AttackDelay
                                         : 1000 / speed
-                                    : ObjectManager.Player.AttackDelay;
+                                    : Player.AttackDelay;
                             }
                         case 1:
                             {
-                                return ObjectManager.Player.AttackDelay > 1000 / speed
-                                    ? ObjectManager.Player.AttackDelay
+                                return Player.AttackDelay > 1000 / speed
+                                    ? Player.AttackDelay
                                     : 1000 / speed;
                             }
                     }
-                    return ObjectManager.Player.AttackDelay;
+                    return Player.AttackDelay;
                 }
             }
 
