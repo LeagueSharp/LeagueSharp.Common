@@ -775,6 +775,19 @@ namespace LeagueSharp.Common
                     StartCharging();
                 }
             }
+
+           else if (IsChannelTypeSpell)
+            {
+                if (TargetSpellCancel)
+                {
+                    CastCancelSpell(position);
+                }
+                else
+                {
+                    CastCancelSpell();
+                }
+            }
+
             else if (packetCast)
             {
                 return ObjectManager.Player.Spellbook.CastSpell(Slot, position, false);
@@ -1093,6 +1106,153 @@ namespace LeagueSharp.Common
 
             var target = GetTarget(extraRange);
             return target != null ? Cast(target, packetCast, aoe) : CastStates.NotCasted;
+        }
+
+        /// <summary>
+        /// OnDoCast args.SData Name upon spell casting
+        /// </summary>
+        public string CastName { get; set; }
+
+        /// <summary>
+        /// OnDelete sender.Name upon skill oject delete
+        /// </summary>
+        public string DeleteName { get; set; }
+
+        /// <summary>
+        /// Allow user to cancel channeling
+        /// </summary>
+        public bool CanBeCanceledByUser { get; set; }
+
+        /// <summary>
+        /// check if the spell is being channeled
+        /// </summary>
+        public bool IsChanneling = false;
+
+        /// <summary>
+        /// Is spell type channel
+        /// </summary>
+        public bool IsChannelTypeSpell { get; set; }
+
+        /// <summary>
+        /// Is spell targettable
+        /// </summary>
+        public bool TargetSpellCancel { get; set; }
+
+        /// <summary>
+        /// Last time casting has been issued
+        /// </summary>
+        private int _cancelSpellIssue;
+
+
+        /// <summary>
+        /// Spell setings
+        /// </summary>
+        /// <param name="castName"></param>
+        /// <param name="deleteName"></param>
+        /// <param name="letUserCancel"></param>
+        /// <param name="targetted"></param>
+        public void SetCancellableSpellCast(string castName, string deleteName, bool letUserCancel, bool targetted)
+        {
+            CastName = castName;
+            DeleteName = deleteName;
+            CanBeCanceledByUser = letUserCancel;
+            TargetSpellCancel = targetted;
+            IsChanneling = false;
+
+            Obj_AI_Base.OnDoCast += OnDoCast;
+            GameObject.OnDelete += OnDelete;
+            Game.OnWndProc += OnWndProc;
+            Obj_AI_Base.OnIssueOrder += OnOrder;
+          //  Game.OnUpdate += OnUpdates;
+
+        }
+
+        private void OnUpdates(EventArgs args)
+        {
+            //var menu = Menu.GetMenu("evade", "evade");
+           // if (menu == null) return;
+          //  menu.Item("enable").SetValue(false);
+
+        }
+
+        public void CastCancelSpell()
+        {
+            if (!IsChanneling && Utils.TickCount - _cancelSpellIssue > 400 + Game.Ping)
+            {
+                ObjectManager.Player.Spellbook.CastSpell(Slot);
+                _cancelSpellIssue = Utils.TickCount;
+            }
+        }
+
+        public void CastCancelSpell(Vector3 position)
+        {
+            if (!IsChanneling && Utils.TickCount - _cancelSpellIssue > 400 + Game.Ping)
+            {
+                ObjectManager.Player.Spellbook.CastSpell(Slot, position);
+                _cancelSpellIssue = Utils.TickCount;
+            }
+        }
+
+
+        /// <summary>
+        /// Check when a spell has been casted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnOrder(Obj_AI_Base sender, GameObjectIssueOrderEventArgs args)
+        {
+            if (!sender.IsMe) return;
+            
+            if (!IsChanneling) return;  
+
+            if (args.Order == GameObjectOrder.MoveTo || args.Order == GameObjectOrder.AttackTo ||
+                args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AutoAttack)
+            {
+                args.Process = false;
+            }
+        }
+
+        /// <summary>
+        /// When player sends a key command
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnWndProc(WndEventArgs args)
+        {
+
+            if (!CanBeCanceledByUser) return;
+            
+            if (args.Msg == 517)
+            {
+                IsChanneling = false;
+            }
+        }
+
+        /// <summary>
+        /// Check when an object has been deleted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnDelete(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == DeleteName) 
+            {
+                IsChanneling = false;
+            }
+        }
+
+        /// <summary>
+        /// Check when the sk   ill object has been casted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe) return;
+
+            if (args.SData.Name == CastName)
+            {
+                IsChanneling = true;
+            }
         }
     }
 }
