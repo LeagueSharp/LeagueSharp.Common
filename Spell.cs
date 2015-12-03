@@ -225,7 +225,7 @@ namespace LeagueSharp.Common
             set
             {
                 _width = value;
-                WidthSqr = value * value;
+                WidthSqr = value*value;
             }
         }
 
@@ -262,7 +262,7 @@ namespace LeagueSharp.Common
                     return ChargedMinRange +
                            Math.Min(
                                ChargedMaxRange - ChargedMinRange,
-                               (Utils.TickCount - _chargedCastedT) * (ChargedMaxRange - ChargedMinRange) /
+                               (Utils.TickCount - _chargedCastedT)*(ChargedMaxRange - ChargedMinRange)/
                                ChargeDuration - 150);
                 }
 
@@ -277,7 +277,7 @@ namespace LeagueSharp.Common
         /// <value>The range squared.</value>
         public float RangeSqr
         {
-            get { return Range * Range; }
+            get { return Range*Range; }
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace LeagueSharp.Common
             {
                 if (!Slot.IsReady())
                     return false;
-                    
+
                 return ObjectManager.Player.HasBuff(ChargedBuffName) ||
                        Utils.TickCount - _chargedCastedT < 300 + Game.Ping;
             }
@@ -388,7 +388,7 @@ namespace LeagueSharp.Common
             ChargedBuffName = buffName;
             ChargedMinRange = minRange;
             ChargedMaxRange = maxRange;
-            ChargeDuration = (int) (deltaT * 1000);
+            ChargeDuration = (int) (deltaT*1000);
             _chargedCastedT = 0;
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
@@ -487,7 +487,8 @@ namespace LeagueSharp.Common
         /// <param name="overrideRange">The override range.</param>
         /// <param name="collisionable">The collisionable.</param>
         /// <returns>PredictionOutput.</returns>
-        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1, CollisionableObjects[] collisionable = null)
+        public PredictionOutput GetPrediction(Obj_AI_Base unit, bool aoe = false, float overrideRange = -1,
+            CollisionableObjects[] collisionable = null)
         {
             return
                 Prediction.GetPrediction(
@@ -504,7 +505,7 @@ namespace LeagueSharp.Common
                         RangeCheckFrom = RangeCheckFrom,
                         Aoe = aoe,
                         CollisionObjects =
-                            collisionable ?? new[] { CollisionableObjects.Heroes, CollisionableObjects.Minions }
+                            collisionable ?? new[] {CollisionableObjects.Heroes, CollisionableObjects.Minions}
                     });
         }
 
@@ -775,6 +776,19 @@ namespace LeagueSharp.Common
                     StartCharging();
                 }
             }
+
+            else if (IsChannelTypeSpell)
+            {
+                if (TargetSpellCancel)
+                {
+                    CastCancelSpell(position);
+                }
+                else
+                {
+                    CastCancelSpell();
+                }
+            }
+
             else if (packetCast)
             {
                 return ObjectManager.Player.Spellbook.CastSpell(Slot, position, false);
@@ -835,7 +849,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public float GetHealthPrediction(Obj_AI_Base unit)
         {
-            var time = (int) (Delay * 1000 + From.Distance(unit.ServerPosition) / Speed - 100);
+            var time = (int)(Delay * 1000 + From.Distance(unit.ServerPosition) / Speed - 100);
             return HealthPrediction.GetHealthPrediction(unit, time);
         }
 
@@ -1006,7 +1020,7 @@ namespace LeagueSharp.Common
                     }
                     break;
                 case SkillshotType.SkillshotCone:
-                    var edge1 = (castPosition.To2D() - From.To2D()).Rotated(-Width / 2);
+                    var edge1 = (castPosition.To2D() - From.To2D()).Rotated(-Width/2);
                     var edge2 = edge1.Rotated(Width);
                     var v = point.To2D() - From.To2D();
                     if (point.To2D().Distance(From, true) < RangeSqr && edge1.CrossProduct(v) > 0 &&
@@ -1061,7 +1075,7 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if the specified location is in range of the spell; otherwise, <c>false</c>.</returns>
         public bool IsInRange(Vector2 point, float range = -1)
         {
-            return RangeCheckFrom.To2D().Distance(point, true) < (range < 0 ? RangeSqr : range * range);
+            return RangeCheckFrom.To2D().Distance(point, true) < (range < 0 ? RangeSqr : range*range);
         }
 
         /// <summary>
@@ -1093,6 +1107,181 @@ namespace LeagueSharp.Common
 
             var target = GetTarget(extraRange);
             return target != null ? Cast(target, packetCast, aoe) : CastStates.NotCasted;
+        }
+
+
+        /// <summary>
+        /// Allow user to cancel channeling
+        /// </summary>
+        public bool CanBeCanceledByUser { get; set; }
+
+        /// <summary>
+        /// check if the spell is being channeled
+        /// </summary>
+        public bool IsChanneling = false;
+
+        /// <summary>
+        /// Is spell type channel
+        /// </summary>
+        public bool IsChannelTypeSpell { get; set; }
+
+        /// <summary>
+        /// Is spell targettable
+        /// </summary>
+        public bool TargetSpellCancel { get; set; }
+
+        /// <summary>
+        /// Should the spell  be interuptable by casting other spells
+        /// </summary>
+        public bool LetSpellcancel { get; set; }
+
+        /// <summary>
+        /// Last time casting has been issued
+        /// </summary>
+        private int _cancelSpellIssue;
+        
+
+        /// <summary>
+        /// Spell setings
+        /// </summary>
+        /// <param name="letUserCancel"></param>
+        /// <param name="targetted"></param>
+        /// <param name="letSpellCancel"></param>
+        public void Setinterruptible(bool letUserCancel, bool targetted,
+            bool letSpellCancel = false)
+        {
+            CanBeCanceledByUser = letUserCancel;
+            TargetSpellCancel = targetted;
+            IsChanneling = false;
+            LetSpellcancel = letSpellCancel;
+
+            Obj_AI_Base.OnDoCast += OnDoCast;
+            GameObject.OnDelete += OnDelete;
+            Game.OnWndProc += OnWndProc;
+            Obj_AI_Base.OnIssueOrder += OnOrder;
+            Spellbook.OnCastSpell += OnCastSpell;
+
+            if (ObjectManager.Player.ChampionName == "Fiddlesticks")
+            {
+                GameObject.OnCreate += OnCreate;
+            }
+        }
+
+        /// <summary>
+        /// Diffrenet spell process names
+        /// </summary>
+        private readonly string[] _processName =
+        {
+            "DrainChannel", "KatarinaR", "Crowstorm",
+            "GalioIdolOfDurand", "AlZaharNetherGrasp",
+            "ReapTheWhirlwind"
+        };
+
+        /// <summary>
+        /// Diffrenet object names
+        /// </summary>
+        private readonly string[] _deleteObject =
+        {
+            "Fiddlesticks_Base_Drain.troy", "katarina_deathLotus_tar.troy",
+            "Galio_Base_R_explo.troy", "Malzahar_Base_R_Beam.troy",
+            "ReapTheWhirlwind_green_cas.troy",
+        };
+
+
+        private void OnCreate(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == "Fiddlesticks_Base_Base_Crowstorm_green_cas.troy")
+            {
+                IsChanneling = false;
+            }
+        }
+
+        /// <summary>
+        /// Check when the skill object has been casted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe) return;
+
+            if (_processName.Contains(args.SData.Name))
+            {
+                IsChanneling = true;
+            }
+        }
+
+        /// <summary>
+        /// Check when an object has been deleted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnDelete(GameObject sender, EventArgs args)
+        {
+            if (_deleteObject.Contains(sender.Name))
+            {
+                IsChanneling = false;
+            }
+        }
+
+        private void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+
+            if (LetSpellcancel) return;
+
+            args.Process = !IsChanneling;
+        }
+
+        public void CastCancelSpell()
+        {
+            if (!IsChanneling && Utils.TickCount - _cancelSpellIssue > 400 + Game.Ping)
+            {
+                ObjectManager.Player.Spellbook.CastSpell(Slot);
+                _cancelSpellIssue = Utils.TickCount;
+            }
+        }
+
+        public void CastCancelSpell(Vector3 position)
+        {
+            if (!IsChanneling && Utils.TickCount - _cancelSpellIssue > 400 + Game.Ping)
+            {
+                ObjectManager.Player.Spellbook.CastSpell(Slot, position);
+                _cancelSpellIssue = Utils.TickCount;
+            }
+        }
+
+
+        /// <summary>
+        /// Check when a spell has been casted
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnOrder(Obj_AI_Base sender, GameObjectIssueOrderEventArgs args)
+        {
+            if (!sender.IsMe) return;
+            
+            if (!IsChanneling) return;  
+
+            if (args.Order == GameObjectOrder.MoveTo || args.Order == GameObjectOrder.AttackTo ||
+                args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AutoAttack)
+            {
+                args.Process = false;
+            }
+        }
+
+        /// <summary>
+        /// When player sends a key command
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnWndProc(WndEventArgs args)
+        {
+
+            if (!CanBeCanceledByUser) return;
+            
+            if (args.Msg == 517)
+            {
+                IsChanneling = false;
+            }
         }
     }
 }
