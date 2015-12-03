@@ -6317,7 +6317,7 @@ namespace LeagueSharp.Common
                     Mastery Merciless = hero.GetMastery(Cunning.Merciless);
                     if (Merciless != null && Merciless.IsActive() && targetHero.HealthPercent < 40)
                     {
-                        amount *= 1 + ((new double[] { 1, 2, 3, 4, 5 }[Merciless.Points - 1]) / 100);
+                        amount *= 1 + Merciless.Points / 100f;
                     }
                 }
 
@@ -6363,7 +6363,7 @@ namespace LeagueSharp.Common
             // Offensive masteries:
 
             //Fervor of Battle: STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
-            if (targetHero != null && hero != null)
+            if (targetHero != null && hero != null && false)
             {
                 Mastery Fervor = hero.GetMastery(Ferocity.FervorofBattle);
                 if (Fervor != null && Fervor.IsActive())
