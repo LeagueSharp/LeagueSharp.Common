@@ -6317,7 +6317,7 @@ namespace LeagueSharp.Common
                     Mastery Merciless = hero.GetMastery(Cunning.Merciless);
                     if (Merciless != null && Merciless.IsActive() && targetHero.HealthPercent < 40)
                     {
-                        amount *= 1 + ((new double[] { 1, 2, 3, 4, 5 }[Merciless.Points]) / 100);
+                        amount *= 1 + ((new double[] { 1, 2, 3, 4, 5 }[Merciless.Points - 1]) / 100);
                     }
                 }
 
