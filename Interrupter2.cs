@@ -125,9 +125,11 @@ namespace LeagueSharp.Common
             RegisterSpell("Nunu", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.E, DangerLevel.Low));
             RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
+            RegisterSpell("Quinn", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("RekSai", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Sion", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
             RegisterSpell("Shen", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
+            RegisterSpell("TahmKench", new InterruptableSpell(SpellSlot.R, DangerLevel.Medium));
             RegisterSpell("TwistedFate", new InterruptableSpell(SpellSlot.R, DangerLevel.Medium));
             RegisterSpell("Urgot", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Velkoz", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
