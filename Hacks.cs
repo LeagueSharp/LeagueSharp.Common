@@ -14,7 +14,7 @@
             {
                 var menu = new Menu("Hacks", "Hacks");
 
-                var draw = menu.AddItem(new MenuItem("DrawingHack", "Disable Drawing").SetValue(false));
+                var draw = menu.AddItem(new MenuItem("DrawingHack", "Disable Drawing").SetValue(new KeyBind(47, KeyBindType.Toggle)));
                 draw.SetValue(LeagueSharp.Hacks.DisableDrawings);
                 draw.ValueChanged +=
                     delegate(object sender, OnValueChangeEventArgs args)
