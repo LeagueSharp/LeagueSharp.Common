@@ -1068,7 +1068,6 @@ namespace LeagueSharp.Common
                     }
                 }
 
-                UnderTowerFarming.GetTarget();
                 /*Killable Minion*/
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
                     ActiveMode == OrbwalkingMode.LastHit)
