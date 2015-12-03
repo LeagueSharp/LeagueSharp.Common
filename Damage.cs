@@ -6363,12 +6363,12 @@ namespace LeagueSharp.Common
             // Offensive masteries:
 
             //Fervor of Battle: STACKTIVATE Your basic attacks and spells give you stacks of Fervor for 5 seconds, stacking 10 times. Each stack of Fervor adds 1-8 bonus physical damage to your basic attacks against champions, based on your level.
-            if (targetHero != null && hero != null && false)
+            if (targetHero != null && hero != null)
             {
                 Mastery Fervor = hero.GetMastery(Ferocity.FervorofBattle);
                 if (Fervor != null && Fervor.IsActive())
                 {
-                    value += (new double[] { 1.6, 3.2, 4.8, 6.4, 8 }[hero.Level]) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                    value += (0.9 + hero.Level * 0.42) * hero.GetBuffCount("MasteryOnHitDamageStacker");
                 }
             }
 
