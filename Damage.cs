@@ -5731,17 +5731,17 @@ namespace LeagueSharp.Common
 
         internal static Mastery GetMastery(this Obj_AI_Hero hero, Ferocity ferocity)
         {
-            return FindMastery(hero, MasteryPage.Offense, (int)ferocity);
+            return FindMastery(hero, MasteryPage.Ferocity, (int)ferocity);
         }
 
         internal static Mastery GetMastery(this Obj_AI_Hero hero, Cunning cunning)
         {
-            return FindMastery(hero, MasteryPage.Defense, (int)cunning);
+            return FindMastery(hero, MasteryPage.Cunning, (int)cunning);
         }
 
         internal static Mastery GetMastery(this Obj_AI_Hero hero, Resolve resolve)
         {
-            return FindMastery(hero, MasteryPage.Utility, (int)resolve);
+            return FindMastery(hero, MasteryPage.Resolve, (int)resolve);
         }
 
         internal static bool IsActive(this Mastery mastery)
