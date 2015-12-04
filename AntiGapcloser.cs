@@ -202,6 +202,26 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
+            
+            #region Ekko
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Ekko",
+                    Slot = SpellSlot.E,
+                    SpellName = "ekkoe",
+                    SkillType = GapcloserType.Skillshot
+                });
+	
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Ekko",
+                    Slot = SpellSlot.E,
+                    SpellName = "ekkoeattack",
+                    SkillType = GapcloserType.Targeted
+                });
+            #endregion
 
             #region Elise
 
@@ -233,7 +253,7 @@ namespace LeagueSharp.Common
                     ChampionName = "Fiora",
                     Slot = SpellSlot.Q,
                     SpellName = "fioraq",
-                    SkillType = GapcloserType.Targeted
+                    SkillType = GapcloserType.Skillshot
                 });
 
             #endregion
@@ -311,7 +331,19 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
-
+            
+            #region Illaoi
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Illaoi",
+                    Slot = SpellSlot.W,
+                    SpellName = "illaoiwattack",
+                    SkillType = GapcloserType.Targeted
+                });
+            #endregion
+            
+            
             #region Irelia
 
             Spells.Add(
