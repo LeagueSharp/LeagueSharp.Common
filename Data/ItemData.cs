@@ -2164,7 +2164,7 @@ namespace LeagueSharp.Common.Data
 
         public static Item Deaths_Dance = new Item
         {
-            Name = "The Bloodthirster",
+            Name = "Death's Dance",
             GoldBase = 525,
             GoldPrice = 3400,
             GoldSell = 2380,
