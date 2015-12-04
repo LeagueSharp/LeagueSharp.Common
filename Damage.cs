@@ -273,9 +273,23 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Ekko",
-                IsActive = (source, target) => (target.GetBuffCount("EkkoStacks") == 3),
+                IsActive = (source, target) => (target.GetBuffCount("EkkoStacks") == 2),
                 GetDamage = (source, target) =>
                  (float)source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.AbilityPower() * 0.8)),
+            };
+            AttackPassives.Add(p);
+            
+            p = new PassiveDamage
+            {
+                ChampionName = "Ekko",
+                IsActive = (source, target) => (target.HealthPercent < 30),
+                GetDamage = (source, target) =>
+                {
+                    float dmg = (float)source.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Magical, (target.MaxHealth - target.Health) * (5 + Math.Floor(source.AbilityPower() / 100) * 2.2f) / 100);
+                    if (!(target is Obj_AI_Hero) && dmg > 150f)
+                        dmg = 150f;
+                    return dmg;
+                }
             };
             AttackPassives.Add(p);
 
@@ -327,25 +341,6 @@ namespace LeagueSharp.Common
                                  0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
             AttackPassives.Add(p);
-
-            #endregion
-
-            #region Kalista
-
-            p = new PassiveDamage
-            {
-                ChampionName = "Kalista",
-                IsActive = (source, target) => true,
-                GetDamage =
-                                (source, target) =>
-                                ((float)
-                                 -source.CalcDamage(
-                                     target,
-                                     DamageType.Physical,
-                                     0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
-            };
-            AttackPassives.Add(p);
-            
 
             #endregion
 
@@ -418,7 +413,27 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
+            
+            #region Rengar
 
+            p = new PassiveDamage
+            {
+                ChampionName = "Rengar",
+                IsActive = (source, target) => source.HasBuff("rengarqbase"),
+                GetDamage = (source, target) => (float)source.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, new int[] { 30, 60, 90, 120, 150 }[source.GetSpell(SpellSlot.Q).Level - 1] + (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * new int[] { 0, 5, 10, 15, 20 }[source.GetSpell(SpellSlot.Q).Level - 1] / 100f)
+            };
+            AttackPassives.Add(p);
+
+			
+			p = new PassiveDamage
+            {
+                ChampionName = "Rengar",
+                IsActive = (source, target) => source.HasBuff("rengarqemp"),
+                GetDamage = (source, target) => (float)source.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, new int[] { 30, 45, 60, 75, 90, 105, 120, 135, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240 }[source.Level - 1] + (source.BaseAttackDamage + source.FlatPhysicalDamageMod) * 0.5f)
+            };
+            AttackPassives.Add(p);
+            #endregion
+ 
             #region Riven
 
             p = new PassiveDamage
@@ -5629,13 +5644,14 @@ namespace LeagueSharp.Common
             bool includePassive = false)
         {
             double result = source.TotalAttackDamage;
-
+	    var k = source.ChampionName == "Kalista" ? 0.9d : 1d;
+	    
             if (!includePassive)
             {
-                return CalcPhysicalDamage(source, target, result);
+                return CalcPhysicalDamage(source, target, result * k);
             }
 
-            var k = 1d;
+            
             var reduction = 0d;
 
             var hero = source as Obj_AI_Hero;
