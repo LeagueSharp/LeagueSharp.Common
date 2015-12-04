@@ -5648,7 +5648,7 @@ namespace LeagueSharp.Common
 	    
             if (!includePassive)
             {
-                return CalcPhysicalDamage(source, target, result) * k;
+                return CalcPhysicalDamage(source, target, result * k);
             }
 
             
