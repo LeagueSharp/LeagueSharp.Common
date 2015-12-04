@@ -5644,7 +5644,7 @@ namespace LeagueSharp.Common
             bool includePassive = false)
         {
             double result = source.TotalAttackDamage;
-	    var k = source.ChampionName == "Kalista" ? 0.9d : 1d;
+	    var k = source.CharData.BaseSkinName == "Kalista" ? 0.9d : 1d;
 	    
             if (!includePassive)
             {
