@@ -5644,13 +5644,14 @@ namespace LeagueSharp.Common
             bool includePassive = false)
         {
             double result = source.TotalAttackDamage;
-
+	    var k = source.ChampionName == "Kalista" ? 0.9d : 1d;
+	    
             if (!includePassive)
             {
-                return CalcPhysicalDamage(source, target, result);
+                return CalcPhysicalDamage(source, target, result) * k;
             }
 
-            var k = source.ChampionName == "Kalista" ? 0.9d : 1d;
+            
             var reduction = 0d;
 
             var hero = source as Obj_AI_Hero;
