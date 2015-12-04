@@ -52,7 +52,8 @@ namespace LeagueSharp.Common
             Closest,
             NearMouse,
             LessAttack,
-            LessCast
+            LessCast,
+            MostStack
         }
 
         #endregion
@@ -412,6 +413,18 @@ namespace LeagueSharp.Common
                    !IsInvulnerable(target, damageType, ignoreShieldSpells);
         }
 
+        private static string[] StackNames =
+            {
+                "KalistaExpungeMarker",
+                "vaynesilvereddebuff",
+                "twitchdeadlyvenom",
+                "EkkoStacks",
+                "dariushemo",
+                "gnarwproc",
+                "TahmKenchPDebuffCounter",
+                "varuswdebuff",
+            };
+
         public static Obj_AI_Hero GetTarget(Obj_AI_Base champion,
             float range,
             DamageType type,
@@ -470,6 +483,7 @@ namespace LeagueSharp.Common
 
                     case TargetingMode.MostAP:
                         return targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
+                    
 
                     case TargetingMode.Closest:
                         return
@@ -500,6 +514,8 @@ namespace LeagueSharp.Common
                                 hero =>
                                     champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) *
                                     GetPriority(hero));
+                    case TargetingMode.MostStack:
+                        return targets.MaxOrDefault(hero => StackNames.Contains(hero.Buffs.ToString()));
                 }
             }
             catch (Exception e)
