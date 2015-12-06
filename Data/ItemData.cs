@@ -478,9 +478,9 @@ namespace LeagueSharp.Common.Data
         public static Item B_F_Sword = new Item
         {
             Name = "B. F. Sword",
-            GoldBase = 1550,
-            GoldPrice = 1550,
-            GoldSell = 1085,
+            GoldBase = 1300,
+            GoldPrice = 1300,
+            GoldSell = 910,
             Purchasable = true,
             Stacks = 1,
             Depth = 1,
@@ -618,17 +618,17 @@ namespace LeagueSharp.Common.Data
         public static Item Vampiric_Scepter = new Item
         {
             Name = "Vampiric Scepter",
-            GoldBase = 440,
-            GoldPrice = 800,
-            GoldSell = 560,
+            GoldBase = 550,
+            GoldPrice = 900,
+            GoldSell = 630,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
             From = new[] { 1036 },
             Into = new[] { 3072, 3074, 3139, 3144, 3181, 3812 },
             InStore = true,
-            FlatPhysicalDamageMod = 10f,
-            PercentLifeStealMod = 0.08f,
+            FlatPhysicalDamageMod = 15f,
+            PercentLifeStealMod = 0.1f,
             Tags = new[] { "Damage", "LifeSteal" },
             Id = 1053
         };
@@ -1356,9 +1356,9 @@ namespace LeagueSharp.Common.Data
         public static Item Berserkers_Greaves = new Item
         {
             Name = "Berserker's Greaves",
-            GoldBase = 225,
-            GoldPrice = 1000,
-            GoldSell = 700,
+            GoldBase = 500,
+            GoldPrice = 1100,
+            GoldSell = 770,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -1366,7 +1366,7 @@ namespace LeagueSharp.Common.Data
             Into = new[] { 3254, 3253, 3252, 3251, 3250 },
             InStore = true,
             FlatMovementSpeedMod = 45f,
-            PercentAttackSpeedMod = 0.25f,
+            PercentAttackSpeedMod = 0.3f,
             Tags = new[] { "AttackSpeed", "Boots" },
             Id = 3006
         };
@@ -1422,9 +1422,9 @@ namespace LeagueSharp.Common.Data
         public static Item Boots_of_Swiftness = new Item
         {
             Name = "Boots of Swiftness",
-            GoldBase = 675,
-            GoldPrice = 1000,
-            GoldSell = 700,
+            GoldBase = 500,
+            GoldPrice = 800,
+            GoldSell = 560,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -1465,7 +1465,7 @@ namespace LeagueSharp.Common.Data
         public static Item Sorcerers_Shoes = new Item
         {
             Name = "Sorcerer's Shoes",
-            GoldBase = 775,
+            GoldBase = 800,
             GoldPrice = 1100,
             GoldSell = 770,
             Purchasable = true,
@@ -1637,15 +1637,15 @@ namespace LeagueSharp.Common.Data
         public static Item Infinity_Edge = new Item
         {
             Name = "Infinity Edge",
-            GoldBase = 645,
-            GoldPrice = 3800,
-            GoldSell = 2660,
+            GoldBase = 625,
+            GoldPrice = 3600,
+            GoldSell = 2520,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
             From = new[] { 1038, 1037, 1018 },
             InStore = true,
-            FlatPhysicalDamageMod = 80f,
+            FlatPhysicalDamageMod = 65f,
             FlatCritChanceMod = 0.2f,
             Tags = new[] { "CriticalStrike", "Damage" },
             Id = 3031
@@ -1834,17 +1834,17 @@ namespace LeagueSharp.Common.Data
         public static Item Phantom_Dancer = new Item
         {
             Name = "Phantom Dancer",
-            GoldBase = 520,
-            GoldPrice = 2800,
-            GoldSell = 1960,
+            GoldBase = 900,
+            GoldPrice = 2700,
+            GoldSell = 1890,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 1018, 3086, 1042 },
             InStore = true,
-            PercentMovementSpeedMod = 0.05f,
-            PercentAttackSpeedMod = 0.5f,
-            FlatCritChanceMod = 0.35f,
+            PercentMovementSpeedMod = 0.12f,
+            PercentAttackSpeedMod = 0.4f,
+            FlatCritChanceMod = 0.30f,
             Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement" },
             Id = 3046
         };
@@ -1856,9 +1856,9 @@ namespace LeagueSharp.Common.Data
         public static Item Ninja_Tabi = new Item
         {
             Name = "Ninja Tabi",
-            GoldBase = 375,
-            GoldPrice = 1000,
-            GoldSell = 700,
+            GoldBase = 500,
+            GoldPrice = 1100,
+            GoldSell = 770,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -2146,16 +2146,37 @@ namespace LeagueSharp.Common.Data
         {
             Name = "The Bloodthirster",
             GoldBase = 1150,
-            GoldPrice = 3500,
-            GoldSell = 2450,
+            GoldPrice = 3700,
+            GoldSell = 2590,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 1053, 1038 },
+            From = new[] { 1053, 1038, 1036 },
             InStore = true,
-            FlatPhysicalDamageMod = 80f,
+            FlatPhysicalDamageMod = 75f,
             Tags = new[] { "Damage", "LifeSteal" },
             Id = 3072
+        };
+
+        #endregion
+
+        #region Death's Dance
+
+        public static Item Deaths_Dance = new Item
+        {
+            Name = "Death's Dance",
+            GoldBase = 525,
+            GoldPrice = 3400,
+            GoldSell = 2380,
+            Purchasable = true,
+            Group = "S6Items",
+            Stacks = 1,
+            Depth = 3,
+            From = new[] { 3133, 1037, 1053 },
+            InStore = true,
+            FlatPhysicalDamageMod = 65f,
+            Tags = new[] { "Damage", "LifeSteal", "CooldownReduction" },
+            Id = 3812
         };
 
         #endregion
@@ -2272,22 +2293,21 @@ namespace LeagueSharp.Common.Data
         public static Item Trinity_Force = new Item
         {
             Name = "Trinity Force",
-            GoldBase = 78,
-            GoldPrice = 3703,
-            GoldSell = 2592,
+            GoldBase = 300,
+            GoldPrice = 3800,
+            GoldSell = 2660,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3086, 3057, 3044 },
             InStore = true,
             FlatHPPoolMod = 250f,
-            FlatMPPoolMod = 200f,
-            FlatPhysicalDamageMod = 30f,
-            FlatMagicDamageMod = 30f,
-            PercentMovementSpeedMod = 0.08f,
-            PercentAttackSpeedMod = 0.3f,
-            FlatCritChanceMod = 0.1f,
-            Tags = new[] { "AttackSpeed", "CriticalStrike", "Damage", "Health", "Mana", "NonbootsMovement", "OnHit", "SpellDamage" },
+            FlatMPPoolMod = 250f,
+            FlatPhysicalDamageMod = 25f,
+            PercentMovementSpeedMod = 0.05f,
+            PercentAttackSpeedMod = 0.15f,
+            FlatCritChanceMod = 0.2f,
+            Tags = new[] { "AttackSpeed", "CriticalStrike", "Damage", "Health", "Mana", "NonbootsMovement", "OnHit", "CooldownReduction" },
             Id = 3078
         };
 
@@ -2359,16 +2379,18 @@ namespace LeagueSharp.Common.Data
         public static Item Runaans_Hurricane_Ranged_Only = new Item
         {
             Name = "Runaan's Hurricane (Ranged Only)",
-            GoldBase = 600,
-            GoldPrice = 2400,
-            GoldSell = 1680,
+            GoldBase = 300,
+            GoldPrice = 2500,
+            GoldSell = 1750,
             Purchasable = true,
             Stacks = 1,
-            Depth = 2,
-            From = new[] { 1042, 1043, 1042 },
+            Depth = 3,
+            From = new[] { 3086, 1043 },
             InStore = true,
-            PercentAttackSpeedMod = 0.7f,
-            Tags = new[] { "AttackSpeed", "OnHit" },
+            PercentAttackSpeedMod = 0.4f,
+            FlatCritChanceMod = 0.3f,
+            PercentMovementSpeedMod = 0.05f,
+            Tags = new[] { "AttackSpeed", "OnHit", "CriticalStrike", "NonbootsMovement" },
             Id = 3085
         };
 
@@ -2402,17 +2424,17 @@ namespace LeagueSharp.Common.Data
         public static Item Statikk_Shiv = new Item
         {
             Name = "Statikk Shiv",
-            GoldBase = 600,
+            GoldBase = 550,
             GoldPrice = 2500,
             GoldSell = 1750,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 3086 },
+            From = new[] { 3086, 2015 },
             InStore = true,
-            PercentMovementSpeedMod = 0.06f,
-            PercentAttackSpeedMod = 0.4f,
-            FlatCritChanceMod = 0.2f,
+            PercentMovementSpeedMod = 0.05f,
+            PercentAttackSpeedMod = 0.35f,
+            FlatCritChanceMod = 0.3f,
             Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement", "OnHit" },
             Id = 3087
         };
@@ -2508,16 +2530,19 @@ namespace LeagueSharp.Common.Data
         public static Item Rapid_Firecannon = new Item
         {
             Name = "Rapid Firecannon",
-            GoldBase = 400,
-            GoldPrice = 800,
-            GoldSell = 320,
+            GoldBase = 550,
+            GoldPrice = 2500,
+            GoldSell = 1750,
             Purchasable = true,
             Stacks = 1,
-            Depth = 2,
+            Depth = 3,
             From = new[] { 3086, 2015 },
             Into = new int[] { },
             InStore = true,
-            FlatCritChanceMod = 0.1f,
+            Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement", "OnHit" },
+            PercentCritChanceMod = 0.3f,
+            PercentMovementSpeedMod = 0.08f,
+            PercentAttackSpeedMod = 0.3f,
             Id = 3094
         };
 
@@ -2742,16 +2767,16 @@ namespace LeagueSharp.Common.Data
         public static Item Frozen_Heart = new Item
         {
             Name = "Frozen Heart",
-            GoldBase = 450,
-            GoldPrice = 2450,
-            GoldSell = 1715,
+            GoldBase = 700,
+            GoldPrice = 2800,
+            GoldSell = 1960,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3082, 3024 },
             InStore = true,
             FlatMPPoolMod = 400f,
-            FlatArmorMod = 100f,
+            FlatArmorMod = 90f,
             Tags = new[] { "Armor", "Aura", "CooldownReduction", "Mana" },
             Id = 3110
         };
@@ -2763,9 +2788,9 @@ namespace LeagueSharp.Common.Data
         public static Item Mercurys_Treads = new Item
         {
             Name = "Mercury's Treads",
-            GoldBase = 375,
-            GoldPrice = 1200,
-            GoldSell = 840,
+            GoldBase = 350,
+            GoldPrice = 1100,
+            GoldSell = 770,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -2888,7 +2913,7 @@ namespace LeagueSharp.Common.Data
         public static Item Boots_of_Mobility = new Item
         {
             Name = "Boots of Mobility",
-            GoldBase = 475,
+            GoldBase = 500,
             GoldPrice = 800,
             GoldSell = 560,
             Purchasable = true,
@@ -2948,9 +2973,9 @@ namespace LeagueSharp.Common.Data
         public static Item Guinsoos_Rageblade = new Item
         {
             Name = "Guinsoo's Rageblade",
-            GoldBase = 865,
-            GoldPrice = 2600,
-            GoldSell = 1820,
+            GoldBase = 1075,
+            GoldPrice = 2800,
+            GoldSell = 1960,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -2958,7 +2983,7 @@ namespace LeagueSharp.Common.Data
             InStore = true,
             FlatPhysicalDamageMod = 30f,
             FlatMagicDamageMod = 40f,
-            Tags = new[] { "AttackSpeed", "Damage", "LifeSteal", "OnHit", "SpellDamage", "SpellVamp" },
+            Tags = new[] { "AttackSpeed", "Damage", "OnHit", "SpellDamage" },
             Id = 3124
         };
 
@@ -3150,6 +3175,27 @@ namespace LeagueSharp.Common.Data
 
         #endregion
 
+        #region Dead Man's Plate
+
+        public static Item Dead_Mans_Plate = new Item
+        {
+            Name = "Dead Man's Plate",
+            GoldBase = 1000,
+            GoldPrice = 2800,
+            GoldSell = 1960,
+            Purchasable = true,
+            Stacks = 1,
+            Depth = 2,
+            From = new[] { 1031, 1011 },
+            InStore = true,
+            FlatHPPoolMod = 600f,
+            FlatArmorMod = 50f,
+            Tags = new[] { "Health", "Armor", "Slow", "Damage", "OnHit" },
+            Id = 3742
+        };
+
+        #endregion
+
         #region Bilgewater Cutlass
 
         public static Item Bilgewater_Cutlass = new Item
@@ -3264,9 +3310,9 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Blade of the Ruined King",
             Range = 550f,
-            GoldBase = 900,
-            GoldPrice = 3200,
-            GoldSell = 2240,
+            GoldBase = 750,
+            GoldPrice = 3400,
+            GoldSell = 2380,
             Purchasable = true,
             Stacks = 1,
             Depth = 4,
@@ -3373,9 +3419,9 @@ namespace LeagueSharp.Common.Data
         public static Item Ionian_Boots_of_Lucidity = new Item
         {
             Name = "Ionian Boots of Lucidity",
-            GoldBase = 675,
-            GoldPrice = 1000,
-            GoldSell = 700,
+            GoldBase = 500,
+            GoldPrice = 800,
+            GoldSell = 560,
             Purchasable = true,
             Stacks = 1,
             Depth = 2,
@@ -4076,17 +4122,16 @@ namespace LeagueSharp.Common.Data
         public static Item Essence_Reaver = new Item
         {
             Name = "Essence Reaver",
-            GoldBase = 850,
-            GoldPrice = 3200,
-            GoldSell = 2240,
+            GoldBase = 400,
+            GoldPrice = 3600,
+            GoldSell = 2520,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
-            From = new[] { 1053, 1038 },
+            From = new[] { 1038, 3133, 1018 },
             InStore = true,
-            FlatPhysicalDamageMod = 80f,
-            PercentLifeStealMod = 0.1f,
-            Tags = new[] { "CooldownReduction", "Damage", "LifeSteal", "ManaRegen" },
+            FlatPhysicalDamageMod = 65f,
+            Tags = new[] { "CooldownReduction", "Damage", "CriticalStrike", "ManaRegen" },
             Id = 3508
         };
 
@@ -4198,15 +4243,15 @@ namespace LeagueSharp.Common.Data
         public static Item Righteous_Glory = new Item
         {
             Name = "Righteous Glory",
-            GoldBase = 700,
-            GoldPrice = 2500,
-            GoldSell = 1750,
+            GoldBase = 750,
+            GoldPrice = 2600,
+            GoldSell = 1820,
             Purchasable = true,
             Stacks = 1,
             Depth = 3,
             From = new[] { 3010, 3801 },
             InStore = true,
-            FlatHPPoolMod = 650f,
+            FlatHPPoolMod = 500f,
             FlatMPPoolMod = 300f,
             Tags = new[] { "Active", "Health", "HealthRegen", "Mana", "NonbootsMovement", "Slow" },
             Id = 3800
