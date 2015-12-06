@@ -273,6 +273,8 @@ namespace LeagueSharp.Common
                 config.AddItem(
                     new MenuItem("TargetingMode", "Target Mode").SetShared()
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
+                config.AddItem(
+                    new MenuItem("stack.count", "Stack Count").SetValue(new Slider(2, 1, 20))).SetTooltip("Only for Stack Mode");
 
                 CommonMenu.Config.AddSubMenu(config);
 
@@ -483,8 +485,7 @@ namespace LeagueSharp.Common
 
                     case TargetingMode.MostAP:
                         return targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
-                    
-
+						
                     case TargetingMode.Closest:
                         return
                             targets.MinOrDefault(
@@ -514,8 +515,12 @@ namespace LeagueSharp.Common
                                 hero =>
                                     champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) *
                                     GetPriority(hero));
+                    
                     case TargetingMode.MostStack:
-                        return targets.MaxOrDefault(hero => StackNames.Contains(hero.Buffs.ToString()));
+                        return targets.MaxOrDefault(hero =>
+                            hero.Buffs.Where(x => StackNames.Contains(x.Name.ToLower()) &&
+                                x.Count >= _configMenu.Item("stack.count").GetValue<Slider>().Value)
+                                .Sum(buff => buff.Count));
                 }
             }
             catch (Exception e)
