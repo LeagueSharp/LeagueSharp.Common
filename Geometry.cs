@@ -1548,16 +1548,18 @@ namespace LeagueSharp.Common
                     }
                 }
 
+
                 /// <summary>
-                /// Rotates a line by a certain angle.
+                /// Rotates Line by angle/radian
                 /// </summary>
                 /// <param name="point1"></param>
                 /// <param name="point2"></param>
-                /// <param name="Angle"></param>
+                /// <param name="value"></param>
+                /// <param name="radian">True for radian values, false for degree</param>
                 /// <returns></returns>
-                public static Vector2 RotateLineByAngle(Vector2 point1, Vector2 point2, float Angle)
+                public Vector2 RotateLineFromPoint(Vector2 point1, Vector2 point2, float value, bool radian = true)
                 {
-                    var angle = Angle * Math.PI / 180;
+                    var angle = !radian ? value * Math.PI / 180 : value;
                     var line = Vector2.Subtract(point2, point1);
 
                     var newline = new Vector2
