@@ -5670,7 +5670,7 @@ namespace LeagueSharp.Common
                             && h.Distance(minionTarget.Position) < 1100))
                     {
                         var value = 0;
-
+                        
                         if (Items.HasItem(3302, hero))
                         {
                             value = 200; // Relic Shield
@@ -5687,14 +5687,6 @@ namespace LeagueSharp.Common
                         return value + hero.TotalAttackDamage;
                     }
                 }
-
-
-                //Champions passive damages:
-                result +=
-                    AttackPassives.Where(
-                        p =>
-                            (p.ChampionName == "" || p.ChampionName == hero.ChampionName) &&
-                            p.IsActive(hero, target)).Sum(passive => passive.GetDamage(hero, target));
 
                 // BotRK
                 if (Items.HasItem(3153, hero))
@@ -5735,8 +5727,17 @@ namespace LeagueSharp.Common
                     reduction += f[(targetHero.Level - 1) / 3];
                 }
             }
+            
+            result = CalcPhysicalDamage(source, target, (result - reduction) * k);
 
-            return CalcPhysicalDamage(source, target, (result - reduction) * k);
+            //Champions passive damages:
+            result +=
+                AttackPassives.Where(
+                    p =>
+                        (p.ChampionName == "" || p.ChampionName == hero.ChampionName) &&
+                        p.IsActive(hero, target)).Sum(passive => passive.GetDamage(hero, target));
+
+            return result;
         }
 
         internal static Mastery FindMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
