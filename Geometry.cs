@@ -1547,6 +1547,27 @@ namespace LeagueSharp.Common
                         Points.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                     }
                 }
+
+                /// <summary>
+                /// Rotates a line by a certain angle.
+                /// </summary>
+                /// <param name="point1"></param>
+                /// <param name="point2"></param>
+                /// <param name="Angle"></param>
+                /// <returns></returns>
+                public static Vector2 RotateLineByAngle(Vector2 point1, Vector2 point2, float Angle)
+                {
+                    var angle = Angle * Math.PI / 180;
+                    var line = Vector2.Subtract(point2, point1);
+
+                    var newline = new Vector2
+                    {
+                        X = (float)(line.X * Math.Cos(angle) - line.Y * Math.Sin(angle)),
+                        Y = (float)(line.X * Math.Sin(angle) + line.Y * Math.Cos(angle))
+                    };
+
+                    return Vector2.Add(newline, point1);
+                }
             }
         }
     }
