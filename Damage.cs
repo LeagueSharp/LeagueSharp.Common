@@ -5731,12 +5731,14 @@ namespace LeagueSharp.Common
             result = CalcPhysicalDamage(source, target, (result - reduction) * k);
 
             //Champions passive damages:
-            result +=
-                AttackPassives.Where(
-                    p =>
-                        (p.ChampionName == "" || p.ChampionName == hero.ChampionName) &&
-                        p.IsActive(hero, target)).Sum(passive => passive.GetDamage(hero, target));
-
+            if (hero != null)
+            {
+                result +=
+                    AttackPassives.Where(
+                        p =>
+                            (p.ChampionName == "" || p.ChampionName == hero.ChampionName) &&
+                            p.IsActive(hero, target)).Sum(passive => passive.GetDamage(hero, target));
+            }
             return result;
         }
 
