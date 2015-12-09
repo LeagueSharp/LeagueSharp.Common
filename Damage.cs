@@ -5707,16 +5707,6 @@ namespace LeagueSharp.Common
 
                     result += d;
                 }
-
-                //SAVAGERY: BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
-                if (target is Obj_AI_Minion)
-                {
-                    var savagery = hero.GetMastery(Cunning.Savagery);
-                    if(savagery != null)
-                    {
-                        result += savagery.Points;
-                    }
-                }
             }
 
             var targetHero = target as Obj_AI_Hero;
