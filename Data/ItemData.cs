@@ -1843,7 +1843,7 @@ namespace LeagueSharp.Common.Data
             From = new[] { 1018, 3086, 1042 },
             InStore = true,
             PercentMovementSpeedMod = 0.12f,
-            PercentAttackSpeedMod = 0.4f,
+            PercentAttackSpeedMod = 0.45f,
             FlatCritChanceMod = 0.30f,
             Tags = new[] { "AttackSpeed", "CriticalStrike", "NonbootsMovement" },
             Id = 3046
@@ -2293,7 +2293,7 @@ namespace LeagueSharp.Common.Data
         public static Item Trinity_Force = new Item
         {
             Name = "Trinity Force",
-            GoldBase = 300,
+            GoldBase = 200,
             GoldPrice = 3800,
             GoldSell = 2660,
             Purchasable = true,
@@ -2380,7 +2380,7 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Runaan's Hurricane (Ranged Only)",
             GoldBase = 300,
-            GoldPrice = 2500,
+            GoldPrice = 2600,
             GoldSell = 1750,
             Purchasable = true,
             Stacks = 1,
@@ -2401,8 +2401,8 @@ namespace LeagueSharp.Common.Data
         public static Item Zeal = new Item
         {
             Name = "Zeal",
-            GoldBase = 250,
-            GoldPrice = 1100,
+            GoldBase = 600,
+            GoldPrice = 1300,
             GoldSell = 770,
             Purchasable = true,
             Stacks = 1,
@@ -2425,7 +2425,7 @@ namespace LeagueSharp.Common.Data
         {
             Name = "Statikk Shiv",
             GoldBase = 550,
-            GoldPrice = 2500,
+            GoldPrice = 2600,
             GoldSell = 1750,
             Purchasable = true,
             Stacks = 1,
@@ -3188,7 +3188,7 @@ namespace LeagueSharp.Common.Data
             Depth = 2,
             From = new[] { 1031, 1011 },
             InStore = true,
-            FlatHPPoolMod = 600f,
+            FlatHPPoolMod = 500f,
             FlatArmorMod = 50f,
             Tags = new[] { "Health", "Armor", "Slow", "Damage", "OnHit" },
             Id = 3742
