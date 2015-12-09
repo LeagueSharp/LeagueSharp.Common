@@ -5670,7 +5670,7 @@ namespace LeagueSharp.Common
                             && h.Distance(minionTarget.Position) < 1100))
                     {
                         var value = 0;
-
+                        
                         if (Items.HasItem(3302, hero))
                         {
                             value = 200; // Relic Shield
@@ -5686,26 +5686,6 @@ namespace LeagueSharp.Common
 
                         return value + hero.TotalAttackDamage;
                     }
-                }
-
-
-                //Champions passive damages:
-                result +=
-                    AttackPassives.Where(
-                        p =>
-                            (p.ChampionName == "" || p.ChampionName == hero.ChampionName) &&
-                            p.IsActive(hero, target)).Sum(passive => passive.GetDamage(hero, target));
-
-                // BotRK
-                if (Items.HasItem(3153, hero))
-                {
-                    var d = 0.06 * target.Health;
-                    if (target is Obj_AI_Minion)
-                    {
-                        d = Math.Min(d, 60);
-                    }
-
-                    result += d;
                 }
 
                 //SAVAGERY: BONUS DAMAGE TO MINIONS AND MONSTERS 1/2/3/4/5 on single target spells and basic attacks
@@ -5735,8 +5715,35 @@ namespace LeagueSharp.Common
                     reduction += f[(targetHero.Level - 1) / 3];
                 }
             }
+            
+            result = CalcPhysicalDamage(source, target, (result - reduction) * k);
 
-            return CalcPhysicalDamage(source, target, (result - reduction) * k);
+            //Champions passive damages:
+            if (hero != null)
+            {
+                result +=
+                    AttackPassives.Where(
+                        p =>
+                            (p.ChampionName == "" || p.ChampionName == hero.ChampionName) &&
+                            p.IsActive(hero, target)).Sum(passive => passive.GetDamage(hero, target));
+
+                // BotRK
+                if (Items.HasItem(3153, hero))
+                {
+                    var d = 0.06 * target.Health;
+                    d = CalcPhysicalDamage(source, target, d);
+
+                    if (target is Obj_AI_Minion)
+                    {
+                        d = Math.Min(d, 60);
+                    }
+
+                    d = Math.Max(d, 10);
+                    result += d;
+                }
+            }
+
+            return result;
         }
 
         internal static Mastery FindMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
