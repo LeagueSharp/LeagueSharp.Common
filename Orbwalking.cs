@@ -853,6 +853,7 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("AALineWidth", "Line Width")).SetShared()
                         .SetValue(new Slider(2, 1, 6));
+                drawings.AddItem(new MenuItem("LastHitHelper", "Last Hit Helper").SetShared().SetValue(true));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
@@ -1259,7 +1260,6 @@ namespace LeagueSharp.Common
                         _config.Item("AACircle").GetValue<Circle>().Color,
                         _config.Item("AALineWidth").GetValue<Slider>().Value);
                 }
-
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
@@ -1280,6 +1280,23 @@ namespace LeagueSharp.Common
                         _config.Item("AALineWidth").GetValue<Slider>().Value, true);
                 }
                 _config.Item("FocusMinionsOverTurrets").Permashow(_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active);
+
+                if (_config.Item("LastHitHelper").GetValue<bool>())
+                {
+                    foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.Name.ToLower().Contains("minion") && x.IsVisible && !x.IsDead && !x.IsZombie && x.IsEnemy && x.IsHPBarRendered &&
+                        x.IsValidTarget(1000)))
+                    {
+                        if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion,true))
+                        {
+                            Render.Circle.DrawCircle(minion.Position,50,Color.LimeGreen);
+                        }
+                        else
+                        {
+                            Render.Circle.DrawCircle(minion.Position, 50, Color.Red);
+                        }
+                    }
+                }
+                
             }
         }
     }
