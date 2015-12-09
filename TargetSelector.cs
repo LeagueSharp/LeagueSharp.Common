@@ -106,6 +106,7 @@ namespace LeagueSharp.Common
 
             _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
             _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
+            _configMenu.Item("stack.count").Show(_configMenu.Item("TargetingMode").GetValue<StringList>().SelectedIndex == 8);
         }
 
         private static void GameOnOnWndProc(WndEventArgs args)
@@ -271,10 +272,12 @@ namespace LeagueSharp.Common
                 }
                 config.AddItem(autoPriorityItem);
                 config.AddItem(
+                    new MenuItem("stack.count", "Stack Count").SetValue(new Slider(2, 1, 20)))
+                    .SetTooltip("Only for Stack Mode");
+                config.AddItem(
                     new MenuItem("TargetingMode", "Target Mode").SetShared()
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
-                config.AddItem(
-                    new MenuItem("stack.count", "Stack Count").SetValue(new Slider(2, 1, 20))).SetTooltip("Only for Stack Mode");
+
 
                 CommonMenu.Config.AddSubMenu(config);
 
