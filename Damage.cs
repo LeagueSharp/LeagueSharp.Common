@@ -5726,7 +5726,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            return CalcPhysicalDamage(source, target, (result - reduction) * k);
+            return CalcPhysicalDamage(source, target, (result - reduction) * k + PassiveFlatMod(source, target));
         }
 
         internal static Mastery FindMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
@@ -6011,7 +6011,7 @@ namespace LeagueSharp.Common
                 source,
                 target,
                 PassivePercentMod(source, target, value) * amount,
-                DamageType.Magical) + PassiveFlatMod(source, target);
+                DamageType.Magical);
 
             return damage;
         }
@@ -6027,12 +6027,14 @@ namespace LeagueSharp.Common
         {
             double armorPenetrationPercent = source.PercentArmorPenetrationMod;
             double armorPenetrationFlat = source.FlatArmorPenetrationMod;
+            double bonusPenetrationMod = source.PercentBonusArmorPenetrationMod;
 
             // Minions return wrong percent values.
             if (source is Obj_AI_Minion)
             {
                 armorPenetrationFlat = 0d;
                 armorPenetrationPercent = 1d;
+                bonusPenetrationMod = 1d;
             }
 
             // Turrets too.
@@ -6040,7 +6042,10 @@ namespace LeagueSharp.Common
             {
                 armorPenetrationFlat = 0d;
                 armorPenetrationPercent = 1d;
+                bonusPenetrationMod = 1d;
             }
+
+            armorPenetrationFlat += (1 - bonusPenetrationMod) * armorPenetrationFlat;
 
             if (source is Obj_AI_Turret)
             {
@@ -6077,7 +6082,7 @@ namespace LeagueSharp.Common
                 source,
                 target,
                 PassivePercentMod(source, target, value) * amount,
-                DamageType.Physical) + PassiveFlatMod(source, target);
+                DamageType.Physical);
 
             // Take into account the percent passives, flat passives and damage reduction.
             return damage;
