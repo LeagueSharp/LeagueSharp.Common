@@ -6027,14 +6027,14 @@ namespace LeagueSharp.Common
         {
             double armorPenetrationPercent = source.PercentArmorPenetrationMod;
             double armorPenetrationFlat = source.FlatArmorPenetrationMod;
-            double bonusPenetrationMod = source.PercentBonusArmorPenetrationMod;
+            double bonusArmorPenetrationMod = source.PercentBonusArmorPenetrationMod;
 
             // Minions return wrong percent values.
             if (source is Obj_AI_Minion)
             {
                 armorPenetrationFlat = 0d;
                 armorPenetrationPercent = 1d;
-                bonusPenetrationMod = 1d;
+                bonusArmorPenetrationMod = 1d;
             }
 
             // Turrets too.
@@ -6042,7 +6042,7 @@ namespace LeagueSharp.Common
             {
                 armorPenetrationFlat = 0d;
                 armorPenetrationPercent = 1d;
-                bonusPenetrationMod = 1d;
+                bonusArmorPenetrationMod = 1d;
             }
 
             
@@ -6063,19 +6063,21 @@ namespace LeagueSharp.Common
 
             // Penetration can't reduce armor below 0.
             var armor = target.Armor;
+            var bonusArmor = target.Armor - target.CharData.Armor;
+
 
             double value;
             if (armor < 0)
             {
                 value = 2 - 100 / (100 - armor);
             }
-            else if ((armor * armorPenetrationPercent) - armorPenetrationFlat < 0)
+            else if ((armor * armorPenetrationPercent) - (bonusArmor * (1 - bonusArmorPenetrationMod)) - armorPenetrationFlat < 0)
             {
                 value = 1;
             }
             else
             {
-                value = 100 / (100 + (armor * armorPenetrationPercent) - armorPenetrationFlat);
+                value = 100 / (100 + (armor * armorPenetrationPercent) - (bonusArmor * (1 - bonusArmorPenetrationMod)) - armorPenetrationFlat);
             }
 
             var damage = DamageReductionMod(
