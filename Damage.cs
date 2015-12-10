@@ -6045,7 +6045,7 @@ namespace LeagueSharp.Common
                 bonusPenetrationMod = 1d;
             }
 
-            armorPenetrationFlat += (1 - bonusPenetrationMod) * armorPenetrationFlat;
+            
 
             if (source is Obj_AI_Turret)
             {
