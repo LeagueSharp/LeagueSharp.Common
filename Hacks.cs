@@ -51,7 +51,7 @@
                         LeagueSharp.Hacks.TowerRanges = args.GetNewValue<bool>();
                     };
 
-                CommonMenu.Config.AddSubMenu(menu);
+                CommonMenu.Instance.AddSubMenu(menu);
             };
         }
     }

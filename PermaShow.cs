@@ -428,7 +428,7 @@ namespace LeagueSharp.Common
 
             placetosave.AddItem(def);
 
-            CommonMenu.Config.AddSubMenu(placetosave);
+            CommonMenu.Instance.AddSubMenu(placetosave);
 
             enablepermashow.ValueChanged += (sender, args) =>
             {
@@ -457,8 +457,8 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void SavePosition()
         {
-            placetosave.Item("X")._valueSet = true;
-            placetosave.Item("Y")._valueSet = true;
+            placetosave.Item("X").ValueSet = true;
+            placetosave.Item("Y").ValueSet = true;
             placetosave.Item("X").SetValue(new Slider((int)BoxPosition.X, 0, Drawing.Width));
             placetosave.Item("Y").SetValue(new Slider((int)BoxPosition.Y, 0, Drawing.Height));
         }
@@ -561,12 +561,12 @@ namespace LeagueSharp.Common
             FontQuality Quality;
             try
             {
-                FontName = CommonMenu.Config.Item("FontName").GetValue<StringList>().SelectedValue;
-                FontHeight = CommonMenu.Config.Item("FontSize").GetValue<Slider>().Value;
+                FontName = CommonMenu.Instance.Item("FontName").GetValue<StringList>().SelectedValue;
+                FontHeight = CommonMenu.Instance.Item("FontSize").GetValue<Slider>().Value;
                 Quality = (FontQuality)
                     Enum.Parse(
                         typeof(FontQuality),
-                        CommonMenu.Config.Item("FontQuality").GetValue<StringList>().SelectedValue);
+                        CommonMenu.Instance.Item("FontQuality").GetValue<StringList>().SelectedValue);
             }
 
             catch (Exception e)
