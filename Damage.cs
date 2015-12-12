@@ -3680,37 +3680,61 @@ namespace LeagueSharp.Common
                 "Poppy",
                 new List<DamageSpell>
                     {
-                        //Q
+                        //Q - single hit
                         new DamageSpell
                             {
-                                Slot = SpellSlot.Q, DamageType = DamageType.Magical,
+                                Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    Math.Min(
-                                        new double[] { 75, 150, 225, 300, 375 }[level],
-                                        new double[] { 20, 40, 60, 80, 100 }[level]
-                                        + 0.08 * target.MaxHealth
-                                        + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                        + 0.6 * source.AbilityPower())
+                                    new double[] {40, 70, 100, 130, 160}[level]
+                                    + 0.65 * source.FlatPhysicalDamageMod
+                                    + 0.06 * target.MaxHealth
+                            },
+                        //Q - both hits
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    (new double[] {80, 140, 200, 260, 320}[level]
+                                    + 1.3 * source.FlatPhysicalDamageMod
+                                    + 0.12 * target.MaxHealth)
+                            },
+                        //W
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.W, DamageType = DamageType.Magical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 70, 110, 150, 190, 230 }[level]
+                                    + 0.7 * source.AbilityPower()
                             },
                         //E - without colliding
                         new DamageSpell
                             {
-                                Slot = SpellSlot.E, DamageType = DamageType.Magical,
+                                Slot = SpellSlot.E, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 50, 75, 100, 125, 150 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    new double[] { 50, 70, 90, 110, 130 }[level]
+                                    + 0.5 * source.FlatPhysicalDamageMod
                             },
                         //E - with colliding
                         new DamageSpell
                             {
-                                Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Magical,
+                                Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 50, 75, 100, 125, 150 }[level]
-                                    + new double[] { 75, 125, 175, 225, 275 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    (new double[] { 100, 140, 180, 220, 260 }[level]
+                                    + 1 * source.FlatPhysicalDamageMod)
+                            },
+                        //R
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.R, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    (new double[] { 200, 300, 400 }[level]
+                                    + 0.9 * source.FlatPhysicalDamageMod)
                             },
                     });
 
@@ -6235,13 +6259,6 @@ namespace LeagueSharp.Common
                     amount -= amount
                               * new[] { 0.5d, 0.55d, 0.6d, 0.65d, 0.7d }[
                                   target.Spellbook.GetSpell(SpellSlot.W).Level - 1] / (source is Obj_AI_Turret ? 2 : 1);
-                }
-
-                // Valiant Fighter
-                // + Poppy reduces all damage that exceeds 10% of her current health by 50%.
-                if (target.HasBuff("PoppyValiantFighter") && !(source is Obj_AI_Turret) && amount / target.Health > 0.1d)
-                {
-                    amount *= 0.5d;
                 }
 
                 // Shadow Dash
