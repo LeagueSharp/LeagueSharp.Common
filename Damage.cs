@@ -2596,10 +2596,18 @@ namespace LeagueSharp.Common
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
-                                Damage =
-                                    (source, target, level) =>
-                                    (new double[] { 2, 3, 4, 5, 6 }[level] / 100
-                                     + 0.01 / 100 * source.AbilityPower()) * target.MaxHealth
+                                Damage = (source, target, level) =>
+                                    {
+                                        var dmg = (0.02 + (Math.Truncate(source.TotalMagicalDamage / 100) * 0.75))
+                                                  * target.MaxHealth;
+
+                                        if (target is Obj_AI_Minion && dmg > 100)
+                                        {
+                                            dmg = 100;
+                                        }
+
+                                        return dmg;
+                                    }                
                             },
                         //E
                         new DamageSpell
