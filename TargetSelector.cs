@@ -279,7 +279,7 @@ namespace LeagueSharp.Common
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
 
 
-                CommonMenu.Config.AddSubMenu(config);
+                CommonMenu.Instance.AddSubMenu(config);
 
                 Game.OnWndProc += GameOnOnWndProc;
                 Drawing.OnDraw += DrawingOnOnDraw;

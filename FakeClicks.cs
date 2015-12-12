@@ -241,7 +241,7 @@ namespace LeagueSharp.Common
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))
                 .SetValue(new StringList(new[] { "Evade, No Cursor Position", "Cursor Position, No Evade" }));
 
-            CommonMenu.Config.AddSubMenu(root);
+            CommonMenu.Instance.AddSubMenu(root);
 
             player = ObjectManager.Player;
 

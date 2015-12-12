@@ -72,24 +72,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\LeagueSharp\System\clipper_library.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Sandbox">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -119,8 +120,25 @@
     <Compile Include="Interrupter2.cs" />
     <Compile Include="LastCastedSpell.cs" />
     <Compile Include="MapPositions.cs" />
-    <Compile Include="Menu.cs" />
     <Compile Include="MenuWrapper.cs" />
+    <Compile Include="Menu\Circle.cs" />
+    <Compile Include="Menu\ColorPicker.cs" />
+    <Compile Include="Menu\CommonMenu.cs" />
+    <Compile Include="Menu\CPSlider.cs" />
+    <Compile Include="Menu\HSLColor.cs" />
+    <Compile Include="Menu\KeyBind.cs" />
+    <Compile Include="Menu\KeyBindType.cs" />
+    <Compile Include="Menu\Menu.cs" />
+    <Compile Include="Menu\MenuDrawHelper.cs" />
+    <Compile Include="Menu\MenuGlobals.cs" />
+    <Compile Include="Menu\MenuItem.cs" />
+    <Compile Include="Menu\MenuSettings.cs" />
+    <Compile Include="Menu\MenuValueType.cs" />
+    <Compile Include="Menu\OnValueChangeEventArgs.cs" />
+    <Compile Include="Menu\SavedSettings.cs" />
+    <Compile Include="Menu\Slider.cs" />
+    <Compile Include="Menu\StringList.cs" />
+    <Compile Include="Menu\WndEventComposition.cs" />
     <Compile Include="Notifications.cs" />
     <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\Notification.cs" />

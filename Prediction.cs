@@ -329,7 +329,7 @@ namespace LeagueSharp.Common
                 var menu = new Menu("Prediction", "Prediction");
                 var slider = new MenuItem("PredMaxRange", "Max Range %").SetValue(new Slider(100, 70, 100));
                 menu.AddItem(slider);
-                CommonMenu.Config.AddSubMenu(menu);
+                CommonMenu.Instance.AddSubMenu(menu);
             };
         }
 
@@ -455,7 +455,7 @@ namespace LeagueSharp.Common
                 }
                 else
                 {
-                    input.Range = input.Range * CommonMenu.Config.Item("PredMaxRange").GetValue<Slider>().Value / 100f;
+                    input.Range = input.Range * CommonMenu.Instance.Item("PredMaxRange").GetValue<Slider>().Value / 100f;
                 }
             }
 
