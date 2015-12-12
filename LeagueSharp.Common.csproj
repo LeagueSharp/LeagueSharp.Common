@@ -127,6 +127,7 @@
     <Compile Include="Menu\CPSlider.cs" />
     <Compile Include="Menu\HSLColor.cs" />
     <Compile Include="Menu\KeyBind.cs" />
+    <Compile Include="Menu\KeybindSetStage.cs" />
     <Compile Include="Menu\KeyBindType.cs" />
     <Compile Include="Menu\Menu.cs" />
     <Compile Include="Menu\MenuDrawHelper.cs" />

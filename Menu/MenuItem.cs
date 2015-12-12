@@ -1,4 +1,6 @@
-﻿namespace LeagueSharp.Common
+﻿using System.Windows.Input;
+
+namespace LeagueSharp.Common
 {
     using System;
     using System.Collections.Generic;
@@ -120,6 +122,10 @@
         /// </summary>
         private object value;
 
+        /// <summary>
+        /// The stage of the KeybindSetting
+        /// </summary>
+        internal KeybindSetStage KeybindSettingStage = KeybindSetStage.NotSetting;
         #endregion
 
         #region Constructors and Destructors
@@ -222,8 +228,11 @@
                                     .Concat(new[] { 0 })
                                     .Max()
                               : (this.ValueType == MenuValueType.KeyBind)
-                                    ? MenuDrawHelper.Font.MeasureText(
-                                        " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width
+                                    ? this.GetValue<KeyBind>().SecondaryKey == 0 ? MenuDrawHelper.Font.MeasureText(
+                                    " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width : 
+                                    MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width 
+                                    + MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().SecondaryKey) + "]").Width 
+                                    + MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width / 4
                                     : 0);
             }
         }
@@ -681,7 +690,7 @@
 
                     if (this.Interacting)
                     {
-                        s = MultiLanguage._("Press new key");
+                        s = MultiLanguage._("Press new key(s)");
                     }
 
                     var x = !string.IsNullOrEmpty(this.Tooltip)
@@ -696,6 +705,29 @@
                         new Rectangle(x, (int)this.Position.Y, this.Width, this.Height),
                         FontDrawFlags.VerticalCenter,
                         new ColorBGRA(1, 169, 234, 255));
+
+                    if (val.SecondaryKey != 0)
+                    {
+                        var x_secondary = !string.IsNullOrEmpty(this.Tooltip)
+                                ? (int)this.Position.X + this.Width - this.Height
+                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
+                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
+                                  - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width 
+                                  - 35
+                                : (int)this.Position.X + this.Width - this.Height
+                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
+                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
+                                  - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width 
+                                  - 10;
+
+                        font.DrawText(
+                        null,
+                        "[" + Utils.KeyToText(val.SecondaryKey) + "]",
+                        new Rectangle(x_secondary, (int)this.Position.Y, this.Width, this.Height),
+                        FontDrawFlags.VerticalCenter,
+                        new ColorBGRA(1, 169, 234, 255));
+                    }
+
                     MenuDrawHelper.DrawOnOff(
                         val.Active,
                         new Vector2(this.Position.X + this.Width - this.Height, this.Position.Y),
@@ -793,7 +825,7 @@
         /// <param name="key">
         ///     The key.
         /// </param>
-        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
+        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key, WndEventComposition wndArgs)
         {
             if (message == WindowsMessages.WM_MOUSEMOVE)
             {
@@ -945,7 +977,7 @@
                         {
                             case WindowsMessages.WM_KEYDOWN:
                                 var val = this.GetValue<KeyBind>();
-                                if (key == val.Key)
+                                if (key == val.Key || key == val.SecondaryKey)
                                 {
                                     if (val.Type == KeyBindType.Press)
                                     {
@@ -960,7 +992,7 @@
                             case WindowsMessages.WM_KEYUP:
 
                                 var val2 = this.GetValue<KeyBind>();
-                                if (key == val2.Key)
+                                if (key == val2.Key || key == val2.SecondaryKey)
                                 {
                                     if (val2.Type == KeyBindType.Press)
                                     {
@@ -977,10 +1009,30 @@
                         }
                     }
 
-                    if (message == WindowsMessages.WM_KEYUP && this.Interacting)
+                    if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage != KeybindSetStage.NotSetting)
+                    {
+                        if (KeybindSettingStage == KeybindSetStage.Keybind1)
+                        {
+                            var val = this.GetValue<KeyBind>();
+                            val.Key = key;
+                            this.SetValue(val);
+                            KeybindSettingStage = KeybindSetStage.Keybind2;
+                        }
+                        else if (KeybindSettingStage == KeybindSetStage.Keybind2)
+                        {
+                            var val = this.GetValue<KeyBind>();
+                            val.SecondaryKey = key;
+                            this.SetValue(val);
+                            this.Interacting = false;
+                            KeybindSettingStage = KeybindSetStage.NotSetting;
+                        }
+                    }
+
+                    if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage == KeybindSetStage.NotSetting)
                     {
                         var val = this.GetValue<KeyBind>();
                         val.Key = key;
+                        val.SecondaryKey = 0;
                         this.SetValue(val);
                         this.Interacting = false;
                     }
@@ -990,7 +1042,8 @@
                         return;
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN)
+                    if (message != WindowsMessages.WM_LBUTTONDOWN 
+                        && wndArgs.Msg != WindowsMessages.WM_RBUTTONDOWN)
                     {
                         return;
                     }
@@ -1013,6 +1066,11 @@
                     }
                     else
                     {
+                        if (wndArgs.Msg == WindowsMessages.WM_RBUTTONDOWN)
+                        {
+                            this.KeybindSettingStage = KeybindSetStage.Keybind1;
+                        }
+                        //this.Stage = KeybindSetStage.NotSetting;
                         this.Interacting = !this.Interacting;
                     }
 
