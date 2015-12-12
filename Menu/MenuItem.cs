@@ -359,8 +359,9 @@
                     return this.GetValue<Circle>().Active;
                 case MenuValueType.KeyBind:
                     return this.GetValue<KeyBind>().Active;
+                default:
+                    return false;
             }
-            return false;
         }
 
         /// <summary>
@@ -392,6 +393,7 @@
         public MenuItem SetShared()
         {
             this.isShared = true;
+
             return this;
         }
 

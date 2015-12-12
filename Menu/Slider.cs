@@ -44,8 +44,8 @@
         public Slider(int value = 0, int minValue = 0, int maxValue = 100)
         {
             this.value = value;
-            this.MinValue = minValue;
-            this.MaxValue = maxValue;
+            this.MaxValue = Math.Max(maxValue, minValue);
+            this.MinValue = Math.Min(maxValue, minValue);
         }
 
         #endregion

@@ -57,7 +57,7 @@
         {
             get
             {
-                return Path.Combine(Config.AppDataDirectory, "MenuConfig");
+                return Path.Combine(Config.AppDataDirectory, "MenuConfigCommon");
             }
         }
 
