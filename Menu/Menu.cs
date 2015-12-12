@@ -420,11 +420,11 @@
         /// <param name="message">
         ///     The message.
         /// </param>
-        public static void SendMessage(uint key, WindowsMessages message)
+        public static void SendMessage(uint key, WindowsMessages message, WndEventComposition args)
         {
             foreach (var menu in RootMenus)
             {
-                menu.Value.OnReceiveMessage(message, Utils.GetCursorPos(), key);
+                menu.Value.OnReceiveMessage(message, Utils.GetCursorPos(), key, args);
             }
         }
 
@@ -623,17 +623,17 @@
         /// <param name="key">
         ///     The key.
         /// </param>
-        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key)
+        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key, WndEventComposition args)
         {
             //Spread the message to the menu's children recursively
             foreach (var child in this.Children)
             {
-                child.OnReceiveMessage(message, cursorPos, key);
+                child.OnReceiveMessage(message, cursorPos, key, args);
             }
 
             foreach (var item in this.Items)
             {
-                item.OnReceiveMessage(message, cursorPos, key);
+                item.OnReceiveMessage(message, cursorPos, key, args);
             }
 
             //Handle the left clicks on the menus to hide or show the submenus.
@@ -710,7 +710,7 @@
         /// </param>
         internal void OnWndProc(WndEventComposition args)
         {
-            this.OnReceiveMessage(args.Msg, Utils.GetCursorPos(), args.WParam);
+            this.OnReceiveMessage(args.Msg, Utils.GetCursorPos(), args.WParam, args);
         }
 
         /// <summary>
