@@ -693,6 +693,8 @@ namespace LeagueSharp.Common
                         s = MultiLanguage._("Press new key(s)");
                     }
 
+                    if (val.Key != 0)
+                    {
                     var x = !string.IsNullOrEmpty(this.Tooltip)
                                 ? (int)this.Position.X + this.Width - this.Height
                                   - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 35
@@ -705,6 +707,7 @@ namespace LeagueSharp.Common
                         new Rectangle(x, (int)this.Position.Y, this.Width, this.Height),
                         FontDrawFlags.VerticalCenter,
                         new ColorBGRA(1, 169, 234, 255));
+                    }
 
                     if (val.SecondaryKey != 0)
                     {
@@ -1009,6 +1012,16 @@ namespace LeagueSharp.Common
                         }
                     }
 
+                    if (key == 8 && message == WindowsMessages.WM_KEYUP && this.Interacting)
+                    {
+                        var val = this.GetValue<KeyBind>();
+                        val.Key = 0;
+                        val.SecondaryKey = 0;
+                        this.SetValue(val);
+                        this.Interacting = false;
+                        KeybindSettingStage = KeybindSetStage.NotSetting;
+                    }
+
                     if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage != KeybindSetStage.NotSetting)
                     {
                         if (KeybindSettingStage == KeybindSetStage.Keybind1)
@@ -1036,6 +1049,7 @@ namespace LeagueSharp.Common
                         this.SetValue(val);
                         this.Interacting = false;
                     }
+
 
                     if (!this.Visible)
                     {
