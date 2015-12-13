@@ -1051,6 +1051,24 @@ namespace LeagueSharp.Common
                                     minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
                                 Player.GetAutoAttackDamage(minion));
             }
+            private bool ShouldWaitUnderTurret(Obj_AI_Minion noneKillableMinion)
+            {
+                return 
+                    ObjectManager.Get<Obj_AI_Minion>()
+                        .Any(
+                            minion => (noneKillableMinion != null ?
+                                noneKillableMinion.NetworkId != minion.NetworkId : true)
+                                && minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
+                                HealthPrediction.LaneClearHealthPrediction(
+                                    minion, (int)((Player.AttackDelay * 1000 +
+                                    (Player.IsMelee ?
+                                    Player.AttackCastDelay * 1000 :
+                                    Player.AttackCastDelay * 1000
+                                    + 1000 * (Player.AttackRange + 2 * Player.BoundingRadius)
+                                    / Player.BasicAttack.MissileSpeed))), FarmDelay) <=
+                                    Player.GetAutoAttackDamage(minion));
+            }
 
 
             /// <summary>
@@ -1181,7 +1199,6 @@ namespace LeagueSharp.Common
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LastHit)
                 {
                     Obj_AI_Minion farmUnderTurretMinion = null;
-                    bool shouldWait = false;
                     Obj_AI_Minion noneKillableMinion = null;
                     // return all the minions underturret in auto attack range
                     var minions = MinionManager.GetMinions(Player.Position, Player.AttackRange + 500)
@@ -1209,7 +1226,7 @@ namespace LeagueSharp.Common
                                                1000 * Math.Max(0, (int)(turretMinion.Distance(turret) - turret.BoundingRadius))
                                                / (int)(turret.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
-                                for (float i = turretLandTick; i < turretLandTick + 3 * turret.AttackDelay * 1000 + 50; i = i + turret.AttackDelay * 1000)
+                                for (float i = turretLandTick + 50; i < turretLandTick + 3 * turret.AttackDelay * 1000 + 50; i = i + turret.AttackDelay * 1000)
                                 {
                                     int time = (int)i - Utils.GameTimeTickCount + Game.Ping / 2;
                                     int predHP = (int)HealthPrediction.LaneClearHealthPrediction(turretMinion,
@@ -1229,7 +1246,7 @@ namespace LeagueSharp.Common
                                 {
                                     int damage = (int)Player.GetAutoAttackDamage(turretMinion, true);
                                     int hits = hpLeftBeforeDie / damage;
-                                    int timeBeforeDie = turretLandTick + turretAttackCount * (int)(turret.AttackDelay * 1000) - Utils.GameTimeTickCount;
+                                    int timeBeforeDie = turretLandTick + (turretAttackCount + 1) * (int)(turret.AttackDelay * 1000) - Utils.GameTimeTickCount;
                                     int timeUntilAttackReady =
                                         LastAATick + (int)(Player.AttackDelay * 1000) > (Utils.GameTimeTickCount + Game.Ping / 2 + 25) ?
                                         LastAATick + (int)(Player.AttackDelay * 1000) - (Utils.GameTimeTickCount + Game.Ping / 2 + 25) :
@@ -1242,39 +1259,34 @@ namespace LeagueSharp.Common
                                     {
                                         farmUnderTurretMinion = turretMinion as Obj_AI_Minion;
                                     }
-                                    else if (hits >= 1 && hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack < timeBeforeDie)
+                                    else if (hits >= 1 && hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack > timeBeforeDie)
                                     {
                                         noneKillableMinion = turretMinion as Obj_AI_Minion;
                                     }
+                                    //Game.PrintChat(hits.ToString() + " " + (hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack > timeBeforeDie).ToString());
 
                                 }
                                 else if (hpLeft == 0 && turretAttackCount == 0 && hpLeftBeforeDie == 0)
                                 {
                                     noneKillableMinion = turretMinion as Obj_AI_Minion;
                                 }
+                                //debug
+                                if (noneKillableMinion != null)
+                                    Game.PrintChat("a");
                                 // should wait before attacking a minion.
-                                shouldWait =
-                                    ObjectManager.Get<Obj_AI_Minion>()
-                                        .Any(
-                                            minion => (noneKillableMinion != null ?
-                                                noneKillableMinion.NetworkId != minion.NetworkId : true)
-                                                && minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
-                                                InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
-                                                HealthPrediction.LaneClearHealthPrediction(
-                                                    minion, (int)((Player.AttackDelay * 1000 +
-                                                    (Player.IsMelee ?
-                                                    Player.AttackCastDelay * 1000 :
-                                                    Player.AttackCastDelay * 1000
-                                                    + 1000 * (Player.AttackRange + 2 * Player.BoundingRadius)
-                                                    / Player.BasicAttack.MissileSpeed))), FarmDelay) <=
-                                                    Player.GetAutoAttackDamage(minion));
-                                if (shouldWait)
+                                if (ShouldWaitUnderTurret(noneKillableMinion))
+                                {
+                                    Game.PrintChat("b");
                                     return null;
+                                }
                                 if (farmUnderTurretMinion != null)
+                                {
+                                    Game.PrintChat("c");
                                     return farmUnderTurretMinion;
+                                }
                                 // balance other minions
                                 foreach (var minion in
-                                    minions.Where(x => (x is Obj_AI_Minion)
+                                    minions.Where(x => x.NetworkId != turretMinion.NetworkId && (x is Obj_AI_Minion)
                                           && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)))
                                 {
                                     int playerDamage = (int)Player.GetAutoAttackDamage(minion);
@@ -1282,6 +1294,31 @@ namespace LeagueSharp.Common
                                     int leftHP = (int)minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
+                                        Game.PrintChat("d");
+                                        return minion;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (ShouldWaitUnderTurret(noneKillableMinion))
+                                return null;
+                            // balance other minions
+                            foreach (var minion in
+                                minions.Where(x => (x is Obj_AI_Minion)
+                                      && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)))
+                            {
+                                var turret = ObjectManager.Get<Obj_AI_Turret>()
+                                    .FirstOrDefault(x => x.IsValidTarget(950, false, minion.Position) && x.IsAlly);
+                                if (turret != null)
+                                {
+                                    int playerDamage = (int)Player.GetAutoAttackDamage(minion);
+                                    int turretDamage = (int)turret.GetAutoAttackDamage(minion, true);
+                                    int leftHP = (int)minion.Health % turretDamage;
+                                    if (leftHP > playerDamage)
+                                    {
+                                        Game.PrintChat("e");
                                         return minion;
                                     }
                                 }
