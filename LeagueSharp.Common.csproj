@@ -90,7 +90,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -165,7 +164,16 @@
     <Compile Include="Utility.cs" />
     <Compile Include="MinionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Utils\Cursor.cs" />
+    <Compile Include="Utils\EnumerableExtensions.cs" />
+    <Compile Include="Utils\KeyboardEvents.cs" />
+    <Compile Include="Utils\Keys.cs" />
+    <Compile Include="Utils\MouseEvents.cs" />
+    <Compile Include="Utils\NativeMethods.cs" />
+    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utils\VirtualMouse.cs" />
+    <Compile Include="Utils\WeightedRandom.cs" />
+    <Compile Include="Utils\WindowsMessages.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -176,6 +184,7 @@
   <ItemGroup>
     <None Include="Resources\CPForm.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

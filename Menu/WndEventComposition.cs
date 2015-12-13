@@ -1,7 +1,7 @@
 ﻿namespace LeagueSharp.Common
 {
     using System;
-    using System.Windows.Forms;
+    using System.Security.Permissions;
 
     /// <summary>
     ///     The windows event message composition, gives indepth information from a <see cref="WndEventArgs" />.
@@ -11,7 +11,7 @@
         #region Fields
 
         /// <summary>
-        ///     The UTF-8/ANSI character of the current message. (If available)
+        ///     The single character of the current message. (If available)
         /// </summary>
         public readonly char Char;
 
@@ -50,14 +50,15 @@
         /// <param name="wndEventArgs">
         ///     The <see cref="WndEventArgs" />
         /// </param>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public WndEventComposition(WndEventArgs wndEventArgs)
         {
             this.wndEventArgs = wndEventArgs;
 
             this.Char = Convert.ToChar((wndEventArgs.WParam <= char.MaxValue) ? wndEventArgs.WParam : 0);
             this.Key = (Keys)((int)wndEventArgs.WParam);
-            this.FullKey = (Keys)((int)wndEventArgs.WParam) != Control.ModifierKeys
-                               ? (Keys)((int)wndEventArgs.WParam) | Control.ModifierKeys
+            this.FullKey = (Keys)((int)wndEventArgs.WParam) != ModifierKeys
+                               ? (Keys)((int)wndEventArgs.WParam) | ModifierKeys
                                : (Keys)((int)wndEventArgs.WParam);
             this.Msg = (WindowsMessages)wndEventArgs.Msg;
 
@@ -70,6 +71,34 @@
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        ///     Gets the current modifier keys.
+        /// </summary>
+        public static Keys ModifierKeys
+        {
+            get
+            {
+                var keys = Keys.None;
+
+                if (NativeMethods.GetKeyState(16) < 0)
+                {
+                    keys |= Keys.Shift;
+                }
+
+                if (NativeMethods.GetKeyState(17) < 0)
+                {
+                    keys |= Keys.Control;
+                }
+
+                if (NativeMethods.GetKeyState(18) < 0)
+                {
+                    keys |= Keys.Alt;
+                }
+
+                return keys;
+            }
+        }
 
         /// <summary>
         ///     Gets the Windows Event Message LParam.
