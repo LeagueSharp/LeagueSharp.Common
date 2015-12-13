@@ -1426,16 +1426,12 @@ namespace LeagueSharp.Common
 
                 if (_config.Item("LastHitHelper").GetValue<bool>())
                 {
-                    foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.Name.ToLower().Contains("minion") && x.IsVisible && !x.IsDead && !x.IsZombie && x.IsEnemy && x.IsHPBarRendered &&
+                    foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.Name.ToLower().Contains("minion") && x.IsHPBarRendered &&
                         x.IsValidTarget(1000)))
                     {
                         if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion,true))
                         {
                             Render.Circle.DrawCircle(minion.Position,50,Color.LimeGreen);
-                        }
-                        else
-                        {
-                            Render.Circle.DrawCircle(minion.Position, 50, Color.Red);
                         }
                     }
                 }
