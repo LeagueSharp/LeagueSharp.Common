@@ -6147,11 +6147,11 @@ namespace LeagueSharp.Common
                     bool closebyenemies = HeroManager.Enemies.Any(x => x.NetworkId != target.NetworkId && x.Distance(target) <= 500); //500 is not the real value
                     if (closebyenemies)
                     {
-                        amount *= 0.92d;
+                        amount *= 0.98d;
                     }
                     else
                     {
-                        amount *= 0.98d;
+                        amount *= 0.93d;
                     }
                 }
                 
@@ -6348,7 +6348,7 @@ namespace LeagueSharp.Common
                     Mastery Thunder = hero.GetMastery(Cunning.ThunderlordsDecree);
                     if (Thunder != null && Thunder.IsActive())
                     {
-                        // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
+                        // amount += 10 * hero.Level + (0.3 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
                     }
                 }
             }
