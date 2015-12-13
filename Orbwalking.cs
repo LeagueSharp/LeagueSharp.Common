@@ -853,7 +853,7 @@ namespace LeagueSharp.Common
                 drawings.AddItem(
                     new MenuItem("AALineWidth", "Line Width")).SetShared()
                         .SetValue(new Slider(2, 1, 6));
-                drawings.AddItem(new MenuItem("LastHitHelper", "Last Hit Helper").SetShared().SetValue(true));
+                drawings.AddItem(new MenuItem("LastHitHelper", "Last Hit Helper").SetShared().SetValue(false));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
