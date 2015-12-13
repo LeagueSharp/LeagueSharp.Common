@@ -1263,25 +1263,18 @@ namespace LeagueSharp.Common
                                     {
                                         noneKillableMinion = turretMinion as Obj_AI_Minion;
                                     }
-                                    //Game.PrintChat(hits.ToString() + " " + (hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack > timeBeforeDie).ToString());
-
                                 }
                                 else if (hpLeft == 0 && turretAttackCount == 0 && hpLeftBeforeDie == 0)
                                 {
                                     noneKillableMinion = turretMinion as Obj_AI_Minion;
                                 }
-                                //debug
-                                if (noneKillableMinion != null)
-                                    Game.PrintChat("a");
                                 // should wait before attacking a minion.
                                 if (ShouldWaitUnderTurret(noneKillableMinion))
                                 {
-                                    Game.PrintChat("b");
                                     return null;
                                 }
                                 if (farmUnderTurretMinion != null)
-                                {
-                                    Game.PrintChat("c");
+                                { 
                                     return farmUnderTurretMinion;
                                 }
                                 // balance other minions
@@ -1294,7 +1287,6 @@ namespace LeagueSharp.Common
                                     int leftHP = (int)minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
-                                        Game.PrintChat("d");
                                         return minion;
                                     }
                                 }
@@ -1318,7 +1310,6 @@ namespace LeagueSharp.Common
                                     int leftHP = (int)minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
-                                        Game.PrintChat("e");
                                         return minion;
                                     }
                                 }
