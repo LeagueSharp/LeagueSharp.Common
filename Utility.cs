@@ -440,7 +440,18 @@ namespace LeagueSharp.Common
             return
                 ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, enemyTurretsOnly, position));
         }
-
+        /// <summary>
+        ///  Return true if unit is under ally turret range.
+        /// <returns></returns>
+        public static bool UnderAllyTurret(this Obj_AI_Base unit)
+        {
+            return UnderAllyTurret(unit.Position);
+        }
+        public static bool UnderAllyTurret(this Vector3 position)
+        {
+            return
+                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.IsValidTarget(950, false, position) && turret.IsAlly);
+        }
         public static NavMeshCell ToNavMeshCell(this Vector3 position)
         {
             var nav = NavMesh.WorldToGrid(position.X, position.Y);

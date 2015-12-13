@@ -217,9 +217,39 @@ namespace LeagueSharp.Common
         /// <returns></returns>
         public static bool HasMinionAggro(Obj_AI_Minion minion)
         {
-            return ActiveAttacks.Values.Any(m => (m.Source is Obj_AI_Minion) && m.Target == minion);
+            return ActiveAttacks.Values.Any(m => (m.Source is Obj_AI_Minion) && m.Target.NetworkId == minion.NetworkId);
         }
-
+        /// <summary>
+        /// Determines whether the specified minion has turret aggro.
+        /// </summary>
+        /// <param name="minion">The minion</param>
+        /// <returns></returns>
+        public static bool HasTurretAggro(Obj_AI_Minion minion)
+        {
+            return ActiveAttacks.Values.Any(m => (m.Source is Obj_AI_Turret) && m.Target.NetworkId == minion.NetworkId);
+        }
+        /// <summary>
+        /// Return the starttick of the attacking turret.
+        /// </summary>
+        /// <param name="minion"></param>
+        /// <returns></returns>
+        public static int TurretAggroStartTick(Obj_AI_Minion minion)
+        {
+            var ActiveTurret = ActiveAttacks.Values
+                .FirstOrDefault(m => (m.Source is Obj_AI_Turret) && m.Target.NetworkId == minion.NetworkId);
+            return ActiveTurret != null ? ActiveTurret.StartTick : 0;
+        }
+        /// <summary>
+        /// Return the Attacking turret.
+        /// </summary>
+        /// <param name="minion"></param>
+        /// <returns></returns>
+        public static Obj_AI_Base GetAggroTurret(Obj_AI_Minion minion)
+        {
+            var ActiveTurret = ActiveAttacks.Values
+                .FirstOrDefault(m => (m.Source is Obj_AI_Turret) && m.Target.NetworkId == minion.NetworkId);
+            return ActiveTurret != null ? ActiveTurret.Source : null;
+        }
         /// <summary>
         /// Represetns predicted damage.
         /// </summary>
