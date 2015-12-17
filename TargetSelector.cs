@@ -74,12 +74,10 @@ namespace LeagueSharp.Common
                 UsingCustom = value;
                 if (value)
                 {
-                    Game.OnWndProc -= GameOnOnWndProc;
                     Drawing.OnDraw -= DrawingOnOnDraw;
                 }
                 else
                 {
-                    Game.OnWndProc += GameOnOnWndProc;
                     Drawing.OnDraw += DrawingOnOnDraw;
                 }
             }
@@ -413,13 +411,13 @@ namespace LeagueSharp.Common
 
         private static string[] StackNames =
             {
-                "KalistaExpungeMarker",
+                "kalistaexpungemarker",
                 "vaynesilvereddebuff",
                 "twitchdeadlyvenom",
-                "EkkoStacks",
+                "ekkostacks",
                 "dariushemo",
                 "gnarwproc",
-                "TahmKenchPDebuffCounter",
+                "tahmkenchpdebuffcounter",
                 "varuswdebuff",
             };
 
