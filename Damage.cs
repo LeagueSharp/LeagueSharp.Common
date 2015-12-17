@@ -25,6 +25,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.Common.Data;
+using Ferocity = LeagueSharp.Common.Data.MasteryData.Ferocity;
+using Cunning = LeagueSharp.Common.Data.MasteryData.Cunning;
+using Resolve = LeagueSharp.Common.Data.MasteryData.Resolve;
+
 
 #endregion
 
@@ -5759,88 +5764,6 @@ namespace LeagueSharp.Common
             }
 
             return CalcPhysicalDamage(source, target, (result - reduction) * k + PassiveFlatMod(source, target));
-        }
-
-        internal static Mastery FindMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
-        {
-            var mastery = @hero.Masteries.FirstOrDefault(m => m.Page == page && m.Id == id);
-            return mastery;
-        }
-
-        internal static Mastery GetMastery(this Obj_AI_Hero hero, Ferocity ferocity)
-        {
-            return FindMastery(hero, MasteryPage.Ferocity, (int)ferocity);
-        }
-
-        internal static Mastery GetMastery(this Obj_AI_Hero hero, Cunning cunning)
-        {
-            return FindMastery(hero, MasteryPage.Cunning, (int)cunning);
-        }
-
-        internal static Mastery GetMastery(this Obj_AI_Hero hero, Resolve resolve)
-        {
-            return FindMastery(hero, MasteryPage.Resolve, (int)resolve);
-        }
-
-        internal static bool IsActive(this Mastery mastery)
-        {
-            return mastery.Points >= 1;
-        }
-
-        internal static bool IsMoveImpaired(this Obj_AI_Hero hero)
-        {
-            return hero.HasBuffOfType(BuffType.Fear) || hero.HasBuffOfType(BuffType.Slow) || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
-                   hero.HasBuffOfType(BuffType.Taunt);
-        }
-
-        internal enum Ferocity
-        {
-            Fury = 65,
-            Sorcery = 68,
-            DoubleEdgedSword = 81,
-            Vampirism = 97,
-            NaturalTalent = 100,
-            Feast = 82,
-            BountyHunter = 113,
-            Oppresor = 114,
-            BatteringBlows = 129,
-            PiercingThoughts = 132,
-            WarlordsBloodlust = 145,
-            FervorofBattle = 146,
-            DeathFireTouch = 137
-        }
-
-        internal enum Cunning
-        {
-            Wanderer = 65,
-            Savagery = 66,
-            RunicAffinity = 81,
-            SecretStash = 82,
-            Meditation = 98,
-            Merciless = 97,
-            Bandit = 114,
-            DangerousGame = 115,
-            Precision = 129,
-            Intelligence = 130,
-            StormraidersSurge = 145,
-            ThunderlordsDecree = 146,
-            WindspeakerBlessing = 147
-        }
-        
-        internal enum Resolve
-        {
-            Recovery = 65,
-            Unyielding = 66,
-            Explorer = 81,
-            ToughSkin = 82,
-            RunicArmor = 97,
-            VeteransScar = 98,
-            Insight = 113,
-            Swiftness = 129,
-            LegendaryGuardian = 130,
-            GraspoftheUndying = 145,
-            StrengthoftheAges = 146,
-            BondofStones = 147
         }
 
         /// <summary>

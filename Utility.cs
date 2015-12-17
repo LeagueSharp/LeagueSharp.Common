@@ -640,18 +640,6 @@ namespace LeagueSharp.Common
                        .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < fountainRange);
         }
 
-        /// <summary>
-        ///     Checks for a mastery
-        /// </summary>
-        /// <param name="source">Source Object</param>
-        /// <param name="data">Mastery Data</param>
-        /// <returns>True/False Bool</returns>
-        public static bool HasMastery(this Obj_AI_Hero source, MasteryData.Mastery data)
-        {
-            return (source.IsValidTarget()) &&
-                   source.Masteries.Find(m => m.Page == data.Tree && m.Id == data.ByteId) != null;
-        }
-
         public static short GetPacketId(this GamePacketEventArgs gamePacketEventArgs)
         {
             var packetData = gamePacketEventArgs.PacketData;

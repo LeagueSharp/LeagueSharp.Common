@@ -22,786 +22,94 @@
 
 #region
 
-using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #endregion
 
 namespace LeagueSharp.Common.Data
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public class MasteryData
+    public static class MasteryData
     {
-        public struct Mastery
+        internal static Mastery FindMastery(this Obj_AI_Hero @hero, MasteryPage page, int id)
         {
-            /// <summary>
-            ///     Mastery ByteId
-            /// </summary>
-            public byte ByteId;
-
-            /// <summary>
-            ///     Mastery Id
-            /// </summary>
-            public int Id;
-
-            /// <summary>
-            ///     Mastery Name
-            /// </summary>
-            public string Name;
-
-            /// <summary>
-            ///     Mastery Requirements
-            /// </summary>
-            public int RequiredId;
-
-            /// <summary>
-            ///     Mastery Tree
-            /// </summary>
-            public MasteryPage Tree;
+            var mastery = @hero.Masteries.FirstOrDefault(m => m.Page == page && m.Id == id);
+            return mastery;
         }
 
-        #region Masteries
-
-        #region Double-Edged Sword
-
-        public static Mastery Double_Edged_Sword = new Mastery
+        internal static Mastery GetMastery(this Obj_AI_Hero hero, Ferocity ferocity)
         {
-            Id = 4111,
-            Name = "Double-Edged Sword",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 65
-        };
+            return FindMastery(hero, MasteryPage.Ferocity, (int)ferocity);
+        }
 
-        #endregion
-
-        #region Fury
-
-        public static Mastery Fury = new Mastery
+        internal static Mastery GetMastery(this Obj_AI_Hero hero, Cunning cunning)
         {
-            Id = 4112,
-            Name = "Fury",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 66
-        };
+            return FindMastery(hero, MasteryPage.Cunning, (int)cunning);
+        }
 
-        #endregion
-
-        #region Sorcery
-
-        public static Mastery Sorcery = new Mastery
+        internal static Mastery GetMastery(this Obj_AI_Hero hero, Resolve resolve)
         {
-            Id = 4113,
-            Name = "Sorcery",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 67
-        };
+            return FindMastery(hero, MasteryPage.Resolve, (int)resolve);
+        }
 
-        #endregion
-
-        #region Butcher
-
-        public static Mastery Butcher = new Mastery
+        internal static bool IsActive(this Mastery mastery)
         {
-            Id = 4114,
-            Name = "Butcher",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 68
-        };
+            return mastery.Points >= 1;
+        }
 
-        #endregion
-
-        #region Expose Weakness
-
-        public static Mastery Expose_Weakness = new Mastery
+        internal static bool IsMoveImpaired(this Obj_AI_Hero hero)
         {
-            Id = 4121,
-            Name = "Expose Weakness",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 81
-        };
+            return hero.HasBuffOfType(BuffType.Fear) || hero.HasBuffOfType(BuffType.Slow) || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                   hero.HasBuffOfType(BuffType.Taunt);
+        }
 
-        #endregion
-
-        #region Brute Force
-
-        public static Mastery Brute_Force = new Mastery
+        internal enum Ferocity
         {
-            Id = 4122,
-            Name = "Brute Force",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 82
-        };
+            Fury = 65,
+            Sorcery = 68,
+            DoubleEdgedSword = 81,
+            Vampirism = 97,
+            NaturalTalent = 100,
+            Feast = 82,
+            BountyHunter = 113,
+            Oppresor = 114,
+            BatteringBlows = 129,
+            PiercingThoughts = 132,
+            WarlordsBloodlust = 145,
+            FervorofBattle = 146,
+            DeathFireTouch = 137
+        }
 
-        #endregion
-
-        #region Mental Force
-
-        public static Mastery Mental_Force = new Mastery
+        internal enum Cunning
         {
-            Id = 4123,
-            Name = "Mental Force",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 83
-        };
+            Wanderer = 65,
+            Savagery = 66,
+            RunicAffinity = 81,
+            SecretStash = 82,
+            Meditation = 98,
+            Merciless = 97,
+            Bandit = 114,
+            DangerousGame = 115,
+            Precision = 129,
+            Intelligence = 130,
+            StormraidersSurge = 145,
+            ThunderlordsDecree = 146,
+            WindspeakerBlessing = 147
+        }
 
-        #endregion
-
-        #region Feast
-
-        public static Mastery Feast = new Mastery
+        internal enum Resolve
         {
-            Id = 4124,
-            Name = "Feast",
-            Tree = MasteryPage.Offense,
-            RequiredId = 4114,
-            ByteId = 84
-        };
-
-        #endregion
-
-        #region Spell Weaving
-
-        public static Mastery Spell_Weaving = new Mastery
-        {
-            Id = 4131,
-            Name = "Spell Weaving",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 97
-        };
-
-        #endregion
-
-        #region Martial Mastery
-
-        public static Mastery Martial_Mastery = new Mastery
-        {
-            Id = 4132,
-            Name = "Martial Mastery",
-            Tree = MasteryPage.Offense,
-            RequiredId = 4122,
-            ByteId = 98
-        };
-
-        #endregion
-
-        #region Arcane Mastery
-
-        public static Mastery Arcane_Mastery = new Mastery
-        {
-            Id = 4133,
-            Name = "Arcane Mastery",
-            Tree = MasteryPage.Offense,
-            RequiredId = 4123,
-            ByteId = 99
-        };
-
-        #endregion
-
-        #region Executioner
-
-        public static Mastery Executioner = new Mastery
-        {
-            Id = 4134,
-            Name = "Executioner",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 100
-        };
-
-        #endregion
-
-        #region Blade Weaving
-
-        public static Mastery Blade_Weaving = new Mastery
-        {
-            Id = 4141,
-            Name = "Blade Weaving",
-            Tree = MasteryPage.Offense,
-            RequiredId = 4131,
-            ByteId = 113
-        };
-
-        #endregion
-
-        #region Warlord
-
-        public static Mastery Warlord = new Mastery
-        {
-            Id = 4142,
-            Name = "Warlord",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 114
-        };
-
-        #endregion
-
-        #region Archmage
-
-        public static Mastery Archmage = new Mastery
-        {
-            Id = 4143,
-            Name = "Archmage",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 115
-        };
-
-        #endregion
-
-        #region Dangerous Game
-
-        public static Mastery Dangerous_Game = new Mastery
-        {
-            Id = 4144,
-            Name = "Dangerous Game",
-            Tree = MasteryPage.Offense,
-            RequiredId = 4134,
-            ByteId = 116
-        };
-
-        #endregion
-
-        #region Frenzy
-
-        public static Mastery Frenzy = new Mastery
-        {
-            Id = 4151,
-            Name = "Frenzy",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 129
-        };
-
-        #endregion
-
-        #region Devastating Strikes
-
-        public static Mastery Devastating_Strikes = new Mastery
-        {
-            Id = 4152,
-            Name = "Devastating Strikes",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 130
-        };
-
-        #endregion
-
-        #region Arcane Blade
-
-        public static Mastery Arcane_Blade = new Mastery
-        {
-            Id = 4154,
-            Name = "Arcane Blade",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 132
-        };
-
-        #endregion
-
-        #region Havoc
-
-        public static Mastery Havoc = new Mastery
-        {
-            Id = 4162,
-            Name = "Havoc",
-            Tree = MasteryPage.Offense,
-            RequiredId = 0,
-            ByteId = 146
-        };
-
-        #endregion
-
-        #region Block
-
-        public static Mastery Block = new Mastery
-        {
-            Id = 4211,
-            Name = "Block",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 65
-        };
-
-        #endregion
-
-        #region Recovery
-
-        public static Mastery Recovery = new Mastery
-        {
-            Id = 4212,
-            Name = "Recovery",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 66
-        };
-
-        #endregion
-
-        #region Enchanted Armor
-
-        public static Mastery Enchanted_Armor = new Mastery
-        {
-            Id = 4213,
-            Name = "Enchanted Armor",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 67
-        };
-
-        #endregion
-
-        #region Tough Skin
-
-        public static Mastery Tough_Skin = new Mastery
-        {
-            Id = 4214,
-            Name = "Tough Skin",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 68
-        };
-
-        #endregion
-
-        #region Unyielding
-
-        public static Mastery Unyielding = new Mastery
-        {
-            Id = 4221,
-            Name = "Unyielding",
-            Tree = MasteryPage.Defense,
-            RequiredId = 4211,
-            ByteId = 81
-        };
-
-        #endregion
-
-        #region Veteran's Scars
-
-        public static Mastery Veterans_Scars = new Mastery
-        {
-            Id = 4222,
-            Name = "Veteran's Scars",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 82
-        };
-
-        #endregion
-
-        #region Bladed Armor
-
-        public static Mastery Bladed_Armor = new Mastery
-        {
-            Id = 4224,
-            Name = "Bladed Armor",
-            Tree = MasteryPage.Defense,
-            RequiredId = 4214,
-            ByteId = 84
-        };
-
-        #endregion
-
-        #region Oppression
-
-        public static Mastery Oppression = new Mastery
-        {
-            Id = 4231,
-            Name = "Oppression",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 97
-        };
-
-        #endregion
-
-        #region Juggernaut
-
-        public static Mastery Juggernaut = new Mastery
-        {
-            Id = 4232,
-            Name = "Juggernaut",
-            Tree = MasteryPage.Defense,
-            RequiredId = 4222,
-            ByteId = 98
-        };
-
-        #endregion
-
-        #region Hardiness
-
-        public static Mastery Hardiness = new Mastery
-        {
-            Id = 4233,
-            Name = "Hardiness",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 99
-        };
-
-        #endregion
-
-        #region Resistance
-
-        public static Mastery Resistance = new Mastery
-        {
-            Id = 4234,
-            Name = "Resistance",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 100
-        };
-
-        #endregion
-
-        #region Perseverance
-
-        public static Mastery Perseverance_ = new Mastery
-        {
-            Id = 4241,
-            Name = "Perseverance ",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 113
-        };
-
-        #endregion
-
-        #region Swiftness
-
-        public static Mastery Swiftness = new Mastery
-        {
-            Id = 4242,
-            Name = "Swiftness",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 114
-        };
-
-        #endregion
-
-        #region Reinforced Armor
-
-        public static Mastery Reinforced_Armor = new Mastery
-        {
-            Id = 4243,
-            Name = "Reinforced Armor",
-            Tree = MasteryPage.Defense,
-            RequiredId = 4233,
-            ByteId = 115
-        };
-
-        #endregion
-
-        #region Evasive
-
-        public static Mastery Evasive = new Mastery
-        {
-            Id = 4244,
-            Name = "Evasive",
-            Tree = MasteryPage.Defense,
-            RequiredId = 4234,
-            ByteId = 116
-        };
-
-        #endregion
-
-        #region Second Wind
-
-        public static Mastery Second_Wind = new Mastery
-        {
-            Id = 4251,
-            Name = "Second Wind",
-            Tree = MasteryPage.Defense,
-            RequiredId = 4241,
-            ByteId = 129
-        };
-
-        #endregion
-
-        #region Legendary Guardian
-
-        public static Mastery Legendary_Guardian = new Mastery
-        {
-            Id = 4252,
-            Name = "Legendary Guardian",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 130
-        };
-
-        #endregion
-
-        #region Runic Blessing
-
-        public static Mastery Runic_Blessing = new Mastery
-        {
-            Id = 4253,
-            Name = "Runic Blessing",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 131
-        };
-
-        #endregion
-
-        #region Tenacious
-
-        public static Mastery Tenacious = new Mastery
-        {
-            Id = 4262,
-            Name = "Tenacious",
-            Tree = MasteryPage.Defense,
-            RequiredId = 0,
-            ByteId = 146
-        };
-
-        #endregion
-
-        #region Phasewalker
-
-        public static Mastery Phasewalker = new Mastery
-        {
-            Id = 4311,
-            Name = "Phasewalker",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 65
-        };
-
-        #endregion
-
-        #region Fleet of Foot
-
-        public static Mastery Fleet_of_Foot = new Mastery
-        {
-            Id = 4312,
-            Name = "Fleet of Foot",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 66
-        };
-
-        #endregion
-
-        #region Meditation
-
-        public static Mastery Meditation = new Mastery
-        {
-            Id = 4313,
-            Name = "Meditation",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 67
-        };
-
-        #endregion
-
-        #region Scout
-
-        public static Mastery Scout = new Mastery
-        {
-            Id = 4314,
-            Name = "Scout",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 68
-        };
-
-        #endregion
-
-        #region Summoner's Insight
-
-        public static Mastery Summoners_Insight = new Mastery
-        {
-            Id = 4322,
-            Name = "Summoner's Insight",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 82
-        };
-
-        #endregion
-
-        #region Strength of Spirit
-
-        public static Mastery Strength_of_Spirit = new Mastery
-        {
-            Id = 4323,
-            Name = "Strength of Spirit",
-            Tree = MasteryPage.Utility,
-            RequiredId = 4313,
-            ByteId = 83
-        };
-
-        #endregion
-
-        #region Alchemist
-
-        public static Mastery Alchemist = new Mastery
-        {
-            Id = 4324,
-            Name = "Alchemist",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 84
-        };
-
-        #endregion
-
-        #region Greed
-
-        public static Mastery Greed = new Mastery
-        {
-            Id = 4331,
-            Name = "Greed",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 97
-        };
-
-        #endregion
-
-        #region Runic Affinity
-
-        public static Mastery Runic_Affinity = new Mastery
-        {
-            Id = 4332,
-            Name = "Runic Affinity",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 98
-        };
-
-        #endregion
-
-        #region Vampirism
-
-        public static Mastery Vampirism = new Mastery
-        {
-            Id = 4333,
-            Name = "Vampirism",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 99
-        };
-
-        #endregion
-
-        #region Culinary Master
-
-        public static Mastery Culinary_Master = new Mastery
-        {
-            Id = 4334,
-            Name = "Culinary Master",
-            Tree = MasteryPage.Utility,
-            RequiredId = 4324,
-            ByteId = 100
-        };
-
-        #endregion
-
-        #region Scavenger
-
-        public static Mastery Scavenger = new Mastery
-        {
-            Id = 4341,
-            Name = "Scavenger",
-            Tree = MasteryPage.Utility,
-            RequiredId = 4331,
-            ByteId = 113
-        };
-
-        #endregion
-
-        #region Wealth
-
-        public static Mastery Wealth = new Mastery
-        {
-            Id = 4342,
-            Name = "Wealth",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 114
-        };
-
-        #endregion
-
-        #region Expanded Mind
-
-        public static Mastery Expanded_Mind = new Mastery
-        {
-            Id = 4343,
-            Name = "Expanded Mind",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 115
-        };
-
-        #endregion
-
-        #region Inspiration
-
-        public static Mastery Inspiration = new Mastery
-        {
-            Id = 4344,
-            Name = "Inspiration",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 116
-        };
-
-        #endregion
-
-        #region Bandit
-
-        public static Mastery Bandit = new Mastery
-        {
-            Id = 4352,
-            Name = "Bandit",
-            Tree = MasteryPage.Utility,
-            RequiredId = 4342,
-            ByteId = 130
-        };
-
-        #endregion
-
-        #region Intelligence
-
-        public static Mastery Intelligence = new Mastery
-        {
-            Id = 4353,
-            Name = "Intelligence",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 131
-        };
-
-        #endregion
-
-        #region Wanderer
-
-        public static Mastery Wanderer = new Mastery
-        {
-            Id = 4362,
-            Name = "Wanderer",
-            Tree = MasteryPage.Utility,
-            RequiredId = 0,
-            ByteId = 146
-        };
-
-        #endregion
-
-        #endregion
+            Recovery = 65,
+            Unyielding = 66,
+            Explorer = 81,
+            ToughSkin = 82,
+            RunicArmor = 97,
+            VeteransScar = 98,
+            Insight = 113,
+            Swiftness = 129,
+            LegendaryGuardian = 130,
+            GraspoftheUndying = 145,
+            StrengthoftheAges = 146,
+            BondofStones = 147
+        }
     }
 }
