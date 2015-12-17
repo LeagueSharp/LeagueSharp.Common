@@ -64,26 +64,7 @@ namespace LeagueSharp.Common
         private static Menu _configMenu;
         private static Obj_AI_Hero _selectedTargetObjAiHero;
 
-        private static bool UsingCustom;
-
-        public static bool CustomTS
-        {
-            get { return UsingCustom; }
-            set
-            {
-                UsingCustom = value;
-                if (value)
-                {
-                    Game.OnWndProc -= GameOnOnWndProc;
-                    Drawing.OnDraw -= DrawingOnOnDraw;
-                }
-                else
-                {
-                    Game.OnWndProc += GameOnOnWndProc;
-                    Drawing.OnDraw += DrawingOnOnDraw;
-                }
-            }
-        }
+        public static bool CustomTS { get; set; }
 
         #endregion
 
@@ -278,11 +259,13 @@ namespace LeagueSharp.Common
                     new MenuItem("TargetingMode", "Target Mode").SetShared()
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
 
-
                 CommonMenu.Instance.AddSubMenu(config);
-
-                Game.OnWndProc += GameOnOnWndProc;
-                Drawing.OnDraw += DrawingOnOnDraw;
+                    
+                if (!CustomTS)
+                {
+                    Game.OnWndProc += GameOnOnWndProc;
+                    Drawing.OnDraw += DrawingOnOnDraw;
+                }
             };
         }
 
