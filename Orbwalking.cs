@@ -116,7 +116,7 @@ namespace LeagueSharp.Common
             "dariusnoxiantacticsonh", "fioraflurry", "garenq","gravesmove",
             "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane",
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
-            "gangplankqwrapper", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+            "gangplankqwrapper", "poppypassiveattack", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
             "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq",
             "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism", "illaoiw"
         };
