@@ -221,7 +221,7 @@ namespace LeagueSharp.Common
                              source.CalcDamage(
                                  target,
                                  DamageType.Magical,
-                                 6d + source.Level + (0.1d * source.AbilityPower()))),
+                                 6d + source.Level + (0.1d * source.TotalMagicalDamage))),
             };
             AttackPassives.Add(p);
 
@@ -280,7 +280,7 @@ namespace LeagueSharp.Common
                 ChampionName = "Ekko",
                 IsActive = (source, target) => (target.GetBuffCount("EkkoStacks") == 2),
                 GetDamage = (source, target) =>
-                 (float)source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.AbilityPower() * 0.8)),
+                 (float)source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.TotalMagicalDamage * 0.8)),
             };
             AttackPassives.Add(p);
             
@@ -290,7 +290,7 @@ namespace LeagueSharp.Common
                 IsActive = (source, target) => (target.HealthPercent < 30),
                 GetDamage = (source, target) =>
                 {
-                    float dmg = (float)source.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Magical, (target.MaxHealth - target.Health) * (5 + Math.Floor(source.AbilityPower() / 100) * 2.2f) / 100);
+                    float dmg = (float)source.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Magical, (target.MaxHealth - target.Health) * (5 + Math.Floor(source.TotalMagicalDamage / 100) * 2.2f) / 100);
                     if (!(target is Obj_AI_Hero) && dmg > 150f)
                         dmg = 150f;
                     return dmg;
@@ -393,7 +393,7 @@ namespace LeagueSharp.Common
                             source.CalcDamage(
                                 target,
                                 DamageType.Magical,
-                                (float)0.15 * source.AbilityPower()
+                                (float)0.15 * source.TotalMagicalDamage
                                 + new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 }[
                                     source.Level - 1]),
             };
@@ -473,7 +473,7 @@ namespace LeagueSharp.Common
                              source.CalcDamage(
                                  target,
                                  DamageType.Magical,
-                                 source.Spellbook.GetSpell(SpellSlot.E).Level * 10 + source.AbilityPower() * 0.3)),
+                                 source.Spellbook.GetSpell(SpellSlot.E).Level * 10 + source.TotalMagicalDamage * 0.3)),
             };
             AttackPassives.Add(p);
 
@@ -577,7 +577,7 @@ namespace LeagueSharp.Common
                             source.CalcDamage(
                                 target,
                                 DamageType.Magical,
-                                (float)0.5d * source.AbilityPower()
+                                (float)0.5d * source.TotalMagicalDamage
                                 + new float[]
                                       { 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 110, 130, 150, 170, 190, 210 }[
                                           source.Level - 1]),
@@ -597,7 +597,7 @@ namespace LeagueSharp.Common
                             source.CalcDamage(
                                 target,
                                 DamageType.Magical,
-                                (float)0.25d * source.AbilityPower()
+                                (float)0.25d * source.TotalMagicalDamage
                                 + new float[]
                                       { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
                                           source.Level - 1]),
@@ -641,7 +641,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 110, 145, 180, 215 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                                     + 0.6 * source.FlatPhysicalDamageMod
                             },
                         //R
@@ -651,7 +651,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 300, 400 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -666,7 +666,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //Q Return
                         new DamageSpell
@@ -675,7 +675,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //W => First FF to target
                         new DamageSpell
@@ -684,7 +684,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //W => Additional FF to already FF target
                         new DamageSpell
@@ -693,7 +693,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 12, 19.5, 27, 34.5, 42 }[level]
-                                    + 0.12 * source.AbilityPower()
+                                    + 0.12 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -702,7 +702,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 95, 130, 165, 200 }[level]
-                                    + 0.50 * source.AbilityPower()
+                                    + 0.50 * source.TotalMagicalDamage
                             },
                         //R, per dash
                         new DamageSpell
@@ -711,7 +711,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                     });
 
@@ -726,7 +726,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 35, 55, 75, 95, 115 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //Q Detonation
                         new DamageSpell
@@ -735,7 +735,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 45, 70, 95, 120, 145 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -744,7 +744,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 30, 55, 80, 105, 130 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                                     + 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //R
@@ -754,7 +754,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 175, 250 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -769,7 +769,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -778,7 +778,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 110, 165, 220, 275 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -793,7 +793,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 130, 180, 230, 280 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //W - per second
                         new DamageSpell
@@ -803,7 +803,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 8, 12, 16, 20, 24 }[level]
                                     + (new[] { 0.01, 0.015, 0.02, 0.025, 0.03 }[level]
-                                       + 0.01 * source.AbilityPower() / 100) * target.MaxHealth
+                                       + 0.01 * source.TotalMagicalDamage / 100) * target.MaxHealth
                             },
                         //E
                         new DamageSpell
@@ -812,7 +812,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 100, 125, 150, 175 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -821,7 +821,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                     });
 
@@ -836,7 +836,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //Q - max
                         new DamageSpell
@@ -845,7 +845,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level] * 2
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -854,7 +854,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 55, 85, 115, 145, 175 }[level]
-                                    + 0.5 * source.AbilityPower()) * (target.HasBuff("chilled") ? 2 : 1)
+                                    + 0.5 * source.TotalMagicalDamage) * (target.HasBuff("chilled") ? 2 : 1)
                             },
                         //R - per second
                         new DamageSpell
@@ -863,7 +863,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160 }[level]
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                     });
 
@@ -878,7 +878,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 115, 150, 185, 220 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -887,7 +887,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.85 * source.AbilityPower()
+                                    + 0.85 * source.TotalMagicalDamage
                             },
                         //R - total
                         new DamageSpell
@@ -896,7 +896,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 210, 335, 460 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -920,7 +920,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 425, 600 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R - Min
                         new DamageSpell
@@ -929,7 +929,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 250, 425, 600 }[level]
-                                     + 1 * source.AbilityPower()) / 2
+                                     + 1 * source.TotalMagicalDamage) / 2
                             },
                     });
 
@@ -944,7 +944,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 65, 85, 105, 125, 145 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W - Soldier auto attacks
                         new DamageSpell
@@ -953,7 +953,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 60, 75, 80, 90 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -962,7 +962,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -971,7 +971,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 225, 300 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -986,7 +986,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 135, 190, 245, 300 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1003,7 +1003,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 375, 500 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1018,7 +1018,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 125, 170, 215, 260 }[level]
-                                    + 0.65 * source.AbilityPower()
+                                    + 0.65 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1033,7 +1033,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.65 * source.AbilityPower()
+                                    + 0.65 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -1042,7 +1042,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 120, 165, 210, 255 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1051,7 +1051,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.55 * source.AbilityPower()
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -1060,7 +1060,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1084,7 +1084,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1108,7 +1108,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -1132,7 +1132,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 115, 155, 195, 235 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -1141,7 +1141,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 15, 20, 25, 30 }[level]
-                                    + 0.1 * source.AbilityPower()
+                                    + 0.1 * source.TotalMagicalDamage
                             },
                         //E 
                         new DamageSpell
@@ -1150,7 +1150,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 80, 105, 130, 155 }[level]
-                                    + 0.55 * source.AbilityPower()
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -1159,7 +1159,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1174,7 +1174,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 135, 190, 245, 305 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -1183,7 +1183,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 125, 175, 225, 275 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1192,7 +1192,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 35, 50, 65, 80 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -1201,7 +1201,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 300, 475, 650 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1216,7 +1216,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 130, 180, 230, 280 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                                     + 0.5 * source.FlatPhysicalDamageMod
                             },
                         //W 
@@ -1226,7 +1226,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.4 * source.AbilityPower() 
+                                    + 0.4 * source.TotalMagicalDamage 
                             },
 
                         //W - Burn
@@ -1236,7 +1236,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 30, 45, 60, 75, 90 }[level] + (1.5 * source.FlatPhysicalDamageMod)
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
 
 
@@ -1256,7 +1256,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 130, 160 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                                     + new double[] { 20, 50, 80 }[level] / 100
                                     * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
@@ -1267,7 +1267,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 195, 240 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                                     + new double[] { 30, 75, 120 }[level] / 100
                                     * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
@@ -1315,7 +1315,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 95, 130, 165, 200 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -1324,7 +1324,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 22, 34, 46, 58, 70 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //R - total
                         new DamageSpell
@@ -1333,7 +1333,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 160, 220 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1370,7 +1370,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 35, 50, 65, 80, 95 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             }
                     });
 
@@ -1418,7 +1418,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 75, 90, 105, 120 }[level]
-                                    + 0.1 * source.AbilityPower()
+                                    + 0.1 * source.TotalMagicalDamage
                             },
                         // Q - Incoming
                         new DamageSpell
@@ -1427,7 +1427,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 85, 110, 135, 160 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         // W
                         new DamageSpell
@@ -1436,7 +1436,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 195, 240, 285, 330 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         // E
                         new DamageSpell
@@ -1445,7 +1445,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 80, 110, 140, 170 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         // R
                         new DamageSpell
@@ -1454,7 +1454,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 350, 500 }[level]
-                                    + 1.3 * source.AbilityPower()
+                                    + 1.3 * source.TotalMagicalDamage
                             }
                     });
 
@@ -1469,7 +1469,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 75, 110, 145, 180 }[level]
-                                    + (0.08 + 0.03 / 100 * source.AbilityPower()) * target.Health
+                                    + (0.08 + 0.03 / 100 * source.TotalMagicalDamage) * target.Health
                             },
                         //Q - Spider
                         new DamageSpell
@@ -1478,7 +1478,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + (0.08 + 0.03 / 100 * source.AbilityPower())
+                                    + (0.08 + 0.03 / 100 * source.TotalMagicalDamage)
                                     * (target.MaxHealth - target.Health)
                             },
                         //W - Human
@@ -1488,7 +1488,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 125, 175, 225, 275 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1504,7 +1504,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 40, 50, 60, 70, 80 }[level]
                                     + new double[] { 35, 40, 45, 50, 55 }[level] / 100
-                                    * source.AbilityPower()
+                                    * source.TotalMagicalDamage
                                     + new double[] { 50, 55, 60, 65, 70 }[level] / 100
                                     * source.FlatPhysicalDamageMod
                             },
@@ -1515,7 +1515,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 1 * source.AbilityPower() + 1 * source.FlatPhysicalDamageMod
+                                    + 1 * source.TotalMagicalDamage + 1 * source.FlatPhysicalDamageMod
                             },
                         //R - total
                         new DamageSpell
@@ -1524,7 +1524,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new[] { 0.15, 0.20, 0.25 }[level]
-                                     + 0.01 / 100 * source.AbilityPower()) * target.Health
+                                     + 0.01 / 100 * source.TotalMagicalDamage) * target.Health
                             },
                     });
 
@@ -1539,7 +1539,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 35, 55, 75, 95, 115 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                                     + 1.1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //W
@@ -1549,7 +1549,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1558,7 +1558,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 125, 175, 225, 275 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                                     + 0.5 * source.FlatPhysicalDamageMod
                             },
                         //R
@@ -1568,7 +1568,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 350, 500, 650 }[level]
-                                    + 0.9 * source.AbilityPower() + 1 * source.FlatPhysicalDamageMod
+                                    + 0.9 * source.TotalMagicalDamage + 1 * source.FlatPhysicalDamageMod
                             },
                     });
 
@@ -1583,7 +1583,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //E - Per bounce
                         new DamageSpell
@@ -1592,7 +1592,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 65, 85, 105, 125, 145 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //R - Per second
                         new DamageSpell
@@ -1601,7 +1601,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 125, 225, 325 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1625,7 +1625,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 90, 130, 170, 210, 250 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1640,7 +1640,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 25, 40, 55, 70 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //W - Per attack
                         new DamageSpell
@@ -1649,7 +1649,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 15, 20, 25, 30 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1658,7 +1658,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 120, 170, 220, 270 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -1667,7 +1667,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 325, 450 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1682,7 +1682,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 135, 190, 245, 300 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1691,7 +1691,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R - max
                         new DamageSpell
@@ -1700,7 +1700,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 360, 540, 720 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1724,7 +1724,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 70, 90 }[level]
-                                    + 0.1 * source.AbilityPower()
+                                    + 0.1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1792,7 +1792,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 20, 30, 40, 50 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                                     + new double[] { 6, 8, 10, 12, 14 }[level] / 100 * target.MaxHealth
                             },
                         //W - big
@@ -1829,7 +1829,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 300, 400 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                                     + 0.2 * source.FlatPhysicalDamageMod
                             },
                     });
@@ -1845,7 +1845,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -1855,7 +1855,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 20, 50, 80, 110, 140 }[level]
                                     + 8 / 100 * target.MaxHealth
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1864,7 +1864,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 130, 180, 230, 280 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -1873,7 +1873,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 300, 400 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1906,7 +1906,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R - Max damage
                         new DamageSpell
@@ -1939,7 +1939,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 30, 40, 50, 60 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1957,7 +1957,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -1972,7 +1972,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -1982,7 +1982,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 135, 180, 225 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -1991,7 +1991,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2001,7 +2001,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 150, 200, 250 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2033,7 +2033,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R - per blade
                         new DamageSpell
@@ -2042,7 +2042,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                                     + 0.6 * source.FlatPhysicalDamageMod
                             },
                     });
@@ -2058,7 +2058,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 85, 110, 135, 160 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2067,7 +2067,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 115, 170, 225, 280 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2091,7 +2091,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2115,7 +2115,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 1 * source.FlatPhysicalDamageMod + 0.6 * source.AbilityPower()
+                                    + 1 * source.FlatPhysicalDamageMod + 0.6 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2124,7 +2124,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 75, 110, 145, 180 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2142,7 +2142,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 160, 220 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2175,7 +2175,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new[] { 25, 40, 55, 70, 85, 100 }[level]
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
 
                         //E
@@ -2217,7 +2217,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 135, 190, 245, 300 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R - Min
                         new DamageSpell
@@ -2254,7 +2254,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 125, 170, 215, 260 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //Q - mantra
                         new DamageSpell
@@ -2265,7 +2265,7 @@ namespace LeagueSharp.Common
                                     new double[] { 80, 125, 170, 215, 260 }[level]
                                     + new double[] { 25, 75, 125, 175 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2274,7 +2274,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                         //W - mantra
                         new DamageSpell
@@ -2283,7 +2283,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2298,7 +2298,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 40, 60, 80, 100, 120 }[level]
-                                     + 0.3 * source.AbilityPower()) * 2
+                                     + 0.3 * source.TotalMagicalDamage) * 2
                             },
                         //Q - Multi-target
                         new DamageSpell
@@ -2307,7 +2307,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 60, 80, 100, 120 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2316,7 +2316,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 30, 50, 70, 90, 110 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2325,7 +2325,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 400, 550 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2340,7 +2340,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 95, 120, 145, 170 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2349,13 +2349,13 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //W - pasive
                         new DamageSpell
                             {
                                 Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical,
-                                Damage = (source, target, level) => 20 + 0.1 * source.AbilityPower()
+                                Damage = (source, target, level) => 20 + 0.1 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2364,7 +2364,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 105, 130, 155, 180 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //R - Base
                         new DamageSpell
@@ -2395,7 +2395,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 85, 110, 135, 160 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //Q - mark
                         new DamageSpell
@@ -2404,7 +2404,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 15, 30, 45, 60, 75 }[level]
-                                    + 0.15 * source.AbilityPower()
+                                    + 0.15 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2414,7 +2414,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 40, 75, 110, 145, 180 }[level]
                                     + 0.6 * source.FlatPhysicalDamageMod
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2423,7 +2423,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 70, 100, 130, 160 }[level]
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                         //R - per dagger
                         new DamageSpell
@@ -2433,7 +2433,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     (new double[] { 350, 550, 750 }[level]
                                      + 3.75 * source.FlatPhysicalDamageMod
-                                     + 2.5 * source.AbilityPower()) / 10
+                                     + 2.5 * source.TotalMagicalDamage) / 10
                             },
                         //R - max
                         new DamageSpell
@@ -2443,7 +2443,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 350, 550, 750 }[level]
                                     + 3.75 * source.FlatPhysicalDamageMod
-                                    + 2.5 * source.AbilityPower()
+                                    + 2.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2458,7 +2458,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 1 * source.FlatPhysicalDamageMod + 0.6 * source.AbilityPower()
+                                    + 1 * source.FlatPhysicalDamageMod + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2467,7 +2467,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 30, 40, 50, 60 }[level]
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2482,7 +2482,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 115, 155, 195, 235 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                             },
                         //W - Passive
                         new DamageSpell
@@ -2500,7 +2500,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 65, 95, 125, 155, 185 }[level]
-                                    + 0.55 * source.AbilityPower()
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2509,7 +2509,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 85, 125, 165, 205, 245 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2518,7 +2518,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 145, 210 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2595,7 +2595,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 130, 180, 230, 280 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2621,7 +2621,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2631,7 +2631,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     (new double[] { 70, 110, 150 }[level]
                                     + 0.65 * source.FlatPhysicalDamageMod
-                                    + 0.25 * source.AbilityPower()) * 
+                                    + 0.25 * source.TotalMagicalDamage) * 
                                     (target.HealthPercent < 25 ? 3 : (target.HealthPercent < 50 ? 2 : 1))
                             },
                     });
@@ -2731,7 +2731,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 80, 105, 130, 155 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //Q . explosion
                         new DamageSpell
@@ -2740,7 +2740,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 80, 105, 130, 155 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2749,7 +2749,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 85, 125, 165, 205, 245 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2758,7 +2758,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2816,7 +2816,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 70, 100, 130, 160 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2825,7 +2825,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2834,7 +2834,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2843,7 +2843,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2858,7 +2858,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 100, 130, 160, 190 }[level]
-                                    + 0.65 * source.AbilityPower()
+                                    + 0.65 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2867,7 +2867,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2876,7 +2876,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2885,7 +2885,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2910,7 +2910,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                         //R - per shot
                         new DamageSpell
@@ -2918,7 +2918,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 40, 50, 60 }[level] + 0.1 * source.AbilityPower()
+                                    new double[] { 40, 50, 60 }[level] + 0.1 * source.TotalMagicalDamage
                                     + 0.25 * source.FlatPhysicalDamageMod
                             },
                     });
@@ -2934,7 +2934,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 125, 170, 215, 260 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2943,7 +2943,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 110, 140, 170, 200 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2958,7 +2958,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -2967,7 +2967,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2976,7 +2976,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 300, 400, 500 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2991,7 +2991,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 120, 170, 220, 270 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
 
                         //W
@@ -3010,7 +3010,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level] + 0.3 * source.Armor
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3019,7 +3019,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 300, 400 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3034,7 +3034,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 135, 190, 245, 300 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -3043,7 +3043,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 4, 4.5, 5, 5.5, 6 }[level] / 100
-                                     + 0.01 / 100 * source.AbilityPower()) * target.MaxHealth
+                                     + 0.01 / 100 * source.TotalMagicalDamage) * target.MaxHealth
                             },
                         //E
                         new DamageSpell
@@ -3052,7 +3052,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 140, 200, 260, 320 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3061,7 +3061,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 400, 550 }[level]
-                                    + 1.3 * source.AbilityPower()
+                                    + 1.3 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3076,7 +3076,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -3085,7 +3085,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 9, 10, 11, 12, 13 }[level] / 100
-                                     + 0.03 / 100 * source.AbilityPower()) * target.MaxHealth
+                                     + 0.03 / 100 * source.TotalMagicalDamage) * target.MaxHealth
                             },
                         //E - impact
                         new DamageSpell
@@ -3094,7 +3094,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 60, 80, 100, 120 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E - explosion
                         new DamageSpell
@@ -3103,7 +3103,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3112,7 +3112,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 150, 200 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3153,7 +3153,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 35, 50, 65, 80 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                                     + 0.85 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //Q - Second target
@@ -3163,7 +3163,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 70, 100, 130, 160 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                                     + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //W
@@ -3181,7 +3181,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 90, 145, 200, 255, 310 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //R - per wave
                         new DamageSpell
@@ -3190,7 +3190,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     0.75 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3213,7 +3213,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 70, 115, 160, 205, 250 }[level] + 0.6 * source.AbilityPower()
+                                    new double[] { 70, 115, 160, 205, 250 }[level] + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3245,7 +3245,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 110, 140, 170, 200 }[level]
-                                    + 1 * source.FlatPhysicalDamageMod + 0.4 * source.AbilityPower()
+                                    + 1 * source.FlatPhysicalDamageMod + 0.4 * source.TotalMagicalDamage
                             },
                         //W - per second
                         new DamageSpell
@@ -3254,7 +3254,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 24, 38, 52, 66, 80 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3263,7 +3263,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R - total
                         new DamageSpell
@@ -3272,7 +3272,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 24, 29, 34 }[level] / 100
-                                     + 0.04 / 100 * source.AbilityPower()) * target.MaxHealth
+                                     + 0.04 / 100 * source.TotalMagicalDamage) * target.MaxHealth
                             },
                     });
 
@@ -3287,7 +3287,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 135, 190, 245, 300 }[level]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                         //W - per tick
                         new DamageSpell
@@ -3296,7 +3296,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 8, 16, 24, 32, 40 }[level]
-                                    + 0.11 * source.AbilityPower()
+                                    + 0.11 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3305,7 +3305,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 225, 300 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3320,7 +3320,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 130, 185, 240, 295 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -3329,7 +3329,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3338,7 +3338,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 25, 40, 55, 70, 85 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3347,7 +3347,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3373,7 +3373,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 95, 135, 175, 215 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E - per second
                         new DamageSpell
@@ -3382,7 +3382,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 11, 19, 27, 35, 43 }[level]
-                                    + 0.12 * source.AbilityPower()
+                                    + 0.12 * source.TotalMagicalDamage
                             },
                         //R - per second
                         new DamageSpell
@@ -3391,7 +3391,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 3, 4, 5 }[level] / 100
-                                     + 0.01 / 100 * source.AbilityPower()) * target.MaxHealth
+                                     + 0.01 / 100 * source.TotalMagicalDamage) * target.MaxHealth
                             },
                     });
 
@@ -3406,7 +3406,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -3415,7 +3415,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 30, 40, 50, 60, 70 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3424,7 +3424,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R - main target
                         new DamageSpell
@@ -3433,7 +3433,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 325, 450 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //R - missile
                         new DamageSpell
@@ -3442,7 +3442,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 125, 175, 225 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3457,7 +3457,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 77.5, 95, 112.5, 130 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //Q - cat
                         new DamageSpell
@@ -3467,7 +3467,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) => {
                                      var dmg = (new double[] { 4, 20, 50, 90 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
-                                     + 0.36 * source.AbilityPower()
+                                     + 0.36 * source.TotalMagicalDamage
                                      + 0.75 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))
                                     * ((target.MaxHealth - target.Health) / target.MaxHealth * 1.5 + 1);
                                         dmg *= target.HasBuff("nidaleepassivehunted") ? 1.33 : 1.0;
@@ -3481,7 +3481,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 80, 120, 160, 200 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //W - cat
                         new DamageSpell
@@ -3491,7 +3491,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 50, 100, 150, 200 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //E - cat
                         new DamageSpell
@@ -3501,7 +3501,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 70, 130, 190, 250 }[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3525,7 +3525,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 260 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3557,7 +3557,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 85, 130, 175, 225, 275 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R - Max Damage
                         new DamageSpell
@@ -3566,7 +3566,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 625, 875, 1125 }[level]
-                                    + 2.5 * source.AbilityPower()
+                                    + 2.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3605,7 +3605,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -3614,7 +3614,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3623,7 +3623,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -3632,7 +3632,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 225, 300 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3657,7 +3657,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 75, 100, 125, 150 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //E - per strike
                         new DamageSpell
@@ -3676,7 +3676,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 400, 700, 1000 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R - min
                         new DamageSpell
@@ -3685,7 +3685,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 400, 700, 1000 }[level]
-                                     + 1 * source.AbilityPower()) * 0.5
+                                     + 1 * source.TotalMagicalDamage) * 0.5
                             },
                     });
 
@@ -3720,7 +3720,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E - without colliding
                         new DamageSpell
@@ -3762,7 +3762,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) => {
                                         double damage = (new double[] { 20, 45, 70, 95, 120}[level] + (new double[] { 0.8, 0.9, 1.0, 1.1, 1.2 }[level] * source.TotalAttackDamage)
-                                        + 0.35 * source.AbilityPower());
+                                        + 0.35 * source.TotalMagicalDamage);
                                         damage += damage * ((100 - target.HealthPercent) / 100);
                                         return damage;
                                     }
@@ -3796,7 +3796,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 150, 200, 250, 300 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -3813,7 +3813,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 65, 130, 195 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3883,7 +3883,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 30, 60, 120 }[level]
-                                    + 0.1 * source.AbilityPower()
+                                    + 0.1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -3918,7 +3918,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 80, 110, 140, 170 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3977,7 +3977,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 135, 195, 255, 315 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //Q - Danger Zone total damage
                         new DamageSpell
@@ -3986,7 +3986,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new[] { 112.5, 202.5, 292.5, 382.5, 472.5 }[level]
-                                    + 1.5 * source.AbilityPower()
+                                    + 1.5 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -3995,7 +3995,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 45, 70, 95, 120, 145 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E - Danger Zone
                         new DamageSpell
@@ -4004,7 +4004,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new[] { 67.5, 105, 142.5, 180, 217.5 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R - per second
                         new DamageSpell
@@ -4013,7 +4013,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 130, 185, 240 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R - Total
                         new DamageSpell
@@ -4022,7 +4022,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 650, 925, 1200 }[level]
-                                    + 1.5 * source.AbilityPower()
+                                    + 1.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4037,7 +4037,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 85, 110, 135, 160 }[level]
-                                    + 0.55 * source.AbilityPower()
+                                    + 0.55 * source.TotalMagicalDamage
                                     + new double[] { 2, 2.5, 3, 3.5, 4 }[level] / 100 * source.MaxMana
                             },
                         //W
@@ -4047,7 +4047,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 100, 120, 140, 160 }[level]
-                                    + 0.4 * source.AbilityPower() + 0.025 * source.MaxMana
+                                    + 0.4 * source.TotalMagicalDamage + 0.025 * source.MaxMana
                             },
                         //E
                         new DamageSpell
@@ -4056,7 +4056,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 36, 52, 68, 84, 100 }[level]
-                                    + 0.2 * source.AbilityPower() + 0.02 * source.MaxMana
+                                    + 0.2 * source.TotalMagicalDamage + 0.02 * source.MaxMana
                             },
                     });
 
@@ -4089,7 +4089,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new[] { 10, 17.5, 25, 32.5, 40 }[level]
                                     + (new double[] { 4, 6, 8, 10, 12 }[level] / 100) * source.MaxHealth
-                                    + 0.15 * source.AbilityPower()
+                                    + 0.15 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4098,7 +4098,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4107,7 +4107,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4131,7 +4131,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 35, 50, 65, 80, 95 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4140,7 +4140,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 90, 130, 170, 210 }[level]
-                                    + 1 * source.FlatPhysicalDamageMod + 1 * source.AbilityPower()
+                                    + 1 * source.FlatPhysicalDamageMod + 1 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4149,7 +4149,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 300, 450, 600 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4164,7 +4164,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4173,7 +4173,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 85, 120, 155, 190 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4206,7 +4206,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4215,7 +4215,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 175, 300, 425 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4230,7 +4230,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 22, 34, 46, 58, 70 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4239,7 +4239,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 65, 80, 95, 110 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                                     + new double[] { 4, 5.5, 7, 8.5, 10 }[level] / 100
                                     * target.MaxHealth
                             },
@@ -4274,7 +4274,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                                     + new double[] { 10, 11, 12, 13, 14 }[level] / 100
                                     * target.MaxHealth
                             },
@@ -4285,7 +4285,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4294,7 +4294,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 70, 105, 140, 175, 210 }[level]
-                                     + 0.4 * source.AbilityPower()) * 1.5
+                                     + 0.4 * source.TotalMagicalDamage) * 1.5
                             },
                         //R
                         new DamageSpell
@@ -4329,7 +4329,7 @@ namespace LeagueSharp.Common
                                     new double[] { 25, 45, 65, 85, 105 }[level]
                                     + new double[] { 70, 80, 90, 100, 110 }[level] / 100
                                     * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W - bounce
                         new DamageSpell
@@ -4362,7 +4362,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 75, 110, 145, 180 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //R - total
                         new DamageSpell
@@ -4371,7 +4371,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 20, 60, 100 }[level]
-                                     + 0.5 * source.AbilityPower()) + (0.60 * source.TotalAttackDamage)
+                                     + 0.5 * source.TotalMagicalDamage) + (0.60 * source.TotalAttackDamage)
                             },
                     });
 
@@ -4386,7 +4386,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 80, 120, 160, 200 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4395,7 +4395,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4410,7 +4410,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4419,7 +4419,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4434,7 +4434,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 25, 40, 55, 70, 85 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -4443,7 +4443,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4452,7 +4452,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 115, 155, 195, 235 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //R - per draven
                         new DamageSpell
@@ -4460,7 +4460,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 50, 70, 90 }[level] + 0.2 * source.AbilityPower()
+                                    new double[] { 50, 70, 90 }[level] + 0.2 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4475,7 +4475,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 50, 95, 140, 185, 230 }[level]
-                                     + 0.6 * source.AbilityPower())
+                                     + 0.6 * source.TotalMagicalDamage)
                                     * ((level == 5 && target is Obj_AI_Hero) ? 1.15 : 1)
                             },
                         //W
@@ -4485,7 +4485,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4494,7 +4494,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //R - min damage
                         new DamageSpell
@@ -4503,7 +4503,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 270, 405, 540 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R - per sphere
                         new DamageSpell
@@ -4512,7 +4512,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 90, 135, 180 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4572,7 +4572,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 70, 100, 130, 160 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4581,7 +4581,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4596,7 +4596,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 125, 170, 215, 260 }[level] 
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //W - Devour 
                         new DamageSpell
@@ -4606,7 +4606,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) => target is Obj_AI_Minion ?  
                                     new double[] { 400, 450, 500, 550, 600 }[level] :
                                     new double[] { 0.20, 0.23, 0.26, 0.29, 0.32 }[level]
-                                    * 0.02 * source.AbilityPower() / 100 * target.MaxHealth
+                                    * 0.02 * source.TotalMagicalDamage / 100 * target.MaxHealth
                             },
                         //W - Regugitate
                         new DamageSpell
@@ -4615,7 +4615,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 150, 200, 250, 300 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4631,7 +4631,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 125, 170, 215, 260 }[level]
-                                    + 0.8 * source.AbilityPower()
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //E - total
                         new DamageSpell
@@ -4640,7 +4640,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 34, 68, 102, 136, 170 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E - onhit
                         new DamageSpell
@@ -4649,7 +4649,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 20, 30, 40, 50 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R - total
                         new DamageSpell
@@ -4658,7 +4658,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 200, 325, 450 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4673,7 +4673,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E - Active
                         new DamageSpell
@@ -4682,7 +4682,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 65, 95, 125, 155, 185 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4691,7 +4691,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 400, 550 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4706,7 +4706,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 110, 160, 210, 260 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E - base damage
                         new DamageSpell
@@ -4716,7 +4716,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 60, 70, 80, 90, 100 }[level]
                                     + new double[] { 0.5, 0.65, 0.8, 0.95, 1.10 }[level]
-                                    * source.FlatPhysicalDamageMod + 0.5 * source.AbilityPower()
+                                    * source.FlatPhysicalDamageMod + 0.5 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -4725,7 +4725,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 300, 400, 500 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4750,7 +4750,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 20, 24, 28 }[level] / 100
-                                     + 0.02 * source.AbilityPower() / 100) * target.MaxHealth
+                                     + 0.02 * source.TotalMagicalDamage / 100) * target.MaxHealth
                             },
                     });
 
@@ -4765,7 +4765,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 100, 130, 160, 190 }[level]
-                                    + 1.2 * source.FlatPhysicalDamageMod + 1 * source.AbilityPower()
+                                    + 1.2 * source.FlatPhysicalDamageMod + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4780,7 +4780,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.65 * source.AbilityPower()
+                                    + 0.65 * source.TotalMagicalDamage
                             },
                         //W - Blue
                         new DamageSpell
@@ -4790,7 +4790,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 40, 60, 80, 100, 120 }[level]
                                     + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W - Red
                         new DamageSpell
@@ -4800,7 +4800,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 30, 45, 60, 75, 90 }[level]
                                     + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W - Yellow
                         new DamageSpell
@@ -4810,7 +4810,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new[] { 15, 22.5, 30, 37.5, 45 }[level]
                                     + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -4819,7 +4819,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 55, 80, 105, 130, 155 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4837,7 +4837,7 @@ namespace LeagueSharp.Common
                                      where buff.DisplayName.ToLower() == "twitchdeadlyvenom"
                                      select buff.Count).FirstOrDefault()
                                     * (new double[] { 15, 20, 25, 30, 35 }[level]
-                                       + 0.2 * source.AbilityPower()
+                                       + 0.2 * source.TotalMagicalDamage
                                        + 0.25 * source.FlatPhysicalDamageMod)
                                     + new double[] { 20, 35, 50, 65, 80 }[level]
                             },
@@ -4848,7 +4848,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 15, 20, 25, 30, 35 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                                     + 0.25 * source.FlatPhysicalDamageMod
                                     + new double[] { 20, 35, 50, 65, 80 }[level]
                             },
@@ -4875,7 +4875,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 15, 25, 35, 45, 55 }[level]
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                     });
 
@@ -4932,7 +4932,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 14, 18, 22, 26 }[level]
-                                    + 0.25 * source.AbilityPower()
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                         //W - per stack
                         new DamageSpell
@@ -4941,7 +4941,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new[] { 2, 2.75, 3.5, 4.25, 5 }[level] / 100
-                                     + 0.02 * source.AbilityPower() / 100) * target.MaxHealth
+                                     + 0.02 * source.TotalMagicalDamage / 100) * target.MaxHealth
                             },
                         //E
                         new DamageSpell
@@ -4959,7 +4959,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 100, 175, 250 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5006,7 +5006,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 125, 170, 215, 260 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -5015,7 +5015,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 120, 170, 220, 270, 320 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5024,7 +5024,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 375, 500 }[level]
-                                    + 0.8 * target.AbilityPower() + 1.0 * source.AbilityPower()
+                                    + 0.8 * target.TotalMagicalDamage + 1.0 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5039,7 +5039,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //W - Max
                         new DamageSpell
@@ -5049,7 +5049,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 30, 50, 70, 90, 110 }[level]
                                     + new double[] { 45, 75, 105, 135, 165 }[level]
-                                    + 0.625 * source.AbilityPower()
+                                    + 0.625 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5058,7 +5058,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 100, 130, 160, 190 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R - max
                         new DamageSpell
@@ -5067,7 +5067,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 500, 700, 900 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5101,7 +5101,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 5, 20, 35, 50, 65 }[level]
                                     + 1.15 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5125,7 +5125,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 60, 80, 100, 120 }[level]
-                                    + 0.2 * source.AbilityPower()
+                                    + 0.2 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5134,7 +5134,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5143,7 +5143,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 98, 161, 224, 287, 350 }[level]
-                                    + 0.98 * source.AbilityPower()
+                                    + 0.98 * source.TotalMagicalDamage
                             },
                         //R - summon damage
                         new DamageSpell
@@ -5152,7 +5152,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.55 * source.AbilityPower()
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //R - per bolt
                         new DamageSpell
@@ -5160,7 +5160,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 15, 30, 45 }[level] + 0.1 * source.AbilityPower()
+                                    new double[] { 15, 30, 45 }[level] + 0.1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5175,7 +5175,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 90, 125, 160, 195, 230 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //W - max
                         new DamageSpell
@@ -5192,7 +5192,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 85, 110, 135, 160 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5201,7 +5201,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 150, 250, 350 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5233,7 +5233,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 105, 150, 195, 240 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R - per bolt
                         new DamageSpell
@@ -5242,7 +5242,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 115, 155 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5259,7 +5259,7 @@ namespace LeagueSharp.Common
                                     Math.Max(
                                         new double[] { 75, 125, 175, 225, 275 }[level],
                                         new double[] { 8, 10, 12, 14, 16 }[level] / 100
-                                        * target.MaxHealth) + 1 * source.AbilityPower()
+                                        * target.MaxHealth) + 1 * source.TotalMagicalDamage
                             },
                         //R - max
                         new DamageSpell
@@ -5283,7 +5283,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.75 * source.AbilityPower()
+                                    + 0.75 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -5292,7 +5292,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5301,7 +5301,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 110, 140, 170, 200 }[level]
-                                    + 0.45 * source.AbilityPower()
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //R - per charge
                         new DamageSpell
@@ -5310,7 +5310,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 190, 245, 300 }[level]
-                                    + 0.43 * source.AbilityPower()
+                                    + 0.43 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5334,7 +5334,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5367,7 +5367,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 90, 110, 130, 150 }[level]
-                                    + 0.6 * source.AbilityPower()
+                                    + 0.6 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5400,7 +5400,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 95, 130, 165, 200 }[level]
-                                    + 1 * source.AbilityPower()
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5424,7 +5424,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 110, 150, 190, 230 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -5434,7 +5434,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 40, 55, 70, 85, 100 }[level]
                                     + (new double[] { 4, 5, 6, 7, 8 }[level] / 100
-                                       + 0.02 * source.AbilityPower() / 100) * target.MaxHealth
+                                       + 0.02 * source.TotalMagicalDamage / 100) * target.MaxHealth
                             },
                         //E
                         new DamageSpell
@@ -5443,7 +5443,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 130, 180, 230, 280 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //R - per bounce
                         new DamageSpell
@@ -5452,7 +5452,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 140, 210, 280 }[level]
-                                    + 0.4 * source.AbilityPower()
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5499,7 +5499,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 75, 120, 165, 210, 255 }[level]
-                                    + 0.65 * source.AbilityPower()
+                                    + 0.65 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -5508,7 +5508,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.35 * source.AbilityPower()
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //E - per mine
                         new DamageSpell
@@ -5517,7 +5517,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 40, 65, 90, 115, 140 }[level]
-                                    + 0.3 * source.AbilityPower()
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5526,7 +5526,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 250, 375, 500 }[level]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5541,7 +5541,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 90, 145, 200, 260, 320 }[level]
-                                    + 0.9 * source.AbilityPower()
+                                    + 0.9 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5556,7 +5556,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.65 * source.AbilityPower()
+                                    + 0.65 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5565,7 +5565,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 60, 95, 130, 165, 200 }[level]
-                                    + 0.5 * source.AbilityPower()
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -5574,7 +5574,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 180, 265, 350 }[level]
-                                    + 0.7 * source.AbilityPower()
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
@@ -5648,7 +5648,7 @@ namespace LeagueSharp.Common
                 case DamageItems.FrostQueenClaim:
                     return source.CalcDamage(target, DamageType.Magical, 50 + 5 * source.Level);
                 case DamageItems.Hexgun:
-                    return source.CalcDamage(target, DamageType.Magical, 150 + 0.4 * source.AbilityPower());
+                    return source.CalcDamage(target, DamageType.Magical, 150 + 0.4 * source.TotalMagicalDamage);
                 case DamageItems.Hydra:
                     return source.CalcDamage(
                         target,
@@ -6267,7 +6267,7 @@ namespace LeagueSharp.Common
 
                 //Opressor: KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
                 Mastery Opressor = hero.GetMastery(Ferocity.Oppresor);
-                if (targetHero != null && Opressor != null && Opressor.IsActive() && targetHero.IsMoveImpaired())
+                if (targetHero != null && Opressor != null && Opressor.IsActive() && targetHero.IsMovementImpaired())
                 {
                     amount *= 1.025;
                 }
@@ -6288,7 +6288,7 @@ namespace LeagueSharp.Common
                     Mastery Thunder = hero.GetMastery(Cunning.ThunderlordsDecree);
                     if (Thunder != null && Thunder.IsActive())
                     {
-                        // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.AbilityPower());
+                        // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.TotalMagicalDamage);
                     }
                 }
             }

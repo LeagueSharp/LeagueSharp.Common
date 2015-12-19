@@ -101,9 +101,12 @@ namespace LeagueSharp.Common
             return hero.Spellbook.GetSpell(slot);
         }
 
-        public static bool IsMoveImpaired(this Obj_AI_Hero hero)
+        /// <summary>
+        ///     Returns if the unit's movement is impaired (Slows, Taunts, Charms, Taunts, Snares, Fear)
+        /// </summary>
+        public static bool IsMovementImpaired(this Obj_AI_Hero hero)
         {
-            return hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Slow)
+            return hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Charm) || hero.HasBuffOfType(BuffType.Slow)
                    || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun)
                    || hero.HasBuffOfType(BuffType.Taunt);
         }
@@ -119,22 +122,34 @@ namespace LeagueSharp.Common
                           || (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
         }
 
+        /// <summary>
+        ///     Returns if the spell is ready to use.
+        /// </summary>
         public static bool IsReady(this Spell spell, int t = 0)
         {
             return IsReady(spell.Instance, t);
         }
 
+        /// <summary>
+        ///     Returns if the spell is ready to use.
+        /// </summary>
         public static bool IsReady(this SpellSlot slot, int t = 0)
         {
             var s = ObjectManager.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
         }
 
+        /// <summary>
+        ///     Returns if the GameObject is valid
+        /// </summary>
         public static bool IsValid<T>(this GameObject obj) where T : GameObject
         {
             return obj as T != null && obj.IsValid;
         }
 
+        /// <summary>
+        ///     Returns if the SpellSlot of the InventorySlot is valid
+        /// </summary>
         public static bool IsValidSlot(this InventorySlot slot)
         {
             return slot != null && slot.SpellSlot != SpellSlot.Unknown;
@@ -155,7 +170,7 @@ namespace LeagueSharp.Common
         [Obsolete("Use HealthPercent attribute.", false)]
         public static float HealthPercentage(this Obj_AI_Base unit)
         {
-            return unit.Health / unit.MaxHealth * 100;
+            return unit.HealthPercent;
         }
 
         /// <summary>
@@ -164,17 +179,19 @@ namespace LeagueSharp.Common
         [Obsolete("Use ManaPercent attribute.", false)]
         public static float ManaPercentage(this Obj_AI_Base unit)
         {
-            return unit.Mana / unit.MaxMana * 100;
+            return unit.ManaPercent;
         }
 
+        [Obsolete("Use TotalMagicalDamage from Leaguesharp.Core.", false)]
         public static float TotalMagicalDamage(this Obj_AI_Hero target)
         {
-            return target.BaseAbilityDamage + target.FlatMagicDamageMod;
+            return target.TotalMagicalDamage;
         }
 
+        [Obsolete("Use TotalAttackDamage attribute from LeagueSharp.Core", false)]
         public static float TotalAttackDamage(this Obj_AI_Hero target)
         {
-            return target.BaseAttackDamage + target.FlatPhysicalDamageMod;
+            return target.TotalAttackDamage;
         }
 
         /// <summary>
@@ -578,11 +595,6 @@ namespace LeagueSharp.Common
             return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
-        public static bool IsMovementImpaired(this Obj_AI_Hero hero)
-        {
-            return hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
-                   hero.HasBuffOfType(BuffType.Taunt);
-        }
 
         /// <summary>
         ///     Returns true if hero is in shop range.
