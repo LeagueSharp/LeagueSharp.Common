@@ -101,15 +101,22 @@ namespace LeagueSharp.Common
             return hero.Spellbook.GetSpell(slot);
         }
 
+        public static bool IsMoveImpaired(this Obj_AI_Hero hero)
+        {
+            return hero.HasBuffOfType(BuffType.Fear) || hero.HasBuffOfType(BuffType.Slow)
+                   || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun)
+                   || hero.HasBuffOfType(BuffType.Taunt);
+        }
+
         /// <summary>
         ///     Returns if the spell is ready to use.
         /// </summary>
         public static bool IsReady(this SpellDataInst spell, int t = 0)
         {
             return spell != null && spell.Slot != SpellSlot.Unknown && t == 0
-                ? spell.State == SpellState.Ready
-                : (spell.State == SpellState.Ready ||
-                   (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
+                       ? spell.State == SpellState.Ready
+                       : (spell.State == SpellState.Ready
+                          || (spell.State == SpellState.Cooldown && (spell.CooldownExpires - Game.Time) <= t / 1000f));
         }
 
         public static bool IsReady(this Spell spell, int t = 0)
