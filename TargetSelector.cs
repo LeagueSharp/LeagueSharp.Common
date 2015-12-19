@@ -1,5 +1,3 @@
-﻿#region LICENSE
-
 /*
  Copyright 2014 - 2014 LeagueSharp
  TargetSelector.cs is part of LeagueSharp.Common.
@@ -514,10 +512,10 @@ namespace LeagueSharp.Common
                                     GetPriority(hero));
                     
                     case TargetingMode.MostStack:
-                        return targets.MaxOrDefault(hero =>
+                        return targets.OrderByDescending(hero =>
                             hero.Buffs.Where(x => StackNames.Contains(x.Name.ToLower()) &&
                                 x.Count >= _configMenu.Item("stack.count").GetValue<Slider>().Value)
-                                .Sum(buff => buff.Count));
+                                .Sum(buff => buff.Count)).ThenByDescending(hero2 => champion.CalcDamage(hero2, damageType, 100) / (1 + hero2.Health) * GetPriority(hero2)).FirstOrDefault();
                 }
             }
             catch (Exception e)
