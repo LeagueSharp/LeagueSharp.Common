@@ -103,7 +103,7 @@ namespace LeagueSharp.Common
 
         public static bool IsMoveImpaired(this Obj_AI_Hero hero)
         {
-            return hero.HasBuffOfType(BuffType.Fear) || hero.HasBuffOfType(BuffType.Slow)
+            return hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Slow)
                    || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun)
                    || hero.HasBuffOfType(BuffType.Taunt);
         }
