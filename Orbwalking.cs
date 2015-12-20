@@ -222,7 +222,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// The champion name
         /// </summary>
-        private static string _championName;
+        private static readonly string _championName;
 
         /// <summary>
         /// The random
@@ -376,7 +376,7 @@ namespace LeagueSharp.Common
             if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
-                if (aiBase != null && Player.ChampionName == "Caitlyn")
+                if (aiBase != null && _championName == "Caitlyn")
                 {
                     if (aiBase.HasBuff("caitlynyordletrapinternal"))
                     {
@@ -452,6 +452,7 @@ namespace LeagueSharp.Common
         /// Returns true if moving won't cancel the auto-attack.
         /// </summary>
         /// <param name="extraWindup">The extra windup.</param>
+        /// <param name="disableMissileCheck">The disable missile check paremeter</param>
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
@@ -569,6 +570,12 @@ namespace LeagueSharp.Common
             }
 
             if (angle >= 60 && Utils.GameTimeTickCount - LastMoveCommandT < 60)
+            {
+                return;
+            }
+
+            // Don't move if still combo is active
+            if (Orbwalker._config != null && Orbwalker._config.Item("StillCombo").GetValue<KeyBind>().Active)
             {
                 return;
             }
@@ -795,7 +802,7 @@ namespace LeagueSharp.Common
             /// <summary>
             /// The configuration
             /// </summary>
-            private static Menu _config;
+            internal static Menu _config;
 
             /// <summary>
             /// The player
@@ -810,7 +817,7 @@ namespace LeagueSharp.Common
             /// <summary>
             /// The orbalker mode
             /// </summary>
-            private OrbwalkingMode _mode = OrbwalkingMode.None;
+            private OrbwalkingMode? _mode;
 
             /// <summary>
             /// The orbwalking point
@@ -831,8 +838,8 @@ namespace LeagueSharp.Common
             /// The name of the CustomMode if it is set.
             /// </summary>
             private string CustomModeName;
-            /// <summary>
             
+            /// <summary>
             /// Initializes a new instance of the <see cref="Orbwalker"/> class.
             /// </summary>
             /// <param name="attachToMenu">The menu the orbwalker should attach to.</param>
@@ -892,8 +899,6 @@ namespace LeagueSharp.Common
 
                 _config.AddItem(
                     new MenuItem("StillCombo", "Combo without moving").SetShared().SetValue(new KeyBind('N', KeyBindType.Press)));
-                _config.Item("StillCombo").ValueChanged +=
-                    (sender, args) => { Move = !args.GetNewValue<KeyBind>().Active; };
 
                 
                 Player = ObjectManager.Player;
@@ -916,7 +921,7 @@ namespace LeagueSharp.Common
             /// Gets the farm delay.
             /// </summary>
             /// <value>The farm delay.</value>
-            private int FarmDelay
+            private static int FarmDelay
             {
                 get { return _config.Item("FarmDelay").GetValue<Slider>().Value; }
             }
@@ -952,6 +957,21 @@ namespace LeagueSharp.Common
             }
 
             /// <summary>
+            /// Gets or sets if the orbwalker should use a overriden mode
+            /// </summary>
+            public bool CustomMode
+            {
+                get
+                {
+                    return _mode.HasValue;
+                }
+                set
+                {
+                    _mode = value ? (OrbwalkingMode?)OrbwalkingMode.None : null;
+                }
+            }
+
+            /// <summary>
             /// Gets or sets the active mode.
             /// </summary>
             /// <value>The active mode.</value>
@@ -959,9 +979,9 @@ namespace LeagueSharp.Common
             {
                 get
                 {
-                    if (_mode != OrbwalkingMode.None)
+                    if (_mode.HasValue)
                     {
-                        return _mode;
+                        return _mode.Value;
                     }
 
                     if (_config.Item("Orbwalk").GetValue<KeyBind>().Active)
@@ -1338,7 +1358,7 @@ namespace LeagueSharp.Common
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
                                           .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                          (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
+                                          (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")
                                   let predHealth =
