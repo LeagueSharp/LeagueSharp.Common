@@ -1296,7 +1296,7 @@ namespace LeagueSharp.Common
                                     {
                                         return lastminion;
                                     }
-                                    if (minions.Count() >= 5 && 1f/Player.AttackDelay >= 1.8)
+                                    if (minions.Count() >= 5 && 1f/Player.AttackDelay >= 1.2)
                                     {
                                         return lastminion;
                                     }
@@ -1330,7 +1330,7 @@ namespace LeagueSharp.Common
                                  && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)).LastOrDefault();
                             if (lastminion != null && minions.Count() >= 2)
                             {
-                                if (minions.Count() >= 5 && 1f / Player.AttackDelay >= 1.8)
+                                if (minions.Count() >= 5 && 1f / Player.AttackDelay >= 1.2)
                                 {
                                     return lastminion;
                                 }
