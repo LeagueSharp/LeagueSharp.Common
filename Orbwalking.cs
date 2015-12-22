@@ -434,7 +434,7 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves" && Attack)
+            if (Player.ChampionName == "Graves")
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
                 if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay && Player.HasBuff("GravesBasicAttackAmmo1"))
@@ -445,7 +445,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }
 
         /// <summary>
@@ -455,11 +455,6 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
-            if (!Move)
-            {
-                return false;
-            }
-
             if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
             {
                 return true;
@@ -601,7 +596,7 @@ namespace LeagueSharp.Common
 
             try
             {
-                if (target.IsValidTarget() && CanAttack())
+                if (target.IsValidTarget() && CanAttack() && Attack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -623,7 +618,7 @@ namespace LeagueSharp.Common
                     }
                 }
 
-                if (CanMove(extraWindup))
+                if (CanMove(extraWindup) && Move)
                 {
                     if (Orbwalker.LimitAttackSpeed && (Player.AttackDelay < 1 / 2.6f) && (_autoattackCounter % 3 != 0 && !CanMove(500, true)))
                     {
@@ -1070,7 +1065,6 @@ namespace LeagueSharp.Common
                                     Player.GetAutoAttackDamage(minion));
             }
 
-
             /// <summary>
             /// Gets the target.
             /// </summary>
@@ -1205,7 +1199,8 @@ namespace LeagueSharp.Common
                         .Where(minion => InAutoAttackRange(minion) && minion.UnderAllyTurret())
                         .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                         .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
-                        .ThenByDescending(minion => minion.MaxHealth);
+                        .ThenByDescending(minion => minion.MaxHealth)
+                        .ThenByDescending(minion => minion.Health);
                     if (minions.Any())
                     {
                         // get the turret aggro minion
@@ -1226,7 +1221,7 @@ namespace LeagueSharp.Common
                                                1000 * Math.Max(0, (int)(turretMinion.Distance(turret) - turret.BoundingRadius))
                                                / (int)(turret.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
-                                for (float i = turretLandTick + 50; i < turretLandTick + 3 * turret.AttackDelay * 1000 + 50; i = i + turret.AttackDelay * 1000)
+                                for (float i = turretLandTick + 50; i < turretLandTick + 10 * turret.AttackDelay * 1000 + 50; i = i + turret.AttackDelay * 1000)
                                 {
                                     int time = (int)i - Utils.GameTimeTickCount + Game.Ping / 2;
                                     int predHP = (int)HealthPrediction.LaneClearHealthPrediction(turretMinion,
@@ -1290,6 +1285,22 @@ namespace LeagueSharp.Common
                                         return minion;
                                     }
                                 }
+                                // late game
+                                var lastminion = minions.Where(x => x.NetworkId != turretMinion.NetworkId && (x is Obj_AI_Minion)
+                                      && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)).LastOrDefault();
+                                if (lastminion != null && minions.Count() >= 2)
+                                {
+                                    if (1f/Player.AttackDelay >= 1f &&
+                                        (int)((float)turretAttackCount * turret.AttackDelay / Player.AttackDelay)
+                                        * Player.GetAutoAttackDamage(lastminion) > lastminion.Health)
+                                    {
+                                        return lastminion;
+                                    }
+                                    if (minions.Count() >= 5 && 1f/Player.AttackDelay >= 1.8)
+                                    {
+                                        return lastminion;
+                                    }
+                                }
                             }
                         }
                         else
@@ -1312,6 +1323,16 @@ namespace LeagueSharp.Common
                                     {
                                         return minion;
                                     }
+                                }
+                            }
+                            //late game
+                            var lastminion = minions.Where(x =>(x is Obj_AI_Minion)
+                                 && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)).LastOrDefault();
+                            if (lastminion != null && minions.Count() >= 2)
+                            {
+                                if (minions.Count() >= 5 && 1f / Player.AttackDelay >= 1.8)
+                                {
+                                    return lastminion;
                                 }
                             }
                         }
