@@ -33,6 +33,7 @@ using System.Xml;
 namespace LeagueSharp.Common
 {
     using System.Globalization;
+    using System.Security.Permissions;
     using System.Threading;
 
     /// <summary>
@@ -40,6 +41,7 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Config
     {
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         static Config()
         {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
