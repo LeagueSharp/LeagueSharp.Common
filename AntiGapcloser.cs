@@ -59,8 +59,13 @@ namespace LeagueSharp.Common
     /// <summary>
     /// Represents a gapcloser.
     /// </summary>
-    public struct Gapcloser
+    public class Gapcloser
     {
+        /// <summary>
+        /// Wehther the skill is enabled or not
+        /// </summary>
+        public bool Enabled = true;
+
         /// <summary>
         /// The champion name
         /// </summary>
@@ -80,6 +85,16 @@ namespace LeagueSharp.Common
         /// The spell name
         /// </summary>
         public string SpellName;
+
+        /// <summary>
+        /// A function that calculates the gapcloser's range.
+        /// </summary>
+        public Func<Obj_AI_Base, float> RangeCalc;
+
+        /// <summary>
+        /// Whether the gapcloser is immune to crowd control.
+        /// </summary>
+        public bool CrowdControlImmune;
     }
 
     /// <summary>
@@ -146,7 +161,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Aatrox",
                     Slot = SpellSlot.Q,
                     SpellName = "aatroxq",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 650f
                 });
 
             #endregion
@@ -185,7 +201,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Corki",
                     Slot = SpellSlot.W,
                     SpellName = "carpetbomb",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 600f
                 });
 
             #endregion
@@ -210,7 +227,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Ekko",
                     Slot = SpellSlot.E,
                     SpellName = "ekkoe",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 325f
                 });
 	
             Spells.Add(
@@ -231,7 +249,7 @@ namespace LeagueSharp.Common
                     ChampionName = "Elise",
                     Slot = SpellSlot.Q,
                     SpellName = "elisespiderqcast",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Targeted
                 });
                 
             Spells.Add(
@@ -279,7 +297,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Gnar",
                     Slot = SpellSlot.E,
                     SpellName = "gnarbige",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 475f
                 });
 
             Spells.Add(
@@ -288,7 +307,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Gnar",
                     Slot = SpellSlot.E,
                     SpellName = "gnare",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 475f
                 });
 
             #endregion
@@ -301,7 +321,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Gragas",
                     Slot = SpellSlot.E,
                     SpellName = "gragase",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 600f
                 });
 
             #endregion
@@ -314,7 +335,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Graves",
                     Slot = SpellSlot.E,
                     SpellName = "gravesmove",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 425f
                 });
 
             #endregion
@@ -327,7 +349,9 @@ namespace LeagueSharp.Common
                     ChampionName = "Hecarim",
                     Slot = SpellSlot.R,
                     SpellName = "hecarimult",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 1000f,
+                    CrowdControlImmune = true
                 });
 
             #endregion
@@ -404,7 +428,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Kassadin",
                     Slot = SpellSlot.R,
                     SpellName = "riftwalk",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 500f
                 });
 
             #endregion
@@ -417,7 +442,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Khazix",
                     Slot = SpellSlot.E,
                     SpellName = "khazixe",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 600f
                 });
 
             Spells.Add(
@@ -426,7 +452,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Khazix",
                     Slot = SpellSlot.E,
                     SpellName = "khazixelong",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 900f
                 });
 
             #endregion
@@ -439,7 +466,8 @@ namespace LeagueSharp.Common
                     ChampionName = "LeBlanc",
                     Slot = SpellSlot.W,
                     SpellName = "leblancslide",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 600f
                 });
 
             Spells.Add(
@@ -448,7 +476,8 @@ namespace LeagueSharp.Common
                     ChampionName = "LeBlanc",
                     Slot = SpellSlot.R,
                     SpellName = "leblancslidem",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 600f
                 });
 
             #endregion
@@ -474,7 +503,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Leona",
                     Slot = SpellSlot.E,
                     SpellName = "leonazenithblade",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 875f
                 });
 
             #endregion
@@ -487,7 +517,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Lucian",
                     Slot = SpellSlot.E,
                     SpellName = "luciane",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 425f
                 });
 
             #endregion
@@ -500,7 +531,9 @@ namespace LeagueSharp.Common
                     ChampionName = "Malphite",
                     Slot = SpellSlot.R,
                     SpellName = "ufslash",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 1000f,
+                    CrowdControlImmune = true
                 });
 
             #endregion
@@ -513,7 +546,8 @@ namespace LeagueSharp.Common
                     ChampionName = "MasterYi",
                     Slot = SpellSlot.Q,
                     SpellName = "alphastrike",
-                    SkillType = GapcloserType.Targeted
+                    SkillType = GapcloserType.Targeted,
+                    CrowdControlImmune = true
                 });
 
             #endregion
@@ -542,24 +576,6 @@ namespace LeagueSharp.Common
                     SkillType = GapcloserType.Targeted
                 });
 
-            Spells.Add(
-                new Gapcloser
-                {
-                    ChampionName = "Pantheon",
-                    Slot = SpellSlot.R,
-                    SpellName = "pantheonrjump",
-                    SkillType = GapcloserType.Skillshot
-                });
-
-            Spells.Add(
-                new Gapcloser
-                {
-                    ChampionName = "Pantheon",
-                    Slot = SpellSlot.R,
-                    SpellName = "pantheonrfall",
-                    SkillType = GapcloserType.Skillshot
-                });
-
             #endregion
 
             #region Poppy
@@ -583,7 +599,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Renekton",
                     Slot = SpellSlot.E,
                     SpellName = "renektonsliceanddice",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 450f
                 });
 
             #endregion
@@ -605,7 +622,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Riven",
                     Slot = SpellSlot.E,
                     SpellName = "rivenfeint",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 325f
                 });
 
             #endregion
@@ -618,7 +636,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Sejuani",
                     Slot = SpellSlot.Q,
                     SpellName = "sejuaniarcticassault",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 850f
                 });
 
             #endregion
@@ -631,7 +650,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Shen",
                     Slot = SpellSlot.E,
                     SpellName = "shenshadowdash",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 600f
                 });
 
             #endregion
@@ -644,7 +664,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Shyvana",
                     Slot = SpellSlot.R,
                     SpellName = "shyvanatransformcast",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 1000f
                 });
 
             #endregion
@@ -670,7 +691,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Tristana",
                     Slot = SpellSlot.W,
                     SpellName = "rocketjump",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 900f
                 });
 
             #endregion
@@ -683,7 +705,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Tryndamere",
                     Slot = SpellSlot.E,
                     SpellName = "slashcast",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 660f
                 });
 
             #endregion
@@ -696,7 +719,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Vi",
                     Slot = SpellSlot.Q,
                     SpellName = "viq",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 725f
                 });
 
             #endregion
@@ -735,7 +759,8 @@ namespace LeagueSharp.Common
                     ChampionName = "Zac",
                     Slot = SpellSlot.E,
                     SpellName = "zace",
-                    SkillType = GapcloserType.Skillshot
+                    SkillType = GapcloserType.Skillshot,
+                    RangeCalc = @base => 1200f + ((@base.Spellbook.GetSpell(SpellSlot.E).Level - 1) * 150f)
                 });
 
             #endregion
@@ -763,12 +788,33 @@ namespace LeagueSharp.Common
         public static event OnGapcloseH OnEnemyGapcloser;
 
         /// <summary>
+        /// Initializes the Common menu
+        /// </summary>
+        public static void Initialize()
+        {
+            Menu gapCloseMenu = new Menu("Anti Gapcloser", "AntiGaploser");
+            foreach (Gapcloser gapcloser in Spells.Where(
+                gapcloser => HeroManager.Allies.Any(
+                    hero => hero.Name.Equals(gapcloser.ChampionName))))
+            {
+                MenuItem item = new MenuItem($"{gapcloser.ChampionName}{gapcloser.SpellName}",
+                    $"{gapcloser.ChampionName} {gapcloser.Slot}")
+                    .SetValue(gapcloser.Enabled);
+
+                item.ValueChanged += (sender, args) => {
+                    gapcloser.Enabled = args.GetNewValue<bool>();
+                };
+            }
+            CommonMenu.Instance.AddSubMenu(gapCloseMenu);
+        }
+
+        /// <summary>
         /// Fired when the game updates.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            ActiveGapclosers.RemoveAll(entry => Utils.TickCount > entry.TickCount + 900);
+            ActiveGapclosers.RemoveAll(entry => Utils.TickCount > (entry.TickCount  + 900));
             if (OnEnemyGapcloser == null)
             {
                 return;
@@ -779,9 +825,9 @@ namespace LeagueSharp.Common
                     ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
                         .Where(
                             gapcloser =>
-                                gapcloser.SkillType == GapcloserType.Targeted ||
-                                (gapcloser.SkillType == GapcloserType.Skillshot &&
-                                 ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
+                                (gapcloser.SkillType == GapcloserType.Targeted) ||
+                                ((gapcloser.SkillType == GapcloserType.Skillshot) &&
+                                 (ObjectManager.Player.Distance(gapcloser.Sender) < 500)))) // why make it harder for ppl to understand the code for a negligable perofrmance boost?
             {
                 OnEnemyGapcloser(gapcloser);
             }
@@ -794,31 +840,32 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!SpellIsGapcloser(args))
+            Gapcloser gapcloser = Spells.FirstOrDefault(
+                spell => (spell != null) && (spell.SpellName == args.SData.Name.ToLower()));
+            if ((gapcloser == null) || !gapcloser.Enabled || gapcloser.CrowdControlImmune)
             {
                 return;
+            }
+
+            Vector3 endPos = args.End;
+            float range = gapcloser.RangeCalc(sender);
+
+            if ((gapcloser.SkillType == GapcloserType.Skillshot)
+                && (range > default(float))
+                && (args.Start.Distance(args.End) > range)) {
+                endPos = (args.End - args.Start).Normalized() * range;
             }
 
             ActiveGapclosers.Add(
                 new ActiveGapcloser
                 {
                     Start = args.Start,
-                    End = args.End,
+                    End = endPos,
                     Sender = (Obj_AI_Hero)sender,
                     TickCount = Utils.TickCount,
-                    SkillType = (args.Target != null && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
+                    SkillType = ((args.Target != null) && args.Target.IsMe) ? GapcloserType.Targeted : GapcloserType.Skillshot,
                     Slot = ((Obj_AI_Hero)sender).GetSpellSlot(args.SData.Name)
                 });
-        }
-
-        /// <summary>
-        /// Checks if a spell is a gapcloser.
-        /// </summary>
-        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
-        /// <returns></returns>
-        private static bool SpellIsGapcloser(GameObjectProcessSpellCastEventArgs args)
-        {
-            return Spells.Any(spell => spell.SpellName == args.SData.Name.ToLower());
         }
     }
 }

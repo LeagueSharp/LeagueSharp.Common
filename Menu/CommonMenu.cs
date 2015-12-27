@@ -25,6 +25,7 @@
             Prediction.Initialize();
             Hacks.Initialize();
             FakeClicks.Initialize();
+            AntiGapcloser.Initialize();
 
             Instance.AddToMainMenu();
         }
