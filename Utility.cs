@@ -108,7 +108,7 @@ namespace LeagueSharp.Common
         {
             return hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Charm) || hero.HasBuffOfType(BuffType.Slow)
                    || hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun)
-                   || hero.HasBuffOfType(BuffType.Taunt);
+                   || hero.HasBuffOfType(BuffType.Taunt) || hero.HasBuffOfType(BuffType.Charm);
         }
 
         /// <summary>
