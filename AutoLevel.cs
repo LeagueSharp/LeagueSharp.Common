@@ -111,12 +111,12 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay)
+            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay || MenuGUI.IsShopOpen)
             {
                 return;
             }
 
-            NextDelay = RandomNumber.Next(750);
+            NextDelay = RandomNumber.Next(300, 1200);
             LastLeveled = Utils.TickCount;
             var spell = order[GetTotalPoints()];
             Player.Spellbook.LevelSpell(spell);
