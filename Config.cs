@@ -32,11 +32,24 @@ using System.Xml;
 
 namespace LeagueSharp.Common
 {
+    using System.Globalization;
+    using System.Security.Permissions;
+    using System.Threading;
+
     /// <summary>
     /// Gets information about the L# system.
     /// </summary>
     public static class Config
     {
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        static Config()
+        {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+        }
+
         /// <summary>
         /// The league sharp directory
         /// </summary>
