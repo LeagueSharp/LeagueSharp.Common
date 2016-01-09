@@ -4605,8 +4605,8 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) => target is Obj_AI_Minion ?  
                                     new double[] { 400, 450, 500, 550, 600 }[level] :
-                                    new double[] { 0.20, 0.23, 0.26, 0.29, 0.32 }[level]
-                                    * 0.02 * source.TotalMagicalDamage / 100 * target.MaxHealth
+                                    (new double[] { 0.20, 0.23, 0.26, 0.29, 0.32 }[level]
+                                    + 0.02 * source.TotalMagicalDamage / 100) * target.MaxHealth
                             },
                         //W - Regugitate
                         new DamageSpell
