@@ -794,11 +794,11 @@ namespace LeagueSharp.Common
         {
             Menu gapCloseMenu = new Menu("Anti Gapcloser", "AntiGaploser");
             foreach (Gapcloser gapcloser in Spells.Where(
-                gapcloser => HeroManager.Allies.Any(
+                gapcloser => HeroManager.Enemies.Any(
                     hero => hero.Name.Equals(gapcloser.ChampionName))))
             {
                 MenuItem item = new MenuItem($"{gapcloser.ChampionName}{gapcloser.SpellName}",
-                    $"{gapcloser.ChampionName} {gapcloser.Slot}")
+                    $"{gapcloser.ChampionName} {gapcloser.Slot}").SetShared().
                     .SetValue(gapcloser.Enabled);
 
                 item.ValueChanged += (sender, args) => {
