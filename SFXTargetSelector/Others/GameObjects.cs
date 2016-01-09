@@ -30,7 +30,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace SFXTargetSelector.Others
+namespace SFXTargetSelectorEx.Others
 {
     /// <summary>
     ///     A static (stack) class which contains a sort-of cached versions of the important game objects.

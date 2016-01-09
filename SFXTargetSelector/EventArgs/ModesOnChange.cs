@@ -26,7 +26,7 @@ using System;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

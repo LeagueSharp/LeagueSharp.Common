@@ -20,7 +20,7 @@
 
 #endregion License
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

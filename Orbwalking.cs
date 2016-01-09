@@ -108,67 +108,67 @@ namespace LeagueSharp.Common {
         /// </summary>
         // ReSharper disable once InconsistentNaming
         public static int LastAATick {
-            get { return SFXTargetSelector.Orbwalking.LastAaTick; }
-            set { SFXTargetSelector.Orbwalking.LastAaTick = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.LastAaTick; }
+            set { SFXTargetSelectorEx.Orbwalking.LastAaTick = value; }
         }
 
         /// <summary>
         ///     <c>true</c> if the orbwalker will attack.
         /// </summary>
         public static bool Attack {
-            get { return SFXTargetSelector.Orbwalking.Attack; }
-            set { SFXTargetSelector.Orbwalking.Attack = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.Attack; }
+            set { SFXTargetSelectorEx.Orbwalking.Attack = value; }
         }
 
         /// <summary>
         ///     <c>true</c> if the orbwalker will skip the next attack.
         /// </summary>
         public static bool DisableNextAttack {
-            get { return SFXTargetSelector.Orbwalking.DisableNextAttack; }
-            set { SFXTargetSelector.Orbwalking.DisableNextAttack = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.DisableNextAttack; }
+            set { SFXTargetSelectorEx.Orbwalking.DisableNextAttack = value; }
         }
 
         /// <summary>
         ///     <c>true</c> if the orbwalker will move.
         /// </summary>
         public static bool Move {
-            get { return SFXTargetSelector.Orbwalking.Move; }
-            set { SFXTargetSelector.Orbwalking.Move = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.Move; }
+            set { SFXTargetSelectorEx.Orbwalking.Move = value; }
         }
 
         /// <summary>
         ///     The tick the most recent attack command was sent.
         /// </summary>
         public static int LastAttackCommandT {
-            get { return SFXTargetSelector.Orbwalking.LastAttackCommandT; }
-            set { SFXTargetSelector.Orbwalking.LastAttackCommandT = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.LastAttackCommandT; }
+            set { SFXTargetSelectorEx.Orbwalking.LastAttackCommandT = value; }
         }
 
         /// <summary>
         ///     The tick the most recent move command was sent.
         /// </summary>
         public static int LastMoveCommandT {
-            get { return SFXTargetSelector.Orbwalking.LastMoveCommandT; }
-            set { SFXTargetSelector.Orbwalking.LastMoveCommandT = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.LastMoveCommandT; }
+            set { SFXTargetSelectorEx.Orbwalking.LastMoveCommandT = value; }
         }
 
         /// <summary>
         ///     The last move command position
         /// </summary>
         public static Vector3 LastMoveCommandPosition {
-            get { return SFXTargetSelector.Orbwalking.LastMoveCommandPosition; }
-            set { SFXTargetSelector.Orbwalking.LastMoveCommandPosition = value; }
+            get { return SFXTargetSelectorEx.Orbwalking.LastMoveCommandPosition; }
+            set { SFXTargetSelectorEx.Orbwalking.LastMoveCommandPosition = value; }
         }
 
         /// <summary>
         ///     Initializes static members of the <see cref="Orbwalking" /> class.
         /// </summary>
         static Orbwalking() {
-            SFXTargetSelector.Orbwalking.AfterAttack += FireAfterAttack;
-            SFXTargetSelector.Orbwalking.BeforeAttack += FireBeforeAttack;
-            SFXTargetSelector.Orbwalking.OnAttack += FireOnAttack;
-            SFXTargetSelector.Orbwalking.OnNonKillableMinion += FireOnNonKillableMinion;
-            SFXTargetSelector.Orbwalking.OnTargetChange +=
+            SFXTargetSelectorEx.Orbwalking.AfterAttack += FireAfterAttack;
+            SFXTargetSelectorEx.Orbwalking.BeforeAttack += FireBeforeAttack;
+            SFXTargetSelectorEx.Orbwalking.OnAttack += FireOnAttack;
+            SFXTargetSelectorEx.Orbwalking.OnNonKillableMinion += FireOnNonKillableMinion;
+            SFXTargetSelectorEx.Orbwalking.OnTargetChange +=
                 FireOnTargetSwitch;
         }
 
@@ -201,7 +201,7 @@ namespace LeagueSharp.Common {
         ///     Fires the before attack event.
         /// </summary>
         /// <param name="args">The args from SFXOrbwalker.</param>
-        private static void FireBeforeAttack(SFXTargetSelector.Orbwalking.BeforeAttackEventArgs args) {
+        private static void FireBeforeAttack(SFXTargetSelectorEx.Orbwalking.BeforeAttackEventArgs args) {
             if (BeforeAttack != null) {
                 BeforeAttack(new BeforeAttackEventArgs {Target = args.Target});
             }
@@ -253,7 +253,7 @@ namespace LeagueSharp.Common {
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the specified name is an auto attack reset; otherwise, <c>false</c>.</returns>
         public static bool IsAutoAttackReset(string name) {
-            return SFXTargetSelector.Orbwalking.IsAutoAttackReset(name);
+            return SFXTargetSelectorEx.Orbwalking.IsAutoAttackReset(name);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace LeagueSharp.Common {
         /// <param name="unit">The unit.</param>
         /// <returns><c>true</c> if the specified unit is melee; otherwise, <c>false</c>.</returns>
         public static bool IsMelee(this Obj_AI_Base unit) {
-            return SFXTargetSelector.Orbwalking.IsMelee(unit);
+            return SFXTargetSelectorEx.Orbwalking.IsMelee(unit);
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace LeagueSharp.Common {
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the name is an auto attack; otherwise, <c>false</c>.</returns>
         public static bool IsAutoAttack(string name) {
-            return SFXTargetSelector.Orbwalking.IsAutoAttack(name);
+            return SFXTargetSelectorEx.Orbwalking.IsAutoAttack(name);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace LeagueSharp.Common {
         /// <param name="target">The target.</param>
         /// <returns>System.Single.</returns>
         public static float GetRealAutoAttackRange(AttackableUnit target) {
-            return SFXTargetSelector.Orbwalking.GetRealAutoAttackRange(target);
+            return SFXTargetSelectorEx.Orbwalking.GetRealAutoAttackRange(target);
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace LeagueSharp.Common {
         /// <param name="target">The target.</param>
         /// <returns>System.Single.</returns>
         public static float GetAttackRange(Obj_AI_Hero target) {
-            return SFXTargetSelector.Orbwalking.GetAttackRange(target);
+            return SFXTargetSelectorEx.Orbwalking.GetAttackRange(target);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace LeagueSharp.Common {
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool InAutoAttackRange(AttackableUnit target) {
-            return SFXTargetSelector.Orbwalking.InAutoAttackRange(target);
+            return SFXTargetSelectorEx.Orbwalking.InAutoAttackRange(target);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace LeagueSharp.Common {
         /// </summary>
         /// <returns>System.Single.</returns>
         public static float GetMyProjectileSpeed() {
-            return SFXTargetSelector.Orbwalking.GetMyProjectileSpeed();
+            return SFXTargetSelectorEx.Orbwalking.GetMyProjectileSpeed();
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace LeagueSharp.Common {
         /// </summary>
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack() {
-            return SFXTargetSelector.Orbwalking.CanAttack();
+            return SFXTargetSelectorEx.Orbwalking.CanAttack();
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace LeagueSharp.Common {
         /// <param name="disableMissileCheck">Whether to disable missle check or not</param>
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false) {
-            return SFXTargetSelector.Orbwalking.CanMove(extraWindup, disableMissileCheck);
+            return SFXTargetSelectorEx.Orbwalking.CanMove(extraWindup, disableMissileCheck);
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace LeagueSharp.Common {
         /// </summary>
         /// <param name="d">The d.</param>
         public static void SetMinimumOrbwalkDistance(float d) {
-            SFXTargetSelector.Orbwalking.SetMinimumOrbwalkDistance(d);
+            SFXTargetSelectorEx.Orbwalking.SetMinimumOrbwalkDistance(d);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace LeagueSharp.Common {
         /// </summary>
         /// <returns>System.Single.</returns>
         public static float GetLastMoveTime() {
-            return SFXTargetSelector.Orbwalking.GetLastMoveTime();
+            return SFXTargetSelectorEx.Orbwalking.GetLastMoveTime();
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace LeagueSharp.Common {
         /// </summary>
         /// <returns>Vector3.</returns>
         public static Vector3 GetLastMovePosition() {
-            return SFXTargetSelector.Orbwalking.GetLastMovePosition();
+            return SFXTargetSelectorEx.Orbwalking.GetLastMovePosition();
         }
 
         /// <summary>
@@ -371,7 +371,7 @@ namespace LeagueSharp.Common {
                                   bool overrideTimer = false,
                                   bool useFixedDistance = true,
                                   bool randomizeMinDistance = true) {
-            SFXTargetSelector.Orbwalking.MoveTo(position, holdAreaRadius, overrideTimer, useFixedDistance,
+            SFXTargetSelectorEx.Orbwalking.MoveTo(position, holdAreaRadius, overrideTimer, useFixedDistance,
                 randomizeMinDistance);
         }
 
@@ -390,7 +390,7 @@ namespace LeagueSharp.Common {
                                    float holdAreaRadius = 0,
                                    bool useFixedDistance = true,
                                    bool randomizeMinDistance = true) {
-            SFXTargetSelector.Orbwalking.Orbwalk(target, position, extraWindup, holdAreaRadius, useFixedDistance,
+            SFXTargetSelectorEx.Orbwalking.Orbwalk(target, position, extraWindup, holdAreaRadius, useFixedDistance,
                 randomizeMinDistance);
         }
 
@@ -398,7 +398,7 @@ namespace LeagueSharp.Common {
         ///     Resets the Auto-Attack timer.
         /// </summary>
         public static void ResetAutoAttackTimer() {
-            SFXTargetSelector.Orbwalking.ResetAutoAttackTimer();
+            SFXTargetSelectorEx.Orbwalking.ResetAutoAttackTimer();
         }
 
         /// <summary>
@@ -437,22 +437,22 @@ namespace LeagueSharp.Common {
         ///     This class allows you to add an instance of "Orbwalker" to your assembly in order to control the orbwalking in an
         ///     easy way.
         /// </summary>
-        public class Orbwalker : SFXTargetSelector.Orbwalking.Orbwalker {
+        public class Orbwalker : SFXTargetSelectorEx.Orbwalking.Orbwalker {
             public new OrbwalkingMode ActiveMode {
                 get {
-                    SFXTargetSelector.Orbwalking.OrbwalkingMode mode = base.ActiveMode;
+                    SFXTargetSelectorEx.Orbwalking.OrbwalkingMode mode = base.ActiveMode;
                     switch (mode) {
-                        case SFXTargetSelector.Orbwalking.OrbwalkingMode.LastHit:
+                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LastHit:
                             return OrbwalkingMode.LastHit;
-                        case SFXTargetSelector.Orbwalking.OrbwalkingMode.Mixed:
+                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Mixed:
                             return OrbwalkingMode.Mixed;
-                        case SFXTargetSelector.Orbwalking.OrbwalkingMode.LaneClear:
+                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LaneClear:
                             return OrbwalkingMode.LaneClear;
-                        case SFXTargetSelector.Orbwalking.OrbwalkingMode.Combo:
+                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Combo:
                             return OrbwalkingMode.Combo;
-                        case SFXTargetSelector.Orbwalking.OrbwalkingMode.Flee:
+                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Flee:
                             return OrbwalkingMode.CustomMode;
-                        case SFXTargetSelector.Orbwalking.OrbwalkingMode.CustomMode:
+                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.CustomMode:
                             return OrbwalkingMode.CustomMode;
                     }
                     return OrbwalkingMode.None;
@@ -460,25 +460,25 @@ namespace LeagueSharp.Common {
                 set {
                     switch (value) {
                         case OrbwalkingMode.LastHit:
-                            base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.LastHit;
+                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LastHit;
                             break;
                         case OrbwalkingMode.Mixed:
-                            base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.Mixed;
+                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Mixed;
                             break;
                         case OrbwalkingMode.LaneClear:
-                            base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.LaneClear;
+                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LaneClear;
                             break;
                         case OrbwalkingMode.Combo:
-                            base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.Combo;
+                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Combo;
                             break;
                         case OrbwalkingMode.Freeze:
-                            base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.LastHit;
+                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LastHit;
                             break;
                         case OrbwalkingMode.CustomMode:
-                            base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.CustomMode;
+                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.CustomMode;
                             break;
                     }
-                    base.ActiveMode = SFXTargetSelector.Orbwalking.OrbwalkingMode.None;
+                    base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.None;
                 }
             }
 

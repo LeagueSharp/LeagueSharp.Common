@@ -31,7 +31,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace SFXTargetSelector.Others
+namespace SFXTargetSelectorEx.Others
 {
     public class Invulnerable
     {

@@ -28,7 +28,7 @@ using System.Linq;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SFXTargetSelector.Others;
+using SFXTargetSelectorEx.Others;
 using SharpDX;
 using Version = System.Version;
 
@@ -38,7 +38,7 @@ using Version = System.Version;
  * Don't copy paste this without asking & giving credits fuckers :^) 
  */
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

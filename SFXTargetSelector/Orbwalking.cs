@@ -27,17 +27,17 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SFXTargetSelector.Others;
+using SFXTargetSelectorEx.Others;
 using SharpDX;
 using Color = System.Drawing.Color;
-using MinionManager = SFXTargetSelector.Others.MinionManager;
-using MinionOrderTypes = SFXTargetSelector.Others.MinionOrderTypes;
-using MinionTeam = SFXTargetSelector.Others.MinionTeam;
-using MinionTypes = SFXTargetSelector.Others.MinionTypes;
+using MinionManager = SFXTargetSelectorEx.Others.MinionManager;
+using MinionOrderTypes = SFXTargetSelectorEx.Others.MinionOrderTypes;
+using MinionTeam = SFXTargetSelectorEx.Others.MinionTeam;
+using MinionTypes = SFXTargetSelectorEx.Others.MinionTypes;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
@@ -1320,8 +1320,8 @@ namespace SFXTargetSelector
             public bool ShouldWait()
             {
                 return
-                    MinionManager.GetMinions(
-                        Player.Position, float.MaxValue, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.None)
+                    LeagueSharp.Common.MinionManager.GetMinions(
+                        Player.Position, float.MaxValue, LeagueSharp.Common.MinionTypes.All, LeagueSharp.Common.MinionTeam.Enemy, LeagueSharp.Common.MinionOrderTypes.None)
                         .Any(
                             minion =>
                                 InAutoAttackRange(minion) &&
@@ -1333,13 +1333,13 @@ namespace SFXTargetSelector
             private bool ShouldWaitUnderTurret(Obj_AI_Minion noneKillableMinion)
             {
                 return
-                    MinionManager.GetMinions(
-                        Player.Position, float.MaxValue, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.None)
+                    LeagueSharp.Common.MinionManager.GetMinions(
+                        Player.Position, float.MaxValue, LeagueSharp.Common.MinionTypes.All, LeagueSharp.Common.MinionTeam.Enemy, LeagueSharp.Common.MinionOrderTypes.None)
                         .Any(
                             minion =>
                                 (noneKillableMinion == null || noneKillableMinion.NetworkId != minion.NetworkId) &&
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
-                                InAutoAttackRange(minion) && MinionManager.IsMinion(minion) &&
+                                InAutoAttackRange(minion) && LeagueSharp.Common.MinionManager.IsMinion(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion,
                                     (int)

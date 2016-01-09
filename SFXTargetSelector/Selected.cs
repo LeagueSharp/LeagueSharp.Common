@@ -29,7 +29,7 @@ using SharpDX;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

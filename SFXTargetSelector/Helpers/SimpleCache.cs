@@ -27,7 +27,7 @@ using System.Collections.Concurrent;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     internal sealed class SimpleCache<T> where T : struct
     {

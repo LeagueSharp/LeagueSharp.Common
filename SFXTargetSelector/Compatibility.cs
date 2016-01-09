@@ -26,12 +26,12 @@ using System;
 using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SFXTargetSelector.Others;
+using SFXTargetSelectorEx.Others;
 using SharpDX;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

@@ -30,7 +30,7 @@ using SharpDX;
 
 #endregion
 
-namespace SFXTargetSelector.Others
+namespace SFXTargetSelectorEx.Others
 {
     internal enum MinionOrderTypes
     {

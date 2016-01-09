@@ -25,13 +25,13 @@
 using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SFXTargetSelector.Others;
+using SFXTargetSelectorEx.Others;
 using SharpDX;
 using Color = System.Drawing.Color;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     internal class Utils
     {

@@ -36,7 +36,7 @@ using ItemData = LeagueSharp.Common.Data.ItemData;
  * Don't copy paste this without asking & giving credits fuckers :^) 
  */
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

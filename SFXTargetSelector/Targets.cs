@@ -28,11 +28,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SFXTargetSelector.Others;
+using SFXTargetSelectorEx.Others;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {

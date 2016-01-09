@@ -31,7 +31,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace SFXTargetSelector
+namespace SFXTargetSelectorEx
 {
     public static partial class TargetSelector
     {
