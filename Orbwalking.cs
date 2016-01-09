@@ -97,6 +97,8 @@ namespace LeagueSharp.Common {
             /// </summary>
             CustomMode,
 
+            Flee,
+
             /// <summary>
             ///     The orbwalker does nothing.
             /// </summary>
@@ -438,50 +440,6 @@ namespace LeagueSharp.Common {
         ///     easy way.
         /// </summary>
         public class Orbwalker : SFXTargetSelectorEx.Orbwalking.Orbwalker {
-            public new OrbwalkingMode ActiveMode {
-                get {
-                    SFXTargetSelectorEx.Orbwalking.OrbwalkingMode mode = base.ActiveMode;
-                    switch (mode) {
-                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LastHit:
-                            return OrbwalkingMode.LastHit;
-                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Mixed:
-                            return OrbwalkingMode.Mixed;
-                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LaneClear:
-                            return OrbwalkingMode.LaneClear;
-                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Combo:
-                            return OrbwalkingMode.Combo;
-                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Flee:
-                            return OrbwalkingMode.CustomMode;
-                        case SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.CustomMode:
-                            return OrbwalkingMode.CustomMode;
-                    }
-                    return OrbwalkingMode.None;
-                }
-                set {
-                    switch (value) {
-                        case OrbwalkingMode.LastHit:
-                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LastHit;
-                            break;
-                        case OrbwalkingMode.Mixed:
-                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Mixed;
-                            break;
-                        case OrbwalkingMode.LaneClear:
-                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LaneClear;
-                            break;
-                        case OrbwalkingMode.Combo:
-                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.Combo;
-                            break;
-                        case OrbwalkingMode.Freeze:
-                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.LastHit;
-                            break;
-                        case OrbwalkingMode.CustomMode:
-                            base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.CustomMode;
-                            break;
-                    }
-                    base.ActiveMode = SFXTargetSelectorEx.Orbwalking.OrbwalkingMode.None;
-                }
-            }
-
             public Orbwalker(Menu attachToMenu) : base(attachToMenu) {
             }
         }

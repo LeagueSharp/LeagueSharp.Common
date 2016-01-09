@@ -79,47 +79,6 @@ namespace SFXTargetSelectorEx
         public delegate void OnTargetChangeH(AttackableUnit oldTarget, AttackableUnit newTarget);
 
         /// <summary>
-        ///     The orbwalking mode.
-        /// </summary>
-        public enum OrbwalkingMode
-        {
-            /// <summary>
-            ///     The orbalker will only last hit minions.
-            /// </summary>
-            LastHit,
-
-            /// <summary>
-            ///     The orbwalker will alternate between last hitting and auto attacking champions.
-            /// </summary>
-            Mixed,
-
-            /// <summary>
-            ///     The orbwalker will clear the lane of minions as fast as possible while attempting to get the last hit.
-            /// </summary>
-            LaneClear,
-
-            /// <summary>
-            ///     The orbwalker will only attack the target.
-            /// </summary>
-            Combo,
-
-            /// <summary>
-            ///     The orbwalker will only move.
-            /// </summary>
-            Flee,
-
-            /// <summary>
-            ///     The orbwalker will only move.
-            /// </summary>
-            CustomMode,
-
-            /// <summary>
-            ///     The orbwalker does nothing.
-            /// </summary>
-            None
-        }
-
-        /// <summary>
         ///     The orbwalking delay.
         /// </summary>
         public enum OrbwalkingRandomize
@@ -949,7 +908,7 @@ namespace SFXTargetSelectorEx
             /// <summary>
             ///     The orbalker mode
             /// </summary>
-            private OrbwalkingMode _mode = OrbwalkingMode.None;
+            private LeagueSharp.Common.Orbwalking.OrbwalkingMode _mode = LeagueSharp.Common.Orbwalking.OrbwalkingMode.None;
 
             /// <summary>
             ///     The orbwalking point
@@ -1155,11 +1114,11 @@ namespace SFXTargetSelectorEx
             ///     Gets or sets the active mode.
             /// </summary>
             /// <value>The active mode.</value>
-            public OrbwalkingMode ActiveMode
+            public LeagueSharp.Common.Orbwalking.OrbwalkingMode ActiveMode
             {
                 get
                 {
-                    if (_mode != OrbwalkingMode.None)
+                    if (_mode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.None)
                     {
                         return _mode;
                     }
@@ -1167,41 +1126,41 @@ namespace SFXTargetSelectorEx
                     if (_config.Item("Orbwalk").GetValue<KeyBind>().Active ||
                         _config.Item("Orbwalk2").GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.Combo;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.Combo;
                     }
 
                     if (_config.Item("StillCombo").GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.Combo;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.Combo;
                     }
 
                     if (_config.Item("LaneClear").GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.LaneClear;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear;
                     }
 
                     if (_config.Item("Farm").GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.Mixed;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.Mixed;
                     }
 
                     if (_config.Item("LastHit").GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.LastHit;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.LastHit;
                     }
 
                     if (_config.Item("Flee").GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.Flee;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.Flee;
                     }
 
                     if (_config.Item(_customModeName) != null &&
                         _config.Item(_customModeName).GetValue<KeyBind>().Active)
                     {
-                        return OrbwalkingMode.CustomMode;
+                        return LeagueSharp.Common.Orbwalking.OrbwalkingMode.CustomMode;
                     }
 
-                    return OrbwalkingMode.None;
+                    return LeagueSharp.Common.Orbwalking.OrbwalkingMode.None;
                 }
                 set { _mode = value; }
             }
@@ -1360,7 +1319,7 @@ namespace SFXTargetSelectorEx
             {
                 AttackableUnit result = null;
 
-                if ((ActiveMode == OrbwalkingMode.Mixed || ActiveMode == OrbwalkingMode.LaneClear) &&
+                if ((ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Mixed || ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear) &&
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, DamageType.Physical);
@@ -1371,14 +1330,14 @@ namespace SFXTargetSelectorEx
                 }
 
                 var minions = new List<Obj_AI_Minion>();
-                if (ActiveMode != OrbwalkingMode.None && ActiveMode != OrbwalkingMode.Flee)
+                if (ActiveMode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.None && ActiveMode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.Flee)
                 {
-                    minions = GetAttackableObjects(ActiveMode != OrbwalkingMode.Combo);
+                    minions = GetAttackableObjects(ActiveMode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.Combo);
                 }
 
                 /*Killable Minion*/
-                if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
-                    ActiveMode == OrbwalkingMode.LastHit)
+                if (ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear || ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Mixed ||
+                    ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LastHit)
                 {
                     var minionList =
                         minions.Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
@@ -1422,7 +1381,7 @@ namespace SFXTargetSelectorEx
                 }
 
                 /* turrets / inhibitors / nexus */
-                if (ActiveMode == OrbwalkingMode.LaneClear &&
+                if (ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear &&
                     (!_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active || !minions.Any()))
                 {
                     /* turrets */
@@ -1448,7 +1407,7 @@ namespace SFXTargetSelectorEx
                 }
 
                 /*Champions*/
-                if (ActiveMode != OrbwalkingMode.LastHit)
+                if (ActiveMode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, DamageType.Physical);
                     if (target.IsValidTarget() && InAutoAttackRange(target))
@@ -1458,7 +1417,7 @@ namespace SFXTargetSelectorEx
                 }
 
                 /*Jungle minions*/
-                if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed)
+                if (ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear || ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Mixed)
                 {
                     var jminions = minions.Where(m => m.Team == GameObjectTeam.Neutral);
                     result = _config.Item("Smallminionsprio").GetValue<bool>()
@@ -1471,8 +1430,8 @@ namespace SFXTargetSelectorEx
                 }
 
                 /* UnderTurret Farming */
-                if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
-                    ActiveMode == OrbwalkingMode.LastHit)
+                if (ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear || ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Mixed ||
+                    ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LastHit)
                 {
                     Obj_AI_Minion farmUnderTurretMinion = null;
                     Obj_AI_Minion noneKillableMinion = null;
@@ -1607,7 +1566,7 @@ namespace SFXTargetSelectorEx
                 }
 
                 /*Lane Clear minions*/
-                if (ActiveMode == OrbwalkingMode.LaneClear)
+                if (ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.LaneClear)
                 {
                     if (!ShouldWait())
                     {
@@ -1652,7 +1611,7 @@ namespace SFXTargetSelectorEx
                     }
                 }
 
-                if (result == null && ActiveMode == OrbwalkingMode.Combo)
+                if (result == null && ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Combo)
                 {
                     if (
                         !GameObjects.EnemyHeroes.Any(
@@ -1803,7 +1762,7 @@ namespace SFXTargetSelectorEx
             {
                 try
                 {
-                    if (ActiveMode == OrbwalkingMode.None || ActiveMode == OrbwalkingMode.Flee)
+                    if (ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.None || ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Flee)
                     {
                         return;
                     }
