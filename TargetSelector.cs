@@ -34,6 +34,11 @@ namespace LeagueSharp.Common {
 
         public static TargetingMode Mode => TargetingMode.AutoPriority;
 
+        public static bool CustomTS {
+            get { return false; }
+            set { }
+        }
+
         #endregion
 
         #region Enum
