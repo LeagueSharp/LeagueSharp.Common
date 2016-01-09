@@ -80,9 +80,6 @@
     <Reference Include="LeagueSharp.Sandbox">
       <HintPath>..\..\..\..\Kappa\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
-    <Reference Include="SFXTargetSelector">
-      <HintPath>..\..\..\..\Kappa\System\SFXTargetSelector.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX">
       <HintPath>..\..\..\..\Kappa\System\SharpDX.dll</HintPath>
     </Reference>
@@ -160,6 +157,27 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Render.cs" />
+    <Compile Include="SFXTargetSelector\Aggro.cs" />
+    <Compile Include="SFXTargetSelector\Compatibility.cs" />
+    <Compile Include="SFXTargetSelector\Drawings.cs" />
+    <Compile Include="SFXTargetSelector\Enumerations\Mode.cs" />
+    <Compile Include="SFXTargetSelector\Enumerations\Priority.cs" />
+    <Compile Include="SFXTargetSelector\EventArgs\ModesOnChange.cs" />
+    <Compile Include="SFXTargetSelector\Extensions.cs" />
+    <Compile Include="SFXTargetSelector\Focus.cs" />
+    <Compile Include="SFXTargetSelector\Helpers\SimpleCache.cs" />
+    <Compile Include="SFXTargetSelector\Helpers\Utils.cs" />
+    <Compile Include="SFXTargetSelector\Humanizer.cs" />
+    <Compile Include="SFXTargetSelector\Modes.cs" />
+    <Compile Include="SFXTargetSelector\Orbwalking.cs" />
+    <Compile Include="SFXTargetSelector\Others\GameObjects.cs" />
+    <Compile Include="SFXTargetSelector\Others\Invulnerable.cs" />
+    <Compile Include="SFXTargetSelector\Others\MinionManager.cs" />
+    <Compile Include="SFXTargetSelector\Priorities.cs" />
+    <Compile Include="SFXTargetSelector\Selected.cs" />
+    <Compile Include="SFXTargetSelector\Targets.cs" />
+    <Compile Include="SFXTargetSelector\TargetSelector.cs" />
+    <Compile Include="SFXTargetSelector\Weights.cs" />
     <Compile Include="Shared.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="TargetSelector.cs" />
