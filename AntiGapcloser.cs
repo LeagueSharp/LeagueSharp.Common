@@ -798,8 +798,7 @@ namespace LeagueSharp.Common
                     hero => hero.Name.Equals(gapcloser.ChampionName))))
             {
                 MenuItem item = new MenuItem($"{gapcloser.ChampionName}{gapcloser.SpellName}",
-                    $"{gapcloser.ChampionName} {gapcloser.Slot}").SetShared().
-                    .SetValue(gapcloser.Enabled);
+                    $"{gapcloser.ChampionName} {gapcloser.Slot}").SetShared().SetValue(gapcloser.Enabled);
 
                 item.ValueChanged += (sender, args) => {
                     gapcloser.Enabled = args.GetNewValue<bool>();
