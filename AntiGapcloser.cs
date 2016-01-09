@@ -28,8 +28,7 @@ using SharpDX;
 
 #endregion
 
-namespace LeagueSharp.Common
-{
+namespace LeagueSharp.Common {
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
@@ -41,8 +40,7 @@ namespace LeagueSharp.Common
     /// <summary>
     /// The type of gapcloser.
     /// </summary>
-    public enum GapcloserType
-    {
+    public enum GapcloserType {
         /// <summary>
         /// The gapcloser used a skillshot ability.
         /// </summary>
@@ -59,8 +57,7 @@ namespace LeagueSharp.Common
     /// <summary>
     /// Represents a gapcloser.
     /// </summary>
-    public struct Gapcloser
-    {
+    public struct Gapcloser {
         /// <summary>
         /// The champion name
         /// </summary>
@@ -85,8 +82,7 @@ namespace LeagueSharp.Common
     /// <summary>
     /// Represents an active gapcloser.
     /// </summary>
-    public struct ActiveGapcloser
-    {
+    public struct ActiveGapcloser {
         /// <summary>
         /// The end
         /// </summary>
@@ -121,8 +117,7 @@ namespace LeagueSharp.Common
     /// <summary>
     /// Provides events and information about gapclosers.
     /// </summary>
-    public static class AntiGapcloser
-    {
+    public static class AntiGapcloser {
         /// <summary>
         /// The gapcloser spells
         /// </summary>
@@ -136,13 +131,11 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Initializes static members of the <see cref="AntiGapcloser"/> class. 
         /// </summary>
-        static AntiGapcloser()
-        {
+        static AntiGapcloser() {
             #region Aatrox
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Aatrox",
                     Slot = SpellSlot.Q,
                     SpellName = "aatroxq",
@@ -154,8 +147,7 @@ namespace LeagueSharp.Common
             #region Akali
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Akali",
                     Slot = SpellSlot.R,
                     SpellName = "akalishadowdance",
@@ -167,8 +159,7 @@ namespace LeagueSharp.Common
             #region Alistar
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Alistar",
                     Slot = SpellSlot.W,
                     SpellName = "headbutt",
@@ -180,8 +171,7 @@ namespace LeagueSharp.Common
             #region Corki
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Corki",
                     Slot = SpellSlot.W,
                     SpellName = "carpetbomb",
@@ -193,8 +183,7 @@ namespace LeagueSharp.Common
             #region Diana
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Diana",
                     Slot = SpellSlot.R,
                     SpellName = "dianateleport",
@@ -202,20 +191,18 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
-            
+
             #region Ekko
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Ekko",
                     Slot = SpellSlot.E,
                     SpellName = "ekkoe",
                     SkillType = GapcloserType.Skillshot
                 });
-	
+
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Ekko",
                     Slot = SpellSlot.E,
                     SpellName = "ekkoeattack",
@@ -226,17 +213,15 @@ namespace LeagueSharp.Common
             #region Elise
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Elise",
                     Slot = SpellSlot.Q,
                     SpellName = "elisespiderqcast",
                     SkillType = GapcloserType.Skillshot
                 });
-                
+
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Elise",
                     Slot = SpellSlot.E,
                     SpellName = "elisespideredescent",
@@ -248,8 +233,7 @@ namespace LeagueSharp.Common
             #region Fiora
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Fiora",
                     Slot = SpellSlot.Q,
                     SpellName = "fioraq",
@@ -261,8 +245,7 @@ namespace LeagueSharp.Common
             #region Fizz
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Fizz",
                     Slot = SpellSlot.Q,
                     SpellName = "fizzpiercingstrike",
@@ -274,8 +257,7 @@ namespace LeagueSharp.Common
             #region Gnar
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Gnar",
                     Slot = SpellSlot.E,
                     SpellName = "gnarbige",
@@ -283,8 +265,7 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Gnar",
                     Slot = SpellSlot.E,
                     SpellName = "gnare",
@@ -296,8 +277,7 @@ namespace LeagueSharp.Common
             #region Gragas
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Gragas",
                     Slot = SpellSlot.E,
                     SpellName = "gragase",
@@ -309,8 +289,7 @@ namespace LeagueSharp.Common
             #region Graves
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Graves",
                     Slot = SpellSlot.E,
                     SpellName = "gravesmove",
@@ -322,8 +301,7 @@ namespace LeagueSharp.Common
             #region Hecarim
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Hecarim",
                     Slot = SpellSlot.R,
                     SpellName = "hecarimult",
@@ -331,24 +309,22 @@ namespace LeagueSharp.Common
                 });
 
             #endregion
-            
+
             #region Illaoi
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Illaoi",
                     Slot = SpellSlot.W,
                     SpellName = "illaoiwattack",
                     SkillType = GapcloserType.Targeted
                 });
             #endregion
-            
-            
+
+
             #region Irelia
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Irelia",
                     Slot = SpellSlot.Q,
                     SpellName = "ireliagatotsu",
@@ -360,8 +336,7 @@ namespace LeagueSharp.Common
             #region JarvanIV
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "JarvanIV",
                     Slot = SpellSlot.Q,
                     SpellName = "jarvanivdragonstrike",
@@ -373,8 +348,7 @@ namespace LeagueSharp.Common
             #region Jax
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Jax",
                     Slot = SpellSlot.Q,
                     SpellName = "jaxleapstrike",
@@ -386,8 +360,7 @@ namespace LeagueSharp.Common
             #region Jayce
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Jayce",
                     Slot = SpellSlot.Q,
                     SpellName = "jaycetotheskies",
@@ -399,8 +372,7 @@ namespace LeagueSharp.Common
             #region Kassadin
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Kassadin",
                     Slot = SpellSlot.R,
                     SpellName = "riftwalk",
@@ -412,8 +384,7 @@ namespace LeagueSharp.Common
             #region Khazix
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Khazix",
                     Slot = SpellSlot.E,
                     SpellName = "khazixe",
@@ -421,8 +392,7 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Khazix",
                     Slot = SpellSlot.E,
                     SpellName = "khazixelong",
@@ -434,8 +404,7 @@ namespace LeagueSharp.Common
             #region LeBlanc
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "LeBlanc",
                     Slot = SpellSlot.W,
                     SpellName = "leblancslide",
@@ -443,8 +412,7 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "LeBlanc",
                     Slot = SpellSlot.R,
                     SpellName = "leblancslidem",
@@ -456,8 +424,7 @@ namespace LeagueSharp.Common
             #region LeeSin
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "LeeSin",
                     Slot = SpellSlot.Q,
                     SpellName = "blindmonkqtwo",
@@ -469,8 +436,7 @@ namespace LeagueSharp.Common
             #region Leona
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Leona",
                     Slot = SpellSlot.E,
                     SpellName = "leonazenithblade",
@@ -482,8 +448,7 @@ namespace LeagueSharp.Common
             #region Lucian
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Lucian",
                     Slot = SpellSlot.E,
                     SpellName = "luciane",
@@ -495,8 +460,7 @@ namespace LeagueSharp.Common
             #region Malphite
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Malphite",
                     Slot = SpellSlot.R,
                     SpellName = "ufslash",
@@ -508,8 +472,7 @@ namespace LeagueSharp.Common
             #region MasterYi
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "MasterYi",
                     Slot = SpellSlot.Q,
                     SpellName = "alphastrike",
@@ -521,8 +484,7 @@ namespace LeagueSharp.Common
             #region MonkeyKing
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "MonkeyKing",
                     Slot = SpellSlot.E,
                     SpellName = "monkeykingnimbus",
@@ -534,8 +496,7 @@ namespace LeagueSharp.Common
             #region Pantheon
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Pantheon",
                     Slot = SpellSlot.W,
                     SpellName = "pantheon_leapbash",
@@ -543,8 +504,7 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Pantheon",
                     Slot = SpellSlot.R,
                     SpellName = "pantheonrjump",
@@ -552,8 +512,7 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Pantheon",
                     Slot = SpellSlot.R,
                     SpellName = "pantheonrfall",
@@ -565,8 +524,7 @@ namespace LeagueSharp.Common
             #region Poppy
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Poppy",
                     Slot = SpellSlot.E,
                     SpellName = "poppyheroiccharge",
@@ -578,8 +536,7 @@ namespace LeagueSharp.Common
             #region Renekton
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Renekton",
                     Slot = SpellSlot.E,
                     SpellName = "renektonsliceanddice",
@@ -591,8 +548,7 @@ namespace LeagueSharp.Common
             #region Riven
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Riven",
                     Slot = SpellSlot.Q,
                     SpellName = "riventricleave",
@@ -600,8 +556,7 @@ namespace LeagueSharp.Common
                 });
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Riven",
                     Slot = SpellSlot.E,
                     SpellName = "rivenfeint",
@@ -613,8 +568,7 @@ namespace LeagueSharp.Common
             #region Sejuani
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Sejuani",
                     Slot = SpellSlot.Q,
                     SpellName = "sejuaniarcticassault",
@@ -626,8 +580,7 @@ namespace LeagueSharp.Common
             #region Shen
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Shen",
                     Slot = SpellSlot.E,
                     SpellName = "shenshadowdash",
@@ -639,8 +592,7 @@ namespace LeagueSharp.Common
             #region Shyvana
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Shyvana",
                     Slot = SpellSlot.R,
                     SpellName = "shyvanatransformcast",
@@ -652,8 +604,7 @@ namespace LeagueSharp.Common
             #region Talon
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Talon",
                     Slot = SpellSlot.E,
                     SpellName = "taloncutthroat",
@@ -665,8 +616,7 @@ namespace LeagueSharp.Common
             #region Tristana
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Tristana",
                     Slot = SpellSlot.W,
                     SpellName = "rocketjump",
@@ -678,8 +628,7 @@ namespace LeagueSharp.Common
             #region Tryndamere
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Tryndamere",
                     Slot = SpellSlot.E,
                     SpellName = "slashcast",
@@ -691,8 +640,7 @@ namespace LeagueSharp.Common
             #region Vi
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Vi",
                     Slot = SpellSlot.Q,
                     SpellName = "viq",
@@ -704,8 +652,7 @@ namespace LeagueSharp.Common
             #region XinZhao
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "XinZhao",
                     Slot = SpellSlot.E,
                     SpellName = "xenzhaosweep",
@@ -714,24 +661,10 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Yasuo
-
-            Spells.Add(
-                new Gapcloser
-                {
-                    ChampionName = "Yasuo",
-                    Slot = SpellSlot.E,
-                    SpellName = "yasuodashwrapper",
-                    SkillType = GapcloserType.Targeted
-                });
-
-            #endregion
-
             #region Zac
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Zac",
                     Slot = SpellSlot.E,
                     SpellName = "zace",
@@ -743,8 +676,7 @@ namespace LeagueSharp.Common
             #region Ziggs
 
             Spells.Add(
-                new Gapcloser
-                {
+                new Gapcloser {
                     ChampionName = "Ziggs",
                     Slot = SpellSlot.W,
                     SpellName = "ziggswtoggle",
@@ -766,11 +698,9 @@ namespace LeagueSharp.Common
         /// Fired when the game updates.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Game_OnGameUpdate(EventArgs args)
-        {
+        private static void Game_OnGameUpdate(EventArgs args) {
             ActiveGapclosers.RemoveAll(entry => Utils.TickCount > entry.TickCount + 900);
-            if (OnEnemyGapcloser == null)
-            {
+            if (OnEnemyGapcloser == null) {
                 return;
             }
 
@@ -792,16 +722,13 @@ namespace LeagueSharp.Common
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
-        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!SpellIsGapcloser(args))
-            {
+        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args) {
+            if (!SpellIsGapcloser(args)) {
                 return;
             }
 
             ActiveGapclosers.Add(
-                new ActiveGapcloser
-                {
+                new ActiveGapcloser {
                     Start = args.Start,
                     End = args.End,
                     Sender = (Obj_AI_Hero)sender,
@@ -816,8 +743,7 @@ namespace LeagueSharp.Common
         /// </summary>
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         /// <returns></returns>
-        private static bool SpellIsGapcloser(GameObjectProcessSpellCastEventArgs args)
-        {
+        private static bool SpellIsGapcloser(GameObjectProcessSpellCastEventArgs args) {
             return Spells.Any(spell => spell.SpellName == args.SData.Name.ToLower());
         }
     }
