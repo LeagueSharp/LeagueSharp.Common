@@ -1339,7 +1339,7 @@ namespace SFXTargetSelectorEx
                             minion =>
                                 (noneKillableMinion == null || noneKillableMinion.NetworkId != minion.NetworkId) &&
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
-                                InAutoAttackRange(minion) && LeagueSharp.Common.MinionManager.IsMinion(minion) &&
+                                InAutoAttackRange(minion) && LeagueSharp.Common.MinionManager.IsMinion((Obj_AI_Minion) minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion,
                                     (int)
