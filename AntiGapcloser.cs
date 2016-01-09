@@ -803,6 +803,8 @@ namespace LeagueSharp.Common
                 item.ValueChanged += (sender, args) => {
                     gapcloser.Enabled = args.GetNewValue<bool>();
                 };
+
+                gapCloseMenu.AddItem(item);
             }
             CommonMenu.Instance.AddSubMenu(gapCloseMenu);
         }
