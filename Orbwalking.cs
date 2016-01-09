@@ -23,6 +23,7 @@
 #region
 
 using System;
+using System.Reflection;
 using SharpDX;
 
 #endregion
@@ -482,6 +483,13 @@ namespace LeagueSharp.Common {
             }
 
             public Orbwalker(Menu attachToMenu) : base(attachToMenu) {
+            }
+
+            public bool ShouldWait() {
+                Type type = this.GetType().BaseType;
+
+                return (type != null) && ((bool) type.InvokeMember("ShouldWait", (BindingFlags.Instance | BindingFlags.InvokeMethod |
+                    BindingFlags.NonPublic), null, this, new object[0]));
             }
         }
     }
