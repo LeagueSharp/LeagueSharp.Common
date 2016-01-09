@@ -1049,7 +1049,7 @@ namespace LeagueSharp.Common
             ///     Determines if the orbwalker should wait before attacking a minion.
             /// </summary>
             /// <returns><c>true</c> if the orbwalker should wait before attacking a minion, <c>false</c> otherwise.</returns>
-            private bool ShouldWait()
+            public bool ShouldWait()
             {
                 return
                     ObjectManager.Get<Obj_AI_Minion>()
