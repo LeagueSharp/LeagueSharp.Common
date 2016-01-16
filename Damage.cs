@@ -3180,7 +3180,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 90, 145, 200, 255, 310 }[level]
+                                    new double[] { 80, 115, 150, 185, 220 }[level]
                                     + 0.8 * source.TotalMagicalDamage
                             },
                         //R - per wave
