@@ -1441,8 +1441,8 @@ namespace LeagueSharp.Common
                                 .Where(
                                     minion =>
                                         minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                        (_config.Item("AttackWards").GetValue<bool>() ||
-                                         !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
+                                        (_config.Item("AttackWards").GetValue<bool>() || 
+                                        !MinionManager.IsWard(minion)) &&
                                         (_config.Item("AttackPetsnTraps").GetValue<bool>() &&
                                          minion.CharData.BaseSkinName != "jarvanivstandard" ||
                                          MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
