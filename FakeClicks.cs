@@ -237,6 +237,12 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void Game_OnGameLoad(EventArgs args)
         {
+            // cn disabled
+            if (Game.Version == "6.1.1.488")
+            {
+                return;
+            }
+
             root.AddItem(new MenuItem("Enable", "Enable").SetValue(false));
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))
                 .SetValue(new StringList(new[] { "Evade, No Cursor Position", "Cursor Position, No Evade" }));
