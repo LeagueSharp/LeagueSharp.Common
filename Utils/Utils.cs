@@ -39,6 +39,7 @@
         {
             get
             {
+                // TODO: TW-6.1-HF
                 if (Game.Version == "6.1.0.499")
                 {
                     return Environment.TickCount;
