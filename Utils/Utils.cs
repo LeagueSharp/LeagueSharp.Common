@@ -39,6 +39,11 @@
         {
             get
             {
+                if (Game.Version == "6.1.0.499")
+                {
+                    return Environment.TickCount;
+                }
+
                 return (int)(Game.Time * 1000);
             }
         }
