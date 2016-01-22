@@ -1446,7 +1446,7 @@ namespace LeagueSharp.Common
                                         (_config.Item("AttackPetsnTraps").GetValue<bool>() &&
                                          minion.CharData.BaseSkinName != "jarvanivstandard" ||
                                          MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
-                                        minion.CharData.BaseSkinName != "gangplankbarrel" && mob.Name != "WardCorpse")
+                                        minion.CharData.BaseSkinName != "gangplankbarrel" && minion.Name != "WardCorpse")
                             let predHealth =
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
