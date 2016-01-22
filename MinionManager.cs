@@ -154,7 +154,7 @@ namespace LeagueSharp.Common
                 where
                     minion.IsMelee() && type == MinionTypes.Melee || !minion.IsMelee() && type == MinionTypes.Ranged ||
                     type == MinionTypes.All
-                where IsMinion(minion) || minionTeam == GameObjectTeam.Neutral && minion.CharData.BaseSkinName != "gangplankbarrel"
+                where IsMinion(minion) || minionTeam == GameObjectTeam.Neutral && minion.MaxHealth > 5
                 select minion).Cast<Obj_AI_Base>().ToList();
 
             switch (order)
