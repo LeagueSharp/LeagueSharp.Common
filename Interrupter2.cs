@@ -136,6 +136,7 @@ namespace LeagueSharp.Common
             RegisterSpell("Warwick", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Xerath", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
             RegisterSpell("Varus", new InterruptableSpell(SpellSlot.Q, DangerLevel.Low, false));
+            RegisterSpell("Jhin", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
 
             #endregion
         }
