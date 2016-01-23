@@ -106,6 +106,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="CustomizableAntiGapcloser.cs" />
     <Compile Include="Damage.cs" />
     <Compile Include="Dash.cs" />
     <Compile Include="Data\ItemData.cs" />
