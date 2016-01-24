@@ -62,6 +62,11 @@ namespace LeagueSharp.Common
         public static List<Obj_AI_Hero> Enemies { get; private set; }
 
         /// <summary>
+        /// Gets the Local Player
+        /// </summary>
+        public static Obj_AI_Hero Player { get; private set; }
+
+        /// <summary>
         /// Initializes static members of the <see cref="HeroManager"/> class. 
         /// </summary>
         static HeroManager()
@@ -82,6 +87,7 @@ namespace LeagueSharp.Common
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
             Allies = AllHeroes.FindAll(o => o.IsAlly);
             Enemies = AllHeroes.FindAll(o => o.IsEnemy);
+            Player = AllHeroes.Find(x => x.IsMe);
         }
     }
 }

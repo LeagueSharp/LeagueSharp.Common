@@ -25,7 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp.Common.Data;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -36,6 +35,7 @@ namespace LeagueSharp.Common
     /// <summary>
     ///     Game functions related utilities.
     /// </summary>
+    
     public static class Utility
     {
         /// <summary>
@@ -69,7 +69,8 @@ namespace LeagueSharp.Common
             Vector3 from = new Vector3())
         {
             if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable)
+                unit.IsInvulnerable || unit.Name == "WardCorpse")
+
             {
                 return false;
             }
@@ -83,7 +84,7 @@ namespace LeagueSharp.Common
                 }
             }
 
-            if (checkTeam && unit.Team == ObjectManager.Player.Team)
+            if (checkTeam && unit.Team == HeroManager.Player.Team)
             {
                 return false;
             }
@@ -92,7 +93,7 @@ namespace LeagueSharp.Common
 
             return !(range < float.MaxValue) ||
                    !(Vector2.DistanceSquared(
-                       (@from.To2D().IsValid() ? @from : ObjectManager.Player.ServerPosition).To2D(),
+                       (@from.To2D().IsValid() ? @from : HeroManager.Player.ServerPosition).To2D(),
                        unitPosition.To2D()) > range * range);
         }
 
@@ -135,7 +136,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool IsReady(this SpellSlot slot, int t = 0)
         {
-            var s = ObjectManager.Player.Spellbook.GetSpell(slot);
+            var s = HeroManager.Player.Spellbook.GetSpell(slot);
             return s != null && IsReady(s, t);
         }
 
@@ -158,7 +159,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// Returns the unit's ability power
         /// </summary>
-        /// 
+        [Obsolete("Use TotalMagicalDamage attribute.", false)]
         public static float AbilityPower(this Obj_AI_Base @base)
         {
             return @base.FlatMagicDamageMod + (@base.PercentMagicDamageMod * @base.FlatMagicDamageMod);
@@ -203,64 +204,100 @@ namespace LeagueSharp.Common
             return hero != null && hero.IsValid;
         }
 
+        /// <summary>
+        ///     Checks if this unit is the same as the given champion name
+        /// </summary>
         public static bool IsChampion(this Obj_AI_Base unit, string championName)
         {
             var hero = unit as Obj_AI_Hero;
             return hero != null && hero.IsValid && hero.ChampionName.Equals(championName);
         }
 
+        /// <summary>
+        ///     Checks if the unit casting recall
+        /// </summary>
         public static bool IsRecalling(this Obj_AI_Hero unit)
         {
             return unit.Buffs.Any(buff => buff.Name.ToLower().Contains("recall") && buff.Type == BuffType.Aura);
         }
 
+        /// <summary>
+        ///     Checks if the unit position is on screen
+        /// </summary>
         public static bool IsOnScreen(this Vector3 position)
         {
             var pos = Drawing.WorldToScreen(position);
             return pos.X > 0 && pos.X <= Drawing.Width && pos.Y > 0 && pos.Y <= Drawing.Height;
         }
 
+        /// <summary>
+        ///     Checks if the unit position is on screen
+        /// </summary>
         public static bool IsOnScreen(this Vector2 position)
         {
             return position.To3D().IsOnScreen();
         }
 
+        /// <summary>
+        ///     Randomizes the position with the supplied min/max
+        /// </summary>
         public static Vector3 Randomize(this Vector3 position, int min, int max)
         {
             var ran = new Random(Utils.TickCount);
             return position + new Vector2(ran.Next(min, max), ran.Next(min, max)).To3D();
         }
 
+        /// <summary>
+        ///    Randomizes the position with the supplied min/max
+        /// </summary>
         public static Vector2 Randomize(this Vector2 position, int min, int max)
         {
             return position.To3D().Randomize(min, max).To2D();
         }
 
+        /// <summary>
+        ///     Checks if this spell is an autoattack
+        /// </summary>
         public static bool IsAutoAttack(this SpellData spellData)
         {
             return Orbwalking.IsAutoAttack(spellData.Name);
         }
 
+        /// <summary>
+        ///     Checks if this spell is an autoattack
+        /// </summary>
         public static bool IsAutoAttack(this SpellDataInst spellData)
         {
             return Orbwalking.IsAutoAttack(spellData.Name);
         }
 
+        /// <summary>
+        ///     Checks if this position is a wall using NavMesh
+        /// </summary>
         public static bool IsWall(this Vector3 position)
         {
             return NavMesh.GetCollisionFlags(position).HasFlag(CollisionFlags.Wall);
         }
 
+        /// <summary>
+        ///     Checks if this position is a wall using NavMesh
+        /// </summary>
         public static bool IsWall(this Vector2 position)
         {
             return position.To3D().IsWall();
         }
 
+        /// <summary>
+        ///     Checks if CastState is SuccessfullyCasted
+        /// </summary>
         public static bool IsCasted(this Spell.CastStates state)
         {
             return state == Spell.CastStates.SuccessfullyCasted;
         }
 
+        /// <summary>
+        ///     Returns the recall duration
+        /// </summary>
         public static int GetRecallTime(Obj_AI_Hero obj)
         {
             return GetRecallTime(obj.Spellbook.GetSpell(SpellSlot.Recall).Name);
@@ -294,6 +331,9 @@ namespace LeagueSharp.Common
             return duration;
         }
 
+        /// <summary>
+        ///    Levels up a spell
+        /// </summary>
         public static void LevelUpSpell(this Spellbook book, SpellSlot slot, bool evolve = false)
         {
             book.LevelSpell(slot);
@@ -499,7 +539,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountEnemiesInRange(float range)
         {
-            return ObjectManager.Player.CountEnemiesInRange(range);
+            return HeroManager.Player.CountEnemiesInRange(range);
         }
 
         /// <summary>
@@ -524,7 +564,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static int CountAlliesInRange(float range)
         {
-            return ObjectManager.Player.CountAlliesInRange(range);
+            return HeroManager.Player.CountAlliesInRange(range);
         }
 
         /// <summary>
@@ -589,23 +629,13 @@ namespace LeagueSharp.Common
         {
             if (rangeCheckFrom.Equals(Vector3.Zero))
             {
-                rangeCheckFrom = ObjectManager.Player.ServerPosition;
+                rangeCheckFrom = HeroManager.Player.ServerPosition;
             }
 
             return ObjectManager.Get<T>().Where(x => rangeCheckFrom.Distance(x.Position, true) < range * range).ToList();
         }
 
 
-        /// <summary>
-        ///     Returns true if hero is in shop range.
-        /// </summary>
-        /// <returns></returns>
-        public static bool InShop(this Obj_AI_Hero hero)
-        {
-            return hero.IsVisible &&
-                   ObjectManager.Get<Obj_Shop>()
-                       .Any(s => s.Team == hero.Team && hero.Distance(s.Position, true) < 1562500); // 1250²
-        }
 
         /// <summary>
         ///     Draws a "lag-free" circle
@@ -646,18 +676,79 @@ namespace LeagueSharp.Common
             }
         }
 
-        public static bool InFountain(this Obj_AI_Hero hero)
+        /// <summary>
+        ///     Returns true if unit is in shop range (range in which the shopping is allowed).
+        /// </summary>
+        /// <returns></returns>
+        public static bool InShop(this Obj_AI_Base unit)
         {
             float fountainRange = 562500; //750 * 750
             var map = Map.GetMap();
             if (map != null && map.Type == Map.MapType.SummonersRift)
             {
-                fountainRange = 1102500; //1050 * 1050
+                fountainRange = 1000000; //1000 * 1000
             }
-            return hero.IsVisible &&
-                   ObjectManager.Get<Obj_SpawnPoint>()
-                       .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < fountainRange);
+            Vector3 fpos = unit.Team == HeroManager.Player.Team ? MiniCache.AllyFountain : MiniCache.EnemyFountain;
+            return unit.IsVisible && unit.Distance(fpos, true) <= fountainRange;
         }
+
+        public enum FountainType
+        {
+            OwnFountain,
+            EnemyFountain
+        }
+
+        /// <summary>
+        ///     Returns true if unit is in fountain range (range in which fountain heals).
+        ///     The second optional parameter allows you to indicate which fountain you want to check against.
+        /// </summary>
+        public static bool InFountain(this Obj_AI_Base unit, FountainType ftype = FountainType.OwnFountain)
+        {
+            float fountainRange = 562500; //750 * 750
+            var map = Map.GetMap();
+            if (map != null && map.Type == Map.MapType.SummonersRift)
+            {
+                fountainRange = 1210000; //1100 * 1100
+            }
+
+            Vector3 fpos = new Vector3();
+
+            if (ftype == FountainType.OwnFountain)
+            {
+                fpos = unit.Team == HeroManager.Player.Team ? MiniCache.AllyFountain : MiniCache.EnemyFountain;
+            }
+            if (ftype == FountainType.EnemyFountain)
+            {
+                fpos = unit.Team == HeroManager.Player.Team ? MiniCache.EnemyFountain : MiniCache.AllyFountain;
+            }
+
+            return unit.IsVisible && unit.Distance(fpos, true) <= fountainRange;
+        }
+
+        /// <summary>
+        ///     Checks a point to see if it is in an ally or enemy fountain
+        /// </summary>
+        public static bool InFountain(this Vector3 position, FountainType fountain)
+        {
+            return position.To2D().InFountain(fountain);
+        }
+
+        /// <summary>
+        ///     Checks a point to see if it is in an ally or enemy fountain
+        /// </summary>
+        public static bool InFountain(this Vector2 position, FountainType fountain)
+        {
+            float fountainRange = 562500; //750 * 750
+            var map = Map.GetMap();
+            if (map != null && map.Type == Map.MapType.SummonersRift)
+            {
+                fountainRange = 1210000; //1100 * 1100
+            }
+            Vector3 fpos = fountain == FountainType.OwnFountain ? MiniCache.AllyFountain : MiniCache.EnemyFountain;
+            return position.Distance(fpos, true) <= fountainRange;
+        }
+
+
 
         public static short GetPacketId(this GamePacketEventArgs gamePacketEventArgs)
         {
@@ -792,8 +883,41 @@ namespace LeagueSharp.Common
             }
         }
 
+        public class MiniCache
+        {
+            private class VectorHolder
+            {
+                public VectorHolder(Vector3 position)
+                {
+                    this.position = position;
+                }
+                public Vector3 position;
+            }
+            private static VectorHolder _allySpawn, _enemySpawn;
+
+            public static Vector3 AllyFountain
+            {
+                get
+                {
+                    if (_allySpawn != null) return _allySpawn.position;
+                    _allySpawn = new VectorHolder(ObjectManager.Get<Obj_SpawnPoint>().Find(x => x.IsAlly).Position);
+                    return _allySpawn.position;
+                }
+            }
+            public static Vector3 EnemyFountain
+            {
+                get
+                {
+                    if (_enemySpawn != null) return _enemySpawn.position;
+                    _enemySpawn = new VectorHolder(ObjectManager.Get<Obj_SpawnPoint>().Find(x => x.IsEnemy).Position);
+                    return _enemySpawn.position;
+                }
+            }
+        }
+
         public class Map
         {
+            private static Map _currentMap { get; set; }
             public enum MapType
             {
                 Unknown,
@@ -856,15 +980,19 @@ namespace LeagueSharp.Common
             public string Name { get; private set; }
             public string ShortName { get; private set; }
             public int StartingLevel { get; private set; }
-
             /// <summary>
             ///     Returns the current map.
             /// </summary>
             public static Map GetMap()
             {
+                if (_currentMap != null)
+                {
+                    return _currentMap;
+                }
                 if (MapById.ContainsKey((int) Game.MapId))
                 {
-                    return MapById[(int) Game.MapId];
+                    _currentMap = MapById[(int)Game.MapId];
+                    return _currentMap;
                 }
 
                 return new Map
