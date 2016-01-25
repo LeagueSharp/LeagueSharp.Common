@@ -445,6 +445,14 @@ namespace LeagueSharp.Common
                 return false;
             }
 
+            if (Player.ChampionName == "Jhin")
+            {
+                if(Player.HasBuff("JhinPassiveReload"))
+                {
+                    return false;
+                }
+            }
+
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }
 
