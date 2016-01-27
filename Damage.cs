@@ -332,6 +332,24 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Jhin
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Jhin",
+                IsActive = (source, target) => (source.HasBuff("jhinpassiveattackbuff")),
+                GetDamage =
+                            (source, target) =>
+                            ((float)
+                             source.CalcDamage(
+                                 target,
+                                 DamageType.Physical,
+                                 source.TotalAttackDamage * 0.5f + (target.MaxHealth - target.Health) * new float[] { 0.15f, 0.20f, 0.25f }[Math.Min(2, (source.Level - 1) / 5)])),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
             #region Jinx
 
             p = new PassiveDamage
