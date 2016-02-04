@@ -470,12 +470,12 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region LeBlanc
+            #region Leblanc
 
             Spells.Add(
                 new CGapcloser
                 {
-                    ChampionName = "LeBlanc",
+                    ChampionName = "Leblanc",
                     Slot = SpellSlot.W,
                     SpellName = "leblancslide",
                     SkillType = CGapcloserTypes.Skillshot,
@@ -485,7 +485,7 @@ namespace LeagueSharp.Common
             Spells.Add(
                 new CGapcloser
                 {
-                    ChampionName = "LeBlanc",
+                    ChampionName = "Leblanc",
                     Slot = SpellSlot.R,
                     SpellName = "leblancslidem",
                     SkillType = CGapcloserTypes.Skillshot,

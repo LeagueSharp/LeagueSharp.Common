@@ -431,12 +431,12 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region LeBlanc
+            #region Leblanc
 
             Spells.Add(
                 new Gapcloser
                 {
-                    ChampionName = "LeBlanc",
+                    ChampionName = "Leblanc",
                     Slot = SpellSlot.W,
                     SpellName = "leblancslide",
                     SkillType = GapcloserType.Skillshot
@@ -445,7 +445,7 @@ namespace LeagueSharp.Common
             Spells.Add(
                 new Gapcloser
                 {
-                    ChampionName = "LeBlanc",
+                    ChampionName = "Leblanc",
                     Slot = SpellSlot.R,
                     SpellName = "leblancslidem",
                     SkillType = GapcloserType.Skillshot
