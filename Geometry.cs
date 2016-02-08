@@ -748,8 +748,8 @@ namespace LeagueSharp.Common
             var sin = Math.Sin(angle);
             var cos = Math.Cos(angle);
 
-            var x = ((rotated.X - around.X) * cos) - ((around.Y - rotated.Y) * sin) + around.X;
-            var y = ((around.Y - rotated.Y) * cos) + ((rotated.X - around.X) * sin) + around.Y;
+            var x = cos * (rotated.X - around.X) - sin * (rotated.Y - around.Y) + around.X;
+            var y = sin * (rotated.X - around.X) + cos * (rotated.Y - around.Y) + around.Y;
 
             return new Vector2((float) x, (float) y);
         }
