@@ -104,7 +104,6 @@ namespace LeagueSharp.Common
 
             _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
             _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
-            _configMenu.Item("stack.count").Show(_configMenu.Item("TargetingMode").GetValue<StringList>().SelectedIndex == 8);
         }
 
         private static void GameOnOnWndProc(WndEventArgs args)
@@ -180,7 +179,7 @@ namespace LeagueSharp.Common
                 "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
                 "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu",
                 "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona",
-                "Soraka", "Taric", "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
+                "Taric", "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
             };
 
             string[] p2 =
@@ -203,7 +202,7 @@ namespace LeagueSharp.Common
                 "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Kindred",
                 "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
                 "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor",
-                "Xerath", "Zed", "Ziggs"
+                "Xerath", "Zed", "Ziggs", "Jhin", "Soraka"
             };
 
             if (p1.Contains(championName))
@@ -269,9 +268,6 @@ namespace LeagueSharp.Common
                     }
                 }
                 config.AddItem(autoPriorityItem);
-                config.AddItem(
-                    new MenuItem("stack.count", "Stack Count").SetValue(new Slider(2, 1, 20)))
-                    .SetTooltip("Only for Stack Mode");
                 config.AddItem(
                     new MenuItem("TargetingMode", "Target Mode").SetShared()
                         .SetValue(new StringList(Enum.GetNames(typeof (TargetingMode)))));
@@ -512,12 +508,13 @@ namespace LeagueSharp.Common
                                 hero =>
                                     champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) *
                                     GetPriority(hero));
-                    
+
                     case TargetingMode.MostStack:
-                        return targets.MaxOrDefault(hero =>
-                            hero.Buffs.Where(x => StackNames.Contains(x.Name.ToLower()) &&
-                                x.Count >= _configMenu.Item("stack.count").GetValue<Slider>().Value)
-                                .Sum(buff => buff.Count));
+                        return
+                            targets.MaxOrDefault(
+                                hero =>
+                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero) +
+                                    (1 + hero.Buffs.Where(b => StackNames.Contains(b.Name.ToLower())).Sum(t => t.Count)));
                 }
             }
             catch (Exception e)
