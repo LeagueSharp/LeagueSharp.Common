@@ -1135,14 +1135,10 @@ namespace LeagueSharp.Common
 
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral &&
-                            (_config.Item("AttackPetsnTraps").GetValue<bool>() &&
-                             minion.CharData.BaseSkinName != "jarvanivstandard" ||
-                             MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())))
+                        if (minion.Team != GameObjectTeam.Neutral && ShouldAttackMinion(minion))
                         {
                             var damage = Player.GetAutoAttackDamage(minion, true);
                             var killable = predHealth <= damage;
-                            var dead = predHealth <= 0;
 
                             if (mode == OrbwalkingMode.Freeze)
                             {
@@ -1369,10 +1365,8 @@ namespace LeagueSharp.Common
                                 }
                                 // late game
                                 var lastminion =
-                                    minions.Where(
-                                        x =>
-                                            x.NetworkId != turretMinion.NetworkId && x is Obj_AI_Minion &&
-                                            !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)).LastOrDefault();
+                                    minions.LastOrDefault(x => x.NetworkId != turretMinion.NetworkId && x is Obj_AI_Minion &&
+                                            !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion));
                                 if (lastminion != null && minions.Count() >= 2)
                                 {
                                     if (1f / Player.AttackDelay >= 1f &&
@@ -1412,9 +1406,8 @@ namespace LeagueSharp.Common
                                 }
                                 //late game
                                 var lastminion =
-                                    minions.Where(
-                                        x => x is Obj_AI_Minion && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion))
-                                        .LastOrDefault();
+                                    minions
+                                        .LastOrDefault(x => x is Obj_AI_Minion && !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion));
                                 if (lastminion != null && minions.Count() >= 2)
                                 {
                                     if (minions.Count() >= 5 && 1f / Player.AttackDelay >= 1.2)
@@ -1448,13 +1441,7 @@ namespace LeagueSharp.Common
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     minion =>
-                                        minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                        (_config.Item("AttackWards").GetValue<bool>() || 
-                                        !MinionManager.IsWard(minion)) &&
-                                        (_config.Item("AttackPetsnTraps").GetValue<bool>() &&
-                                         minion.CharData.BaseSkinName != "jarvanivstandard" ||
-                                         MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
-                                        minion.CharData.BaseSkinName != "gangplankbarrel" && minion.Name != "WardCorpse")
+                                        minion.IsValidTarget() && InAutoAttackRange(minion) && ShouldAttackMinion(minion, false))
                             let predHealth =
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
@@ -1472,6 +1459,34 @@ namespace LeagueSharp.Common
                 }
 
                 return result;
+            }
+
+            /// <summary>
+            ///     Returns if a minion should be attacked
+            /// </summary>
+            /// <param name="minion">The <see cref="Obj_AI_Minion" /></param>
+            /// <param name="includeBarrel">Include Gangplank Barrel</param>
+            /// <returns><c>true</c> if the minion should be attacked; otherwise, <c>false</c>.</returns>
+            private bool ShouldAttackMinion(Obj_AI_Minion minion, bool includeBarrel = false)
+            {
+                if (minion.Name == "WardCorpse" || minion.CharData.BaseSkinName == "jarvanivstandard")
+                {
+                    return false;
+                }
+
+                if (minion.Team == GameObjectTeam.Neutral && includeBarrel)
+                {
+                    return _config.Item("AttackBarrel").GetValue<bool>() &&
+                           minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered;
+                }
+
+                if (MinionManager.IsWard(minion))
+                {
+                    return _config.Item("AttackWards").IsActive();
+                }
+
+                return _config.Item("AttackPetsnTraps").GetValue<bool>() && MinionManager.IsMinion(minion) &&
+                       minion.CharData.BaseSkinName != "gangplankbarrel";
             }
 
             /// <summary>
