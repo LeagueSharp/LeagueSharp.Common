@@ -1914,7 +1914,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 90, 155, 220, 285, 350 }[level]
+                                    new double[] { 80, 125, 170, 215, 260 }[level]
                                     + new double[] { 0.4, 0.6, 0.8, 1, 1.2 }[level] * source.FlatPhysicalDamageMod
                             },
                         //W
@@ -3717,8 +3717,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] {40, 70, 100, 130, 160}[level]
-                                    + 0.65 * source.FlatPhysicalDamageMod
+                                    new double[] {40, 65, 90, 115, 140}[level]
+                                    + 0.80 * source.FlatPhysicalDamageMod
                                     + 0.06 * target.MaxHealth
                             },
                         //Q - both hits
@@ -3727,8 +3727,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    (new double[] {80, 140, 200, 260, 320}[level]
-                                    + 1.3 * source.FlatPhysicalDamageMod
+                                    (new double[] {80, 130, 180, 230, 280}[level]
+                                    + 1.6 * source.FlatPhysicalDamageMod
                                     + 0.12 * target.MaxHealth)
                             },
                         //W
@@ -5543,8 +5543,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 250, 375, 500 }[level]
-                                    + 0.9 * source.TotalMagicalDamage
+                                    new double[] { 300, 450, 600 }[level]
+                                    + 1.1 * source.TotalMagicalDamage
                             },
                     });
 
