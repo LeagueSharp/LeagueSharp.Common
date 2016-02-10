@@ -1485,7 +1485,7 @@ namespace LeagueSharp.Common
                     return _config.Item("AttackWards").IsActive();
                 }
 
-                return _config.Item("AttackPetsnTraps").GetValue<bool>() && MinionManager.IsMinion(minion) &&
+                return (_config.Item("AttackPetsnTraps").GetValue<bool>() || MinionManager.IsMinion(minion)) &&
                        minion.CharData.BaseSkinName != "gangplankbarrel";
             }
 
