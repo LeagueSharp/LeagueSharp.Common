@@ -119,7 +119,7 @@ namespace LeagueSharp.Common
             "gangplankqwrapper", "poppypassiveattack", "powerfist", "renektonpreexecute", "rengarq",
             "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
             "vie", "volibearq", "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism",
-            "illaoiw"
+            "illaoiw", "jhinq"
         };
 
 
@@ -447,7 +447,7 @@ namespace LeagueSharp.Common
 
             if (Player.ChampionName == "Jhin")
             {
-                if(Player.HasBuff("JhinPassiveReload"))
+                if (Player.HasBuff("JhinPassiveReload"))
                 {
                     return false;
                 }
