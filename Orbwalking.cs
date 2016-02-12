@@ -76,7 +76,7 @@ namespace LeagueSharp.Common
         public enum OrbwalkingMode
         {
             /// <summary>
-            ///     The orbalker will only last hit minions.
+            ///     The orbwalker will only last hit minions.
             /// </summary>
             LastHit,
 
@@ -95,6 +95,9 @@ namespace LeagueSharp.Common
             /// </summary>
             Combo,
 
+            /// <summary>
+            ///     The orbwalker will only last hit minions as late as possible.
+            /// </summary>
             Freeze,
 
             /// <summary>
@@ -119,7 +122,7 @@ namespace LeagueSharp.Common
             "gangplankqwrapper", "poppypassiveattack", "powerfist", "renektonpreexecute", "rengarq",
             "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
             "vie", "volibearq", "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism",
-            "illaoiw"
+            "illaoiw", "jhinq"
         };
 
 
@@ -447,7 +450,7 @@ namespace LeagueSharp.Common
 
             if (Player.ChampionName == "Jhin")
             {
-                if(Player.HasBuff("JhinPassiveReload"))
+                if (Player.HasBuff("JhinPassiveReload"))
                 {
                     return false;
                 }
