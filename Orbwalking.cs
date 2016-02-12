@@ -76,7 +76,7 @@ namespace LeagueSharp.Common
         public enum OrbwalkingMode
         {
             /// <summary>
-            ///     The orbalker will only last hit minions.
+            ///     The orbwalker will only last hit minions.
             /// </summary>
             LastHit,
 
@@ -95,6 +95,9 @@ namespace LeagueSharp.Common
             /// </summary>
             Combo,
 
+            /// <summary>
+            ///     The orbwalker will only last hit minions as late as possible.
+            /// </summary>
             Freeze,
 
             /// <summary>
