@@ -1209,10 +1209,13 @@ namespace LeagueSharp.Common
                 /*Champions*/
                 if (mode != OrbwalkingMode.LastHit)
                 {
-                    var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target))
+                    if (mode != OrbwalkingMode.LaneClear || !ShouldWait())
                     {
-                        return target;
+                        var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
+                        if (target.IsValidTarget() && InAutoAttackRange(target))
+                        {
+                            return target;
+                        }
                     }
                 }
 
