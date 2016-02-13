@@ -119,7 +119,7 @@ namespace LeagueSharp.Common
             "gangplankqwrapper", "poppypassiveattack", "powerfist", "renektonpreexecute", "rengarq",
             "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
             "vie", "volibearq", "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism",
-            "illaoiw"
+            "illaoiw", "elisespiderw", "fiorae", "meditate", "riventricleave", "sejuaninorthernwinds"          
         };
 
 
