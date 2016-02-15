@@ -85,7 +85,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Indicates whether the value was set.
         /// </summary>
-        internal bool ValueSet;
+        public bool ValueSet;
 
         /// <summary>
         ///     The value type.
