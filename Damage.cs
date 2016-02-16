@@ -35,6 +35,9 @@ using Resolve = LeagueSharp.Common.Data.MasteryData.Resolve;
 
 namespace LeagueSharp.Common
 {
+    using System.Threading;
+    using System.Web.UI.WebControls;
+
     /// <summary>
     /// Gets the damage done to a target.
     /// </summary>
@@ -201,10 +204,37 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Aatrox",
-                IsActive =
-                            (source, target) => (source.HasBuff("AatroxWPower") && source.HasBuff("AatroxWONHPowerBuff")),
+                IsActive = (source, target) => (source.HasBuff("AatroxWPower") && source.HasBuff("AatroxWONHPowerBuff")),
                 GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Akali
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Akali",
+                IsActive = (source, target) => true,
+                GetDamage =
+                    (source, target) =>
+                    (float)
+                    source.CalcDamage(
+                        target,
+                        DamageType.Magical,
+                        (0.06 + Math.Abs(source.TotalMagicalDamage / 100) * 0.16667) * source.TotalAttackDamage)
+            };
+
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Akali",
+                IsActive = (source, target) => target.HasBuff("AkaliMota"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.Q, 1)
+            };
+
             AttackPassives.Add(p);
 
             #endregion
@@ -217,12 +247,82 @@ namespace LeagueSharp.Common
                 IsActive = (source, target) => (source.HasBuff("alistartrample")),
                 GetDamage =
                             (source, target) =>
-                            ((float)
-                             source.CalcDamage(
-                                 target,
-                                 DamageType.Magical,
-                                 6d + source.Level + (0.1d * source.TotalMagicalDamage))),
+                            (float)
+                            source.CalcDamage(
+                                target,
+                                DamageType.Magical,
+                                6d + source.Level + 0.1d * source.TotalMagicalDamage),
             };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Ashe
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Ashe",
+                IsActive = (source, target) => target.HasBuff("ashepassiveslow"),
+                GetDamage = (source, target) => source.CalcDamage(target, DamageType.Physical, source.TotalAttackDamage * (0.1 + (source.Crit * (1 + source.CritDamageMultiplier))))
+            };
+
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Ashe",
+                IsActive = (source, target) => source.HasBuff("asheqattack"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.Q)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Bard
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Bard",
+                IsActive = (source, target) => source.GetBuffCount("bardpspiritammocount") > 0,
+                GetDamage =
+                            (source, target) =>
+                            source.CalcDamage(
+                                target,
+                                DamageType.Magical,
+                                new[] { 30, 55, 80, 110, 140, 175, 210, 245, 280, 315, 345, 375, 400, 425, 445, 465 }[
+                                    Math.Min(source.GetBuffCount("bardpdisplaychimecount") / 10, 15)]
+                                + (source.GetBuffCount("bardpdisplaychimecount") > 150
+                                       ? Math.Truncate((source.GetBuffCount("bardpdisplaychimecount") - 150) / 5d) * 20
+                                       : 0) + 0.3 * source.TotalMagicalDamage)
+             };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Blatzcrink
+
+            p = new PassiveDamage
+                    {
+                        ChampionName = "Blitzcrank",
+                        IsActive = (source, target) => source.HasBuff("PowerFist"),
+                        GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.E)
+                    };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Braum
+
+            p = new PassiveDamage
+                    {
+                        ChampionName = "Braum", IsActive = (source, target) => source.HasBuff("braummarkstunreduction"),
+                        GetDamage =
+                            (source, target) => source.CalcDamage(target, DamageType.Magical, 6.4 + (1.6 * source.Level))
+                    };
+
             AttackPassives.Add(p);
 
             #endregion
@@ -230,7 +330,7 @@ namespace LeagueSharp.Common
             #region Caitlyn
 
             p = new PassiveDamage
-            {
+            {              
                 ChampionName = "Caitlyn", IsActive = (source, target) => (source.HasBuff("caitlynheadshot")),
                 GetDamage =
                             (source, target) =>
@@ -240,6 +340,95 @@ namespace LeagueSharp.Common
                                  DamageType.Physical,
                                  1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region ChoGath
+
+            p = new PassiveDamage
+            {
+                ChampionName = "ChoGath",
+                IsActive = (source, target) => source.HasBuff("VorpalSpikes"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.E)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Corki
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Corki",
+                IsActive = (source, target) => (source.HasBuff("rapidreload")),
+                GetDamage =
+                            (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Darius
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Darius",
+                IsActive = (source, target) => true,
+                GetDamage =
+                            (source, target) =>
+                            source.CalcDamage(
+                                target,
+                                DamageType.Physical,
+                                ((9 + source.Level + (source.FlatPhysicalDamageMod * 0.3))
+                                 * Math.Min(target.GetBuffCount("dariushemo") + 1, 5))
+                                * (target.Type == GameObjectType.obj_AI_Minion ? 0.25 : 1))
+            };
+
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Darius",
+                IsActive = (source, target) => source.HasBuff("DariusNoxianTacticsONH"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Dianna
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Diana",
+                IsActive = (source, target) => source.HasBuff("dianaarcready"),
+                GetDamage =
+                    (source, target) =>
+                    source.CalcDamage(
+                        target,
+                        DamageType.Magical,
+                        15
+                        + ((source.Level < 6
+                                ? 5
+                                : (source.Level < 11 ? 10 : (source.Level < 14 ? 15 : (source.Level < 16 ? 20 : 25))))
+                           * source.Level) + (source.TotalMagicalDamage * 0.8))
+                    };
+
+            #endregion
+
+            #region DrMundo
+
+            p = new PassiveDamage
+            {
+                ChampionName = "DrMundo",
+                IsActive = (source, target) => source.HasBuff("Masochism"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.E)
+            };
+
             AttackPassives.Add(p);
 
             #endregion
@@ -257,21 +446,11 @@ namespace LeagueSharp.Common
                                  DamageType.Physical,
                                  0.45d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
+
             AttackPassives.Add(p);
 
             #endregion
-
-            #region Corki
-
-            p = new PassiveDamage
-            {
-                ChampionName = "Corki", IsActive = (source, target) => (source.HasBuff("rapidreload")),
-                GetDamage =
-                            (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
-            };
-            AttackPassives.Add(p);
-
-            #endregion
+    
 
             #region Ekko
 
@@ -282,6 +461,7 @@ namespace LeagueSharp.Common
                 GetDamage = (source, target) =>
                  (float)source.CalcDamage(target, DamageType.Magical, 10 + (source.Level * 10) + (source.TotalMagicalDamage * 0.8)),
             };
+
             AttackPassives.Add(p);
             
             p = new PassiveDamage
@@ -296,6 +476,84 @@ namespace LeagueSharp.Common
                     return dmg;
                 }
             };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Fizz
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Fizz",
+                IsActive = (source, target) => source.GetSpell(SpellSlot.W).Level > 0,
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W) / 6
+            };
+
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Fizz",
+                IsActive = (source, target) => source.HasBuff("FizzSeastonePassive"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Gangplank
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Gangplank",
+                IsActive = (source, target) => source.HasBuff("gangplankpassiveattack"),
+                GetDamage =
+                    (source, target) =>
+                    source.CalcDamage(
+                        target,
+                        DamageType.True,
+                        20 + (10 * source.Level) + source.FlatPhysicalDamageMod)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Garen
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Garen",
+                IsActive = (source, target) => source.HasBuff("GarenQ"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.Q)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Gnar
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Gnar",
+                IsActive = (source, target) => (target.GetBuffCount("gnarwproc") == 2),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Gragas
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Gragas",
+                IsActive = (source, target) => source.HasBuff("gragaswattackbuff"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+            };
+
             AttackPassives.Add(p);
 
             #endregion
@@ -320,14 +578,107 @@ namespace LeagueSharp.Common
 
             #endregion
 
-            #region Gnar
+            #region Hecarim
 
             p = new PassiveDamage
             {
-                ChampionName = "Gnar",
-                IsActive = (source, target) => (target.GetBuffCount("gnarwproc") == 2),
-                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+                ChampionName = "Hecarim",
+                IsActive = (source, target) => source.HasBuff("hecarimrampspeed"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.E)
             };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Illaoi
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Illaoi",
+                IsActive = (source, target) => source.HasBuff("IllaoiW"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Irelia
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Irelia",
+                IsActive = (source, target) => source.HasBuff("ireliahitenstylecharged"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+             };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region JarvanIV
+
+            p = new PassiveDamage
+            {
+                ChampionName = "JarvanIV",
+                IsActive = (source, target) => !target.HasBuff("jarvanivmartialcadencecheck"),
+                GetDamage =
+                    (source, target) =>
+                    source.CalcDamage(target, DamageType.Physical, Math.Min(target.Health * 0.1, 400))
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Jax
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Jax",
+                IsActive = (source, target) => source.HasBuff("JaxEmpowerTwo"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Jayce
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Jayce",
+                IsActive =
+                    (source, target) =>
+                    Math.Abs(source.Crit - 1) < float.Epsilon && !source.HasBuff("jaycehypercharge"),
+                GetDamage =
+                    (source, target) =>
+                    source.CalcDamage(
+                        target,
+                        DamageType.Physical,
+                        source.GetCritMultiplier() * source.TotalAttackDamage)
+            };
+
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Jayce",
+                IsActive = (source, target) => source.HasBuff("jaycehypercharge"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W, 1)
+            };
+
+            AttackPassives.Add(p);
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Jayce",
+                IsActive = (source, target) => source.HasBuff("jaycepassivemeleeattack"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.R)
+            };
+
             AttackPassives.Add(p);
 
             #endregion
@@ -387,6 +738,32 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Kalista
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Kalista",
+                IsActive = (source, target) => target.HasBuff("kalistacoopstrikemarkally"),
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.W)
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Kassadin
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Kassadin",
+                IsActive = (source, target) => source.GetSpell(SpellSlot.W).Level > 0,
+                GetDamage =
+                    (source, target) =>
+                    source.GetSpellDamage(target, SpellSlot.W, source.HasBuff("NetherBlade") ? 1 : 0)
+            };
+
+            #endregion
+
             #region Katarina
 
             p = new PassiveDamage
@@ -394,6 +771,19 @@ namespace LeagueSharp.Common
                 ChampionName = "Katarina", IsActive = (source, target) => (target.HasBuff("katarinaqmark")),
                 GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
             };
+            AttackPassives.Add(p);
+
+            #endregion
+
+            #region Kayle
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Kayle",
+                IsActive = (source, target) => source.GetSpell(SpellSlot.E).Level > 0,
+                GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.E)
+            };
+
             AttackPassives.Add(p);
 
             #endregion
@@ -6385,7 +6775,13 @@ namespace LeagueSharp.Common
 
             return value;
         }
- 
+
+        private static float GetCritMultiplier(this Obj_AI_Hero hero, bool checkCrit = false)
+        {
+            var crit = Items.HasItem((int)ItemId.Infinity_Edge, hero) ? 1.5f : 1;
+            return !checkCrit ? crit : (Math.Abs(hero.Crit - 1) < float.Epsilon ? 1 + crit : 1);
+        }
+
         /// <summary>
         /// Represents a damage spell that only occurs with a passive.
         /// </summary>
@@ -6397,7 +6793,7 @@ namespace LeagueSharp.Common
             /// <param name="source">The source.</param>
             /// <param name="target">The target.</param>
             /// <returns></returns>
-            public delegate float GetDamageD(Obj_AI_Hero source, Obj_AI_Base target);
+            public delegate double GetDamageD(Obj_AI_Hero source, Obj_AI_Base target);
 
             /// <summary>
             /// Gets whether this instance is active.
@@ -6424,3 +6820,4 @@ namespace LeagueSharp.Common
         }
     }
 }
+
