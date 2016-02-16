@@ -348,6 +348,26 @@ namespace LeagueSharp.Common
             };
             AttackPassives.Add(p);
 
+            p = new PassiveDamage()
+            {
+                ChampionName = "Jhin",
+                IsActive = (source, target) => Math.Abs(source.Crit - 1) < float.Epsilon,
+                GetDamage =
+                    (source, target) =>
+                    (float)
+                    source.CalcDamage(
+                        target,
+                        DamageType.Physical,
+                        (Items.HasItem((int)ItemId.Infinity_Edge, source) ? 0.875 : 0.5)
+                        * (source.TotalAttackDamage
+                           * (1
+                              + (new[] { 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40 }[
+                                  source.Level - 1] + (Math.Floor(source.Crit * 100 / 10) * 4)
+                                 + (Math.Floor((source.AttackSpeedMod - 1) * 100 / 10) * 2.5)) / 100)))
+            };
+
+            AttackPassives.Add(p);
+
             #endregion
 
             #region Jinx
@@ -1233,7 +1253,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 130, 180, 230, 280 }[level]
+                                    new double[] { 70, 115, 150, 205, 250 }[level]
                                     + 0.5 * source.TotalMagicalDamage
                                     + 0.5 * source.FlatPhysicalDamageMod
                             },
