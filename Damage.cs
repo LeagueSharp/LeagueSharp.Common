@@ -799,6 +799,24 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Lux
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Lux",
+                IsActive = (source, target) => source.HasBuff("LuxIlluminatingFraulein"),
+                GetDamage =
+                    (source, target) =>
+                    source.CalcDamage(
+                        target,
+                        DamageType.Magical,
+                        10 + (8 * source.Level) + (0.2 * source.TotalMagicalDamage))
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
             #region Nasus
 
             p = new PassiveDamage
