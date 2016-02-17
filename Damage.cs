@@ -1873,7 +1873,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "XinZhao",
-                IsActive = (source, target) => source.HasBuff("ZenZhaoComboTarget"),
+                IsActive = (source, target) => source.HasBuff("XenZhaoComboTarget"),
                 GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.Q)
             };
 
