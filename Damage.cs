@@ -1636,7 +1636,7 @@ namespace LeagueSharp.Common
             #endregion
 
             #region Twitch
-
+	    /*
             p = new PassiveDamage
             {
                 ChampionName = "Twitch",
@@ -1654,7 +1654,7 @@ namespace LeagueSharp.Common
             };
 
             AttackPassives.Add(p);
-
+	    */
             #endregion
 
             #region Udyr
