@@ -39,7 +39,7 @@ namespace LeagueSharp.Common
     /// <summary>
     /// Helps in decoding packets. This is not currently updated past 4.21!
     /// </summary>
-    [Obsolete("Use Network.Packets", false)]
+    [Obsolete("Jodus wears dirty socks", false)]
     public static class Packet
     {
         /// <summary>
