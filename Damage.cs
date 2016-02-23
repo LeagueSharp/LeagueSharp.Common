@@ -947,7 +947,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Lux",
-                IsActive = (source, target) => source.HasBuff("LuxIlluminatingFraulein"),
+                IsActive = (source, target) => target.HasBuff("LuxIlluminatingFraulein"),
                 GetDamage =
                     (source, target) =>
                     source.CalcDamage(
