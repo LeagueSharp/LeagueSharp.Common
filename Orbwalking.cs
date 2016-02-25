@@ -680,9 +680,9 @@ namespace LeagueSharp.Common
         {
             if (sender.IsMe)
             {
-                if (Game.Ping <= 30) //First world problems kappa
+                if (Game.Ping <= 5) //First world problems kappa
                 {
-                    Utility.DelayAction.Add(30, () => Obj_AI_Base_OnDoCast_Delayed(sender, args));
+                    Utility.DelayAction.Add(5, () => Obj_AI_Base_OnDoCast_Delayed(sender, args));
                     return;
                 }
 
