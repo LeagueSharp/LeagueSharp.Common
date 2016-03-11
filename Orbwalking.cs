@@ -641,7 +641,7 @@ namespace LeagueSharp.Common
                         return;
                     }
 
-                    MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
+                    MoveTo(position, Math.Max(holdAreaRadius, 30), false, useFixedDistance, randomizeMinDistance);
                 }
             }
             catch (Exception e)
