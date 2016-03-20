@@ -52,6 +52,14 @@ namespace LeagueSharp.Common
             return source.Direction.To2D().Perpendicular().AngleBetween((target.Position - source.Position).To2D()) < angle;
         }
 
+        public static float GetSpellCoolDown(this Obj_AI_Hero hero, SpellSlot spell)
+        {
+            var expire = hero.Spellbook.GetSpell(spell).CooldownExpires;
+            var cd = (expire - (Game.Time - 1));
+
+            return cd <=  0 ? 0 : cd ;
+        }
+
         /// <summary>
         ///     Returns if both source and target are Facing Themselves.
         /// </summary>
