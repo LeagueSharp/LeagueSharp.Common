@@ -52,6 +52,12 @@ namespace LeagueSharp.Common
             return source.Direction.To2D().Perpendicular().AngleBetween((target.Position - source.Position).To2D()) < angle;
         }
 
+        /// <summary>
+        /// Will return real time spell cooldown
+        /// </summary>
+        /// <param name="hero"></param>
+        /// <param name="spell"></param>
+        /// <returns></returns>
         public static float GetSpellCoolDown(this Obj_AI_Hero hero, SpellSlot spell)
         {
             var expire = hero.Spellbook.GetSpell(spell).CooldownExpires;
