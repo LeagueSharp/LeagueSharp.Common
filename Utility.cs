@@ -58,7 +58,7 @@ namespace LeagueSharp.Common
         /// <param name="hero"></param>
         /// <param name="spell"></param>
         /// <returns></returns>
-        public static float GetSpellCoolDown(this Obj_AI_Hero hero, SpellSlot spell)
+        public static float GetSpellCooldownEx(this Obj_AI_Hero hero, SpellSlot spell)
         {
             var expire = hero.Spellbook.GetSpell(spell).CooldownExpires;
             var cd = (expire - (Game.Time - 1));
