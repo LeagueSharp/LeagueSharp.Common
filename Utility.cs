@@ -53,6 +53,20 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        /// Will return real time spell cooldown
+        /// </summary>
+        /// <param name="hero"></param>
+        /// <param name="spell"></param>
+        /// <returns></returns>
+        public static float GetSpellCoolDown(this Obj_AI_Hero hero, SpellSlot spell)
+        {
+            var expire = hero.Spellbook.GetSpell(spell).CooldownExpires;
+            var cd = (expire - (Game.Time - 1));
+
+            return cd <=  0 ? 0 : cd ;
+        }
+
+        /// <summary>
         ///     Returns if both source and target are Facing Themselves.
         /// </summary>
         public static bool IsBothFacing(Obj_AI_Base source, Obj_AI_Base target)
