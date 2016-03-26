@@ -159,7 +159,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool IsValid<T>(this GameObject obj) where T : GameObject
         {
-            return obj as T != null && obj.IsValid;
+            return obj is T && obj.IsValid;
         }
 
         /// <summary>
