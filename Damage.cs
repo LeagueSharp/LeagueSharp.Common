@@ -3464,6 +3464,60 @@ namespace LeagueSharp.Common
                     });
 
             Spells.Add(
+                "Jhin",
+                new List<DamageSpell>
+                    {
+                        //Q
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.Q, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 60, 85, 110, 135, 160 }[level]
+                                    + new double[] { 0.3, 0.35, 0.4, 0.45, 0.5 }[level] * source.FlatPhysicalDamageMod
+                                    + 0.6 * source.TotalMagicalDamage
+                            },
+                        //W
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.W, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 85, 120, 155, 190 }[level]
+                                    + 0.7 * source.FlatPhysicalDamageMod
+                            },
+                        //E
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.E, DamageType = DamageType.Magical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 20, 80, 140, 200, 260 }[level]
+                                    + 1.20 * source.FlatPhysicalDamageMod
+                                    + 1 * source.TotalMagicalDamage
+                            },
+                        //R - Normal Shot
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.R, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 125, 200 }[level]
+                                    + 0.25 * source.FlatPhysicalDamageMod * (1 + (100 - target.HealthPercent) * 1.02)
+                            },
+                        //R - Final Shot
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 125, 200 }[level]
+                                    + 0.25 * source.FlatPhysicalDamageMod * (1 + (100 - target.HealthPercent) * 1.02)
+                                    * 2 + 0.01 * source.FlatCritDamageMod
+                            },
+                    });
+
+            Spells.Add(
                 "Jinx",
                 new List<DamageSpell>
                     {
@@ -3473,7 +3527,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    0.1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    0.1 * source.TotalAttackDamage
                             },
                         //W
                         new DamageSpell
@@ -3482,7 +3536,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 60, 110, 160, 210 }[level]
-                                    + 1.4 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    + 1.4 * source.FlatPhysicalDamageMod
                             },
                         //E
                         new DamageSpell
