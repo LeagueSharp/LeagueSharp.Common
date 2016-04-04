@@ -11,13 +11,10 @@
 
     using Color = SharpDX.Color;
     using Rectangle = SharpDX.Rectangle;
-    using Newtonsoft.Json;
-    using System.Security.Permissions;
 
     /// <summary>
-    /// The menu.
+    ///     The menu.
     /// </summary>
-    [JsonObject(MemberSerialization.OptIn)]
     public class Menu
     {
         #region Static Fields
@@ -39,7 +36,6 @@
         /// <summary>
         ///     The menu children.
         /// </summary>
-        [JsonProperty]
         public List<Menu> Children = new List<Menu>();
 
         /// <summary>
@@ -50,39 +46,21 @@
         /// <summary>
         ///     The menu display name.
         /// </summary>
-        [JsonProperty]
         public string DisplayName;
 
         /// <summary>
         ///     Indicates whether the menu has a root attribute.
         /// </summary>
-        [JsonProperty]
         public bool IsRootMenu;
 
         /// <summary>
-        ///     The menu items
+        ///     The menu submenus.
         /// </summary>
         public List<MenuItem> Items = new List<MenuItem>();
 
-        // <summary>
-        /// The Current Loaded Items for this Menu
-        internal List<MenuItem> _loadedItems = new List<MenuItem>();
-
-        // <summary>
-        /// The getter provides up to date items for serialization where as the setter 
-        /// is used for deserialization to store into _loadeditems.
-        [JsonProperty(PropertyName = "Items")]
-        private List<MenuItem> LoadedItems
-        {
-            get { return SavedSettings.LoadedJSONS[configName].Values.ToList(); } //return SavedSettings.LoadedJSONS [Name].Values.ToList();
-            set { _loadedItems = value;  }
-        }
-
-    
         /// <summary>
         ///     The menu name.
         /// </summary>
-        [JsonProperty]
         public string Name;
 
         /// <summary>
@@ -115,16 +93,6 @@
         /// </summary>
         private string uniqueId;
 
-        /// <summary>
-        ///     The assembly name
-        /// </summary>
-        public string Assemblyname;
-
-        /// <summary>
-        /// The name of the configuration file
-        internal string configName;
-
-
         #endregion
 
         #region Constructors and Destructors
@@ -153,12 +121,6 @@
             CommonMenu.Instance.AddSubMenu(Root);
         }
 
-        [JsonConstructor]
-        public Menu(string name)
-        {
-            this.Name = name;
-        }
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="Menu" /> class.
         /// </summary>
@@ -171,7 +133,6 @@
         /// <param name="isRootMenu">
         ///     Indicates whether the menu has root attribute.
         /// </param>
-        
         public Menu(string displayName, string name, bool isRootMenu = false)
         {
             this.DisplayName = displayName;
@@ -179,8 +140,6 @@
             this.IsRootMenu = isRootMenu;
             this.Style = FontStyle.Regular;
             this.Color = Color.White;
-            this.Assemblyname = Assembly.GetCallingAssembly().GetName().Name;
-            this.configName = Assembly.GetCallingAssembly().GetName().Name + Assembly.GetCallingAssembly().GetType().GUID;
 
             if (isRootMenu)
             {
@@ -188,8 +147,8 @@
                 Game.OnEnd += delegate { this.SaveAll(); };
                 AppDomain.CurrentDomain.DomainUnload += delegate { this.SaveAll(); };
                 AppDomain.CurrentDomain.ProcessExit += delegate { this.SaveAll(); };
-              
-                var rootName = Assemblyname + "." + name;
+
+                var rootName = Assembly.GetCallingAssembly().GetName().Name + "." + name;
 
                 if (RootMenus.ContainsKey(rootName))
                 {
@@ -197,7 +156,6 @@
                 }
 
                 RootMenus.Add(rootName, this);
-
             }
         }
 
@@ -756,7 +714,7 @@
         }
 
         /// <summary>
-        ///     Save all in a recursive method.
+        ///     Save all in a recurisve method.
         /// </summary>
         /// <param name="dics">
         ///     The collection.
@@ -774,49 +732,26 @@
             }
         }
 
-
-
-
         /// <summary>
-        /// Saves everything recursively.
+        ///     Save all data.
         /// </summary>
-        /// <param name="dics">The dics.</param>
-        internal void RecursiveSaveAll(ref Dictionary<string, Dictionary<string, MenuItem>> dics)
-        {
-            foreach (var child in Children)
-            {
-                child.RecursiveSaveAll(ref dics);
-            }
-
-            foreach (var item in Items)
-            {
-                item.SaveToFile(ref dics);
-            }
-        }
-
-
-        internal void LoadRecursively(ref Dictionary<string, MenuItem> dic)
-        {
-            foreach (var child in Children)
-            {
-                child.LoadRecursively(ref dic);
-            }
-
-            foreach (var item in _loadedItems)
-            {
-                item.LoadToDict(ref dic);
-            }
-        }
-
-
         internal void SaveAll()
         {
-            SavedSettings.SaveToJSON(this);
+            var dic = new Dictionary<string, Dictionary<string, byte[]>>();
+            this.RecursiveSaveAll(ref dic);
+
+            foreach (var dictionary in dic)
+            {
+                var dicToSave = SavedSettings.Load(dictionary.Key) ?? new Dictionary<string, byte[]>();
+
+                foreach (var entry in dictionary.Value)
+                {
+                    dicToSave[entry.Key] = entry.Value;
+                }
+
+                SavedSettings.Save(dictionary.Key, dicToSave);
+            }
         }
-
-        
-
-
 
         /// <summary>
         ///     Initialize menu state.

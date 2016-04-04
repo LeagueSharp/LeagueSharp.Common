@@ -80,10 +80,6 @@
     <Reference Include="LeagueSharp.Sandbox">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
@@ -138,7 +134,6 @@
     <Compile Include="Menu\MenuGlobals.cs" />
     <Compile Include="Menu\MenuItem.cs" />
     <Compile Include="Menu\MenuSettings.cs" />
-    <Compile Include="Menu\MenuJSON.cs" />
     <Compile Include="Menu\MenuValueType.cs" />
     <Compile Include="Menu\OnValueChangeEventArgs.cs" />
     <Compile Include="Menu\SavedSettings.cs" />

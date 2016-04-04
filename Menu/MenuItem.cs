@@ -14,12 +14,10 @@ namespace LeagueSharp.Common
     using Color = SharpDX.Color;
     using Font = SharpDX.Direct3D9.Font;
     using Rectangle = SharpDX.Rectangle;
-    using Newtonsoft.Json;
-    using System.Security.Permissions;    
-    
+
     /// <summary>
     ///     The menu item.
-    [JsonObject(MemberSerialization.OptIn)]
+    /// </summary>
     public class MenuItem
     {
         #region Fields
@@ -27,7 +25,6 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     The display name.
         /// </summary>
-        [JsonProperty]
         public string DisplayName;
 
         /// <summary>
@@ -48,13 +45,11 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     The name.
         /// </summary>
-        [JsonProperty]
         public string Name;
 
         /// <summary>
         ///     The parent.
         /// </summary>
-        
         public Menu Parent;
 
         /// <summary>
@@ -110,7 +105,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Indicates whether the menu item is shared.
         /// </summary>
-        internal bool isShared;
+        private bool isShared;
 
         /// <summary>
         ///     Indicates whether the menu item is visible.
@@ -125,8 +120,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     The value.
         /// </summary>
-        [JsonProperty]
-        internal object value;
+        private object value;
 
         /// <summary>
         /// The stage of the KeybindSetting
@@ -136,10 +130,6 @@ namespace LeagueSharp.Common
 
         #region Constructors and Destructors
 
-        [JsonConstructor]
-        public MenuItem()
-        {
-        }
         /// <summary>
         ///     Initializes a new instance of the <see cref="Menu" /> class.
         /// </summary>
@@ -349,38 +339,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Saves to file.
-        /// </summary>
-        /// <param name="dics">The dics.</param>
-        internal void SaveToFile(ref Dictionary<string, Dictionary<string, MenuItem>> dics)
-        {
-            if (!dontSave)
-            {
-                if (!dics.ContainsKey(SaveFileName))
-                {
-                    dics.Add(SaveFileName, new Dictionary<string, MenuItem>());
-                }
-
-                dics[SaveFileName][Name] = this;
-            }
-        }
-
-        internal void LoadToDict(ref Dictionary<string, MenuItem> dic)
-        {
-            if (!dic.ContainsKey(Name))
-            {
-                dic.Add(Name, this);
-            }
-            else {
-                dic[Name] = this;
-            }
-        }
-
-
-
-
-        /// <summary>
-        ///     Gets the item valuec
+        ///     Gets the item value.
         /// </summary>
         /// <typeparam name="T">
         ///     The item type.
@@ -495,7 +454,6 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The item instance.
         /// </returns>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public MenuItem SetValue<T>(T newValue)
         {
             this.ValueType = MenuValueType.None;
@@ -532,52 +490,17 @@ namespace LeagueSharp.Common
                 Console.WriteLine(@"CommonLibMenu: Data type not supported");
             }
 
-            SavedSettings.Load(SaveFileName);
-
-            SavedSettings.ReadFormat format = SavedSettings.ReadFormat.JSON;
-            
-            if (SavedSettings.FileFormat.ContainsKey(SaveFileName))
-            {
-                format = SavedSettings.FileFormat[SaveFileName];
-            }
-
-            var usingJSON = format == SavedSettings.ReadFormat.JSON;
-
+            var readBytes = SavedSettings.GetSavedData(this.SaveFileName, this.SaveKey);
             var v = newValue;
 
             try
             {
-                byte[] readBytes = null;
-                MenuItem readJSON = null;
-
-                if (format == SavedSettings.ReadFormat.BIN)
-                {
-                    readBytes = SavedSettings.GetSavedData(SaveFileName, SaveKey);
-                }
-
-                else if (format == SavedSettings.ReadFormat.JSON)
-                {
-                    if (SavedSettings.LoadedJSONS.ContainsKey(SaveFileName))
-                    {
-                        if (SavedSettings.LoadedJSONS[SaveFileName].ContainsKey(Name))
-                        {
-                            readJSON = SavedSettings.LoadedJSONS[SaveFileName][Name];
-                        }
-                        else if (SavedSettings.LoadedJSONS[SaveFileName].ContainsKey(SaveKey))
-                        {
-                            readJSON = SavedSettings.LoadedJSONS[SaveFileName][SaveKey];
-                            SavedSettings.LoadedJSONS[SaveFileName][SaveKey].Name = this.Name;
-                            SavedSettings.LoadedJSONS[SaveFileName][SaveKey].DisplayName = this.DisplayName;
-                        }
-                    }
-                }
-
-                if (!this.ValueSet && (usingJSON ? readJSON != null : readBytes != null))
+                if (!this.ValueSet && readBytes != null)
                 {
                     switch (this.ValueType)
                     {
                         case MenuValueType.KeyBind:
-                            KeyBind savedKeyValue = usingJSON ? JsonConvert.DeserializeObject<KeyBind>(readJSON.value.ToString()) :  (KeyBind)(object)Utils.Deserialize<T>(readBytes);
+                            var savedKeyValue = (KeyBind)(object)Utils.Deserialize<T>(readBytes);
                             if (savedKeyValue.Type == KeyBindType.Press)
                             {
                                 savedKeyValue.Active = false;
@@ -586,42 +509,32 @@ namespace LeagueSharp.Common
                             newValue = (T)(object)savedKeyValue;
                             break;
                         case MenuValueType.Circle:
-                            var savedCircleValue = usingJSON ? (JsonConvert.DeserializeObject<Circle>(readJSON.value.ToString())) : (Circle)(object)Utils.Deserialize<T>(readBytes);
+                            var savedCircleValue = (Circle)(object)Utils.Deserialize<T>(readBytes);
                             var newCircleValue = (Circle)(object)newValue;
                             savedCircleValue.Radius = newCircleValue.Radius;
                             newValue = (T)(object)savedCircleValue;
                             break;
                         case MenuValueType.Slider:
-                            var savedSliderValue = usingJSON ? JsonConvert.DeserializeObject<Slider>(readJSON.value.ToString()) : (Slider)(object)Utils.Deserialize<T>(readBytes);
+                            var savedSliderValue = (Slider)(object)Utils.Deserialize<T>(readBytes);
                             var newSliderValue = (Slider)(object)newValue;
                             if (savedSliderValue.MinValue == newSliderValue.MinValue
                                 && savedSliderValue.MaxValue == newSliderValue.MaxValue)
                             {
                                 newValue = (T)(object)savedSliderValue;
                             }
+
                             break;
                         case MenuValueType.StringList:
-                            StringList savedListValue = usingJSON ? JsonConvert.DeserializeObject<StringList>(readJSON.value.ToString()) : (StringList)(object)Utils.Deserialize<T>(readBytes);
+                            var savedListValue = (StringList)(object)Utils.Deserialize<T>(readBytes);
                             var newListValue = (StringList)(object)newValue;
                             if (savedListValue.SList.SequenceEqual(newListValue.SList))
                             {
                                 newValue = (T)(object)savedListValue;
                             }
-                            break;
-                        case MenuValueType.Color:
-                            var savedColorValue = usingJSON ? System.Drawing.Color.FromName(readJSON.value.ToString()) : (System.Drawing.Color)(object)Utils.Deserialize<T>(readBytes);
-                            var newColorValue = (System.Drawing.Color)(object)newValue;
-                            newValue = (T)(object)savedColorValue;
-                            break;
 
+                            break;
                         default:
-                            try {
-                                newValue = usingJSON ? (T)(object)readJSON.value : Utils.Deserialize<T>(readBytes);
-                            }
-                            catch (InvalidCastException ex)
-                            {
-                                Console.WriteLine(ex + " caused by: " + Name + " " + DisplayName + " " + ValueType);
-                            }
+                            newValue = Utils.Deserialize<T>(readBytes);
                             break;
                     }
                 }
@@ -629,7 +542,7 @@ namespace LeagueSharp.Common
             catch (Exception e)
             {
                 newValue = v;
-                Console.WriteLine(e + " caused by: " + Name + " " + DisplayName + " " + ValueType);
+                Console.WriteLine(e);
             }
 
             OnValueChangeEventArgs valueChangedEvent = null;
@@ -1232,7 +1145,7 @@ namespace LeagueSharp.Common
                     dics[this.SaveFileName] = new Dictionary<string, byte[]>();
                 }
 
-               dics[this.SaveFileName][this.SaveKey] = this.serialized;
+                dics[this.SaveFileName][this.SaveKey] = this.serialized;
             }
         }
 
