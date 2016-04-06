@@ -1843,6 +1843,7 @@ namespace LeagueSharp.Common
                         (source.Level < 7 ? 0.06 : (source.Level < 17 ? 0.08 : 0.1)) * target.MaxHealth)
             };
 
+
             AttackPassives.Add(p);
 
             #endregion
@@ -3290,7 +3291,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 50, 80, 110, 140 }[level]
-                                    + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //W
                         new DamageSpell
@@ -3473,7 +3474,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 85, 110, 135, 160 }[level]
+                                    new double[] { 50, 75, 100, 125, 150 }[level]
                                     + new double[] { 0.3, 0.35, 0.4, 0.45, 0.5 }[level] * source.FlatPhysicalDamageMod
                                     + 0.6 * source.TotalMagicalDamage
                             },
@@ -4817,7 +4818,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 50, 100, 150, 200 }[
+                                    new double[] { 60, 110, 160, 210}[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
                                     + 0.3 * source.TotalMagicalDamage
                             },
@@ -5027,9 +5028,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] {40, 65, 90, 115, 140}[level]
+                                    new double[] {35, 55, 75, 95, 115 }[level]
                                     + 0.80 * source.FlatPhysicalDamageMod
-                                    + 0.06 * target.MaxHealth
+                                    + 0.07 * target.MaxHealth
                             },
                         //Q - both hits
                         new DamageSpell
@@ -5037,9 +5038,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    (new double[] {80, 130, 180, 230, 280}[level]
+                                    (new double[] {70, 110, 150, 190, 230}[level]
                                     + 1.6 * source.FlatPhysicalDamageMod
-                                    + 0.12 * target.MaxHealth)
+                                    + 0.14 * target.MaxHealth)
                             },
                         //W
                         new DamageSpell
@@ -6202,9 +6203,10 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 15, 25, 35, 45, 55 }[level]
+                                    new double[] { 10, 20, 30, 40, 50 }[level]
                                     + 0.25 * source.TotalMagicalDamage
                             },
+
                     });
 
             Spells.Add(
