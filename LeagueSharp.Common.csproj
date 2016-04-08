@@ -111,9 +111,12 @@
     <Compile Include="Dash.cs" />
     <Compile Include="Data\ItemData.cs" />
     <Compile Include="Data\MasteryData.cs" />
+    <Compile Include="DWIntegration\TargetSpellData.cs" />
+    <Compile Include="DWIntegration\TargetSpellDatabase.cs" />
     <Compile Include="FakeClicks.cs" />
     <Compile Include="GamePacket.cs" />
     <Compile Include="Hacks.cs" />
+    <Compile Include="DWIntegration\HealthDeath.cs" />
     <Compile Include="HealthPrediction.cs" />
     <Compile Include="HeroManager.cs" />
     <Compile Include="Interrupter.cs" />

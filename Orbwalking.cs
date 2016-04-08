@@ -371,7 +371,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
-            var result = Player.AttackRange + Player.BoundingRadius;
+            var result = GetRealAutoAttackRange(Player,target);
             if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
@@ -383,6 +383,23 @@ namespace LeagueSharp.Common
                     }
                 }
 
+                return result + target.BoundingRadius;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Returns the auto-attack range of source with respect to the target.
+        /// </summary>
+        /// <param name="source">The Source entity.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>System.Single.</returns>
+        public static float GetRealAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
+        {
+            var result = source.AttackRange + source.BoundingRadius;
+            if (target.IsValidTarget())
+            {
                 return result + target.BoundingRadius;
             }
 
@@ -416,6 +433,55 @@ namespace LeagueSharp.Common
                 Vector2.DistanceSquared(
                     target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
                     Player.ServerPosition.To2D()) <= myRange * myRange;
+        }
+
+        /// <summary>
+        ///     Returns true if the target is in auto-attack range.
+        /// </summary>
+        /// <param name="source">The source entity.</param>
+        /// <param name="target">The target.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool InAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
+        {
+            if (!target.IsValidTarget())
+            {
+                return false;
+            }
+            var myRange = GetRealAutoAttackRange(source, target);
+            return
+                Vector2.DistanceSquared(
+                    target is Obj_AI_Base ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
+                    source.ServerPosition.To2D()) <= myRange * myRange;
+        }
+        /// <summary>
+        ///     Returns path distance till unit.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>path distance till unit.</returns>
+        public static float RealDistanceTillUnit(AttackableUnit target)
+        {
+            return RealDistanceTillUnit(Player, target);
+        }
+
+        /// <summary>
+        ///     Returns path distance till unit.
+        /// </summary>
+        /// <param name="source">The from unit.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>path distance till unit.</returns>
+        public static float RealDistanceTillUnit(Obj_AI_Base source, AttackableUnit target)
+        {
+            float dist = 0;
+            var dists = source.GetPath(target.Position);
+            if (dists.Count() == 0)
+                return 0;
+            Vector3 from = dists[0];
+            foreach (var to in dists)
+            {
+                dist += Vector3.Distance(from, to);
+                from = to;
+            }
+            return dist;
         }
 
         /// <summary>

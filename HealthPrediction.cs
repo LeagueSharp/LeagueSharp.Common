@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LeagueSharp.Common.DWIntegration;
 
 #endregion
 
@@ -150,6 +151,8 @@ namespace LeagueSharp.Common
         /// <returns></returns>
         public static float GetHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
         {
+            return HealthDeath.GetHealthPrediction(unit, time);
+
             var predictedDamage = 0f;
 
             foreach (var attack in ActiveAttacks.Values)
@@ -182,6 +185,7 @@ namespace LeagueSharp.Common
         /// <returns></returns>
         public static float LaneClearHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
         {
+            return HealthDeath.GetLaneClearPred(unit, time);
             var predictedDamage = 0f;
 
             foreach (var attack in ActiveAttacks.Values)
