@@ -371,20 +371,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
-            #region Corki
-
-            p = new PassiveDamage
-            {
-                ChampionName = "Corki",
-                IsActive = (source, target) => (source.HasBuff("rapidreload")),
-                GetDamage =
-                            (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
-            };
-            AttackPassives.Add(p);
-
-            #endregion
-
+                        
             #region Darius
 
             p = new PassiveDamage
