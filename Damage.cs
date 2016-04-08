@@ -371,20 +371,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
-            #region Corki
-
-            p = new PassiveDamage
-            {
-                ChampionName = "Corki",
-                IsActive = (source, target) => (source.HasBuff("rapidreload")),
-                GetDamage =
-                            (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
-            };
-            AttackPassives.Add(p);
-
-            #endregion
-
+                        
             #region Darius
 
             p = new PassiveDamage
@@ -7092,6 +7079,9 @@ namespace LeagueSharp.Common
                     reduction += f[(targetHero.Level - 1) / 3];
                 }
             }
+            //TODO: need to check if there are items or spells in game that reduce magical dmg % or by amount
+            if (hero?.ChampionName == "Corki")
+                return CalcMixedDamage(source, target, (result - reduction) * k, result * k);
 
             return CalcPhysicalDamage(source, target, (result - reduction) * k + PassiveFlatMod(source, target));
         }
@@ -7263,6 +7253,22 @@ namespace LeagueSharp.Common
             }
 
             return Math.Max(damage, 0d);
+        }
+
+        /// <summary>
+        /// Calculates the mixed damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="amountPhysical">The amount of physical damage after modifiers.</param>
+        /// <param name="amountMagic">The amount of magical damage after modifiers.</param>
+        /// <param name="magic">% magic dmg</param>
+        /// <param name="physical">% physical dmg</param>
+        /// <param name="trueDmg">% trueDmg dmg</param>
+        /// <returns></returns>
+        private static double CalcMixedDamage(Obj_AI_Base source, Obj_AI_Base target, double amountPhysical, double amountMagic, int magic = 50, int physical = 50, int trueDmg = 0)
+        {
+            return CalcMagicDamage(source, target, (amountMagic * magic) / 100) + CalcPhysicalDamage(source, target, (amountPhysical * physical) / 100) + PassiveFlatMod(source, target) + (amountMagic * trueDmg) / 100;
         }
 
         /// <summary>
