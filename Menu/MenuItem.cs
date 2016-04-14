@@ -661,16 +661,11 @@ namespace LeagueSharp.Common
                     this.TooltipColor);
             }
 
-            Font font;
-            switch (this.FontStyle)
-            {
-                case FontStyle.Bold:
-                    font = MenuDrawHelper.FontBold;
-                    break;
-                default:
-                    font = MenuDrawHelper.Font;
-                    break;
-            }
+            var style = this.FontStyle;
+            style &= ~FontStyle.Strikeout;
+            style &= ~FontStyle.Underline;
+
+            var font = MenuDrawHelper.GetFont(style);
 
             switch (this.ValueType)
             {
@@ -695,40 +690,40 @@ namespace LeagueSharp.Common
 
                     if (val.Key != 0)
                     {
-                    var x = !string.IsNullOrEmpty(this.Tooltip)
-                                ? (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 35
-                                : (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
+                        var x = !string.IsNullOrEmpty(this.Tooltip)
+                                    ? (int)this.Position.X + this.Width - this.Height
+                                      - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 35
+                                    : (int)this.Position.X + this.Width - this.Height
+                                      - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
 
-                    font.DrawText(
-                        null,
-                        "[" + Utils.KeyToText(val.Key) + "]",
-                        new Rectangle(x, (int)this.Position.Y, this.Width, this.Height),
-                        FontDrawFlags.VerticalCenter,
-                        new ColorBGRA(1, 169, 234, 255));
+                        font.DrawText(
+                            null,
+                            "[" + Utils.KeyToText(val.Key) + "]",
+                            new Rectangle(x, (int)this.Position.Y, this.Width, this.Height),
+                            FontDrawFlags.VerticalCenter,
+                            new ColorBGRA(1, 169, 234, 255));
                     }
 
                     if (val.SecondaryKey != 0)
                     {
                         var x_secondary = !string.IsNullOrEmpty(this.Tooltip)
-                                ? (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
-                                  - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width 
-                                  - 35
-                                : (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
-                                  - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width 
-                                  - 10;
+                                              ? (int)this.Position.X + this.Width - this.Height
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
+                                                - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width
+                                                - 35
+                                              : (int)this.Position.X + this.Width - this.Height
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
+                                                - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width
+                                                - 10;
 
                         font.DrawText(
-                        null,
-                        "[" + Utils.KeyToText(val.SecondaryKey) + "]",
-                        new Rectangle(x_secondary, (int)this.Position.Y, this.Width, this.Height),
-                        FontDrawFlags.VerticalCenter,
-                        new ColorBGRA(1, 169, 234, 255));
+                            null,
+                            "[" + Utils.KeyToText(val.SecondaryKey) + "]",
+                            new Rectangle(x_secondary, (int)this.Position.Y, this.Width, this.Height),
+                            FontDrawFlags.VerticalCenter,
+                            new ColorBGRA(1, 169, 234, 255));
                     }
 
                     MenuDrawHelper.DrawOnOff(
@@ -814,6 +809,37 @@ namespace LeagueSharp.Common
                 new Rectangle((int)this.Position.X + 5, (int)this.Position.Y, this.Width, this.Height),
                 FontDrawFlags.VerticalCenter,
                 this.FontColor);
+
+            var textWidth = font.MeasureText(null, MultiLanguage._(this.DisplayName));
+            if ((this.FontStyle & FontStyle.Strikeout) != 0)
+            {
+                Drawing.DrawLine(
+                    this.Position.X + 5,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 2f),
+                    this.Position.X + 5 + textWidth.Width,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 2f),
+                    1f,
+                    System.Drawing.Color.FromArgb(
+                        this.FontColor.A,
+                        this.FontColor.R,
+                        this.FontColor.G,
+                        this.FontColor.B));
+            }
+
+            if ((this.FontStyle & FontStyle.Underline) != 0)
+            {
+                Drawing.DrawLine(
+                    this.Position.X + 5,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 1.5f),
+                    this.Position.X + 5 + textWidth.Width,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 1.5f),
+                    1f,
+                    System.Drawing.Color.FromArgb(
+                        this.FontColor.A,
+                        this.FontColor.R,
+                        this.FontColor.G,
+                        this.FontColor.B));
+            }
         }
 
         /// <summary>

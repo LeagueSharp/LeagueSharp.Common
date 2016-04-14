@@ -119,7 +119,7 @@ namespace LeagueSharp.Common
             "dariusnoxiantacticsonh", "fioraflurry", "garenq",
             "gravesmove", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane",
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
-            "gangplankqwrapper", "poppypassiveattack", "powerfist", "renektonpreexecute", "rengarq",
+            "gangplankqwrapper", "powerfist", "renektonpreexecute", "rengarq",
             "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
             "vie", "volibearq", "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism",
             "illaoiw", "elisespiderw", "fiorae", "meditate", "sejuaninorthernwinds"      
@@ -456,6 +456,9 @@ namespace LeagueSharp.Common
                 }
             }
 
+            if (Player.IsCastingInterruptableSpell())
+                return false;
+
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }
 
@@ -641,7 +644,7 @@ namespace LeagueSharp.Common
                         return;
                     }
 
-                    MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
+                    MoveTo(position, Math.Max(holdAreaRadius, 30), false, useFixedDistance, randomizeMinDistance);
                 }
             }
             catch (Exception e)
@@ -680,9 +683,10 @@ namespace LeagueSharp.Common
         {
             if (sender.IsMe)
             {
-                if (Game.Ping <= 30) //First world problems kappa
+                var ping = Game.Ping;
+                if (ping <= 30) //First world problems kappa
                 {
-                    Utility.DelayAction.Add(30, () => Obj_AI_Base_OnDoCast_Delayed(sender, args));
+                    Utility.DelayAction.Add(30 - ping, () => Obj_AI_Base_OnDoCast_Delayed(sender, args));
                     return;
                 }
 

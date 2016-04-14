@@ -371,20 +371,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
-            #region Corki
-
-            p = new PassiveDamage
-            {
-                ChampionName = "Corki",
-                IsActive = (source, target) => (source.HasBuff("rapidreload")),
-                GetDamage =
-                            (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
-            };
-            AttackPassives.Add(p);
-
-            #endregion
-
+                        
             #region Darius
 
             p = new PassiveDamage
@@ -947,7 +934,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Lux",
-                IsActive = (source, target) => source.HasBuff("LuxIlluminatingFraulein"),
+                IsActive = (source, target) => target.HasBuff("LuxIlluminatingFraulein"),
                 GetDamage =
                     (source, target) =>
                     source.CalcDamage(
@@ -1842,6 +1829,7 @@ namespace LeagueSharp.Common
                         DamageType.Magical,
                         (source.Level < 7 ? 0.06 : (source.Level < 17 ? 0.08 : 0.1)) * target.MaxHealth)
             };
+
 
             AttackPassives.Add(p);
 
@@ -3290,7 +3278,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 50, 80, 110, 140 }[level]
-                                    + 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //W
                         new DamageSpell
@@ -3464,6 +3452,60 @@ namespace LeagueSharp.Common
                     });
 
             Spells.Add(
+                "Jhin",
+                new List<DamageSpell>
+                    {
+                        //Q
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.Q, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 75, 100, 125, 150 }[level]
+                                    + new double[] { 0.3, 0.35, 0.4, 0.45, 0.5 }[level] * source.FlatPhysicalDamageMod
+                                    + 0.6 * source.TotalMagicalDamage
+                            },
+                        //W
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.W, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 85, 120, 155, 190 }[level]
+                                    + 0.7 * source.FlatPhysicalDamageMod
+                            },
+                        //E
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.E, DamageType = DamageType.Magical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 20, 80, 140, 200, 260 }[level]
+                                    + 1.20 * source.FlatPhysicalDamageMod
+                                    + 1 * source.TotalMagicalDamage
+                            },
+                        //R - Normal Shot
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.R, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 125, 200 }[level]
+                                    + 0.25 * source.FlatPhysicalDamageMod * (1 + (100 - target.HealthPercent) * 1.02)
+                            },
+                        //R - Final Shot
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 50, 125, 200 }[level]
+                                    + 0.25 * source.FlatPhysicalDamageMod * (1 + (100 - target.HealthPercent) * 1.02)
+                                    * 2 + 0.01 * source.FlatCritDamageMod
+                            },
+                    });
+
+            Spells.Add(
                 "Jinx",
                 new List<DamageSpell>
                     {
@@ -3473,7 +3515,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    0.1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    0.1 * source.TotalAttackDamage
                             },
                         //W
                         new DamageSpell
@@ -3482,7 +3524,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 10, 60, 110, 160, 210 }[level]
-                                    + 1.4 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                    + 1.4 * source.FlatPhysicalDamageMod
                             },
                         //E
                         new DamageSpell
@@ -4763,7 +4805,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 50, 100, 150, 200 }[
+                                    new double[] { 60, 110, 160, 210}[
                                         source.Spellbook.GetSpell(SpellSlot.R).Level - 1]
                                     + 0.3 * source.TotalMagicalDamage
                             },
@@ -4973,9 +5015,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] {40, 65, 90, 115, 140}[level]
+                                    new double[] {35, 55, 75, 95, 115 }[level]
                                     + 0.80 * source.FlatPhysicalDamageMod
-                                    + 0.06 * target.MaxHealth
+                                    + 0.07 * target.MaxHealth
                             },
                         //Q - both hits
                         new DamageSpell
@@ -4983,9 +5025,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    (new double[] {80, 130, 180, 230, 280}[level]
+                                    (new double[] {70, 110, 150, 190, 230}[level]
                                     + 1.6 * source.FlatPhysicalDamageMod
-                                    + 0.12 * target.MaxHealth)
+                                    + 0.14 * target.MaxHealth)
                             },
                         //W
                         new DamageSpell
@@ -6148,9 +6190,10 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 15, 25, 35, 45, 55 }[level]
+                                    new double[] { 10, 20, 30, 40, 50 }[level]
                                     + 0.25 * source.TotalMagicalDamage
                             },
+
                     });
 
             Spells.Add(
@@ -7036,6 +7079,9 @@ namespace LeagueSharp.Common
                     reduction += f[(targetHero.Level - 1) / 3];
                 }
             }
+            //TODO: need to check if there are items or spells in game that reduce magical dmg % or by amount
+            if (hero?.ChampionName == "Corki")
+                return CalcMixedDamage(source, target, (result - reduction) * k, result * k);
 
             return CalcPhysicalDamage(source, target, (result - reduction) * k + PassiveFlatMod(source, target));
         }
@@ -7207,6 +7253,22 @@ namespace LeagueSharp.Common
             }
 
             return Math.Max(damage, 0d);
+        }
+
+        /// <summary>
+        /// Calculates the mixed damage.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="amountPhysical">The amount of physical damage after modifiers.</param>
+        /// <param name="amountMagic">The amount of magical damage after modifiers.</param>
+        /// <param name="magic">% magic dmg</param>
+        /// <param name="physical">% physical dmg</param>
+        /// <param name="trueDmg">% trueDmg dmg</param>
+        /// <returns></returns>
+        private static double CalcMixedDamage(Obj_AI_Base source, Obj_AI_Base target, double amountPhysical, double amountMagic, int magic = 50, int physical = 50, int trueDmg = 0)
+        {
+            return CalcMagicDamage(source, target, (amountMagic * magic) / 100) + CalcPhysicalDamage(source, target, (amountPhysical * physical) / 100) + PassiveFlatMod(source, target) + (amountMagic * trueDmg) / 100;
         }
 
         /// <summary>
