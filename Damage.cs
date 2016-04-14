@@ -1636,7 +1636,7 @@ namespace LeagueSharp.Common
             #endregion
 
             #region Twitch
-
+	    /*
             p = new PassiveDamage
             {
                 ChampionName = "Twitch",
@@ -1654,7 +1654,7 @@ namespace LeagueSharp.Common
             };
 
             AttackPassives.Add(p);
-
+	    */
             #endregion
 
             #region Udyr
@@ -1872,8 +1872,8 @@ namespace LeagueSharp.Common
 
             p = new PassiveDamage
             {
-                ChampionName = "ZinZhao",
-                IsActive = (source, target) => source.HasBuff("ZenZhaoComboTarget"),
+                ChampionName = "XinZhao",
+                IsActive = (source, target) => source.HasBuff("XenZhaoComboTarget"),
                 GetDamage = (source, target) => source.GetSpellDamage(target, SpellSlot.Q)
             };
 
