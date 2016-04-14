@@ -52,6 +52,7 @@ namespace LeagueSharp.Common
                     {
                         LeagueSharp.Hacks.TowerRanges = args.GetNewValue<bool>();
                     };
+                CommonMenu.Instance.AddSubMenu(menu);
 
                 var objectCache = menu.AddItem(new MenuItem("GameObjectCache", "Use Game Object Cache").SetValue(false));
                 objectCache.SetValue(LeagueSharp.Hacks.UseGameObjectCache);
@@ -60,7 +61,6 @@ namespace LeagueSharp.Common
                     {
                         LeagueSharp.Hacks.UseGameObjectCache = args.GetNewValue<bool>();
                     };
-
                 CommonMenu.Instance.AddSubMenu(menu);
             };
         }
