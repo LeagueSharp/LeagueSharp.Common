@@ -261,21 +261,22 @@ namespace LeagueSharp.Common
 
         public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
-            //Kindred's Lamb's Respite(R)
+            var targetBuffs = new HashSet<string>(target.Buffs.Select(buff => buff.Name), StringComparer.OrdinalIgnoreCase);
 
-            if (target.HasBuff("kindredrnodeathbuff") && target.HealthPercent <= 10)
+            //Kindred's Lamb's Respite(R)
+            if (targetBuffs.Contains("KindredRNoDeathBuff") && target.HealthPercent <= 10)
             {
                 return true;
             }
 
             // Tryndamere's Undying Rage (R)
-            if (target.HasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
+            if (targetBuffs.Contains("UndyingRage") && target.Health <= target.MaxHealth * 0.10f)
             {
                 return true;
             }
 
             // Kayle's Intervention (R)
-            if (target.HasBuff("JudicatorIntervention"))
+            if (targetBuffs.Contains("JudicatorIntervention"))
             {
                 return true;
             }
@@ -286,29 +287,26 @@ namespace LeagueSharp.Common
             }
 
             // Morgana's Black Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
+            if (targetBuffs.Contains("BlackShield") && damageType.Equals(DamageType.Magical))
             {
                 return true;
             }
 
             // Banshee's Veil (PASSIVE)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BansheesVeil"))
+            if (targetBuffs.Contains("bansheesveil") && damageType.Equals(DamageType.Magical))
             {
-                // TODO: Get exact Banshee's Veil buff name.
                 return true;
             }
 
             // Sivir's Spell Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
+            if (targetBuffs.Contains("SivirE") && damageType.Equals(DamageType.Magical))
             {
-                // TODO: Get exact Sivir's Spell Shield buff name
                 return true;
             }
 
             // Nocturne's Shroud of Darkness (W)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
+            if (targetBuffs.Contains("NocturneShroudofDarkness") && damageType.Equals(DamageType.Magical))
             {
-                // TODO: Get exact Nocturne's Shourd of Darkness buff name
                 return true;
             }
 

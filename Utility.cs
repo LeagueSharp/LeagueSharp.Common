@@ -82,33 +82,30 @@ namespace LeagueSharp.Common
             bool checkTeam = true,
             Vector3 from = new Vector3())
         {
-            if (unit == null || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable ||
-                unit.IsInvulnerable || unit.Name == "WardCorpse")
+            if (unit == null || !unit.IsValid || !unit.IsVisible || unit.IsDead || !unit.IsTargetable ||
+                unit.IsInvulnerable)
 
             {
                 return false;
             }
 
-            var @base = unit as Obj_AI_Base;
-            if (@base != null)
-            {
-                if (@base.HasBuff("kindredrnodeathbuff") && @base.HealthPercent <= 10)
-                {
-                    return false;
-                }
-            }
-
+           
             if (checkTeam && unit.Team == HeroManager.Player.Team)
             {
                 return false;
             }
 
-            var unitPosition = @base != null ? @base.ServerPosition : unit.Position;
+            if (unit.Name == "WardCorpse")
+            {
+                return false;
+            }
+
+            var @base = unit as Obj_AI_Base;
 
             return !(range < float.MaxValue) ||
                    !(Vector2.DistanceSquared(
                        (@from.To2D().IsValid() ? @from : HeroManager.Player.ServerPosition).To2D(),
-                       unitPosition.To2D()) > range * range);
+                       (@base != null ? @base.ServerPosition : unit.Position).To2D()) > range * range);
         }
 
         public static SpellDataInst GetSpell(this Obj_AI_Hero hero, SpellSlot slot)
