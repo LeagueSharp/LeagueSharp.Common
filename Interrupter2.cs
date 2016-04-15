@@ -30,6 +30,8 @@ using System.Linq;
 
 namespace LeagueSharp.Common
 {
+    using LeagueSharp.Data.DataTypes;
+
     /// <summary>
     /// Provides information an API regarding interruptable spells.
     /// </summary>
@@ -109,36 +111,17 @@ namespace LeagueSharp.Common
         /// </summary>
         private static void InitializeSpells()
         {
-            #region Spells
-
-            RegisterSpell("Caitlyn", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("FiddleSticks", new InterruptableSpell(SpellSlot.W, DangerLevel.Medium));
-            RegisterSpell("FiddleSticks", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Galio", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Janna", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("Karthus", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Katarina", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Lucian", new InterruptableSpell(SpellSlot.R, DangerLevel.High, false));
-            RegisterSpell("Malzahar", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("MasterYi", new InterruptableSpell(SpellSlot.W, DangerLevel.Low));
-            RegisterSpell("MissFortune", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Nunu", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.E, DangerLevel.Low));
-            RegisterSpell("Pantheon", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Quinn", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("RekSai", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Sion", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("Shen", new InterruptableSpell(SpellSlot.R, DangerLevel.Low));
-            RegisterSpell("TahmKench", new InterruptableSpell(SpellSlot.R, DangerLevel.Medium));
-            RegisterSpell("TwistedFate", new InterruptableSpell(SpellSlot.R, DangerLevel.Medium));
-            RegisterSpell("Urgot", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Velkoz", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Warwick", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Xerath", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-            RegisterSpell("Varus", new InterruptableSpell(SpellSlot.Q, DangerLevel.Low, false));
-            RegisterSpell("Jhin", new InterruptableSpell(SpellSlot.R, DangerLevel.High));
-
-            #endregion
+            foreach (var keyValuePair in LeagueSharp.Data.Data.Get<InterruptableSpellData>().InterruptableSpells)
+            {
+                foreach (var spell in keyValuePair.Value)
+                {
+                    RegisterSpell(
+                        keyValuePair.Key,
+                        new InterruptableSpell(
+                            spell.Slot,
+                            (DangerLevel)Enum.Parse(typeof(DangerLevel), spell.DangerLevel.ToString())));
+                }
+            }
         }
 
         /// <summary>
