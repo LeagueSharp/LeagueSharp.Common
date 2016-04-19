@@ -67,9 +67,7 @@ namespace LeagueSharp.Common
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Name == name))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
-                return inst != null && inst.State == SpellState.Ready;
+                return ObjectManager.Player.Spellbook.CanUseSpell((SpellSlot)(slot.Slot + (int)SpellSlot.Item1)) == SpellState.Ready;
             }
 
             return false;
@@ -84,9 +82,7 @@ namespace LeagueSharp.Common
         {
             foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)id))
             {
-                var inst = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell =>
-                    (int)spell.Slot == slot.Slot + (int)SpellSlot.Item1);
-                return inst != null && inst.State == SpellState.Ready;
+                return ObjectManager.Player.Spellbook.CanUseSpell((SpellSlot)(slot.Slot + (int)SpellSlot.Item1)) == SpellState.Ready;
             }
 
             return false;

@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
-    /// Provides cached game objects.
+    ///     Provides cached game objects.
     /// </summary>
-    [Obsolete(
-        "This will most likely not be needed anymore when Jodus adds it to LeagueSharp.dll and chewy fixes cache," +
-        "only use it if you know what you are doing!", false)]
+    [Obsolete("Cache enforced in LeagueSharp Core, class obsolete and prone to delete.", false)]
     public class ObjectHandler
     {
+        #region Static Fields
+
         /// <summary>
-        /// The game objects
+        ///     The game objects
         /// </summary>
         private static readonly Dictionary<Type, Dictionary<int, GameObject>> gameObjects =
             new Dictionary<Type, Dictionary<int, GameObject>>();
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        /// Initializes static members of the <see cref="ObjectHandler"/> class.
+        ///     Initializes static members of the <see cref="ObjectHandler" /> class.
         /// </summary>
         static ObjectHandler()
         {
@@ -48,46 +52,28 @@ namespace LeagueSharp.Common
             GameObject.OnDelete += Obj_AI_Base_OnDelete;
         }
 
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
-        /// Gets the player.
+        ///     Gets the player.
         /// </summary>
         /// <value>The player.</value>
         public static Obj_AI_Hero Player
         {
-            get { return ObjectManager.Player; }
-        }
-
-        /// <summary>
-        /// Fired when a <see cref="Obj_AI_Base"/> is created.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
-        {
-            var type = sender.GetType();
-            if (!gameObjects.ContainsKey(type))
+            get
             {
-                gameObjects.Add(type, new Dictionary<int, GameObject>());
-            }
-
-            gameObjects[type][sender.NetworkId] = sender;
-        }
-
-        /// <summary>
-        /// Fired when a <see cref="Obj_AI_Base"/> is deleted.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Obj_AI_Base_OnDelete(GameObject sender, EventArgs args)
-        {
-            foreach (var dictionary in gameObjects.Values)
-            {
-                dictionary.Remove(sender.NetworkId);
+                return ObjectManager.Player;
             }
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        /// Gets all of the game objects of the specified type.
+        ///     Gets all of the game objects of the specified type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>GameObjectWrapper&lt;T&gt;.</returns>
@@ -108,7 +94,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the unit by network identifier.
+        ///     Gets the unit by network identifier.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="networkId">The network identifier.</param>
@@ -126,38 +112,87 @@ namespace LeagueSharp.Common
             return null;
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// A wrapper around a <see cref="List{T}"/> that provides extensions.
+        ///     Fired when a <see cref="Obj_AI_Base" /> is created.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
+        {
+            var type = sender.GetType();
+            if (!gameObjects.ContainsKey(type))
+            {
+                gameObjects.Add(type, new Dictionary<int, GameObject>());
+            }
+
+            gameObjects[type][sender.NetworkId] = sender;
+        }
+
+        /// <summary>
+        ///     Fired when a <see cref="Obj_AI_Base" /> is deleted.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private static void Obj_AI_Base_OnDelete(GameObject sender, EventArgs args)
+        {
+            foreach (var dictionary in gameObjects.Values)
+            {
+                dictionary.Remove(sender.NetworkId);
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        ///     A wrapper around a <see cref="List{T}" /> that provides extensions.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public class GameObjectWrapper<T> : List<T> where T : GameObject, new()
+        public class GameObjectWrapper<T> : List<T>
+            where T : GameObject, new()
         {
+            #region Public Properties
+
             /// <summary>
-            /// Gets the allies.
+            ///     Gets the allies.
             /// </summary>
             /// <value>The allies.</value>
             public List<T> Allies
             {
-                get { return FindAll(o => o.IsValid<T>() && o.IsAlly); }
+                get
+                {
+                    return this.FindAll(o => o.IsValid<T>() && o.IsAlly);
+                }
             }
 
             /// <summary>
-            /// Gets the enemies.
+            ///     Gets the enemies.
             /// </summary>
             /// <value>The enemies.</value>
             public List<T> Enemies
             {
-                get { return FindAll(o => o.IsValid<T>() && o.IsEnemy); }
+                get
+                {
+                    return this.FindAll(o => o.IsValid<T>() && o.IsEnemy);
+                }
             }
 
             /// <summary>
-            /// Gets the neutrals.
+            ///     Gets the neutrals.
             /// </summary>
             /// <value>The neutrals.</value>
             public List<T> Neutrals
             {
-                get { return FindAll(o => o.IsValid<T>() && o.Team == GameObjectTeam.Neutral); }
+                get
+                {
+                    return this.FindAll(o => o.IsValid<T>() && o.Team == GameObjectTeam.Neutral);
+                }
             }
+
+            #endregion
         }
     }
 }

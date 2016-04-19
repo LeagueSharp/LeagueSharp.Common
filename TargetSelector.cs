@@ -32,6 +32,8 @@ using Color = System.Drawing.Color;
 
 namespace LeagueSharp.Common
 {
+    using LeagueSharp.Data.DataTypes;
+
     public class TargetSelector
     {
         #region Enum
@@ -174,52 +176,8 @@ namespace LeagueSharp.Common
 
         private static int GetPriorityFromDb(string championName)
         {
-            string[] p1 =
-            {
-                "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
-                "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu",
-                "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona",
-                "Taric", "TahmKench", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
-            };
-
-            string[] p2 =
-            {
-                "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax",
-                "Lee Sin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain",
-                "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"
-            };
-
-            string[] p3 =
-            {
-                "Akali", "Diana", "Ekko", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin",
-                "Kayle", "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo",
-                "Zilean"
-            };
-
-            string[] p4 =
-            {
-                "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
-                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Kindred",
-                "Leblanc", "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra",
-                "Talon", "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "Velkoz", "Viktor",
-                "Xerath", "Zed", "Ziggs", "Jhin", "Soraka"
-            };
-
-            if (p1.Contains(championName))
-            {
-                return 1;
-            }
-            if (p2.Contains(championName))
-            {
-                return 2;
-            }
-            if (p3.Contains(championName))
-            {
-                return 3;
-            }
-            return p4.Contains(championName) ? 4 : 1;
+            return LeagueSharp.Data.Data.Get<ChampionPriorityData>().GetPriority(championName);
         }
-
 
         internal static void Initialize()
         {
@@ -303,21 +261,22 @@ namespace LeagueSharp.Common
 
         public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
-            //Kindred's Lamb's Respite(R)
+            var targetBuffs = new HashSet<string>(target.Buffs.Select(buff => buff.Name), StringComparer.OrdinalIgnoreCase);
 
-            if (target.HasBuff("kindredrnodeathbuff") && target.HealthPercent <= 10)
+            //Kindred's Lamb's Respite(R)
+            if (targetBuffs.Contains("KindredRNoDeathBuff") && target.HealthPercent <= 10)
             {
                 return true;
             }
 
             // Tryndamere's Undying Rage (R)
-            if (target.HasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
+            if (targetBuffs.Contains("UndyingRage") && target.Health <= target.MaxHealth * 0.10f)
             {
                 return true;
             }
 
             // Kayle's Intervention (R)
-            if (target.HasBuff("JudicatorIntervention"))
+            if (targetBuffs.Contains("JudicatorIntervention"))
             {
                 return true;
             }
@@ -328,29 +287,26 @@ namespace LeagueSharp.Common
             }
 
             // Morgana's Black Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
+            if (targetBuffs.Contains("BlackShield") && damageType.Equals(DamageType.Magical))
             {
                 return true;
             }
 
             // Banshee's Veil (PASSIVE)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BansheesVeil"))
+            if (targetBuffs.Contains("bansheesveil") && damageType.Equals(DamageType.Magical))
             {
-                // TODO: Get exact Banshee's Veil buff name.
                 return true;
             }
 
             // Sivir's Spell Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
+            if (targetBuffs.Contains("SivirE") && damageType.Equals(DamageType.Magical))
             {
-                // TODO: Get exact Sivir's Spell Shield buff name
                 return true;
             }
 
             // Nocturne's Shroud of Darkness (W)
-            if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
+            if (targetBuffs.Contains("NocturneShroudofDarkness") && damageType.Equals(DamageType.Magical))
             {
-                // TODO: Get exact Nocturne's Shourd of Darkness buff name
                 return true;
             }
 
