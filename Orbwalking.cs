@@ -958,7 +958,7 @@ namespace LeagueSharp.Common
                 /* Delay sliders */
                 _config.AddItem(
                     new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(80, 0, 200)));
-                _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
+                _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, -200, 200)));
 
                 /*Load the menu*/
                 _config.AddItem(
@@ -1197,8 +1197,8 @@ namespace LeagueSharp.Common
 
                     foreach (var minion in MinionList)
                     {
-                        var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) /
+                        var t = (int) (Player.AttackCastDelay * 1000)  +
+                                1000 * (int) Math.Max(0, Player.Distance(minion)) /
                                 (int) GetMyProjectileSpeed();
 
                         if (mode == OrbwalkingMode.Freeze)
@@ -1206,7 +1206,7 @@ namespace LeagueSharp.Common
                             t += 200 + Game.Ping / 2;
                         }
 
-                        var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
+                        var predHealth = HealthPrediction.GetHealthPrediction(minion, t + FarmDelay, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && ShouldAttackMinion(minion))
                         {
