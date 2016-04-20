@@ -380,14 +380,30 @@
         {
             if (Font != null)
             {
+                Font.OnLostDevice();
                 Font.Dispose();
                 Font = null;
             }
 
             if (FontBold != null)
             {
+                FontBold.OnLostDevice();
                 FontBold.Dispose();
                 FontBold = null;
+            }
+
+            if (FontBoldItalic != null)
+            {
+                FontBoldItalic.OnLostDevice();
+                FontBoldItalic.Dispose();
+                FontBoldItalic = null;
+            }
+
+            if (FontItalic != null)
+            {
+                FontItalic.OnLostDevice();
+                FontItalic.Dispose();
+                FontItalic = null;
             }
         }
 
@@ -399,6 +415,8 @@
         {
             Font.OnResetDevice();
             FontBold.OnResetDevice();
+            FontBoldItalic.OnResetDevice();
+            FontItalic.OnResetDevice();
         }
 
         /// <summary>
@@ -411,6 +429,8 @@
         {
             Font.OnLostDevice();
             FontBold.OnLostDevice();
+            FontItalic.OnLostDevice();
+            FontBoldItalic.OnLostDevice();
         }
 
         #endregion

@@ -719,6 +719,8 @@ namespace LeagueSharp.Common
             /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
             private static void Dispose(object sender, EventArgs e)
             {
+                OnPreReset(EventArgs.Empty);
+
                 if (_effect != null && !_effect.IsDisposed)
                 {
                     _effect.Dispose();
@@ -936,6 +938,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public override void Dispose()
             {
+                OnPreReset();
                 if (!_line.IsDisposed)
                 {
                     _line.Dispose();
@@ -1071,6 +1074,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public override void Dispose()
             {
+                OnPreReset();
                 if (!_line.IsDisposed)
                 {
                     _line.Dispose();
@@ -1604,6 +1608,7 @@ namespace LeagueSharp.Common
             /// </summary>
             public override void Dispose()
             {
+                OnPreReset();
                 Game.OnUpdate -= Game_OnUpdate;
                 if (!_sprite.IsDisposed)
                 {
@@ -1995,6 +2000,7 @@ namespace LeagueSharp.Common
             public override void Dispose()
             {
                 Game.OnUpdate -= Game_OnUpdate;
+                OnPreReset();
                 if (!_textFont.IsDisposed)
                 {
                     _textFont.Dispose();
