@@ -49,6 +49,7 @@ namespace LeagueSharp.Common
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnPostReset += Drawing_OnPostReset;
             Drawing.OnPreReset += Drawing_OnPreReset;
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             Game.OnWndProc += Game_OnWndProc;
             
             if (!Directory.Exists(Path))
@@ -90,6 +91,19 @@ namespace LeagueSharp.Common
             foreach (var notification in NotificationsList)
             {
                 notification.Value.OnPreReset();
+            }
+        }
+
+        /// <summary>
+        /// Fired when the current domain unloads
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            foreach (var notification in NotificationsList)
+            {
+                notification.Value.OnDomainUnload();
             }
         }
 

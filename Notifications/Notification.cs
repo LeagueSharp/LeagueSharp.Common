@@ -440,6 +440,13 @@ namespace LeagueSharp.Common
             #endregion
         }
 
+        public void OnDomainUnload()
+        {
+            Font.OnLostDevice();
+            line.OnLostDevice();
+            sprite.OnLostDevice();
+        }
+
         public void OnPreReset()
         {
             Font.OnLostDevice();

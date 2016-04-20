@@ -40,6 +40,11 @@ namespace LeagueSharp.Common
         void OnPostReset();
 
         /// <summary>
+        ///     Gets called after unloading the current appdomain.
+        /// </summary>
+        void OnDomainUnload();
+
+        /// <summary>
         ///     Gets called when Game -> Tick happens and updates the game.
         /// </summary>
         void OnUpdate();

@@ -324,6 +324,10 @@ namespace LeagueSharp.Common
         /// <param name="eventArgs">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
         {
+            BoxLine.OnLostDevice();
+            Text.OnLostDevice();
+            sprite.OnLostDevice();
+            sprite.Dispose();
             Text.Dispose();
             BoxLine.Dispose();
         }
@@ -334,6 +338,7 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void DrawingOnOnPostReset(EventArgs args)
         {
+            sprite.OnResetDevice();
             Text.OnResetDevice();
             BoxLine.OnResetDevice();
         }
@@ -344,6 +349,7 @@ namespace LeagueSharp.Common
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         private static void DrawingOnPreReset(EventArgs args)
         {
+            sprite.OnLostDevice();
             Text.OnLostDevice();
             BoxLine.OnLostDevice();
         }
