@@ -65,11 +65,11 @@ namespace LeagueSharp.Common.Data
             NaturalTalent = 100,
             Feast = 82,
             BountyHunter = 113,
-            Oppresor = 114,
+            Oppressor = 110,
             BatteringBlows = 129,
             PiercingThoughts = 132,
             WarlordsBloodlust = 145,
-            FervorofBattle = 146,
+            FervorofBattle = 114,
             DeathFireTouch = 137
         }
 
