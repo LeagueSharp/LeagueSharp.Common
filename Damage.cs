@@ -502,7 +502,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
+/*
             #region Gangplank
 
             p = new PassiveDamage
@@ -520,7 +520,7 @@ namespace LeagueSharp.Common
             AttackPassives.Add(p);
 
             #endregion
-
+*/
             #region Garen
 
             p = new PassiveDamage
