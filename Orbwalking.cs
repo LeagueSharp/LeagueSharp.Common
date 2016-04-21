@@ -457,7 +457,9 @@ namespace LeagueSharp.Common
             }
 
             if (Player.IsCastingInterruptableSpell())
+            {
                 return false;
+            }
 
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }

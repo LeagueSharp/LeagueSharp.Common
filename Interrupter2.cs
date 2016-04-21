@@ -119,7 +119,7 @@ namespace LeagueSharp.Common
                         keyValuePair.Key,
                         new InterruptableSpell(
                             spell.Slot,
-                            (DangerLevel)Enum.Parse(typeof(DangerLevel), spell.DangerLevel.ToString())));
+                            (DangerLevel)Enum.Parse(typeof(DangerLevel), spell.DangerLevel.ToString()), spell.MovementInterrupts));
                 }
             }
         }
