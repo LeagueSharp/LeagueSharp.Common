@@ -238,6 +238,7 @@ namespace LeagueSharp.Common
             Player = ObjectManager.Player;
             _championName = Player.ChampionName;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Obj_AI_Base.OnDoCast += Obj_AI_Base_OnDoCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }
@@ -716,6 +717,28 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
+        ///     Handles the <see cref="E:CastSpell" /> event.
+        /// </summary>
+        /// <param name="spellbook">The spellbook.</param>
+        /// <param name="args">The <see cref="SpellbookCastSpellEventArgs" /> instance containing the event data.</param>
+        private static void Spellbook_OnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
+        {
+            try
+            {
+                var spellName = spellbook.GetSpell(args.Slot).Name;
+
+                if (spellbook.Owner.IsMe && IsAutoAttackReset(spellName))
+                {
+                    ResetAutoAttackTimer();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        /// <summary>
         ///     Handles the <see cref="E:ProcessSpell" /> event.
         /// </summary>
         /// <param name="unit">The unit.</param>
@@ -726,17 +749,8 @@ namespace LeagueSharp.Common
             {
                 var spellName = Spell.SData.Name;
 
-                if (unit.IsMe && IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
-                {
-                    ResetAutoAttackTimer();
-                }
-
-                if (!IsAutoAttack(spellName))
-                {
-                    return;
-                }
-
-                if (unit.IsMe &&
+                if (unit.IsMe && 
+                    IsAutoAttack(spellName) &&
                     (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
                     LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
