@@ -632,6 +632,20 @@
             return this.value is T ? (T)this.value : default(T);
         }
 
+        /// <summary>
+        ///     Gets a value indicating if the value is of item type.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The item type.
+        /// </typeparam>
+        /// <returns>
+        ///     The <see cref="bool" /> indicating whether the value is of type.
+        /// </returns>
+        public bool TypeOf<T>()
+        {
+            return this.value is T;
+        }
+
         #endregion
 
         #region Methods
