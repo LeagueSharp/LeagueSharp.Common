@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +10,6 @@ namespace LeagueSharp.Common
     using SharpDX.Direct3D9;
 
     using Color = SharpDX.Color;
-    using Font = SharpDX.Direct3D9.Font;
     using Rectangle = SharpDX.Rectangle;
 
     /// <summary>
@@ -73,6 +70,11 @@ namespace LeagueSharp.Common
         public Color TooltipColor;
 
         /// <summary>
+        ///     Indicates whether the value was set.
+        /// </summary>
+        public bool ValueSet;
+
+        /// <summary>
         ///     Indicates whether the menu item is drawing the tooltip.
         /// </summary>
         internal bool DrawingTooltip;
@@ -83,9 +85,9 @@ namespace LeagueSharp.Common
         internal bool Interacting;
 
         /// <summary>
-        ///     Indicates whether the value was set.
+        ///     The stage of the KeybindSetting
         /// </summary>
-        public bool ValueSet;
+        internal KeybindSetStage KeybindSettingStage = KeybindSetStage.NotSetting;
 
         /// <summary>
         ///     The value type.
@@ -122,10 +124,6 @@ namespace LeagueSharp.Common
         /// </summary>
         private object value;
 
-        /// <summary>
-        /// The stage of the KeybindSetting
-        /// </summary>
-        internal KeybindSetStage KeybindSettingStage = KeybindSetStage.NotSetting;
         #endregion
 
         #region Constructors and Destructors
@@ -228,11 +226,16 @@ namespace LeagueSharp.Common
                                     .Concat(new[] { 0 })
                                     .Max()
                               : (this.ValueType == MenuValueType.KeyBind)
-                                    ? this.GetValue<KeyBind>().SecondaryKey == 0 ? MenuDrawHelper.Font.MeasureText(
-                                    " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width : 
-                                    MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width 
-                                    + MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().SecondaryKey) + "]").Width 
-                                    + MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width / 4
+                                    ? this.GetValue<KeyBind>().SecondaryKey == 0
+                                          ? MenuDrawHelper.Font.MeasureText(
+                                              " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width
+                                          : MenuDrawHelper.Font.MeasureText(
+                                              " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width
+                                            + MenuDrawHelper.Font.MeasureText(
+                                                " [" + Utils.KeyToText(this.GetValue<KeyBind>().SecondaryKey) + "]")
+                                                  .Width
+                                            + MenuDrawHelper.Font.MeasureText(
+                                                " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width / 4
                                     : 0);
             }
         }
@@ -615,6 +618,20 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        ///     Gets the item value, safely.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The item type.
+        /// </typeparam>
+        /// <returns>
+        ///     The value.
+        /// </returns>
+        public T TryGetValue<T>()
+        {
+            return this.value is T ? (T)this.value : default(T);
+        }
+
         #endregion
 
         #region Methods
@@ -854,7 +871,14 @@ namespace LeagueSharp.Common
         /// <param name="key">
         ///     The key.
         /// </param>
-        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key, WndEventComposition wndArgs)
+        /// <param name="wndArgs">
+        ///     The windows arguments.
+        /// </param>
+        internal void OnReceiveMessage(
+            WindowsMessages message,
+            Vector2 cursorPos,
+            uint key,
+            WndEventComposition wndArgs)
         {
             if (message == WindowsMessages.WM_MOUSEMOVE)
             {
@@ -1045,29 +1069,31 @@ namespace LeagueSharp.Common
                         val.SecondaryKey = 0;
                         this.SetValue(val);
                         this.Interacting = false;
-                        KeybindSettingStage = KeybindSetStage.NotSetting;
+                        this.KeybindSettingStage = KeybindSetStage.NotSetting;
                     }
 
-                    if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage != KeybindSetStage.NotSetting)
+                    if (message == WindowsMessages.WM_KEYUP && this.Interacting
+                        && this.KeybindSettingStage != KeybindSetStage.NotSetting)
                     {
-                        if (KeybindSettingStage == KeybindSetStage.Keybind1)
+                        if (this.KeybindSettingStage == KeybindSetStage.Keybind1)
                         {
                             var val = this.GetValue<KeyBind>();
                             val.Key = key;
                             this.SetValue(val);
-                            KeybindSettingStage = KeybindSetStage.Keybind2;
+                            this.KeybindSettingStage = KeybindSetStage.Keybind2;
                         }
-                        else if (KeybindSettingStage == KeybindSetStage.Keybind2)
+                        else if (this.KeybindSettingStage == KeybindSetStage.Keybind2)
                         {
                             var val = this.GetValue<KeyBind>();
                             val.SecondaryKey = key;
                             this.SetValue(val);
                             this.Interacting = false;
-                            KeybindSettingStage = KeybindSetStage.NotSetting;
+                            this.KeybindSettingStage = KeybindSetStage.NotSetting;
                         }
                     }
 
-                    if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage == KeybindSetStage.NotSetting)
+                    if (message == WindowsMessages.WM_KEYUP && this.Interacting
+                        && this.KeybindSettingStage == KeybindSetStage.NotSetting)
                     {
                         var val = this.GetValue<KeyBind>();
                         val.Key = key;
@@ -1076,14 +1102,12 @@ namespace LeagueSharp.Common
                         this.Interacting = false;
                     }
 
-
                     if (!this.Visible)
                     {
                         return;
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN 
-                        && wndArgs.Msg != WindowsMessages.WM_RBUTTONDOWN)
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && wndArgs.Msg != WindowsMessages.WM_RBUTTONDOWN)
                     {
                         return;
                     }
