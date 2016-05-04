@@ -873,10 +873,20 @@ namespace LeagueSharp.Common
                     return;
                 }
 
+                var width = Drawing.Width;
+                var height = Drawing.Height;
+
                 foreach (var unit in
                     HeroManager.Enemies.FindAll(h => h.IsValid && h.IsHPBarRendered))
                 {
                     var barPos = unit.HPBarPosition;
+
+                    if (barPos.X < -200 || barPos.X > width + 200)
+                        continue;
+
+                    if (barPos.Y < -200 || barPos.X > height + 200)
+                        continue;
+
                     var damage = _damageToUnit(unit);
                     var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
                     var xPos = barPos.X + XOffset + Width * percentHealthAfterDamage;
