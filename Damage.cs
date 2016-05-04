@@ -6379,11 +6379,11 @@ namespace LeagueSharp.Common
                         //R - max
                         new DamageSpell
                             {
-                                Slot = SpellSlot.R, DamageType = DamageType.Magical, //TODO: check for Researched targets
+                                Slot = SpellSlot.R, DamageType = DamageType.True, 
                                 Damage =
-                                    (source, target, level) =>
-                                    new double[] { 500, 725, 950 }[level]
-                                    + 1 * source.TotalMagicalDamage
+                                    (source, target, level) => target.HasBuff("velkozresearchedstack") ? new double[] { 500, 725, 950 }[level]
+                                    + 1 * source.TotalMagicalDamage : source.CalcDamage(target, DamageType.Magical, new double[] { 500, 725, 950 }[level]
+                                    + 1 * source.TotalMagicalDamage)
                             },
                     });
 
