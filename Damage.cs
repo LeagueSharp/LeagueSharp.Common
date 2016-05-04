@@ -1,4 +1,4 @@
-#region LICENSE
+﻿#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -1846,7 +1846,7 @@ namespace LeagueSharp.Common
                             source.CalcDamage(
                                 target,
                                 DamageType.Magical,
-                                (float)0.25d * source.TotalMagicalDamage
+                                (float)0.3d * source.TotalMagicalDamage
                                 + new float[]
                                       { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
                                           source.Level - 1]),
@@ -2097,8 +2097,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 90, 120, 150, 180 }[level]
-                                    + 0.5 * source.TotalMagicalDamage
+                                    new double[] { 60, 85, 110, 135, 160 }[level]
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //Q - max
                         new DamageSpell
@@ -2157,8 +2157,9 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 210, 335, 460 }[level]
-                                    + 1 * source.TotalMagicalDamage
+                                    new double[] { 150, 275, 400 }[level] + new double[] { 10, 15, 20 }[level] /* Aura */ 
+                                    + new double[] { 50, 75, 100 }[level] /* Tibbers ʕ•͡ᴥ•ʔ */ 
+                                    + (0.65 + 0.1 + 0.15) * source.TotalMagicalDamage
                             },
                     });
 
@@ -2294,8 +2295,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.65 * source.TotalMagicalDamage
+                                    new double[] { 80, 110, 140, 170, 200 }[level]
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2312,8 +2313,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.55 * source.TotalMagicalDamage
+                                    new double[] { 70, 90, 110, 130, 150 }[level]
+                                    + 0.35 * source.TotalMagicalDamage
                             },
                         //R
                         new DamageSpell
@@ -2321,8 +2322,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 150, 250, 350 }[level]
-                                    + 0.5 * source.TotalMagicalDamage
+                                    new double[] { 100, 200, 300 }[level]
+                                    + 0.25 * source.TotalMagicalDamage
                             },
                     });
 
@@ -2393,8 +2394,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 75, 115, 155, 195, 235 }[level]
-                                    + 0.45 * source.TotalMagicalDamage
+                                    new double[] { 75, 120, 165, 210, 255 }[level]
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -2402,8 +2403,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 10, 15, 20, 25, 30 }[level]
-                                    + 0.1 * source.TotalMagicalDamage
+                                    new double[] { 20, 35, 50, 65, 80  }[level]
+                                    + 0.15 * source.TotalMagicalDamage
                             },
                         //E 
                         new DamageSpell
@@ -2411,8 +2412,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 55, 80, 105, 130, 155 }[level]
-                                    + 0.55 * source.TotalMagicalDamage
+                                    new double[] { 53, 57, 61, 65, 69, 73, 77, 81, 85, 89, 93, 97, 101, 105, 109, 113, 117, 121 }[(source as Obj_AI_Hero).Level - 1] //TODO: Check if this is correct
+                                    + 0.1 * source.TotalMagicalDamage + (target.HasBuffOfType(BuffType.Poison) ? new double[] { 10, 40, 70, 100, 130 }[level] + 0.35 * source.TotalMagicalDamage : 0)
                             },
                         //R
                         new DamageSpell
@@ -4349,8 +4350,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 135, 190, 245, 300 }[level]
-                                    + 0.8 * source.TotalMagicalDamage
+                                    new double[] { 70, 110, 150, 190, 230 }[level]
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //W
                         new DamageSpell
@@ -4367,17 +4368,16 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 140, 200, 260, 320 }[level]
-                                    + 0.8 * source.TotalMagicalDamage
+                                    new double[] { 80, 115, 150, 185, 220 }[level]
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                         //R
-                        new DamageSpell
+                        new DamageSpell //1.5% of the target’s maximum health per 100 ability power, per second
                             {
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
-                                    (source, target, level) =>
-                                    new double[] { 250, 400, 550 }[level]
-                                    + 1.3 * source.TotalMagicalDamage
+                                    (source, target, level) => 2.5 *
+                                    (new double[] { 6, 8, 10 }[level] / 100 + 0.015 * source.TotalMagicalDamage / 100) * target.MaxHealth
                             },
                     });
 
@@ -5767,8 +5767,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 75, 115, 155, 195, 235 }[level]
-                                    + 0.8 * source.TotalMagicalDamage
+                                    new double[] { 50, 80, 110, 140, 170 }[level]
+                                    + 1 * source.TotalMagicalDamage
                             },
                         //R - per draven
                         new DamageSpell
@@ -5791,8 +5791,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     (new double[] { 50, 95, 140, 185, 230 }[level]
-                                     + 0.6 * source.TotalMagicalDamage)
-                                    * ((level == 5 && target is Obj_AI_Hero) ? 1.15 : 1)
+                                     + 0.75 * source.TotalMagicalDamage)
                             },
                         //W
                         new DamageSpell
@@ -5801,7 +5800,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.7 * source.TotalMagicalDamage
+                                    + 0.75 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -6340,8 +6339,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 250, 375, 500 }[level]
-                                    + 0.8 * target.TotalMagicalDamage + 1.0 * source.TotalMagicalDamage
+                                    new double[] { 175, 250, 325 }[level]  // TODO: figure out how fast it scales, 175-350/250-500/325-650 (based on target’s missing health)
+                                    + 0.8 * target.TotalMagicalDamage + 0.75 * source.TotalMagicalDamage //0.75 - 1.5 ability power (based on target’s missing health)
                             },
                     });
 
@@ -6366,7 +6365,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     new double[] { 30, 50, 70, 90, 110 }[level]
                                     + new double[] { 45, 75, 105, 135, 165 }[level]
-                                    + 0.625 * source.TotalMagicalDamage
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -6375,16 +6374,16 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 100, 130, 160, 190 }[level]
-                                    + 0.5 * source.TotalMagicalDamage
+                                    + 0.3 * source.TotalMagicalDamage
                             },
                         //R - max
                         new DamageSpell
                             {
-                                Slot = SpellSlot.R, DamageType = DamageType.Magical,
+                                Slot = SpellSlot.R, DamageType = DamageType.Magical, //TODO: check for Researched targets
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 500, 700, 900 }[level]
-                                    + 0.6 * source.TotalMagicalDamage
+                                    new double[] { 500, 725, 950 }[level]
+                                    + 1 * source.TotalMagicalDamage
                             },
                     });
 
@@ -6441,8 +6440,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 40, 60, 80, 100, 120 }[level]
-                                    + 0.2 * source.TotalMagicalDamage
+                                    new double[] { 60, 80, 100, 120, 140 }[level]
+                                    + 0.4 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -6450,8 +6449,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.7 * source.TotalMagicalDamage
+                                    new double[] { 70, 110, 150, 190, 230 }[level]
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -6459,8 +6458,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 98, 161, 224, 287, 350 }[level]
-                                    + 0.98 * source.TotalMagicalDamage
+                                    new double[] { 90, 170, 250, 330, 410 }[level]
+                                    + 1.2 * source.TotalMagicalDamage
                             },
                         //R - summon damage
                         new DamageSpell
@@ -6468,8 +6467,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 150, 250, 350 }[level]
-                                    + 0.55 * source.TotalMagicalDamage
+                                    new double[] { 100, 175, 250 }[level]
+                                    + 0.50 * source.TotalMagicalDamage
                             },
                         //R - per bolt
                         new DamageSpell
@@ -6477,7 +6476,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, Stage = 1, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 15, 30, 45 }[level] + 0.1 * source.TotalMagicalDamage
+                                    new double[] { 150, 250, 350 }[level] + 0.6 * source.TotalMagicalDamage
                             },
                     });
 
@@ -6491,8 +6490,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 90, 125, 160, 195, 230 }[level]
-                                    + 0.6 * source.TotalMagicalDamage
+                                    new double[] { 80, 100, 120, 140, 160 }[level]
+                                    + 0.45 * source.TotalMagicalDamage
                             },
                         //W - max
                         new DamageSpell
@@ -6508,7 +6507,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 85, 110, 135, 160 }[level]
+                                    new double[] { 60, 80, 100, 120, 140 }[level]
                                     + 0.45 * source.TotalMagicalDamage
                             },
                         //R
@@ -6626,7 +6625,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.R, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 190, 245, 300 }[level]
+                                    new double[] { 200, 230, 260 }[level]
                                     + 0.43 * source.TotalMagicalDamage
                             },
                     });
@@ -6872,8 +6871,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 70, 105, 140, 175, 210 }[level]
-                                    + 0.65 * source.TotalMagicalDamage
+                                    new double[] { 60, 90, 120, 150, 180 }[level]
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -7079,10 +7078,13 @@ namespace LeagueSharp.Common
                     reduction += f[(targetHero.Level - 1) / 3];
                 }
             }
-            //TODO: need to check if there are items or spells in game that reduce magical dmg % or by amount
-            if (hero?.ChampionName == "Corki")
-                return CalcMixedDamage(source, target, (result - reduction) * k, result * k);
 
+            //TODO: need to check if there are items or spells in game that reduce magical dmg % or by amount
+            if (hero != null && hero.ChampionName == "Corki")
+            {
+                return CalcMixedDamage(source, target, (result - reduction) * k, result * k);
+            }
+                
             return CalcPhysicalDamage(source, target, (result - reduction) * k + PassiveFlatMod(source, target));
         }
 
