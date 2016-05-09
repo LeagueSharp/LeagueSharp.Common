@@ -89,23 +89,16 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            handler = Notifications.Reserve(GetId(), handler);
-            if (handler != null)
-            {
-                duration = newDuration;
+            startT = Utils.GameTimeTickCount;
+            duration = newDuration;
 
-                TextColor.A = 0xFF;
-                BoxColor.A = 0xFF;
-                BorderColor.A = 0xFF;
+            TextColor.A = 0xFF;
+            BoxColor.A = 0xFF;
+            BorderColor.A = 0xFF;
 
-                position = new Vector2(Drawing.Width - 200f, Notifications.GetLocation(handler));
-
-                decreasementTick = GetNextDecreasementTick();
-
-                return Draw = Update = true;
-            }
-
-            return false;
+            position = new Vector2(Drawing.Width - 200f, Notifications.GetLocation(this));
+            
+            return Draw = Update = true;
         }
 
         /// <summary>
@@ -180,16 +173,7 @@ namespace LeagueSharp.Common
         }
 
         #endregion
-
-        /// <summary>
-        ///     Calculate the next decreasement tick.
-        /// </summary>
-        /// <returns>Decreasement Tick</returns>
-        private int GetNextDecreasementTick()
-        {
-            return Utils.TickCount + ((duration / 0xFF));
-        }
-
+        
         /// <summary>
         ///     Calculate the border into vertices
         /// </summary>
@@ -259,19 +243,29 @@ namespace LeagueSharp.Common
         private readonly string id;
 
         /// <summary>
+        ///     Locally saved Notification's Start Tick
+        /// </summary>
+        private int startT;
+
+        /// <summary>
+        ///     Locally saved Notification's Movement Start Tick
+        /// </summary>
+        private int moveStartT;
+
+        /// <summary>
         ///     Locally saved Notification's Duration
         /// </summary>
         private int duration;
 
         /// <summary>
-        ///     Locally saved handler for FileStream.
-        /// </summary>
-        private FileStream handler;
-
-        /// <summary>
         ///     Locally saved position
         /// </summary>
         private Vector2 position;
+
+        /// <summary>
+        ///     Locally moved saved position
+        /// </summary>
+        private Vector2 moveStartPosition;
 
         /// <summary>
         ///     Locally saved update position
@@ -282,11 +276,6 @@ namespace LeagueSharp.Common
         ///     Locally saved Notification State
         /// </summary>
         private NotificationState state;
-
-        /// <summary>
-        ///     Locally saved value, indicating when next decreasment tick should happen.
-        /// </summary>
-        private int decreasementTick;
 
         /// <summary>
         ///     Locally saved Line
@@ -357,49 +346,37 @@ namespace LeagueSharp.Common
                 return;
             }
 
-            #region Box
-
-            line.Begin();
-
-            var vertices = new[]
-            {
-                new Vector2(position.X + line.Width / 0x2, position.Y),
-                new Vector2(position.X + line.Width / 0x2, position.Y + 25f)
-            };
-
-            line.Draw(vertices, BoxColor);
-            line.End();
-
-            #endregion
+            Vector2[] vertices;
 
             #region Outline
 
             if (border)
             {
-                var x = position.X;
-                var y = position.Y;
-                var w = line.Width;
-                const float h = 25f;
-                const float px = 1f;
-
                 line.Begin();
-                line.Draw(GetBorder(x, y, w, px), BorderColor); // TOP
-                line.End();
 
-                var oWidth = line.Width;
-                line.Width = px;
+                vertices = new[]
+                {
+                    new Vector2(position.X + (int)Math.Floor(line.Width / 0x2), position.Y- 0x01),
+                    new Vector2(position.X + (int)Math.Floor(line.Width / 0x2) + 0x01, position.Y + 25f + 0x01)
+                };
 
-                line.Begin();
-                line.Draw(GetBorder(x, y, px, h), BorderColor); // LEFT
-                line.Draw(GetBorder(x + w, y, 1, h), BorderColor); // RIGHT
-                line.End();
-
-                line.Width = oWidth;
-
-                line.Begin();
-                line.Draw(GetBorder(x, y + h, w, 1), BorderColor); // BOTTOM
+                line.Draw(vertices, BorderColor);
                 line.End();
             }
+
+            #endregion
+
+            #region Box
+            line.Begin();
+
+            vertices = new[]
+            {
+                new Vector2(position.X + (int)Math.Floor(line.Width / 0x2), position.Y),
+                new Vector2(position.X + (int)Math.Floor(line.Width / 0x2), position.Y + 25f)
+            };
+
+            line.Draw(vertices, BoxColor);
+            line.End();
 
             #endregion
 
@@ -485,7 +462,7 @@ namespace LeagueSharp.Common
                             Dispose();
                         }
 
-                        Notifications.Free(handler);
+                        Notifications.RemoveNotification(this);
 
                         return;
                     }
@@ -494,22 +471,13 @@ namespace LeagueSharp.Common
 
                     #region Decreasement Tick
 
-                    if (!flashing && duration > 0x0 && Utils.TickCount - decreasementTick > 0x0)
+                    var t = Math.Max(0, startT + duration - Utils.GameTimeTickCount + 500);
+                    if (!flashing && duration > 0x0 && t < 500 )
                     {
-                        if (TextColor.A > 0x0)
-                        {
-                            TextColor.A--;
-                        }
-                        if (BoxColor.A > 0x0)
-                        {
-                            BoxColor.A--;
-                        }
-                        if (BorderColor.A > 0x0)
-                        {
-                            BorderColor.A--;
-                        }
-
-                        decreasementTick = GetNextDecreasementTick();
+                        var alpha = (byte)(255 * ((float)t / 500));
+                        TextColor.A = alpha;
+                        BoxColor.A = alpha;
+                        BorderColor.A = alpha;
                     }
 
                     #endregion
@@ -532,7 +500,7 @@ namespace LeagueSharp.Common
                                             Dispose();
                                         }
 
-                                        Notifications.Free(handler);
+                                        Notifications.RemoveNotification(this);
 
                                         return;
                                     }
@@ -575,7 +543,7 @@ namespace LeagueSharp.Common
                                             Dispose();
                                         }
 
-                                        Notifications.Free(handler);
+                                        Notifications.RemoveNotification(this);
 
                                         return;
                                     }
@@ -633,22 +601,17 @@ namespace LeagueSharp.Common
                     var location = Notifications.GetLocation();
                     if (location != -0x1 && position.Y > location)
                     {
-                        if (Notifications.IsFirst((int) position.Y))
+                        if (updatePosition != Vector2.Zero && textFix != Vector2.Zero)
                         {
-                            handler = Notifications.Reserve(GetId(), handler);
-                            if (handler != null)
-                            {
-                                if (updatePosition != Vector2.Zero && textFix != Vector2.Zero)
-                                {
-                                    position.X = textFix.X;
-                                    textFix = Vector2.Zero;
-                                    line.Width = 190f;
-                                }
-
-                                updatePosition = new Vector2(position.X, Notifications.GetLocation(handler));
-                                state = NotificationState.AnimationMove;
-                            }
+                            position.X = textFix.X;
+                            textFix = Vector2.Zero;
+                            line.Width = 190f;
                         }
+
+                        updatePosition = new Vector2(position.X, Notifications.GetLocation(this));
+                        state = NotificationState.AnimationMove;
+                        moveStartT = Utils.GameTimeTickCount;
+                        moveStartPosition = position;
                     }
 
                     #endregion
@@ -661,11 +624,9 @@ namespace LeagueSharp.Common
 
                     if (Math.Abs(position.Y - updatePosition.Y) > float.Epsilon)
                     {
-                        var value = (updatePosition.Distance(new Vector2(position.X, position.Y - 0x1)) <
-                                     updatePosition.Distance(new Vector2(position.X, position.Y + 0x1)))
-                            ? -0x1
-                            : 0x1;
-                        position.Y += value;
+                        var percentT = Math.Min(1, ((float)Utils.GameTimeTickCount - moveStartT) / 500);
+
+                        position.Y = moveStartPosition.Y + (updatePosition.Y - moveStartPosition.Y) * percentT;
                     }
                     else
                     {
@@ -683,12 +644,8 @@ namespace LeagueSharp.Common
 
                     if (Math.Abs(line.Width - 0xB9) < float.Epsilon)
                     {
-                        handler = Notifications.Reserve(GetId(), handler);
-                        if (handler != null)
-                        {
-                            state = NotificationState.AnimationShowMove;
-                            updatePosition = new Vector2(position.X, Notifications.GetLocation(handler));
-                        }
+                        state = NotificationState.AnimationShowMove;
+                        updatePosition = new Vector2(position.X, Notifications.GetLocation(this));
                         return;
                     }
                     line.Width--;
@@ -750,7 +707,7 @@ namespace LeagueSharp.Common
         /// <param name="args">WndEventArgs</param>
         public void OnWndProc(WndEventArgs args)
         {
-            if (Utils.IsUnderRectangle(Drawing.WorldToScreen(Game.CursorPos), position.X, position.Y, line.Width, 25f))
+            if (Utils.IsUnderRectangle(Utils.GetCursorPos(), position.X, position.Y, line.Width, 25f))
             {
                 #region Mouse
 
@@ -761,7 +718,7 @@ namespace LeagueSharp.Common
                     {
                         clickTick = Utils.TickCount;
 
-                        Notifications.Free(handler);
+                        Notifications.RemoveNotification(this);
 
                         Draw = Update = false;
                         if (autoDispose)
@@ -827,16 +784,12 @@ namespace LeagueSharp.Common
 
                 duration = 0;
 
-                if (handler != null)
-                {
-                    Notifications.Free(handler);
-                }
+                Notifications.RemoveNotification(this);
 
                 position = Vector2.Zero;
                 updatePosition = Vector2.Zero;
 
                 state = 0;
-                decreasementTick = 0;
 
                 textFix = Vector2.Zero;
 

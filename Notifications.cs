@@ -25,7 +25,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 #endregion
@@ -51,11 +50,6 @@ namespace LeagueSharp.Common
             Drawing.OnPreReset += Drawing_OnPreReset;
             AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             Game.OnWndProc += Game_OnWndProc;
-            
-            if (!Directory.Exists(Path))
-            {
-                Directory.CreateDirectory(Path);
-            }
         }
 
         /// <summary>
@@ -211,194 +205,33 @@ namespace LeagueSharp.Common
         #region Memory
 
         /// <summary>
-        /// Reserves a location slot for a GUID
-        /// </summary>
-        /// <param name="id">GUID</param>
-        /// <param name="old">Old Slot</param>
-        /// <returns>FileStream Handler</returns>
-        public static FileStream Reserve(string id, FileStream old = null)
-        {
-            var loc = GetLocation();
-
-            if (loc != -0x1)
-            {
-                try
-                {
-                    var path = Path + "\\" + loc + ".lock";
-
-                    if (!File.Exists(path))
-                    {
-                        var stream = File.Create(path, 0x1, FileOptions.DeleteOnClose);
-
-                        if (old != null)
-                        {
-                            Free(old);
-                        }
-                        return stream;
-                    }
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Frees a location slot
-        /// </summary>
-        /// <param name="stream">FileStream Handler</param>
-        /// <returns>Boolean</returns>
-        public static bool Free(FileStream stream)
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream.Close();
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Returns the next free location
         /// </summary>
         /// <returns>Location</returns>
         public static int GetLocation()
         {
-            var files = Directory.GetFiles(Path, "*.lock", SearchOption.TopDirectoryOnly);
-
-            if (!files.Any())
-            {
-                return 0x55;
-            }
-
-            var array = new List<int>();
-
-            foreach (var i in files)
-            {
-                try
-                {
-                    var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
-                    var str = i.Substring(length, i.Length - length);
-                    var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
-
-                    array.Add(@int);
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-            }
-
-            array.Sort();
-
-            // Find a free slot if array does not start from the zero-based location (85)
-            if (array.Count > 0x0 && array[0] > 0x55)
-            {
-                for (var i = 0x55; i < array[0]; i += 0x1E)
-                {
-                    if (File.Exists(Path + "\\" + (i + 0x1E) + ".lock"))
-                    {
-                        // If slot found, return it as value.
-                        return i;
-                    }
-                }
-            }
-
-            // Find a free slot between the current locked locations
-            for (var i = 0x0; i < array.Count - 0x1; ++i)
-            {
-                if (array[i] + 0x1E != array[i + 0x1])
-                {
-                    // Return free slot which was found between current locked locations
-                    return array[i] + 0x1E;
-                }
-            }
-
-            // Return (last slot + 30) as value
-            return array[array.Count - 0x1] + 0x1E;
+            return 0x55 + 0x1E * NotificationsList.Count;
         }
 
         /// <summary>
-        /// Gets the location.
+        /// Returns the location free location
         /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>System.Int32.</returns>
-        public static int GetLocation(FileStream stream)
+        /// <returns>Location</returns>
+        public static int GetLocation(INotification notification)
         {
-            var i = stream.Name;
-            var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
-            var str = i.Substring(length, i.Length - length);
-            var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
+            var i = 0;
+            var guid = notification.GetId();
 
-            return @int;
-        }
-
-        /// <summary>
-        /// Validates if current position is first in line
-        /// </summary>
-        /// <param name="position">Position</param>
-        /// <returns>Boolean</returns>
-        public static bool IsFirst(int position)
-        {
-            if (position == 0x55)
+            foreach (var notification_ in NotificationsList)
             {
-                return true;
-            }
-
-            var files = Directory.GetFiles(Path, "*.lock", SearchOption.TopDirectoryOnly);
-
-            if (!files.Any())
-            {
-                return true;
-            }
-
-            var array = new List<int>();
-
-            foreach (var i in files)
-            {
-                try
+                if(notification_.Key == guid)
                 {
-                    var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
-                    var str = i.Substring(length, i.Length - length);
-                    var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
-
-                    array.Add(@int);
+                    return 0x55 + 0x1E * i;
                 }
-                catch (Exception)
-                {
-                    // ignored
-                }
+                i++;
             }
 
-            if (array.Count > 0x0)
-            {
-                for (var i = position - 0x1E; i > GetLocation(); i -= 0x1E)
-                {
-                    if (array.Contains(i))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Gets the path.
-        /// </summary>
-        /// <value>The path.</value>
-        private static string Path
-        {
-            get
-            {
-                return System.IO.Path.Combine(Config.AppDataDirectory, "Notifications");
-            }
+            return 0x55 + 0x1E * i;
         }
 
         #endregion
