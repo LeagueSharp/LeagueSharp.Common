@@ -197,6 +197,7 @@ namespace LeagueSharp.Common
         {
             lock (RenderObjectsLock)
             {
+                renderObject.OnPreReset();
                 RenderObjects.Remove(renderObject);
             }
         }
