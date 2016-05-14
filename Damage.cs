@@ -3783,8 +3783,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) => source.HasBuff("judicatorrighteousfury") ?  new double[] { 20, 30, 40, 50, 60 }[level]
-                                    + 0.25 * source.TotalMagicalDamage : source.CalcDamage(target, DamageType.Magical, new double[] { 10, 15, 20, 25, 30 }[level]
-                                    + 0.15 * source.TotalMagicalDamage)
+                                    + 0.25 * source.TotalMagicalDamage : new double[] { 10, 15, 20, 25, 30 }[level]
+                                    + 0.15 * source.TotalMagicalDamage
                             },
                     });
 
