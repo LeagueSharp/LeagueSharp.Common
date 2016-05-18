@@ -263,10 +263,22 @@ namespace LeagueSharp.Common
         {
             var targetBuffs = new HashSet<string>(target.Buffs.Select(buff => buff.Name), StringComparer.OrdinalIgnoreCase);
 
-            //Kindred's Lamb's Respite(R)
+            // Kindred's Lamb's Respite(R)
             if (targetBuffs.Contains("KindredRNoDeathBuff") && target.HealthPercent <= 10)
             {
                 return true;
+            }
+            
+            // Fizz E
+            if (targetBuffs.Contains("fizztrickslamsounddummy"))
+            {
+            	return true;
+            }
+            
+            // Vladimir W
+            if (targetBuffs.Contains("VladimirSanguinePool"))
+            {
+            	return true;
             }
 
             // Tryndamere's Undying Rage (R)
