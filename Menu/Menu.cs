@@ -29,6 +29,14 @@
         /// </summary>
         public static Dictionary<string, Menu> RootMenus = new Dictionary<string, Menu>();
 
+        /// <summary>
+        ///     If the menu should be compact
+        /// </summary>
+        internal static bool IsCompact
+        {
+            get { return Root.Item("Menu.Compact").GetValue<bool>(); }
+        }
+
         #endregion
 
         #region Fields
@@ -105,16 +113,20 @@
             Root.AddItem(new MenuItem("BackgroundAlpha", "Background Opacity")).SetValue(new Slider(165, 55, 255));
             Root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
-                    new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" })));
-            Root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 12, 20)));
+                    new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" }, 1)));
+            Root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(15, 12, 20)));
             Root.AddItem(
                 new MenuItem("FontQuality", "Font Quality").SetValue(
                     new StringList(
                         Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray(),
-                        4)));
+                        5)));
+
             Root.AddItem(
                 new MenuItem("LeagueSharp.Common.TooltipDuration", "Tooltip Notification Duration").SetValue(
                     new Slider(1500, 0, 5000)));
+            Root.AddItem(
+             new MenuItem("Menu.Compact", "Compact Menu").SetValue(false));
+
             Root.AddItem(
                 new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(FontStyle.Bold, Color.Yellow));
 
@@ -240,10 +252,11 @@
         {
             get
             {
-                if (this.IsRootMenu || this.Parent == null)
+                if (IsCompact || this.IsRootMenu || this.Parent == null)
                 {
                     return MenuSettings.BasePosition + this.MenuCount * new Vector2(0, MenuSettings.MenuItemHeight);
                 }
+   
 
                 return this.Parent.MyBasePosition;
             }
@@ -271,8 +284,8 @@
                        + new Vector2(
                              (this.Parent != null)
                                  ? this.Parent.Position.X + this.Parent.Width
-                                 : (int)this.MyBasePosition.X,
-                             0) + this.YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
+                                 : (int)this.MyBasePosition.X, 0) 
+                                 + this.YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
             }
         }
 
@@ -352,7 +365,7 @@
                     return 0;
                 }
 
-                return this.Parent.YLevel + this.Parent.Children.TakeWhile(test => test.Name != this.Name).Count();
+                return (IsCompact ? 0 : this.Parent.YLevel) + this.Parent.Children.TakeWhile(test => test.Name != this.Name).Count();
             }
         }
 
