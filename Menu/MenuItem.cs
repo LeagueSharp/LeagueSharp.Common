@@ -203,7 +203,7 @@
         {
             get
             {
-                if (this.Parent == null)
+                if (Menu.IsCompact || this.Parent == null)
                 {
                     return MenuSettings.BasePosition;
                 }
@@ -320,7 +320,7 @@
                     return 0;
                 }
 
-                return this.Parent.YLevel + this.Parent.Children.Count
+                return (Menu.IsCompact ? 0 : this.Parent.YLevel) + this.Parent.Children.Count
                        + this.Parent.Items.TakeWhile(test => test.Name != this.Name).Count(c => c.ShowItem);
             }
         }
