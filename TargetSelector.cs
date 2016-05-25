@@ -63,6 +63,7 @@ namespace LeagueSharp.Common
         #region Vars
 
         public static TargetingMode Mode = TargetingMode.AutoPriority;
+        private static int _focusTime;
         private static Menu _configMenu;
         private static Obj_AI_Hero _selectedTargetObjAiHero;
 
@@ -106,6 +107,29 @@ namespace LeagueSharp.Common
 
             _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
             _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
+            
+            if (!_configMenu.Item("ResetOnRelease").GetValue<bool>())
+            {
+                return;
+            }
+            
+            if (SelectedTarget != null && !a)
+            {
+                if (!_configMenu.Item("ForceFocusSelected").GetValue<bool>() && Utils.GameTimeTickCount - _focusTime < 150)
+                {
+                    if (!a)
+                    {
+                        _selectedTargetObjAiHero = null;
+                    }
+                }
+            }
+            else
+            {
+                if (a)
+                {
+                    _focusTime = Utils.GameTimeTickCount;
+                }
+            }
         }
 
         private static void GameOnOnWndProc(WndEventArgs args)
@@ -203,6 +227,7 @@ namespace LeagueSharp.Common
                 focusMenu.AddItem(
                     new MenuItem("ForceFocusSelectedK2", "Only attack selected Key 2"))
                     .SetValue(new KeyBind(32, KeyBindType.Press));
+                focusMenu.AddItem(new MenuItem("ResetOnRelease", "Reset selected target upon release")).SetValue(false);
 
                 config.AddSubMenu(focusMenu);
 
