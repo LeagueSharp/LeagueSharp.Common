@@ -294,12 +294,6 @@ namespace LeagueSharp.Common
                 return true;
             }
             
-            // Fizz E
-            if (targetBuffs.Contains("fizztrickslamsounddummy"))
-            {
-            	return true;
-            }
-            
             // Vladimir W
             if (targetBuffs.Contains("VladimirSanguinePool"))
             {
