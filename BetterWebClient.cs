@@ -62,7 +62,7 @@ namespace LeagueSharp.Common
         
         public string Kappa
         {
-            get { return "kappa"; }
+            get { return "version5"; }
         }
 
         //Get last status code
