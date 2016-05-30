@@ -232,7 +232,7 @@ namespace LeagueSharp.Common
                 config.AddSubMenu(focusMenu);
 
                 var autoPriorityItem =
-                    new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false).SetTooltip("5 = Highest Priority");
+                    new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(true).SetTooltip("5 = Highest Priority");
                 autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
 
                 foreach (var enemy in HeroManager.Enemies)
