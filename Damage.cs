@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -1334,14 +1334,18 @@ namespace LeagueSharp.Common
                 ChampionName = "Shen",
                 IsActive = (source, target) => source.HasBuff("shenqbuff"),
                 GetDamage = (source, target) =>
+                {
+                    double dmg = 0;
+                    if (source.HasBuff("shenqbuffweak"))
                     {
-                        var dmg = source.GetSpellDamage(target, SpellSlot.Q);
-                        if (target.Type == GameObjectType.obj_AI_Hero && target.HasBuff("ShenQSlow"))
-                        {
-                            dmg += source.GetSpellDamage(target, SpellSlot.Q, 1);
-                        }
-                        return dmg;
+                        dmg = source.GetSpellDamage(target, SpellSlot.Q);
                     }
+                    if (source.HasBuff("shenqbuffstrong"))
+                    {
+                        dmg = source.GetSpellDamage(target, SpellSlot.Q, 1);
+                    }
+                    return dmg;
+                }
             };
 
             AttackPassives.Add(p);
@@ -5479,8 +5483,33 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 100, 140, 180, 220 }[level]
-                                    + 0.6 * source.TotalMagicalDamage
+                                    {
+                                        var dmg = (new double[] { 3, 3.5, 4, 4.5, 5 }[level] +
+                                                  0.015 * source.TotalMagicalDamage) * target.MaxHealth / 100;
+                                        if (target is Obj_AI_Hero)
+                                        {
+                                            return dmg;
+                                        }
+                                        return Math.Min(new double[] { 30, 50, 70, 90, 110 }[level] + 
+                                               dmg, new double[] { 75, 100, 125, 150, 175 }[level]);
+                                    }
+                            },
+                        //Q - Enhanced
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Magical,
+                                Damage =
+                                    (source, target, level) =>
+                                    {
+                                        var dmg = (new double[] { 5, 5.5, 6, 6.6, 7 }[level] +
+                                                  0.02 * source.TotalMagicalDamage) * target.MaxHealth / 100;
+                                        if (target is Obj_AI_Hero)
+                                        {
+                                            return dmg;
+                                        }
+                                        return Math.Min(new double[] { 30, 50, 70, 90, 110 }[level] +
+                                               dmg, new double[] { 75, 100, 125, 150, 175 }[level]);
+                                    }
                             },
                         //E
                         new DamageSpell
