@@ -825,6 +825,27 @@
             MenuGlobals.MenuState.Remove(this.uniqueId);
         }
 
+        public void RemoveMenu(Menu menu)
+        {
+            foreach (var child in this.Children.ToArray())
+            {
+                if (child == menu)
+                {
+                    this.Children.Remove(menu);
+                }
+
+                child.RemoveMenu(menu);
+            }
+        }
+
+        public static void Remove(Menu menu)
+        {
+            foreach (var rootMenu in RootMenus.Values)
+            {
+                rootMenu.RemoveMenu(menu);
+            }
+        }
+
         #endregion
     }
 }

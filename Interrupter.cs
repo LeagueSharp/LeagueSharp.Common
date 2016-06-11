@@ -399,7 +399,17 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
             Game.OnUpdate += Game_OnGameUpdate;
+        }
+
+        public static void Shutdown()
+        {
+            Game.OnUpdate -= Game_OnGameUpdate;
         }
 
         [Obsolete("Use Interrupter2.OnInterruptableTarget", false)]

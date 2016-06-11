@@ -203,7 +203,19 @@ namespace LeagueSharp.Common
             return LeagueSharp.Data.Data.Get<ChampionPriorityData>().GetPriority(championName);
         }
 
-        internal static void Initialize()
+        public static void Shutdown()
+        {
+            Menu.Remove(_configMenu);
+
+            Game.OnWndProc -= GameOnOnWndProc;
+
+            if (!CustomTS)
+            {
+                Drawing.OnDraw -= DrawingOnOnDraw;
+            }
+        }
+
+        public static void Initialize()
         {
             CustomEvents.Game.OnGameLoad += args =>
             {

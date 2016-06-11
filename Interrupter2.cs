@@ -70,6 +70,11 @@ namespace LeagueSharp.Common
         /// </summary>
         static Interrupter2()
         {
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
             // Initialize Properties
             InterruptableSpells = new Dictionary<string, List<InterruptableSpell>>();
             CastingInterruptableSpell = new Dictionary<int, InterruptableSpell>();
@@ -83,6 +88,13 @@ namespace LeagueSharp.Common
             Game.OnUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnStopCast += Spellbook_OnStopCast;
+        }
+
+        public static void Shutdown()
+        {
+            Game.OnUpdate -= Game_OnGameUpdate;
+            Obj_AI_Base.OnProcessSpellCast -= Obj_AI_Base_OnProcessSpellCast;
+            Spellbook.OnStopCast -= Spellbook_OnStopCast;
         }
 
         /// <summary>

@@ -44,7 +44,17 @@ namespace LeagueSharp.Common
         /// </summary>
         static Dash()
         {
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
             Obj_AI_Hero.OnNewPath += ObjAiHeroOnOnNewPath;
+        }
+
+        public static void Shutdown()
+        {
+            Obj_AI_Hero.OnNewPath -= ObjAiHeroOnOnNewPath;
         }
 
         /// <summary>

@@ -319,18 +319,25 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Prediction
     {
+        private static Menu _menu;
+
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        internal static void Initialize()
+        public static void Initialize()
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
             {
-                var menu = new Menu("Prediction", "Prediction");
+                _menu = new Menu("Prediction", "Prediction");
                 var slider = new MenuItem("PredMaxRange", "Max Range %").SetValue(new Slider(100, 70, 100));
-                menu.AddItem(slider);
-                CommonMenu.Instance.AddSubMenu(menu);
+                _menu.AddItem(slider);
+                CommonMenu.Instance.AddSubMenu(_menu);
             };
+        }
+
+        public static void Shutdown()
+        {
+            Menu.Remove(_menu);
         }
 
         /// <summary>

@@ -7,6 +7,8 @@ namespace LeagueSharp.Common
     /// </summary>
     internal class Hacks
     {
+        private static Menu menu;
+
         /// <summary>
         /// Initializes this instance.
         /// </summary>
@@ -14,7 +16,7 @@ namespace LeagueSharp.Common
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
             {
-                var menu = new Menu("Hacks", "Hacks");
+                menu = new Menu("Hacks", "Hacks");
 
                 var draw = menu.AddItem(new MenuItem("DrawingHack", "Disable Drawing").SetValue(false));
                 draw.SetValue(LeagueSharp.Hacks.DisableDrawings);
@@ -52,8 +54,14 @@ namespace LeagueSharp.Common
                     {
                         LeagueSharp.Hacks.TowerRanges = args.GetNewValue<bool>();
                     };
+
                 CommonMenu.Instance.AddSubMenu(menu);
             };
+        }
+
+        public static void Shutdown()
+        {
+            Menu.Remove(menu);
         }
     }
 }

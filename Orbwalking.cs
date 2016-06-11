@@ -802,7 +802,7 @@ namespace LeagueSharp.Common
         ///     This class allows you to add an instance of "Orbwalker" to your assembly in order to control the orbwalking in an
         ///     easy way.
         /// </summary>
-        public class Orbwalker
+        public class Orbwalker : IDisposable
         {
             /// <summary>
             ///     The lane clear wait time modifier.
@@ -918,10 +918,21 @@ namespace LeagueSharp.Common
                     (sender, args) => { Move = !args.GetNewValue<KeyBind>().Active; };
 
 
-                Player = ObjectManager.Player;
-                Game.OnUpdate += GameOnOnGameUpdate;
-                Drawing.OnDraw += DrawingOnOnDraw;
+                this.Player = ObjectManager.Player;
+                Game.OnUpdate += this.GameOnOnGameUpdate;
+                Drawing.OnDraw += this.DrawingOnOnDraw;
                 Instances.Add(this);
+            }
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose()
+            {
+                Menu.Remove(_config);
+                Game.OnUpdate -= this.GameOnOnGameUpdate;
+                Drawing.OnDraw -= this.DrawingOnOnDraw;
+                Instances.Remove(this);
             }
 
             /// <summary>
