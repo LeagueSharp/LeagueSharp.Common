@@ -5829,7 +5829,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 120, 160, 200, 240 }[level]
-                                    + 0.75 * source.TotalMagicalDamage
+                                    + 0.8 * source.TotalMagicalDamage
                             },
                         //E
                         new DamageSpell
@@ -5838,7 +5838,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.4 * source.TotalMagicalDamage
+                                    + 0.5 * source.TotalMagicalDamage
                             },
                         //R - min damage
                         new DamageSpell
