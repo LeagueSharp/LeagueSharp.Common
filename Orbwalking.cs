@@ -1184,7 +1184,7 @@ namespace LeagueSharp.Common
                         if (minion.Team == GameObjectTeam.Neutral && _config.Item("AttackBarrel").GetValue<bool>() &&
                             minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered)
                         {
-                            if (minion.Health < 2)
+                            if (minion.Health <= 1 || minion.Health <= 2 && Player.Distance(minion) >= 300)
                             {
                                 return minion;
                             }
