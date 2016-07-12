@@ -878,7 +878,7 @@ namespace LeagueSharp.Common
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("AttackPetsnTraps", "Auto attack pets & traps").SetShared().SetValue(true));
-                misc.AddItem(new MenuItem("AttackBarrel", "Auto attack gangplank barrel").SetShared().SetValue(true));
+                misc.AddItem(new MenuItem("AttackGPBarrel", "Auto attack gangplank barrel").SetShared().SetValue(new StringList(new[] { "Combo and Farming", "Farming", "No" }, 1)));
                 misc.AddItem(new MenuItem("Smallminionsprio", "Jungle clear small first").SetShared().SetValue(false));
                 misc.AddItem(
                     new MenuItem("LimitAttackSpeed", "Don't kite if Attack Speed > 2.5").SetShared().SetValue(false));
@@ -1130,6 +1130,54 @@ namespace LeagueSharp.Common
                     }
                 }
 
+                //GankPlank barrels
+                var attackGankPlankBarrels = _config.Item("AttackGPBarrel").GetValue<StringList>().SelectedIndex;
+                Console.WriteLine(attackGankPlankBarrels);
+                if (attackGankPlankBarrels != 2 && (attackGankPlankBarrels == 0 || (mode == OrbwalkingMode.LaneClear  || mode == OrbwalkingMode.Mixed ||
+                        mode == OrbwalkingMode.LastHit || mode == OrbwalkingMode.Freeze)))
+                {
+                    var enemyGangPlank = HeroManager.Enemies.FirstOrDefault(e => e.ChampionName.Equals("gangplank", StringComparison.InvariantCultureIgnoreCase));
+
+                    if (enemyGangPlank != null )
+                    {
+                        var barrels = ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(minion => minion.Team == GameObjectTeam.Neutral && minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered && minion.IsValidTarget() && InAutoAttackRange(minion));
+
+                        foreach (var barrel in barrels)
+                        {
+                            if (barrel.Health <= 1f)
+                            {
+                                return barrel;
+                            }
+
+                            var t = (int)(Player.AttackCastDelay * 1000) + Game.Ping / 2 +
+                                1000 * (int)Math.Max(0, Player.Distance(barrel) - Player.BoundingRadius) /
+                                (int)GetMyProjectileSpeed();
+
+                            var barrelBuff = barrel.Buffs.FirstOrDefault(
+                            b =>
+                                b.Name.Equals(
+                                    "gangplankebarrelactive", StringComparison.InvariantCultureIgnoreCase));
+
+                            if (barrelBuff != null && barrel.Health <= 2f)
+                            {
+                                var healthDecayRate = enemyGangPlank.Level >= 13 ? 0.5f : (enemyGangPlank.Level >= 7 ? 1f : 2f);
+                                var nextHealthDecayTime = Game.Time < barrelBuff.StartTime + healthDecayRate ? barrelBuff.StartTime + healthDecayRate : barrelBuff.StartTime + healthDecayRate * 2;
+
+                                if (nextHealthDecayTime <= Game.Time + t / 1000f)
+                                {
+                                    return barrel;
+                                }
+                            }
+                        }
+
+                        if (barrels.Any())
+                        {
+                            return null;
+                        }
+                    }
+                }
+
                 /*Killable Minion*/
                 if (mode == OrbwalkingMode.LaneClear || mode == OrbwalkingMode.Mixed || mode == OrbwalkingMode.LastHit ||
                     mode == OrbwalkingMode.Freeze)
@@ -1178,15 +1226,6 @@ namespace LeagueSharp.Common
                                 {
                                     return minion;
                                 }
-                            }
-                        }
-
-                        if (minion.Team == GameObjectTeam.Neutral && _config.Item("AttackBarrel").GetValue<bool>() &&
-                            minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered)
-                        {
-                            if (minion.Health <= 1 || minion.Health <= 2 && Player.Distance(minion) >= 300)
-                            {
-                                return minion;
                             }
                         }
                     }
@@ -1464,7 +1503,7 @@ namespace LeagueSharp.Common
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     minion =>
-                                        minion.IsValidTarget() && InAutoAttackRange(minion) && ShouldAttackMinion(minion, false))
+                                        minion.IsValidTarget() && InAutoAttackRange(minion) && ShouldAttackMinion(minion))
                             let predHealth =
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
@@ -1490,17 +1529,11 @@ namespace LeagueSharp.Common
             /// <param name="minion">The <see cref="Obj_AI_Minion" /></param>
             /// <param name="includeBarrel">Include Gangplank Barrel</param>
             /// <returns><c>true</c> if the minion should be attacked; otherwise, <c>false</c>.</returns>
-            private bool ShouldAttackMinion(Obj_AI_Minion minion, bool includeBarrel = false)
+            private bool ShouldAttackMinion(Obj_AI_Minion minion)
             {
                 if (minion.Name == "WardCorpse" || minion.CharData.BaseSkinName == "jarvanivstandard")
                 {
                     return false;
-                }
-
-                if (minion.Team == GameObjectTeam.Neutral && includeBarrel)
-                {
-                    return _config.Item("AttackBarrel").GetValue<bool>() &&
-                           minion.CharData.BaseSkinName == "gangplankbarrel" && minion.IsHPBarRendered;
                 }
 
                 if (MinionManager.IsWard(minion))
