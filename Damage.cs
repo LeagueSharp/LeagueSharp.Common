@@ -5350,15 +5350,15 @@ namespace LeagueSharp.Common
                 "Ryze",
                 new List<DamageSpell>
                     {
-                        //Q TODO: calculate the bonus damage 40 / 55 / 70 / 85 / 100%
+                        //Q
                         new DamageSpell
                             {
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 60, 85, 110, 135, 160, 185 }[level]
+                                    (new double[] { 60, 85, 110, 135, 160, 185 }[level]
                                     + 0.45 * source.TotalMagicalDamage
-                                    + 0.03 * source.MaxMana
+                                    + 0.03 * source.MaxMana) * (1 + (target.HasBuff("RyzeE") ? new double[] { 40, 55, 70, 85, 100, 100 }[level] / 100 : 0))
                             },
                         //W
                         new DamageSpell
