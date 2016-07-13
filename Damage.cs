@@ -3058,7 +3058,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 10, 20, 30, 40, 50 }[level]
+                                    new double[] { 15, 25, 35, 45, 55 }[level]
                                     + 1 * source.TotalMagicalDamage
                                     + new double[] { 6, 8, 10, 12, 14 }[level] / 100 * target.MaxHealth
                             },
@@ -5939,7 +5939,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 125, 170, 215, 260 }[level] 
+                                    new double[] { 80, 130, 180, 230, 280 }[level] 
                                     + 0.7 * source.TotalMagicalDamage
                             },
                         //W - Devour 
@@ -6519,8 +6519,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 80, 100, 120, 140, 160 }[level]
-                                    + 0.45 * source.TotalMagicalDamage
+                                    new double[] { 75, 90, 105, 120, 135 }[level]
+                                    + 0.55 * source.TotalMagicalDamage
                             },
                         //W - max
                         new DamageSpell
@@ -6568,7 +6568,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.W, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    (new double[] { 80, 125, 170, 215, 260 }[level])
+                                    (new double[] { 60, 110, 160, 210, 260 }[level])
                                     * ((target.MaxHealth - target.Health) / target.MaxHealth + 1)
                             },
                         //E
