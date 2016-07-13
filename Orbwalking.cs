@@ -1132,7 +1132,6 @@ namespace LeagueSharp.Common
 
                 //GankPlank barrels
                 var attackGankPlankBarrels = _config.Item("AttackGPBarrel").GetValue<StringList>().SelectedIndex;
-                Console.WriteLine(attackGankPlankBarrels);
                 if (attackGankPlankBarrels != 2 && (attackGankPlankBarrels == 0 || (mode == OrbwalkingMode.LaneClear  || mode == OrbwalkingMode.Mixed ||
                         mode == OrbwalkingMode.LastHit || mode == OrbwalkingMode.Freeze)))
                 {
