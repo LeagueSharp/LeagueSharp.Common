@@ -5358,7 +5358,7 @@ namespace LeagueSharp.Common
                                     (source, target, level) =>
                                     (new double[] { 60, 85, 110, 135, 160, 185 }[level]
                                     + 0.45 * source.TotalMagicalDamage
-                                    + 0.03 * source.MaxMana) * (1 + (target.HasBuff("RyzeE") ? new double[] { 40, 55, 70, 85, 100, 100 }[level] / 100 : 0))
+                                    + 0.03 * (source.MaxMana - 392.4 - 52 * (source as Obj_AI_Hero).Level ) ) * (1 + (target.HasBuff("RyzeE") ? new double[] { 40, 55, 70, 85, 100, 100 }[level] / 100 : 0))
                             },
                         //W
                         new DamageSpell
@@ -5367,7 +5367,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 80, 100, 120, 140, 160 }[level]
-                                    + 0.2 * source.TotalMagicalDamage + 0.01 * source.MaxMana
+                                    + 0.2 * source.TotalMagicalDamage + 0.01 * (source.MaxMana - 392.4 - 52 * (source as Obj_AI_Hero).Level)
                             },
                         //E
                         new DamageSpell
@@ -5376,7 +5376,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 50, 75, 100, 125, 150 }[level]
-                                    + 0.3 * source.TotalMagicalDamage + 0.02 * source.MaxMana
+                                    + 0.3 * source.TotalMagicalDamage + 0.02 * (source.MaxMana - 392.4 - 52 * (source as Obj_AI_Hero).Level)
                             },
                     });
 
