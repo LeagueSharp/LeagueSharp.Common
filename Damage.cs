@@ -2416,8 +2416,10 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 53, 57, 61, 65, 69, 73, 77, 81, 85, 89, 93, 97, 101, 105, 109, 113, 117, 121 }[(source as Obj_AI_Hero).Level - 1] //TODO: Check if this is correct
-                                    + 0.1 * source.TotalMagicalDamage + (target.HasBuffOfType(BuffType.Poison) ? new double[] { 10, 40, 70, 100, 130 }[level] + 0.35 * source.TotalMagicalDamage : 0)
+                                    (48 + 4 * ((Obj_AI_Hero)source).Level) + 0.1 * source.TotalMagicalDamage
+                                    + (target.HasBuffOfType(BuffType.Poison)
+                                           ? new double[] { 10, 40, 70, 100, 130 }[level] + 0.35 * source.TotalMagicalDamage
+                                           : 0)
                             },
                         //R
                         new DamageSpell
