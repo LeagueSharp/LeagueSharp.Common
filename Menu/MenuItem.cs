@@ -148,7 +148,7 @@
             }
 
             this.Name = name;
-            this.DisplayName = displayName;
+            this.DisplayName = MenuGlobals.Function001(displayName);
             this.FontStyle = FontStyle.Regular;
             this.FontColor = Color.White;
             this.ShowItem = true;
