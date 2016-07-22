@@ -239,6 +239,25 @@ namespace LeagueSharp.Common
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Obj_AI_Base.OnDoCast += Obj_AI_Base_OnDoCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
+
+            if (_championName == "Rengar")
+            {
+                
+                Obj_AI_Base.OnPlayAnimation += delegate(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+                {
+                    if (sender.IsMe && args.Animation == "Spell5")
+                    {
+                        var t = 0;
+
+                        if (_lastTarget != null && _lastTarget.IsValid)
+                        {
+                            t += (int)Math.Min(ObjectManager.Player.Distance(_lastTarget) / 1.5f, 0.6f);
+                        }
+
+                        LastAATick = Utils.GameTimeTickCount - Game.Ping / 2 + t;
+                    }
+                };
+            }
         }
 
         /// <summary>

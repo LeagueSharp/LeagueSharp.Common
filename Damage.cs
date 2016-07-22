@@ -3123,7 +3123,7 @@ namespace LeagueSharp.Common
                                 Damage =
                                     (source, target, level) =>
                                     new double[] { 20, 50, 80, 110, 140 }[level]
-                                    + 8 / 100 * target.MaxHealth
+                                    + 8 / 100f * target.MaxHealth
                                     + 0.3 * source.TotalMagicalDamage
                             },
                         //E
