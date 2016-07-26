@@ -25,139 +25,49 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using SharpDX;
 
 #endregion
 
 namespace LeagueSharp.Common
 {
-
-    /// <summary>
-    /// Represents the chance of hitting an enemy.
-    /// </summary>
     public enum HitChance
     {
-        /// <summary>
-        /// The target is immobile.
-        /// </summary>
         Immobile = 8,
-
-        /// <summary>
-        /// The unit is dashing.
-        /// </summary>
         Dashing = 7,
-
-        /// <summary>
-        /// Very high probability of hitting the target.
-        /// </summary>
         VeryHigh = 6,
-
-        /// <summary>
-        /// High probability of hitting the target.
-        /// </summary>
         High = 5,
-
-        /// <summary>
-        /// Medium probability of hitting the target.
-        /// </summary>
         Medium = 4,
-
-        /// <summary>
-        /// Low probability of hitting the target.
-        /// </summary>
         Low = 3,
-
-        /// <summary>
-        /// Impossible to hit the target.
-        /// </summary>
         Impossible = 2,
-
-        /// <summary>
-        /// The target is out of range.
-        /// </summary>
         OutOfRange = 1,
-
-        /// <summary>
-        /// The target is blocked by other units.
-        /// </summary>
-        Collision = 0
+        Collision = 0,
     }
 
-    /// <summary>
-    /// The type of skillshot.
-    /// </summary>
     public enum SkillshotType
     {
-        /// <summary>
-        /// The skillshot is linear.
-        /// </summary>
         SkillshotLine,
-
-        /// <summary>
-        /// The skillshot is circular.
-        /// </summary>
         SkillshotCircle,
-
-        /// <summary>
-        /// The skillshot is conical.
-        /// </summary>
-        SkillshotCone
+        SkillshotCone,
     }
 
-    /// <summary>
-    /// Objects that cause collision to the spell.
-    /// </summary>
     public enum CollisionableObjects
     {
-        /// <summary>
-        /// Minions.
-        /// </summary>
         Minions,
-
-        /// <summary>
-        /// Enemy heroes.
-        /// </summary>
         Heroes,
-
-        /// <summary>
-        /// Yasuo's Wind Wall (W)
-        /// </summary>
         YasuoWall,
-
-        /// <summary>
-        /// Walls.
-        /// </summary>
         Walls,
-
-        /// <summary>
-        /// Ally heroes.
-        /// </summary>
-        Allies
     }
 
-    /// <summary>
-    /// Contains information necessary to calculate the prediction.
-    /// </summary>
     public class PredictionInput
     {
         /// <summary>
-        /// The position that the skillshot will be launched from.
-        /// </summary>
-        private Vector3 _from;
-
-        /// <summary>
-        /// The position to check the range from.
-        /// </summary>
-        private Vector3 _rangeCheckFrom;
-
-        /// <summary>
-        /// If set to <c>true</c> the prediction will hit as many enemy heroes as posible.
+        /// Set to true make the prediction hit as many enemy heroes as posible.
         /// </summary>
         public bool Aoe = false;
 
         /// <summary>
-        /// <c>true</c> if the spell collides with units.
+        /// Set to true if the unit collides with units.
         /// </summary>
         public bool Collision = false;
 
@@ -172,7 +82,7 @@ namespace LeagueSharp.Common
         /// <summary>
         /// The skillshot delay in seconds.
         /// </summary>
-        public float Delay;
+        public float Delay = 0f;
 
         /// <summary>
         /// The skillshot width's radius or the angle in case of the cone skillshots.
@@ -204,10 +114,13 @@ namespace LeagueSharp.Common
         /// </summary>
         public bool UseBoundingRadius = true;
 
+        private Vector3 _from;
+
+        private Vector3 _rangeCheckFrom;
+
         /// <summary>
         /// The position from where the skillshot missile gets fired.
         /// </summary>
-        /// <value>From.</value>
         public Vector3 From
         {
             get { return _from.To2D().IsValid() ? _from : ObjectManager.Player.ServerPosition; }
@@ -217,7 +130,6 @@ namespace LeagueSharp.Common
         /// <summary>
         /// The position from where the range is checked.
         /// </summary>
-        /// <value>The range check from.</value>
         public Vector3 RangeCheckFrom
         {
             get
@@ -229,36 +141,14 @@ namespace LeagueSharp.Common
             set { _rangeCheckFrom = value; }
         }
 
-        /// <summary>
-        /// Gets the real radius.
-        /// </summary>
-        /// <value>The real radius.</value>
         internal float RealRadius
         {
             get { return UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius; }
         }
     }
 
-    /// <summary>
-    /// The output after calculating the prediction.
-    /// </summary>
     public class PredictionOutput
     {
-        /// <summary>
-        /// The AoE target hit.
-        /// </summary>
-        internal int _aoeTargetsHitCount;
-
-        /// <summary>
-        /// The calculated cast position
-        /// </summary>
-        private Vector3 _castPosition;
-
-        /// <summary>
-        /// The predicted unit position
-        /// </summary>
-        private Vector3 _unitPosition;
-
         /// <summary>
         /// The list of the targets that the spell will hit (only if aoe was enabled).
         /// </summary>
@@ -274,30 +164,25 @@ namespace LeagueSharp.Common
         /// </summary>
         public HitChance Hitchance = HitChance.Impossible;
 
-        /// <summary>
-        /// The input
-        /// </summary>
         internal PredictionInput Input;
+
+        internal int _aoeTargetsHitCount;
+        private Vector3 _castPosition;
+
+        private Vector3 _unitPosition;
 
         /// <summary>
         /// The position where the skillshot should be casted to increase the accuracy.
         /// </summary>
-        /// <value>The cast position.</value>
         public Vector3 CastPosition
         {
-            get
-            {
-                return _castPosition.IsValid() && _castPosition.To2D().IsValid()
-                    ? _castPosition.SetZ()
-                    : Input.Unit.ServerPosition;
-            }
+            get { return _castPosition.To2D().IsValid() ? _castPosition : Input.Unit.ServerPosition; }
             set { _castPosition = value; }
         }
 
         /// <summary>
         /// The number of targets the skillshot will hit (only if aoe was enabled).
         /// </summary>
-        /// <value>The aoe targets hit count.</value>
         public int AoeTargetsHitCount
         {
             get { return Math.Max(_aoeTargetsHitCount, AoeTargetsHit.Count); }
@@ -306,10 +191,9 @@ namespace LeagueSharp.Common
         /// <summary>
         /// The position where the unit is going to be when the skillshot reaches his position.
         /// </summary>
-        /// <value>The unit position.</value>
         public Vector3 UnitPosition
         {
-            get { return _unitPosition.To2D().IsValid() ? _unitPosition.SetZ() : Input.Unit.ServerPosition; }
+            get { return _unitPosition.To2D().IsValid() ? _unitPosition : Input.Unit.ServerPosition; }
             set { _unitPosition = value; }
         }
     }
@@ -319,107 +203,26 @@ namespace LeagueSharp.Common
     /// </summary>
     public static class Prediction
     {
-        private static Menu _menu;
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        public static void Initialize()
-        {
-            CustomEvents.Game.OnGameLoad += eventArgs =>
-            {
-                _menu = new Menu("Prediction", "Prediction");
-                var slider = new MenuItem("PredMaxRange", "Max Range %").SetValue(new Slider(100, 70, 100));
-                _menu.AddItem(slider);
-                CommonMenu.Instance.AddSubMenu(_menu);
-            };
-        }
-
-        public static void Shutdown()
-        {
-            Menu.Remove(_menu);
-        }
-
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="delay">The delay.</param>
-        /// <returns>PredictionOutput.</returns>
         public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay)
         {
-            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay });
+            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, });
         }
 
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="delay">The delay.</param>
-        /// <param name="radius">The radius.</param>
-        /// <returns>PredictionOutput.</returns>
         public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay, float radius)
         {
-            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, Radius = radius });
+            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, Radius = radius, });
         }
 
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="delay">The delay.</param>
-        /// <param name="radius">The radius.</param>
-        /// <param name="speed">The speed.</param>
-        /// <returns>PredictionOutput.</returns>
         public static PredictionOutput GetPrediction(Obj_AI_Base unit, float delay, float radius, float speed)
         {
-            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, Radius = radius, Speed = speed });
+            return GetPrediction(new PredictionInput { Unit = unit, Delay = delay, Radius = radius, Speed = speed, });
         }
 
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="delay">The delay.</param>
-        /// <param name="radius">The radius.</param>
-        /// <param name="speed">The speed.</param>
-        /// <param name="collisionable">The collisionable objects.</param>
-        /// <returns>PredictionOutput.</returns>
-        public static PredictionOutput GetPrediction(Obj_AI_Base unit,
-            float delay,
-            float radius,
-            float speed,
-            CollisionableObjects[] collisionable)
-        {
-            return
-                GetPrediction(
-                    new PredictionInput
-                    {
-                        Unit = unit,
-                        Delay = delay,
-                        Radius = radius,
-                        Speed = speed,
-                        CollisionObjects = collisionable
-                    });
-        }
-
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>PredictionOutput.</returns>
         public static PredictionOutput GetPrediction(PredictionInput input)
         {
             return GetPrediction(input, true, true);
         }
 
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="ft">if set to <c>true</c>, will add extra delay to the spell..</param>
-        /// <param name="checkCollision">if set to <c>true</c>, checks collision.</param>
-        /// <returns>PredictionOutput.</returns>
         internal static PredictionOutput GetPrediction(PredictionInput input, bool ft, bool checkCollision)
         {
             PredictionOutput result = null;
@@ -432,7 +235,7 @@ namespace LeagueSharp.Common
             if (ft)
             {
                 //Increase the delay due to the latency and server tick:
-                input.Delay += Game.Ping / 2000f + 0.06f;
+                input.Delay += Game.Ping / 2000f + 0.05f;
 
                 if (input.Aoe)
                 {
@@ -441,8 +244,7 @@ namespace LeagueSharp.Common
             }
 
             //Target too far away.
-            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon &&
-                input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
+            if (input.Range != float.MaxValue && input.Unit.Distance(input.RangeCheckFrom) >= input.Range * 1.5d)
             {
                 return new PredictionOutput { Input = input };
             }
@@ -460,12 +262,8 @@ namespace LeagueSharp.Common
                 {
                     result = GetImmobilePrediction(input, remainingImmobileT);
                 }
-                else
-                {
-                    input.Range = input.Range * CommonMenu.Instance.Item("PredMaxRange").GetValue<Slider>().Value / 100f;
-                }
             }
-
+            
             //Normal prediction
             if (result == null)
             {
@@ -473,11 +271,10 @@ namespace LeagueSharp.Common
             }
 
             //Check if the unit position is in range
-            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
+            if (input.Range != float.MaxValue)
             {
-                if (result.Hitchance >= HitChance.High &&
-                    input.RangeCheckFrom.Distance(input.Unit.Position, true) >
-                    Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
+                if (result.Hitchance == HitChance.High &&
+                    input.RangeCheckFrom.Distance(input.Unit.Position, true) > Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
                 {
                     result.Hitchance = HitChance.Medium;
                 }
@@ -516,35 +313,29 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        /// <summary>
-        /// Gets the dashing prediction.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>PredictionOutput.</returns>
         internal static PredictionOutput GetDashingPrediction(PredictionInput input)
         {
             var dashData = input.Unit.GetDashInfo();
             var result = new PredictionOutput { Input = input };
-
+            input.Delay += 0.1f;
             //Normal dashes.
             if (!dashData.IsBlink)
             {
                 //Mid air:
-                var endP = dashData.Path.Last();
                 var dashPred = GetPositionOnPath(
-                    input, new List<Vector2> { input.Unit.ServerPosition.To2D(), endP }, dashData.Speed);
-                if (dashPred.Hitchance >= HitChance.High && dashPred.UnitPosition.To2D().Distance(input.Unit.Position.To2D(), endP, true) < 200 )
+                    input, new List<Vector2> { input.Unit.ServerPosition.To2D(), dashData.Path.Last() }, dashData.Speed);
+                if (dashPred.Hitchance == HitChance.High)
                 {
                     dashPred.CastPosition = dashPred.UnitPosition;
                     dashPred.Hitchance = HitChance.Dashing;
                     return dashPred;
                 }
-                
+
                 //At the end of the dash:
                 if (dashData.Path.PathLength() > 200)
                 {
-                    
-                    var timeToPoint = input.Delay / 2f + input.From.To2D().Distance(endP) / input.Speed - 0.25f;
+                    var endP = dashData.Path.Last();
+                    var timeToPoint = input.Delay + input.From.To2D().Distance(endP) / input.Speed;
                     if (timeToPoint <=
                         input.Unit.Distance(endP) / dashData.Speed + input.RealRadius / input.Unit.MoveSpeed)
                     {
@@ -552,7 +343,7 @@ namespace LeagueSharp.Common
                         {
                             CastPosition = endP.To3D(),
                             UnitPosition = endP.To3D(),
-                            Hitchance = HitChance.Dashing
+                            Hitchance = HitChance.Dashing,
                         };
                     }
                 }
@@ -566,12 +357,6 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        /// <summary>
-        /// Gets the immobile prediction.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="remainingImmobileT">The remaining immobile t.</param>
-        /// <returns>PredictionOutput.</returns>
         internal static PredictionOutput GetImmobilePrediction(PredictionInput input, double remainingImmobileT)
         {
             var timeToReachTargetPosition = input.Delay + input.Unit.Distance(input.From) / input.Speed;
@@ -582,7 +367,7 @@ namespace LeagueSharp.Common
                 {
                     CastPosition = input.Unit.ServerPosition,
                     UnitPosition = input.Unit.Position,
-                    Hitchance = HitChance.Immobile
+                    Hitchance = HitChance.Immobile,
                 };
             }
 
@@ -592,23 +377,18 @@ namespace LeagueSharp.Common
                 CastPosition = input.Unit.ServerPosition,
                 UnitPosition = input.Unit.ServerPosition,
                 Hitchance = HitChance.High
-                /*timeToReachTargetPosition - remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed < 0.4d ? HitChance.High : HitChance.Medium*/
+                /*timeToReachTargetPosition - remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed < 0.4d ? HitChance.High : HitChance.Medium*/,
             };
         }
 
-        /// <summary>
-        /// Gets the standard prediction.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>PredictionOutput.</returns>
         internal static PredictionOutput GetStandardPrediction(PredictionInput input)
         {
             var speed = input.Unit.MoveSpeed;
 
-            if (input.Unit.Distance(input.From, true) < 200 * 200)
+            if (input.Unit.Distance(input.From, true) < 300 * 300)
             {
-                //input.Delay /= 2;
-                speed /= 1.5f;
+                input.Delay /= 2;
+                speed *= 2;
             }
 
             var result = GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
@@ -618,33 +398,25 @@ namespace LeagueSharp.Common
             return result;
         }
 
-        /// <summary>
-        /// Gets the time the unit is immobile untill.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns>System.Double.</returns>
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
-            var result =
-                unit.Buffs.Where(
-                    buff =>
-                        buff.IsActive && Game.Time <= buff.EndTime &&
-                        (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
-                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
-                    .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
+            var result = 0d;
+            foreach (var buff in unit.Buffs)
+            {
+                if (buff.IsActive && Game.Time <= buff.EndTime &&
+                    (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                     buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                {
+                    result = Math.Max(result, buff.EndTime);
+                }
+            }
             return (result - Game.Time);
         }
 
-        /// <summary>
-        /// Gets the position on path.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="speed">The speed.</param>
-        /// <returns>PredictionOutput.</returns>
+
         internal static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
         {
-            speed = (Math.Abs(speed - (-1)) < float.Epsilon) ? input.Unit.MoveSpeed : speed;
+            speed = (speed == -1) ? input.Unit.MoveSpeed : speed;
 
             if (path.Count <= 1)
             {
@@ -660,7 +432,7 @@ namespace LeagueSharp.Common
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed == float.MaxValue)
             {
                 var tDistance = input.Delay * speed - input.RealRadius;
 
@@ -675,19 +447,14 @@ namespace LeagueSharp.Common
                         var direction = (b - a).Normalized();
 
                         var cp = a + direction * tDistance;
-                        var p = a +
-                                direction *
-                                ((i == path.Count - 2)
-                                    ? Math.Min(tDistance + input.RealRadius, d)
-                                    : (tDistance + input.RealRadius));
+                        var p = a + direction * ((i == path.Count - 2) ? Math.Min(tDistance + input.RealRadius, d) : (tDistance + input.RealRadius));
 
                         return new PredictionOutput
                         {
                             Input = input,
                             CastPosition = cp.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance =
-                                PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High
+                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
 
@@ -696,19 +463,9 @@ namespace LeagueSharp.Common
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed - input.RealRadius &&
-                Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius && input.Speed != float.MaxValue)
             {
-                var d = input.Delay * speed - input.RealRadius;
-                if (input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone)
-                {
-                    if (input.From.Distance(input.Unit.ServerPosition, true) < 200 * 200)
-                    {
-                        d = input.Delay * speed;
-                    }
-                }
-
-                path = path.CutPath(d);
+                path = path.CutPath(Math.Max(0, input.Delay * speed - input.RealRadius));
                 var tT = 0f;
                 for (var i = 0; i < path.Count - 1; i++)
                 {
@@ -723,11 +480,9 @@ namespace LeagueSharp.Common
 
                     if (pos.IsValid() && t >= tT && t <= tT + tB)
                     {
-                        if (pos.Distance(b, true) < 20)
-                            break;
                         var p = pos + input.RealRadius * direction;
 
-                        if (input.Type == SkillshotType.SkillshotLine && false)
+                        if (input.Type == SkillshotType.SkillshotLine)
                         {
                             var alpha = (input.From.To2D() - p).AngleBetween(a - b);
                             if (alpha > 30 && alpha < 180 - 30)
@@ -745,8 +500,7 @@ namespace LeagueSharp.Common
                             Input = input,
                             CastPosition = pos.To3D(),
                             UnitPosition = p.To3D(),
-                            Hitchance =
-                                PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High
+                            Hitchance = PathTracker.GetCurrentPath(input.Unit).Time < 0.1d ? HitChance.VeryHigh : HitChance.High,
                         };
                     }
                     tT += tB;
@@ -759,21 +513,13 @@ namespace LeagueSharp.Common
                 Input = input,
                 CastPosition = position.To3D(),
                 UnitPosition = position.To3D(),
-                Hitchance = HitChance.Medium
+                Hitchance = HitChance.Medium,
             };
         }
     }
 
-    /// <summary>
-    /// Calculates area of effect prediction.
-    /// </summary>
     internal static class AoePrediction
     {
-        /// <summary>
-        /// Gets the prediction.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>PredictionOutput.</returns>
         public static PredictionOutput GetPrediction(PredictionInput input)
         {
             switch (input.Type)
@@ -788,53 +534,41 @@ namespace LeagueSharp.Common
             return new PredictionOutput();
         }
 
-        /// <summary>
-        /// Gets the possible targets.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>List&lt;PossibleTarget&gt;.</returns>
-        internal static List<PossibleTarget> GetPossibleTargets(PredictionInput input)
+        internal static List<PosibleTarget> GetPosibleTargets(PredictionInput input)
         {
-            var result = new List<PossibleTarget>();
-            var originalUnit = input.Unit;
-            foreach (var enemy in
-                HeroManager.Enemies.FindAll(
-                    h =>
-                        h.NetworkId != originalUnit.NetworkId &&
-                        h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
+            var result = new List<PosibleTarget>();
+            foreach (
+                var enemy in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(
+                            h =>
+                                h.NetworkId != input.Unit.NetworkId &&
+                                h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
             {
                 input.Unit = enemy;
                 var prediction = Prediction.GetPrediction(input, false, false);
                 if (prediction.Hitchance >= HitChance.High)
                 {
-                    result.Add(new PossibleTarget { Position = prediction.UnitPosition.To2D(), Unit = enemy });
+                    result.Add(new PosibleTarget { Position = prediction.UnitPosition.To2D(), Unit = enemy });
                 }
             }
             return result;
         }
 
-        /// <summary>
-        /// Represents a circular skillshot.
-        /// </summary>
         public static class Circle
         {
-            /// <summary>
-            /// Gets the prediction.
-            /// </summary>
-            /// <param name="input">The input.</param>
-            /// <returns>PredictionOutput.</returns>
             public static PredictionOutput GetPrediction(PredictionInput input)
             {
                 var mainTargetPrediction = Prediction.GetPrediction(input, false, true);
-                var posibleTargets = new List<PossibleTarget>
+                var posibleTargets = new List<PosibleTarget>
                 {
-                    new PossibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
+                    new PosibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
                 };
 
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     //Add the posible targets  in range:
-                    posibleTargets.AddRange(GetPossibleTargets(input));
+                    posibleTargets.AddRange(GetPosibleTargets(input));
                 }
 
                 while (posibleTargets.Count > 1)
@@ -852,7 +586,7 @@ namespace LeagueSharp.Common
                             UnitPosition = mainTargetPrediction.UnitPosition,
                             Hitchance = mainTargetPrediction.Hitchance,
                             Input = input,
-                            _aoeTargetsHitCount = posibleTargets.Count
+                            _aoeTargetsHitCount = posibleTargets.Count,
                         };
                     }
 
@@ -874,47 +608,37 @@ namespace LeagueSharp.Common
             }
         }
 
-        /// <summary>
-        /// Represents a conical skillshot.
-        /// </summary>
         public static class Cone
         {
-            /// <summary>
-            /// Gets the hits.
-            /// </summary>
-            /// <param name="end">The end.</param>
-            /// <param name="range">The range.</param>
-            /// <param name="angle">The angle.</param>
-            /// <param name="points">The points.</param>
-            /// <returns>System.Int32.</returns>
             internal static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
             {
-                return (from point in points
-                        let edge1 = end.Rotated(-angle / 2)
-                        let edge2 = edge1.Rotated(angle)
-                        where
-                            point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
-                            point.CrossProduct(edge2) > 0
-                        select point).Count();
+                var result = 0;
+                foreach (var point in points)
+                {
+                    var edge1 = end.Rotated(-angle / 2);
+                    var edge2 = edge1.Rotated(angle);
+                    if (point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 &&
+                        point.CrossProduct(edge2) > 0)
+                    {
+                        result++;
+                    }
+                }
+
+                return result;
             }
 
-            /// <summary>
-            /// Gets the prediction.
-            /// </summary>
-            /// <param name="input">The input.</param>
-            /// <returns>PredictionOutput.</returns>
             public static PredictionOutput GetPrediction(PredictionInput input)
             {
                 var mainTargetPrediction = Prediction.GetPrediction(input, false, true);
-                var posibleTargets = new List<PossibleTarget>
+                var posibleTargets = new List<PosibleTarget>
                 {
-                    new PossibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
+                    new PosibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
                 };
 
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     //Add the posible targets  in range:
-                    posibleTargets.AddRange(GetPossibleTargets(input));
+                    posibleTargets.AddRange(GetPosibleTargets(input));
                 }
 
                 if (posibleTargets.Count > 1)
@@ -963,7 +687,7 @@ namespace LeagueSharp.Common
                             _aoeTargetsHitCount = bestCandidateHits,
                             UnitPosition = mainTargetPrediction.UnitPosition,
                             CastPosition = bestCandidate.To3D(),
-                            Input = input
+                            Input = input,
                         };
                     }
                 }
@@ -971,68 +695,39 @@ namespace LeagueSharp.Common
             }
         }
 
-        /// <summary>
-        /// Represents a linear skillshot.
-        /// </summary>
         public static class Line
         {
-            /// <summary>
-            /// Gets the hits.
-            /// </summary>
-            /// <param name="start">The start.</param>
-            /// <param name="end">The end.</param>
-            /// <param name="radius">The radius.</param>
-            /// <param name="points">The points.</param>
-            /// <returns>IEnumerable&lt;Vector2&gt;.</returns>
             internal static IEnumerable<Vector2> GetHits(Vector2 start, Vector2 end, double radius, List<Vector2> points)
             {
                 return points.Where(p => p.Distance(start, end, true, true) <= radius * radius);
             }
 
-            /// <summary>
-            /// Gets the candidates.
-            /// </summary>
-            /// <param name="from">From.</param>
-            /// <param name="to">To.</param>
-            /// <param name="radius">The radius.</param>
-            /// <param name="range">The range.</param>
-            /// <returns>Vector2[].</returns>
             internal static Vector2[] GetCandidates(Vector2 from, Vector2 to, float radius, float range)
             {
                 var middlePoint = (from + to) / 2;
                 var intersections = Geometry.CircleCircleIntersection(
                     from, middlePoint, radius, from.Distance(middlePoint));
 
-                if (intersections.Length > 1)
-                {
-                    var c1 = intersections[0];
-                    var c2 = intersections[1];
+                var c1 = intersections[0];
+                var c2 = intersections[1];
 
-                    c1 = from + range * (to - c1).Normalized();
-                    c2 = from + range * (to - c2).Normalized();
+                c1 = from + range * (to - c1).Normalized();
+                c2 = from + range * (to - c2).Normalized();
 
-                    return new[] { c1, c2 };
-                }
-
-                return new Vector2[] { };
+                return new[] { c1, c2 };
             }
 
-            /// <summary>
-            /// Gets the prediction.
-            /// </summary>
-            /// <param name="input">The input.</param>
-            /// <returns>PredictionOutput.</returns>
             public static PredictionOutput GetPrediction(PredictionInput input)
             {
                 var mainTargetPrediction = Prediction.GetPrediction(input, false, true);
-                var posibleTargets = new List<PossibleTarget>
+                var posibleTargets = new List<PosibleTarget>
                 {
-                    new PossibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
+                    new PosibleTarget { Position = mainTargetPrediction.UnitPosition.To2D(), Unit = input.Unit }
                 };
                 if (mainTargetPrediction.Hitchance >= HitChance.Medium)
                 {
                     //Add the posible targets  in range:
-                    posibleTargets.AddRange(GetPossibleTargets(input));
+                    posibleTargets.AddRange(GetPosibleTargets(input));
                 }
 
                 if (posibleTargets.Count > 1)
@@ -1052,12 +747,14 @@ namespace LeagueSharp.Common
 
                     foreach (var candidate in candidates)
                     {
-                        if (
-                            GetHits(
+                        if (GetHits(
                                 input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3 - 10),
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
-                            var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
+                            var hits =
+                                GetHits(
+                                    input.From.To2D(), candidate, input.Radius,
+                                    positionsList).ToList();
                             var hitsCount = hits.Count;
                             if (hitsCount >= bestCandidateHits)
                             {
@@ -1101,7 +798,7 @@ namespace LeagueSharp.Common
                             _aoeTargetsHitCount = bestCandidateHits,
                             UnitPosition = mainTargetPrediction.UnitPosition,
                             CastPosition = ((p1 + p2) * 0.5f).To3D(),
-                            Input = input
+                            Input = input,
                         };
                     }
                 }
@@ -1110,66 +807,35 @@ namespace LeagueSharp.Common
             }
         }
 
-        /// <summary>
-        /// Represents a possible target.
-        /// </summary>
-        internal class PossibleTarget
+        internal class PosibleTarget
         {
-            /// <summary>
-            /// The position
-            /// </summary>
             public Vector2 Position;
-
-            /// <summary>
-            /// The unit
-            /// </summary>
             public Obj_AI_Base Unit;
         }
     }
 
-    /// <summary>
-    /// Class that helps in calculating collision.
-    /// </summary>
     public static class Collision
     {
-        /// <summary>
-        /// The tick yasuo casted wind wall.
-        /// </summary>
-        private static int _wallCastT;
+        private static int WallCastT;
+        private static Vector2 YasuoWallCastedPos;
 
-        /// <summary>
-        /// The yasuo wind wall casted position.
-        /// </summary>
-        private static Vector2 _yasuoWallCastedPos;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="Collision"/> class.
-        /// </summary>
         static Collision()
         {
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
-        /// <summary>
-        /// Fired when the game processes a spell cast.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
-                _wallCastT = Utils.TickCount;
-                _yasuoWallCastedPos = sender.ServerPosition.To2D();
+                WallCastT = Environment.TickCount;
+                YasuoWallCastedPos = sender.ServerPosition.To2D();
             }
         }
 
         /// <summary>
         /// Returns the list of the units that the skillshot will hit before reaching the set positions.
         /// </summary>
-        /// <param name="positions">The positions.</param>
-        /// <param name="input">The input.</param>
-        /// <returns>List&lt;Obj_AI_Base&gt;.</returns>
         public static List<Obj_AI_Base> GetCollision(List<Vector3> positions, PredictionInput input)
         {
             var result = new List<Obj_AI_Base>();
@@ -1181,64 +847,39 @@ namespace LeagueSharp.Common
                     switch (objectType)
                     {
                         case CollisionableObjects.Minions:
-                            foreach (var minion in
-                                ObjectManager.Get<Obj_AI_Minion>()
-                                    .Where(
-                                        minion =>
-                                            minion.IsValidTarget(
-                                                Math.Min(input.Range + input.Radius + 100, 2000), true,
-                                                input.RangeCheckFrom)))
+                            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                             {
-                                input.Unit = minion;
-                                var minionPrediction = Prediction.GetPrediction(input, false, false);
-                                if (
-                                    minionPrediction.UnitPosition.To2D()
-                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                    Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
+                                if (minion.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
                                 {
-                                    result.Add(minion);
+                                    input.Unit = minion;
+                                    var minionPrediction = Prediction.GetPrediction(input, false, false);
+                                    if (
+                                        minionPrediction.UnitPosition.To2D()
+                                            .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                        Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
+                                    {
+                                        result.Add(minion);
+                                    }
                                 }
                             }
                             break;
                         case CollisionableObjects.Heroes:
-                            foreach (var hero in
-                                HeroManager.Enemies.FindAll(
-                                    hero =>
-                                        hero.IsValidTarget(
-                                            Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
-                                )
+                            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                             {
-                                input.Unit = hero;
-                                var prediction = Prediction.GetPrediction(input, false, false);
-                                if (
-                                    prediction.UnitPosition.To2D()
-                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                if (hero.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom))
                                 {
-                                    result.Add(hero);
+                                    input.Unit = hero;
+                                    var prediction = Prediction.GetPrediction(input, false, false);
+                                    if (
+                                        prediction.UnitPosition.To2D()
+                                            .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                        Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                    {
+                                        result.Add(hero);
+                                    }
                                 }
                             }
                             break;
-                            
-                        case CollisionableObjects.Allies:
-                            foreach (var hero in
-                                HeroManager.Allies.FindAll(
-                                    hero =>
-                                       Vector3.Distance(ObjectManager.Player.ServerPosition, hero.ServerPosition) <= Math.Min(input.Range + input.Radius + 100, 2000))
-                                )
-                            {
-                                input.Unit = hero;
-                                var prediction = Prediction.GetPrediction(input, false, false);
-                                if (
-                                    prediction.UnitPosition.To2D()
-                                        .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
-                                {
-                                    result.Add(hero);
-                                }
-                            }
-                            break;
-                            
 
                         case CollisionableObjects.Walls:
                             var step = position.Distance(input.From) / 20;
@@ -1254,47 +895,41 @@ namespace LeagueSharp.Common
 
                         case CollisionableObjects.YasuoWall:
 
-                            if (Utils.TickCount - _wallCastT > 4000)
-                            {
-                                break;
-                            }
+                        if (Environment.TickCount - WallCastT > 4000) break;
 
-                            GameObject wall = null;
-                            foreach (var gameObject in
-                                ObjectManager.Get<GameObject>()
-                                    .Where(
-                                        gameObject =>
-                                            gameObject.IsValid &&
-                                            Regex.IsMatch(
-                                                gameObject.Name, "_w_windwall_enemy_0.\\.troy", RegexOptions.IgnoreCase))
-                                )
+                        GameObject wall = null;
+                        foreach (var gameObject in ObjectManager.Get<GameObject>())
+                        {
+                            if (gameObject.IsValid &&
+                                System.Text.RegularExpressions.Regex.IsMatch(
+                                    gameObject.Name, "_w_windwall_enemy_0.\\.troy",
+                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase))
                             {
                                 wall = gameObject;
                             }
-                            if (wall == null)
-                            {
-                                break;
-                            }
-                            var level = wall.Name.Substring(wall.Name.Length - 6, 1);
-                            var wallWidth = (300 + 50 * Convert.ToInt32(level));
-
-                            var wallDirection =
-                                (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
-                            var wallStart = wall.Position.To2D() + wallWidth / 2f * wallDirection;
-                            var wallEnd = wallStart - wallWidth * wallDirection;
-
-                            if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
-                            {
-                                var t = Utils.TickCount +
-                                        (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
-                                            .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
-                                if (t < _wallCastT + 4000)
-                                {
-                                    result.Add(ObjectManager.Player);
-                                }
-                            }
-
+                        }
+                        if (wall == null)
+                        {
                             break;
+                        }
+                        var level = wall.Name.Substring(wall.Name.Length - 6, 1);
+                        var wallWidth = (300 + 50 * Convert.ToInt32(level));
+
+                        var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
+                        var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
+                        var wallEnd = wallStart - wallWidth * wallDirection;
+                       
+                        if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
+                        {
+                            var t = Environment.TickCount + (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
+                                    .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
+                            if (t < WallCastT + 4000)
+                            {
+                                result.Add(ObjectManager.Player);
+                            }
+                        }
+                                
+                        break;
                     }
                 }
             }
@@ -1303,113 +938,53 @@ namespace LeagueSharp.Common
         }
     }
 
-    /// <summary>
-    /// Represents the path of a unit.
-    /// </summary>
     internal class StoredPath
     {
-        /// <summary>
-        /// The path
-        /// </summary>
         public List<Vector2> Path;
+        public int Tick = 0;
 
-        /// <summary>
-        /// The tick
-        /// </summary>
-        public int Tick;
-
-        /// <summary>
-        /// Gets the time.
-        /// </summary>
-        /// <value>The time.</value>
         public double Time
         {
-            get { return (Utils.TickCount - Tick) / 1000d; }
+            get { return (Environment.TickCount - Tick) / 1000d; }
         }
 
-        /// <summary>
-        /// Gets the waypoint count.
-        /// </summary>
-        /// <value>The waypoint count.</value>
         public int WaypointCount
         {
             get { return Path.Count; }
         }
 
-        /// <summary>
-        /// Gets the start point.
-        /// </summary>
-        /// <value>The start point.</value>
         public Vector2 StartPoint
         {
             get { return Path.FirstOrDefault(); }
         }
 
-        /// <summary>
-        /// Gets the end point.
-        /// </summary>
-        /// <value>The end point.</value>
         public Vector2 EndPoint
         {
             get { return Path.LastOrDefault(); }
         }
     }
 
-    /// <summary>
-    /// Tracks the path of units.
-    /// </summary>
     internal static class PathTracker
     {
-        /// <summary>
-        /// The maximum time
-        /// </summary>
         private const double MaxTime = 1.5d;
-
-        /// <summary>
-        /// The stored paths
-        /// </summary>
         private static readonly Dictionary<int, List<StoredPath>> StoredPaths = new Dictionary<int, List<StoredPath>>();
 
-        /// <summary>
-        /// Initializes static members of the <see cref="PathTracker"/> class.
-        /// </summary>
         static PathTracker()
         {
             Obj_AI_Base.OnNewPath += Obj_AI_Hero_OnNewPath;
         }
 
-        /// <summary>
-        /// Fired when a unit changes it's path.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="GameObjectNewPathEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
-            if (!(sender is Obj_AI_Hero))
-            {
-                return;
-            }
-
             if (!StoredPaths.ContainsKey(sender.NetworkId))
             {
                 StoredPaths.Add(sender.NetworkId, new List<StoredPath>());
             }
 
-            var newPath = new StoredPath { Tick = Utils.TickCount, Path = args.Path.ToList().To2D() };
+            var newPath = new StoredPath { Tick = Environment.TickCount, Path = args.Path.ToList().To2D() };
             StoredPaths[sender.NetworkId].Add(newPath);
-
-            if (StoredPaths[sender.NetworkId].Count > 50)
-            {
-                StoredPaths[sender.NetworkId].RemoveRange(0, 40);
-            }
         }
 
-        /// <summary>
-        /// Gets the stored paths.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="maxT">The maximum t.</param>
-        /// <returns>List&lt;StoredPath&gt;.</returns>
         public static List<StoredPath> GetStoredPaths(Obj_AI_Base unit, double maxT)
         {
             return StoredPaths.ContainsKey(unit.NetworkId)
@@ -1417,11 +992,6 @@ namespace LeagueSharp.Common
                 : new List<StoredPath>();
         }
 
-        /// <summary>
-        /// Gets the current path.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns>StoredPath.</returns>
         public static StoredPath GetCurrentPath(Obj_AI_Base unit)
         {
             return StoredPaths.ContainsKey(unit.NetworkId)
@@ -1429,11 +999,6 @@ namespace LeagueSharp.Common
                 : new StoredPath();
         }
 
-        /// <summary>
-        /// Gets the tendency.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns>Vector3.</returns>
         public static Vector3 GetTendency(Obj_AI_Base unit)
         {
             var paths = GetStoredPaths(unit, MaxTime);
@@ -1450,12 +1015,7 @@ namespace LeagueSharp.Common
             return result.To3D();
         }
 
-        /// <summary>
-        /// Gets the mean speed.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <param name="maxT">The maximum t.</param>
-        /// <returns>System.Double.</returns>
+
         public static double GetMeanSpeed(Obj_AI_Base unit, double maxT)
         {
             var paths = GetStoredPaths(unit, MaxTime);
