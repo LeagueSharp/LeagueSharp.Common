@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
     /// <summary>
     /// Adds hacks to the menu.
@@ -35,6 +33,7 @@ namespace LeagueSharp.Common
 
                 MenuDisableDrawings = menu.AddItem(new MenuItem("DrawingHack", "Disable Drawing").SetValue(false));
                 MenuDisableDrawings.ValueChanged += (sender, args) => LeagueSharp.Hacks.DisableDrawings = args.GetNewValue<bool>();
+                MenuDisableDrawings.SetValue(LeagueSharp.Hacks.DisableDrawings);
 
                 MenuDisableSay = menu.AddItem(new MenuItem("SayHack", "Disable L# Send Chat").SetValue(false).SetTooltip("Block Game.Say from Assemblies"));
                 MenuDisableSay.ValueChanged += (sender, args) => LeagueSharp.Hacks.DisableSay = args.GetNewValue<bool>();
@@ -43,6 +42,7 @@ namespace LeagueSharp.Common
                 MenuTowerRange.ValueChanged += (sender, args) => LeagueSharp.Hacks.TowerRanges = args.GetNewValue<bool>();
 
                 LeagueSharp.Hacks.AntiAFK = MenuAntiAfk.GetValue<bool>();
+                LeagueSharp.Hacks.DisableDrawings = MenuDisableDrawings.GetValue<bool>();
                 LeagueSharp.Hacks.DisableSay = MenuDisableSay.GetValue<bool>();
                 LeagueSharp.Hacks.TowerRanges = MenuTowerRange.GetValue<bool>();
 
