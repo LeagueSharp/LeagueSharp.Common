@@ -1,45 +1,28 @@
-﻿#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- Alerter.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
-
-using System;
-using SharpDX;
-
-#endregion
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System;
+
+    using SharpDX;
+
     /// <summary>
-    /// Shows text for an amount of time.
+    ///     Shows text for an amount of time.
     /// </summary>
     public class Alerter : Render.Text
     {
+        #region Fields
+
         private readonly float _duration;
+
         private readonly float _endTime;
+
         private readonly float _startTime;
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Alerter"/> class.
+        ///     Initializes a new instance of the <see cref="Alerter" /> class.
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
@@ -48,76 +31,101 @@ namespace LeagueSharp.Common
         /// <param name="color">The color.</param>
         /// <param name="faceName">Name of the face.</param>
         /// <param name="duration">The duration.</param>
-        public Alerter(int x,
+        public Alerter(
+            int x,
             int y,
             string text,
             int size,
             ColorBGRA color,
             string faceName = "Calibri",
-            float duration = 1f) : base(x, y, text, size, color, faceName)
+            float duration = 1f)
+            : base(x, y, text, size, color, faceName)
         {
-            _duration = duration;
-            _startTime = Utils.TickCount;
-            _endTime = _startTime + _duration;
+            this._duration = duration;
+            this._startTime = Utils.TickCount;
+            this._endTime = this._startTime + this._duration;
 
-            Game.OnUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += this.Game_OnGameUpdate;
         }
 
-        /// <summary>
-        /// Gets the end time.
-        /// </summary>
-        /// <value>
-        /// The end time.
-        /// </value>
-        public float EndTime
-        {
-            get { return _endTime; }
-        }
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        /// Gets the start time.
+        ///     Gets the duration.
         /// </summary>
         /// <value>
-        /// The start time.
-        /// </value>
-        public float StartTime
-        {
-            get { return _startTime; }
-        }
-
-        /// <summary>
-        /// Gets the duration.
-        /// </summary>
-        /// <value>
-        /// The duration.
+        ///     The duration.
         /// </value>
         public float Duration
         {
-            get { return _duration; }
+            get
+            {
+                return this._duration;
+            }
         }
 
         /// <summary>
-        /// Removes this instance.
+        ///     Gets the end time.
+        /// </summary>
+        /// <value>
+        ///     The end time.
+        /// </value>
+        public float EndTime
+        {
+            get
+            {
+                return this._endTime;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the start time.
+        /// </summary>
+        /// <value>
+        ///     The start time.
+        /// </value>
+        public float StartTime
+        {
+            get
+            {
+                return this._startTime;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Removes this instance.
         /// </summary>
         public void Remove()
         {
-            Visible = false;
-            Dispose();
+            this.Visible = false;
+            this.Dispose();
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Fired when the game updates.
+        ///     Fired when the game updates.
         /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (!(Utils.TickCount > EndTime))
+            if (!(Utils.TickCount > this.EndTime))
             {
                 return;
             }
 
-            Visible = false;
-            Dispose();
+            this.Visible = false;
+            this.Dispose();
         }
+
+        #endregion
     }
 }

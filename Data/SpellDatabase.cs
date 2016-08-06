@@ -1,21 +1,4 @@
-﻿// <copyright file="SpellDatabase.cs" company="LeagueSharp">
-//    Copyright (c) 2015 LeagueSharp.
-// 
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-// 
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-// 
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see http://www.gnu.org/licenses/
-// </copyright>
-
-namespace LeagueSharp.Common.Data
+﻿namespace LeagueSharp.Common.Data
 {
     using System;
     using System.Collections.Generic;
@@ -54,6 +37,22 @@ namespace LeagueSharp.Common.Data
         public static IEnumerable<SpellDatabaseEntry> Get(Func<SpellDatabaseEntry, bool> predicate = null)
         {
             return predicate == null ? Spells : Spells.Where(predicate);
+        }
+
+        /// <summary>
+        ///     Get all spells corresponding to a spellslot (useful for nidalee, jayce, elise, leesin)
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="championName">The Champion Name</param>
+        /// <returns></returns>
+        public static IEnumerable<SpellDatabaseEntry> GetAllSpellsOnSpellSlot(
+            SpellSlot slot,
+            string championName = "undefined")
+        {
+            var actualChampionName = championName.Equals("undefined")
+                                         ? ObjectManager.Player.CharData.BaseSkinName
+                                         : championName;
+            return Spells.Where(spellData => spellData.ChampionName == actualChampionName && spellData.Slot == slot);
         }
 
         /// <summary>
@@ -121,85 +120,11 @@ namespace LeagueSharp.Common.Data
         }
 
         /// <summary>
-        ///     Get all spells corresponding to a spellslot (useful for nidalee, jayce, elise, leesin)
-        /// </summary>
-        /// <param name="slot">The SpellSlot</param>
-        /// <param name="championName">The Champion Name</param>
-        /// <returns></returns>
-        public static IEnumerable<SpellDatabaseEntry> GetAllSpellsOnSpellSlot(
-            SpellSlot slot,
-            string championName = "undefined")
-        {
-            var actualChampionName = championName.Equals("undefined")
-                                         ? ObjectManager.Player.CharData.BaseSkinName
-                                         : championName;
-            return Spells.Where(spellData => spellData.ChampionName == actualChampionName && spellData.Slot == slot);
-        }
-
-        /// <summary>
-        ///     Creates a spell from target spellslot
-        /// </summary>
-        /// <param name="slot">The SpellSlot</param>
-        /// <param name="championName">The Champion Name</param>
-        /// <returns></returns>
-        public static Spell MakeSpell(this SpellSlot slot, string championName = "undefined")
-        {
-            var spellData = GetBySpellSlot(slot, championName);
-            // Charged Spell:
-            if (spellData.ChargedSpellName != "")
-            {
-                return new Spell
-                {
-                    Slot = slot,
-                    ChargedBuffName = spellData.ChargedBuffName,
-                    ChargedMaxRange = spellData.ChargedMaxRange,
-                    ChargedMinRange = spellData.ChargedMinRange,
-                    ChargedSpellName = spellData.ChargedSpellName,
-                    ChargeDuration = spellData.ChargeDuration,
-                    Delay = spellData.Delay,
-                    Range = spellData.Range,
-                    Width =
-                                   spellData.Radius > 0 && spellData.Radius < 30000
-                                       ? spellData.Radius
-                                       : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
-                    Collision =
-                                   (spellData.CollisionObjects != null
-                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
-                    Speed = spellData.MissileSpeed,
-                    IsChargedSpell = true,
-                    Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
-                };
-            }
-            // Skillshot:
-            if (spellData.CastType.Any(type => type == CastType.Position || type == CastType.Direction))
-            {
-                return new Spell
-                {
-                    Slot = slot,
-                    Delay = spellData.Delay,
-                    Range = spellData.Range,
-                    Width =
-                                   spellData.Radius > 0 && spellData.Radius < 30000
-                                       ? spellData.Radius
-                                       : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
-                    Collision =
-                                   (spellData.CollisionObjects != null
-                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
-                    Speed = spellData.MissileSpeed,
-                    IsSkillshot = true,
-                    Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
-                };
-            }
-            // Targeted:
-            return new Spell { Slot = slot, Range = spellData.Range, Delay = spellData.Delay, Speed = spellData.MissileSpeed, IsSkillshot = false };
-        }
-
-        /// <summary>
-        /// Returns the SDK alternative to the LeagueSharp.Data SpellType.
+        ///     Returns the SDK alternative to the LeagueSharp.Data SpellType.
         /// </summary>
         /// <param name="spellType">The LeagueSharp.Data SpellType</param>
         /// <returns>The SDK SpellType</returns>
-        public static SkillshotType GetSkillshotTypeFromSpellType(LeagueSharp.Data.Enumerations.SpellType spellType)
+        public static SkillshotType GetSkillshotTypeFromSpellType(SpellType spellType)
         {
             switch (spellType)
             {
@@ -226,6 +151,61 @@ namespace LeagueSharp.Common.Data
             }
             return SkillshotType.SkillshotLine;
         }
+
+        /// <summary>
+        ///     Creates a spell from target spellslot
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="championName">The Champion Name</param>
+        /// <returns></returns>
+        public static Spell MakeSpell(this SpellSlot slot, string championName = "undefined")
+        {
+            var spellData = GetBySpellSlot(slot, championName);
+            // Charged Spell:
+            if (spellData.ChargedSpellName != "")
+            {
+                return new Spell
+                           {
+                               Slot = slot, ChargedBuffName = spellData.ChargedBuffName,
+                               ChargedMaxRange = spellData.ChargedMaxRange, ChargedMinRange = spellData.ChargedMinRange,
+                               ChargedSpellName = spellData.ChargedSpellName, ChargeDuration = spellData.ChargeDuration,
+                               Delay = spellData.Delay, Range = spellData.Range,
+                               Width =
+                                   spellData.Radius > 0 && spellData.Radius < 30000
+                                       ? spellData.Radius
+                                       : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
+                               Collision =
+                                   (spellData.CollisionObjects != null
+                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
+                               Speed = spellData.MissileSpeed, IsChargedSpell = true,
+                               Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
+                           };
+            }
+            // Skillshot:
+            if (spellData.CastType.Any(type => type == CastType.Position || type == CastType.Direction))
+            {
+                return new Spell
+                           {
+                               Slot = slot, Delay = spellData.Delay, Range = spellData.Range,
+                               Width =
+                                   spellData.Radius > 0 && spellData.Radius < 30000
+                                       ? spellData.Radius
+                                       : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
+                               Collision =
+                                   (spellData.CollisionObjects != null
+                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
+                               Speed = spellData.MissileSpeed, IsSkillshot = true,
+                               Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
+                           };
+            }
+            // Targeted:
+            return new Spell
+                       {
+                           Slot = slot, Range = spellData.Range, Delay = spellData.Delay, Speed = spellData.MissileSpeed,
+                           IsSkillshot = false
+                       };
+        }
+
         #endregion
     }
 }

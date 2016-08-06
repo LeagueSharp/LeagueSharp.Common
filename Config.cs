@@ -1,46 +1,49 @@
-﻿#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- Config.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
-
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Xml;
-
-#endregion
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System;
     using System.Globalization;
+    using System.IO;
     using System.Security.Permissions;
     using System.Threading;
 
+    using LeagueSharp.Sandbox;
+
     /// <summary>
-    /// Gets information about the L# system.
+    ///     Gets information about the L# system.
     /// </summary>
     public static class Config
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The app data directory
+        /// </summary>
+        private static string _appDataDirectory;
+
+        /// <summary>
+        ///     The league sharp directory
+        /// </summary>
+        private static string _leagueSharpDirectory;
+
+        /// <summary>
+        ///     The selected language
+        /// </summary>
+        private static string _selectedLanguage;
+
+        /// <summary>
+        ///     The show menu hotkey
+        /// </summary>
+        private static byte _showMenuHotkey;
+
+        /// <summary>
+        ///     The show menu toggle hotkey
+        /// </summary>
+        private static byte _showMenuToggleHotkey;
+
+        #endregion
+
+        #region Constructors and Destructors
+
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         static Config()
         {
@@ -50,36 +53,15 @@ namespace LeagueSharp.Common
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
         }
 
-        /// <summary>
-        /// The league sharp directory
-        /// </summary>
-        private static string _leagueSharpDirectory;
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        /// The app data directory
-        /// </summary>
-        private static string _appDataDirectory;
-
-        /// <summary>
-        /// The show menu hotkey
-        /// </summary>
-        private static byte _showMenuHotkey;
-
-        /// <summary>
-        /// The show menu toggle hotkey
-        /// </summary>
-        private static byte _showMenuToggleHotkey;
-
-        /// <summary>
-        /// The selected language
-        /// </summary>
-        private static string _selectedLanguage;
-
-        /// <summary>
-        /// Gets the application data directory.
+        ///     Gets the application data directory.
         /// </summary>
         /// <value>
-        /// The application data directory.
+        ///     The application data directory.
         /// </value>
         public static string AppDataDirectory
         {
@@ -87,8 +69,10 @@ namespace LeagueSharp.Common
             {
                 if (_appDataDirectory == null)
                 {
-                    _appDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                        "LS" + Environment.UserName.GetHashCode().ToString("X"));
+                    _appDataDirectory =
+                        Path.Combine(
+                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                            "LS" + Environment.UserName.GetHashCode().ToString("X"));
                 }
 
                 return _appDataDirectory;
@@ -96,10 +80,10 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the selected language.
+        ///     Gets the selected language.
         /// </summary>
         /// <value>
-        /// The selected language.
+        ///     The selected language.
         /// </value>
         public static string SelectedLanguage
         {
@@ -109,8 +93,8 @@ namespace LeagueSharp.Common
                 {
                     try
                     {
-                        _selectedLanguage = Sandbox.SandboxConfig.SelectedLanguage;
-                        if(_selectedLanguage == "Traditional-Chinese")
+                        _selectedLanguage = SandboxConfig.SelectedLanguage;
+                        if (_selectedLanguage == "Traditional-Chinese")
                         {
                             _selectedLanguage = "Chinese";
                         }
@@ -119,7 +103,7 @@ namespace LeagueSharp.Common
                     {
                         _selectedLanguage = "";
                         Console.WriteLine(@"Could not get the menu language");
-                    }   
+                    }
                 }
 
                 return _selectedLanguage;
@@ -127,10 +111,10 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the show menu press key.
+        ///     Gets the show menu press key.
         /// </summary>
         /// <value>
-        /// The show menu press key.
+        ///     The show menu press key.
         /// </value>
         public static byte ShowMenuPressKey
         {
@@ -140,7 +124,7 @@ namespace LeagueSharp.Common
                 {
                     try
                     {
-                        _showMenuHotkey = (byte)Sandbox.SandboxConfig.MenuKey;
+                        _showMenuHotkey = (byte)SandboxConfig.MenuKey;
                         _showMenuHotkey = _showMenuHotkey == 0 ? (byte)16 : _showMenuHotkey;
                         _showMenuHotkey = Utils.FixVirtualKey(_showMenuHotkey);
                         Console.WriteLine(@"Menu press key set to {0}", _showMenuHotkey);
@@ -150,7 +134,6 @@ namespace LeagueSharp.Common
                         _showMenuHotkey = 16;
                         Console.WriteLine(@"Could not get the menu press key");
                     }
-
                 }
 
                 return _showMenuHotkey;
@@ -158,10 +141,10 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the show menu toggle key.
+        ///     Gets the show menu toggle key.
         /// </summary>
         /// <value>
-        /// The show menu toggle key.
+        ///     The show menu toggle key.
         /// </value>
         public static byte ShowMenuToggleKey
         {
@@ -171,7 +154,7 @@ namespace LeagueSharp.Common
                 {
                     try
                     {
-                        _showMenuToggleHotkey = (byte) Sandbox.SandboxConfig.MenuToggleKey;
+                        _showMenuToggleHotkey = (byte)SandboxConfig.MenuToggleKey;
                         _showMenuToggleHotkey = _showMenuToggleHotkey == 0 ? (byte)120 : _showMenuToggleHotkey;
                         _showMenuToggleHotkey = Utils.FixVirtualKey(_showMenuToggleHotkey);
                         Console.WriteLine(@"Menu toggle key set to {0}", _showMenuToggleHotkey);
@@ -186,5 +169,7 @@ namespace LeagueSharp.Common
                 return _showMenuToggleHotkey;
             }
         }
+
+        #endregion
     }
 }

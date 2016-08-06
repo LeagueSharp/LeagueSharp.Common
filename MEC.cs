@@ -1,301 +1,41 @@
-﻿#region LICENSE
-/*
- Copyright 2014 - 2014 LeagueSharp
- MEC.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using SharpDX;
-
-#endregion
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using SharpDX;
+
     /// <summary>
-    /// Provides method to calculate the minimum enclosing circle.
+    ///     Provides method to calculate the minimum enclosing circle.
     /// </summary>
     public static class MEC
     {
+        #region Static Fields
+
+        /// <summary>
+        ///     The minimum maximum box
+        /// </summary>
+        public static RectangleF g_MinMaxBox;
+
         // For debugging.
 
         /// <summary>
-        /// The minimum maximum corners
+        ///     The minimum maximum corners
         /// </summary>
         public static Vector2[] g_MinMaxCorners;
 
         /// <summary>
-        /// The minimum maximum box
-        /// </summary>
-        public static RectangleF g_MinMaxBox;
-
-        /// <summary>
-        /// The non culled points
+        ///     The non culled points
         /// </summary>
         public static Vector2[] g_NonCulledPoints;
 
-        /// <summary>
-        /// Returns the mininimum enclosing circle from a list of points.
-        /// </summary>
-        /// <param name="points">The points.</param>
-        /// <returns>MecCircle.</returns>
-        public static MecCircle GetMec(List<Vector2> points)
-        {
-            var center = new Vector2();
-            float radius;
+        #endregion
 
-            var ConvexHull = MakeConvexHull(points);
-            FindMinimalBoundingCircle(ConvexHull, out center, out radius);
-            return new MecCircle(center, radius);
-        }
-
-        // Find the points nearest the upper left, upper right,
-        // lower left, and lower right corners.
-        /// <summary>
-        /// Gets the minimum maximum corners.
-        /// </summary>
-        /// <param name="points">The points.</param>
-        /// <param name="ul">The ul.</param>
-        /// <param name="ur">The ur.</param>
-        /// <param name="ll">The ll.</param>
-        /// <param name="lr">The lr.</param>
-        private static void GetMinMaxCorners(List<Vector2> points,
-            ref Vector2 ul,
-            ref Vector2 ur,
-            ref Vector2 ll,
-            ref Vector2 lr)
-        {
-            // Start with the first point as the solution.
-            ul = points[0];
-            ur = ul;
-            ll = ul;
-            lr = ul;
-
-            // Search the other points.
-            foreach (var pt in points)
-            {
-                if (-pt.X - pt.Y > -ul.X - ul.Y)
-                {
-                    ul = pt;
-                }
-                if (pt.X - pt.Y > ur.X - ur.Y)
-                {
-                    ur = pt;
-                }
-                if (-pt.X + pt.Y > -ll.X + ll.Y)
-                {
-                    ll = pt;
-                }
-                if (pt.X + pt.Y > lr.X + lr.Y)
-                {
-                    lr = pt;
-                }
-            }
-
-            g_MinMaxCorners = new[] { ul, ur, lr, ll }; // For debugging.
-        }
-
-        // Find a box that fits inside the MinMax quadrilateral.
-        /// <summary>
-        /// Gets the minimum maximum box.
-        /// </summary>
-        /// <param name="points">The points.</param>
-        /// <returns>RectangleF.</returns>
-        private static RectangleF GetMinMaxBox(List<Vector2> points)
-        {
-            // Find the MinMax quadrilateral.
-            Vector2 ul = new Vector2(0, 0), ur = ul, ll = ul, lr = ul;
-            GetMinMaxCorners(points, ref ul, ref ur, ref ll, ref lr);
-
-            // Get the coordinates of a box that lies inside this quadrilateral.
-            var xmin = ul.X;
-            var ymin = ul.Y;
-
-            var xmax = ur.X;
-            if (ymin < ur.Y)
-            {
-                ymin = ur.Y;
-            }
-
-            if (xmax > lr.X)
-            {
-                xmax = lr.X;
-            }
-            var ymax = lr.Y;
-
-            if (xmin < ll.X)
-            {
-                xmin = ll.X;
-            }
-            if (ymax > ll.Y)
-            {
-                ymax = ll.Y;
-            }
-
-            var result = new RectangleF(xmin, ymin, xmax - xmin, ymax - ymin);
-            g_MinMaxBox = result; // For debugging.
-            return result;
-        }
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Culls points out of the convex hull that lie inside the trapezoid defined by the vertices with smallest and largest
-        /// X and Y coordinates.
-        /// </summary>
-        /// <param name="points">The points.</param>
-        /// <returns>Points that are not culled.</returns>
-        private static List<Vector2> HullCull(List<Vector2> points)
-        {
-            // Find a culling box.
-            var culling_box = GetMinMaxBox(points);
-
-            // Cull the points.
-            var results =
-                points.Where(
-                    pt =>
-                        pt.X <= culling_box.Left || pt.X >= culling_box.Right || pt.Y <= culling_box.Top ||
-                        pt.Y >= culling_box.Bottom).ToList();
-
-            g_NonCulledPoints = new Vector2[results.Count]; // For debugging.
-            results.CopyTo(g_NonCulledPoints); // For debugging.
-            return results;
-        }
-
-        /// <summary>
-        /// Makes the convex hull.
-        /// </summary>
-        /// <param name="points">The points.</param>
-        /// <returns>Points that make up a polygon's convex hull..</returns>
-        public static List<Vector2> MakeConvexHull(List<Vector2> points)
-        {
-            // Cull.
-            points = HullCull(points);
-
-            // Find the remaining point with the smallest Y value.
-            // if (there's a tie, take the one with the smaller X value.
-            Vector2[] best_pt = { points[0] };
-            foreach (
-                var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))
-                )
-            {
-                best_pt[0] = pt;
-            }
-
-            // Move this point to the convex hull.
-            var hull = new List<Vector2> { best_pt[0] };
-            points.Remove(best_pt[0]);
-
-            // Start wrapping up the other points.
-            float sweep_angle = 0;
-            for (;;)
-            {
-                // If all of the points are on the hull, we're done.
-                if (points.Count == 0)
-                {
-                    break;
-                }
-
-                // Find the point with smallest AngleValue
-                // from the last point.
-                var X = hull[hull.Count - 1].X;
-                var Y = hull[hull.Count - 1].Y;
-                best_pt[0] = points[0];
-                float best_angle = 3600;
-
-                // Search the rest of the points.
-                foreach (var pt in points)
-                {
-                    var test_angle = AngleValue(X, Y, pt.X, pt.Y);
-                    if ((test_angle >= sweep_angle) && (best_angle > test_angle))
-                    {
-                        best_angle = test_angle;
-                        best_pt[0] = pt;
-                    }
-                }
-
-                // See if the first point is better.
-                // If so, we are done.
-                var first_angle = AngleValue(X, Y, hull[0].X, hull[0].Y);
-                if ((first_angle >= sweep_angle) && (best_angle >= first_angle))
-                {
-                    // The first point is better. We're done.
-                    break;
-                }
-
-                // Add the best point to the convex hull.
-                hull.Add(best_pt[0]);
-                points.Remove(best_pt[0]);
-
-                sweep_angle = best_angle;
-            }
-
-            return hull;
-        }
-
-        /// <summary>
-        /// Return a number that gives the ordering of angles
-        /// WRST horizontal from the point(x1, y1) to(x2, y2).
-        /// In other words, AngleValue(x1, y1, x2, y2) is not
-        /// the angle, but if:
-        ///     Angle(x1, y1, x2, y2) > Angle(x1, y1, x2, y2)
-        /// then
-        ///     AngleValue(x1, y1, x2, y2) > AngleValue(x1, y1, x2, y2)
-        /// this angle is greater than the angle for another set
-        /// of points,) this number for
-        /// This function is dy / (dy + dx).
-        /// </summary>
-        /// <param name="x1">The x1.</param>
-        /// <param name="y1">The y1.</param>
-        /// <param name="x2">The x2.</param>
-        /// <param name="y2">The y2.</param>
-        /// <returns>A number that gives the ordering of angles</returns>
-        private static float AngleValue(float x1, float y1, float x2, float y2)
-        {
-            float t;
-
-            var dx = x2 - x1;
-            var ax = Math.Abs(dx);
-            var dy = y2 - y1;
-            var ay = Math.Abs(dy);
-            if (ax + ay == 0)
-            {
-                // if (the two points are the same, return 360.
-                t = 360f / 9f;
-            }
-            else
-            {
-                t = dy / (ax + ay);
-            }
-            if (dx < 0)
-            {
-                t = 2 - t;
-            }
-            else if (dy < 0)
-            {
-                t = 4 + t;
-            }
-            return t * 90;
-        }
-
-        /// <summary>
-        /// Finds the minimal bounding circle.
+        ///     Finds the minimal bounding circle.
         /// </summary>
         /// <param name="points">The points.</param>
         /// <param name="center">The center.</param>
@@ -368,12 +108,147 @@ namespace LeagueSharp.Common
             }
             else
             {
-                radius = (float) Math.Sqrt(best_radius2);
+                radius = (float)Math.Sqrt(best_radius2);
             }
         }
 
         /// <summary>
-        /// Encloses the points in a circle.
+        ///     Returns the mininimum enclosing circle from a list of points.
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <returns>MecCircle.</returns>
+        public static MecCircle GetMec(List<Vector2> points)
+        {
+            var center = new Vector2();
+            float radius;
+
+            var ConvexHull = MakeConvexHull(points);
+            FindMinimalBoundingCircle(ConvexHull, out center, out radius);
+            return new MecCircle(center, radius);
+        }
+
+        /// <summary>
+        ///     Makes the convex hull.
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <returns>Points that make up a polygon's convex hull..</returns>
+        public static List<Vector2> MakeConvexHull(List<Vector2> points)
+        {
+            // Cull.
+            points = HullCull(points);
+
+            // Find the remaining point with the smallest Y value.
+            // if (there's a tie, take the one with the smaller X value.
+            Vector2[] best_pt = { points[0] };
+            foreach (
+                var pt in points.Where(pt => (pt.Y < best_pt[0].Y) || ((pt.Y == best_pt[0].Y) && (pt.X < best_pt[0].X)))
+                )
+            {
+                best_pt[0] = pt;
+            }
+
+            // Move this point to the convex hull.
+            var hull = new List<Vector2> { best_pt[0] };
+            points.Remove(best_pt[0]);
+
+            // Start wrapping up the other points.
+            float sweep_angle = 0;
+            for (;;)
+            {
+                // If all of the points are on the hull, we're done.
+                if (points.Count == 0)
+                {
+                    break;
+                }
+
+                // Find the point with smallest AngleValue
+                // from the last point.
+                var X = hull[hull.Count - 1].X;
+                var Y = hull[hull.Count - 1].Y;
+                best_pt[0] = points[0];
+                float best_angle = 3600;
+
+                // Search the rest of the points.
+                foreach (var pt in points)
+                {
+                    var test_angle = AngleValue(X, Y, pt.X, pt.Y);
+                    if ((test_angle >= sweep_angle) && (best_angle > test_angle))
+                    {
+                        best_angle = test_angle;
+                        best_pt[0] = pt;
+                    }
+                }
+
+                // See if the first point is better.
+                // If so, we are done.
+                var first_angle = AngleValue(X, Y, hull[0].X, hull[0].Y);
+                if ((first_angle >= sweep_angle) && (best_angle >= first_angle))
+                {
+                    // The first point is better. We're done.
+                    break;
+                }
+
+                // Add the best point to the convex hull.
+                hull.Add(best_pt[0]);
+                points.Remove(best_pt[0]);
+
+                sweep_angle = best_angle;
+            }
+
+            return hull;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Return a number that gives the ordering of angles
+        ///     WRST horizontal from the point(x1, y1) to(x2, y2).
+        ///     In other words, AngleValue(x1, y1, x2, y2) is not
+        ///     the angle, but if:
+        ///     Angle(x1, y1, x2, y2) > Angle(x1, y1, x2, y2)
+        ///     then
+        ///     AngleValue(x1, y1, x2, y2) > AngleValue(x1, y1, x2, y2)
+        ///     this angle is greater than the angle for another set
+        ///     of points,) this number for
+        ///     This function is dy / (dy + dx).
+        /// </summary>
+        /// <param name="x1">The x1.</param>
+        /// <param name="y1">The y1.</param>
+        /// <param name="x2">The x2.</param>
+        /// <param name="y2">The y2.</param>
+        /// <returns>A number that gives the ordering of angles</returns>
+        private static float AngleValue(float x1, float y1, float x2, float y2)
+        {
+            float t;
+
+            var dx = x2 - x1;
+            var ax = Math.Abs(dx);
+            var dy = y2 - y1;
+            var ay = Math.Abs(dy);
+            if (ax + ay == 0)
+            {
+                // if (the two points are the same, return 360.
+                t = 360f / 9f;
+            }
+            else
+            {
+                t = dy / (ax + ay);
+            }
+            if (dx < 0)
+            {
+                t = 2 - t;
+            }
+            else if (dy < 0)
+            {
+                t = 4 + t;
+            }
+            return t * 90;
+        }
+
+        /// <summary>
+        ///     Encloses the points in a circle.
         /// </summary>
         /// <param name="center">The center.</param>
         /// <param name="radius2">The radius2.</param>
@@ -382,7 +257,8 @@ namespace LeagueSharp.Common
         /// <param name="skip2">The skip2.</param>
         /// <param name="skip3">The skip3.</param>
         /// <returns><c>true</c> if the indicated circle encloses all of the points, <c>false</c> otherwise.</returns>
-        private static bool CircleEnclosesPoints(Vector2 center,
+        private static bool CircleEnclosesPoints(
+            Vector2 center,
             float radius2,
             List<Vector2> points,
             int skip1,
@@ -390,13 +266,13 @@ namespace LeagueSharp.Common
             int skip3)
         {
             return (from point in points.Where((t, i) => (i != skip1) && (i != skip2) && (i != skip3))
-                let dx = center.X - point.X
-                let dy = center.Y - point.Y
-                select dx * dx + dy * dy).All(test_radius2 => !(test_radius2 > radius2));
+                    let dx = center.X - point.X
+                    let dy = center.Y - point.Y
+                    select dx * dx + dy * dy).All(test_radius2 => !(test_radius2 > radius2));
         }
 
         /// <summary>
-        /// Finds the circle through the three points.
+        ///     Finds the circle through the three points.
         /// </summary>
         /// <param name="a">a.</param>
         /// <param name="b">The b.</param>
@@ -427,31 +303,153 @@ namespace LeagueSharp.Common
             radius2 = dx * dx + dy * dy;
         }
 
+        // Find a box that fits inside the MinMax quadrilateral.
         /// <summary>
-        /// Represetns a MecCircle
+        ///     Gets the minimum maximum box.
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <returns>RectangleF.</returns>
+        private static RectangleF GetMinMaxBox(List<Vector2> points)
+        {
+            // Find the MinMax quadrilateral.
+            Vector2 ul = new Vector2(0, 0), ur = ul, ll = ul, lr = ul;
+            GetMinMaxCorners(points, ref ul, ref ur, ref ll, ref lr);
+
+            // Get the coordinates of a box that lies inside this quadrilateral.
+            var xmin = ul.X;
+            var ymin = ul.Y;
+
+            var xmax = ur.X;
+            if (ymin < ur.Y)
+            {
+                ymin = ur.Y;
+            }
+
+            if (xmax > lr.X)
+            {
+                xmax = lr.X;
+            }
+            var ymax = lr.Y;
+
+            if (xmin < ll.X)
+            {
+                xmin = ll.X;
+            }
+            if (ymax > ll.Y)
+            {
+                ymax = ll.Y;
+            }
+
+            var result = new RectangleF(xmin, ymin, xmax - xmin, ymax - ymin);
+            g_MinMaxBox = result; // For debugging.
+            return result;
+        }
+
+        // Find the points nearest the upper left, upper right,
+        // lower left, and lower right corners.
+        /// <summary>
+        ///     Gets the minimum maximum corners.
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <param name="ul">The ul.</param>
+        /// <param name="ur">The ur.</param>
+        /// <param name="ll">The ll.</param>
+        /// <param name="lr">The lr.</param>
+        private static void GetMinMaxCorners(
+            List<Vector2> points,
+            ref Vector2 ul,
+            ref Vector2 ur,
+            ref Vector2 ll,
+            ref Vector2 lr)
+        {
+            // Start with the first point as the solution.
+            ul = points[0];
+            ur = ul;
+            ll = ul;
+            lr = ul;
+
+            // Search the other points.
+            foreach (var pt in points)
+            {
+                if (-pt.X - pt.Y > -ul.X - ul.Y)
+                {
+                    ul = pt;
+                }
+                if (pt.X - pt.Y > ur.X - ur.Y)
+                {
+                    ur = pt;
+                }
+                if (-pt.X + pt.Y > -ll.X + ll.Y)
+                {
+                    ll = pt;
+                }
+                if (pt.X + pt.Y > lr.X + lr.Y)
+                {
+                    lr = pt;
+                }
+            }
+
+            g_MinMaxCorners = new[] { ul, ur, lr, ll }; // For debugging.
+        }
+
+        /// <summary>
+        ///     Culls points out of the convex hull that lie inside the trapezoid defined by the vertices with smallest and largest
+        ///     X and Y coordinates.
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <returns>Points that are not culled.</returns>
+        private static List<Vector2> HullCull(List<Vector2> points)
+        {
+            // Find a culling box.
+            var culling_box = GetMinMaxBox(points);
+
+            // Cull the points.
+            var results =
+                points.Where(
+                    pt =>
+                    pt.X <= culling_box.Left || pt.X >= culling_box.Right || pt.Y <= culling_box.Top
+                    || pt.Y >= culling_box.Bottom).ToList();
+
+            g_NonCulledPoints = new Vector2[results.Count]; // For debugging.
+            results.CopyTo(g_NonCulledPoints); // For debugging.
+            return results;
+        }
+
+        #endregion
+
+        /// <summary>
+        ///     Represetns a MecCircle
         /// </summary>
         public struct MecCircle
         {
+            #region Fields
+
             /// <summary>
-            /// The center
+            ///     The center
             /// </summary>
             public Vector2 Center;
 
             /// <summary>
-            /// The radius
+            ///     The radius
             /// </summary>
             public float Radius;
 
+            #endregion
+
+            #region Constructors and Destructors
+
             /// <summary>
-            /// Initializes a new instance of the <see cref="MecCircle"/> struct.
+            ///     Initializes a new instance of the <see cref="MecCircle" /> struct.
             /// </summary>
             /// <param name="center">The center.</param>
             /// <param name="radius">The radius.</param>
             public MecCircle(Vector2 center, float radius)
             {
-                Center = center;
-                Radius = radius;
+                this.Center = center;
+                this.Radius = radius;
             }
+
+            #endregion
         }
     }
 }

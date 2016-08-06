@@ -2,7 +2,6 @@
 {
     using System;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
 
     /// <summary>
     ///     The native methods.

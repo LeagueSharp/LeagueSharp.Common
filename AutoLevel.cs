@@ -1,77 +1,57 @@
-#region LICENSE
-
-/*
- Copyright 2014 - 2015 LeagueSharp
- AutoLevel.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-#endregion
-
 namespace LeagueSharp.Common
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
-    /// Automatically levels skills.
+    ///     Automatically levels skills.
     /// </summary>
     public class AutoLevel
     {
-        /// <summary>
-        /// The order
-        /// </summary>
-        private static List<SpellSlot> order = new List<SpellSlot>();
+        #region Static Fields
 
         /// <summary>
-        /// The last leveled
-        /// </summary>
-        private static float LastLeveled;
-
-        /// <summary>
-        /// The next delay
-        /// </summary>
-        private static float NextDelay;
-
-        /// <summary>
-        /// The player
+        ///     The player
         /// </summary>
         private static readonly Obj_AI_Hero Player = ObjectManager.Player;
 
         /// <summary>
-        /// The random number
-        /// </summary>
-        private static Random RandomNumber;
-
-        /// <summary>
-        /// The enabled
+        ///     The enabled
         /// </summary>
         private static bool enabled;
 
         /// <summary>
-        /// The initialize
+        ///     The initialize
         /// </summary>
         private static bool init;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoLevel"/> class.
+        ///     The last leveled
+        /// </summary>
+        private static float LastLeveled;
+
+        /// <summary>
+        ///     The next delay
+        /// </summary>
+        private static float NextDelay;
+
+        /// <summary>
+        ///     The order
+        /// </summary>
+        private static List<SpellSlot> order = new List<SpellSlot>();
+
+        /// <summary>
+        ///     The random number
+        /// </summary>
+        private static Random RandomNumber;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AutoLevel" /> class.
         /// </summary>
         /// <param name="levels">The levels.</param>
         public AutoLevel(IEnumerable<int> levels)
@@ -81,7 +61,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoLevel"/> class.
+        ///     Initializes a new instance of the <see cref="AutoLevel" /> class.
         /// </summary>
         /// <param name="levels">The levels.</param>
         public AutoLevel(List<SpellSlot> levels)
@@ -90,28 +70,90 @@ namespace LeagueSharp.Common
             Init();
         }
 
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        private static void Init()
-        {
-            if (init)
-            {
-                return;
-            }
+        #endregion
 
-            init = true;
-            RandomNumber = new Random(Utils.TickCount);
-            Game.OnUpdate += Game_OnGameUpdate;
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Disables this instance.
+        /// </summary>
+        public static void Disable()
+        {
+            enabled = false;
         }
 
         /// <summary>
-        /// Fired when the game updates.
+        ///     Enables this instance.
         /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        public static void Enable()
+        {
+            enabled = true;
+        }
+
+        /// <summary>
+        ///     Sets if this instance is enabled or not according to the <paramref name="b" />.
+        /// </summary>
+        /// <param name="b">if set to <c>true</c> [b].</param>
+        public static void Enabled(bool b)
+        {
+            enabled = b;
+        }
+
+        /// <summary>
+        ///     Gets the sequence.
+        /// </summary>
+        /// <returns></returns>
+        public static int[] GetSequence()
+        {
+            return order.Select(spell => (int)spell).ToArray();
+        }
+
+        /// <summary>
+        ///     Gets the sequence list.
+        /// </summary>
+        /// <returns></returns>
+        public static List<SpellSlot> GetSequenceList()
+        {
+            return order;
+        }
+
+        /// <summary>
+        ///     Updates the sequence.
+        /// </summary>
+        /// <param name="levels">The levels.</param>
+        public static void UpdateSequence(IEnumerable<int> levels)
+        {
+            Init();
+            order.Clear();
+            foreach (var level in levels)
+            {
+                order.Add((SpellSlot)level);
+            }
+        }
+
+        /// <summary>
+        ///     Updates the sequence.
+        /// </summary>
+        /// <param name="levels">The levels.</param>
+        public static void UpdateSequence(List<SpellSlot> levels)
+        {
+            Init();
+            order.Clear();
+            order = levels;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Fired when the game updates.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay || MenuGUI.IsShopOpen)
+            if (!enabled || Player.SpellTrainingPoints < 1 || Utils.TickCount - LastLeveled < NextDelay
+                || MenuGUI.IsShopOpen)
             {
                 return;
             }
@@ -123,7 +165,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the total points.
+        ///     Gets the total points.
         /// </summary>
         /// <returns></returns>
         private static int GetTotalPoints()
@@ -138,71 +180,20 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Enables this instance.
+        ///     Initializes this instance.
         /// </summary>
-        public static void Enable()
+        private static void Init()
         {
-            enabled = true;
-        }
-
-        /// <summary>
-        /// Disables this instance.
-        /// </summary>
-        public static void Disable()
-        {
-            enabled = false;
-        }
-
-        /// <summary>
-        /// Sets if this instance is enabled or not according to the <paramref name="b"/>.
-        /// </summary>
-        /// <param name="b">if set to <c>true</c> [b].</param>
-        public static void Enabled(bool b)
-        {
-            enabled = b;
-        }
-
-        /// <summary>
-        /// Updates the sequence.
-        /// </summary>
-        /// <param name="levels">The levels.</param>
-        public static void UpdateSequence(IEnumerable<int> levels)
-        {
-            Init();
-            order.Clear();
-            foreach (var level in levels)
+            if (init)
             {
-                order.Add((SpellSlot) level);
+                return;
             }
+
+            init = true;
+            RandomNumber = new Random(Utils.TickCount);
+            Game.OnUpdate += Game_OnGameUpdate;
         }
 
-        /// <summary>
-        /// Updates the sequence.
-        /// </summary>
-        /// <param name="levels">The levels.</param>
-        public static void UpdateSequence(List<SpellSlot> levels)
-        {
-            Init();
-            order.Clear();
-            order = levels;
-        }
-
-        /// <summary>
-        /// Gets the sequence.
-        /// </summary>
-        /// <returns></returns>
-        public static int[] GetSequence()
-        {
-            return order.Select(spell => (int) spell).ToArray();
-        }
-
-        /// <summary>
-        /// Gets the sequence list.
-        /// </summary>
-        /// <returns></returns>
-        public static List<SpellSlot> GetSequenceList()
-        {
-            return order;
-        }
+        #endregion
     }
 }

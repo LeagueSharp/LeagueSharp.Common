@@ -1,54 +1,149 @@
-#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- Notification.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
-
-using System;
-using System.IO;
-using SharpDX;
-using SharpDX.Direct3D9;
-using Color = System.Drawing.Color;
-
-#endregion
-
 namespace LeagueSharp.Common
 {
+    using System;
+
+    using SharpDX;
+    using SharpDX.Direct3D9;
+
+    using Color = System.Drawing.Color;
+
     /// <summary>
     ///     Basic Notification
     /// </summary>
     public class Notification : INotification, IDisposable
     {
-        #region Other
+        #region Fields
 
-        public enum NotificationState
-        {
-            Idle,
-            AnimationMove,
-            AnimationShowShrink,
-            AnimationShowMove,
-            AnimationShowGrow
-        }
+        /// <summary>
+        ///     Notification's Border Color
+        /// </summary>
+        public ColorBGRA BorderColor = new ColorBGRA(255f, 255f, 255f, 255f);
+
+        /// <summary>
+        ///     Notification's Box Color
+        /// </summary>
+        public ColorBGRA BoxColor = new ColorBGRA(0f, 0f, 0f, 255f);
+
+        /// <summary>
+        ///     Notification's Font
+        /// </summary>
+        public Font Font = new Font(
+            Drawing.Direct3DDevice,
+            0xE,
+            0x0,
+            FontWeight.DoNotCare,
+            0x0,
+            false,
+            FontCharacterSet.Default,
+            FontPrecision.Default,
+            FontQuality.Antialiased,
+            FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
+            "Tahoma");
+
+        /// <summary>
+        ///     Notification's Text
+        /// </summary>
+        public string Text;
+
+        /// <summary>
+        ///     Notification's Text Color
+        /// </summary>
+        public ColorBGRA TextColor = new ColorBGRA(255f, 255f, 255f, 255f);
+
+        /// <summary>
+        ///     Locally saved bool which indicates if notification will be disposed after finishing
+        /// </summary>
+        private readonly bool autoDispose;
+
+        /// <summary>
+        ///     Locally saved bytes which contain old ALPHA values
+        /// </summary>
+        private readonly byte[] flashingBytes = new byte[3];
+
+        /// <summary>
+        ///     Locally saved Global Unique Identification (GUID)
+        /// </summary>
+        private readonly string id;
+
+        /// <summary>
+        ///     Locally saved Line
+        /// </summary>
+        private readonly Line line = new Line(Drawing.Direct3DDevice)
+                                         { Antialias = false, GLLines = true, Width = 190f };
+
+        /// <summary>
+        ///     Locally saved Sprite
+        /// </summary>
+        private readonly Sprite sprite = new Sprite(Drawing.Direct3DDevice);
+
+        /// <summary>
+        ///     Locally saved bool which indicates if border should be drawn
+        /// </summary>
+        private bool border;
+
+        /// <summary>
+        ///     Locally saved int which contains data of the last tick.
+        /// </summary>
+        private int clickTick;
+
+        /// <summary>
+        ///     Locally saved Notification's Duration
+        /// </summary>
+        private int duration;
+
+        /// <summary>
+        ///     Locally saved bool which indicates if flashing mode is on or off.
+        /// </summary>
+        private bool flashing;
+
+        /// <summary>
+        ///     Locally saved int which contains an internval for flash mode
+        /// </summary>
+        private int flashInterval;
+
+        /// <summary>
+        ///     Locally saved int which contains next flash mode tick
+        /// </summary>
+        private int flashTick;
+
+        /// <summary>
+        ///     Locally moved saved position
+        /// </summary>
+        private Vector2 moveStartPosition;
+
+        /// <summary>
+        ///     Locally saved Notification's Movement Start Tick
+        /// </summary>
+        private int moveStartT;
+
+        /// <summary>
+        ///     Locally saved position
+        /// </summary>
+        private Vector2 position;
+
+        /// <summary>
+        ///     Locally saved Notification's Start Tick
+        /// </summary>
+        private int startT;
+
+        /// <summary>
+        ///     Locally saved Notification State
+        /// </summary>
+        private NotificationState state;
+
+        /// <summary>
+        ///     Locally saved boolean for Text Fix
+        /// </summary>
+        private Vector2 textFix;
+
+        /// <summary>
+        ///     Locally saved update position
+        /// </summary>
+        private Vector2 updatePosition;
 
         #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         ///     Notification Constructor
@@ -59,167 +154,49 @@ namespace LeagueSharp.Common
         public Notification(string text, int duration = -0x1, bool dispose = false)
         {
             // Setting GUID
-            id = Guid.NewGuid().ToString("N");
+            this.id = Guid.NewGuid().ToString("N");
 
             // Setting main values
-            Text = text;
-            state = NotificationState.Idle;
-            border = true;
-            autoDispose = dispose;
+            this.Text = text;
+            this.state = NotificationState.Idle;
+            this.border = true;
+            this.autoDispose = dispose;
 
             // Preload Text
-            Font.PreloadText(text);
+            this.Font.PreloadText(text);
 
             // Calling Show
-            Show(duration);
-        }
-
-        #region Functions
-
-        /// <summary>
-        ///     Show an inactive Notification, returns boolean if successful or not.
-        /// </summary>
-        /// <param name="newDuration">Duration (-1 for Infinite)</param>
-        /// <returns></returns>
-        public bool Show(int newDuration = -0x1)
-        {
-            if (Draw || Update)
-            {
-                state = NotificationState.AnimationShowShrink;
-                return false;
-            }
-
-            startT = Utils.GameTimeTickCount;
-            duration = newDuration;
-
-            TextColor.A = 0xFF;
-            BoxColor.A = 0xFF;
-            BorderColor.A = 0xFF;
-
-            position = new Vector2(Drawing.Width - 200f, Notifications.GetLocation(this));
-            
-            return Draw = Update = true;
+            this.Show(duration);
         }
 
         /// <summary>
-        ///     Enters Notification's flashing mode
+        ///     Finalization
         /// </summary>
-        /// <param name="interval">Flash Interval</param>
-        public Notification Flash(int interval = 0xFA)
+        ~Notification()
         {
-            flashing = !flashing;
-            if (flashing)
-            {
-                flashInterval = interval;
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        ///     Toggles the notification border
-        /// </summary>
-        public Notification Border()
-        {
-            border = !border;
-
-            return this;
-        }
-
-        /// <summary>
-        ///     Sets the notification border toggle value
-        /// </summary>
-        /// <param name="value">bool value</param>
-        public Notification Border(bool value)
-        {
-            border = value;
-
-            return this;
-        }
-
-        #region Color Set
-
-        /// <summary>
-        ///     Sets the notification text color
-        /// </summary>
-        /// <param name="color">System Drawing Color</param>
-        public Notification SetTextColor(Color color)
-        {
-            TextColor = new ColorBGRA(color.R, color.G, color.B, color.A);
-
-            return this;
-        }
-
-        /// <summary>
-        ///     Sets the notification box color
-        /// </summary>
-        /// <param name="color">System Drawing Color</param>
-        public Notification SetBoxColor(Color color)
-        {
-            BoxColor = new ColorBGRA(color.R, color.G, color.B, color.A);
-
-            return this;
-        }
-
-        /// <summary>
-        ///     Sets the notification border color
-        /// </summary>
-        /// <param name="color">System Drawing Color</param>
-        public Notification SetBorderColor(Color color)
-        {
-            BorderColor = new ColorBGRA(color.R, color.G, color.B, color.A);
-
-            return this;
-        }
-
-        #endregion
-        
-        /// <summary>
-        ///     Calculate the border into vertices
-        /// </summary>
-        /// <param name="x">X axis</param>
-        /// <param name="y">Y axis</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <returns>Vector2 Array</returns>
-        private static Vector2[] GetBorder(float x, float y, float w, float h)
-        {
-            return new[] { new Vector2(x + w / 0x2, y), new Vector2(x + w / 0x2, y + h) };
+            this.Dispose(false);
         }
 
         #endregion
 
-        #region Public Fields
+        #region Enums
 
-        /// <summary>
-        ///     Notification's Text
-        /// </summary>
-        public string Text;
+        public enum NotificationState
+        {
+            Idle,
 
-        #region Colors
+            AnimationMove,
 
-        /// <summary>
-        ///     Notification's Text Color
-        /// </summary>
-        public ColorBGRA TextColor = new ColorBGRA(255f, 255f, 255f, 255f);
+            AnimationShowShrink,
 
-        /// <summary>
-        ///     Notification's Box Color
-        /// </summary>
-        public ColorBGRA BoxColor = new ColorBGRA(0f, 0f, 0f, 255f);
+            AnimationShowMove,
 
-        /// <summary>
-        ///     Notification's Border Color
-        /// </summary>
-        public ColorBGRA BorderColor = new ColorBGRA(255f, 255f, 255f, 255f);
+            AnimationShowGrow
+        }
 
-        /// <summary>
-        ///     Notification's Font
-        /// </summary>
-        public Font Font = new Font(
-            Drawing.Direct3DDevice, 0xE, 0x0, FontWeight.DoNotCare, 0x0, false, FontCharacterSet.Default,
-            FontPrecision.Default, FontQuality.Antialiased, FontPitchAndFamily.DontCare | FontPitchAndFamily.Decorative,
-            "Tahoma");
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///     Indicates if notification should be drawn
@@ -233,115 +210,74 @@ namespace LeagueSharp.Common
 
         #endregion
 
-        #endregion
-
-        #region Private Fields
+        #region Public Methods and Operators
 
         /// <summary>
-        ///     Locally saved Global Unique Identification (GUID)
+        ///     Toggles the notification border
         /// </summary>
-        private readonly string id;
-
-        /// <summary>
-        ///     Locally saved Notification's Start Tick
-        /// </summary>
-        private int startT;
-
-        /// <summary>
-        ///     Locally saved Notification's Movement Start Tick
-        /// </summary>
-        private int moveStartT;
-
-        /// <summary>
-        ///     Locally saved Notification's Duration
-        /// </summary>
-        private int duration;
-
-        /// <summary>
-        ///     Locally saved position
-        /// </summary>
-        private Vector2 position;
-
-        /// <summary>
-        ///     Locally moved saved position
-        /// </summary>
-        private Vector2 moveStartPosition;
-
-        /// <summary>
-        ///     Locally saved update position
-        /// </summary>
-        private Vector2 updatePosition;
-
-        /// <summary>
-        ///     Locally saved Notification State
-        /// </summary>
-        private NotificationState state;
-
-        /// <summary>
-        ///     Locally saved Line
-        /// </summary>
-        private readonly Line line = new Line(Drawing.Direct3DDevice)
+        public Notification Border()
         {
-            Antialias = false,
-            GLLines = true,
-            Width = 190f
-        };
+            this.border = !this.border;
+
+            return this;
+        }
 
         /// <summary>
-        ///     Locally saved Sprite
+        ///     Sets the notification border toggle value
         /// </summary>
-        private readonly Sprite sprite = new Sprite(Drawing.Direct3DDevice);
+        /// <param name="value">bool value</param>
+        public Notification Border(bool value)
+        {
+            this.border = value;
+
+            return this;
+        }
 
         /// <summary>
-        ///     Locally saved boolean for Text Fix
+        ///     IDisposable callback
         /// </summary>
-        private Vector2 textFix;
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
 
         /// <summary>
-        ///     Locally saved bool which indicates if flashing mode is on or off.
+        ///     Enters Notification's flashing mode
         /// </summary>
-        private bool flashing;
+        /// <param name="interval">Flash Interval</param>
+        public Notification Flash(int interval = 0xFA)
+        {
+            this.flashing = !this.flashing;
+            if (this.flashing)
+            {
+                this.flashInterval = interval;
+            }
+
+            return this;
+        }
 
         /// <summary>
-        ///     Locally saved bytes which contain old ALPHA values
+        ///     Returns the notification's global unique identification (GUID)
         /// </summary>
-        private readonly byte[] flashingBytes = new byte[3];
+        /// <returns>GUID</returns>
+        public string GetId()
+        {
+            return this.id;
+        }
 
-        /// <summary>
-        ///     Locally saved int which contains an internval for flash mode
-        /// </summary>
-        private int flashInterval;
-
-        /// <summary>
-        ///     Locally saved int which contains next flash mode tick
-        /// </summary>
-        private int flashTick;
-
-        /// <summary>
-        ///     Locally saved int which contains data of the last tick.
-        /// </summary>
-        private int clickTick;
-
-        /// <summary>
-        ///     Locally saved bool which indicates if border should be drawn
-        /// </summary>
-        private bool border;
-
-        /// <summary>
-        ///     Locally saved bool which indicates if notification will be disposed after finishing
-        /// </summary>
-        private readonly bool autoDispose;
-
-        #endregion
-
-        #region Required Functions
+        public void OnDomainUnload()
+        {
+            this.Font.OnLostDevice();
+            this.line.OnLostDevice();
+            this.sprite.OnLostDevice();
+        }
 
         /// <summary>
         ///     Called for Drawing onto screen
         /// </summary>
         public void OnDraw()
         {
-            if (!Draw)
+            if (!this.Draw)
             {
                 return;
             }
@@ -350,92 +286,95 @@ namespace LeagueSharp.Common
 
             #region Outline
 
-            if (border)
+            if (this.border)
             {
-                line.Begin();
+                this.line.Begin();
 
                 vertices = new[]
-                {
-                    new Vector2(position.X + (int)Math.Floor(line.Width / 0x2), position.Y- 0x01),
-                    new Vector2(position.X + (int)Math.Floor(line.Width / 0x2) + 0x01, position.Y + 25f + 0x01)
-                };
+                               {
+                                   new Vector2(
+                                       this.position.X + (int)Math.Floor(this.line.Width / 0x2),
+                                       this.position.Y - 0x01),
+                                   new Vector2(
+                                       this.position.X + (int)Math.Floor(this.line.Width / 0x2) + 0x01,
+                                       this.position.Y + 25f + 0x01)
+                               };
 
-                line.Draw(vertices, BorderColor);
-                line.End();
+                this.line.Draw(vertices, this.BorderColor);
+                this.line.End();
             }
 
             #endregion
 
             #region Box
-            line.Begin();
+
+            this.line.Begin();
 
             vertices = new[]
-            {
-                new Vector2(position.X + (int)Math.Floor(line.Width / 0x2), position.Y),
-                new Vector2(position.X + (int)Math.Floor(line.Width / 0x2), position.Y + 25f)
-            };
+                           {
+                               new Vector2(this.position.X + (int)Math.Floor(this.line.Width / 0x2), this.position.Y),
+                               new Vector2(
+                                   this.position.X + (int)Math.Floor(this.line.Width / 0x2),
+                                   this.position.Y + 25f)
+                           };
 
-            line.Draw(vertices, BoxColor);
-            line.End();
+            this.line.Draw(vertices, this.BoxColor);
+            this.line.End();
 
             #endregion
 
             #region Text
 
-            sprite.Begin();
+            this.sprite.Begin();
 
-            var textDimension = Font.MeasureText(sprite, Text);
-            var finalText = Text;
+            var textDimension = this.Font.MeasureText(this.sprite, this.Text);
+            var finalText = this.Text;
 
-            if (textDimension.Width + 0x5 > line.Width)
+            if (textDimension.Width + 0x5 > this.line.Width)
             {
-                for (var i = Text.Length; i > 0x0; --i)
+                for (var i = this.Text.Length; i > 0x0; --i)
                 {
-                    var text = Text.Substring(0x0, i);
-                    var textWidth = Font.MeasureText(sprite, text).Width;
+                    var text = this.Text.Substring(0x0, i);
+                    var textWidth = this.Font.MeasureText(this.sprite, text).Width;
 
-                    if (textWidth + 0x5 > line.Width)
+                    if (textWidth + 0x5 > this.line.Width)
                     {
                         continue;
                     }
 
-                    finalText = (text == Text) ? text : text.Substring(0x0, text.Length - 0x3) + "...";
+                    finalText = (text == this.Text) ? text : text.Substring(0x0, text.Length - 0x3) + "...";
                     break;
                 }
             }
 
-            textDimension = Font.MeasureText(sprite, finalText);
+            textDimension = this.Font.MeasureText(this.sprite, finalText);
 
-            var rectangle = new Rectangle((int) position.X, (int) position.Y, (int) line.Width, 0x19);
-           
-            Font.DrawText(
-                sprite, finalText, rectangle.TopLeft.X + (rectangle.Width - textDimension.Width) / 0x2,
-                rectangle.TopLeft.Y + (rectangle.Height - textDimension.Height) / 0x2, TextColor);
+            var rectangle = new Rectangle((int)this.position.X, (int)this.position.Y, (int)this.line.Width, 0x19);
 
-            sprite.End();
+            this.Font.DrawText(
+                this.sprite,
+                finalText,
+                rectangle.TopLeft.X + (rectangle.Width - textDimension.Width) / 0x2,
+                rectangle.TopLeft.Y + (rectangle.Height - textDimension.Height) / 0x2,
+                this.TextColor);
+
+            this.sprite.End();
 
             #endregion
         }
 
-        public void OnDomainUnload()
+        public void OnPostReset()
         {
-            Font.OnLostDevice();
-            line.OnLostDevice();
-            sprite.OnLostDevice();
+            this.line.OnResetDevice();
+            this.Font.OnResetDevice();
+            this.sprite.OnResetDevice();
         }
 
         public void OnPreReset()
         {
-            Font.OnLostDevice();
-            line.OnLostDevice();
-            sprite.OnLostDevice();
-        }
-
-        public void OnPostReset()
-        {
-            line.OnResetDevice();
-            Font.OnResetDevice();
-            sprite.OnResetDevice();
+            this.Font.OnLostDevice();
+            this.line.OnLostDevice();
+            this.sprite.OnLostDevice();
         }
 
         /// <summary>
@@ -443,261 +382,271 @@ namespace LeagueSharp.Common
         /// </summary>
         public void OnUpdate()
         {
-            if (!Update)
+            if (!this.Update)
             {
                 return;
             }
 
-            switch (state)
+            switch (this.state)
             {
                 case NotificationState.Idle:
-                {
-                    #region Duration End Handler
-
-                    if (!flashing && duration > 0x0 && TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
                     {
-                        Update = Draw = false;
-                        if (autoDispose)
+                        #region Duration End Handler
+
+                        if (!this.flashing && this.duration > 0x0 && this.TextColor.A == 0x0 && this.BoxColor.A == 0x0
+                            && this.BorderColor.A == 0x0)
                         {
-                            Dispose();
+                            this.Update = this.Draw = false;
+                            if (this.autoDispose)
+                            {
+                                this.Dispose();
+                            }
+
+                            Notifications.RemoveNotification(this);
+
+                            return;
                         }
 
-                        Notifications.RemoveNotification(this);
+                        #endregion
 
-                        return;
-                    }
+                        #region Decreasement Tick
 
-                    #endregion
-
-                    #region Decreasement Tick
-
-                    var t = Math.Max(0, startT + duration - Utils.GameTimeTickCount + 500);
-                    if (!flashing && duration > 0x0 && t < 500 )
-                    {
-                        var alpha = (byte)(255 * ((float)t / 500));
-                        TextColor.A = alpha;
-                        BoxColor.A = alpha;
-                        BorderColor.A = alpha;
-                    }
-
-                    #endregion
-
-                    #region Flashing
-
-                    if (flashing)
-                    {
-                        if (Utils.TickCount - flashTick > 0x0)
+                        var t = Math.Max(0, this.startT + this.duration - Utils.GameTimeTickCount + 500);
+                        if (!this.flashing && this.duration > 0x0 && t < 500)
                         {
-                            if (TextColor.A > 0x0 && BoxColor.A > 0x0 && BorderColor.A > 0x0)
+                            var alpha = (byte)(255 * ((float)t / 500));
+                            this.TextColor.A = alpha;
+                            this.BoxColor.A = alpha;
+                            this.BorderColor.A = alpha;
+                        }
+
+                        #endregion
+
+                        #region Flashing
+
+                        if (this.flashing)
+                        {
+                            if (Utils.TickCount - this.flashTick > 0x0)
                             {
-                                if (duration > 0x0)
+                                if (this.TextColor.A > 0x0 && this.BoxColor.A > 0x0 && this.BorderColor.A > 0x0)
                                 {
-                                    if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
+                                    if (this.duration > 0x0)
                                     {
-                                        Update = Draw = false;
-                                        if (autoDispose)
+                                        if (this.TextColor.A == 0x0 && this.BoxColor.A == 0x0
+                                            && this.BorderColor.A == 0x0)
                                         {
-                                            Dispose();
+                                            this.Update = this.Draw = false;
+                                            if (this.autoDispose)
+                                            {
+                                                this.Dispose();
+                                            }
+
+                                            Notifications.RemoveNotification(this);
+
+                                            return;
                                         }
+                                    }
 
-                                        Notifications.RemoveNotification(this);
+                                    this.flashingBytes[0x0] = --this.TextColor.A;
+                                    this.flashingBytes[0x1] = --this.BoxColor.A;
+                                    this.flashingBytes[0x2] = --this.BorderColor.A;
 
-                                        return;
+                                    this.TextColor.A = 0x0;
+                                    this.BoxColor.A = 0x0;
+                                    this.BorderColor.A = 0x0;
+                                }
+                                else
+                                {
+                                    this.TextColor.A = this.flashingBytes[0x0];
+                                    this.BoxColor.A = this.flashingBytes[0x1];
+                                    this.BorderColor.A = this.flashingBytes[0x2];
+
+                                    if (this.TextColor.A > 0x0)
+                                    {
+                                        this.TextColor.A--;
+                                    }
+                                    if (this.BoxColor.A > 0x0)
+                                    {
+                                        this.BoxColor.A--;
+                                    }
+                                    if (this.BorderColor.A > 0x0)
+                                    {
+                                        this.BorderColor.A--;
+                                    }
+
+                                    if (this.duration > 0x0)
+                                    {
+                                        if (this.TextColor.A == 0x0 && this.BoxColor.A == 0x0
+                                            && this.BorderColor.A == 0x0)
+                                        {
+                                            this.Update = this.Draw = false;
+                                            if (this.autoDispose)
+                                            {
+                                                this.Dispose();
+                                            }
+
+                                            Notifications.RemoveNotification(this);
+
+                                            return;
+                                        }
                                     }
                                 }
+                                this.flashTick = Utils.TickCount + this.flashInterval;
+                            }
+                        }
 
-                                flashingBytes[0x0] = --TextColor.A;
-                                flashingBytes[0x1] = --BoxColor.A;
-                                flashingBytes[0x2] = --BorderColor.A;
+                        #endregion
 
-                                TextColor.A = 0x0;
-                                BoxColor.A = 0x0;
-                                BorderColor.A = 0x0;
+                        #region Mouse
+
+                        var mouseLocation = Drawing.WorldToScreen(Game.CursorPos);
+                        if (Utils.IsUnderRectangle(
+                            mouseLocation,
+                            this.position.X,
+                            this.position.Y,
+                            this.line.Width,
+                            25f))
+                        {
+                            this.TextColor.A = 0xFF;
+                            this.BoxColor.A = 0xFF;
+                            this.BorderColor.A = 0xFF;
+
+                            var textDimension = this.Font.MeasureText(this.sprite, this.Text);
+                            if (textDimension.Width + 0x10 > this.line.Width)
+                            {
+                                var extra = textDimension.Width - 0xB4;
+                                if (this.updatePosition == Vector2.Zero)
+                                {
+                                    this.textFix = new Vector2(this.position.X, this.position.Y);
+                                    this.updatePosition = new Vector2(this.position.X - extra, this.position.Y);
+                                }
+                                if (this.updatePosition != Vector2.Zero && this.position.X > this.updatePosition.X)
+                                {
+                                    this.position.X -= 1f;
+                                    this.line.Width += 1f;
+                                }
+                            }
+                        }
+                        else if (this.updatePosition != Vector2.Zero)
+                        {
+                            if (this.position.X < this.textFix.X)
+                            {
+                                this.position.X += 1f;
+                                this.line.Width -= 1f;
                             }
                             else
                             {
-                                TextColor.A = flashingBytes[0x0];
-                                BoxColor.A = flashingBytes[0x1];
-                                BorderColor.A = flashingBytes[0x2];
-
-                                if (TextColor.A > 0x0)
-                                {
-                                    TextColor.A--;
-                                }
-                                if (BoxColor.A > 0x0)
-                                {
-                                    BoxColor.A--;
-                                }
-                                if (BorderColor.A > 0x0)
-                                {
-                                    BorderColor.A--;
-                                }
-
-                                if (duration > 0x0)
-                                {
-                                    if (TextColor.A == 0x0 && BoxColor.A == 0x0 && BorderColor.A == 0x0)
-                                    {
-                                        Update = Draw = false;
-                                        if (autoDispose)
-                                        {
-                                            Dispose();
-                                        }
-
-                                        Notifications.RemoveNotification(this);
-
-                                        return;
-                                    }
-                                }
-                            }
-                            flashTick = Utils.TickCount + flashInterval;
-                        }
-                    }
-
-                    #endregion
-
-                    #region Mouse
-
-                    var mouseLocation = Drawing.WorldToScreen(Game.CursorPos);
-                    if (Utils.IsUnderRectangle(mouseLocation, position.X, position.Y, line.Width, 25f))
-                    {
-                        TextColor.A = 0xFF;
-                        BoxColor.A = 0xFF;
-                        BorderColor.A = 0xFF;
-
-                        var textDimension = Font.MeasureText(sprite, Text);
-                        if (textDimension.Width + 0x10 > line.Width)
-                        {
-                            var extra = textDimension.Width - 0xB4;
-                            if (updatePosition == Vector2.Zero)
-                            {
-                                textFix = new Vector2(position.X, position.Y);
-                                updatePosition = new Vector2(position.X - extra, position.Y);
-                            }
-                            if (updatePosition != Vector2.Zero && position.X > updatePosition.X)
-                            {
-                                position.X -= 1f;
-                                line.Width += 1f;
+                                this.textFix = Vector2.Zero;
+                                this.updatePosition = Vector2.Zero;
                             }
                         }
-                    }
-                    else if (updatePosition != Vector2.Zero)
-                    {
-                        if (position.X < textFix.X)
+
+                        #endregion
+
+                        #region Movement
+
+                        var location = Notifications.GetLocation();
+                        if (location != -0x1 && this.position.Y > location)
                         {
-                            position.X += 1f;
-                            line.Width -= 1f;
+                            if (this.updatePosition != Vector2.Zero && this.textFix != Vector2.Zero)
+                            {
+                                this.position.X = this.textFix.X;
+                                this.textFix = Vector2.Zero;
+                                this.line.Width = 190f;
+                            }
+
+                            this.updatePosition = new Vector2(this.position.X, Notifications.GetLocation(this));
+                            this.state = NotificationState.AnimationMove;
+                            this.moveStartT = Utils.GameTimeTickCount;
+                            this.moveStartPosition = this.position;
+                        }
+
+                        #endregion
+
+                        break;
+                    }
+                case NotificationState.AnimationMove:
+                    {
+                        #region Movement
+
+                        if (Math.Abs(this.position.Y - this.updatePosition.Y) > float.Epsilon)
+                        {
+                            var percentT = Math.Min(1, ((float)Utils.GameTimeTickCount - this.moveStartT) / 500);
+
+                            this.position.Y = this.moveStartPosition.Y
+                                              + (this.updatePosition.Y - this.moveStartPosition.Y) * percentT;
                         }
                         else
                         {
-                            textFix = Vector2.Zero;
-                            updatePosition = Vector2.Zero;
-                        }
-                    }
-
-                    #endregion
-
-                    #region Movement
-
-                    var location = Notifications.GetLocation();
-                    if (location != -0x1 && position.Y > location)
-                    {
-                        if (updatePosition != Vector2.Zero && textFix != Vector2.Zero)
-                        {
-                            position.X = textFix.X;
-                            textFix = Vector2.Zero;
-                            line.Width = 190f;
+                            this.updatePosition = Vector2.Zero;
+                            this.state = NotificationState.Idle;
                         }
 
-                        updatePosition = new Vector2(position.X, Notifications.GetLocation(this));
-                        state = NotificationState.AnimationMove;
-                        moveStartT = Utils.GameTimeTickCount;
-                        moveStartPosition = position;
+                        #endregion
+
+                        break;
                     }
-
-                    #endregion
-
-                    break;
-                }
-                case NotificationState.AnimationMove:
-                {
-                    #region Movement
-
-                    if (Math.Abs(position.Y - updatePosition.Y) > float.Epsilon)
-                    {
-                        var percentT = Math.Min(1, ((float)Utils.GameTimeTickCount - moveStartT) / 500);
-
-                        position.Y = moveStartPosition.Y + (updatePosition.Y - moveStartPosition.Y) * percentT;
-                    }
-                    else
-                    {
-                        updatePosition = Vector2.Zero;
-                        state = NotificationState.Idle;
-                    }
-
-                    #endregion
-
-                    break;
-                }
                 case NotificationState.AnimationShowShrink:
-                {
-                    #region Shrink
-
-                    if (Math.Abs(line.Width - 0xB9) < float.Epsilon)
                     {
-                        state = NotificationState.AnimationShowMove;
-                        updatePosition = new Vector2(position.X, Notifications.GetLocation(this));
-                        return;
+                        #region Shrink
+
+                        if (Math.Abs(this.line.Width - 0xB9) < float.Epsilon)
+                        {
+                            this.state = NotificationState.AnimationShowMove;
+                            this.updatePosition = new Vector2(this.position.X, Notifications.GetLocation(this));
+                            return;
+                        }
+                        this.line.Width--;
+                        this.position.X++;
+
+                        #endregion
+
+                        break;
                     }
-                    line.Width--;
-                    position.X++;
-
-                    #endregion
-
-                    break;
-                }
                 case NotificationState.AnimationShowMove:
-                {
-                    #region Movement
-
-                    if (Math.Abs(Notifications.GetLocation() + 0x1E - updatePosition.Y) < float.Epsilon)
                     {
-                        updatePosition.Y = Notifications.GetLocation();
-                    }
+                        #region Movement
 
-                    if (Math.Abs(position.Y - updatePosition.Y) > float.Epsilon)
-                    {
-                        var value = (updatePosition.Distance(new Vector2(position.X, position.Y - 0.5f)) <
-                                     updatePosition.Distance(new Vector2(position.X, position.Y + 0.5f)))
-                            ? -0.5f
-                            : 0.5f;
-                        position.Y += value;
-                    }
-                    else
-                    {
-                        updatePosition = Vector2.Zero;
-                        state = NotificationState.AnimationShowGrow;
-                    }
+                        if (Math.Abs(Notifications.GetLocation() + 0x1E - this.updatePosition.Y) < float.Epsilon)
+                        {
+                            this.updatePosition.Y = Notifications.GetLocation();
+                        }
 
-                    #endregion
+                        if (Math.Abs(this.position.Y - this.updatePosition.Y) > float.Epsilon)
+                        {
+                            var value =
+                                (this.updatePosition.Distance(new Vector2(this.position.X, this.position.Y - 0.5f))
+                                 < this.updatePosition.Distance(new Vector2(this.position.X, this.position.Y + 0.5f)))
+                                    ? -0.5f
+                                    : 0.5f;
+                            this.position.Y += value;
+                        }
+                        else
+                        {
+                            this.updatePosition = Vector2.Zero;
+                            this.state = NotificationState.AnimationShowGrow;
+                        }
 
-                    break;
-                }
+                        #endregion
+
+                        break;
+                    }
                 case NotificationState.AnimationShowGrow:
-                {
-                    #region Growth
-
-                    if (Math.Abs(line.Width - 0xBE) < float.Epsilon)
                     {
-                        state = NotificationState.Idle;
-                        return;
+                        #region Growth
+
+                        if (Math.Abs(this.line.Width - 0xBE) < float.Epsilon)
+                        {
+                            this.state = NotificationState.Idle;
+                            return;
+                        }
+                        this.line.Width++;
+                        this.position.X--;
+
+                        #endregion
+
+                        break;
                     }
-                    line.Width++;
-                    position.X--;
-
-                    #endregion
-
-                    break;
-                }
             }
         }
 
@@ -707,27 +656,27 @@ namespace LeagueSharp.Common
         /// <param name="args">WndEventArgs</param>
         public void OnWndProc(WndEventArgs args)
         {
-            if (Utils.IsUnderRectangle(Utils.GetCursorPos(), position.X, position.Y, line.Width, 25f))
+            if (Utils.IsUnderRectangle(Utils.GetCursorPos(), this.position.X, this.position.Y, this.line.Width, 25f))
             {
                 #region Mouse
 
-                var message = (WindowsMessages) args.Msg;
+                var message = (WindowsMessages)args.Msg;
                 if (message == WindowsMessages.WM_LBUTTONDOWN)
                 {
-                    if (Utils.TickCount - clickTick < 0x5DC)
+                    if (Utils.TickCount - this.clickTick < 0x5DC)
                     {
-                        clickTick = Utils.TickCount;
+                        this.clickTick = Utils.TickCount;
 
                         Notifications.RemoveNotification(this);
 
-                        Draw = Update = false;
-                        if (autoDispose)
+                        this.Draw = this.Update = false;
+                        if (this.autoDispose)
                         {
-                            Dispose();
+                            this.Dispose();
                         }
                         return;
                     }
-                    clickTick = Utils.TickCount;
+                    this.clickTick = Utils.TickCount;
                 }
 
                 #endregion
@@ -735,24 +684,78 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        ///     Returns the notification's global unique identification (GUID)
+        ///     Sets the notification border color
         /// </summary>
-        /// <returns>GUID</returns>
-        public string GetId()
+        /// <param name="color">System Drawing Color</param>
+        public Notification SetBorderColor(Color color)
         {
-            return id;
+            this.BorderColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+
+            return this;
+        }
+
+        /// <summary>
+        ///     Sets the notification box color
+        /// </summary>
+        /// <param name="color">System Drawing Color</param>
+        public Notification SetBoxColor(Color color)
+        {
+            this.BoxColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+
+            return this;
+        }
+
+        /// <summary>
+        ///     Sets the notification text color
+        /// </summary>
+        /// <param name="color">System Drawing Color</param>
+        public Notification SetTextColor(Color color)
+        {
+            this.TextColor = new ColorBGRA(color.R, color.G, color.B, color.A);
+
+            return this;
+        }
+
+        /// <summary>
+        ///     Show an inactive Notification, returns boolean if successful or not.
+        /// </summary>
+        /// <param name="newDuration">Duration (-1 for Infinite)</param>
+        /// <returns></returns>
+        public bool Show(int newDuration = -0x1)
+        {
+            if (this.Draw || this.Update)
+            {
+                this.state = NotificationState.AnimationShowShrink;
+                return false;
+            }
+
+            this.startT = Utils.GameTimeTickCount;
+            this.duration = newDuration;
+
+            this.TextColor.A = 0xFF;
+            this.BoxColor.A = 0xFF;
+            this.BorderColor.A = 0xFF;
+
+            this.position = new Vector2(Drawing.Width - 200f, Notifications.GetLocation(this));
+
+            return this.Draw = this.Update = true;
         }
 
         #endregion
 
-        #region Disposal
+        #region Methods
 
         /// <summary>
-        ///     IDisposable callback
+        ///     Calculate the border into vertices
         /// </summary>
-        public void Dispose()
+        /// <param name="x">X axis</param>
+        /// <param name="y">Y axis</param>
+        /// <param name="w">Width</param>
+        /// <param name="h">Height</param>
+        /// <returns>Vector2 Array</returns>
+        private static Vector2[] GetBorder(float x, float y, float w, float h)
         {
-            Dispose(true);
+            return new[] { new Vector2(x + w / 0x2, y), new Vector2(x + w / 0x2, y + h) };
         }
 
         /// <summary>
@@ -768,46 +771,38 @@ namespace LeagueSharp.Common
 
             if (safe)
             {
-                Text = null;
+                this.Text = null;
 
-                TextColor = new ColorBGRA();
-                BoxColor = new ColorBGRA();
-                BorderColor = new ColorBGRA();
+                this.TextColor = new ColorBGRA();
+                this.BoxColor = new ColorBGRA();
+                this.BorderColor = new ColorBGRA();
 
-                Font.Dispose();
-                Font = null;
+                this.Font.Dispose();
+                this.Font = null;
 
-                line.Dispose();
-                sprite.Dispose();
-                Draw = false;
-                Update = false;
+                this.line.Dispose();
+                this.sprite.Dispose();
+                this.Draw = false;
+                this.Update = false;
 
-                duration = 0;
+                this.duration = 0;
 
                 Notifications.RemoveNotification(this);
 
-                position = Vector2.Zero;
-                updatePosition = Vector2.Zero;
+                this.position = Vector2.Zero;
+                this.updatePosition = Vector2.Zero;
 
-                state = 0;
+                this.state = 0;
 
-                textFix = Vector2.Zero;
+                this.textFix = Vector2.Zero;
 
-                flashing = false;
-                flashInterval = 0;
-                flashTick = 0;
-                clickTick = 0;
+                this.flashing = false;
+                this.flashInterval = 0;
+                this.flashTick = 0;
+                this.clickTick = 0;
 
-                border = false;
+                this.border = false;
             }
-        }
-
-        /// <summary>
-        ///     Finalization
-        /// </summary>
-        ~Notification()
-        {
-            Dispose(false);
         }
 
         #endregion
