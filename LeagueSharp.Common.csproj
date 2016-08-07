@@ -70,6 +70,12 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
       <HintPath>C:\Program Files (x86)\PlaySharp\References\clipper_library.dll</HintPath>
@@ -187,6 +193,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Key.snk" />
     <None Include="Resources\CPForm.png" />
   </ItemGroup>
   <ItemGroup />
