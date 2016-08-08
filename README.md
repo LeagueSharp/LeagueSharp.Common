@@ -7,6 +7,12 @@ The LeagueSharp platform, common library is our main support library for all ass
 When starting development with our library, we recommend to overview some of our existing code, examples are available on the forums.
 Additionally, you're able to dig into the files and start reading how to code operates, most of the codes are self-explanatory with proper field/property/function names but documentation is available.
 
+## License
+
+Works that are created for use on joduska.me or other PlaySharp affiliated sites don't need to request a license. For everything else please contact us.
+
+If you contribute to this library you assign licensing use to us.
+
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning.
