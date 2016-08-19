@@ -98,6 +98,11 @@
                         {
                             _selectedLanguage = "Chinese";
                         }
+
+                        if (_selectedLanguage.StartsWith("zh"))
+                        {
+                            _selectedLanguage = "Chinese";
+                        }
                     }
                     catch (Exception)
                     {
