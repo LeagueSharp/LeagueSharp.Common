@@ -736,6 +736,19 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Kled
+
+            p = new PassiveDamage
+            {
+                ChampionName = "Kled",
+                IsActive = (source, target) => source.HasBuff("kledwactive") && source.GetBuffCount("kledwactive") == 3,
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
+            };
+
+            AttackPassives.Add(p);
+
+            #endregion
+
             #region KogMaw
 
             p = new PassiveDamage
@@ -3890,6 +3903,57 @@ namespace LeagueSharp.Common
                                     + target.MaxHealth * 0.05f
                             },
                     });
+
+            Spells.Add(
+                "Kled",
+                new List<DamageSpell>
+                {
+                       //Q
+                       new DamageSpell
+                           {
+                               Slot = SpellSlot.Q, DamageType = DamageType.Physical,
+                               Damage =
+                                   (source, target, level) => (source.Spellbook.GetSpell(SpellSlot.Q).Name == "KledQ") ?
+                                    new double[] { 25, 50, 75, 100, 125 }[level] + source.TotalAttackDamage * 0.6f : 
+                                    new double[] { 30, 45, 60, 75, 90 }[level] + source.TotalAttackDamage * 0.8f
+                           },
+                       //Q Second 
+                       new DamageSpell
+                           {
+                               Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Physical,
+                               Damage =
+                                   (source, target, level) =>
+                                    new double[] { 50, 100, 150, 200, 250 }[level]
+                                    + source.TotalAttackDamage * 1.2f
+                           },
+                       //W 
+                       new DamageSpell
+                           {
+                               Slot = SpellSlot.W, DamageType = DamageType.Physical,
+                               Damage =
+                                   (source, target, level) =>
+                                    new double[] { 20, 30, 40, 50, 60 }[level]
+                                    +  (new double[] { 4, 5, 6, 7, 8}[level] / 100) * target.MaxHealth
+                           },
+                        //E
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.E, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    new double[] { 20, 45, 70, 95, 120 }[level]
+                                    + source.TotalAttackDamage * 0.6f
+                            },
+                        //R
+                        new DamageSpell
+                            {
+                                Slot = SpellSlot.E, DamageType = DamageType.Physical,
+                                Damage =
+                                    (source, target, level) =>
+                                    (new double[] { 12, 15, 18 }[level] / 100)
+                                    * target.MaxHealth
+                            },
+                     });
 
             Spells.Add(
                 "LeBlanc",
