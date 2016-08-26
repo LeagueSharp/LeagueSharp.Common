@@ -6954,7 +6954,16 @@ namespace LeagueSharp.Common
             bool includePassive = false)
         {
             double result = source.TotalAttackDamage;
-            var k = source.CharData.BaseSkinName == "Kalista" ? 0.9d : 1d;
+            var k = 1d;
+            if (source.CharData.BaseSkinName == "Kalista")
+            {
+                k = 0.9d;
+            }
+            if (source.CharData.BaseSkinName == "Kled" && 
+                ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
+            {
+                k = 0.8d;
+            }
 
             if (!includePassive)
             {
