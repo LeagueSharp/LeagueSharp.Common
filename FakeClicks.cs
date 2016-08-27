@@ -97,8 +97,10 @@ namespace LeagueSharp.Common
         {
             CustomEvents.Game.OnGameLoad -= Game_OnGameLoad;
             Obj_AI_Base.OnNewPath -= DrawFake;
+            /*
             Orbwalking.BeforeAttack -= BeforeAttackFake;
             Spellbook.OnCastSpell -= BeforeSpellCast;
+            */
             Orbwalking.AfterAttack -= AfterAttack;
             Obj_AI_Base.OnIssueOrder -= OnIssueOrder;
 
@@ -128,6 +130,7 @@ namespace LeagueSharp.Common
             }
         }
 
+        /*
         /// <summary>
         ///     The before attack fake click.
         ///     Currently used for the second style of fake clicks
@@ -167,6 +170,7 @@ namespace LeagueSharp.Common
                 ShowClick(args.Target.Position, ClickType.Attack);
             }
         }
+        */
 
         /// <summary>
         ///     The on new path fake.
@@ -213,8 +217,10 @@ namespace LeagueSharp.Common
             player = ObjectManager.Player;
 
             Obj_AI_Base.OnNewPath += DrawFake;
+            /*
             Orbwalking.BeforeAttack += BeforeAttackFake;
             Spellbook.OnCastSpell += BeforeSpellCast;
+            */
             Orbwalking.AfterAttack += AfterAttack;
             Obj_AI_Base.OnIssueOrder += OnIssueOrder;
         }
@@ -239,11 +245,7 @@ namespace LeagueSharp.Common
             {
                 var vect = args.TargetPosition;
                 vect.Z = player.Position.Z;
-                if (args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AttackTo)
-                {
-                    ShowClick(RandomizePosition(vect), ClickType.Attack);
-                }
-                else
+                if (args.Order != GameObjectOrder.AttackUnit && args.Order != GameObjectOrder.AttackTo)
                 {
                     ShowClick(vect, ClickType.Move);
                 }
