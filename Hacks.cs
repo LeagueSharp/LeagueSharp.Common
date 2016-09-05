@@ -25,6 +25,74 @@
 
         private static MenuItem MenuTowerRange;
 
+        public static bool AntiAFK
+        {
+            get
+            {
+                return LeagueSharp.Hacks.AntiAFK;
+            }
+            set
+            {
+                if (value == LeagueSharp.Hacks.AntiAFK)
+                {
+                    return;
+                }
+
+                LeagueSharp.Hacks.AntiAFK = value;
+            }
+        }
+
+        public static bool DisableDrawings
+        {
+            get
+            {
+                return LeagueSharp.Hacks.DisableDrawings;
+            }
+            set
+            {
+                if (value == LeagueSharp.Hacks.DisableDrawings)
+                {
+                    return;
+                }
+
+                LeagueSharp.Hacks.DisableDrawings = value;
+            }
+        }
+
+        public static bool DisableSay
+        {
+            get
+            {
+                return LeagueSharp.Hacks.DisableSay;
+            }
+            set
+            {
+                if (value == LeagueSharp.Hacks.DisableSay)
+                {
+                    return;
+                }
+
+                LeagueSharp.Hacks.DisableSay = value;
+            }
+        }
+
+        public static bool TowerRanges
+        {
+            get
+            {
+                return LeagueSharp.Hacks.TowerRanges;
+            }
+            set
+            {
+                if (value == LeagueSharp.Hacks.TowerRanges)
+                {
+                    return;
+                }
+
+                LeagueSharp.Hacks.TowerRanges = value;
+            }
+        }
+
         #endregion
 
         #region Public Methods and Operators
@@ -48,28 +116,22 @@
                     menu = new Menu("Hacks", "Hacks");
 
                     MenuAntiAfk = menu.AddItem(new MenuItem("AfkHack", "Anti-AFK").SetValue(false));
-                    MenuAntiAfk.ValueChanged += (sender, args) => LeagueSharp.Hacks.AntiAFK = args.GetNewValue<bool>();
+                    MenuAntiAfk.ValueChanged += (sender, args) => AntiAFK = args.GetNewValue<bool>();
 
                     MenuDisableDrawings = menu.AddItem(new MenuItem("DrawingHack", "Disable Drawing").SetValue(false));
-                    MenuDisableDrawings.ValueChanged +=
-                        (sender, args) => LeagueSharp.Hacks.DisableDrawings = args.GetNewValue<bool>();
-                    MenuDisableDrawings.SetValue(LeagueSharp.Hacks.DisableDrawings);
+                    MenuDisableDrawings.ValueChanged += (sender, args) => DisableDrawings = args.GetNewValue<bool>();
+                    MenuDisableDrawings.SetValue(DisableDrawings);
 
-                    MenuDisableSay =
-                        menu.AddItem(
-                            new MenuItem("SayHack", "Disable L# Send Chat").SetValue(false)
-                                .SetTooltip("Block Game.Say from Assemblies"));
-                    MenuDisableSay.ValueChanged +=
-                        (sender, args) => LeagueSharp.Hacks.DisableSay = args.GetNewValue<bool>();
+                    MenuDisableSay = menu.AddItem(new MenuItem("SayHack", "Disable L# Send Chat").SetValue(false).SetTooltip("Block Game.Say from Assemblies"));
+                    MenuDisableSay.ValueChanged += (sender, args) => DisableSay = args.GetNewValue<bool>();
 
                     MenuTowerRange = menu.AddItem(new MenuItem("TowerHack", "Show Tower Ranges").SetValue(false));
-                    MenuTowerRange.ValueChanged +=
-                        (sender, args) => LeagueSharp.Hacks.TowerRanges = args.GetNewValue<bool>();
+                    MenuTowerRange.ValueChanged += (sender, args) => TowerRanges = args.GetNewValue<bool>();
 
-                    LeagueSharp.Hacks.AntiAFK = MenuAntiAfk.GetValue<bool>();
-                    LeagueSharp.Hacks.DisableDrawings = MenuDisableDrawings.GetValue<bool>();
-                    LeagueSharp.Hacks.DisableSay = MenuDisableSay.GetValue<bool>();
-                    LeagueSharp.Hacks.TowerRanges = MenuTowerRange.GetValue<bool>();
+                    AntiAFK = MenuAntiAfk.GetValue<bool>();
+                    DisableDrawings = MenuDisableDrawings.GetValue<bool>();
+                    DisableSay = MenuDisableSay.GetValue<bool>();
+                    TowerRanges = MenuTowerRange.GetValue<bool>();
 
                     CommonMenu.Instance.AddSubMenu(menu);
 
