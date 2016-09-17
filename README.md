@@ -1,6 +1,6 @@
 # LeagueSharp.Common
 
-The LeagueSharp platform, common library is our main support library for all assemblies, containing code which are part of a system or sort of system, required or commonly used data, supporting interfaces designed to assist assemblies which make use of the platform scope.
+The LeagueSharp platform, common library is our main support library for all assemblies, containing code which are part of a system or sort of system, required or commonly used data, supporting interfaces designed to assist assemblies which make use of the platform scope. It is made by the whole community to allow a universal standard.
 
 ## Getting Started
 
@@ -9,7 +9,7 @@ Additionally, you're able to dig into the files and start reading how to code op
 
 ## License
 
-Works that are created for use on joduska.me or other PlaySharp affiliated sites don't need to request a license. For everything else please contact us.
+Works that are created for use on joduska.me or other PlaySharp affiliated sites can freely use this project.
 
 If you contribute to this library you assign licensing use to us.
 
