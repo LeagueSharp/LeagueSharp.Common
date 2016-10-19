@@ -90,7 +90,6 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void Initialize()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         public static void Shutdown()
@@ -212,7 +211,7 @@ namespace LeagueSharp.Common
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))
                 .SetValue(new StringList(new[] { "Evade, No Cursor Position", "Cursor Position, No Evade" }));
 
-            CommonMenu.Instance.AddSubMenu(root);
+            //TODO: LibraryMenu.InstanceMenu.AddSubMenu(root);
 
             player = ObjectManager.Player;
 

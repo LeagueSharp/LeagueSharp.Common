@@ -106,7 +106,7 @@
                                        CastPosition = mecCircle.Center.To3D(),
                                        UnitPosition = mainTargetPrediction.UnitPosition,
                                        Hitchance = mainTargetPrediction.Hitchance, Input = input,
-                                       AoeTargetsHitCountBackingField = posibleTargets.Count
+                                       AoeTargetsHitCount = posibleTargets.Count
                                    };
                     }
 
@@ -203,7 +203,7 @@
                         return new PredictionOutput
                                    {
                                        Hitchance = mainTargetPrediction.Hitchance,
-                                       AoeTargetsHitCountBackingField = bestCandidateHits,
+                                       AoeTargetsHitCount = bestCandidateHits,
                                        UnitPosition = mainTargetPrediction.UnitPosition,
                                        CastPosition = bestCandidate.To3D(), Input = input
                                    };
@@ -335,7 +335,7 @@
                         return new PredictionOutput
                                    {
                                        Hitchance = mainTargetPrediction.Hitchance,
-                                       AoeTargetsHitCountBackingField = bestCandidateHits,
+                                       AoeTargetsHitCount = bestCandidateHits,
                                        UnitPosition = mainTargetPrediction.UnitPosition,
                                        CastPosition = ((p1 + p2) * 0.5f).To3D(), Input = input
                                    };

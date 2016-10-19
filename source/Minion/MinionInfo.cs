@@ -46,31 +46,27 @@ namespace LeagueSharp.Common
 
             this.IsMinion = minion.Name.Contains("Minion");
             this.IsWard = minion.Name.Contains("Ward");
-
-            var isJungleMob = false;
-            if (SmallNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex)))
-            {
-                this.JungleType = JungleType.Small;
-                isJungleMob = true;
-            }
-            else if (LargeNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex)))
-            {
-                this.JungleType = JungleType.Large;
-                isJungleMob = true;
-            }
-            else if (LegendaryNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex)))
-            {
-                this.JungleType = JungleType.Legendary;
-                isJungleMob = true;
-            }
-
-            this.IsJungleMob = isJungleMob;
+            this.JungleType = SmallNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex))
+                                  ? JungleType.Small
+                                  : LargeNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex))
+                                      ? JungleType.Large
+                                      : LegendaryNameRegex.Any(regex => Regex.IsMatch(minion.Name, regex))
+                                          ? JungleType.Legendary
+                                          : JungleType.Unknown;
+            this.IsJungleMob = this.JungleType != JungleType.Unknown;
             this.IsComponent = !this.IsMinion && !this.IsWard && !this.IsJungleMob;
             this.IsJungleBuff = minion.CharData.BaseSkinName.Equals("SRU_Blue")
                                 || minion.CharData.BaseSkinName.Equals("SRU_Red");
 
             if (this.IsMinion)
             {
+                this.Level = minion.MinionLevel;
+                if (this.Level == 0)
+                {
+                    var levels = ObjectManager.Get<Obj_AI_Hero>().Where(h => h.Team == minion.Team).Select(s => s.Level).ToArray();
+                    this.Level = levels.Any() ? (int)Math.Round(levels.Average()) : 1;
+                }
+
                 var regex =
                     new Regex(@"Minion_T(?<Team>\d+)+L(?<Lane>\d+)+S(?<Wave>\d+)+N(?<Index>\d+)").Match(minion.Name);
                 if (!regex.Success)
@@ -78,9 +74,9 @@ namespace LeagueSharp.Common
                     return;
                 }
 
-                this.Lane = (LaneType)Convert.ToInt32(regex.Groups["Lane"]);
-                this.Wave = Convert.ToInt32(regex.Groups["Wave"]);
-                this.Index = Convert.ToInt32(regex.Groups["Index"]);
+                this.Lane = (LaneType)Convert.ToInt32(regex.Groups["Lane"].Value);
+                this.Wave = Convert.ToInt32(regex.Groups["Wave"].Value);
+                this.Index = Convert.ToInt32(regex.Groups["Index"].Value);
             }
         }
 
@@ -132,6 +128,11 @@ namespace LeagueSharp.Common
         ///     Gets the lane.
         /// </summary>
         public LaneType Lane { get; }
+
+        /// <summary>
+        ///     Gets the minion level.
+        /// </summary>
+        public int Level { get; }
 
         /// <summary>
         ///     Gets the wave.

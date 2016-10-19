@@ -16,7 +16,7 @@ namespace LeagueSharp.Common
     {
         #region Fields
 
-        internal int AoeTargetsHitCountBackingField;
+        private int aoeTargetsHitCountBackingField;
 
         private Vector3 castPositionBackingField;
 
@@ -32,9 +32,20 @@ namespace LeagueSharp.Common
         public List<Obj_AI_Hero> AoeTargetsHit { get; set; } = new List<Obj_AI_Hero>();
 
         /// <summary>
-        ///     Gets the area of effect targets hit count.
+        ///     Gets or sets the area of effect targets hit count.
         /// </summary>
-        public int AoeTargetsHitCount => Math.Max(this.AoeTargetsHitCountBackingField, this.AoeTargetsHit.Count);
+        public int AoeTargetsHitCount
+        {
+            get
+            {
+                return Math.Max(this.aoeTargetsHitCountBackingField, this.AoeTargetsHit.Count);
+            }
+
+            set
+            {
+                this.aoeTargetsHitCountBackingField = value;
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the cast position.

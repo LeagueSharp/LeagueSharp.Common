@@ -1,4 +1,8 @@
-﻿namespace LeagueSharp.Common
+﻿// <copyright file="KeyBindType.cs" company="LeagueSharp">
+// Copyright (c) LeagueSharp. All rights reserved.
+// </copyright>
+
+namespace LeagueSharp.Common
 {
     /// <summary>
     ///     The KeyBind enum, representing the type of the keybind.

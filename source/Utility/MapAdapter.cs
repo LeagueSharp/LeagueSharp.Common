@@ -60,7 +60,7 @@ namespace LeagueSharp.Common
             /// <returns>
             ///     The <see cref="IMap" />.
             /// </returns>
-            public static IMap GetMap() => Library.Instance?.Map?.GetCurrentMap();
+            public static IMap GetMap() => Instances.Map?.GetCurrentMap();
 
             #endregion
         }

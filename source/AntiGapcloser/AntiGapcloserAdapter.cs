@@ -51,7 +51,7 @@ namespace LeagueSharp.Common
 
         #region Properties
 
-        private static AntiGapcloser Instance => Library.Instance?.AntiGapcloser;
+        private static AntiGapcloser Instance => Instances.AntiGapcloser;
 
         #endregion
 

@@ -7,16 +7,18 @@ namespace LeagueSharp.Common
     using System;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Security.Permissions;
     using System.Text;
     using System.Threading;
 
+    using LeagueSharp.Common.Configuration;
+
     using PlaySharp.Toolkit.AppDomain.Loader;
-    using PlaySharp.Toolkit.EventAggregator;
 
     /// <summary>
-    ///     Library entry point for external service loading.
+    ///     The library manager.
     /// </summary>
     public class Library : ILibrary
     {
@@ -25,11 +27,56 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Initializes a new instance of the <see cref="Library" /> class.
         /// </summary>
-        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         public Library()
         {
-            Instance = this;
+            Instances.Library = this;
+        }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <inheritdoc />
+        public void Configure(CompositionContainer container)
+        {
+            ExpandConsole();
+            CreateInstances(container);
+        }
+
+        /// <inheritdoc />
+        public void Unload()
+        {
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Creates static instances to support old API.
+        /// </summary>
+        /// <param name="container">
+        ///     The composition container.
+        /// </param>
+        private static void CreateInstances(CompositionContainer container)
+        {
+            Instances.AntiGapcloser = Export(container, new AntiGapcloser());
+            Instances.Damage = Export(container, new Damage());
+            Instances.Dash = Export(container, new Dash());
+            Instances.GameEvents = Export(container, new CustomEvents.Game());
+            Instances.HeroManager = Export(container, new HeroManager());
+            Instances.Map = Export(container, new Utility.Map());
+            Instances.MinionManager = Export(container, new MinionManager());
+            Instances.UnitEvents = Export(container, new CustomEvents.Unit());
+            Instances.MenuManager = Export(container, new MenuManager());
+        }
+
+        /// <summary>
+        ///     Expands the console on debug, requires permissions.
+        /// </summary>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        private static void ExpandConsole()
+        {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -41,80 +88,26 @@ namespace LeagueSharp.Common
             Console.WindowHeight = Console.LargestWindowHeight / 2;
         }
 
-        #endregion
-
-        #region Public Properties
-
         /// <summary>
-        ///     Gets the library instance.
+        ///     Composes exported value macro.
         /// </summary>
-        public static Library Instance { get; private set; }
-
-        /// <summary>
-        ///     Gets the anti gapcloser.
-        /// </summary>
-        [Import(typeof(AntiGapcloser))]
-        public AntiGapcloser AntiGapcloser { get; private set; }
-
-        /// <summary>
-        ///     Gets the damage calculation system.
-        /// </summary>
-        [Import(typeof(Damage))]
-        public Damage Damage { get; private set; }
-
-        /// <summary>
-        ///     Gets the dash system.
-        /// </summary>
-        [Import(typeof(Dash))]
-        public Dash Dash { get; private set; }
-
-        /// <summary>
-        ///     Gets the event aggregator.
-        /// </summary>
-        [Import(typeof(IEventAggregator))]
-        public IEventAggregator EventAggregator { get; private set; }
-
-        /// <summary>
-        ///     Gets the game custom events.
-        /// </summary>
-        [Import(typeof(CustomEvents.Game))]
-        public CustomEvents.Game GameEvents { get; private set; }
-
-        /// <summary>
-        ///     Gets the map.
-        /// </summary>
-        [Import(typeof(Utility.Map))]
-        public Utility.Map Map { get; private set; }
-
-        /// <summary>
-        ///     Gets the minion manager.
-        /// </summary>
-        [Import(typeof(MinionManager))]
-        public MinionManager MinionManager { get; private set; }
-
-        /// <summary>
-        ///     Gets the unit custom events.
-        /// </summary>
-        [Import(typeof(CustomEvents.Unit))]
-        public CustomEvents.Unit UnitEvents { get; private set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <inheritdoc />
-        public void Configure(CompositionContainer container)
+        /// <typeparam name="T">
+        ///     The value type.
+        /// </typeparam>
+        /// <param name="container">
+        ///     The container.
+        /// </param>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
+        /// <returns>
+        ///     The value composed.
+        /// </returns>
+        private static T Export<T>(CompositionContainer container, T value)
         {
-            this.EventAggregator.Subscribe(this.GameEvents);
-            this.EventAggregator.Subscribe(this.UnitEvents);
-            this.Damage.SortSpells();
-        }
-
-        /// <inheritdoc />
-        public void Unload()
-        {
-            Render.Terminate();
-            Render.Circle.Dispose(this, EventArgs.Empty);
+            container.SatisfyImportsOnce(value);
+            container.ComposeExportedValue(value);
+            return value;
         }
 
         #endregion

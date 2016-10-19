@@ -159,9 +159,9 @@ namespace LeagueSharp.Common
             /// </summary>
             internal void SubscribeToResetEvents()
             {
-                Drawing.OnPreReset += args => this.OnPreReset();
-                Drawing.OnPostReset += args => this.OnPostReset();
-                AppDomain.CurrentDomain.DomainUnload += (sender, args) => this.OnPreReset();
+                /*Drawing.OnPreReset += this.DrawingOnOnPreReset;
+                Drawing.OnPostReset += this.DrawingOnOnPostReset;
+                AppDomain.CurrentDomain.DomainUnload += this.CurrentDomainOnDomainUnload;*/
             }
 
             /// <summary>
@@ -177,7 +177,26 @@ namespace LeagueSharp.Common
                     return;
                 }
 
+                /*Drawing.OnPreReset -= this.DrawingOnOnPreReset;
+                Drawing.OnPostReset -= this.DrawingOnOnPostReset;
+                AppDomain.CurrentDomain.DomainUnload -= this.CurrentDomainOnDomainUnload;*/
+
                 this.IsDisposed = true;
+            }
+
+            private void CurrentDomainOnDomainUnload(object sender, EventArgs eventArgs)
+            {
+                this.OnPostReset();
+            }
+
+            private void DrawingOnOnPostReset(EventArgs args)
+            {
+                this.OnPostReset();
+            }
+
+            private void DrawingOnOnPreReset(EventArgs args)
+            {
+                this.OnPreReset();
             }
 
             #endregion

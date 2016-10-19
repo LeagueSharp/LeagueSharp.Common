@@ -50,6 +50,15 @@
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets the menu item reference.
+        /// </summary>
+        internal MenuItem MenuItemReference { get; set; }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>

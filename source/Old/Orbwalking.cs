@@ -1652,8 +1652,8 @@ namespace LeagueSharp.Common
                         _config.Item("AALineWidth").GetValue<Slider>().Value,
                         true);
                 }
-                _config.Item("FocusMinionsOverTurrets")
-                    .Permashow(_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active);
+                /*_config.Item("FocusMinionsOverTurrets")
+                    .Permashow(_config.Item("FocusMinionsOverTurrets").GetValue<KeyBind>().Active);*/
 
                 if (_config.Item("LastHitHelper").GetValue<bool>())
                 {

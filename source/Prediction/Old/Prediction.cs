@@ -91,18 +91,12 @@ namespace LeagueSharp.Common
             return GetPrediction(input, true, true);
         }
 
-        /// <summary>
-        ///     Initializes this instance.
-        /// </summary>
-        public static void Initialize()
+        public static void Initialize(Menu menu)
         {
-            CustomEvents.Game.OnGameLoad += eventArgs =>
-                {
-                    _menu = new Menu("Prediction", "Prediction");
-                    var slider = new MenuItem("PredMaxRange", "Max Range %").SetValue(new Slider(100, 70, 100));
-                    _menu.AddItem(slider);
-                    CommonMenu.Instance.AddSubMenu(_menu);
-                };
+            _menu = new Menu("Prediction", "Prediction");
+            var slider = new MenuItem("PredMaxRange", "Max Range %").SetValue(new Slider(100, 70, 100));
+            _menu.AddItem(slider);
+            menu.AddSubMenu(_menu);
         }
 
         public static void Shutdown()
@@ -365,7 +359,8 @@ namespace LeagueSharp.Common
                 }
                 else
                 {
-                    input.Range = input.Range * CommonMenu.Instance.Item("PredMaxRange").GetValue<Slider>().Value / 100f;
+                    input.Range = input.Range * Instances.MenuManager.Menu.Item("PredMaxRange").GetValue<Slider>().Value
+                                  / 100f;
                 }
             }
 

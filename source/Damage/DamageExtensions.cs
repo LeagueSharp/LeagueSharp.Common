@@ -17,7 +17,7 @@ namespace LeagueSharp.Common
     {
         #region Properties
 
-        private static Damage Instance => Library.Instance?.Damage;
+        private static Damage Instance => Instances.Damage;
 
         #endregion
 

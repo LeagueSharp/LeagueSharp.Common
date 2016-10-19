@@ -7,13 +7,9 @@ namespace LeagueSharp.Common
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
-
-    using log4net;
 
     using PlaySharp.Toolkit.AppDomain.Messages;
     using PlaySharp.Toolkit.EventAggregator;
-    using PlaySharp.Toolkit.Logging;
 
     /// <summary>
     ///     Provides custom defined events.
@@ -55,8 +51,6 @@ namespace LeagueSharp.Common
             #region Properties
 
             private List<Delegate> InvocationList { get; } = new List<Delegate>();
-
-            private ILog Log { get; } = AssemblyLogs.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
             #endregion
 

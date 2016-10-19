@@ -23,6 +23,7 @@ namespace LeagueSharp.Common
         {
             GameObject.OnCreate += this.OnCreate;
             GameObject.OnDelete += this.OnDelete;
+            CustomEvents.Game.OnGameLoad += this.OnLoad;
         }
 
         #endregion
@@ -41,7 +42,7 @@ namespace LeagueSharp.Common
         private void OnCreate(GameObject sender, EventArgs args)
         {
             var minion = sender as Obj_AI_Minion;
-            if (minion != null)
+            if (minion != null && !this.MinionInfos.ContainsKey(minion.NetworkId))
             {
                 this.MinionInfos.Add(minion.NetworkId, new MinionInfo(minion));
             }
@@ -53,6 +54,17 @@ namespace LeagueSharp.Common
             if (minion != null && this.MinionInfos.ContainsKey(minion.NetworkId))
             {
                 this.MinionInfos.Remove(minion.NetworkId);
+            }
+        }
+
+        private void OnLoad(EventArgs eventArgs)
+        {
+            foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
+            {
+                if (!this.MinionInfos.ContainsKey(obj.NetworkId))
+                {
+                    this.MinionInfos.Add(obj.NetworkId, new MinionInfo(obj));
+                }
             }
         }
 

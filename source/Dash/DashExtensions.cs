@@ -20,7 +20,7 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The <see cref="Dash.DashItem" />.
         /// </returns>
-        public static Dash.DashItem GetDashInfo(this Obj_AI_Base unit) => Library.Instance?.Dash?.GetDashInfo(unit);
+        public static Dash.DashItem GetDashInfo(this Obj_AI_Base unit) => Instances.Dash?.GetDashInfo(unit);
 
         /// <summary>
         ///     Determines if the unit is dashing.
@@ -31,7 +31,7 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
-        public static bool IsDashing(this Obj_AI_Base unit) => Library.Instance?.Dash?.IsDashing(unit) ?? false;
+        public static bool IsDashing(this Obj_AI_Base unit) => Instances.Dash?.IsDashing(unit) ?? false;
 
         #endregion
     }

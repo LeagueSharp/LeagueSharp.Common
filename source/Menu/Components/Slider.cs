@@ -1,24 +1,21 @@
-﻿namespace LeagueSharp.Common
+﻿// <copyright file="Slider.cs" company="LeagueSharp">
+// Copyright (c) LeagueSharp. All rights reserved.
+// </copyright>
+
+namespace LeagueSharp.Common
 {
     using System;
+    using System.Runtime.Serialization;
+
+    using SharpDX.Menu;
 
     /// <summary>
     ///     The menu slider.
     /// </summary>
-    [Serializable]
-    public struct Slider
+    [DataContract]
+    public class Slider : IUpdateableValue<Slider>
     {
         #region Fields
-
-        /// <summary>
-        ///     The maximum value.
-        /// </summary>
-        public int MaxValue;
-
-        /// <summary>
-        ///     The minimum value.
-        /// </summary>
-        public int MinValue;
 
         /// <summary>
         ///     The value.
@@ -30,7 +27,7 @@
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Slider" /> struct.
+        ///     Initializes a new instance of the <see cref="Slider" /> class.
         /// </summary>
         /// <param name="value">
         ///     The value.
@@ -53,8 +50,19 @@
         #region Public Properties
 
         /// <summary>
+        ///     Gets or sets the maximum value.
+        /// </summary>
+        public int MaxValue { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the minimum value.
+        /// </summary>
+        public int MinValue { get; set; }
+
+        /// <summary>
         ///     Gets or sets the value.
         /// </summary>
+        [DataMember]
         public int Value
         {
             get
@@ -66,6 +74,16 @@
             {
                 this.value = Math.Min(Math.Max(value, this.MinValue), this.MaxValue);
             }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <inheritdoc />
+        public void Update(Slider newValue)
+        {
+            this.Value = newValue.Value;
         }
 
         #endregion

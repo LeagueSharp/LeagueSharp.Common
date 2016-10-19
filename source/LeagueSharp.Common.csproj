@@ -77,10 +77,14 @@
     <Reference Include="SharpDX.Direct3D9">
       <HintPath>Z:\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.Menu">
+      <HintPath>Z:\References\SharpDX.Menu.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
@@ -659,7 +663,41 @@
     <Compile Include="Geometry\Rectangle.cs" />
     <Compile Include="Geometry\Ring.cs" />
     <Compile Include="Geometry\Sector.cs" />
+    <Compile Include="Instances.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="Menu\Components\SliderBool.cs" />
+    <Compile Include="Menu\Configuration\DataAggregator.cs" />
+    <Compile Include="Menu\Configuration\DrawingViewFactory.cs" />
+    <Compile Include="Menu\Core\MenuAdapater.cs" />
+    <Compile Include="Menu\Configuration\MenuController.cs" />
+    <Compile Include="Menu\Components\Circle.cs" />
+    <Compile Include="Menu\Items\ColorPicker.cs" />
+    <Compile Include="Menu\Items\CPSlider.cs" />
+    <Compile Include="Menu\Items\HSLColor.cs" />
+    <Compile Include="Menu\Components\KeyBind.cs" />
+    <Compile Include="Menu\Components\KeybindSetStage.cs" />
+    <Compile Include="Menu\Components\KeyBindType.cs" />
+    <Compile Include="Menu\Core\Menu.cs" />
+    <Compile Include="Menu\Configuration\MenuManager.cs" />
+    <Compile Include="Menu\Components\Slider.cs" />
+    <Compile Include="Menu\MenuGlobals.cs" />
+    <Compile Include="Menu\Core\MenuItem.cs" />
+    <Compile Include="Menu\Core\MenuSettings.cs" />
+    <Compile Include="Menu\OnValueChangeEventArgs.cs" />
+    <Compile Include="Menu\Components\StringList.cs" />
+    <Compile Include="Menu\View\DxColorView.cs" />
+    <Compile Include="Menu\View\CircleView.cs" />
+    <Compile Include="Menu\View\SystemColorView.cs" />
+    <Compile Include="Menu\View\KeybindView.cs" />
+    <Compile Include="Menu\View\BoolView.cs" />
+    <Compile Include="Menu\View\SliderBoolView.cs" />
+    <Compile Include="Menu\View\SliderView.cs" />
+    <Compile Include="Menu\View\StringListView.cs" />
+    <Compile Include="Menu\View\ComponentView.cs" />
+    <Compile Include="Menu\View\IViewAttributes.cs" />
+    <Compile Include="Menu\View\MenuView.cs" />
+    <Compile Include="Menu\View\SharedView.cs" />
+    <Compile Include="Menu\View\ViewAttributes.cs" />
     <Compile Include="Minion\FarmLocation.cs" />
     <Compile Include="Minion\JungleType.cs" />
     <Compile Include="Minion\LaneType.cs" />
@@ -673,6 +711,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Native\Config.cs" />
+    <Compile Include="Native\MultiLanguageAdapter.cs" />
     <Compile Include="Native\Shared.cs" />
     <Compile Include="Old\AutoLevel.cs" />
     <Compile Include="Old\CustomizableAntiGapcloser.cs" />
@@ -682,38 +721,20 @@
     <Compile Include="Old\FakeClicks.cs" />
     <Compile Include="Old\Hacks.cs" />
     <Compile Include="Old\HealthPrediction.cs" />
-    <Compile Include="Old\HeroManager.cs" />
+    <Compile Include="Native\HeroManager.cs" />
     <Compile Include="Old\Interrupter.cs" />
     <Compile Include="Old\Interrupter2.cs" />
     <Compile Include="Old\Items.cs" />
     <Compile Include="Old\LastCastedSpell.cs" />
     <Compile Include="Old\MapPositions.cs" />
     <Compile Include="Old\MenuWrapper.cs" />
-    <Compile Include="Old\Menu\Circle.cs" />
-    <Compile Include="Old\Menu\ColorPicker.cs" />
-    <Compile Include="Old\Menu\CommonMenu.cs" />
-    <Compile Include="Old\Menu\CPSlider.cs" />
-    <Compile Include="Old\Menu\HSLColor.cs" />
-    <Compile Include="Old\Menu\KeyBind.cs" />
-    <Compile Include="Old\Menu\KeybindSetStage.cs" />
-    <Compile Include="Old\Menu\KeyBindType.cs" />
-    <Compile Include="Old\Menu\Menu.cs" />
-    <Compile Include="Old\Menu\MenuDrawHelper.cs" />
-    <Compile Include="Old\Menu\MenuGlobals.cs" />
-    <Compile Include="Old\Menu\MenuItem.cs" />
-    <Compile Include="Old\Menu\MenuSettings.cs" />
-    <Compile Include="Old\Menu\MenuValueType.cs" />
-    <Compile Include="Old\Menu\OnValueChangeEventArgs.cs" />
-    <Compile Include="Old\Menu\SavedSettings.cs" />
-    <Compile Include="Old\Menu\Slider.cs" />
-    <Compile Include="Old\Menu\StringList.cs" />
-    <Compile Include="Old\MultiLanguage.cs" />
+    <Compile Include="Native\MultiLanguage.cs" />
     <Compile Include="Old\Notifications.cs" />
     <Compile Include="Old\Notifications\INotification.cs" />
     <Compile Include="Old\Notifications\Notification.cs" />
     <Compile Include="Old\ObjectHandler.cs" />
     <Compile Include="Old\Orbwalking.cs" />
-    <Compile Include="Old\PermaShow.cs" />
+    <Compile Include="Old\Packet.cs" />
     <Compile Include="Old\Spell.cs" />
     <Compile Include="Old\TargetSelector.cs" />
     <Compile Include="Packets\GamePacket.cs" />
@@ -793,16 +814,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Damage\Passives\" />
-    <Folder Include="Menu\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CPForm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SliderActive.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SliderDisabled.png" />
+    <None Include="Resources\spectrum_chart.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

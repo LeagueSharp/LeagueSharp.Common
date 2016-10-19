@@ -26,7 +26,7 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Gets the instance.
         /// </summary>
-        public static MinionManager Instance => Library.Instance?.MinionManager;
+        public static MinionManager Instance => Instances.MinionManager;
 
         #endregion
 

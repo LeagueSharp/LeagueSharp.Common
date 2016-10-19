@@ -217,9 +217,9 @@
                 var targets =
                     HeroManager.Enemies.FindAll(
                         hero =>
-                        ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId)
-                        && IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom)
-                        && (conditions == null || conditions(hero)));
+                            ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId)
+                            && IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom)
+                            && (conditions == null || conditions(hero)));
 
                 switch (Mode)
                 {
@@ -236,9 +236,8 @@
                         return
                             targets.MinOrDefault(
                                 hero =>
-                                (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).Distance(
-                                    hero.ServerPosition,
-                                    true));
+                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition)
+                                        .Distance(hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:
                         return targets.MinOrDefault(hero => hero.Distance(Game.CursorPos, true));
@@ -247,28 +246,31 @@
                         return
                             targets.MaxOrDefault(
                                 hero =>
-                                champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero));
+                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health)
+                                    * GetPriority(hero));
 
                     case TargetingMode.LessAttack:
                         return
                             targets.MaxOrDefault(
                                 hero =>
-                                champion.CalcDamage(hero, Damage.DamageType.Physical, 100) / (1 + hero.Health)
-                                * GetPriority(hero));
+                                    champion.CalcDamage(hero, Damage.DamageType.Physical, 100) / (1 + hero.Health)
+                                    * GetPriority(hero));
 
                     case TargetingMode.LessCast:
                         return
                             targets.MaxOrDefault(
                                 hero =>
-                                champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health)
-                                * GetPriority(hero));
+                                    champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health)
+                                    * GetPriority(hero));
 
                     case TargetingMode.MostStack:
                         return
                             targets.MaxOrDefault(
                                 hero =>
-                                champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero)
-                                + (1 + hero.Buffs.Where(b => StackNames.Contains(b.Name.ToLower())).Sum(t => t.Count)));
+                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health)
+                                    * GetPriority(hero)
+                                    + (1
+                                       + hero.Buffs.Where(b => StackNames.Contains(b.Name.ToLower())).Sum(t => t.Count)));
                 }
             }
             catch (Exception e)
@@ -301,81 +303,75 @@
             return null;
         }
 
-        public static void Initialize()
+        public static void Initialize(Menu menu)
         {
-            CustomEvents.Game.OnGameLoad += args =>
+            var config = new Menu("Target Selector", "TargetSelector");
+
+            _configMenu = config;
+
+            var focusMenu = new Menu("Focus Target Settings", "FocusTargetSettings");
+
+            focusMenu.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            focusMenu.AddItem(
+                new MenuItem("SelTColor", "Focus selected target color").SetShared()
+                    .SetValue(new Circle(true, Color.Red)));
+            focusMenu.AddItem(
+                new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false));
+            focusMenu.AddItem(new MenuItem("sep", ""));
+            focusMenu.AddItem(
+                new MenuItem("ForceFocusSelectedKeys", "Enable only attack selected Keys").SetShared().SetValue(false));
+            focusMenu.AddItem(new MenuItem("ForceFocusSelectedK", "Only attack selected Key"))
+                .SetValue(new KeyBind(32, KeyBindType.Press));
+            focusMenu.AddItem(new MenuItem("ForceFocusSelectedK2", "Only attack selected Key 2"))
+                .SetValue(new KeyBind(32, KeyBindType.Press));
+            focusMenu.AddItem(new MenuItem("ResetOnRelease", "Reset selected target upon release")).SetValue(false);
+
+            config.AddSubMenu(focusMenu);
+
+            var autoPriorityItem =
+                new MenuItem("AutoPriority", "Auto arrange priorities").SetShared()
+                    .SetValue(true)
+                    .SetTooltip("5 = Highest Priority");
+            autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
+
+            foreach (var enemy in HeroManager.Enemies)
+            {
+                config.AddItem(
+                    new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
+                        .SetValue(
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1,
+                                5,
+                                1)));
+                if (autoPriorityItem.GetValue<bool>())
                 {
-                    var config = new Menu("Target Selector", "TargetSelector");
+                    config.Item("TargetSelector" + enemy.ChampionName + "Priority")
+                        .SetValue(
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1,
+                                5,
+                                1));
+                }
+            }
+            config.AddItem(autoPriorityItem);
+            config.AddItem(
+                new MenuItem("TargetingMode", "Target Mode").SetShared()
+                    .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
 
-                    _configMenu = config;
+            menu.AddSubMenu(config);
+            Game.OnWndProc += GameOnOnWndProc;
 
-                    var focusMenu = new Menu("Focus Target Settings", "FocusTargetSettings");
-
-                    focusMenu.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
-                    focusMenu.AddItem(
-                        new MenuItem("SelTColor", "Focus selected target color").SetShared()
-                            .SetValue(new Circle(true, Color.Red)));
-                    focusMenu.AddItem(
-                        new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false));
-                    focusMenu.AddItem(new MenuItem("sep", ""));
-                    focusMenu.AddItem(
-                        new MenuItem("ForceFocusSelectedKeys", "Enable only attack selected Keys").SetShared()
-                            .SetValue(false));
-                    focusMenu.AddItem(new MenuItem("ForceFocusSelectedK", "Only attack selected Key"))
-                        .SetValue(new KeyBind(32, KeyBindType.Press));
-                    focusMenu.AddItem(new MenuItem("ForceFocusSelectedK2", "Only attack selected Key 2"))
-                        .SetValue(new KeyBind(32, KeyBindType.Press));
-                    focusMenu.AddItem(new MenuItem("ResetOnRelease", "Reset selected target upon release"))
-                        .SetValue(false);
-
-                    config.AddSubMenu(focusMenu);
-
-                    var autoPriorityItem =
-                        new MenuItem("AutoPriority", "Auto arrange priorities").SetShared()
-                            .SetValue(true)
-                            .SetTooltip("5 = Highest Priority");
-                    autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
-
-                    foreach (var enemy in HeroManager.Enemies)
-                    {
-                        config.AddItem(
-                            new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName)
-                                .SetShared()
-                                .SetValue(
-                                    new Slider(
-                                        autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1,
-                                        5,
-                                        1)));
-                        if (autoPriorityItem.GetValue<bool>())
-                        {
-                            config.Item("TargetSelector" + enemy.ChampionName + "Priority")
-                                .SetValue(
-                                    new Slider(
-                                        autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1,
-                                        5,
-                                        1));
-                        }
-                    }
-                    config.AddItem(autoPriorityItem);
-                    config.AddItem(
-                        new MenuItem("TargetingMode", "Target Mode").SetShared()
-                            .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
-
-                    CommonMenu.Instance.AddSubMenu(config);
-                    Game.OnWndProc += GameOnOnWndProc;
-
-                    if (!CustomTS)
-                    {
-                        Drawing.OnDraw += DrawingOnOnDraw;
-                    }
-                };
+            if (!CustomTS)
+            {
+                Drawing.OnDraw += DrawingOnOnDraw;
+            }
         }
 
         public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
             var targetBuffs = new HashSet<string>(
-                target.Buffs.Select(buff => buff.Name),
-                StringComparer.OrdinalIgnoreCase);
+                                  target.Buffs.Select(buff => buff.Name),
+                                  StringComparer.OrdinalIgnoreCase);
 
             // Kindred's Lamb's Respite(R)
             if (targetBuffs.Contains("KindredRNoDeathBuff") && target.HealthPercent <= 10)
@@ -502,8 +498,8 @@
                      || _configMenu.Item("ForceFocusSelectedK2").GetValue<KeyBind>().Active)
                     && _configMenu.Item("ForceFocusSelectedKeys").GetValue<bool>();
 
-            _configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
-            _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());
+            /*_configMenu.Item("ForceFocusSelectedKeys").Permashow(SelectedTarget != null && a);
+            _configMenu.Item("ForceFocusSelected").Permashow(_configMenu.Item("ForceFocusSelected").GetValue<bool>());*/
 
             if (!_configMenu.Item("ResetOnRelease").GetValue<bool>())
             {

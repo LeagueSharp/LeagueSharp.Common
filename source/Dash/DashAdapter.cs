@@ -17,12 +17,12 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Initalizes the system.
         /// </summary>
-        public static void Initalize() => Library.Instance?.Dash?.Activate();
+        public static void Initalize() => Instances.Dash?.Activate();
 
         /// <summary>
         ///     Shuts the system down.
         /// </summary>
-        public static void Shutdown() => Library.Instance?.Dash?.Deactivate();
+        public static void Shutdown() => Instances.Dash?.Deactivate();
 
         #endregion
     }

@@ -242,6 +242,8 @@ namespace LeagueSharp.Common
 
             switch (vKey)
             {
+                case 0:
+                    return "None";
                 case 9:
                     return "Tab";
                 case 16:

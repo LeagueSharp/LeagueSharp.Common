@@ -158,7 +158,7 @@ namespace LeagueSharp.Common
             /// <summary>
             ///     Gets or sets a value indicating whether the sprite is visible.
             /// </summary>
-            public bool IsVisible { get; set; }
+            public bool IsVisible { get; set; } = true;
 
             /// <summary>
             ///     Gets or sets the position.
@@ -327,10 +327,30 @@ namespace LeagueSharp.Common
             }
 
             /// <inheritdoc />
-            public override void OnPostReset() => this.DeviceSprite.OnResetDevice();
+            public override void OnPostReset()
+            {
+                try
+                {
+                    this.DeviceSprite?.OnResetDevice();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
 
             /// <inheritdoc />
-            public override void OnPreReset() => this.DeviceSprite.OnLostDevice();
+            public override void OnPreReset()
+            {
+                try
+                {
+                    this.DeviceSprite?.OnLostDevice();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
 
             /// <summary>
             ///     Resets the sprite.
@@ -417,6 +437,8 @@ namespace LeagueSharp.Common
                 {
                     this.OriginalTexture.Dispose();
                 }
+
+                this.Bitmap = null;
             }
 
             private static Bitmap SaturateBitmap(Image original, float saturation)

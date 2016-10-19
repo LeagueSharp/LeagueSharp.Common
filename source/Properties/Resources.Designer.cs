@@ -83,29 +83,9 @@ namespace LeagueSharp.Common.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap CPActiveSlider {
+        internal static System.Drawing.Bitmap spectrum_chart {
             get {
-                object obj = ResourceManager.GetObject("CPActiveSlider", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap CPForm {
-            get {
-                object obj = ResourceManager.GetObject("CPForm", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap CPInactiveSlider {
-            get {
-                object obj = ResourceManager.GetObject("CPInactiveSlider", resourceCulture);
+                object obj = ResourceManager.GetObject("spectrum_chart", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
