@@ -1,5 +1,7 @@
 ﻿namespace LeagueSharp.Common
 {
+    using System;
+
     /// <summary>
     ///     Adds hacks to the menu.
     /// </summary>
@@ -159,6 +161,8 @@
                         LeagueSharp.Hacks.DisableDrawings = true;
                     }
                 };
+
+            Console.WriteLine(AntiAFK);
         }
 
         #endregion

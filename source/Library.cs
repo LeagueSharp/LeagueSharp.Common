@@ -7,7 +7,6 @@ namespace LeagueSharp.Common
     using System;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Security.Permissions;
     using System.Text;
@@ -41,11 +40,16 @@ namespace LeagueSharp.Common
         {
             ExpandConsole();
             CreateInstances(container);
+
+            Instances.Damage.SortSpells();
         }
 
         /// <inheritdoc />
         public void Unload()
         {
+            Instances.MenuManager.SaveAll();
+            Render.Terminate();
+            Render.Circle.Dispose(this, EventArgs.Empty);
         }
 
         #endregion

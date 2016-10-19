@@ -6,11 +6,13 @@ namespace LeagueSharp.Common
 {
     using System.Runtime.Serialization;
 
+    using SharpDX.Menu;
+
     /// <summary>
     ///     The menu keybind.
     /// </summary>
     [DataContract]
-    public class KeyBind
+    public class KeyBind : IUpdateableValue<KeyBind>
     {
         #region Constructors and Destructors
 
@@ -90,6 +92,17 @@ namespace LeagueSharp.Common
         ///     Gets or sets the key bind type.
         /// </summary>
         public KeyBindType Type { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <inheritdoc />
+        public void Update(KeyBind newValue)
+        {
+            this.Key = newValue.Key;
+            this.SecondaryKey = newValue.SecondaryKey;
+        }
 
         #endregion
     }

@@ -7,11 +7,13 @@ namespace LeagueSharp.Common
     using System.Drawing;
     using System.Runtime.Serialization;
 
+    using SharpDX.Menu;
+
     /// <summary>
     ///     The circle color spectrum (picker), with the toggle feature.
     /// </summary>
     [DataContract]
-    public class Circle
+    public class Circle : IUpdateableValue<Circle>
     {
         #region Constructors and Destructors
 
@@ -62,6 +64,17 @@ namespace LeagueSharp.Common
         ///     Gets or sets the radius.
         /// </summary>
         public float Radius { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <inheritdoc />
+        public void Update(Circle newValue)
+        {
+            this.Active = newValue.Active;
+            this.Color = newValue.Color;
+        }
 
         #endregion
     }

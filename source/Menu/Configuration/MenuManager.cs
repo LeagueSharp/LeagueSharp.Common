@@ -15,22 +15,6 @@ namespace LeagueSharp.Common.Configuration
     /// </summary>
     public class MenuManager : IPartImportsSatisfiedNotification
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MenuManager" /> class.
-        /// </summary>
-        public MenuManager()
-        {
-            /*
-                        TargetSelector.Initialize();
-                        Prediction.Initialize();
-                        Hacks.Initialize();
-                        FakeClicks.Initialize();*/
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -63,6 +47,17 @@ namespace LeagueSharp.Common.Configuration
             TargetSelector.Initialize(this.Menu);
             Prediction.Initialize(this.Menu);
             Hacks.Initialize(this.Menu);
+        }
+
+        /// <summary>
+        ///     Saves all existing menus.
+        /// </summary>
+        public void SaveAll()
+        {
+            foreach (var menu in this.MenuFactory.MenuCollection.Values)
+            {
+                menu.SaveComponents();
+            }
         }
 
         #endregion

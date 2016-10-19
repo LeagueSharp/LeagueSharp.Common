@@ -128,8 +128,8 @@
                                  ? spellData.Radius
                                  : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
                 this.Collision = spellData.CollisionObjects != null
-                                  && spellData.CollisionObjects.Any(
-                                      obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions);
+                                 && spellData.CollisionObjects.Any(
+                                     obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions);
                 this.Speed = spellData.MissileSpeed;
                 this.IsChargedSpell = true;
                 this.Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
@@ -144,8 +144,8 @@
                                  ? spellData.Radius
                                  : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
                 this.Collision = spellData.CollisionObjects != null
-                                  && spellData.CollisionObjects.Any(
-                                      obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions);
+                                 && spellData.CollisionObjects.Any(
+                                     obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions);
                 this.Speed = spellData.MissileSpeed;
                 this.IsSkillshot = true;
                 this.Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
@@ -413,7 +413,7 @@
                            + Math.Min(
                                this.ChargedMaxRange - this.ChargedMinRange,
                                ((Utils.TickCount - this._chargedCastedT) * (this.ChargedMaxRange - this.ChargedMinRange)
-                               / this.ChargeDuration) - 150);
+                                / this.ChargeDuration) - 150);
                 }
 
                 return this.ChargedMaxRange;

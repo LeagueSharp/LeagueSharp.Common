@@ -5,6 +5,7 @@
 namespace LeagueSharp.Common
 {
     using System;
+    using System.ComponentModel;
     using System.Drawing;
 
     using SharpDX;
@@ -325,13 +326,20 @@ namespace LeagueSharp.Common
             {
                 this.ValueSet = true;
                 this.MenuItemReference = ComponentFactory.CreateItem(this.Name, this.DisplayName, newValue);
+                this.MenuItemReference.PropertyChanged += this.OnPropertyChanged;
                 return this;
             }
 
             var oldObject = this.MenuItemReference as IMenuItem<T>;
             var oldValue = oldObject != null ? oldObject.Value : default(T);
 
+            if (this.MenuItemReference != null)
+            {
+                this.MenuItemReference.PropertyChanged -= this.OnPropertyChanged;
+            }
+
             this.MenuItemReference = new MenuItem<T>(this.Name, this.DisplayName, newValue);
+            this.MenuItemReference.PropertyChanged += this.OnPropertyChanged;
             this.ValueChanged?.Invoke(this, new OnValueChangeEventArgs(oldValue, newValue) { MenuItemReference = this });
 
             return this;
@@ -399,6 +407,21 @@ namespace LeagueSharp.Common
         public bool TypeOf<T>()
         {
             return this.MenuItemReference is IMenuItem<T>;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName.Equals("Value", StringComparison.CurrentCultureIgnoreCase))
+            {
+                this.ValueChanged?.Invoke(
+                    this,
+                    new OnValueChangeEventArgs(null, this.MenuItemReference.GetValueObject())
+                            { MenuItemReference = this });
+            }
         }
 
         #endregion
