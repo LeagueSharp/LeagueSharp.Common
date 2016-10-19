@@ -68,8 +68,8 @@
                     && attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var landTime = attack.StartTick + attack.Delay
-                                   + 1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                   / attack.ProjectileSpeed + delay;
+                                   + (1000 * Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                   / attack.ProjectileSpeed) + delay;
 
                     if ( /*Utils.GameTimeTickCount < landTime - delay &&*/ landTime < Utils.GameTimeTickCount + time)
                     {
@@ -128,8 +128,8 @@
                     {
                         if (fromT >= Utils.GameTimeTickCount
                             && (fromT + attack.Delay
-                                + Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
-                                / attack.ProjectileSpeed < toT))
+                                + (Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius)
+                                / attack.ProjectileSpeed) < toT))
                         {
                             n++;
                         }
@@ -224,9 +224,9 @@
             var attackData = new PredictedDamage(
                 sender,
                 target,
-                Utils.GameTimeTickCount - Game.Ping / 2,
+                Utils.GameTimeTickCount - (Game.Ping / 2),
                 sender.AttackCastDelay * 1000,
-                sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
+                (sender.AttackDelay * 1000) - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.IsMelee() ? int.MaxValue : (int)args.SData.MissileSpeed,
                 (float)sender.GetAutoAttackDamage(target, true));
             ActiveAttacks.Add(sender.NetworkId, attackData);

@@ -175,8 +175,8 @@
                                        ? spellData.Radius
                                        : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
                                Collision =
-                                   (spellData.CollisionObjects != null
-                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
+                                   spellData.CollisionObjects != null
+                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions),
                                Speed = spellData.MissileSpeed, IsChargedSpell = true,
                                Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
                            };
@@ -192,8 +192,8 @@
                                        ? spellData.Radius
                                        : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
                                Collision =
-                                   (spellData.CollisionObjects != null
-                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
+                                   spellData.CollisionObjects != null
+                                    && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions),
                                Speed = spellData.MissileSpeed, IsSkillshot = true,
                                Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
                            };

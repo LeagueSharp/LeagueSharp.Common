@@ -48,7 +48,7 @@
                 HeroManager.Enemies.FindAll(
                     h =>
                         h.NetworkId != originalUnit.NetworkId
-                        && h.IsValidTarget((input.Range + 200 + input.RealRadius), true, input.RangeCheckFrom)))
+                        && h.IsValidTarget(input.Range + 200 + input.RealRadius, true, input.RangeCheckFrom)))
             {
                 input.Unit = enemy;
                 var prediction = Prediction.GetPrediction(input, false, false);
@@ -275,7 +275,7 @@
                         var targetCandidates = GetCandidates(
                             input.From.To2D(),
                             target.Position,
-                            (input.Radius),
+                            input.Radius,
                             input.Range);
                         candidates.AddRange(targetCandidates);
                     }
@@ -291,7 +291,7 @@
                             GetHits(
                                 input.From.To2D(),
                                 candidate,
-                                (input.Radius + input.Unit.BoundingRadius / 3 - 10),
+                                input.Radius + (input.Unit.BoundingRadius / 3) - 10,
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
                             var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
@@ -371,8 +371,8 @@
                     var c1 = intersections[0];
                     var c2 = intersections[1];
 
-                    c1 = from + range * (to - c1).Normalized();
-                    c2 = from + range * (to - c2).Normalized();
+                    c1 = from + (range * (to - c1).Normalized());
+                    c2 = from + (range * (to - c2).Normalized());
 
                     return new[] { c1, c2 };
                 }

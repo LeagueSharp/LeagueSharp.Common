@@ -127,9 +127,9 @@
                 this.Width = spellData.Radius > 0 && spellData.Radius < 30000
                                  ? spellData.Radius
                                  : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
-                this.Collision = (spellData.CollisionObjects != null
+                this.Collision = spellData.CollisionObjects != null
                                   && spellData.CollisionObjects.Any(
-                                      obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions));
+                                      obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions);
                 this.Speed = spellData.MissileSpeed;
                 this.IsChargedSpell = true;
                 this.Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
@@ -143,9 +143,9 @@
                 this.Width = spellData.Radius > 0 && spellData.Radius < 30000
                                  ? spellData.Radius
                                  : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
-                this.Collision = (spellData.CollisionObjects != null
+                this.Collision = spellData.CollisionObjects != null
                                   && spellData.CollisionObjects.Any(
-                                      obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions));
+                                      obj => obj == LeagueSharp.Data.Enumerations.CollisionableObjects.Minions);
                 this.Speed = spellData.MissileSpeed;
                 this.IsSkillshot = true;
                 this.Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
@@ -330,7 +330,10 @@
         {
             get
             {
-                if (!this.Slot.IsReady()) return false;
+                if (!this.Slot.IsReady())
+                {
+                    return false;
+                }
 
                 return ObjectManager.Player.HasBuff(this.ChargedBuffName)
                        || Utils.TickCount - this._chargedCastedT < 300 + Game.Ping;
@@ -409,8 +412,8 @@
                     return this.ChargedMinRange
                            + Math.Min(
                                this.ChargedMaxRange - this.ChargedMinRange,
-                               (Utils.TickCount - this._chargedCastedT) * (this.ChargedMaxRange - this.ChargedMinRange)
-                               / this.ChargeDuration - 150);
+                               ((Utils.TickCount - this._chargedCastedT) * (this.ChargedMaxRange - this.ChargedMinRange)
+                               / this.ChargeDuration) - 150);
                 }
 
                 return this.ChargedMaxRange;
@@ -818,7 +821,7 @@
         /// <returns>System.Single.</returns>
         public float GetHealthPrediction(Obj_AI_Base unit)
         {
-            var time = (int)(this.Delay * 1000 + this.From.Distance(unit.ServerPosition) / this.Speed - 100);
+            var time = (int)((this.Delay * 1000) + (this.From.Distance(unit.ServerPosition) / this.Speed) - 100);
             return HealthPrediction.GetHealthPrediction(unit, time);
         }
 
@@ -1325,7 +1328,10 @@
 
         private void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
-            if (this.LetSpellcancel) return;
+            if (this.LetSpellcancel)
+            {
+                return;
+            }
 
             args.Process = !this.IsChanneling;
         }
@@ -1358,7 +1364,10 @@
         /// <param name="args"></param>
         private void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe) return;
+            if (!sender.IsMe)
+            {
+                return;
+            }
 
             if (this._processName.Contains(args.SData.Name))
             {
@@ -1373,9 +1382,15 @@
         /// <param name="args"></param>
         private void OnOrder(Obj_AI_Base sender, GameObjectIssueOrderEventArgs args)
         {
-            if (!sender.IsMe) return;
+            if (!sender.IsMe)
+            {
+                return;
+            }
 
-            if (!this.IsChanneling) return;
+            if (!this.IsChanneling)
+            {
+                return;
+            }
 
             if (args.Order == GameObjectOrder.MoveTo || args.Order == GameObjectOrder.AttackTo
                 || args.Order == GameObjectOrder.AttackUnit || args.Order == GameObjectOrder.AutoAttack)
@@ -1390,7 +1405,10 @@
         /// <param name="args"></param>
         private void OnWndProc(WndEventArgs args)
         {
-            if (!this.CanBeCanceledByUser) return;
+            if (!this.CanBeCanceledByUser)
+            {
+                return;
+            }
 
             if (args.Msg == 517)
             {
@@ -1423,7 +1441,7 @@
                 return;
             }
 
-            if ((Utils.TickCount - this._chargedReqSentT > 500))
+            if (Utils.TickCount - this._chargedReqSentT > 500)
             {
                 if (this.IsCharging)
                 {

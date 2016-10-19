@@ -784,6 +784,22 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The <see cref="bool" />.
         /// </returns>
+        public static bool IsMovementImpaired(this Obj_AI_Hero hero)
+        {
+            return hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Charm)
+                   || hero.HasBuffOfType(BuffType.Slow) || hero.HasBuffOfType(BuffType.Snare)
+                   || hero.HasBuffOfType(BuffType.Stun) || hero.HasBuffOfType(BuffType.Taunt);
+        }
+
+        /// <summary>
+        ///     Determines if the hero's movement is imparied.
+        /// </summary>
+        /// <param name="hero">
+        ///     The hero.
+        /// </param>
+        /// <returns>
+        ///     The <see cref="bool" />.
+        /// </returns>
         public static bool IsMovementImparied(this Obj_AI_Hero hero)
             =>
             hero.HasBuffOfType(BuffType.Flee) || hero.HasBuffOfType(BuffType.Charm) || hero.HasBuffOfType(BuffType.Slow)

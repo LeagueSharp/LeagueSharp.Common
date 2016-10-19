@@ -138,9 +138,9 @@ namespace LeagueSharp.Common
                 //At the end of the dash:
                 if (dashData.Path.PathLength() > 200)
                 {
-                    var timeToPoint = input.Delay / 2f + input.From.To2D().Distance(endP) / input.Speed - 0.25f;
+                    var timeToPoint = (input.Delay / 2f) + (input.From.To2D().Distance(endP) / input.Speed) - 0.25f;
                     if (timeToPoint
-                        <= input.Unit.Distance(endP) / dashData.Speed + input.RealRadius / input.Unit.MoveSpeed)
+                        <= (input.Unit.Distance(endP) / dashData.Speed) + (input.RealRadius / input.Unit.MoveSpeed))
                     {
                         return new PredictionOutput
                                    {
@@ -167,9 +167,9 @@ namespace LeagueSharp.Common
         /// <returns>PredictionOutput.</returns>
         internal static PredictionOutput GetImmobilePrediction(PredictionInput input, double remainingImmobileT)
         {
-            var timeToReachTargetPosition = input.Delay + input.Unit.Distance(input.From) / input.Speed;
+            var timeToReachTargetPosition = input.Delay + (input.Unit.Distance(input.From) / input.Speed);
 
-            if (timeToReachTargetPosition <= remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed)
+            if (timeToReachTargetPosition <= remainingImmobileT + (input.RealRadius / input.Unit.MoveSpeed))
             {
                 return new PredictionOutput
                            {
@@ -209,10 +209,10 @@ namespace LeagueSharp.Common
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            if (pLength >= input.Delay * speed - input.RealRadius
+            if (pLength >= (input.Delay * speed) - input.RealRadius
                 && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
             {
-                var tDistance = input.Delay * speed - input.RealRadius;
+                var tDistance = (input.Delay * speed) - input.RealRadius;
 
                 for (var i = 0; i < path.Count - 1; i++)
                 {
@@ -224,12 +224,12 @@ namespace LeagueSharp.Common
                     {
                         var direction = (b - a).Normalized();
 
-                        var cp = a + direction * tDistance;
+                        var cp = a + (direction * tDistance);
                         var p = a
-                                + direction
+                                + (direction
                                 * ((i == path.Count - 2)
                                        ? Math.Min(tDistance + input.RealRadius, d)
-                                       : (tDistance + input.RealRadius));
+                                       : (tDistance + input.RealRadius)));
 
                         return new PredictionOutput
                                    {
@@ -246,10 +246,10 @@ namespace LeagueSharp.Common
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed - input.RealRadius
+            if (pLength >= (input.Delay * speed) - input.RealRadius
                 && Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
-                var d = input.Delay * speed - input.RealRadius;
+                var d = (input.Delay * speed) - input.RealRadius;
                 if (input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone)
                 {
                     if (input.From.Distance(input.Unit.ServerPosition, true) < 200 * 200)
@@ -266,15 +266,19 @@ namespace LeagueSharp.Common
                     var b = path[i + 1];
                     var tB = a.Distance(b) / speed;
                     var direction = (b - a).Normalized();
-                    a = a - speed * tT * direction;
+                    a = a - (speed * tT * direction);
                     var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
                     var t = (float)sol[0];
                     var pos = (Vector2)sol[1];
 
                     if (pos.IsValid() && t >= tT && t <= tT + tB)
                     {
-                        if (pos.Distance(b, true) < 20) break;
-                        var p = pos + input.RealRadius * direction;
+                        if (pos.Distance(b, true) < 20)
+                        {
+                            break;
+                        }
+
+                        var p = pos + (input.RealRadius * direction);
 
                         if (input.Type == SkillshotType.SkillshotLine && false)
                         {
@@ -329,7 +333,7 @@ namespace LeagueSharp.Common
             if (ft)
             {
                 //Increase the delay due to the latency and server tick:
-                input.Delay += Game.Ping / 2000f + 0.06f;
+                input.Delay += (Game.Ping / 2000f) + 0.06f;
 
                 if (input.Aoe)
                 {
@@ -375,7 +379,7 @@ namespace LeagueSharp.Common
             {
                 if (result.Hitchance >= HitChance.High
                     && input.RangeCheckFrom.Distance(input.Unit.Position, true)
-                    > Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
+                    > Math.Pow(input.Range + (input.RealRadius * 3 / 4), 2))
                 {
                     result.Hitchance = HitChance.Medium;
                 }
@@ -391,8 +395,8 @@ namespace LeagueSharp.Common
                     if (result.Hitchance != HitChance.OutOfRange)
                     {
                         result.CastPosition = input.RangeCheckFrom
-                                              + input.Range
-                                              * (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D();
+                                              + (input.Range
+                                              * (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D());
                     }
                     else
                     {
@@ -452,7 +456,7 @@ namespace LeagueSharp.Common
                             && (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun
                                 || buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
                     .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
-            return (result - Game.Time);
+            return result - Game.Time;
         }
 
         #endregion

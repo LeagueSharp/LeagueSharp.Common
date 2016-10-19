@@ -4227,7 +4227,7 @@ namespace LeagueSharp.Common
 
                     result.NetworkId = packet.ReadInteger(1);
                     result.Unit = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(result.NetworkId);
-                    result.Slot = (SpellSlot) (packet.ReadByte());
+                    result.Slot = (SpellSlot)packet.ReadByte();
                     result.UnknownByte = packet.ReadByte(); // 0, 1C, 48
                     result.UnknownByte2 = packet.ReadByte(); //usually 2
                     result.SpellString = packet.ReadString(11);

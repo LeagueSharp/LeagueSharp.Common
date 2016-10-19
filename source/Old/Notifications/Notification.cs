@@ -354,8 +354,8 @@ namespace LeagueSharp.Common
             this.Font.DrawText(
                 this.sprite,
                 finalText,
-                rectangle.TopLeft.X + (rectangle.Width - textDimension.Width) / 0x2,
-                rectangle.TopLeft.Y + (rectangle.Height - textDimension.Height) / 0x2,
+                rectangle.TopLeft.X + ((rectangle.Width - textDimension.Width) / 0x2),
+                rectangle.TopLeft.Y + ((rectangle.Height - textDimension.Height) / 0x2),
                 this.TextColor);
 
             this.sprite.End();
@@ -574,7 +574,7 @@ namespace LeagueSharp.Common
                             var percentT = Math.Min(1, ((float)Utils.GameTimeTickCount - this.moveStartT) / 500);
 
                             this.position.Y = this.moveStartPosition.Y
-                                              + (this.updatePosition.Y - this.moveStartPosition.Y) * percentT;
+                                              + ((this.updatePosition.Y - this.moveStartPosition.Y) * percentT);
                         }
                         else
                         {
@@ -755,7 +755,7 @@ namespace LeagueSharp.Common
         /// <returns>Vector2 Array</returns>
         private static Vector2[] GetBorder(float x, float y, float w, float h)
         {
-            return new[] { new Vector2(x + w / 0x2, y), new Vector2(x + w / 0x2, y + h) };
+            return new[] { new Vector2(x + (w / 0x2), y), new Vector2(x + (w / 0x2), y + h) };
         }
 
         /// <summary>

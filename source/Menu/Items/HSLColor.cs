@@ -169,11 +169,11 @@
                 else
                 {
                     var temp2 = GetTemp2(hslColor);
-                    var temp1 = 2.0 * hslColor.luminosity - temp2;
+                    var temp1 = (2.0 * hslColor.luminosity) - temp2;
 
-                    r = GetColorComponent(temp1, temp2, hslColor.hue + 1.0 / 3.0);
+                    r = GetColorComponent(temp1, temp2, hslColor.hue + (1.0 / 3.0));
                     g = GetColorComponent(temp1, temp2, hslColor.hue);
-                    b = GetColorComponent(temp1, temp2, hslColor.hue - 1.0 / 3.0);
+                    b = GetColorComponent(temp1, temp2, hslColor.hue - (1.0 / 3.0));
                 }
             }
 
@@ -287,7 +287,7 @@
             temp3 = MoveIntoRange(temp3);
 
             return (temp3 < 1.0 / 6.0)
-                       ? temp1 + (temp2 - temp1) * 6.0 * temp3
+                       ? temp1 + ((temp2 - temp1) * 6.0 * temp3)
                        : (temp3 < 0.5)
                              ? temp2
                              : (temp3 < 2.0 / 3.0) ? temp1 + ((temp2 - temp1) * ((2.0 / 3.0) - temp3) * 6.0) : temp1;

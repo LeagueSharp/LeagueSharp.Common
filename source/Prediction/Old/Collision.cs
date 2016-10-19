@@ -70,7 +70,7 @@
                                 var minionPrediction = Prediction.GetPrediction(input, false, false);
                                 if (minionPrediction.UnitPosition.To2D()
                                         .Distance(input.From.To2D(), position.To2D(), true, true)
-                                    <= Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
+                                    <= Math.Pow(input.Radius + 15 + minion.BoundingRadius, 2))
                                 {
                                     result.Add(minion);
                                 }
@@ -89,7 +89,7 @@
                                 var prediction = Prediction.GetPrediction(input, false, false);
                                 if (prediction.UnitPosition.To2D()
                                         .Distance(input.From.To2D(), position.To2D(), true, true)
-                                    <= Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                    <= Math.Pow(input.Radius + 50 + hero.BoundingRadius, 2))
                                 {
                                     result.Add(hero);
                                 }
@@ -107,7 +107,7 @@
                                 var prediction = Prediction.GetPrediction(input, false, false);
                                 if (prediction.UnitPosition.To2D()
                                         .Distance(input.From.To2D(), position.To2D(), true, true)
-                                    <= Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                    <= Math.Pow(input.Radius + 50 + hero.BoundingRadius, 2))
                                 {
                                     result.Add(hero);
                                 }
@@ -151,18 +151,18 @@
                                 break;
                             }
                             var level = wall.Name.Substring(wall.Name.Length - 6, 1);
-                            var wallWidth = (300 + 50 * Convert.ToInt32(level));
+                            var wallWidth = 300 + (50 * Convert.ToInt32(level));
 
                             var wallDirection =
                                 (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
-                            var wallStart = wall.Position.To2D() + wallWidth / 2f * wallDirection;
-                            var wallEnd = wallStart - wallWidth * wallDirection;
+                            var wallStart = wall.Position.To2D() + (wallWidth / 2f * wallDirection);
+                            var wallEnd = wallStart - (wallWidth * wallDirection);
 
                             if (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D()).Intersects)
                             {
                                 var t = Utils.TickCount
-                                        + (wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
-                                               .Point.Distance(input.From) / input.Speed + input.Delay) * 1000;
+                                        + (((wallStart.Intersection(wallEnd, position.To2D(), input.From.To2D())
+                                               .Point.Distance(input.From) / input.Speed) + input.Delay) * 1000);
                                 if (t < _wallCastT + 4000)
                                 {
                                     result.Add(ObjectManager.Player);

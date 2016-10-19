@@ -64,7 +64,7 @@
         /// <returns>Location</returns>
         public static int GetLocation()
         {
-            return 0x55 + 0x1E * NotificationsList.Count;
+            return 0x55 + (0x1E * NotificationsList.Count);
         }
 
         /// <summary>
@@ -80,12 +80,12 @@
             {
                 if (notification_.Key == guid)
                 {
-                    return 0x55 + 0x1E * i;
+                    return 0x55 + (0x1E * i);
                 }
                 i++;
             }
 
-            return 0x55 + 0x1E * i;
+            return 0x55 + (0x1E * i);
         }
 
         /// <summary>

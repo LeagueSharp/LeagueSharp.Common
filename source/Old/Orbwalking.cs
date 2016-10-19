@@ -172,7 +172,7 @@ namespace LeagueSharp.Common
                                 t += (int)Math.Min(ObjectManager.Player.Distance(_lastTarget) / 1.5f, 0.6f);
                             }
 
-                            LastAATick = Utils.GameTimeTickCount - Game.Ping / 2 + t;
+                            LastAATick = Utils.GameTimeTickCount - (Game.Ping / 2) + t;
                         }
                     };
             }
@@ -301,8 +301,8 @@ namespace LeagueSharp.Common
         {
             if (Player.ChampionName == "Graves")
             {
-                var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
-                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay
+                var attackDelay = (1.0740296828d * 1000 * Player.AttackDelay) - 716.2381256175d;
+                if (Utils.GameTimeTickCount + (Game.Ping / 2) + 25 >= LastAATick + attackDelay
                     && Player.HasBuff("GravesBasicAttackAmmo1"))
                 {
                     return true;
@@ -324,7 +324,7 @@ namespace LeagueSharp.Common
                 return false;
             }
 
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
+            return Utils.GameTimeTickCount + (Game.Ping / 2) + 25 >= LastAATick + (Player.AttackDelay * 1000);
         }
 
         /// <summary>
@@ -346,8 +346,8 @@ namespace LeagueSharp.Common
             }
 
             return NoCancelChamps.Contains(_championName)
-                   || (Utils.GameTimeTickCount + Game.Ping / 2
-                       >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
+                   || (Utils.GameTimeTickCount + (Game.Ping / 2)
+                       >= LastAATick + (Player.AttackCastDelay * 1000) + extraWindup + localExtraWindup);
         }
 
         /// <summary>
@@ -759,7 +759,7 @@ namespace LeagueSharp.Common
                 if (unit.IsMe
                     && (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
                 {
-                    LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
+                    LastAATick = Utils.GameTimeTickCount - (Game.Ping / 2);
                     _missileLaunched = false;
                     LastMoveCommandT = 0;
                     _autoattackCounter++;
@@ -1153,9 +1153,9 @@ namespace LeagueSharp.Common
                                 return barrel;
                             }
 
-                            var t = (int)(this.Player.AttackCastDelay * 1000) + Game.Ping / 2
-                                    + 1000 * (int)Math.Max(0, this.Player.Distance(barrel) - this.Player.BoundingRadius)
-                                    / (int)GetMyProjectileSpeed();
+                            var t = (int)(this.Player.AttackCastDelay * 1000) + (Game.Ping / 2)
+                                    + (1000 * (int)Math.Max(0, this.Player.Distance(barrel) - this.Player.BoundingRadius)
+                                    / (int)GetMyProjectileSpeed());
 
                             var barrelBuff =
                                 barrel.Buffs.FirstOrDefault(
@@ -1169,9 +1169,9 @@ namespace LeagueSharp.Common
                                                           : (enemyGangPlank.Level >= 7 ? 1f : 2f);
                                 var nextHealthDecayTime = Game.Time < barrelBuff.StartTime + healthDecayRate
                                                               ? barrelBuff.StartTime + healthDecayRate
-                                                              : barrelBuff.StartTime + healthDecayRate * 2;
+                                                              : barrelBuff.StartTime + (healthDecayRate * 2);
 
-                                if (nextHealthDecayTime <= Game.Time + t / 1000f)
+                                if (nextHealthDecayTime <= Game.Time + (t / 1000f))
                                 {
                                     return barrel;
                                 }
@@ -1199,13 +1199,13 @@ namespace LeagueSharp.Common
 
                     foreach (var minion in MinionList)
                     {
-                        var t = (int)(this.Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2
-                                + 1000 * (int)Math.Max(0, this.Player.Distance(minion) - this.Player.BoundingRadius)
-                                / (int)GetMyProjectileSpeed();
+                        var t = (int)(this.Player.AttackCastDelay * 1000) - 100 + (Game.Ping / 2)
+                                + (1000 * (int)Math.Max(0, this.Player.Distance(minion) - this.Player.BoundingRadius)
+                                / (int)GetMyProjectileSpeed());
 
                         if (mode == OrbwalkingMode.Freeze)
                         {
-                            t += 200 + Game.Ping / 2;
+                            t += 200 + (Game.Ping / 2);
                         }
 
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, this.FarmDelay);
@@ -1346,19 +1346,19 @@ namespace LeagueSharp.Common
                                     turretMinion as Obj_AI_Minion);
                                 // from healthprediction (don't blame me :S)
                                 var turretLandTick = turretStarTick + (int)(closestTower.AttackCastDelay * 1000)
-                                                     + 1000
+                                                     + (1000
                                                      * Math.Max(
                                                          0,
                                                          (int)
                                                          (turretMinion.Distance(closestTower)
                                                           - closestTower.BoundingRadius))
-                                                     / (int)(closestTower.BasicAttack.MissileSpeed + 70);
+                                                     / (int)(closestTower.BasicAttack.MissileSpeed + 70));
                                 // calculate the HP before try to balance it
                                 for (float i = turretLandTick + 50;
-                                     i < turretLandTick + 10 * closestTower.AttackDelay * 1000 + 50;
-                                     i = i + closestTower.AttackDelay * 1000)
+                                     i < turretLandTick + (10 * closestTower.AttackDelay * 1000) + 50;
+                                     i = i + (closestTower.AttackDelay * 1000))
                                 {
-                                    var time = (int)i - Utils.GameTimeTickCount + Game.Ping / 2;
+                                    var time = (int)i - Utils.GameTimeTickCount + (Game.Ping / 2);
                                     var predHP =
                                         (int)
                                         HealthPrediction.LaneClearHealthPrediction(turretMinion, time > 0 ? time : 0);
@@ -1378,31 +1378,31 @@ namespace LeagueSharp.Common
                                     var damage = (int)this.Player.GetAutoAttackDamage(turretMinion, true);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick
-                                                        + (turretAttackCount + 1)
-                                                        * (int)(closestTower.AttackDelay * 1000)
+                                                        + ((turretAttackCount + 1)
+                                                        * (int)(closestTower.AttackDelay * 1000))
                                                         - Utils.GameTimeTickCount;
                                     var timeUntilAttackReady = LastAATick + (int)(this.Player.AttackDelay * 1000)
-                                                               > Utils.GameTimeTickCount + Game.Ping / 2 + 25
+                                                               > Utils.GameTimeTickCount + (Game.Ping / 2) + 25
                                                                    ? LastAATick + (int)(this.Player.AttackDelay * 1000)
-                                                                     - (Utils.GameTimeTickCount + Game.Ping / 2 + 25)
+                                                                     - (Utils.GameTimeTickCount + (Game.Ping / 2) + 25)
                                                                    : 0;
                                     var timeToLandAttack = this.Player.IsMelee
                                                                ? this.Player.AttackCastDelay * 1000
-                                                               : this.Player.AttackCastDelay * 1000
-                                                                 + 1000
+                                                               : (this.Player.AttackCastDelay * 1000)
+                                                                 + (1000
                                                                  * Math.Max(
                                                                      0,
                                                                      turretMinion.Distance(this.Player)
                                                                      - this.Player.BoundingRadius)
-                                                                 / this.Player.BasicAttack.MissileSpeed;
+                                                                 / this.Player.BasicAttack.MissileSpeed);
                                     if (hits >= 1
-                                        && hits * this.Player.AttackDelay * 1000 + timeUntilAttackReady
+                                        && (hits * this.Player.AttackDelay * 1000) + timeUntilAttackReady
                                         + timeToLandAttack < timeBeforeDie)
                                     {
                                         farmUnderTurretMinion = turretMinion as Obj_AI_Minion;
                                     }
                                     else if (hits >= 1
-                                             && hits * this.Player.AttackDelay * 1000 + timeUntilAttackReady
+                                             && (hits * this.Player.AttackDelay * 1000) + timeUntilAttackReady
                                              + timeToLandAttack > timeBeforeDie)
                                     {
                                         noneKillableMinion = turretMinion as Obj_AI_Minion;
@@ -1736,12 +1736,12 @@ namespace LeagueSharp.Common
                             && HealthPrediction.LaneClearHealthPrediction(
                                 minion,
                                 (int)
-                                (this.Player.AttackDelay * 1000
+                                ((this.Player.AttackDelay * 1000)
                                  + (this.Player.IsMelee
                                         ? this.Player.AttackCastDelay * 1000
-                                        : this.Player.AttackCastDelay * 1000
-                                          + 1000 * (this.Player.AttackRange + 2 * this.Player.BoundingRadius)
-                                          / this.Player.BasicAttack.MissileSpeed)),
+                                        : (this.Player.AttackCastDelay * 1000)
+                                          + (1000 * (this.Player.AttackRange + (2 * this.Player.BoundingRadius))
+                                          / this.Player.BasicAttack.MissileSpeed))),
                                 this.FarmDelay) <= this.Player.GetAutoAttackDamage(minion));
             }
 

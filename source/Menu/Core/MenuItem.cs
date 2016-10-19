@@ -17,6 +17,12 @@ namespace LeagueSharp.Common
     /// </summary>
     public class MenuItem
     {
+        #region Fields
+
+        private bool showItem;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -73,13 +79,11 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Gets or sets the font color.
         /// </summary>
-        [Obsolete]
         public ColorBGRA FontColor { get; set; }
 
         /// <summary>
         ///     Gets or sets the font style.
         /// </summary>
-        [Obsolete]
         public FontStyle FontStyle { get; set; }
 
         /// <summary>
@@ -112,8 +116,18 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Gets or sets a value indicating whether to show the item.
         /// </summary>
-        [Obsolete]
-        public bool ShowItem { get; set; }
+        public bool ShowItem
+        {
+            get
+            {
+                return this.showItem;
+            }
+
+            set
+            {
+                this.Show(value);
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the tag.
@@ -162,9 +176,9 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The item instance.
         /// </returns>
-        [Obsolete]
         public MenuItem DontSave()
         {
+            this.MenuItemReference.IsSaveable = false;
             return this;
         }
 
@@ -188,9 +202,29 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     Value indicating whether the item is active.
         /// </returns>
-        [Obsolete]
         public bool IsActive()
         {
+            var type = this.MenuItemReference.ValueType;
+            if (type == typeof(bool))
+            {
+                return this.GetValue<bool>();
+            }
+
+            if (type == typeof(Circle))
+            {
+                return this.GetValue<Circle>().Active;
+            }
+
+            if (type == typeof(KeyBind))
+            {
+                return this.GetValue<KeyBind>().Active;
+            }
+
+            if (type == typeof(SliderBool))
+            {
+                return this.GetValue<SliderBool>().IsActive;
+            }
+
             return false;
         }
 
@@ -206,9 +240,24 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The item instance.
         /// </returns>
-        [Obsolete]
         public MenuItem SetFontStyle(FontStyle fontStyle = FontStyle.Regular, Color? fontColor = null)
         {
+            this.FontStyle = fontStyle;
+
+            var view = this.MenuItemReference.View;
+            if (view != null)
+            {
+                view.SetAttribute(typeof(FontStyle).ToString(), fontStyle);
+                if (fontColor.HasValue)
+                {
+                    var color = fontColor.Value;
+                    this.FontColor = color;
+
+                    var brush = new SolidBrush(System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B));
+                    view.SetAttribute(typeof(Brush).ToString(), brush);
+                }
+            }
+
             return this;
         }
 
@@ -291,15 +340,16 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Shows the item.
         /// </summary>
-        /// <param name="showItem">
+        /// <param name="flag">
         ///     Indicates whether to show the item.
         /// </param>
         /// <returns>
         ///     The item instance.
         /// </returns>
-        [Obsolete]
-        public MenuItem Show(bool showItem = true)
+        public MenuItem Show(bool flag = true)
         {
+            this.MenuItemReference.IsVisible = flag;
+            this.showItem = flag;
             return this;
         }
 

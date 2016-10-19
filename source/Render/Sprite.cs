@@ -313,8 +313,12 @@ namespace LeagueSharp.Common
                     var matrix = this.DeviceSprite.Transform;
                     var nMatrix = Matrix.Scaling(this.Scale.X, this.Scale.Y, 0) * Matrix.RotationZ(this.Rotation)
                                   * Matrix.Translation(this.Position.X, this.Position.Y, 0);
+                    var rotation = Math.Abs(this.Rotation) > float.Epsilon
+                                       ? new Vector3(this.Width / 2f, this.Height / 2f, 0)
+                                       : (Vector3?)null;
+
                     this.DeviceSprite.Transform = nMatrix;
-                    this.DeviceSprite.Draw(this.Texture, this.Color, this.SpriteCrop);
+                    this.DeviceSprite.Draw(this.Texture, this.Color, this.SpriteCrop, rotation);
                     this.DeviceSprite.Transform = matrix;
 
                     this.DeviceSprite.End();

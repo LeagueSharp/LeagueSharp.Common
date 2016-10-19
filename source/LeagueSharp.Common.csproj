@@ -50,35 +50,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>Z:\References\clipper_library.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\clipper_library.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>Z:\Core\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>Z:\References\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Data">
-      <HintPath>Z:\References\LeagueSharp.Data.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\LeagueSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Sandbox">
-      <HintPath>Z:\System\LeagueSharp.Sandbox.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
-      <HintPath>Z:\Core\log4net.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\Core\log4net.dll</HintPath>
     </Reference>
     <Reference Include="PlaySharp.Toolkit">
-      <HintPath>Z:\Core\PlaySharp.Toolkit.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\Core\PlaySharp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>Z:\References\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>Z:\References\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Menu">
-      <HintPath>Z:\References\SharpDX.Menu.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\CIu4hcORW\References\SharpDX.Menu.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
@@ -141,6 +141,7 @@
     <Compile Include="Damage\Damage.cs" />
     <Compile Include="Damage\DamageExtensions.cs" />
     <Compile Include="Damage\DamageItems.cs" />
+    <Compile Include="Damage\DamagePassive.cs" />
     <Compile Include="Damage\DamageSpell.cs" />
     <Compile Include="Damage\DamageSpells.cs" />
     <Compile Include="Damage\DamageSummonerSpells.cs" />
@@ -175,6 +176,110 @@
     <Compile Include="Damage\DamageItems\IDamageItem.cs" />
     <Compile Include="Damage\DamageItems\IDamageItemMetadata.cs" />
     <Compile Include="Damage\DamageItems\ItemDamageType.cs" />
+    <Compile Include="Damage\Passives\DamageAatroxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageAkaliPassive.cs" />
+    <Compile Include="Damage\Passives\DamageAkaliPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageAlistarPassive.cs" />
+    <Compile Include="Damage\Passives\DamageAshePassive.cs" />
+    <Compile Include="Damage\Passives\DamageAshePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageBardPassive.cs" />
+    <Compile Include="Damage\Passives\DamageBlitzcrankPassive.cs" />
+    <Compile Include="Damage\Passives\DamageBraumPassive.cs" />
+    <Compile Include="Damage\Passives\DamageCaitlynPassive.cs" />
+    <Compile Include="Damage\Passives\DamageChoGathPassive.cs" />
+    <Compile Include="Damage\Passives\DamageDariusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageDariusPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageDianaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageDrMundoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageEkkoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageEkkoPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageFizzPassive.cs" />
+    <Compile Include="Damage\Passives\DamageFizzPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageGarenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageGnarPassive.cs" />
+    <Compile Include="Damage\Passives\DamageGragasPassive.cs" />
+    <Compile Include="Damage\Passives\DamageGravesPassive.cs" />
+    <Compile Include="Damage\Passives\DamageHecarimPassive.cs" />
+    <Compile Include="Damage\Passives\DamageIllaoiPassive.cs" />
+    <Compile Include="Damage\Passives\DamageIreliaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJarvanIVPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJaxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJaycePassive.cs" />
+    <Compile Include="Damage\Passives\DamageJaycePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageJhinPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJhinPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageJinxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKalistaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKassadinPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKatarinaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKaylePassive.cs" />
+    <Compile Include="Damage\Passives\DamageKennenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKogMawPassive.cs" />
+    <Compile Include="Damage\Passives\DamageLeonaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageLucianPassive.cs" />
+    <Compile Include="Damage\Passives\DamageLuxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageMalphitePassive.cs" />
+    <Compile Include="Damage\Passives\DamageMasterYiPassive.cs" />
+    <Compile Include="Damage\Passives\DamageMonkeyKingPassive.cs" />
+    <Compile Include="Damage\Passives\DamageMordekaiserPassive.cs" />
+    <Compile Include="Damage\Passives\DamageNasusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageNautilusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageNautilusPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageNidaleePassive.cs" />
+    <Compile Include="Damage\Passives\DamageNocturnePassive.cs" />
+    <Compile Include="Damage\Passives\DamageNunuPassive.cs" />
+    <Compile Include="Damage\Passives\DamageOriannaPassive.cs" />
+    <Compile Include="Damage\Passives\DamagePoppyPassive.cs" />
+    <Compile Include="Damage\Passives\DamageQuinnPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRekSaiPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRenektonPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRengarPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRengarPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageRivenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRumblePassive.cs" />
+    <Compile Include="Damage\Passives\DamageSejuaniPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShacoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShacoPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageShacoPassive2.cs" />
+    <Compile Include="Damage\Passives\DamageShenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShyvanaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShyvanaPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageSionPassive.cs" />
+    <Compile Include="Damage\Passives\DamageSkarnerPassive.cs" />
+    <Compile Include="Damage\Passives\DamageSonaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageSonaPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageTahmKenchPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTalonPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTaricPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTeemoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageThreshPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTristanaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTrundlePassive.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive2.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive3.cs" />
+    <Compile Include="Damage\Passives\DamageUdyrPassive.cs" />
+    <Compile Include="Damage\Passives\DamageVarusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageVaynePassive.cs" />
+    <Compile Include="Damage\Passives\DamageVaynePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageViktorPassive.cs" />
+    <Compile Include="Damage\Passives\DamageViPassive.cs" />
+    <Compile Include="Damage\Passives\DamageViPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageVolibearPassive.cs" />
+    <Compile Include="Damage\Passives\DamageVolibearPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageWarwickPassive.cs" />
+    <Compile Include="Damage\Passives\DamageXinZhaoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageYasuoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageYorickPassive.cs" />
+    <Compile Include="Damage\Passives\DamageZedPassive.cs" />
+    <Compile Include="Damage\Passives\DamageZiggsPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageNamiMarkPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageLeonaMarkPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageKalistaMarkPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageBraumMarkPassive.cs" />
+    <Compile Include="Damage\Passives\IPassiveDamage.cs" />
+    <Compile Include="Damage\Passives\IPassiveDamageMetadata.cs" />
     <Compile Include="Damage\Spells\Aatrox\DamageAatroxE.cs" />
     <Compile Include="Damage\Spells\Aatrox\DamageAatroxQ.cs" />
     <Compile Include="Damage\Spells\Aatrox\DamageAatroxR.cs" />
@@ -735,6 +840,7 @@
     <Compile Include="Old\ObjectHandler.cs" />
     <Compile Include="Old\Orbwalking.cs" />
     <Compile Include="Old\Packet.cs" />
+    <Compile Include="Old\PermaShow.cs" />
     <Compile Include="Old\Spell.cs" />
     <Compile Include="Old\TargetSelector.cs" />
     <Compile Include="Packets\GamePacket.cs" />
@@ -812,9 +918,7 @@
     <None Include="Resources\ChineseJson.json" />
     <None Include="Resources\CircleEffect.fx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Damage\Passives\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\spectrum_chart.jpg" />
   </ItemGroup>

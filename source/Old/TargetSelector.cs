@@ -99,9 +99,9 @@
         {
             get
             {
-                return (_configMenu != null && _configMenu.Item("FocusSelected").GetValue<bool>()
+                return _configMenu != null && _configMenu.Item("FocusSelected").GetValue<bool>()
                             ? _selectedTargetObjAiHero
-                            : null);
+                            : null;
             }
         }
 
@@ -267,8 +267,8 @@
                         return
                             targets.MaxOrDefault(
                                 hero =>
-                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health)
-                                    * GetPriority(hero)
+                                    (champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health)
+                                    * GetPriority(hero))
                                     + (1
                                        + hero.Buffs.Where(b => StackNames.Contains(b.Name.ToLower())).Sum(t => t.Count)));
                 }
