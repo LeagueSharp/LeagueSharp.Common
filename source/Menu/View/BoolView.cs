@@ -92,7 +92,7 @@ namespace LeagueSharp.Common.View
         /// <inheritdoc />
         public override void OnDraw()
         {
-            if (this.Component == null)
+            if (this.Component == null || !this.Component.IsVisible)
             {
                 return;
             }
@@ -123,7 +123,7 @@ namespace LeagueSharp.Common.View
         /// <inheritdoc />
         public override void OnWindowProc(uint message, uint wParam, long lParam)
         {
-            if (this.Component == null)
+            if (this.Component == null || !this.Component.IsVisible)
             {
                 return;
             }
@@ -190,7 +190,7 @@ namespace LeagueSharp.Common.View
             using (var graphics = Graphics.FromImage(bitmap))
             {
                 SharedView.CreateBackgroundView(graphics, 0, 0, width, height);
-                SharedView.CreateTitle(graphics, 0, 0, width, height, title, viewAttributes);
+                SharedView.CreateTitle(graphics, 0, 0, width - height - 5, height, title, viewAttributes);
             }
 
             if (this.sprite == null)

@@ -53,7 +53,7 @@
       <HintPath>Z:\References\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>Z:\References\JetBrains.Annotations.dll</HintPath>
+      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LeagueSharp">
@@ -66,7 +66,12 @@
       <HintPath>Z:\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>Z:\Core\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PlaySharp.Toolkit">
       <HintPath>Z:\Core\PlaySharp.Toolkit.dll</HintPath>
@@ -901,7 +906,6 @@
   <ItemGroup>
     <None Include="..\App.config" />
     <AdditionalFiles Include="..\stylecop.json" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
@@ -915,6 +919,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\ChineseJson.json" />
     <None Include="Resources\CircleEffect.fx" />
   </ItemGroup>

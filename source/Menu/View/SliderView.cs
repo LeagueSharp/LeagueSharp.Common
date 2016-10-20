@@ -92,7 +92,7 @@ namespace LeagueSharp.Common.View
         /// <inheritdoc />
         public override void OnDraw()
         {
-            if (this.Component == null)
+            if (this.Component == null || !this.Component.IsVisible)
             {
                 return;
             }
@@ -119,7 +119,7 @@ namespace LeagueSharp.Common.View
         /// <inheritdoc />
         public override void OnWindowProc(uint message, uint wParam, long lParam)
         {
-            if (this.Component == null)
+            if (this.Component == null || !this.Component.IsVisible)
             {
                 return;
             }

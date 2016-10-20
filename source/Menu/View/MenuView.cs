@@ -51,7 +51,7 @@ namespace LeagueSharp.Common.View
         /// </summary>
         ~MenuView()
         {
-            this.sprite.Bitmap?.Dispose();
+            this.sprite?.Bitmap?.Dispose();
         }
 
         #endregion
@@ -82,7 +82,7 @@ namespace LeagueSharp.Common.View
         /// <inheritdoc />
         public override void OnDraw()
         {
-            if (this.Component == null)
+            if (this.Component == null || !this.Component.IsVisible)
             {
                 return;
             }

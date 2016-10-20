@@ -13,22 +13,12 @@ namespace LeagueSharp.Common
     ///     The string list component container.
     /// </summary>
     [DataContract]
-    public struct StringList : IUpdateableValue<StringList>
+    public class StringList : IUpdateableValue<StringList>
     {
-        #region Fields
-
-        /// <summary>
-        ///     The selected index.
-        /// </summary>
-        [DataMember]
-        public int SelectedIndex;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="StringList" /> struct.c
+        ///     Initializes a new instance of the <see cref="StringList" /> class.
         /// </summary>
         /// <param name="items">
         ///     The items.
@@ -50,6 +40,12 @@ namespace LeagueSharp.Common
         ///     Gets the items.
         /// </summary>
         public string[] Items { get; }
+
+        /// <summary>
+        ///     Gets or sets the selected index.
+        /// </summary>
+        [DataMember]
+        public int SelectedIndex { get; set; }
 
         /// <summary>
         ///     Gets the selected value.

@@ -50,6 +50,38 @@ namespace LeagueSharp.Common.View
         }
 
         /// <summary>
+        ///     Creates a border for a view.
+        /// </summary>
+        /// <param name="graphics">
+        ///     The graphics.
+        /// </param>
+        /// <param name="x">
+        ///     The X.
+        /// </param>
+        /// <param name="y">
+        ///     The Y.
+        /// </param>
+        /// <param name="width">
+        ///     The width.
+        /// </param>
+        /// <param name="height">
+        ///     The height.
+        /// </param>
+        /// <param name="color">
+        ///     The color of the border.
+        /// </param>
+        public static void CreateBorder(Graphics graphics, float x, float y, float width, float height, Color color)
+        {
+            using (var pen = new Pen(color, 1.5f))
+            {
+                graphics.DrawLine(pen, x, y, x + width, y);
+                graphics.DrawLine(pen, x, y + height, x + width, y + height);
+                graphics.DrawLine(pen, x, y, x, y + height);
+                graphics.DrawLine(pen, x + width, y, x + width, y + height);
+            }
+        }
+
+        /// <summary>
         ///     Creates a box for a view.
         /// </summary>
         /// <param name="graphics">

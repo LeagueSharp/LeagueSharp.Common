@@ -82,7 +82,7 @@ namespace LeagueSharp.Common.View
         /// <inheritdoc />
         public override void OnDraw()
         {
-            if (this.Component == null)
+            if (this.Component == null || !this.Component.IsVisible)
             {
                 return;
             }
