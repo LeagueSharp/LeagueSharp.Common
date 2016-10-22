@@ -25,7 +25,10 @@ namespace LeagueSharp.Common
 
             set
             {
-                LeagueSharp.Hacks.AntiAFK = value;
+                if (AntiAfk != value)
+                {
+                    LeagueSharp.Hacks.AntiAFK = value;
+                }
             }
         }
 
@@ -41,7 +44,10 @@ namespace LeagueSharp.Common
 
             set
             {
-                LeagueSharp.Hacks.DisableDrawings = value;
+                if (DisableDrawings != value)
+                {
+                    LeagueSharp.Hacks.DisableDrawings = value;
+                }
             }
         }
 
@@ -57,7 +63,10 @@ namespace LeagueSharp.Common
 
             set
             {
-                LeagueSharp.Hacks.DisableSay = value;
+                if (DisableSay != value)
+                {
+                    LeagueSharp.Hacks.DisableSay = value;
+                }
             }
         }
 
@@ -73,7 +82,10 @@ namespace LeagueSharp.Common
 
             set
             {
-                LeagueSharp.Hacks.TowerRanges = value;
+                if (TowerRanges != value)
+                {
+                    LeagueSharp.Hacks.TowerRanges = value;
+                }
             }
         }
 

@@ -94,20 +94,9 @@ namespace LeagueSharp.Common
         public int MenuFontSize { get; set; }
 
         /// <summary>
-        ///     Gets or sets the name.
+        ///     Gets the name.
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.MenuItemReference.Name;
-            }
-
-            set
-            {
-                // TODO: Log?
-            }
-        }
+        public string Name => this.MenuItemReference.Name;
 
         /// <summary>
         ///     Gets or sets the parent.
@@ -154,9 +143,10 @@ namespace LeagueSharp.Common
         public int TooltipDuration => 0;
 
         /// <summary>
-        ///     Gets a value indicating whether the value was set.
+        ///     Gets or sets a value indicating whether the value was set.
         /// </summary>
-        public bool ValueSet { get; private set; }
+        [Obsolete]
+        public bool ValueSet { get; set; }
 
         #endregion
 
@@ -268,9 +258,9 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The item instance.
         /// </returns>
-        [Obsolete]
         public MenuItem SetShared()
         {
+            this.MenuItemReference.IsShared = true;
             return this;
         }
 
@@ -283,7 +273,6 @@ namespace LeagueSharp.Common
         /// <returns>
         ///     The item instance.
         /// </returns>
-        [Obsolete("Use Tag Property.")]
         public MenuItem SetTag(int tag = 0)
         {
             this.Tag = tag;
@@ -322,25 +311,32 @@ namespace LeagueSharp.Common
         /// </returns>
         public MenuItem SetValue<T>(T newValue)
         {
-            if (!this.ValueSet)
+            if (newValue.GetType() == this.MenuItemReference.ValueType)
             {
-                this.ValueSet = true;
-                this.MenuItemReference = ComponentFactory.CreateItem(this.Name, this.DisplayName, newValue);
-                this.MenuItemReference.PropertyChanged += this.OnPropertyChanged;
-                return this;
+                var oldValue = this.MenuItemReference.GetValue();
+                this.MenuItemReference.SetValue(newValue);
+
+                this.ValueChanged?.Invoke(this, new OnValueChangeEventArgs(oldValue, newValue));
             }
-
-            var oldObject = this.MenuItemReference as IMenuItem<T>;
-            var oldValue = oldObject != null ? oldObject.Value : default(T);
-
-            if (this.MenuItemReference != null)
+            else
             {
-                this.MenuItemReference.PropertyChanged -= this.OnPropertyChanged;
-            }
+                var oldItem = this.MenuItemReference;
+                var newItem = ComponentFactory.CreateItem(this.Name, this.DisplayName, newValue);
 
-            this.MenuItemReference = new MenuItem<T>(this.Name, this.DisplayName, newValue);
-            this.MenuItemReference.PropertyChanged += this.OnPropertyChanged;
-            this.ValueChanged?.Invoke(this, new OnValueChangeEventArgs(oldValue, newValue) { MenuItemReference = this });
+                newItem.IsShared = oldItem.IsShared;
+                newItem.IsSaveable = oldItem.IsSaveable;
+                this.MenuItemReference = newItem;
+
+                oldItem.PropertyChanged -= this.OnPropertyChanged;
+                newItem.PropertyChanged += this.OnPropertyChanged;
+
+                if (oldItem.Parent != null)
+                {
+                    oldItem.Parent[oldItem.Name] = newItem;
+                }
+
+                this.ValueChanged?.Invoke(this, new OnValueChangeEventArgs(null, newValue));
+            }
 
             return this;
         }
@@ -419,8 +415,7 @@ namespace LeagueSharp.Common
             {
                 this.ValueChanged?.Invoke(
                     this,
-                    new OnValueChangeEventArgs(null, this.MenuItemReference.GetValueObject())
-                            { MenuItemReference = this });
+                    new OnValueChangeEventArgs(null, this.MenuItemReference.GetValue()));
             }
         }
 

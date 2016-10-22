@@ -151,6 +151,7 @@ namespace LeagueSharp.Common.View
                             height * this.Component.Value.Items.Length))
                         {
                             this.Component.Value.SelectedIndex = (int)((cursor.Y - this.Component.Position.Y) / height);
+                            this.isPicking = false;
                             this.updateContext = true;
                         }
                     }

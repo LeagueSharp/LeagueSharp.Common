@@ -9,12 +9,20 @@ namespace LeagueSharp.Common.Configuration
     using SharpDX;
     using SharpDX.Menu;
 
+    using Hacks = LeagueSharp.Hacks;
+
     /// <summary>
     ///     The menu controller.
     /// </summary>
     [Export(typeof(IMenuController))]
     public class MenuController : IMenuController
     {
+        #region Fields
+
+        private bool isVisible;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -36,7 +44,18 @@ namespace LeagueSharp.Common.Configuration
         public float ComponentWidth { get; } = 180;
 
         /// <inheritdoc />
-        public bool IsVisible { get; private set; } = true;
+        public bool IsVisible
+        {
+            get
+            {
+                return this.isVisible && !Hacks.DisableDrawings;
+            }
+
+            private set
+            {
+                this.isVisible = value;
+            }
+        }
 
         /// <inheritdoc />
         public Vector2 Position { get; } = new Vector2(10, 10);

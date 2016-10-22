@@ -4,7 +4,6 @@
 
 namespace LeagueSharp.Common
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Linq;
@@ -22,7 +21,10 @@ namespace LeagueSharp.Common
         /// </summary>
         public HeroManager()
         {
-            CustomEvents.Game.OnGameLoad += this.OnGameLoad;
+            this.All = ObjectManager.Get<Obj_AI_Hero>().ToList();
+            this.Ally = this.All.FindAll(o => o.IsAlly);
+            this.Enemy = this.All.FindAll(o => o.IsEnemy);
+            this.LocalPlayer = this.All.Find(x => x.IsMe);
         }
 
         #endregion
@@ -66,34 +68,22 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Gets all of the heroes.
         /// </summary>
-        public List<Obj_AI_Hero> All { get; private set; }
+        public List<Obj_AI_Hero> All { get; }
 
         /// <summary>
         ///     Gets all of the ally heroes.
         /// </summary>
-        public List<Obj_AI_Hero> Ally { get; private set; }
+        public List<Obj_AI_Hero> Ally { get; }
 
         /// <summary>
         ///     Gets all of the enemies.
         /// </summary>
-        public List<Obj_AI_Hero> Enemy { get; private set; }
+        public List<Obj_AI_Hero> Enemy { get; }
 
         /// <summary>
         ///     Gets the local player
         /// </summary>
-        public Obj_AI_Hero LocalPlayer { get; private set; }
-
-        #endregion
-
-        #region Methods
-
-        private void OnGameLoad(EventArgs eventArgs)
-        {
-            this.All = ObjectManager.Get<Obj_AI_Hero>().ToList();
-            this.Ally = this.All.FindAll(o => o.IsAlly);
-            this.Enemy = this.All.FindAll(o => o.IsEnemy);
-            this.LocalPlayer = this.All.Find(x => x.IsMe);
-        }
+        public Obj_AI_Hero LocalPlayer { get; }
 
         #endregion
     }
