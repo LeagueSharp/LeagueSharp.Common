@@ -53,7 +53,7 @@
       <HintPath>Z:\References\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
+      <HintPath>packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LeagueSharp">
@@ -66,11 +66,11 @@
       <HintPath>Z:\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <HintPath>packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PlaySharp.Toolkit">
@@ -821,6 +821,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Native\Config.cs" />
+    <Compile Include="Native\Hacks.cs" />
     <Compile Include="Native\MultiLanguageAdapter.cs" />
     <Compile Include="Native\Shared.cs" />
     <Compile Include="Old\AutoLevel.cs" />
@@ -829,7 +830,6 @@
     <Compile Include="Old\Data\MasteryData.cs" />
     <Compile Include="Old\Data\SpellDatabase.cs" />
     <Compile Include="Old\FakeClicks.cs" />
-    <Compile Include="Old\Hacks.cs" />
     <Compile Include="Old\HealthPrediction.cs" />
     <Compile Include="Native\HeroManager.cs" />
     <Compile Include="Old\Interrupter.cs" />
@@ -908,9 +908,9 @@
     <AdditionalFiles Include="..\stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
