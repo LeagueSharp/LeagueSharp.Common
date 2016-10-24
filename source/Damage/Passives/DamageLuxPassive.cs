@@ -1,0 +1,35 @@
+// <copyright file="DamageLuxPassive.cs" company="LeagueSharp">
+// Copyright (c) LeagueSharp. All rights reserved.
+// </copyright>
+
+namespace LeagueSharp.Common.Passives
+{
+    using System.ComponentModel.Composition;
+
+    /// <summary>
+    ///     Lux's Damage Passive.
+    /// </summary>
+    [Export(typeof(IPassiveDamage))]
+    [ExportMetadata("ChampionName", "Lux")]
+    public class DamageLuxPassive : IPassiveDamage
+    {
+        #region Public Methods and Operators
+
+        /// <inheritdoc />
+        public double GetDamage(Obj_AI_Hero source, Obj_AI_Base target)
+        {
+            return source.CalcDamage(
+                target,
+                Damage.DamageType.Magical,
+                10 + (8 * source.Level) + (0.2 * source.TotalMagicalDamage));
+        }
+
+        /// <inheritdoc />
+        public bool IsActive(Obj_AI_Hero source, Obj_AI_Base target)
+        {
+            return target.HasBuff("LuxIlluminatingFraulein");
+        }
+
+        #endregion
+    }
+}

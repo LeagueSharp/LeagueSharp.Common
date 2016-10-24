@@ -1,0 +1,3 @@
+[submodule "external/SharpDX.Menu"]
+	path = external/SharpDX.Menu
+	url = https://github.com/L33T/SharpDX.Menu

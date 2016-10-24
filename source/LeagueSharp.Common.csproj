@@ -1,0 +1,928 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BFB66E60-98AB-4178-AB3D-7B9C3EBEC2F7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LeagueSharp.Common</RootNamespace>
+    <AssemblyName>LeagueSharp.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Debug\LeagueSharp.Common.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <FileAlignment>1024</FileAlignment>
+    <BaseAddress>16777216</BaseAddress>
+    <CodeAnalysisRuleSet>..\LeagueSharp.Common.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <FileAlignment>1024</FileAlignment>
+    <BaseAddress>16777216</BaseAddress>
+    <DocumentationFile>..\bin\Release\LeagueSharp.Common.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>..\LeagueSharp.Common.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\LeagueSharp.Common.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="clipper_library">
+      <HintPath>Z:\References\clipper_library.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>Z:\Core\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="LeagueSharp">
+      <HintPath>Z:\References\LeagueSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LeagueSharp.Data">
+      <HintPath>Z:\References\LeagueSharp.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="LeagueSharp.Sandbox">
+      <HintPath>Z:\System\LeagueSharp.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>Z:\Core\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Z:\Core\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PlaySharp.Toolkit">
+      <HintPath>Z:\Core\PlaySharp.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>Z:\References\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>Z:\References\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Menu">
+      <HintPath>Z:\References\SharpDX.Menu.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AntiGapcloser\ActiveGapcloser.cs" />
+    <Compile Include="AntiGapcloser\AntiGapcloser.cs" />
+    <Compile Include="AntiGapcloser\AntiGapcloserAdapter.cs" />
+    <Compile Include="AntiGapcloser\Gapcloser.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserAatroxQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserAkaliR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserAlistarW.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserCorkiW.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserDianaR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserEkkoE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserEliseE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserFioraQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserFizzQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserGnarE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserGragasE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserGravesE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserHecarimR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserIllaoiW.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserIreliaQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserJarvanIVQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserJaxQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserJayceQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserKassadinR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserKhazixE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserLeBlancR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserLeeSinQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserLeonaE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserLucianE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserMalphiteR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserMasterYiQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserMonkeyKingE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserPantheonR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserPoppyE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserRenektonE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserRivenE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserSejuaniQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserShenE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserShyvanaR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserTalonE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserTristanaW.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserTryndamereE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserViQ.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserXinZhaoE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserYasuoE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserZacE.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\GapcloserZedR.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\IGapcloser.cs" />
+    <Compile Include="AntiGapcloser\GapcloserData\IGapcloserMetadata.cs" />
+    <Compile Include="AntiGapcloser\GapcloserType.cs" />
+    <Compile Include="Damage\Damage.cs" />
+    <Compile Include="Damage\DamageExtensions.cs" />
+    <Compile Include="Damage\DamageItems.cs" />
+    <Compile Include="Damage\DamagePassive.cs" />
+    <Compile Include="Damage\DamageSpell.cs" />
+    <Compile Include="Damage\DamageSpells.cs" />
+    <Compile Include="Damage\DamageSummonerSpells.cs" />
+    <Compile Include="Damage\DamageType.cs" />
+    <Compile Include="Damage\IDamageSpell.cs" />
+    <Compile Include="Damage\DamageItems\DamageDuskblade.cs" />
+    <Compile Include="Damage\DamageItems\DamageMuramana.cs" />
+    <Compile Include="Damage\DamageItems\DamageSerratedDirk.cs" />
+    <Compile Include="Damage\DamageItems\DamageTrinityForce.cs" />
+    <Compile Include="Damage\DamageItems\DamageIcebornGauntlet.cs" />
+    <Compile Include="Damage\DamageItems\DamageLordVanDammsPillager.cs" />
+    <Compile Include="Damage\DamageItems\DamageRapidFirecannon.cs" />
+    <Compile Include="Damage\DamageItems\DamageKircheisShard.cs" />
+    <Compile Include="Damage\DamageItems\DamageLichBane.cs" />
+    <Compile Include="Damage\DamageItems\DamageStatikkShiv.cs" />
+    <Compile Include="Damage\DamageItems\DamageRecurveBow.cs" />
+    <Compile Include="Damage\DamageItems\DamageRunaansHurricane.cs" />
+    <Compile Include="Damage\DamageItems\DamageSheen.cs" />
+    <Compile Include="Damage\DamageItems\DamageSunfireCape.cs" />
+    <Compile Include="Damage\DamageItems\DamageBilgewaterCutlass.cs" />
+    <Compile Include="Damage\DamageItems\DamageBotRK.cs" />
+    <Compile Include="Damage\DamageItems\DamageBamisCinder.cs" />
+    <Compile Include="Damage\DamageItems\DamageWitsEnd.cs" />
+    <Compile Include="Damage\DamageItems\DamageHexgun.cs" />
+    <Compile Include="Damage\DamageItems\DamageHextechProtobelt.cs" />
+    <Compile Include="Damage\DamageItems\DamageRavenousHydra.cs" />
+    <Compile Include="Damage\DamageItems\DamageTitanicHydra.cs" />
+    <Compile Include="Damage\DamageItems\DamageTiamat.cs" />
+    <Compile Include="Damage\DamageItems\DamageHextechGLP.cs" />
+    <Compile Include="Damage\DamageItems\DamageItem.cs" />
+    <Compile Include="Damage\DamageItems\DamageLiandrysTorment.cs" />
+    <Compile Include="Damage\DamageItems\IDamageItem.cs" />
+    <Compile Include="Damage\DamageItems\IDamageItemMetadata.cs" />
+    <Compile Include="Damage\DamageItems\ItemDamageType.cs" />
+    <Compile Include="Damage\Passives\DamageAatroxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageAkaliPassive.cs" />
+    <Compile Include="Damage\Passives\DamageAkaliPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageAlistarPassive.cs" />
+    <Compile Include="Damage\Passives\DamageAshePassive.cs" />
+    <Compile Include="Damage\Passives\DamageAshePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageBardPassive.cs" />
+    <Compile Include="Damage\Passives\DamageBlitzcrankPassive.cs" />
+    <Compile Include="Damage\Passives\DamageBraumPassive.cs" />
+    <Compile Include="Damage\Passives\DamageCaitlynPassive.cs" />
+    <Compile Include="Damage\Passives\DamageChoGathPassive.cs" />
+    <Compile Include="Damage\Passives\DamageDariusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageDariusPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageDianaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageDrMundoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageEkkoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageEkkoPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageFizzPassive.cs" />
+    <Compile Include="Damage\Passives\DamageFizzPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageGarenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageGnarPassive.cs" />
+    <Compile Include="Damage\Passives\DamageGragasPassive.cs" />
+    <Compile Include="Damage\Passives\DamageGravesPassive.cs" />
+    <Compile Include="Damage\Passives\DamageHecarimPassive.cs" />
+    <Compile Include="Damage\Passives\DamageIllaoiPassive.cs" />
+    <Compile Include="Damage\Passives\DamageIreliaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJarvanIVPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJaxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJaycePassive.cs" />
+    <Compile Include="Damage\Passives\DamageJaycePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageJhinPassive.cs" />
+    <Compile Include="Damage\Passives\DamageJhinPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageJinxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKalistaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKassadinPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKatarinaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKaylePassive.cs" />
+    <Compile Include="Damage\Passives\DamageKennenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageKogMawPassive.cs" />
+    <Compile Include="Damage\Passives\DamageLeonaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageLucianPassive.cs" />
+    <Compile Include="Damage\Passives\DamageLuxPassive.cs" />
+    <Compile Include="Damage\Passives\DamageMalphitePassive.cs" />
+    <Compile Include="Damage\Passives\DamageMasterYiPassive.cs" />
+    <Compile Include="Damage\Passives\DamageMonkeyKingPassive.cs" />
+    <Compile Include="Damage\Passives\DamageMordekaiserPassive.cs" />
+    <Compile Include="Damage\Passives\DamageNasusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageNautilusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageNautilusPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageNidaleePassive.cs" />
+    <Compile Include="Damage\Passives\DamageNocturnePassive.cs" />
+    <Compile Include="Damage\Passives\DamageNunuPassive.cs" />
+    <Compile Include="Damage\Passives\DamageOriannaPassive.cs" />
+    <Compile Include="Damage\Passives\DamagePoppyPassive.cs" />
+    <Compile Include="Damage\Passives\DamageQuinnPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRekSaiPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRenektonPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRengarPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRengarPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageRivenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageRumblePassive.cs" />
+    <Compile Include="Damage\Passives\DamageSejuaniPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShacoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShacoPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageShacoPassive2.cs" />
+    <Compile Include="Damage\Passives\DamageShenPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShyvanaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageShyvanaPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageSionPassive.cs" />
+    <Compile Include="Damage\Passives\DamageSkarnerPassive.cs" />
+    <Compile Include="Damage\Passives\DamageSonaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageSonaPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageTahmKenchPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTalonPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTaricPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTeemoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageThreshPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTristanaPassive.cs" />
+    <Compile Include="Damage\Passives\DamageTrundlePassive.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive2.cs" />
+    <Compile Include="Damage\Passives\DamageTwistedFatePassive3.cs" />
+    <Compile Include="Damage\Passives\DamageUdyrPassive.cs" />
+    <Compile Include="Damage\Passives\DamageVarusPassive.cs" />
+    <Compile Include="Damage\Passives\DamageVaynePassive.cs" />
+    <Compile Include="Damage\Passives\DamageVaynePassive1.cs" />
+    <Compile Include="Damage\Passives\DamageViktorPassive.cs" />
+    <Compile Include="Damage\Passives\DamageViPassive.cs" />
+    <Compile Include="Damage\Passives\DamageViPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageVolibearPassive.cs" />
+    <Compile Include="Damage\Passives\DamageVolibearPassive1.cs" />
+    <Compile Include="Damage\Passives\DamageWarwickPassive.cs" />
+    <Compile Include="Damage\Passives\DamageXinZhaoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageYasuoPassive.cs" />
+    <Compile Include="Damage\Passives\DamageYorickPassive.cs" />
+    <Compile Include="Damage\Passives\DamageZedPassive.cs" />
+    <Compile Include="Damage\Passives\DamageZiggsPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageNamiMarkPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageLeonaMarkPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageKalistaMarkPassive.cs" />
+    <Compile Include="Damage\Passives\Global\DamageBraumMarkPassive.cs" />
+    <Compile Include="Damage\Passives\IPassiveDamage.cs" />
+    <Compile Include="Damage\Passives\IPassiveDamageMetadata.cs" />
+    <Compile Include="Damage\Spells\Aatrox\DamageAatroxE.cs" />
+    <Compile Include="Damage\Spells\Aatrox\DamageAatroxQ.cs" />
+    <Compile Include="Damage\Spells\Aatrox\DamageAatroxR.cs" />
+    <Compile Include="Damage\Spells\Aatrox\DamageAatroxW.cs" />
+    <Compile Include="Damage\Spells\Ahri\DamageAhriE.cs" />
+    <Compile Include="Damage\Spells\Ahri\DamageAhriQ.cs" />
+    <Compile Include="Damage\Spells\Ahri\DamageAhriQ1.cs" />
+    <Compile Include="Damage\Spells\Ahri\DamageAhriR.cs" />
+    <Compile Include="Damage\Spells\Ahri\DamageAhriW.cs" />
+    <Compile Include="Damage\Spells\Ahri\DamageAhriW1.cs" />
+    <Compile Include="Damage\Spells\Akali\DamageAkaliE.cs" />
+    <Compile Include="Damage\Spells\Akali\DamageAkaliQ.cs" />
+    <Compile Include="Damage\Spells\Akali\DamageAkaliQ1.cs" />
+    <Compile Include="Damage\Spells\Akali\DamageAkaliR.cs" />
+    <Compile Include="Damage\Spells\Alistar\DamageAlistarQ.cs" />
+    <Compile Include="Damage\Spells\Alistar\DamageAlistarW.cs" />
+    <Compile Include="Damage\Spells\Amumu\DamageAmumuE.cs" />
+    <Compile Include="Damage\Spells\Amumu\DamageAmumuQ.cs" />
+    <Compile Include="Damage\Spells\Amumu\DamageAmumuR.cs" />
+    <Compile Include="Damage\Spells\Amumu\DamageAmumuW.cs" />
+    <Compile Include="Damage\Spells\Anivia\DamageAniviaE.cs" />
+    <Compile Include="Damage\Spells\Anivia\DamageAniviaQ.cs" />
+    <Compile Include="Damage\Spells\Anivia\DamageAniviaQ1.cs" />
+    <Compile Include="Damage\Spells\Anivia\DamageAniviaR.cs" />
+    <Compile Include="Damage\Spells\Annie\DamageAnnieQ.cs" />
+    <Compile Include="Damage\Spells\Annie\DamageAnnieR.cs" />
+    <Compile Include="Damage\Spells\Annie\DamageAnnieW.cs" />
+    <Compile Include="Damage\Spells\Ashe\DamageAsheR.cs" />
+    <Compile Include="Damage\Spells\Ashe\DamageAsheR1.cs" />
+    <Compile Include="Damage\Spells\Ashe\DamageAsheW.cs" />
+    <Compile Include="Damage\Spells\Azir\DamageAzirE.cs" />
+    <Compile Include="Damage\Spells\Azir\DamageAzirQ.cs" />
+    <Compile Include="Damage\Spells\Azir\DamageAzirR.cs" />
+    <Compile Include="Damage\Spells\Azir\DamageAzirW.cs" />
+    <Compile Include="Damage\Spells\Bard\DamageBardQ.cs" />
+    <Compile Include="Damage\Spells\Blitzcrank\DamageBlitzcrankE.cs" />
+    <Compile Include="Damage\Spells\Blitzcrank\DamageBlitzcrankQ.cs" />
+    <Compile Include="Damage\Spells\Blitzcrank\DamageBlitzcrankR.cs" />
+    <Compile Include="Damage\Spells\Brand\DamageBrandE.cs" />
+    <Compile Include="Damage\Spells\Brand\DamageBrandQ.cs" />
+    <Compile Include="Damage\Spells\Brand\DamageBrandR.cs" />
+    <Compile Include="Damage\Spells\Brand\DamageBrandW.cs" />
+    <Compile Include="Damage\Spells\Braum\DamageBraumQ.cs" />
+    <Compile Include="Damage\Spells\Braum\DamageBraumR.cs" />
+    <Compile Include="Damage\Spells\Caitlyn\DamageCaitlynE.cs" />
+    <Compile Include="Damage\Spells\Caitlyn\DamageCaitlynQ.cs" />
+    <Compile Include="Damage\Spells\Caitlyn\DamageCaitlynR.cs" />
+    <Compile Include="Damage\Spells\Cassiopeia\DamageCassiopeiaE.cs" />
+    <Compile Include="Damage\Spells\Cassiopeia\DamageCassiopeiaQ.cs" />
+    <Compile Include="Damage\Spells\Cassiopeia\DamageCassiopeiaR.cs" />
+    <Compile Include="Damage\Spells\Cassiopeia\DamageCassiopeiaW.cs" />
+    <Compile Include="Damage\Spells\ChoGath\DamageChoGathE.cs" />
+    <Compile Include="Damage\Spells\ChoGath\DamageChoGathQ.cs" />
+    <Compile Include="Damage\Spells\ChoGath\DamageChoGathR.cs" />
+    <Compile Include="Damage\Spells\ChoGath\DamageChoGathW.cs" />
+    <Compile Include="Damage\Spells\Corki\DamageCorkiE.cs" />
+    <Compile Include="Damage\Spells\Corki\DamageCorkiQ.cs" />
+    <Compile Include="Damage\Spells\Corki\DamageCorkiR.cs" />
+    <Compile Include="Damage\Spells\Corki\DamageCorkiR1.cs" />
+    <Compile Include="Damage\Spells\Corki\DamageCorkiW.cs" />
+    <Compile Include="Damage\Spells\Corki\DamageCorkiW1.cs" />
+    <Compile Include="Damage\Spells\Darius\DamageDariusQ.cs" />
+    <Compile Include="Damage\Spells\Darius\DamageDariusR.cs" />
+    <Compile Include="Damage\Spells\Darius\DamageDariusW.cs" />
+    <Compile Include="Damage\Spells\Diana\DamageDianaQ.cs" />
+    <Compile Include="Damage\Spells\Diana\DamageDianaR.cs" />
+    <Compile Include="Damage\Spells\Diana\DamageDianaW.cs" />
+    <Compile Include="Damage\Spells\Draven\DamageDravenE.cs" />
+    <Compile Include="Damage\Spells\Draven\DamageDravenQ.cs" />
+    <Compile Include="Damage\Spells\Draven\DamageDravenR.cs" />
+    <Compile Include="Damage\Spells\DrMundo\DamageDrMundoQ.cs" />
+    <Compile Include="Damage\Spells\Ekko\DamageEkkoE.cs" />
+    <Compile Include="Damage\Spells\Ekko\DamageEkkoQ.cs" />
+    <Compile Include="Damage\Spells\Ekko\DamageEkkoQ1.cs" />
+    <Compile Include="Damage\Spells\Ekko\DamageEkkoW.cs" />
+    <Compile Include="Damage\Spells\Elise\DamageEliseQ.cs" />
+    <Compile Include="Damage\Spells\Elise\DamageEliseQ1.cs" />
+    <Compile Include="Damage\Spells\Elise\DamageEliseW.cs" />
+    <Compile Include="Damage\Spells\Evelynn\DamageEvelynnE.cs" />
+    <Compile Include="Damage\Spells\Evelynn\DamageEvelynnQ.cs" />
+    <Compile Include="Damage\Spells\Evelynn\DamageEvelynnR.cs" />
+    <Compile Include="Damage\Spells\ExportDamageMetadataAttribute.cs" />
+    <Compile Include="Damage\Spells\Ezreal\DamageEzrealE.cs" />
+    <Compile Include="Damage\Spells\Ezreal\DamageEzrealQ.cs" />
+    <Compile Include="Damage\Spells\Ezreal\DamageEzrealR.cs" />
+    <Compile Include="Damage\Spells\Ezreal\DamageEzrealW.cs" />
+    <Compile Include="Damage\Spells\Fiddlesticks\DamageFiddlesticksE.cs" />
+    <Compile Include="Damage\Spells\Fiddlesticks\DamageFiddlesticksR.cs" />
+    <Compile Include="Damage\Spells\Fiddlesticks\DamageFiddlesticksW.cs" />
+    <Compile Include="Damage\Spells\Fiora\DamageFioraQ.cs" />
+    <Compile Include="Damage\Spells\Fiora\DamageFioraW.cs" />
+    <Compile Include="Damage\Spells\Fizz\DamageFizzE.cs" />
+    <Compile Include="Damage\Spells\Fizz\DamageFizzQ.cs" />
+    <Compile Include="Damage\Spells\Fizz\DamageFizzR.cs" />
+    <Compile Include="Damage\Spells\Fizz\DamageFizzW.cs" />
+    <Compile Include="Damage\Spells\Galio\DamageGalioE.cs" />
+    <Compile Include="Damage\Spells\Galio\DamageGalioQ.cs" />
+    <Compile Include="Damage\Spells\Galio\DamageGalioR.cs" />
+    <Compile Include="Damage\Spells\GangPlank\DamageGangPlankQ.cs" />
+    <Compile Include="Damage\Spells\GangPlank\DamageGangPlankR.cs" />
+    <Compile Include="Damage\Spells\Garen\DamageGarenE.cs" />
+    <Compile Include="Damage\Spells\Garen\DamageGarenQ.cs" />
+    <Compile Include="Damage\Spells\Garen\DamageGarenR.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarE.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarE1.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarQ.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarQ1.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarR.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarW.cs" />
+    <Compile Include="Damage\Spells\Gnar\DamageGnarW1.cs" />
+    <Compile Include="Damage\Spells\Gragas\DamageGragasE.cs" />
+    <Compile Include="Damage\Spells\Gragas\DamageGragasQ.cs" />
+    <Compile Include="Damage\Spells\Gragas\DamageGragasR.cs" />
+    <Compile Include="Damage\Spells\Gragas\DamageGragasW.cs" />
+    <Compile Include="Damage\Spells\Graves\DamageGravesQ.cs" />
+    <Compile Include="Damage\Spells\Graves\DamageGravesQ1.cs" />
+    <Compile Include="Damage\Spells\Graves\DamageGravesR.cs" />
+    <Compile Include="Damage\Spells\Graves\DamageGravesW.cs" />
+    <Compile Include="Damage\Spells\Hecarim\DamageHecarimE.cs" />
+    <Compile Include="Damage\Spells\Hecarim\DamageHecarimQ.cs" />
+    <Compile Include="Damage\Spells\Hecarim\DamageHecarimR.cs" />
+    <Compile Include="Damage\Spells\Hecarim\DamageHecarimW.cs" />
+    <Compile Include="Damage\Spells\Heimerdinger\DamageHeimerdingerE.cs" />
+    <Compile Include="Damage\Spells\Heimerdinger\DamageHeimerdingerE1.cs" />
+    <Compile Include="Damage\Spells\Heimerdinger\DamageHeimerdingerW.cs" />
+    <Compile Include="Damage\Spells\Heimerdinger\DamageHeimerdingerW1.cs" />
+    <Compile Include="Damage\Spells\IDamageSpellMetadata.cs" />
+    <Compile Include="Damage\Spells\Irelia\DamageIreliaE.cs" />
+    <Compile Include="Damage\Spells\Irelia\DamageIreliaQ.cs" />
+    <Compile Include="Damage\Spells\Irelia\DamageIreliaR.cs" />
+    <Compile Include="Damage\Spells\Irelia\DamageIreliaW.cs" />
+    <Compile Include="Damage\Spells\Janna\DamageJannaQ.cs" />
+    <Compile Include="Damage\Spells\Janna\DamageJannaW.cs" />
+    <Compile Include="Damage\Spells\JarvanIV\DamageJarvanIVE.cs" />
+    <Compile Include="Damage\Spells\JarvanIV\DamageJarvanIVQ.cs" />
+    <Compile Include="Damage\Spells\JarvanIV\DamageJarvanIVR.cs" />
+    <Compile Include="Damage\Spells\Jax\DamageJaxE.cs" />
+    <Compile Include="Damage\Spells\Jax\DamageJaxQ.cs" />
+    <Compile Include="Damage\Spells\Jax\DamageJaxR.cs" />
+    <Compile Include="Damage\Spells\Jax\DamageJaxW.cs" />
+    <Compile Include="Damage\Spells\Jayce\DamageJayceE.cs" />
+    <Compile Include="Damage\Spells\Jayce\DamageJayceQ.cs" />
+    <Compile Include="Damage\Spells\Jayce\DamageJayceQ1.cs" />
+    <Compile Include="Damage\Spells\Jayce\DamageJayceW.cs" />
+    <Compile Include="Damage\Spells\Jhin\DamageJhinE.cs" />
+    <Compile Include="Damage\Spells\Jhin\DamageJhinQ.cs" />
+    <Compile Include="Damage\Spells\Jhin\DamageJhinR.cs" />
+    <Compile Include="Damage\Spells\Jhin\DamageJhinR1.cs" />
+    <Compile Include="Damage\Spells\Jhin\DamageJhinW.cs" />
+    <Compile Include="Damage\Spells\Jinx\DamageJinxE.cs" />
+    <Compile Include="Damage\Spells\Jinx\DamageJinxQ.cs" />
+    <Compile Include="Damage\Spells\Jinx\DamageJinxR.cs" />
+    <Compile Include="Damage\Spells\Jinx\DamageJinxR1.cs" />
+    <Compile Include="Damage\Spells\Jinx\DamageJinxW.cs" />
+    <Compile Include="Damage\Spells\Kalista\DamageKalistaE.cs" />
+    <Compile Include="Damage\Spells\Kalista\DamageKalistaQ.cs" />
+    <Compile Include="Damage\Spells\Kalista\DamageKalistaW.cs" />
+    <Compile Include="Damage\Spells\Karma\DamageKarmaQ.cs" />
+    <Compile Include="Damage\Spells\Karma\DamageKarmaQ1.cs" />
+    <Compile Include="Damage\Spells\Karma\DamageKarmaW.cs" />
+    <Compile Include="Damage\Spells\Karma\DamageKarmaW1.cs" />
+    <Compile Include="Damage\Spells\Karthus\DamageKarthusE.cs" />
+    <Compile Include="Damage\Spells\Karthus\DamageKarthusQ.cs" />
+    <Compile Include="Damage\Spells\Karthus\DamageKarthusQ1.cs" />
+    <Compile Include="Damage\Spells\Karthus\DamageKarthusR.cs" />
+    <Compile Include="Damage\Spells\Kassadin\DamageKassadinE.cs" />
+    <Compile Include="Damage\Spells\Kassadin\DamageKassadinQ.cs" />
+    <Compile Include="Damage\Spells\Kassadin\DamageKassadinR.cs" />
+    <Compile Include="Damage\Spells\Kassadin\DamageKassadinR1.cs" />
+    <Compile Include="Damage\Spells\Kassadin\DamageKassadinW.cs" />
+    <Compile Include="Damage\Spells\Kassadin\DamageKassadinW1.cs" />
+    <Compile Include="Damage\Spells\Katarina\DamageKatarinaE.cs" />
+    <Compile Include="Damage\Spells\Katarina\DamageKatarinaQ.cs" />
+    <Compile Include="Damage\Spells\Katarina\DamageKatarinaQ1.cs" />
+    <Compile Include="Damage\Spells\Katarina\DamageKatarinaR.cs" />
+    <Compile Include="Damage\Spells\Katarina\DamageKatarinaR1.cs" />
+    <Compile Include="Damage\Spells\Katarina\DamageKatarinaW.cs" />
+    <Compile Include="Damage\Spells\Kayle\DamageKayleE.cs" />
+    <Compile Include="Damage\Spells\Kayle\DamageKayleQ.cs" />
+    <Compile Include="Damage\Spells\Kennen\DamageKennenE.cs" />
+    <Compile Include="Damage\Spells\Kennen\DamageKennenQ.cs" />
+    <Compile Include="Damage\Spells\Kennen\DamageKennenR.cs" />
+    <Compile Include="Damage\Spells\Kennen\DamageKennenW.cs" />
+    <Compile Include="Damage\Spells\Kennen\DamageKennenW1.cs" />
+    <Compile Include="Damage\Spells\KhaZix\DamageKhaZixE.cs" />
+    <Compile Include="Damage\Spells\KhaZix\DamageKhaZixQ.cs" />
+    <Compile Include="Damage\Spells\KhaZix\DamageKhaZixQ1.cs" />
+    <Compile Include="Damage\Spells\KhaZix\DamageKhaZixQ2.cs" />
+    <Compile Include="Damage\Spells\KhaZix\DamageKhaZixQ3.cs" />
+    <Compile Include="Damage\Spells\KhaZix\DamageKhaZixW.cs" />
+    <Compile Include="Damage\Spells\Kindred\DamageKindredE.cs" />
+    <Compile Include="Damage\Spells\Kindred\DamageKindredQ.cs" />
+    <Compile Include="Damage\Spells\Kindred\DamageKindredW.cs" />
+    <Compile Include="Damage\Spells\KogMaw\DamageKogMawE.cs" />
+    <Compile Include="Damage\Spells\KogMaw\DamageKogMawQ.cs" />
+    <Compile Include="Damage\Spells\KogMaw\DamageKogMawR.cs" />
+    <Compile Include="Damage\Spells\KogMaw\DamageKogMawW.cs" />
+    <Compile Include="Damage\Spells\LeBlanc\DamageLeBlancE.cs" />
+    <Compile Include="Damage\Spells\LeBlanc\DamageLeBlancQ.cs" />
+    <Compile Include="Damage\Spells\LeBlanc\DamageLeBlancQ1.cs" />
+    <Compile Include="Damage\Spells\LeBlanc\DamageLeBlancW.cs" />
+    <Compile Include="Damage\Spells\LeeSin\DamageLeeSinE.cs" />
+    <Compile Include="Damage\Spells\LeeSin\DamageLeeSinQ.cs" />
+    <Compile Include="Damage\Spells\LeeSin\DamageLeeSinQ1.cs" />
+    <Compile Include="Damage\Spells\LeeSin\DamageLeeSinR.cs" />
+    <Compile Include="Damage\Spells\Leona\DamageLeonaE.cs" />
+    <Compile Include="Damage\Spells\Leona\DamageLeonaQ.cs" />
+    <Compile Include="Damage\Spells\Leona\DamageLeonaR.cs" />
+    <Compile Include="Damage\Spells\Leona\DamageLeonaW.cs" />
+    <Compile Include="Damage\Spells\Lissandra\DamageLissandraE.cs" />
+    <Compile Include="Damage\Spells\Lissandra\DamageLissandraQ.cs" />
+    <Compile Include="Damage\Spells\Lissandra\DamageLissandraR.cs" />
+    <Compile Include="Damage\Spells\Lissandra\DamageLissandraW.cs" />
+    <Compile Include="Damage\Spells\Lucian\DamageLucianQ.cs" />
+    <Compile Include="Damage\Spells\Lucian\DamageLucianR.cs" />
+    <Compile Include="Damage\Spells\Lucian\DamageLucianW.cs" />
+    <Compile Include="Damage\Spells\Lulu\DamageLuluE.cs" />
+    <Compile Include="Damage\Spells\Lulu\DamageLuluQ.cs" />
+    <Compile Include="Damage\Spells\Lux\DamageLuxE.cs" />
+    <Compile Include="Damage\Spells\Lux\DamageLuxQ.cs" />
+    <Compile Include="Damage\Spells\Lux\DamageLuxR.cs" />
+    <Compile Include="Damage\Spells\Malphite\DamageMalphiteE.cs" />
+    <Compile Include="Damage\Spells\Malphite\DamageMalphiteQ.cs" />
+    <Compile Include="Damage\Spells\Malphite\DamageMalphiteR.cs" />
+    <Compile Include="Damage\Spells\Malphite\DamageMalphiteW.cs" />
+    <Compile Include="Damage\Spells\Malzahar\DamageMalzaharE.cs" />
+    <Compile Include="Damage\Spells\Malzahar\DamageMalzaharQ.cs" />
+    <Compile Include="Damage\Spells\Malzahar\DamageMalzaharR.cs" />
+    <Compile Include="Damage\Spells\Malzahar\DamageMalzaharW.cs" />
+    <Compile Include="Damage\Spells\Maokai\DamageMaokaiE.cs" />
+    <Compile Include="Damage\Spells\Maokai\DamageMaokaiE1.cs" />
+    <Compile Include="Damage\Spells\Maokai\DamageMaokaiQ.cs" />
+    <Compile Include="Damage\Spells\Maokai\DamageMaokaiR.cs" />
+    <Compile Include="Damage\Spells\Maokai\DamageMaokaiW.cs" />
+    <Compile Include="Damage\Spells\MasterYi\DamageMasterYiE.cs" />
+    <Compile Include="Damage\Spells\MasterYi\DamageMasterYiQ.cs" />
+    <Compile Include="Damage\Spells\MissFortune\DamageMissFortuneE.cs" />
+    <Compile Include="Damage\Spells\MissFortune\DamageMissFortuneQ.cs" />
+    <Compile Include="Damage\Spells\MissFortune\DamageMissFortuneQ1.cs" />
+    <Compile Include="Damage\Spells\MissFortune\DamageMissFortuneR.cs" />
+    <Compile Include="Damage\Spells\MissFortune\DamageMissFortuneW.cs" />
+    <Compile Include="Damage\Spells\MonkeyKing\DamageMonkeyKingE.cs" />
+    <Compile Include="Damage\Spells\MonkeyKing\DamageMonkeyKingQ.cs" />
+    <Compile Include="Damage\Spells\MonkeyKing\DamageMonkeyKingR.cs" />
+    <Compile Include="Damage\Spells\MonkeyKing\DamageMonkeyKingW.cs" />
+    <Compile Include="Damage\Spells\Mordekaiser\DamageMordekaiserE.cs" />
+    <Compile Include="Damage\Spells\Mordekaiser\DamageMordekaiserQ.cs" />
+    <Compile Include="Damage\Spells\Mordekaiser\DamageMordekaiserR.cs" />
+    <Compile Include="Damage\Spells\Mordekaiser\DamageMordekaiserW.cs" />
+    <Compile Include="Damage\Spells\Morgana\DamageMorganaQ.cs" />
+    <Compile Include="Damage\Spells\Morgana\DamageMorganaR.cs" />
+    <Compile Include="Damage\Spells\Morgana\DamageMorganaW.cs" />
+    <Compile Include="Damage\Spells\Nami\DamageNamiE.cs" />
+    <Compile Include="Damage\Spells\Nami\DamageNamiQ.cs" />
+    <Compile Include="Damage\Spells\Nami\DamageNamiR.cs" />
+    <Compile Include="Damage\Spells\Nami\DamageNamiW.cs" />
+    <Compile Include="Damage\Spells\Nasus\DamageNasusE.cs" />
+    <Compile Include="Damage\Spells\Nasus\DamageNasusE1.cs" />
+    <Compile Include="Damage\Spells\Nasus\DamageNasusQ.cs" />
+    <Compile Include="Damage\Spells\Nasus\DamageNasusR.cs" />
+    <Compile Include="Damage\Spells\Nautilus\DamageNautilusE.cs" />
+    <Compile Include="Damage\Spells\Nautilus\DamageNautilusQ.cs" />
+    <Compile Include="Damage\Spells\Nautilus\DamageNautilusR.cs" />
+    <Compile Include="Damage\Spells\Nautilus\DamageNautilusR1.cs" />
+    <Compile Include="Damage\Spells\Nautilus\DamageNautilusW.cs" />
+    <Compile Include="Damage\Spells\Nidalee\DamageNidaleeE1.cs" />
+    <Compile Include="Damage\Spells\Nidalee\DamageNidaleeQ.cs" />
+    <Compile Include="Damage\Spells\Nidalee\DamageNidaleeQ1.cs" />
+    <Compile Include="Damage\Spells\Nidalee\DamageNidaleeW.cs" />
+    <Compile Include="Damage\Spells\Nidalee\DamageNidaleeW1.cs" />
+    <Compile Include="Damage\Spells\Nocturne\DamageNocturneE.cs" />
+    <Compile Include="Damage\Spells\Nocturne\DamageNocturneQ.cs" />
+    <Compile Include="Damage\Spells\Nocturne\DamageNocturneR.cs" />
+    <Compile Include="Damage\Spells\Nunu\DamageNunuE.cs" />
+    <Compile Include="Damage\Spells\Nunu\DamageNunuQ.cs" />
+    <Compile Include="Damage\Spells\Nunu\DamageNunuR.cs" />
+    <Compile Include="Damage\Spells\Olaf\DamageOlafE.cs" />
+    <Compile Include="Damage\Spells\Olaf\DamageOlafQ.cs" />
+    <Compile Include="Damage\Spells\Orianna\DamageOriannaE.cs" />
+    <Compile Include="Damage\Spells\Orianna\DamageOriannaQ.cs" />
+    <Compile Include="Damage\Spells\Orianna\DamageOriannaR.cs" />
+    <Compile Include="Damage\Spells\Orianna\DamageOriannaW.cs" />
+    <Compile Include="Damage\Spells\Pantheon\DamagePantheonE.cs" />
+    <Compile Include="Damage\Spells\Pantheon\DamagePantheonQ.cs" />
+    <Compile Include="Damage\Spells\Pantheon\DamagePantheonR.cs" />
+    <Compile Include="Damage\Spells\Pantheon\DamagePantheonR1.cs" />
+    <Compile Include="Damage\Spells\Pantheon\DamagePantheonW.cs" />
+    <Compile Include="Damage\Spells\Poppy\DamagePoppyE.cs" />
+    <Compile Include="Damage\Spells\Poppy\DamagePoppyE1.cs" />
+    <Compile Include="Damage\Spells\Poppy\DamagePoppyQ.cs" />
+    <Compile Include="Damage\Spells\Poppy\DamagePoppyQ1.cs" />
+    <Compile Include="Damage\Spells\Poppy\DamagePoppyR.cs" />
+    <Compile Include="Damage\Spells\Poppy\DamagePoppyW.cs" />
+    <Compile Include="Damage\Spells\Quinn\DamageQuinnE.cs" />
+    <Compile Include="Damage\Spells\Quinn\DamageQuinnQ.cs" />
+    <Compile Include="Damage\Spells\Quinn\DamageQuinnR.cs" />
+    <Compile Include="Damage\Spells\Rammus\DamageRammusQ.cs" />
+    <Compile Include="Damage\Spells\Rammus\DamageRammusR.cs" />
+    <Compile Include="Damage\Spells\Rammus\DamageRammusW.cs" />
+    <Compile Include="Damage\Spells\Renekton\DamageRenektonE.cs" />
+    <Compile Include="Damage\Spells\Renekton\DamageRenektonQ.cs" />
+    <Compile Include="Damage\Spells\Renekton\DamageRenektonQ1.cs" />
+    <Compile Include="Damage\Spells\Renekton\DamageRenektonR.cs" />
+    <Compile Include="Damage\Spells\Renekton\DamageRenektonW.cs" />
+    <Compile Include="Damage\Spells\Renekton\DamageRenektonW1.cs" />
+    <Compile Include="Damage\Spells\Rengar\DamageRengarE.cs" />
+    <Compile Include="Damage\Spells\Rengar\DamageRengarQ.cs" />
+    <Compile Include="Damage\Spells\Rengar\DamageRengarW.cs" />
+    <Compile Include="Damage\Spells\Riven\DamageRivenQ.cs" />
+    <Compile Include="Damage\Spells\Riven\DamageRivenR.cs" />
+    <Compile Include="Damage\Spells\Riven\DamageRivenW.cs" />
+    <Compile Include="Damage\Spells\Rumble\DamageRumbleE.cs" />
+    <Compile Include="Damage\Spells\Rumble\DamageRumbleE1.cs" />
+    <Compile Include="Damage\Spells\Rumble\DamageRumbleQ.cs" />
+    <Compile Include="Damage\Spells\Rumble\DamageRumbleQ1.cs" />
+    <Compile Include="Damage\Spells\Rumble\DamageRumbleR.cs" />
+    <Compile Include="Damage\Spells\Rumble\DamageRumbleR1.cs" />
+    <Compile Include="Damage\Spells\Ryze\DamageRyzeE.cs" />
+    <Compile Include="Damage\Spells\Ryze\DamageRyzeQ.cs" />
+    <Compile Include="Damage\Spells\Ryze\DamageRyzeW.cs" />
+    <Compile Include="Damage\Spells\Sejuani\DamageSejuaniE.cs" />
+    <Compile Include="Damage\Spells\Sejuani\DamageSejuaniQ.cs" />
+    <Compile Include="Damage\Spells\Sejuani\DamageSejuaniR.cs" />
+    <Compile Include="Damage\Spells\Sejuani\DamageSejuaniW.cs" />
+    <Compile Include="Damage\Spells\Sejuani\DamageSejuaniW1.cs" />
+    <Compile Include="Damage\Spells\Shaco\DamageShacoE.cs" />
+    <Compile Include="Damage\Spells\Shaco\DamageShacoQ.cs" />
+    <Compile Include="Damage\Spells\Shaco\DamageShacoR.cs" />
+    <Compile Include="Damage\Spells\Shaco\DamageShacoW.cs" />
+    <Compile Include="Damage\Spells\Shen\DamageShenE.cs" />
+    <Compile Include="Damage\Spells\Shen\DamageShenQ.cs" />
+    <Compile Include="Damage\Spells\Shen\DamageShenQ1.cs" />
+    <Compile Include="Damage\Spells\Shyvana\DamageShyvanaE.cs" />
+    <Compile Include="Damage\Spells\Shyvana\DamageShyvanaQ.cs" />
+    <Compile Include="Damage\Spells\Shyvana\DamageShyvanaR.cs" />
+    <Compile Include="Damage\Spells\Shyvana\DamageShyvanaW.cs" />
+    <Compile Include="Damage\Spells\Singed\DamageSingedE.cs" />
+    <Compile Include="Damage\Spells\Singed\DamageSingedQ.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionE.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionE1.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionQ.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionQ1.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionR.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionR1.cs" />
+    <Compile Include="Damage\Spells\Sion\DamageSionW.cs" />
+    <Compile Include="Damage\Spells\Sivir\DamageSivirQ.cs" />
+    <Compile Include="Damage\Spells\Sivir\DamageSivirW.cs" />
+    <Compile Include="Damage\Spells\Skarner\DamageSkarnerE.cs" />
+    <Compile Include="Damage\Spells\Skarner\DamageSkarnerQ.cs" />
+    <Compile Include="Damage\Spells\Skarner\DamageSkarnerR.cs" />
+    <Compile Include="Damage\Spells\Sona\DamageSonaQ.cs" />
+    <Compile Include="Damage\Spells\Sona\DamageSonaR.cs" />
+    <Compile Include="Damage\Spells\Soraka\DamageSorakaE.cs" />
+    <Compile Include="Damage\Spells\Soraka\DamageSorakaQ.cs" />
+    <Compile Include="Damage\Spells\Swain\DamageSwainE.cs" />
+    <Compile Include="Damage\Spells\Swain\DamageSwainQ.cs" />
+    <Compile Include="Damage\Spells\Swain\DamageSwainR.cs" />
+    <Compile Include="Damage\Spells\Swain\DamageSwainW.cs" />
+    <Compile Include="Damage\Spells\Syndra\DamageSyndraE.cs" />
+    <Compile Include="Damage\Spells\Syndra\DamageSyndraQ.cs" />
+    <Compile Include="Damage\Spells\Syndra\DamageSyndraR.cs" />
+    <Compile Include="Damage\Spells\Syndra\DamageSyndraR1.cs" />
+    <Compile Include="Damage\Spells\Syndra\DamageSyndraW.cs" />
+    <Compile Include="Damage\Spells\TahmKench\DamageTahmKenchQ.cs" />
+    <Compile Include="Damage\Spells\TahmKench\DamageTahmKenchW.cs" />
+    <Compile Include="Damage\Spells\TahmKench\DamageTahmKenchW1.cs" />
+    <Compile Include="Damage\Spells\Talon\DamageTalonQ.cs" />
+    <Compile Include="Damage\Spells\Talon\DamageTalonR.cs" />
+    <Compile Include="Damage\Spells\Talon\DamageTalonW.cs" />
+    <Compile Include="Damage\Spells\Taric\DamageTaricE.cs" />
+    <Compile Include="Damage\Spells\Taric\DamageTaricR.cs" />
+    <Compile Include="Damage\Spells\Taric\DamageTaricW.cs" />
+    <Compile Include="Damage\Spells\Teemo\DamageTeemoE.cs" />
+    <Compile Include="Damage\Spells\Teemo\DamageTeemoE1.cs" />
+    <Compile Include="Damage\Spells\Teemo\DamageTeemoQ.cs" />
+    <Compile Include="Damage\Spells\Teemo\DamageTeemoR.cs" />
+    <Compile Include="Damage\Spells\Thresh\DamageThreshE.cs" />
+    <Compile Include="Damage\Spells\Thresh\DamageThreshQ.cs" />
+    <Compile Include="Damage\Spells\Thresh\DamageThreshR.cs" />
+    <Compile Include="Damage\Spells\Tristana\DamageTristanaE.cs" />
+    <Compile Include="Damage\Spells\Tristana\DamageTristanaR.cs" />
+    <Compile Include="Damage\Spells\Tristana\DamageTristanaW.cs" />
+    <Compile Include="Damage\Spells\Trundle\DamageTrundleQ.cs" />
+    <Compile Include="Damage\Spells\Trundle\DamageTrundleR.cs" />
+    <Compile Include="Damage\Spells\Tryndamere\DamageTryndamereE.cs" />
+    <Compile Include="Damage\Spells\TwistedFate\DamageTwistedFateE.cs" />
+    <Compile Include="Damage\Spells\TwistedFate\DamageTwistedFateQ.cs" />
+    <Compile Include="Damage\Spells\TwistedFate\DamageTwistedFateW.cs" />
+    <Compile Include="Damage\Spells\TwistedFate\DamageTwistedFateW1.cs" />
+    <Compile Include="Damage\Spells\TwistedFate\DamageTwistedFateW2.cs" />
+    <Compile Include="Damage\Spells\Twitch\DamageTwitchE.cs" />
+    <Compile Include="Damage\Spells\Twitch\DamageTwitchE1.cs" />
+    <Compile Include="Damage\Spells\Udyr\DamageUdyrQ.cs" />
+    <Compile Include="Damage\Spells\Udyr\DamageUdyrR.cs" />
+    <Compile Include="Damage\Spells\Urgot\DamageUrgotE.cs" />
+    <Compile Include="Damage\Spells\Urgot\DamageUrgotQ.cs" />
+    <Compile Include="Damage\Spells\Varus\DamageVarusE.cs" />
+    <Compile Include="Damage\Spells\Varus\DamageVarusQ.cs" />
+    <Compile Include="Damage\Spells\Varus\DamageVarusQ1.cs" />
+    <Compile Include="Damage\Spells\Varus\DamageVarusR.cs" />
+    <Compile Include="Damage\Spells\Varus\DamageVarusW.cs" />
+    <Compile Include="Damage\Spells\Varus\DamageVarusW1.cs" />
+    <Compile Include="Damage\Spells\Vayne\DamageVayneE.cs" />
+    <Compile Include="Damage\Spells\Vayne\DamageVayneQ.cs" />
+    <Compile Include="Damage\Spells\Vayne\DamageVayneW.cs" />
+    <Compile Include="Damage\Spells\Veigar\DamageVeigarQ.cs" />
+    <Compile Include="Damage\Spells\Veigar\DamageVeigarR.cs" />
+    <Compile Include="Damage\Spells\Veigar\DamageVeigarW.cs" />
+    <Compile Include="Damage\Spells\Velkoz\DamageVelkozE.cs" />
+    <Compile Include="Damage\Spells\Velkoz\DamageVelkozQ.cs" />
+    <Compile Include="Damage\Spells\Velkoz\DamageVelkozR.cs" />
+    <Compile Include="Damage\Spells\Velkoz\DamageVelkozW.cs" />
+    <Compile Include="Damage\Spells\Viktor\DamageViktorE.cs" />
+    <Compile Include="Damage\Spells\Viktor\DamageViktorE1.cs" />
+    <Compile Include="Damage\Spells\Viktor\DamageViktorQ.cs" />
+    <Compile Include="Damage\Spells\Viktor\DamageViktorR.cs" />
+    <Compile Include="Damage\Spells\Viktor\DamageViktorR1.cs" />
+    <Compile Include="Damage\Spells\Vi\DamageViE.cs" />
+    <Compile Include="Damage\Spells\Vi\DamageViQ.cs" />
+    <Compile Include="Damage\Spells\Vi\DamageViR.cs" />
+    <Compile Include="Damage\Spells\Vi\DamageViW.cs" />
+    <Compile Include="Damage\Spells\Vladimir\DamageVladimirE.cs" />
+    <Compile Include="Damage\Spells\Vladimir\DamageVladimirQ.cs" />
+    <Compile Include="Damage\Spells\Vladimir\DamageVladimirR.cs" />
+    <Compile Include="Damage\Spells\Vladimir\DamageVladimirW.cs" />
+    <Compile Include="Damage\Spells\Volibear\DamageVolibearE.cs" />
+    <Compile Include="Damage\Spells\Volibear\DamageVolibearQ.cs" />
+    <Compile Include="Damage\Spells\Volibear\DamageVolibearR.cs" />
+    <Compile Include="Damage\Spells\Volibear\DamageVolibearW.cs" />
+    <Compile Include="Damage\Spells\Warwick\DamageWarwickQ.cs" />
+    <Compile Include="Damage\Spells\Warwick\DamageWarwickR.cs" />
+    <Compile Include="Damage\Spells\Xerath\DamageXerathE.cs" />
+    <Compile Include="Damage\Spells\Xerath\DamageXerathQ.cs" />
+    <Compile Include="Damage\Spells\Xerath\DamageXerathR.cs" />
+    <Compile Include="Damage\Spells\Xerath\DamageXerathW.cs" />
+    <Compile Include="Damage\Spells\XinZhao\DamageXinZhaoE.cs" />
+    <Compile Include="Damage\Spells\XinZhao\DamageXinZhaoQ.cs" />
+    <Compile Include="Damage\Spells\XinZhao\DamageXinZhaoR.cs" />
+    <Compile Include="Damage\Spells\Yasuo\DamageYasuoE.cs" />
+    <Compile Include="Damage\Spells\Yasuo\DamageYasuoQ.cs" />
+    <Compile Include="Damage\Spells\Yasuo\DamageYasuoR.cs" />
+    <Compile Include="Damage\Spells\Yorick\DamageYorickE.cs" />
+    <Compile Include="Damage\Spells\Yorick\DamageYorickQ.cs" />
+    <Compile Include="Damage\Spells\Yorick\DamageYorickW.cs" />
+    <Compile Include="Damage\Spells\Zac\DamageZacE.cs" />
+    <Compile Include="Damage\Spells\Zac\DamageZacQ.cs" />
+    <Compile Include="Damage\Spells\Zac\DamageZacR.cs" />
+    <Compile Include="Damage\Spells\Zac\DamageZacW.cs" />
+    <Compile Include="Damage\Spells\Zed\DamageZedE.cs" />
+    <Compile Include="Damage\Spells\Zed\DamageZedQ.cs" />
+    <Compile Include="Damage\Spells\Zed\DamageZedR.cs" />
+    <Compile Include="Damage\Spells\Ziggs\DamageZiggsE.cs" />
+    <Compile Include="Damage\Spells\Ziggs\DamageZiggsQ.cs" />
+    <Compile Include="Damage\Spells\Ziggs\DamageZiggsR.cs" />
+    <Compile Include="Damage\Spells\Ziggs\DamageZiggsW.cs" />
+    <Compile Include="Damage\Spells\Zilean\DamageZileanQ.cs" />
+    <Compile Include="Damage\Spells\Zyra\DamageZyraE.cs" />
+    <Compile Include="Damage\Spells\Zyra\DamageZyraQ.cs" />
+    <Compile Include="Damage\Spells\Zyra\DamageZyraR.cs" />
+    <Compile Include="Damage\SummonerSpell.cs" />
+    <Compile Include="Damage\SummonerSpells\ISummonerSpell.cs" />
+    <Compile Include="Damage\SummonerSpells\ISummonerSpellMetadata.cs" />
+    <Compile Include="Damage\SummonerSpells\SummonerSpellIgnite.cs" />
+    <Compile Include="Damage\SummonerSpells\SummonerSpellSmite.cs" />
+    <Compile Include="Dash\Dash.cs" />
+    <Compile Include="Dash\DashAdapter.cs" />
+    <Compile Include="Dash\DashExtensions.cs" />
+    <Compile Include="Dash\DashItem.cs" />
+    <Compile Include="Events\GameEvents.cs" />
+    <Compile Include="Events\OnDash.cs" />
+    <Compile Include="Events\OnGameEnd.cs" />
+    <Compile Include="Events\OnGameLoad.cs" />
+    <Compile Include="Events\OnLevelUp.cs" />
+    <Compile Include="Events\OnLevelUpSpell.cs" />
+    <Compile Include="Events\UnitEvents.cs" />
+    <Compile Include="Geometry\Arc.cs" />
+    <Compile Include="Geometry\Circle.cs" />
+    <Compile Include="Geometry\ConvexHull.cs" />
+    <Compile Include="Geometry\Geometry.cs" />
+    <Compile Include="Geometry\IntersectionResult.cs" />
+    <Compile Include="Geometry\Line.cs" />
+    <Compile Include="Geometry\MecCircle.cs" />
+    <Compile Include="Geometry\MinMaxCornersInfo.cs" />
+    <Compile Include="Geometry\Polygon.cs" />
+    <Compile Include="Geometry\ProjectionInfo.cs" />
+    <Compile Include="Geometry\Rectangle.cs" />
+    <Compile Include="Geometry\Ring.cs" />
+    <Compile Include="Geometry\Sector.cs" />
+    <Compile Include="Instances.cs" />
+    <Compile Include="Library.cs" />
+    <Compile Include="Menu\Components\SliderBool.cs" />
+    <Compile Include="Menu\Configuration\DataAggregator.cs" />
+    <Compile Include="Menu\Configuration\DrawingViewFactory.cs" />
+    <Compile Include="Menu\Core\MenuAdapater.cs" />
+    <Compile Include="Menu\Configuration\MenuController.cs" />
+    <Compile Include="Menu\Components\Circle.cs" />
+    <Compile Include="Menu\Items\ColorPicker.cs" />
+    <Compile Include="Menu\Items\CPSlider.cs" />
+    <Compile Include="Menu\Items\HSLColor.cs" />
+    <Compile Include="Menu\Components\KeyBind.cs" />
+    <Compile Include="Menu\Components\KeybindSetStage.cs" />
+    <Compile Include="Menu\Components\KeyBindType.cs" />
+    <Compile Include="Menu\Core\Menu.cs" />
+    <Compile Include="Menu\Configuration\MenuManager.cs" />
+    <Compile Include="Menu\Components\Slider.cs" />
+    <Compile Include="Menu\MenuGlobals.cs" />
+    <Compile Include="Menu\Core\MenuItem.cs" />
+    <Compile Include="Menu\Core\MenuSettings.cs" />
+    <Compile Include="Menu\OnValueChangeEventArgs.cs" />
+    <Compile Include="Menu\Components\StringList.cs" />
+    <Compile Include="Menu\View\DxColorView.cs" />
+    <Compile Include="Menu\View\CircleView.cs" />
+    <Compile Include="Menu\View\SystemColorView.cs" />
+    <Compile Include="Menu\View\KeybindView.cs" />
+    <Compile Include="Menu\View\BoolView.cs" />
+    <Compile Include="Menu\View\SliderBoolView.cs" />
+    <Compile Include="Menu\View\SliderView.cs" />
+    <Compile Include="Menu\View\StringListView.cs" />
+    <Compile Include="Menu\View\ComponentView.cs" />
+    <Compile Include="Menu\View\IViewAttributes.cs" />
+    <Compile Include="Menu\View\MenuView.cs" />
+    <Compile Include="Menu\View\SharedView.cs" />
+    <Compile Include="Menu\View\ViewAttributes.cs" />
+    <Compile Include="Minion\FarmLocation.cs" />
+    <Compile Include="Minion\JungleType.cs" />
+    <Compile Include="Minion\LaneType.cs" />
+    <Compile Include="Minion\MinionInfo.cs" />
+    <Compile Include="Minion\MinionManager.cs" />
+    <Compile Include="Minion\MinionManagerAdapter.cs" />
+    <Compile Include="Minion\MinionOrderTypes.cs" />
+    <Compile Include="Minion\MinionTeam.cs" />
+    <Compile Include="Minion\MinionTypes.cs" />
+    <Compile Include="Native\BetterWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Native\Config.cs" />
+    <Compile Include="Native\Hacks.cs" />
+    <Compile Include="Native\MultiLanguageAdapter.cs" />
+    <Compile Include="Native\Shared.cs" />
+    <Compile Include="Old\AutoLevel.cs" />
+    <Compile Include="Old\CustomizableAntiGapcloser.cs" />
+    <Compile Include="Old\Data\ItemData.cs" />
+    <Compile Include="Old\Data\MasteryData.cs" />
+    <Compile Include="Old\Data\SpellDatabase.cs" />
+    <Compile Include="Old\FakeClicks.cs" />
+    <Compile Include="Old\HealthPrediction.cs" />
+    <Compile Include="Native\HeroManager.cs" />
+    <Compile Include="Old\Interrupter.cs" />
+    <Compile Include="Old\Interrupter2.cs" />
+    <Compile Include="Old\Items.cs" />
+    <Compile Include="Old\LastCastedSpell.cs" />
+    <Compile Include="Old\MapPositions.cs" />
+    <Compile Include="Old\MenuWrapper.cs" />
+    <Compile Include="Native\MultiLanguage.cs" />
+    <Compile Include="Old\Notifications.cs" />
+    <Compile Include="Old\Notifications\INotification.cs" />
+    <Compile Include="Old\Notifications\Notification.cs" />
+    <Compile Include="Old\ObjectHandler.cs" />
+    <Compile Include="Old\Orbwalking.cs" />
+    <Compile Include="Old\Packet.cs" />
+    <Compile Include="Old\PermaShow.cs" />
+    <Compile Include="Old\Spell.cs" />
+    <Compile Include="Old\TargetSelector.cs" />
+    <Compile Include="Packets\GamePacket.cs" />
+    <Compile Include="Prediction\CollisionableObjects.cs" />
+    <Compile Include="Prediction\HitChance.cs" />
+    <Compile Include="Prediction\Old\AoePrediction.cs" />
+    <Compile Include="Prediction\Old\Collision.cs" />
+    <Compile Include="Prediction\Old\Prediction.cs" />
+    <Compile Include="Prediction\PathTracker.cs" />
+    <Compile Include="Prediction\PredictionInput.cs" />
+    <Compile Include="Prediction\PredictionOutput.cs" />
+    <Compile Include="Prediction\SkillshotType.cs" />
+    <Compile Include="Prediction\StoredPath.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Render\Alerter.cs" />
+    <Compile Include="Render\Circle.cs" />
+    <Compile Include="Render\CircleEffect.cs" />
+    <Compile Include="Render\FontExtension.cs" />
+    <Compile Include="Render\Line.cs" />
+    <Compile Include="Render\Rectangle.cs" />
+    <Compile Include="Render\Render.cs" />
+    <Compile Include="Render\RenderObject.cs" />
+    <Compile Include="Render\Sprite.cs" />
+    <Compile Include="Render\Text.cs" />
+    <Compile Include="Utility\DelayAction.cs" />
+    <Compile Include="Utility\HpBarDamageIndicator.cs" />
+    <Compile Include="Utility\MapAdapter.cs" />
+    <Compile Include="Utility\Map.cs" />
+    <Compile Include="Utility\Maps\IMap.cs" />
+    <Compile Include="Utility\Maps\IMapMetadata.cs" />
+    <Compile Include="Utility\Maps\MapCrystalScar.cs" />
+    <Compile Include="Utility\Maps\MapHowlingAbyss.cs" />
+    <Compile Include="Utility\Maps\MapSummonersRift.cs" />
+    <Compile Include="Utility\Maps\MapTwistedTreeline.cs" />
+    <Compile Include="Utility\Maps\MapUnknown.cs" />
+    <Compile Include="Utility\MiniCache.cs" />
+    <Compile Include="Utility\Utility.cs" />
+    <Compile Include="Utility\Vector2Time.cs" />
+    <Compile Include="Utility\Version.cs" />
+    <Compile Include="Utility\WaypointTracker.cs" />
+    <Compile Include="Utils\Cursor.cs" />
+    <Compile Include="Utils\EnumerableExtensions.cs" />
+    <Compile Include="Utils\KeyboardEvents.cs" />
+    <Compile Include="Utils\Keys.cs" />
+    <Compile Include="Utils\MouseEvents.cs" />
+    <Compile Include="Utils\NativeMethods.cs" />
+    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utils\VirtualMouse.cs" />
+    <Compile Include="Utils\WeightedRandom.cs" />
+    <Compile Include="Utils\WindowsMessages.cs" />
+    <Compile Include="Utils\WndEventComposition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\App.config" />
+    <AdditionalFiles Include="..\stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\ChineseJson.json" />
+    <None Include="Resources\CircleEffect.fx" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\spectrum_chart.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
