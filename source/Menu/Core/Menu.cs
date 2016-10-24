@@ -9,6 +9,8 @@ namespace LeagueSharp.Common
     using System.Drawing;
     using System.Linq;
 
+    using LeagueSharp.Common.Configuration;
+
     using SharpDX.Menu;
 
     using Color = SharpDX.Color;
@@ -38,7 +40,14 @@ namespace LeagueSharp.Common
             this.MenuReference = ComponentFactory.CreateMenu(name, displayName);
             if (isRootMenu)
             {
-                Instances.MenuManager.MenuFactory?.Add(this.MenuReference);
+                if (Instances.MenuManager == null)
+                {
+                    MenuManager.SatisfyMenu(this);
+                }
+                else
+                {
+                    Instances.MenuManager.MenuFactory?.Add(this.MenuReference);
+                }
             }
 
             this.IsRootMenu = isRootMenu;

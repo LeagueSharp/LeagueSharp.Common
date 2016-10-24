@@ -4,6 +4,7 @@
 
 namespace LeagueSharp.Common.Configuration
 {
+    using System.Collections.Generic;
     using System.ComponentModel.Composition;
 
     using SharpDX.Menu;
@@ -35,6 +36,12 @@ namespace LeagueSharp.Common.Configuration
 
         #endregion
 
+        #region Properties
+
+        private static IList<Menu> SatisfyMenuCollection { get; } = new List<Menu>();
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <inheritdoc />
@@ -47,6 +54,13 @@ namespace LeagueSharp.Common.Configuration
             TargetSelector.Initialize(this.Menu);
             Prediction.Initialize(this.Menu);
             Hacks.Initialize(this.Menu);
+
+            foreach (var menu in SatisfyMenuCollection)
+            {
+                this.MenuFactory.Add(menu.MenuReference, true);
+            }
+
+            SatisfyMenuCollection.Clear();
         }
 
         /// <summary>
@@ -57,6 +71,24 @@ namespace LeagueSharp.Common.Configuration
             foreach (var menu in this.MenuFactory.MenuCollection.Values)
             {
                 menu.SaveComponents();
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Adds the menu for satisfaction once the manager is ready.
+        /// </summary>
+        /// <param name="menu">
+        ///     The menu.
+        /// </param>
+        internal static void SatisfyMenu(Menu menu)
+        {
+            if (!SatisfyMenuCollection.Contains(menu))
+            {
+                SatisfyMenuCollection.Add(menu);
             }
         }
 
