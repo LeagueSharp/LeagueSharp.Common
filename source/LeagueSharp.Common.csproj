@@ -53,8 +53,7 @@
       <HintPath>Z:\References\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>Z:\Core\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>Z:\References\LeagueSharp.dll</HintPath>
@@ -66,12 +65,10 @@
       <HintPath>Z:\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>Z:\Core\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Z:\Core\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PlaySharp.Toolkit">
       <HintPath>Z:\Core\PlaySharp.Toolkit.dll</HintPath>

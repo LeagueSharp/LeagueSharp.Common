@@ -6,6 +6,7 @@
     /// <summary>
     ///     The HSL Color class.
     /// </summary>
+    [Obsolete]
     public class HSLColor
     {
         #region Constants

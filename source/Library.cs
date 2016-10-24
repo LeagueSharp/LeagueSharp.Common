@@ -41,6 +41,7 @@ namespace LeagueSharp.Common
             ExpandConsole();
             CreateInstances(container);
 
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             Instances.Damage.SortSpells();
         }
 
@@ -112,6 +113,12 @@ namespace LeagueSharp.Common
             container.SatisfyImportsOnce(value);
             container.ComposeExportedValue(value);
             return value;
+        }
+
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
+        private static void OnProcessExit(object sender, EventArgs eventArgs)
+        {
+            Instances.MenuManager.SaveAll();
         }
 
         #endregion

@@ -93,6 +93,8 @@ namespace LeagueSharp.Common
 
         #region Properties
 
+        private static MenuItem DisableDrawing { get; set; }
+
         private static Menu Menu { get; set; }
 
         #endregion
@@ -115,11 +117,13 @@ namespace LeagueSharp.Common
             Menu = new Menu("Hacks", "Hacks");
 
             Menu.AddItem(CreateHackItem("antiafk", "Anti-AFK"));
-            Menu.AddItem(CreateHackItem("disable_drawing", "Disable Drawing"));
+            Menu.AddItem(DisableDrawing = CreateHackItem("disable_drawing", "Disable Drawing"));
             Menu.AddItem(CreateHackItem("disable_chat", "Disable L# Send Chat"));
             Menu.AddItem(CreateHackItem("show_tower_range", "Show Tower Range"));
 
             menu.AddSubMenu(Menu);
+
+            Game.OnWndProc += OnWndProc;
         }
 
         #endregion
@@ -155,6 +159,20 @@ namespace LeagueSharp.Common
                 case "show_tower_range":
                     TowerRanges = onValueChangeEventArgs.GetNewValue<bool>();
                     break;
+            }
+        }
+
+        private static void OnWndProc(WndEventArgs args)
+        {
+            if (!DisableDrawing?.GetValue<bool>() ?? true)
+            {
+                return;
+            }
+
+            if ((args.Msg == (uint)WindowsMessages.WM_KEYUP || args.Msg == (uint)WindowsMessages.WM_KEYDOWN)
+                && args.WParam == Config.ShowMenuPressKey)
+            {
+                DisableDrawings = args.Msg != (uint)WindowsMessages.WM_KEYDOWN;
             }
         }
 

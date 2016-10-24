@@ -1,4 +1,8 @@
-﻿namespace LeagueSharp.Common
+﻿// <copyright file="OnValueChangeEventArgs.cs" company="LeagueSharp">
+// Copyright (c) LeagueSharp. All rights reserved.
+// </copyright>
+
+namespace LeagueSharp.Common
 {
     using System;
 
