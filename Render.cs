@@ -2223,9 +2223,9 @@
             {
                 Game.OnUpdate -= this.Game_OnUpdate;
                 this.OnPreReset();
-                if (!this._textFont.IsDisposed)
+                if (!this._textFont?.IsDisposed)
                 {
-                    this._textFont.Dispose();
+                    this._textFont?.Dispose();
                 }
             }
 
@@ -2271,7 +2271,7 @@
             /// </summary>
             public override void OnPostReset()
             {
-                this._textFont.OnResetDevice();
+                this._textFont?.OnResetDevice();
             }
 
             /// <summary>
@@ -2279,7 +2279,7 @@
             /// </summary>
             public override void OnPreReset()
             {
-                this._textFont.OnLostDevice();
+                this._textFont?.OnLostDevice();
             }
 
             #endregion
