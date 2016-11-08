@@ -2223,7 +2223,7 @@
             {
                 Game.OnUpdate -= this.Game_OnUpdate;
                 this.OnPreReset();
-                if (!this._textFont?.IsDisposed)
+                if (this._textFont != null && !this._textFont.IsDisposed)
                 {
                     this._textFont?.Dispose();
                 }
