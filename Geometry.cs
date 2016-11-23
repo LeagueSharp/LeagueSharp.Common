@@ -1067,8 +1067,8 @@
                 for (var i = 0; i <= this.Points.Count - 1; i++)
                 {
                     var nextIndex = (this.Points.Count - 1 == i) ? 0 : (i + 1);
-                    var from = Drawing.WorldToScreen(this.Points[i].To3D());
-                    var to = Drawing.WorldToScreen(this.Points[nextIndex].To3D());
+                    var from = Drawing.WorldToScreen(this.Points[i].To3D2());
+                    var to = Drawing.WorldToScreen(this.Points[nextIndex].To3D2());
                     Drawing.DrawLine(from[0], from[1], to[0], to[1], width, color);
                 }
             }
