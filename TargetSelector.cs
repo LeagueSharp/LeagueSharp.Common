@@ -429,6 +429,12 @@
             {
                 return true;
             }
+            
+            // Edge of Night Items
+           if (targetBuffs.Contains("itemmagekillerveil"))
+            {
+                return true;
+            }
 
             return false;
         }
