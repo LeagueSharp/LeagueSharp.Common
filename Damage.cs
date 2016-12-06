@@ -1640,23 +1640,13 @@ namespace LeagueSharp.Common
             #region Yorick
 
             p = new PassiveDamage
-                    {
-                        ChampionName = "Yorick", IsActive = (source, target) => source.HasBuff("YorickUnholySymbiosis"),
-                        GetDamage =
-                            (source, target) =>
-                            source.CalcDamage(
-                                target,
-                                DamageType.Physical,
-                                (0.05
-                                 * MinionManager.GetMinions(float.MaxValue)
-                                       .Count(
-                                           g =>
-                                           g.Team == source.Team
-                                           && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")
-                                               || (g.HasBuff("yorickunholysymbiosis")
-                                                   && g.GetBuff("yorickunholysymbiosis").Caster.NetworkId
-                                                   == source.NetworkId)))) * source.TotalAttackDamage)
-                    };
+            {
+                ChampionName = "Yorick",
+                IsActive = (source, target) => source.HasBuff("yorickqbuff"),
+                GetDamage =
+                (source, target) =>
+                source.GetSpellDamage(target, SpellSlot.Q)
+            };
 
             AttackPassives.Add(p);
 
@@ -5481,7 +5471,7 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, Stage = 1, DamageType = DamageType.Magical,
                                 Damage = (source, target, level) =>
                                     {
-                                        var dmg = (new double[] { 5, 5.5, 6, 6.6, 7 }[level]
+                                        var dmg = (new double[] { 4, 4.5, 5, 5.5, 6 }[level]
                                                    + 0.02 * source.TotalMagicalDamage)
                                                   * target.MaxHealth / 100;
                                         if (target is Obj_AI_Hero)
@@ -6727,17 +6717,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.Q, DamageType = DamageType.Physical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 30, 60, 90, 120, 150 }[level]
-                                    + 1.2 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                            },
-                        //W
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.W, DamageType = DamageType.Magical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 60, 95, 130, 165, 200 }[level]
-                                    + 1 * source.TotalMagicalDamage
+                                    new double[] { 30, 55, 80, 105, 130 }[level]
+                                    + 0.4 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                             },
                         //E
                         new DamageSpell
@@ -6745,8 +6726,8 @@ namespace LeagueSharp.Common
                                 Slot = SpellSlot.E, DamageType = DamageType.Magical,
                                 Damage =
                                     (source, target, level) =>
-                                    new double[] { 55, 85, 115, 145, 175 }[level]
-                                    + 1 * source.FlatPhysicalDamageMod
+                                    new double[] { 70, 105, 140, 175, 210 }[level]
+                                    + 0.7 * source.TotalMagicalDamage
                             },
                     });
 
