@@ -1,11 +1,13 @@
-﻿namespace LeagueSharp.Common.Data
+﻿using System;
+
+namespace LeagueSharp.Common.Data
 {
     using System.Linq;
 
     public static class MasteryData
     {
         #region Enums
-
+        // updated 7 december 2016
         public enum Cunning
         {
             Wanderer = 65,
@@ -16,9 +18,13 @@
 
             SecretStash = 82,
 
+            Assasin = 83,
+
             Meditation = 98,
 
             Merciless = 97,
+
+            GreenfathersGift = 113,
 
             Bandit = 114,
 
@@ -35,13 +41,21 @@
             WindspeakerBlessing = 147
         }
 
+        // updated 7 december 2016
         public enum Ferocity
         {
             Fury = 65,
 
             Sorcery = 68,
 
-            DoubleEdgedSword = 81,
+            FreshBlood = 81,
+
+            ExposeWeakness = 83,
+
+            DoubleEdgedSword = 114,
+
+            [Obsolete("Obsolete! Please update your assembly, oppresor called doubleedgedsword now")]
+            Oppresor = 114,
 
             Vampirism = 97,
 
@@ -51,7 +65,7 @@
 
             BountyHunter = 113,
 
-            Oppresor = 114,
+            BattleTrance = 115,
 
             BatteringBlows = 129,
 
@@ -61,9 +75,10 @@
 
             FervorofBattle = 146,
 
-            DeathFireTouch = 137
+            DeathFireTouch = 148
         }
 
+        //updated 7 december 2016
         public enum Resolve
         {
             Recovery = 65,
@@ -72,7 +87,9 @@
 
             Explorer = 81,
 
-            ToughSkin = 82,
+            SiegeMaster = 82,
+
+            ToughSkin = 83,
 
             RunicArmor = 97,
 
@@ -80,12 +97,19 @@
 
             Insight = 113,
 
+            Perseverance = 114,
+
+            Fearless = 115,
+
             Swiftness = 129,
 
             LegendaryGuardian = 130,
 
             GraspoftheUndying = 145,
 
+            CourageoftheColossus = 146,
+
+            [Obsolete("Obsolete! Please update your assembly! StrengthoftheAges is called CourageoftheColossus now.")]
             StrengthoftheAges = 146,
 
             BondofStones = 147
