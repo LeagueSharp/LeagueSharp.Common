@@ -16,6 +16,10 @@ namespace LeagueSharp.Common
         #region Static Fields
 
         /// <summary>
+        /// An array of the last 3 targets as NetworkIDs, useful for 3-hit passives or thunderlord
+        /// </summary>
+        public static int[] LastTargets = new int[] {0,0,0};
+        /// <summary>
         ///     <c>true</c> if the orbwalker will attack.
         /// </summary>
         public static bool Attack = true;
@@ -585,12 +589,6 @@ namespace LeagueSharp.Common
 
                 if (CanMove(extraWindup) && Move)
                 {
-                    if (Orbwalker.LimitAttackSpeed && (Player.AttackDelay < 1 / 2.6f) && _autoattackCounter % 3 != 0
-                        && !CanMove(500, true))
-                    {
-                        return;
-                    }
-
                     MoveTo(position, Math.Max(holdAreaRadius, 30), false, useFixedDistance, randomizeMinDistance);
                 }
             }
@@ -629,6 +627,17 @@ namespace LeagueSharp.Common
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Pushes a target to the <see cref="LastTargets"/> list.
+        /// </summary>
+        /// <param name="networkId"></param>
+        private static void PushLastTargets(int networkId)
+        {
+            LastTargets[2] = LastTargets[1];
+            LastTargets[1] = LastTargets[0];
+            LastTargets[0] = networkId;
+        }
 
         /// <summary>
         ///     Fires the after attack event.
@@ -745,10 +754,13 @@ namespace LeagueSharp.Common
             try
             {
                 var spellName = Spell.SData.Name;
-
-                if (unit.IsMe && IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
+                if (unit.IsMe)
                 {
-                    ResetAutoAttackTimer();
+                    PushLastTargets(Spell.Target.NetworkId);
+                    if (IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
+                    {
+                        ResetAutoAttackTimer();
+                    }
                 }
 
                 if (!IsAutoAttack(spellName))
@@ -935,15 +947,14 @@ namespace LeagueSharp.Common
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(50, 50, 250)));
-                misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
+                misc.AddItem(new MenuItem("PriorizeFarm", "Prioritize farm over harass").SetShared().SetValue(true));
+                misc.AddItem(new MenuItem("PrioritizeCasters", "Attack caster minions first").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("AttackWards", "Auto attack wards").SetShared().SetValue(false));
                 misc.AddItem(new MenuItem("AttackPetsnTraps", "Auto attack pets & traps").SetShared().SetValue(true));
                 misc.AddItem(
                     new MenuItem("AttackGPBarrel", "Auto attack gangplank barrel").SetShared()
                         .SetValue(new StringList(new[] { "Combo and Farming", "Farming", "No" }, 1)));
                 misc.AddItem(new MenuItem("Smallminionsprio", "Jungle clear small first").SetShared().SetValue(false));
-                misc.AddItem(
-                    new MenuItem("LimitAttackSpeed", "Don't kite if Attack Speed > 2.5").SetShared().SetValue(false));
                 misc.AddItem(
                     new MenuItem("FocusMinionsOverTurrets", "Focus minions over objectives").SetShared()
                         .SetValue(new KeyBind('M', KeyBindType.Toggle)));
@@ -988,15 +999,7 @@ namespace LeagueSharp.Common
             #endregion
 
             #region Public Properties
-
-            public static bool LimitAttackSpeed
-            {
-                get
-                {
-                    return _config.Item("LimitAttackSpeed").GetValue<bool>();
-                }
-            }
-
+            
             /// <summary>
             ///     Gets a value indicating whether the orbwalker is orbwalking by checking the missiles.
             /// </summary>
@@ -1505,35 +1508,45 @@ namespace LeagueSharp.Common
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 this._prevMinion,
-                                (int)(this.Player.AttackDelay * 1000 * LaneClearWaitTimeMod),
+                                (int) (this.Player.AttackDelay*1000*LaneClearWaitTimeMod),
                                 this.FarmDelay);
-                            if (predHealth >= 2 * this.Player.GetAutoAttackDamage(this._prevMinion)
+                            if (predHealth >= 2*this.Player.GetAutoAttackDamage(this._prevMinion)
                                 || Math.Abs(predHealth - this._prevMinion.Health) < float.Epsilon)
                             {
                                 return this._prevMinion;
                             }
                         }
 
-                        result = (from minion in
-                                      ObjectManager.Get<Obj_AI_Minion>()
-                                      .Where(
-                                          minion =>
-                                          minion.IsValidTarget() && this.InAutoAttackRange(minion)
-                                          && this.ShouldAttackMinion(minion))
-                                  let predHealth =
-                                      HealthPrediction.LaneClearHealthPrediction(
-                                          minion,
-                                          (int)(this.Player.AttackDelay * 1000 * LaneClearWaitTimeMod),
-                                          this.FarmDelay)
-                                  where
-                                      predHealth >= 2 * this.Player.GetAutoAttackDamage(minion)
-                                      || Math.Abs(predHealth - minion.Health) < float.Epsilon
-                                  select minion).MaxOrDefault(
-                                      m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
+                        var results = (from minion in
+                            ObjectManager.Get<Obj_AI_Minion>()
+                                .Where(
+                                    minion =>
+                                        minion.IsValidTarget() && this.InAutoAttackRange(minion)
+                                        && this.ShouldAttackMinion(minion))
+                            let predHealth =
+                                HealthPrediction.LaneClearHealthPrediction(
+                                    minion,
+                                    (int) (this.Player.AttackDelay*1000*LaneClearWaitTimeMod),
+                                    this.FarmDelay)
+                            where
+                                predHealth >= 2*this.Player.GetAutoAttackDamage(minion)
+                                || Math.Abs(predHealth - minion.Health) < float.Epsilon
+                            select minion);
+
+                        result = results.MaxOrDefault(m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
+
+                        if (_config.Item("PrioritizeCasters").GetValue<bool>())
+                        {
+                            result =
+                                results.OrderByDescending(
+                                    m =>
+                                        m.CharData.Name.Contains("Ranged"))
+                                    .FirstOrDefault();
+                        }
 
                         if (result != null)
                         {
-                            this._prevMinion = (Obj_AI_Minion)result;
+                            this._prevMinion = (Obj_AI_Minion) result;
                         }
                     }
                 }
