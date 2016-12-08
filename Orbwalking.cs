@@ -753,19 +753,20 @@ namespace LeagueSharp.Common
         {
             try
             {
-                var spellName = Spell.SData.Name;
                 if (unit.IsMe)
                 {
+                    var spellName = Spell.SData.Name;
+
                     if (IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
                         ResetAutoAttackTimer();
 
                     if (!IsAutoAttack(spellName))
                         return;
                     
-                    PushLastTargets(Spell.Target.NetworkId);
-
                     if (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ)
                     {
+                        PushLastTargets(Spell.Target.NetworkId);
+
                         LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
                         _missileLaunched = false;
                         LastMoveCommandT = 0;
