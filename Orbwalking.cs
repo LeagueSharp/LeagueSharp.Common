@@ -756,37 +756,32 @@ namespace LeagueSharp.Common
                 var spellName = Spell.SData.Name;
                 if (unit.IsMe)
                 {
-                    PushLastTargets(Spell.Target.NetworkId);
                     if (IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
-                    {
                         ResetAutoAttackTimer();
-                    }
-                }
 
-                if (!IsAutoAttack(spellName))
-                {
-                    return;
-                }
+                    if (!IsAutoAttack(spellName))
+                        return;
+                    
+                    PushLastTargets(Spell.Target.NetworkId);
 
-                if (unit.IsMe
-                    && (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
-                {
-                    LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
-                    _missileLaunched = false;
-                    LastMoveCommandT = 0;
-                    _autoattackCounter++;
-
-                    if (Spell.Target is Obj_AI_Base)
+                    if (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ)
                     {
-                        var target = (Obj_AI_Base)Spell.Target;
-                        if (target.IsValid)
+                        LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
+                        _missileLaunched = false;
+                        LastMoveCommandT = 0;
+                        _autoattackCounter++;
+
+                        if (Spell.Target is Obj_AI_Base)
                         {
-                            FireOnTargetSwitch(target);
-                            _lastTarget = target;
+                            var target = (Obj_AI_Base)Spell.Target;
+                            if (target.IsValid)
+                            {
+                                FireOnTargetSwitch(target);
+                                _lastTarget = target;
+                            }
                         }
                     }
                 }
-
                 FireOnAttack(unit, _lastTarget);
             }
             catch (Exception e)
