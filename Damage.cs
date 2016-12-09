@@ -8407,7 +8407,7 @@ namespace LeagueSharp.Common
                 var Fervor = hero.GetMastery(MasteryData.Ferocity.FervorofBattle);
                 if (Fervor != null && Fervor.IsActive())
                 {
-                    value += (0.9 + hero.Level*0.42)*hero.GetBuffCount("MasteryOnHitDamageStacker");
+                    value += Math.Min((0.59 + hero.Level*0.41)*hero.GetBuffCount("MasteryOnHitDamageStacker"), 4.71 + hero.Level * 0.41);
                 }
             }
 
@@ -8515,13 +8515,13 @@ namespace LeagueSharp.Common
                     }
                     //Thunderlord's Decree: Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.3 bonus attack damage)(+0.1 ability power) magic damage in an area around them
 
-                    var Thunder = hero.GetMastery(MasteryData.Cunning.ThunderlordsDecree);
+                    /*var Thunder = hero.GetMastery(MasteryData.Cunning.ThunderlordsDecree);
                     if (Thunder != null && Thunder.IsActive())
                     {
                         if (Orbwalking.LastTargets != null && Orbwalking.LastTargets[0] == targetHero.NetworkId &&
                             Orbwalking.LastTargets[1] == targetHero.NetworkId)
                             amount += 10*hero.Level + (0.3*hero.TotalAttackDamage) + (0.1*hero.TotalMagicalDamage);
-                    }
+                    }*/
                 }
 
                 // Double edge sword:
