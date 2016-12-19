@@ -1,47 +1,24 @@
-﻿#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- Notifications.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-#endregion
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System;
+    using System.Collections.Concurrent;
+
     public class Notifications
     {
+        #region Static Fields
+
         /// <summary>
-        /// The notifications list
+        ///     The notifications list
         /// </summary>
         private static readonly ConcurrentDictionary<string, INotification> NotificationsList =
             new ConcurrentDictionary<string, INotification>();
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        /// Initializes static members of the <see cref="Notifications"/> class.
+        ///     Initializes static members of the <see cref="Notifications" /> class.
         /// </summary>
         static Notifications()
         {
@@ -49,76 +26,16 @@ namespace LeagueSharp.Common
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnPostReset += Drawing_OnPostReset;
             Drawing.OnPreReset += Drawing_OnPreReset;
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
             Game.OnWndProc += Game_OnWndProc;
-            
-            if (!Directory.Exists(Path))
-            {
-                Directory.CreateDirectory(Path);
-            }
         }
 
-        /// <summary>
-        /// Fired when the game recieves a window event.
-        /// </summary>
-        /// <param name="args">The <see cref="WndEventArgs"/> instance containing the event data.</param>
-        private static void Game_OnWndProc(WndEventArgs args)
-        {
-            foreach (var notification in NotificationsList)
-            {
-                notification.Value.OnWndProc(args);
-            }
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Fired when the game is drawn.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Drawing_OnDraw(EventArgs args)
-        {
-            foreach (var notification in NotificationsList)
-            {
-                notification.Value.OnDraw();
-            }
-        }
-
-        /// <summary>
-        /// Fired before the DirectX device is reset.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Drawing_OnPreReset(EventArgs args)
-        {
-            foreach (var notification in NotificationsList)
-            {
-                notification.Value.OnPreReset();
-            }
-        }
-
-        /// <summary>
-        /// Fired when the DirectX device is reset.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Drawing_OnPostReset(EventArgs args)
-        {
-            foreach (var notification in NotificationsList)
-            {
-                notification.Value.OnPostReset();
-            }
-        }
-
-        /// <summary>
-        /// Fired when the game updates.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private static void Game_OnGameUpdate(EventArgs args)
-        {
-            foreach (var notification in NotificationsList)
-            {
-                notification.Value.OnUpdate();
-            }
-        }
-
-        /// <summary>
-        /// Adds a notification to the notification list
+        ///     Adds a notification to the notification list
         /// </summary>
         /// <param name="notification">Notification Instance</param>
         /// <returns>Boolean</returns>
@@ -128,7 +45,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Adds a simple notification to the notification list
+        ///     Adds a simple notification to the notification list
         /// </summary>
         /// <param name="text">Display Text</param>
         /// <param name="duration">Duration (-1 for infinite)</param>
@@ -142,7 +59,57 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Removes a notification from the notification list
+        ///     Returns the next free location
+        /// </summary>
+        /// <returns>Location</returns>
+        public static int GetLocation()
+        {
+            return 0x55 + 0x1E * NotificationsList.Count;
+        }
+
+        /// <summary>
+        ///     Returns the location free location
+        /// </summary>
+        /// <returns>Location</returns>
+        public static int GetLocation(INotification notification)
+        {
+            var i = 0;
+            var guid = notification.GetId();
+
+            foreach (var notification_ in NotificationsList)
+            {
+                if (notification_.Key == guid)
+                {
+                    return 0x55 + 0x1E * i;
+                }
+                i++;
+            }
+
+            return 0x55 + 0x1E * i;
+        }
+
+        /// <summary>
+        ///     Validates if a notification currently exists inside the list.
+        /// </summary>
+        /// <param name="notification">Notification Instance</param>
+        /// <returns>Boolean</returns>
+        public static bool IsValidNotification(INotification notification)
+        {
+            return NotificationsList.ContainsKey(notification.GetId());
+        }
+
+        /// <summary>
+        ///     Validates if a notification currently exists inside the list.
+        /// </summary>
+        /// <param name="id">Notification GUID</param>
+        /// <returns><c>true</c> if the specified identifier is a valid notification; otherwise, <c>false</c>.</returns>
+        public static bool IsValidNotification(string id)
+        {
+            return NotificationsList.ContainsKey(id);
+        }
+
+        /// <summary>
+        ///     Removes a notification from the notification list
         /// </summary>
         /// <param name="notification">Notification Instance</param>
         /// <returns>Boolean</returns>
@@ -153,7 +120,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Removes a notification from the notification list
+        ///     Removes a notification from the notification list
         /// </summary>
         /// <param name="id">Notification GUID</param>
         /// <param name="notification">Notification Instance</param>
@@ -164,27 +131,7 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Validates if a notification currently exists inside the list.
-        /// </summary>
-        /// <param name="notification">Notification Instance</param>
-        /// <returns>Boolean</returns>
-        public static bool IsValidNotification(INotification notification)
-        {
-            return NotificationsList.ContainsKey(notification.GetId());
-        }
-
-        /// <summary>
-        /// Validates if a notification currently exists inside the list.
-        /// </summary>
-        /// <param name="id">Notification GUID</param>
-        /// <returns><c>true</c> if the specified identifier is a valid notification; otherwise, <c>false</c>.</returns>
-        public static bool IsValidNotification(string id)
-        {
-            return NotificationsList.ContainsKey(id);
-        }
-
-        /// <summary>
-        /// Removes a notification from the notification list
+        ///     Removes a notification from the notification list
         /// </summary>
         /// <param name="id">Notification GUID</param>
         /// <returns>Boolean</returns>
@@ -194,196 +141,80 @@ namespace LeagueSharp.Common
             return NotificationsList.TryRemove(id, out dump);
         }
 
-        #region Memory
+        #endregion
+
+        #region Methods
 
         /// <summary>
-        /// Reserves a location slot for a GUID
+        ///     Fired when the current domain unloads
         /// </summary>
-        /// <param name="id">GUID</param>
-        /// <param name="old">Old Slot</param>
-        /// <returns>FileStream Handler</returns>
-        public static FileStream Reserve(string id, FileStream old = null)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void CurrentDomain_DomainUnload(object sender, EventArgs e)
         {
-            var loc = GetLocation();
-
-            if (loc != -0x1)
+            foreach (var notification in NotificationsList)
             {
-                try
-                {
-                    var path = Path + "\\" + loc + ".lock";
-
-                    if (!File.Exists(path))
-                    {
-                        var stream = File.Create(path, 0x1, FileOptions.DeleteOnClose);
-
-                        if (old != null)
-                        {
-                            Free(old);
-                        }
-                        return stream;
-                    }
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
+                notification.Value.OnDomainUnload();
             }
-
-            return null;
         }
 
         /// <summary>
-        /// Frees a location slot
+        ///     Fired when the game is drawn.
         /// </summary>
-        /// <param name="stream">FileStream Handler</param>
-        /// <returns>Boolean</returns>
-        public static bool Free(FileStream stream)
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private static void Drawing_OnDraw(EventArgs args)
         {
-            if (stream != null)
+            foreach (var notification in NotificationsList)
             {
-                stream.Dispose();
-                stream.Close();
-                return true;
+                notification.Value.OnDraw();
             }
-
-            return false;
         }
 
         /// <summary>
-        /// Returns the next free location
+        ///     Fired when the DirectX device is reset.
         /// </summary>
-        /// <returns>Location</returns>
-        public static int GetLocation()
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private static void Drawing_OnPostReset(EventArgs args)
         {
-            var files = Directory.GetFiles(Path, "*.lock", SearchOption.TopDirectoryOnly);
-
-            if (!files.Any())
+            foreach (var notification in NotificationsList)
             {
-                return 0x55;
+                notification.Value.OnPostReset();
             }
-
-            var array = new List<int>();
-
-            foreach (var i in files)
-            {
-                try
-                {
-                    var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
-                    var str = i.Substring(length, i.Length - length);
-                    var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
-
-                    array.Add(@int);
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-            }
-
-            array.Sort();
-
-            // Find a free slot if array does not start from the zero-based location (85)
-            if (array.Count > 0x0 && array[0] > 0x55)
-            {
-                for (var i = 0x55; i < array[0]; i += 0x1E)
-                {
-                    if (File.Exists(Path + "\\" + (i + 0x1E) + ".lock"))
-                    {
-                        // If slot found, return it as value.
-                        return i;
-                    }
-                }
-            }
-
-            // Find a free slot between the current locked locations
-            for (var i = 0x0; i < array.Count - 0x1; ++i)
-            {
-                if (array[i] + 0x1E != array[i + 0x1])
-                {
-                    // Return free slot which was found between current locked locations
-                    return array[i] + 0x1E;
-                }
-            }
-
-            // Return (last slot + 30) as value
-            return array[array.Count - 0x1] + 0x1E;
         }
 
         /// <summary>
-        /// Gets the location.
+        ///     Fired before the DirectX device is reset.
         /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>System.Int32.</returns>
-        public static int GetLocation(FileStream stream)
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private static void Drawing_OnPreReset(EventArgs args)
         {
-            var i = stream.Name;
-            var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
-            var str = i.Substring(length, i.Length - length);
-            var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
-
-            return @int;
+            foreach (var notification in NotificationsList)
+            {
+                notification.Value.OnPreReset();
+            }
         }
 
         /// <summary>
-        /// Validates if current position is first in line
+        ///     Fired when the game updates.
         /// </summary>
-        /// <param name="position">Position</param>
-        /// <returns>Boolean</returns>
-        public static bool IsFirst(int position)
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (position == 0x55)
+            foreach (var notification in NotificationsList)
             {
-                return true;
+                notification.Value.OnUpdate();
             }
-
-            var files = Directory.GetFiles(Path, "*.lock", SearchOption.TopDirectoryOnly);
-
-            if (!files.Any())
-            {
-                return true;
-            }
-
-            var array = new List<int>();
-
-            foreach (var i in files)
-            {
-                try
-                {
-                    var length = i.IndexOf("Notifications\\", StringComparison.Ordinal) + "Notifications\\".Length;
-                    var str = i.Substring(length, i.Length - length);
-                    var @int = int.Parse(str.Substring(0x0, str.IndexOf('.')));
-
-                    array.Add(@int);
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-            }
-
-            if (array.Count > 0x0)
-            {
-                for (var i = position - 0x1E; i > GetLocation(); i -= 0x1E)
-                {
-                    if (array.Contains(i))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
 
         /// <summary>
-        /// Gets the path.
+        ///     Fired when the game recieves a window event.
         /// </summary>
-        /// <value>The path.</value>
-        private static string Path
+        /// <param name="args">The <see cref="WndEventArgs" /> instance containing the event data.</param>
+        private static void Game_OnWndProc(WndEventArgs args)
         {
-            get
+            foreach (var notification in NotificationsList)
             {
-                return System.IO.Path.Combine(Config.AppDataDirectory, "Notifications");
+                notification.Value.OnWndProc(args);
             }
         }
 

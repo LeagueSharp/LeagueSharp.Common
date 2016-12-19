@@ -1,118 +1,115 @@
-﻿#region LICENSE
-/*
- Copyright 2014 - 2014 LeagueSharp
- LastCastedSpell.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-
-#endregion
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System.Collections.Generic;
+
     /// <summary>
-    /// Represents a last casted spell.
+    ///     Represents a last casted spell.
     /// </summary>
     public class LastCastedSpellEntry
     {
+        #region Fields
+
         /// <summary>
-        /// The name
+        ///     The name
         /// </summary>
         public string Name;
 
         /// <summary>
-        /// The target
+        ///     The target
         /// </summary>
         public Obj_AI_Base Target;
 
         /// <summary>
-        /// The tick
+        ///     The tick
         /// </summary>
         public int Tick;
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="LastCastedSpellEntry"/> class.
+        ///     Initializes a new instance of the <see cref="LastCastedSpellEntry" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="tick">The tick.</param>
         /// <param name="target">The target.</param>
         public LastCastedSpellEntry(string name, int tick, Obj_AI_Base target)
         {
-            Name = name;
-            Tick = tick;
-            Target = target;
+            this.Name = name;
+            this.Tick = tick;
+            this.Target = target;
         }
+
+        #endregion
     }
 
     /// <summary>
-    /// Represents the last cast packet sent.
+    ///     Represents the last cast packet sent.
     /// </summary>
     public class LastCastPacketSentEntry
     {
+        #region Fields
+
         /// <summary>
-        /// The slot
+        ///     The slot
         /// </summary>
         public SpellSlot Slot;
 
         /// <summary>
-        /// The target network identifier
+        ///     The target network identifier
         /// </summary>
         public int TargetNetworkId;
 
         /// <summary>
-        /// The tick
+        ///     The tick
         /// </summary>
         public int Tick;
 
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="LastCastPacketSentEntry"/> class.
+        ///     Initializes a new instance of the <see cref="LastCastPacketSentEntry" /> class.
         /// </summary>
         /// <param name="slot">The slot.</param>
         /// <param name="tick">The tick.</param>
         /// <param name="targetNetworkId">The target network identifier.</param>
         public LastCastPacketSentEntry(SpellSlot slot, int tick, int targetNetworkId)
         {
-            Slot = slot;
-            Tick = tick;
-            TargetNetworkId = targetNetworkId;
+            this.Slot = slot;
+            this.Tick = tick;
+            this.TargetNetworkId = targetNetworkId;
         }
+
+        #endregion
     }
 
     /// <summary>
-    /// Gets the last casted spell of the unit.
+    ///     Gets the last casted spell of the unit.
     /// </summary>
     public static class LastCastedSpell
     {
-        /// <summary>
-        /// The casted spells
-        /// </summary>
-        internal static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
-            new Dictionary<int, LastCastedSpellEntry>();
+        #region Static Fields
 
         /// <summary>
-        /// The last cast packet sent
+        ///     The last cast packet sent
         /// </summary>
         public static LastCastPacketSentEntry LastCastPacketSent;
 
         /// <summary>
-        /// Initializes static members of the <see cref="LastCastedSpell"/> class. 
+        ///     The casted spells
+        /// </summary>
+        internal static readonly Dictionary<int, LastCastedSpellEntry> CastedSpells =
+            new Dictionary<int, LastCastedSpellEntry>();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes static members of the <see cref="LastCastedSpell" /> class.
         /// </summary>
         static LastCastedSpell()
         {
@@ -120,25 +117,61 @@ namespace LeagueSharp.Common
             Spellbook.OnCastSpell += SpellbookOnCastSpell;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        /// Fired then a spell is casted.
+        ///     Gets the last casted spell.
         /// </summary>
-        /// <param name="spellbook">The spellbook.</param>
-        /// <param name="args">The <see cref="SpellbookCastSpellEventArgs"/> instance containing the event data.</param>
-        static void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
+        /// <param name="unit">The unit.</param>
+        /// <returns></returns>
+        public static LastCastedSpellEntry LastCastedspell(this Obj_AI_Hero unit)
         {
-            if (spellbook.Owner.IsMe)
-            {
-                LastCastPacketSent = new LastCastPacketSentEntry(
-                        args.Slot, Utils.TickCount, (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0 );
-            }
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId] : null;
         }
 
         /// <summary>
-        /// Fired when the game processes the spell cast.
+        ///     Gets the last casted spell name.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <returns></returns>
+        public static string LastCastedSpellName(this Obj_AI_Hero unit)
+        {
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Name : string.Empty;
+        }
+
+        /// <summary>
+        ///     Gets the last casted spell tick.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <returns></returns>
+        public static int LastCastedSpellT(this Obj_AI_Hero unit)
+        {
+            return CastedSpells.ContainsKey(unit.NetworkId)
+                       ? CastedSpells[unit.NetworkId].Tick
+                       : (Utils.TickCount > 0 ? 0 : int.MinValue);
+        }
+
+        /// <summary>
+        ///     Gets the last casted spell's target.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <returns></returns>
+        public static Obj_AI_Base LastCastedSpellTarget(this Obj_AI_Hero unit)
+        {
+            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Target : null;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Fired when the game processes the spell cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender is Obj_AI_Hero)
@@ -156,43 +189,21 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Gets the last casted spell tick.
+        ///     Fired then a spell is casted.
         /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns></returns>
-        public static int LastCastedSpellT(this Obj_AI_Hero unit)
+        /// <param name="spellbook">The spellbook.</param>
+        /// <param name="args">The <see cref="SpellbookCastSpellEventArgs" /> instance containing the event data.</param>
+        static void SpellbookOnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
         {
-            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Tick : (Utils.TickCount > 0 ? 0 : int.MinValue);
+            if (spellbook.Owner.IsMe)
+            {
+                LastCastPacketSent = new LastCastPacketSentEntry(
+                    args.Slot,
+                    Utils.TickCount,
+                    (args.Target is Obj_AI_Base) ? args.Target.NetworkId : 0);
+            }
         }
 
-        /// <summary>
-        /// Gets the last casted spell name.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns></returns>
-        public static string LastCastedSpellName(this Obj_AI_Hero unit)
-        {
-            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Name : string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the last casted spell's target.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns></returns>
-        public static Obj_AI_Base LastCastedSpellTarget(this Obj_AI_Hero unit)
-        {
-            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId].Target : null;
-        }
-
-        /// <summary>
-        /// Gets the last casted spell.
-        /// </summary>
-        /// <param name="unit">The unit.</param>
-        /// <returns></returns>
-        public static LastCastedSpellEntry LastCastedspell(this Obj_AI_Hero unit)
-        {
-            return CastedSpells.ContainsKey(unit.NetworkId) ? CastedSpells[unit.NetworkId] : null;
-        }
+        #endregion
     }
 }

@@ -29,6 +29,14 @@
         /// </summary>
         public static Dictionary<string, Menu> RootMenus = new Dictionary<string, Menu>();
 
+        /// <summary>
+        ///     If the menu should be compact
+        /// </summary>
+        internal static bool IsCompact
+        {
+            get { return Root.Item("Menu.Compact").GetValue<bool>(); }
+        }
+
         #endregion
 
         #region Fields
@@ -105,16 +113,20 @@
             Root.AddItem(new MenuItem("BackgroundAlpha", "Background Opacity")).SetValue(new Slider(165, 55, 255));
             Root.AddItem(
                 new MenuItem("FontName", "Font Name:").SetValue(
-                    new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" })));
-            Root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(13, 12, 20)));
+                    new StringList(new[] { "Tahoma", "Calibri", "Segoe UI" }, 1)));
+            Root.AddItem(new MenuItem("FontSize", "Font Size:").SetValue(new Slider(15, 12, 20)));
             Root.AddItem(
                 new MenuItem("FontQuality", "Font Quality").SetValue(
                     new StringList(
                         Enum.GetValues(typeof(FontQuality)).Cast<FontQuality>().Select(v => v.ToString()).ToArray(),
-                        4)));
+                        5)));
+
             Root.AddItem(
                 new MenuItem("LeagueSharp.Common.TooltipDuration", "Tooltip Notification Duration").SetValue(
                     new Slider(1500, 0, 5000)));
+            Root.AddItem(
+             new MenuItem("Menu.Compact", "Compact Menu").SetValue(false));
+
             Root.AddItem(
                 new MenuItem("FontInfo", "Press F5 after your change").SetFontStyle(FontStyle.Bold, Color.Yellow));
 
@@ -135,7 +147,7 @@
         /// </param>
         public Menu(string displayName, string name, bool isRootMenu = false)
         {
-            this.DisplayName = displayName;
+            this.DisplayName = MenuGlobals.Function001(displayName);
             this.Name = name;
             this.IsRootMenu = isRootMenu;
             this.Style = FontStyle.Regular;
@@ -240,10 +252,11 @@
         {
             get
             {
-                if (this.IsRootMenu || this.Parent == null)
+                if (IsCompact || this.IsRootMenu || this.Parent == null)
                 {
                     return MenuSettings.BasePosition + this.MenuCount * new Vector2(0, MenuSettings.MenuItemHeight);
                 }
+   
 
                 return this.Parent.MyBasePosition;
             }
@@ -271,8 +284,8 @@
                        + new Vector2(
                              (this.Parent != null)
                                  ? this.Parent.Position.X + this.Parent.Width
-                                 : (int)this.MyBasePosition.X,
-                             0) + this.YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
+                                 : (int)this.MyBasePosition.X, 0) 
+                                 + this.YLevel * new Vector2(0, MenuSettings.MenuItemHeight);
             }
         }
 
@@ -296,12 +309,12 @@
                 //Hide all the children
                 if (!this.isVisible)
                 {
-                    foreach (var schild in this.Children)
+                    foreach (var schild in this.Children.ToArray())
                     {
                         schild.Visible = false;
                     }
 
-                    foreach (var sitem in this.Items)
+                    foreach (var sitem in this.Items.ToArray())
                     {
                         sitem.Visible = false;
                     }
@@ -352,7 +365,7 @@
                     return 0;
                 }
 
-                return this.Parent.YLevel + this.Parent.Children.TakeWhile(test => test.Name != this.Name).Count();
+                return (IsCompact ? 0 : this.Parent.YLevel) + this.Parent.Children.TakeWhile(test => test.Name != this.Name).Count();
             }
         }
 
@@ -374,7 +387,7 @@
         /// </returns>
         public static Menu GetMenu(string assemblyname, string menuname)
         {
-            return RootMenus.FirstOrDefault(x => x.Key == assemblyname + "." + menuname).Value;
+            return RootMenus.ToArray().FirstOrDefault(x => x.Key == assemblyname + "." + menuname).Value;
         }
 
         /// <summary>
@@ -494,14 +507,14 @@
             }
 
             //Search in our own items
-            foreach (var item in this.Items.Where(item => item.Name == name))
+            foreach (var item in this.Items.ToArray().Where(item => item.Name == name))
             {
                 return item;
             }
 
             //Search in submenus
             return
-                (from subMenu in this.Children where subMenu.Item(name) != null select subMenu.Item(name))
+                (from subMenu in this.Children.ToArray() where subMenu.Item(name) != null select subMenu.Item(name))
                     .FirstOrDefault();
         }
 
@@ -536,7 +549,7 @@
         /// </returns>
         public Menu SubMenu(string name)
         {
-            return this.Children.FirstOrDefault(sm => sm.Name == name) ?? this.AddSubMenu(new Menu(name, name));
+            return this.Children.ToArray().FirstOrDefault(sm => sm.Name == name) ?? this.AddSubMenu(new Menu(name, name));
         }
 
         #endregion
@@ -570,40 +583,72 @@
                 return;
             }
 
+            var childs = this.Children.ToArray();
+            var items = this.Items.ToArray();
+
             Drawing.Direct3DDevice.SetRenderState(RenderState.AlphaBlendEnable, true);
             MenuDrawHelper.DrawBox(
                 this.Position,
                 this.Width,
                 this.Height,
-                (this.Children.Count > 0 && this.Children[0].Visible || this.Items.Count > 0 && this.Items[0].Visible)
+                (childs.Length > 0 && childs[0].Visible || items.Length > 0 && items[0].Visible)
                     ? MenuSettings.ActiveBackgroundColor
                     : MenuSettings.BackgroundColor,
                 1,
                 System.Drawing.Color.Black);
 
-            MenuDrawHelper.Font.DrawText(
+            var style = this.Style;
+            style &= ~FontStyle.Strikeout;
+            style &= ~FontStyle.Underline;
+
+            var font = MenuDrawHelper.GetFont(style);
+
+            font.DrawText(
                 null,
                 MultiLanguage._(this.DisplayName),
                 new Rectangle((int)this.Position.X + 5, (int)this.Position.Y, this.Width, this.Height),
                 FontDrawFlags.VerticalCenter,
                 this.Color);
-            MenuDrawHelper.Font.DrawText(
+            font.DrawText(
                 null,
                 ">",
                 new Rectangle((int)this.Position.X - 5, (int)this.Position.Y, this.Width, this.Height),
                 FontDrawFlags.Right | FontDrawFlags.VerticalCenter,
                 this.Color);
 
+            var textWidth = font.MeasureText(null, MultiLanguage._(this.DisplayName));
+            if ((this.Style & FontStyle.Strikeout) != 0)
+            {
+                Drawing.DrawLine(
+                    this.Position.X + 5,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 2f),
+                    this.Position.X + 5 + textWidth.Width,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 2f),
+                    1f,
+                    System.Drawing.Color.FromArgb(this.Color.A, this.Color.R, this.Color.G, this.Color.B));
+            }
+
+            if ((this.Style & FontStyle.Underline) != 0)
+            {
+                Drawing.DrawLine(
+                    this.Position.X + 5,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 1.5f),
+                    this.Position.X + 5 + textWidth.Width,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 1.5f),
+                    1f,
+                    System.Drawing.Color.FromArgb(this.Color.A, this.Color.R, this.Color.G, this.Color.B));
+            }
+
             //Draw the menu submenus
-            foreach (var child in this.Children.Where(child => child.Visible))
+            foreach (var child in childs.ToArray().Where(child => child.Visible))
             {
                 child.OnDraw(args);
             }
 
             //Draw the items
-            for (var i = this.Items.Count - 1; i >= 0; i--)
+            for (var i = items.Length - 1; i >= 0; i--)
             {
-                var item = this.Items[i];
+                var item = items[i];
                 if (item.Visible)
                 {
                     item.OnDraw();
@@ -626,12 +671,12 @@
         internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key, WndEventComposition args)
         {
             //Spread the message to the menu's children recursively
-            foreach (var child in this.Children)
+            foreach (var child in this.Children.ToArray())
             {
                 child.OnReceiveMessage(message, cursorPos, key, args);
             }
 
-            foreach (var item in this.Items)
+            foreach (var item in this.Items.ToArray())
             {
                 item.OnReceiveMessage(message, cursorPos, key, args);
             }
@@ -649,12 +694,12 @@
                     var n = (int)(cursorPos.Y - MenuSettings.BasePosition.Y) / MenuSettings.MenuItemHeight;
                     if (this.MenuCount != n)
                     {
-                        foreach (var schild in this.Children)
+                        foreach (var schild in this.Children.ToArray())
                         {
                             schild.Visible = false;
                         }
 
-                        foreach (var sitem in this.Items)
+                        foreach (var sitem in this.Items.ToArray())
                         {
                             sitem.Visible = false;
                         }
@@ -675,14 +720,14 @@
             if (!this.IsRootMenu && this.Parent != null)
             {
                 //Close all the submenus in the level 
-                foreach (var child in this.Parent.Children.Where(child => child.Name != this.Name))
+                foreach (var child in this.Parent.Children.ToArray().Where(child => child.Name != this.Name))
                 {
-                    foreach (var schild in child.Children)
+                    foreach (var schild in child.Children.ToArray())
                     {
                         schild.Visible = false;
                     }
 
-                    foreach (var sitem in child.Items)
+                    foreach (var sitem in child.Items.ToArray())
                     {
                         sitem.Visible = false;
                     }
@@ -690,13 +735,13 @@
             }
 
             //Hide or Show the submenus.
-            foreach (var child in this.Children)
+            foreach (var child in this.Children.ToArray())
             {
                 child.Visible = !child.Visible;
             }
 
             //Hide or Show the items.
-            foreach (var item in this.Items)
+            foreach (var item in this.Items.ToArray())
             {
                 item.Visible = !item.Visible;
             }
@@ -721,12 +766,12 @@
         /// </param>
         internal void RecursiveSaveAll(ref Dictionary<string, Dictionary<string, byte[]>> dics)
         {
-            foreach (var child in this.Children)
+            foreach (var child in this.Children.ToArray())
             {
                 child.RecursiveSaveAll(ref dics);
             }
 
-            foreach (var item in this.Items)
+            foreach (var item in this.Items.ToArray())
             {
                 item.SaveToFile(ref dics);
             }
@@ -781,6 +826,27 @@
         private void UnloadMenuState()
         {
             MenuGlobals.MenuState.Remove(this.uniqueId);
+        }
+
+        public void RemoveMenu(Menu menu)
+        {
+            foreach (var child in this.Children.ToArray())
+            {
+                if (child == menu)
+                {
+                    this.Children.Remove(menu);
+                }
+
+                child.RemoveMenu(menu);
+            }
+        }
+
+        public static void Remove(Menu menu)
+        {
+            foreach (var rootMenu in RootMenus.Values)
+            {
+                rootMenu.RemoveMenu(menu);
+            }
         }
 
         #endregion

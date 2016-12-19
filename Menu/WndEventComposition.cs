@@ -57,9 +57,7 @@
 
             this.Char = Convert.ToChar((wndEventArgs.WParam <= char.MaxValue) ? wndEventArgs.WParam : 0);
             this.Key = (Keys)((int)wndEventArgs.WParam);
-            this.FullKey = (Keys)((int)wndEventArgs.WParam) != ModifierKeys
-                               ? (Keys)((int)wndEventArgs.WParam) | ModifierKeys
-                               : (Keys)((int)wndEventArgs.WParam);
+            this.FullKey = (Keys)((int)wndEventArgs.WParam);
             this.Msg = (WindowsMessages)wndEventArgs.Msg;
 
             var bytes = BitConverter.GetBytes(wndEventArgs.WParam);

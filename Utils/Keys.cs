@@ -1,4 +1,4 @@
-﻿namespace LeagueSharp.Common
+namespace LeagueSharp.Common
 {
     using System;
 
@@ -177,7 +177,7 @@
         /// <summary>
         ///     The IME mode change key.
         /// </summary>
-        IMEModeChange = IMEAceept | LButton,
+        IMEModeChange = IMEAccept | LButton,
 
         /// <summary>
         ///     The SPACEBAR key.

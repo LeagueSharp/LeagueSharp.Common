@@ -1,11 +1,14 @@
 ﻿namespace LeagueSharp.Common
 {
     using System;
+    using System.Drawing;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     using Color = System.Drawing.Color;
+    using Font = SharpDX.Direct3D9.Font;
+    using Rectangle = SharpDX.Rectangle;
 
     /// <summary>
     ///     The menu draw helper.
@@ -24,6 +27,16 @@
         /// </summary>
         internal static Font FontBold;
 
+        /// <summary>
+        ///     The italic font.
+        /// </summary>
+        internal static Font FontItalic;
+        
+        /// <summary>
+        ///     The bold and italic font.
+        /// </summary>
+        internal static Font FontBoldItalic;
+
         #endregion
 
         #region Constructors and Destructors
@@ -33,34 +46,44 @@
         /// </summary>
         static MenuDrawHelper()
         {
+            var device = Drawing.Direct3DDevice;
+            var faceName = Menu.Root.Item("FontName").GetValue<StringList>().SelectedValue;
+            var height = Menu.Root.Item("FontSize").GetValue<Slider>().Value;
+            var outputPercision = FontPrecision.Default;
+            var quality =
+                (FontQuality)
+                Enum.Parse(
+                    typeof(FontQuality),
+                    Menu.Root.Item("FontQuality").GetValue<StringList>().SelectedValue,
+                    true);
+
             Font = new Font(
-                Drawing.Direct3DDevice,
+                device,
                 new FontDescription
-                    {
-                        FaceName = Menu.Root.Item("FontName").GetValue<StringList>().SelectedValue,
-                        Height = Menu.Root.Item("FontSize").GetValue<Slider>().Value,
-                        OutputPrecision = FontPrecision.Default,
-                        Quality =
-                            (FontQuality)
-                            Enum.Parse(
-                                typeof(FontQuality),
-                                Menu.Root.Item("FontQuality").GetValue<StringList>().SelectedValue,
-                                true)
-                    });
+                    { FaceName = faceName, Height = height, OutputPrecision = outputPercision, Quality = quality });
 
             FontBold = new Font(
-                Drawing.Direct3DDevice,
+                device,
                 new FontDescription
                     {
-                        FaceName = Menu.Root.Item("FontName").GetValue<StringList>().SelectedValue,
-                        Height = Menu.Root.Item("FontSize").GetValue<Slider>().Value,
-                        OutputPrecision = FontPrecision.Default, Weight = FontWeight.Bold,
-                        Quality =
-                            (FontQuality)
-                            Enum.Parse(
-                                typeof(FontQuality),
-                                Menu.Root.Item("FontQuality").GetValue<StringList>().SelectedValue,
-                                true)
+                        FaceName = faceName, Height = height, OutputPrecision = outputPercision, Weight = FontWeight.Bold,
+                        Quality = quality
+                    });
+
+            FontItalic = new Font(
+                device,
+                new FontDescription
+                    {
+                        FaceName = faceName, Height = height, OutputPrecision = outputPercision, Italic = true,
+                        Quality = quality
+                    });
+
+            FontBoldItalic = new Font(
+                device,
+                new FontDescription
+                    {
+                        FaceName = faceName, Height = height, OutputPrecision = outputPercision, Weight = FontWeight.Bold,
+                        Italic = true, Quality = quality
                     });
 
             Drawing.OnPreReset += OnPreReset;
@@ -69,6 +92,21 @@
         }
 
         #endregion
+
+        internal static Font GetFont(FontStyle fontStyle)
+        {
+            switch (fontStyle)
+            {
+                case FontStyle.Bold:
+                    return FontBold;
+                case FontStyle.Italic:
+                    return FontItalic;
+                case FontStyle.Bold | FontStyle.Italic:
+                    return FontBoldItalic;
+                default:
+                    return Font;
+            }
+        }
 
         #region Methods
 
@@ -342,14 +380,30 @@
         {
             if (Font != null)
             {
+                Font.OnLostDevice();
                 Font.Dispose();
                 Font = null;
             }
 
             if (FontBold != null)
             {
+                FontBold.OnLostDevice();
                 FontBold.Dispose();
                 FontBold = null;
+            }
+
+            if (FontBoldItalic != null)
+            {
+                FontBoldItalic.OnLostDevice();
+                FontBoldItalic.Dispose();
+                FontBoldItalic = null;
+            }
+
+            if (FontItalic != null)
+            {
+                FontItalic.OnLostDevice();
+                FontItalic.Dispose();
+                FontItalic = null;
             }
         }
 
@@ -361,6 +415,8 @@
         {
             Font.OnResetDevice();
             FontBold.OnResetDevice();
+            FontBoldItalic.OnResetDevice();
+            FontItalic.OnResetDevice();
         }
 
         /// <summary>
@@ -373,6 +429,8 @@
         {
             Font.OnLostDevice();
             FontBold.OnLostDevice();
+            FontItalic.OnLostDevice();
+            FontBoldItalic.OnLostDevice();
         }
 
         #endregion

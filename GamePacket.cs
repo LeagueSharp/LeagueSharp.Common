@@ -1,239 +1,263 @@
-﻿#region LICENSE
-
-/*
- Copyright 2014 - 2014 LeagueSharp
- GamePacket.cs is part of LeagueSharp.Common.
- 
- LeagueSharp.Common is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- LeagueSharp.Common is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#endregion
-
-#region
-
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using SharpDX;
-
-#endregion
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+
+    using SharpDX;
+
     /// <summary>
     ///     This class makes easier to handle packets.
     /// </summary>
     public class GamePacket
     {
-        /// <summary>
-        /// The _header
-        /// </summary>
-        private readonly byte _header;
+        #region Fields
 
         /// <summary>
-        /// The binary reader.
-        /// </summary>
-        private readonly BinaryReader Br;
-
-        /// <summary>
-        /// The binary writer
-        /// </summary>
-        private readonly BinaryWriter Bw;
-
-        /// <summary>
-        /// The memory stream.
-        /// </summary>
-        private readonly MemoryStream Ms;
-
-        /// <summary>
-        /// The raw packet
-        /// </summary>
-        private readonly byte[] rawPacket;
-
-        /// <summary>
-        /// The channel
+        ///     The channel
         /// </summary>
         public PacketChannel Channel = PacketChannel.C2S;
 
         /// <summary>
-        /// The flags
+        ///     The flags
         /// </summary>
         public PacketProtocolFlags Flags = PacketProtocolFlags.Reliable;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GamePacket"/> class.
+        ///     The _header
+        /// </summary>
+        private readonly byte _header;
+
+        /// <summary>
+        ///     The binary reader.
+        /// </summary>
+        private readonly BinaryReader Br;
+
+        /// <summary>
+        ///     The binary writer
+        /// </summary>
+        private readonly BinaryWriter Bw;
+
+        /// <summary>
+        ///     The memory stream.
+        /// </summary>
+        private readonly MemoryStream Ms;
+
+        /// <summary>
+        ///     The raw packet
+        /// </summary>
+        private readonly byte[] rawPacket;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="GamePacket" /> class.
         /// </summary>
         /// <param name="data">The data.</param>
         public GamePacket(byte[] data)
         {
-            Block = false;
-            Ms = new MemoryStream(data);
-            Br = new BinaryReader(Ms);
-            Bw = new BinaryWriter(Ms);
+            this.Block = false;
+            this.Ms = new MemoryStream(data);
+            this.Br = new BinaryReader(this.Ms);
+            this.Bw = new BinaryWriter(this.Ms);
 
-            Br.BaseStream.Position = 0;
-            Bw.BaseStream.Position = 0;
-            rawPacket = data;
-            _header = data[0];
+            this.Br.BaseStream.Position = 0;
+            this.Bw.BaseStream.Position = 0;
+            this.rawPacket = data;
+            this._header = data[0];
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GamePacket"/> class.
+        ///     Initializes a new instance of the <see cref="GamePacket" /> class.
         /// </summary>
-        /// <param name="args">The <see cref="GamePacketEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="GamePacketEventArgs" /> instance containing the event data.</param>
         public GamePacket(GamePacketEventArgs args)
         {
-            Block = false;
-            Ms = new MemoryStream(args.PacketData);
-            Br = new BinaryReader(Ms);
-            Bw = new BinaryWriter(Ms);
+            this.Block = false;
+            this.Ms = new MemoryStream(args.PacketData);
+            this.Br = new BinaryReader(this.Ms);
+            this.Bw = new BinaryWriter(this.Ms);
 
-            Br.BaseStream.Position = 0;
-            Bw.BaseStream.Position = 0;
-            rawPacket = args.PacketData;
-            _header = args.PacketData[0];
-            Channel = args.Channel;
-            Flags = args.ProtocolFlag;
+            this.Br.BaseStream.Position = 0;
+            this.Bw.BaseStream.Position = 0;
+            this.rawPacket = args.PacketData;
+            this._header = args.PacketData[0];
+            this.Channel = args.Channel;
+            this.Flags = args.ProtocolFlag;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GamePacket"/> class.
+        ///     Initializes a new instance of the <see cref="GamePacket" /> class.
         /// </summary>
         /// <param name="header">The header.</param>
         /// <param name="channel">The channel.</param>
         /// <param name="flags">The flags.</param>
-        public GamePacket(byte header,
+        public GamePacket(
+            byte header,
             PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
-            Block = false;
-            Ms = new MemoryStream();
-            Br = new BinaryReader(Ms);
-            Bw = new BinaryWriter(Ms);
+            this.Block = false;
+            this.Ms = new MemoryStream();
+            this.Br = new BinaryReader(this.Ms);
+            this.Bw = new BinaryWriter(this.Ms);
 
-            Br.BaseStream.Position = 0;
-            Bw.BaseStream.Position = 0;
-            WriteByte(header);
-            _header = header;
-            Channel = channel;
-            Flags = flags;
+            this.Br.BaseStream.Position = 0;
+            this.Bw.BaseStream.Position = 0;
+            this.WriteByte(header);
+            this._header = header;
+            this.Channel = channel;
+            this.Flags = flags;
         }
 
-        /// <summary>
-        /// Gets the header.
-        /// </summary>
-        /// <value>
-        /// The header.
-        /// </value>
-        public byte Header
-        {
-            get { return ReadByte(0); } //Better in case header changes, but also resets position.
-        }
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        /// Gets or sets the position.
+        ///     Gets or sets a value indicating whether this <see cref="GamePacket" /> is block.
         /// </summary>
         /// <value>
-        /// The position.
-        /// </value>
-        public long Position
-        {
-            get { return Br.BaseStream.Position; }
-            set
-            {
-                if (value >= 0L)
-                {
-                    Br.BaseStream.Position = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="GamePacket"/> is block.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if block; otherwise, <c>false</c>.
+        ///     <c>true</c> if block; otherwise, <c>false</c>.
         /// </value>
         public bool Block { get; set; }
 
         /// <summary>
-        /// Returns the packet size.
+        ///     Gets the header.
         /// </summary>
-        /// <returns></returns>
-        public long Size()
+        /// <value>
+        ///     The header.
+        /// </value>
+        public byte Header
         {
-            return Br.BaseStream.Length;
+            get
+            {
+                return this.ReadByte(0);
+            } //Better in case header changes, but also resets position.
         }
 
         /// <summary>
-        /// Reads a byte from the packet and increases the position by 1.
+        ///     Gets or sets the position.
+        /// </summary>
+        /// <value>
+        ///     The position.
+        /// </value>
+        public long Position
+        {
+            get
+            {
+                return this.Br.BaseStream.Position;
+            }
+            set
+            {
+                if (value >= 0L)
+                {
+                    this.Br.BaseStream.Position = value;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Dumps the packet.
+        /// </summary>
+        /// <param name="additionalInfo">if set to <c>true</c> writes additional information.</param>
+        /// <returns></returns>
+        public string Dump(bool additionalInfo = false)
+        {
+            var s = string.Concat(this.Ms.ToArray().Select(b => b.ToString("X2") + " "));
+            if (additionalInfo)
+            {
+                s = "Channel: " + this.Channel + " Flags: " + this.Flags + " Data: " + s;
+            }
+            return s;
+        }
+
+        /// <summary>
+        ///     Gets the raw packet.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetRawPacket()
+        {
+            return this.Ms.ToArray();
+        }
+
+        /// <summary>
+        ///     Receives the packet.
+        /// </summary>
+        /// <param name="channel">The channel.</param>
+        public void Process(PacketChannel channel = PacketChannel.S2C)
+        {
+            return; //Blocked for now 4.21
+            if (!this.Block)
+            {
+                Game.ProcessPacket(this.Ms.ToArray(), channel);
+            }
+        }
+
+        /// <summary>
+        ///     Reads a byte from the packet and increases the position by 1.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns></returns>
         public byte ReadByte(long position = -1)
         {
-            Position = position;
-            return Br.ReadBytes(1)[0];
+            this.Position = position;
+            return this.Br.ReadBytes(1)[0];
         }
 
         /// <summary>
-        /// Reads and returns a double byte.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <returns></returns>
-        public short ReadShort(long position = -1)
-        {
-            Position = position;
-            return BitConverter.ToInt16(Br.ReadBytes(2), 0);
-        }
-
-        /// <summary>
-        /// Reads and returns a float.
+        ///     Reads and returns a float.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns></returns>
         public float ReadFloat(long position = -1)
         {
-            Position = position;
-            return BitConverter.ToSingle(Br.ReadBytes(4), 0);
+            this.Position = position;
+            return BitConverter.ToSingle(this.Br.ReadBytes(4), 0);
         }
 
         /// <summary>
-        /// Reads and returns an integer.
+        ///     Reads and returns an integer.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns></returns>
         public int ReadInteger(long position = -1)
         {
-            Position = position;
-            return BitConverter.ToInt32(Br.ReadBytes(4), 0);
+            this.Position = position;
+            return BitConverter.ToInt32(this.Br.ReadBytes(4), 0);
         }
 
         /// <summary>
-        /// Reads and returns a string.
+        ///     Reads and returns a double byte.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns></returns>
+        public short ReadShort(long position = -1)
+        {
+            this.Position = position;
+            return BitConverter.ToInt16(this.Br.ReadBytes(2), 0);
+        }
+
+        /// <summary>
+        ///     Reads and returns a string.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns></returns>
         public string ReadString(long position = -1)
         {
-            Position = position;
+            this.Position = position;
             var sb = new StringBuilder();
 
-            for (var i = Position; i < Size(); i++)
+            for (var i = this.Position; i < this.Size(); i++)
             {
-                var num = ReadByte();
+                var num = this.ReadByte();
 
                 if (num == 0)
                 {
@@ -246,127 +270,76 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Writes a byte.
+        ///     Saves the packet dump to a file
         /// </summary>
-        /// <param name="b">The byte.</param>
-        /// <param name="repeat">Specifies how many times to write the packet.</param>
-        public void WriteByte(byte b, int repeat = 1)
+        /// <param name="filePath">The file path.</param>
+        public void SaveToFile(string filePath)
         {
-            for (var i = 0; i < repeat; i++)
-            {
-                Bw.Write(b);
-            }
+            var w = File.AppendText(filePath);
+
+            w.WriteLine(this.Dump(true));
+            w.Close();
         }
 
         /// <summary>
-        /// Writes a short.
-        /// </summary>
-        /// <param name="s">The short.</param>
-        public void WriteShort(short s)
-        {
-            Bw.Write(s);
-        }
-
-        /// <summary>
-        /// Writes a float.
-        /// </summary>
-        /// <param name="f">The float.</param>
-        public void WriteFloat(float f)
-        {
-            Bw.Write(f);
-        }
-
-        /// <summary>
-        /// Writes an integer.
-        /// </summary>
-        /// <param name="i">The integer.</param>
-        public void WriteInteger(int i)
-        {
-            Bw.Write(i);
-        }
-
-        /// <summary>
-        /// Writes the hex string as bytes to the packet.
-        /// </summary>
-        /// <param name="hex">The hexadecimal string.</param>
-        public void WriteHexString(string hex)
-        {
-            hex = hex.Replace(" ", string.Empty);
-
-            if ((hex.Length % 2) != 0)
-            {
-                hex = "0" + hex;
-            }
-
-            Bw.Write(
-                Enumerable.Range(0, hex.Length)
-                    .Where(x => x % 2 == 0)
-                    .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                    .ToArray());
-        }
-
-        /// <summary>
-        /// Writes the string.
-        /// </summary>
-        /// <param name="str">The string.</param>
-        public void WriteString(string str)
-        {
-            Bw.Write(Encoding.UTF8.GetBytes(str));
-        }
-
-        /// <summary>
-        /// Searches for the byte.
+        ///     Searches for the byte.
         /// </summary>
         /// <param name="num">The number.</param>
         /// <returns></returns>
         public int[] SearchByte(byte num)
         {
             //return rawPacket.IndexOf(new byte[num]).ToArray();
-            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return this.rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         /// <summary>
-        /// Searches for the short.
-        /// </summary>
-        /// <param name="num">The number.</param>
-        /// <returns></returns>
-        public int[] SearchShort(short num)
-        {
-            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
-        }
-
-        /// <summary>
-        /// Searches for the float.
+        ///     Searches for the float.
         /// </summary>
         /// <param name="num">The number.</param>
         /// <returns></returns>
         public int[] SearchFloat(float num)
         {
-            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            return this.rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         /// <summary>
-        /// Searches for the integer.
+        ///     Searches for the game tile.
         /// </summary>
-        /// <param name="num">The number.</param>
+        /// <param name="position">The position.</param>
         /// <returns></returns>
-        public int[] SearchInteger(int num)
+        public int[][] SearchGameTile(Vector2 position)
         {
-            return rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+            var tile = NavMesh.WorldToGrid(position.X, position.Y);
+            var cell = NavMesh.GetCell((short)tile.X, (short)tile.Y);
+
+            var x = this.SearchShort(cell.GridX);
+            var y = this.SearchShort(cell.GridY);
+
+            return new[] { x, y };
         }
 
         /// <summary>
-        /// Searches for the string.
+        ///     Searches for the game tile.
         /// </summary>
-        /// <param name="str">The string.</param>
+        /// <param name="position">The position.</param>
         /// <returns></returns>
-        public int[] SearchString(string str)
+        public int[][] SearchGameTile(Vector3 position)
         {
-            return rawPacket.IndexOf(Utils.GetBytes(str)).ToArray();
+            return this.SearchGameTile(position.To2D());
         }
 
         /// <summary>
-        /// Searches for the hexadecimal string.
+        ///     Searches for the game tile.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
+        public int[][] SearchGameTile(GameObject obj)
+        {
+            return this.SearchGameTile(obj.Position.To2D());
+        }
+
+        /// <summary>
+        ///     Searches for the hexadecimal string.
         /// </summary>
         /// <param name="hex">The hexadecimal string.</param>
         /// <returns></returns>
@@ -380,7 +353,7 @@ namespace LeagueSharp.Common
             }
 
             return
-                rawPacket.IndexOf(
+                this.rawPacket.IndexOf(
                     Enumerable.Range(0, hex.Length)
                         .Where(x => x % 2 == 0)
                         .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
@@ -388,7 +361,17 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Searches for the object.
+        ///     Searches for the integer.
+        /// </summary>
+        /// <param name="num">The number.</param>
+        /// <returns></returns>
+        public int[] SearchInteger(int num)
+        {
+            return this.rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
+        }
+
+        /// <summary>
+        ///     Searches for the object.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns></returns>
@@ -399,28 +382,28 @@ namespace LeagueSharp.Common
                 return null;
             }
 
-            return SearchInteger(obj.NetworkId);
+            return this.SearchInteger(obj.NetworkId);
         }
 
         /// <summary>
-        /// Searches  forthe object.
+        ///     Searches  forthe object.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
         /// <returns></returns>
         public int[] SearchObject(int networkId)
         {
-            return networkId == 0 ? null : SearchInteger(networkId);
+            return networkId == 0 ? null : this.SearchInteger(networkId);
         }
 
         /// <summary>
-        /// Searches for the position.
+        ///     Searches for the position.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns></returns>
         public int[][] SearchPosition(Vector2 position)
         {
-            var x = SearchFloat(position.X);
-            var y = SearchFloat(position.Y);
+            var x = this.SearchFloat(position.X);
+            var y = this.SearchFloat(position.Y);
 
             if (x == null || y == null)
             {
@@ -431,34 +414,34 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Searches for the position.
+        ///     Searches for the position.
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns></returns>
         public int[][] SearchPosition(Vector3 position)
         {
-            return SearchPosition(position.To2D());
+            return this.SearchPosition(position.To2D());
         }
 
         /// <summary>
-        /// Searches for the position.
+        ///     Searches for the position.
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <returns></returns>
         public int[][] SearchPosition(GameObject unit)
         {
-            return SearchPosition(unit.Position.To2D());
+            return this.SearchPosition(unit.Position.To2D());
         }
 
         /// <summary>
-        /// Searches for the position.
+        ///     Searches for the position.
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <returns></returns>
         public int[][] SearchPosition(Obj_AI_Base unit)
         {
-            var pos = SearchPosition(unit.Position.To2D());
-            var pos2 = SearchPosition(unit.ServerPosition.To2D());
+            var pos = this.SearchPosition(unit.Position.To2D());
+            var pos2 = this.SearchPosition(unit.ServerPosition.To2D());
 
             if (pos == null)
             {
@@ -469,105 +452,122 @@ namespace LeagueSharp.Common
         }
 
         /// <summary>
-        /// Searches for the game tile.
+        ///     Searches for the short.
         /// </summary>
-        /// <param name="position">The position.</param>
+        /// <param name="num">The number.</param>
         /// <returns></returns>
-        public int[][] SearchGameTile(Vector2 position)
+        public int[] SearchShort(short num)
         {
-            var tile = NavMesh.WorldToGrid(position.X, position.Y);
-            var cell = NavMesh.GetCell((short) tile.X, (short) tile.Y);
-
-            var x = SearchShort(cell.GridX);
-            var y = SearchShort(cell.GridY);
-
-            return new[] { x, y };
+            return this.rawPacket.IndexOf(BitConverter.GetBytes(num)).ToArray();
         }
 
         /// <summary>
-        /// Searches for the game tile.
+        ///     Searches for the string.
         /// </summary>
-        /// <param name="position">The position.</param>
+        /// <param name="str">The string.</param>
         /// <returns></returns>
-        public int[][] SearchGameTile(Vector3 position)
+        public int[] SearchString(string str)
         {
-            return SearchGameTile(position.To2D());
+            return this.rawPacket.IndexOf(Utils.GetBytes(str)).ToArray();
         }
 
         /// <summary>
-        /// Searches for the game tile.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns></returns>
-        public int[][] SearchGameTile(GameObject obj)
-        {
-            return SearchGameTile(obj.Position.To2D());
-        }
-
-        /// <summary>
-        /// Gets the raw packet.
-        /// </summary>
-        /// <returns></returns>
-        public byte[] GetRawPacket()
-        {
-            return Ms.ToArray();
-        }
-
-        /// <summary>
-        /// Sends the packet
+        ///     Sends the packet
         /// </summary>
         /// <param name="channel">The channel.</param>
         /// <param name="flags">The flags.</param>
-        public void Send(PacketChannel channel = PacketChannel.C2S,
+        public void Send(
+            PacketChannel channel = PacketChannel.C2S,
             PacketProtocolFlags flags = PacketProtocolFlags.Reliable)
         {
             return; //Blocked for now 4.21
-            if (!Block)
+            if (!this.Block)
             {
                 Game.SendPacket(
-                    Ms.ToArray(), Channel == PacketChannel.C2S ? channel : Channel,
-                    Flags == PacketProtocolFlags.Reliable ? flags : Flags);
+                    this.Ms.ToArray(),
+                    this.Channel == PacketChannel.C2S ? channel : this.Channel,
+                    this.Flags == PacketProtocolFlags.Reliable ? flags : this.Flags);
             }
         }
 
         /// <summary>
-        /// Receives the packet.
+        ///     Returns the packet size.
         /// </summary>
-        /// <param name="channel">The channel.</param>
-        public void Process(PacketChannel channel = PacketChannel.S2C)
-        {
-            return; //Blocked for now 4.21
-            if (!Block)
-            {
-                Game.ProcessPacket(Ms.ToArray(), channel);
-            }
-        }
-
-        /// <summary>
-        /// Dumps the packet.
-        /// </summary>
-        /// <param name="additionalInfo">if set to <c>true</c> writes additional information.</param>
         /// <returns></returns>
-        public string Dump(bool additionalInfo = false)
+        public long Size()
         {
-            var s = string.Concat(Ms.ToArray().Select(b => b.ToString("X2") + " "));
-            if (additionalInfo)
-            {
-                s = "Channel: " + Channel + " Flags: " + Flags + " Data: " + s;
-            }
-            return s;
+            return this.Br.BaseStream.Length;
         }
 
         /// <summary>
-        /// Saves the packet dump to a file
+        ///     Writes a byte.
         /// </summary>
-        /// <param name="filePath">The file path.</param>
-        public void SaveToFile(string filePath)
+        /// <param name="b">The byte.</param>
+        /// <param name="repeat">Specifies how many times to write the packet.</param>
+        public void WriteByte(byte b, int repeat = 1)
         {
-            var w = File.AppendText(filePath);
-
-            w.WriteLine(Dump(true));
-            w.Close();
+            for (var i = 0; i < repeat; i++)
+            {
+                this.Bw.Write(b);
+            }
         }
+
+        /// <summary>
+        ///     Writes a float.
+        /// </summary>
+        /// <param name="f">The float.</param>
+        public void WriteFloat(float f)
+        {
+            this.Bw.Write(f);
+        }
+
+        /// <summary>
+        ///     Writes the hex string as bytes to the packet.
+        /// </summary>
+        /// <param name="hex">The hexadecimal string.</param>
+        public void WriteHexString(string hex)
+        {
+            hex = hex.Replace(" ", string.Empty);
+
+            if ((hex.Length % 2) != 0)
+            {
+                hex = "0" + hex;
+            }
+
+            this.Bw.Write(
+                Enumerable.Range(0, hex.Length)
+                    .Where(x => x % 2 == 0)
+                    .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                    .ToArray());
+        }
+
+        /// <summary>
+        ///     Writes an integer.
+        /// </summary>
+        /// <param name="i">The integer.</param>
+        public void WriteInteger(int i)
+        {
+            this.Bw.Write(i);
+        }
+
+        /// <summary>
+        ///     Writes a short.
+        /// </summary>
+        /// <param name="s">The short.</param>
+        public void WriteShort(short s)
+        {
+            this.Bw.Write(s);
+        }
+
+        /// <summary>
+        ///     Writes the string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        public void WriteString(string str)
+        {
+            this.Bw.Write(Encoding.UTF8.GetBytes(str));
+        }
+
+        #endregion
     }
 }

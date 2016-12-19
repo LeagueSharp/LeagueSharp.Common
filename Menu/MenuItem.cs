@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-
-namespace LeagueSharp.Common
+﻿namespace LeagueSharp.Common
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +10,6 @@ namespace LeagueSharp.Common
     using SharpDX.Direct3D9;
 
     using Color = SharpDX.Color;
-    using Font = SharpDX.Direct3D9.Font;
     using Rectangle = SharpDX.Rectangle;
 
     /// <summary>
@@ -73,6 +70,11 @@ namespace LeagueSharp.Common
         public Color TooltipColor;
 
         /// <summary>
+        ///     Indicates whether the value was set.
+        /// </summary>
+        public bool ValueSet;
+
+        /// <summary>
         ///     Indicates whether the menu item is drawing the tooltip.
         /// </summary>
         internal bool DrawingTooltip;
@@ -83,9 +85,9 @@ namespace LeagueSharp.Common
         internal bool Interacting;
 
         /// <summary>
-        ///     Indicates whether the value was set.
+        ///     The stage of the KeybindSetting
         /// </summary>
-        internal bool ValueSet;
+        internal KeybindSetStage KeybindSettingStage = KeybindSetStage.NotSetting;
 
         /// <summary>
         ///     The value type.
@@ -122,10 +124,6 @@ namespace LeagueSharp.Common
         /// </summary>
         private object value;
 
-        /// <summary>
-        /// The stage of the KeybindSetting
-        /// </summary>
-        internal KeybindSetStage KeybindSettingStage = KeybindSetStage.NotSetting;
         #endregion
 
         #region Constructors and Destructors
@@ -150,7 +148,7 @@ namespace LeagueSharp.Common
             }
 
             this.Name = name;
-            this.DisplayName = displayName;
+            this.DisplayName = MenuGlobals.Function001(displayName);
             this.FontStyle = FontStyle.Regular;
             this.FontColor = Color.White;
             this.ShowItem = true;
@@ -205,7 +203,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                if (this.Parent == null)
+                if (Menu.IsCompact || this.Parent == null)
                 {
                     return MenuSettings.BasePosition;
                 }
@@ -228,11 +226,16 @@ namespace LeagueSharp.Common
                                     .Concat(new[] { 0 })
                                     .Max()
                               : (this.ValueType == MenuValueType.KeyBind)
-                                    ? this.GetValue<KeyBind>().SecondaryKey == 0 ? MenuDrawHelper.Font.MeasureText(
-                                    " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width : 
-                                    MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width 
-                                    + MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().SecondaryKey) + "]").Width 
-                                    + MenuDrawHelper.Font.MeasureText(" [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width / 4
+                                    ? this.GetValue<KeyBind>().SecondaryKey == 0
+                                          ? MenuDrawHelper.Font.MeasureText(
+                                              " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width
+                                          : MenuDrawHelper.Font.MeasureText(
+                                              " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width
+                                            + MenuDrawHelper.Font.MeasureText(
+                                                " [" + Utils.KeyToText(this.GetValue<KeyBind>().SecondaryKey) + "]")
+                                                  .Width
+                                            + MenuDrawHelper.Font.MeasureText(
+                                                " [" + Utils.KeyToText(this.GetValue<KeyBind>().Key) + "]").Width / 4
                                     : 0);
             }
         }
@@ -317,7 +320,7 @@ namespace LeagueSharp.Common
                     return 0;
                 }
 
-                return this.Parent.YLevel + this.Parent.Children.Count
+                return (Menu.IsCompact ? 0 : this.Parent.YLevel) + this.Parent.Children.Count
                        + this.Parent.Items.TakeWhile(test => test.Name != this.Name).Count(c => c.ShowItem);
             }
         }
@@ -615,6 +618,34 @@ namespace LeagueSharp.Common
             }
         }
 
+        /// <summary>
+        ///     Gets the item value, safely.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The item type.
+        /// </typeparam>
+        /// <returns>
+        ///     The value.
+        /// </returns>
+        public T TryGetValue<T>()
+        {
+            return this.value is T ? (T)this.value : default(T);
+        }
+
+        /// <summary>
+        ///     Gets a value indicating if the value is of item type.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The item type.
+        /// </typeparam>
+        /// <returns>
+        ///     The <see cref="bool" /> indicating whether the value is of type.
+        /// </returns>
+        public bool TypeOf<T>()
+        {
+            return this.value is T;
+        }
+
         #endregion
 
         #region Methods
@@ -661,16 +692,11 @@ namespace LeagueSharp.Common
                     this.TooltipColor);
             }
 
-            Font font;
-            switch (this.FontStyle)
-            {
-                case FontStyle.Bold:
-                    font = MenuDrawHelper.FontBold;
-                    break;
-                default:
-                    font = MenuDrawHelper.Font;
-                    break;
-            }
+            var style = this.FontStyle;
+            style &= ~FontStyle.Strikeout;
+            style &= ~FontStyle.Underline;
+
+            var font = MenuDrawHelper.GetFont(style);
 
             switch (this.ValueType)
             {
@@ -695,40 +721,40 @@ namespace LeagueSharp.Common
 
                     if (val.Key != 0)
                     {
-                    var x = !string.IsNullOrEmpty(this.Tooltip)
-                                ? (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 35
-                                : (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
+                        var x = !string.IsNullOrEmpty(this.Tooltip)
+                                    ? (int)this.Position.X + this.Width - this.Height
+                                      - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 35
+                                    : (int)this.Position.X + this.Width - this.Height
+                                      - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width - 10;
 
-                    font.DrawText(
-                        null,
-                        "[" + Utils.KeyToText(val.Key) + "]",
-                        new Rectangle(x, (int)this.Position.Y, this.Width, this.Height),
-                        FontDrawFlags.VerticalCenter,
-                        new ColorBGRA(1, 169, 234, 255));
+                        font.DrawText(
+                            null,
+                            "[" + Utils.KeyToText(val.Key) + "]",
+                            new Rectangle(x, (int)this.Position.Y, this.Width, this.Height),
+                            FontDrawFlags.VerticalCenter,
+                            new ColorBGRA(1, 169, 234, 255));
                     }
 
                     if (val.SecondaryKey != 0)
                     {
                         var x_secondary = !string.IsNullOrEmpty(this.Tooltip)
-                                ? (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
-                                  - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width 
-                                  - 35
-                                : (int)this.Position.X + this.Width - this.Height
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
-                                  - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
-                                  - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width 
-                                  - 10;
+                                              ? (int)this.Position.X + this.Width - this.Height
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
+                                                - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width
+                                                - 35
+                                              : (int)this.Position.X + this.Width - this.Height
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width
+                                                - font.MeasureText("[" + Utils.KeyToText(val.Key) + "]").Width / 4
+                                                - font.MeasureText("[" + Utils.KeyToText(val.SecondaryKey) + "]").Width
+                                                - 10;
 
                         font.DrawText(
-                        null,
-                        "[" + Utils.KeyToText(val.SecondaryKey) + "]",
-                        new Rectangle(x_secondary, (int)this.Position.Y, this.Width, this.Height),
-                        FontDrawFlags.VerticalCenter,
-                        new ColorBGRA(1, 169, 234, 255));
+                            null,
+                            "[" + Utils.KeyToText(val.SecondaryKey) + "]",
+                            new Rectangle(x_secondary, (int)this.Position.Y, this.Width, this.Height),
+                            FontDrawFlags.VerticalCenter,
+                            new ColorBGRA(1, 169, 234, 255));
                     }
 
                     MenuDrawHelper.DrawOnOff(
@@ -814,6 +840,37 @@ namespace LeagueSharp.Common
                 new Rectangle((int)this.Position.X + 5, (int)this.Position.Y, this.Width, this.Height),
                 FontDrawFlags.VerticalCenter,
                 this.FontColor);
+
+            var textWidth = font.MeasureText(null, MultiLanguage._(this.DisplayName));
+            if ((this.FontStyle & FontStyle.Strikeout) != 0)
+            {
+                Drawing.DrawLine(
+                    this.Position.X + 5,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 2f),
+                    this.Position.X + 5 + textWidth.Width,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 2f),
+                    1f,
+                    System.Drawing.Color.FromArgb(
+                        this.FontColor.A,
+                        this.FontColor.R,
+                        this.FontColor.G,
+                        this.FontColor.B));
+            }
+
+            if ((this.FontStyle & FontStyle.Underline) != 0)
+            {
+                Drawing.DrawLine(
+                    this.Position.X + 5,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 1.5f),
+                    this.Position.X + 5 + textWidth.Width,
+                    this.Position.Y + (MenuSettings.MenuItemHeight / 1.5f),
+                    1f,
+                    System.Drawing.Color.FromArgb(
+                        this.FontColor.A,
+                        this.FontColor.R,
+                        this.FontColor.G,
+                        this.FontColor.B));
+            }
         }
 
         /// <summary>
@@ -828,7 +885,14 @@ namespace LeagueSharp.Common
         /// <param name="key">
         ///     The key.
         /// </param>
-        internal void OnReceiveMessage(WindowsMessages message, Vector2 cursorPos, uint key, WndEventComposition wndArgs)
+        /// <param name="wndArgs">
+        ///     The windows arguments.
+        /// </param>
+        internal void OnReceiveMessage(
+            WindowsMessages message,
+            Vector2 cursorPos,
+            uint key,
+            WndEventComposition wndArgs)
         {
             if (message == WindowsMessages.WM_MOUSEMOVE)
             {
@@ -1019,29 +1083,31 @@ namespace LeagueSharp.Common
                         val.SecondaryKey = 0;
                         this.SetValue(val);
                         this.Interacting = false;
-                        KeybindSettingStage = KeybindSetStage.NotSetting;
+                        this.KeybindSettingStage = KeybindSetStage.NotSetting;
                     }
 
-                    if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage != KeybindSetStage.NotSetting)
+                    if (message == WindowsMessages.WM_KEYUP && this.Interacting
+                        && this.KeybindSettingStage != KeybindSetStage.NotSetting)
                     {
-                        if (KeybindSettingStage == KeybindSetStage.Keybind1)
+                        if (this.KeybindSettingStage == KeybindSetStage.Keybind1)
                         {
                             var val = this.GetValue<KeyBind>();
                             val.Key = key;
                             this.SetValue(val);
-                            KeybindSettingStage = KeybindSetStage.Keybind2;
+                            this.KeybindSettingStage = KeybindSetStage.Keybind2;
                         }
-                        else if (KeybindSettingStage == KeybindSetStage.Keybind2)
+                        else if (this.KeybindSettingStage == KeybindSetStage.Keybind2)
                         {
                             var val = this.GetValue<KeyBind>();
                             val.SecondaryKey = key;
                             this.SetValue(val);
                             this.Interacting = false;
-                            KeybindSettingStage = KeybindSetStage.NotSetting;
+                            this.KeybindSettingStage = KeybindSetStage.NotSetting;
                         }
                     }
 
-                    if (message == WindowsMessages.WM_KEYUP && this.Interacting && this.KeybindSettingStage == KeybindSetStage.NotSetting)
+                    if (message == WindowsMessages.WM_KEYUP && this.Interacting
+                        && this.KeybindSettingStage == KeybindSetStage.NotSetting)
                     {
                         var val = this.GetValue<KeyBind>();
                         val.Key = key;
@@ -1050,14 +1116,12 @@ namespace LeagueSharp.Common
                         this.Interacting = false;
                     }
 
-
                     if (!this.Visible)
                     {
                         return;
                     }
 
-                    if (message != WindowsMessages.WM_LBUTTONDOWN 
-                        && wndArgs.Msg != WindowsMessages.WM_RBUTTONDOWN)
+                    if (message != WindowsMessages.WM_LBUTTONDOWN && wndArgs.Msg != WindowsMessages.WM_RBUTTONDOWN)
                     {
                         return;
                     }

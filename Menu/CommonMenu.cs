@@ -21,12 +21,27 @@
         /// </summary>
         static CommonMenu()
         {
+            Initialize();
+        }
+
+        public static void Initialize()
+        {
             TargetSelector.Initialize();
             Prediction.Initialize();
             Hacks.Initialize();
             FakeClicks.Initialize();
 
             Instance.AddToMainMenu();
+        }
+
+        public static void Shutdown()
+        {
+            TargetSelector.Shutdown();
+            Prediction.Shutdown();
+            Hacks.Shutdown();
+            FakeClicks.Shutdown();
+
+            Menu.Remove(Instance);
         }
 
         #endregion

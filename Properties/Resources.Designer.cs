@@ -59,21 +59,35 @@ namespace LeagueSharp.Common.Properties {
                 resourceCulture = value;
             }
         }
-        
         /// <summary>
-        ///   Looks up a localized string similar to {
-        ///    &quot;misc&quot;: &quot;\u96dc\u9805&quot;,
-        ///    &quot;dontult&quot;: &quot;\u4e0d\u4f7f\u7528\u5927\u7edd&quot;,
-        ///    &quot;target selector&quot;: &quot;\u76ee\u6807\u9009\u62e9\u5668&quot;,
-        ///    &quot;orbwalker&quot;: &quot;\u8d70\u780d&quot;,
-        ///    &quot;initiator&apos;s list&quot;: &quot;\u5f00\u653b\u5355&quot;,
-        ///    &quot;draw aacirlce oktw\u00a9 style&quot;: &quot;\u986f\u793a\u666e\u653b\u5708 oktw\u00a9 style&quot;,
-        ///    &quot;e shield config&quot;: &quot;E\u76fe\u8a2d\u5b9a&quot;,
-        ///    &quot;iteams&quot;: &quot;\u7269\u4ef6&quot;,
-        ///    &quot;e config&quot;: &quot;E\u8a2d\u5b9a&quot;,
-        ///    &quot;w config&quot;: &quot;W\u8a2d\u5b9a&quot;,
-        ///    &quot;r option&quot;: &quot;R\u9009\u9879&quot;,
-        ///    &quot;r champions&quot;: &quot;R [rest of string was truncated]&quot;;.
+        ///   查詢類似 {
+        ///	&quot;\u003c&quot;: &quot;\u003c&quot;,
+        ///	&quot;yasuo&quot;: &quot;\u72bd\u5bbf&quot;,
+        ///  &quot;velkoz&quot;: &quot;\u5a01\u5bc7\u8332&quot;,
+        ///  &quot;braum&quot;: &quot;\u5e03\u90ce\u59c6&quot;,
+        ///  &quot;gnar&quot;: &quot;\u5436\u5152&quot;,
+        ///  &quot;azir&quot;: &quot;\u963f\u7948\u723e&quot;,
+        ///  &quot;kalista&quot;: &quot;\u514b\u9ece\u601d\u59b2&quot;,
+        ///  &quot;rekSai&quot;: &quot;\u96f7\u73c2\u715e&quot;,
+        ///  &quot;bard&quot;: &quot;\u5df4\u5fb7&quot;,
+        ///  &quot;ekko&quot;: &quot;\u827e\u514b&quot;,
+        ///  &quot;aatrox&quot;: &quot;\u5384\u85a9\u65af&quot;,
+        ///  &quot;ahri&quot;: &quot;\u963f\u7483&quot;,
+        ///  &quot;akali&quot;: &quot;\u963f\u5361\u8389&quot;,
+        ///  &quot;alistar&quot;: &quot;\u4e9e\u6b77\u65af\u5854&quot;,
+        ///  &quot;amumu&quot;: &quot;\u963f\u59c6\u59c6&quot;,
+        ///  &quot;anivia&quot;: &quot;\u827e\u59ae\u7dad\u4e9e&quot;,
+        ///  &quot;annie&quot;: &quot;\u5b89\u59ae&quot;,
+        ///  &quot;ashe&quot;: &quot;\u827e\u5e0c&quot;,
+        ///  &quot;blitzcrank&quot;: &quot;\u5e03\u91cc\u8328&quot;,
+        ///  &quot;brand&quot;: &quot;\u5e03\u862d\u5fb7&quot;,
+        ///  &quot;caitlyn&quot;: &quot;\u51f1\u7279\u7433&quot;,
+        ///  &quot;cassiopeia&quot;: &quot;\u5361\u838e\u78a7\u96c5&quot;,
+        ///  &quot;chogath&quot;: &quot;\u79d1\u52a0\u65af&quot;,
+        ///  &quot;corki&quot;: &quot;\u5eab\u5947&quot;,
+        ///  &quot;darius&quot;: &quot;\u9054\u745e\u65af&quot;,
+        ///  &quot;diana&quot;: &quot;\u9edb\u5b89\u5a1c&quot;,
+        ///  &quot;drmundo&... 的當地語系化字串。
         /// </summary>
         internal static string ChineseJson {
             get {
