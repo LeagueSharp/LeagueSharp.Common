@@ -303,6 +303,16 @@ namespace LeagueSharp.Common
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
+            if (Player.IsCastingInterruptableSpell())
+            {
+                return false;
+            }
+            
+            if (Player.HasBuffOfType(BuffType.Blind))
+            {
+                return false;
+            }
+
             if (Player.ChampionName == "Graves")
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
@@ -321,11 +331,6 @@ namespace LeagueSharp.Common
                 {
                     return false;
                 }
-            }
-
-            if (Player.IsCastingInterruptableSpell())
-            {
-                return false;
             }
 
             return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
