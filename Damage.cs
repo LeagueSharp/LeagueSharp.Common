@@ -252,6 +252,16 @@ namespace LeagueSharp.Common
 
             #endregion
 
+            #region Camille
+            p = new PassiveDamage
+            {
+                ChampionName = "Camille",
+                IsActive = (source, target) => source.HasBuff("camiller"),
+                GetDamage =
+                    (source, target) => source.GetSpellDamage(target, SpellSlot.R)
+            };
+            #endregion
+
             #region ChoGath
 
             p = new PassiveDamage
@@ -2331,47 +2341,63 @@ namespace LeagueSharp.Common
                                     + 2 * source.FlatPhysicalDamageMod
                             },
                     });
-            Spells.Add("Camille",
-                new List<DamageSpell>
-                {
-                     //Q
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.Q, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 0.2, 0.25, 0.3, 0.35, 0.4 }[level]
-                                    * source.FlatPhysicalDamageMod
-                            },
-                        //W
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.W, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 65, 95, 125, 155, 185 }[level]
-                                    + 0.6 *  (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                            },
-                         //E
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.E, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 70, 115, 160, 205, 250 }[level]
-                                    + 0.75 *  (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
-                            },
-                          //R
-                        new DamageSpell
-                            {
-                                Slot = SpellSlot.R, DamageType = DamageType.Physical,
-                                Damage =
-                                    (source, target, level) =>
-                                    new double[] { 5, 10, 15 }[level]
-                                    +  new double[] {0.04, 0.06, 0.08 } [level] *  source.FlatHPPoolMod
-                            },
+            Spells.Add(
+                 "Camille",
+                 new List<DamageSpell>
+                 {
+                    //Q
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] {20, 25, 30, 35, 40}[level]/100
+                                *(source.TotalAttackDamage)
+                    },
+                    //Q2
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        Stage = 1,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] {40, 50, 60, 70, 80}[level]/100
+                                *(source.TotalAttackDamage)
+                    },
+                    //W
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.W,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] {65, 95, 125, 155, 185}[level] +
+                                0.6*(source.TotalAttackDamage)
+                    },
+                    //E
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.E,
+                        DamageType = DamageType.Magical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] {70, 115, 160, 205, 250}[level]
+                                + 0.75*source.TotalMagicalDamage
+                    },
+                    //R
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.R,
+                        DamageType = DamageType.Magical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] {5, 10, 15}[level]
+                                + new double[] {4, 6, 8}[level]/100*target.Health
+                    },
+                 });
 
-                });
             Spells.Add(
                 "Cassiopeia",
                 new List<DamageSpell>
