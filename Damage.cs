@@ -7878,7 +7878,7 @@ damage += damage* ((100 - target.HealthPercent) / 100);
                 var Fervor = hero.GetMastery(MasteryData.Ferocity.FervorofBattle);
                 if (Fervor != null && Fervor.IsActive())
                 {
-                    value += (0.9 + hero.Level * 0.42) * hero.GetBuffCount("MasteryOnHitDamageStacker");
+                    value += Math.Min((0.59 + hero.Level * 0.41) * hero.GetBuffCount("MasteryOnHitDamageStacker"), 4.71 + hero.Level * 0.41);
                 }
             }
 
@@ -7906,27 +7906,36 @@ damage += damage* ((100 - target.HealthPercent) / 100);
         /// <returns></returns>
         private static double PassivePercentMod(Obj_AI_Base source, Obj_AI_Base target, double amount)
         {
+            //those look outdated on riot servers but cant guarantee the same for garena/tencent
             var SiegeMinionList = new List<string> { "Red_Minion_MechCannon", "Blue_Minion_MechCannon" };
-            var NormalMinionList = new List<string>
-                                       {
-                                           "Red_Minion_Wizard", "Blue_Minion_Wizard", "Red_Minion_Basic",
-                                           "Blue_Minion_Basic"
-                                       };
+            var CasterMinionList = new List<string>
+            {
+                "Red_Minion_Wizard",
+                "Blue_Minion_Wizard"
+            };
+            var MeleeMinionList = new List<string>
+            {
+                "Red_Minion_Basic",
+                "Blue_Minion_Basic"
+            };
 
             //Minions and towers passives:
             if (source is Obj_AI_Turret)
             {
-                //Siege minions receive 70% damage from turrets
-                if (SiegeMinionList.Contains(target.CharData.BaseSkinName))
+                //Siege minions (caster minions too!) receive 70% damage from turrets
+                if (SiegeMinionList.Contains(target.CharData.BaseSkinName) ||
+                    CasterMinionList.Contains(target.CharData.BaseSkinName) ||
+                    target.CharData.BaseSkinName.Contains("Siege") || target.CharData.BaseSkinName.Contains("Ranged"))
+
                 {
                     amount *= 0.7d;
                 }
 
-                //Normal minions take 114% more damage from towers.
-                else if (NormalMinionList.Contains(target.CharData.BaseSkinName))
+                //Normal minions take 114% more damage from towers. -- not anymore
+                /*else if (MeleeMinionList.Contains(target.CharData.BaseSkinName))
                 {
                     amount *= 1.14285714285714d;
-                }
+                }*/
             }
 
             // Masteries:
@@ -7937,31 +7946,29 @@ damage += damage* ((100 - target.HealthPercent) / 100);
                 // Offensive masteries:
 
                 //INCREASED DAMAGE FROM ABILITIES 0.4/0.8/1.2/1.6/2%
-                /*
-                Mastery sorcery = hero.GetMastery(Ferocity.Sorcery);
+
+                /*Mastery sorcery = hero.GetMastery(MasteryData.Ferocity.Sorcery);
                 if (sorcery != null && sorcery.IsActive())
                 {
                     amount *= 1 + ((new double[] { 0.4, 0.8, 1.2, 1.6, 2.0 }[sorcery.Points]) / 100);
-                } /*
-
+                }
                 //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
                 //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
-                Mastery DoubleEdgedSword = hero.GetMastery(Ferocity.DoubleEdgedSword);
+                Mastery DoubleEdgedSword = hero.GetMastery(MasteryData.Ferocity.DoubleEdgedSword);
                 if (DoubleEdgedSword != null && DoubleEdgedSword.IsActive())
                 {
                     amount *= hero.IsMelee() ? 1.03 : 1.02;
                 }
-
-                /* Bounty Hunter: TAKING NAMES You gain a permanent 1 % damage increase for each unique enemy champion you kill
-                Mastery BountyHunter = hero.GetMastery(Ferocity.BountyHunter);
+                // Bounty Hunter: TAKING NAMES You gain a permanent 1 % damage increase for each unique enemy champion you kill
+                Mastery BountyHunter = hero.GetMastery(MasteryData.Ferocity.BountyHunter);
                 if (BountyHunter != null && BountyHunter.IsActive())
                 {
                     //We need a hero.UniqueChampionsKilled or both the sender and the target for ChampionKilled OnNotify Event
                     // amount += amount * Math.Min(hero.ChampionsKilled, 5);
-                } */
+                }*/
 
                 //Opressor: KICK 'EM WHEN THEY'RE DOWN You deal 2.5% increased damage to targets with impaired movement (slows, stuns, taunts, etc)
-                var Opressor = hero.GetMastery(MasteryData.Ferocity.Oppresor);
+                var Opressor = hero.GetMastery(MasteryData.Ferocity.DoubleEdgedSword);
                 if (targetHero != null && Opressor != null && Opressor.IsActive() && targetHero.IsMovementImpaired())
                 {
                     amount *= 1.025;
@@ -7975,35 +7982,29 @@ damage += damage* ((100 - target.HealthPercent) / 100);
                     {
                         amount *= 1 + Merciless.Points / 100f;
                     }
-                }
+                    //Thunderlord's Decree: Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.3 bonus attack damage)(+0.1 ability power) magic damage in an area around them
 
-                //Thunderlord's Decree: RIDE THE LIGHTNING Your 3rd ability or basic attack on an enemy champion shocks them, dealing 10 - 180(+0.2 bonus attack damage)(+0.1 ability power) magic damage in an area around them
-                if (false)
-                // Need a good way to check if it is 3rd attack (Use OnProcessSpell/SpellBook.OnCast if have to)
-                {
-                    var Thunder = hero.GetMastery(MasteryData.Cunning.ThunderlordsDecree);
+                    /*var Thunder = hero.GetMastery(MasteryData.Cunning.ThunderlordsDecree);
                     if (Thunder != null && Thunder.IsActive())
                     {
-                        // amount += 10 * hero.Level + (0.2 * hero.FlatPhysicalDamageMod) + (0.1 * hero.TotalMagicalDamage);
-                    }
+                        if (Orbwalking.LastTargets != null && Orbwalking.LastTargets[0] == targetHero.NetworkId &&
+                            Orbwalking.LastTargets[1] == targetHero.NetworkId)
+                            amount += 10*hero.Level + (0.3*hero.TotalAttackDamage) + (0.1*hero.TotalMagicalDamage);
+                    }*/
                 }
-            }
-
-            if (targetHero != null)
-            {
-                // Defensive masteries:
 
                 // Double edge sword:
-                //MELEE Deal an additional 3 % damage, but receive an additional 1.5 % damage
-                //RANGED Deal an additional 2 % damage, but receive an additional 2 % damage
-                var des = targetHero.GetMastery(MasteryData.Ferocity.DoubleEdgedSword);
+                // Deal an additional 5 % damage, but receive an additional 2.5 % damage
+                var des = hero.GetMastery(MasteryData.Ferocity.DoubleEdgedSword);
                 if (des != null && des.IsActive())
                 {
-                    amount *= targetHero.IsMelee() ? 1.015d : 1.02d;
+                    amount *= 1.05d;
                 }
             }
 
-            return amount;
+            return
+
+                amount;
         }
 
         #endregion
