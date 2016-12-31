@@ -407,7 +407,7 @@ namespace LeagueSharp.Common
         /// <returns>System.Single.</returns>
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
-            var result = Player.AttackRange + Player.BoundingRadius;
+            var result = Player.GetAutoAttackRange(target);
             if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
@@ -1640,7 +1640,7 @@ namespace LeagueSharp.Common
                 {
                     Render.Circle.DrawCircle(
                         this.Player.Position,
-                        GetRealAutoAttackRange(null) + 65,
+                        GetRealAutoAttackRange(null),
                         _config.Item("AACircle").GetValue<Circle>().Color,
                         _config.Item("AALineWidth").GetValue<Slider>().Value);
                 }
