@@ -115,7 +115,7 @@
                 {
                     menu = new Menu("Hacks", "Hacks");
 
-                    MenuAntiAfk = menu.AddItem(new MenuItem("AfkHack", "Anti-AFK").SetValue(false));
+                    MenuAntiAfk = menu.AddItem(new MenuItem("AfkHack", "Anti-AFK").SetValue(true));
                     MenuAntiAfk.ValueChanged += (sender, args) => AntiAFK = args.GetNewValue<bool>();
 
                     MenuDisableDrawings = menu.AddItem(new MenuItem("DrawingHack", "Disable Drawing").SetValue(false));
