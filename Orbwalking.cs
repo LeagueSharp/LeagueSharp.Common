@@ -308,7 +308,7 @@ namespace LeagueSharp.Common
                 return false;
             }
             
-            if (Player.HasBuffOfType(BuffType.Blind))
+            if (Player.HasBuffOfType(BuffType.Blind) && Player.CharData.BaseSkinName != "Kalista")
             {
                 return false;
             }
