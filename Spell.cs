@@ -406,11 +406,7 @@
 
                 if (this.IsCharging)
                 {
-                    return this.ChargedMinRange
-                           + Math.Min(
-                               this.ChargedMaxRange - this.ChargedMinRange,
-                               (Utils.TickCount - this._chargedCastedT) * (this.ChargedMaxRange - this.ChargedMinRange)
-                               / this.ChargeDuration - 150);
+                     return charge.Range - 50;
                 }
 
                 return this.ChargedMaxRange;
